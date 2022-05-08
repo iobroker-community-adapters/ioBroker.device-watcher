@@ -85,105 +85,105 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			for(const [id] of Object.entries(devices)) {
-				if (!myBlacklistArr.includes(id)) {
+				//if (!myBlacklistArr.includes(id)) {
 
-					const currDeviceString    = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
+				const currDeviceString    = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
 
-					//Device Namen
-					const deviceObject = await this.getForeignObjectAsync(currDeviceString);
-					let deviceName;
+				//Device Namen
+				const deviceObject = await this.getForeignObjectAsync(currDeviceString);
+				let deviceName;
 
-					if (deviceObject && typeof deviceObject === 'object') {
-						deviceName = deviceObject.common.name;
-					}
-					//Raum Namen
-					//const deviceRoomName;
-					let currRoom;
+				if (deviceObject && typeof deviceObject === 'object') {
+					deviceName = deviceObject.common.name;
+				}
+				//Raum Namen
+				//const deviceRoomName;
+				let currRoom;
 
-					//Link Qualität
-					const deviceQualityState = await this.getForeignStateAsync(id);
-					let linkQuality;
+				//Link Qualität
+				const deviceQualityState = await this.getForeignStateAsync(id);
+				let linkQuality;
 
-					if (deviceQualityState){
-						if (this.config.trueState) {
-							linkQuality = deviceQualityState.val;
-						} else if ((deviceQualityState.val != null) && (typeof deviceQualityState.val === 'number')) {
-							if (deviceQualityState.val < 0) {
-								linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
-							} else if ((deviceQualityState.val) >= 0) {
-								linkQuality = parseFloat((100/255 * deviceQualityState.val).toFixed(0)) + '%';
-							}
+				if (deviceQualityState){
+					if (this.config.trueState) {
+						linkQuality = deviceQualityState.val;
+					} else if ((deviceQualityState.val != null) && (typeof deviceQualityState.val === 'number')) {
+						if (deviceQualityState.val < 0) {
+							linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
+						} else if ((deviceQualityState.val) >= 0) {
+							linkQuality = parseFloat((100/255 * deviceQualityState.val).toFixed(0)) + '%';
 						}
 					}
+				}
 
-					jsonLinkQualityDevices.push(
+				jsonLinkQualityDevices.push(
+					{
+						device: deviceName,
+						adapter: deviceAdapterName,
+						room: currRoom,
+						link_quality: linkQuality
+					}
+				);
+
+				// 2. Wann bestand letzter Kontakt zum Gerät
+				if (deviceQualityState) {
+					try {
+						const time = new Date();
+						const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
+						// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
+						//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
+						let lastContactString = Math.round(lastContact) + ' Minuten';
+						if (Math.round(lastContact) > 100) {
+							lastContactString = Math.round(lastContact/60) + ' Stunden';
+						}
+						if (Math.round(lastContact/60) > 48) {
+							lastContactString = Math.round(lastContact/60/24) + ' Tagen';
+						}
+						if (lastContact > this.config.maxMinutes) {
+							arrOfflineDevices.push(
+								{
+									device: deviceName,
+									adapter: deviceAdapterName,
+									room: currRoom,
+									lastContact: lastContactString
+								}
+							);
+						}
+					} catch (e) {
+						this.log.error('(03) Error while getting timestate ' + e);
+					}
+				}
+
+				// 3. Batteriestatus abfragen
+				const currDeviceBatteryString = currDeviceString + '.battery';
+				const deviceBatteryState = await this.getForeignStateAsync(currDeviceBatteryString);
+				let batteryHealth;
+
+				if (!deviceBatteryState) {
+					batteryHealth = ' - ';
+				} else if (deviceBatteryState) {
+					batteryHealth = (deviceBatteryState).val + '%';
+					arrBatteryPowered.push(
 						{
 							device: deviceName,
 							adapter: deviceAdapterName,
 							room: currRoom,
-							link_quality: linkQuality
-						}
-					);
-
-					// 2. Wann bestand letzter Kontakt zum Gerät
-					if (deviceQualityState) {
-						try {
-							const time = new Date();
-							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
-							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
-							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
-							let lastContactString = Math.round(lastContact) + ' Minuten';
-							if (Math.round(lastContact) > 100) {
-								lastContactString = Math.round(lastContact/60) + ' Stunden';
-							}
-							if (Math.round(lastContact/60) > 48) {
-								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
-							}
-							if (lastContact > this.config.maxMinutes) {
-								arrOfflineDevices.push(
-									{
-										device: deviceName,
-										adapter: deviceAdapterName,
-										room: currRoom,
-										lastContact: lastContactString
-									}
-								);
-							}
-						} catch (e) {
-							this.log.error('(03) Error while getting timestate ' + e);
-						}
-					}
-
-					// 3. Batteriestatus abfragen
-					const currDeviceBatteryString = currDeviceString + '.battery';
-					const deviceBatteryState = await this.getForeignStateAsync(currDeviceBatteryString);
-					let batteryHealth;
-
-					if (!deviceBatteryState) {
-						batteryHealth = ' - ';
-					} else if (deviceBatteryState) {
-						batteryHealth = (deviceBatteryState).val + '%';
-						arrBatteryPowered.push(
-							{
-								device: deviceName,
-								adapter: deviceAdapterName,
-								room: currRoom,
-								battery: batteryHealth
-							}
-						);
-					}
-
-					// 4. Alle Geräte in die Liste eintragen
-					arrListAllDevices.push(
-						{
-							device: deviceName,
-							adapter: deviceAdapterName,
-							room: currRoom,
-							battery: batteryHealth,
-							link_quality: linkQuality
+							battery: batteryHealth
 						}
 					);
 				}
+
+				// 4. Alle Geräte in die Liste eintragen
+				arrListAllDevices.push(
+					{
+						device: deviceName,
+						adapter: deviceAdapterName,
+						room: currRoom,
+						battery: batteryHealth,
+						link_quality: linkQuality
+					}
+				);
+				//}
 
 				// 1b. Zähle, wie viele Geräte existieren
 				//------------------------
