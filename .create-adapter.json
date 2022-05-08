@@ -1,0 +1,46 @@
+{
+	"cli": true,
+	"target": "directory",
+	"adapterName": "device-watcher",
+	"title": "Device Watcher",
+	"description": "Watchdog for wireless devices",
+	"keywords": [
+		"watchdog",
+		"devices",
+		"wireless",
+		"watcher"
+	],
+	"expert": "yes",
+	"features": [
+		"adapter"
+	],
+	"adminFeatures": [],
+	"type": "misc-data",
+	"startMode": "schedule",
+	"scheduleStartOnChange": "yes",
+	"connectionType": "local",
+	"dataSource": "poll",
+	"connectionIndicator": "no",
+	"language": "JavaScript",
+	"adminReact": "no",
+	"tools": [
+		"ESLint",
+		"type checking"
+	],
+	"i18n": "JSON",
+	"releaseScript": "yes",
+	"devServer": "yes",
+	"devServerPort": 8081,
+	"indentation": "Tab",
+	"quotes": "single",
+	"es6class": "yes",
+	"authorName": "Christian Behrends",
+	"authorGithub": "ciddi89",
+	"authorEmail": "mail@christian-behrends.de",
+	"gitRemoteProtocol": "SSH",
+	"gitCommit": "no",
+	"defaultBranch": "main",
+	"license": "MIT License",
+	"dependabot": "yes",
+	"creatorVersion": "2.1.1"
+}

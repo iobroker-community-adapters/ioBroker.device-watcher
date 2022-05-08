@@ -1,0 +1,149 @@
+{
+    "i18n": true,
+    "type": "tabs",
+    "items": {
+        "_options": {
+            "type": "panel",
+            "label": "Options",
+            "items": {
+                "_headerDevices": {
+                    "type": "header", 
+                    "text": "Devices",
+                    "size": 1
+                },
+                "test": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Test Devices"
+                },
+                "zigbeeDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Zigbee Devices"
+                },
+                "bleDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Ble Devices"
+                }
+                ,
+                "_headerOtherSettings": {
+                    "type": "header", 
+                    "text": "Other Settings",
+                    "size": 1
+                },
+                "trueState": {
+                    "newLine": true,
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "True State",
+                    "help": "True state for quality"
+                },
+                "maxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Offline time of Devices",
+                    "help": "in minutes"
+                }
+            }
+        },
+        "_notifications": {
+            "type": "panel",
+            "label": "Notifications",
+            "items": {
+                "_headerPushover": {
+                    "type": "header", 
+                    "text": "Pushover",
+                    "size": 1
+                },
+                "instancePushover": {
+                    "newLine": true,
+                    "type": "instance",
+                    "adapter": "pushover",
+                    "all": true,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Pushover Instanz",
+                    "help": "Please choose the pushover instance"
+                },
+                "devicePushover": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Device-ID (optional)",
+                    "help": "Choose your device"
+                },
+                "titlePushover": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Title (optional)",
+                    "help": "Choose your title for Pushmessage"
+                },
+                "headerTelegram": {
+                    "newLine": "true",
+                    "type": "header", 
+                    "text": "Telegram",
+                    "size": 1
+                },
+                "instanceTelegram": {
+                    "newLine": true,
+                    "type": "instance",
+                    "adapter": "telegram",
+                    "all": true,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Telegram Instanz",
+                    "help": "Please choose the telegram instance"
+                },
+                "deviceTelegram": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Device-ID (optional)",
+                    "help": "Choose your device"
+                }
+            } 
+        },
+        "_blacklist": {
+            "type": "panel",
+            "label": "Blacklist",
+            "items": {
+                "tableBlacklist": {
+                    "type": "table",
+                    "label": "Blacklist",
+                    "nodelete": true,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "items": [{
+                        "type": "objectId",
+                        "width":"100%",
+                        "title": "Choose which devices should be excluded", 
+                        "attr": "device", 
+                        "filter": false, 
+                        "sort": false,
+                        "default": ""
+                    }]
+                }
+            }
+        }
+    }
+}
