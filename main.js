@@ -28,11 +28,10 @@ class DeviceWatcher extends utils.Adapter {
 	async onReady() {
 		this.log.debug('Adapter Device-Watcher was started');
 
-		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
+		/*if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
-			return;
-		}
-
+			//return;
+		} */
 		try {
 			await this.main();
 			this.log.debug('all done, exiting');
@@ -41,6 +40,9 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.error('Error while running Device-Watcher. Error Message:' + e);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
+
+
+
 	}
 
 	async main() {
