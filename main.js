@@ -241,7 +241,7 @@ class DeviceWatcher extends utils.Adapter {
 				catch (e) {
 					this.log.error('(05) Error while writing the states ' + e);
 				}
-
+				/*
 				try {
 					//Notifications
 					const pushoverInstanz = this.config.instancePushover;
@@ -253,7 +253,7 @@ class DeviceWatcher extends utils.Adapter {
 				catch (e) {
 					this.log.error('(06) Error send notification ' + e);
 				}
-
+*/
 
 				this.log.debug('Function finished: ' + this.main.name);
 			}
