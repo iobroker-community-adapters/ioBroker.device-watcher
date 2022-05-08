@@ -96,21 +96,10 @@ class DeviceWatcher extends utils.Adapter {
 					//Raum Namen
 					//const deviceRoomName;
 					let currRoom;
-					const roomID = await this.getEnumsAsync('rooms', currDeviceString);
-					//let deviceRoomName;
-
-					for(const id of Object.entries(roomID))
-					{
-						this.log.warn('Testschleife Enum: ' + (id));
-					}
-					//const deviceRoomName = roomID.enumName;
-					//this.log.warn('Enum: ' + (deviceRoomName));
-
 
 					//Link Qualität
 					const deviceQualityState = await this.getForeignStateAsync(id);
 					let linkQuality;
-
 
 					if (deviceQualityState){
 						if (this.config.trueState) {
