@@ -81,7 +81,7 @@
 		]
 	},
 	"native": {
-		"zigbeeDevices": true,
+		"zigbeeDevices": false,
 		"bleDevices": false,
 		"trueState": false,
 		"maxMinutes": 300,
