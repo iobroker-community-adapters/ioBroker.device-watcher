@@ -241,13 +241,14 @@ class DeviceWatcher extends utils.Adapter {
 					this.log.error('(05) Error while writing the states ' + e);
 				}
 
+				/*
 				//Notifications
 				const pushoverInstanz = this.config.instancePushover;
 				const msg = 'TestNachricht';
 				if (pushoverInstanz) {
 					await this.sendToAsync(pushoverInstanz, msg);
 				}
-
+				*/
 				this.log.debug('Function finished: ' + this.main.name);
 			}
 		}
