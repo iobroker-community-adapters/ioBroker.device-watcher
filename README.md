@@ -13,7 +13,7 @@
 
 ## device-watcher adapter for ioBroker
 
-This is a watchdog for wireless devices. Currently it works with the zigbee adapter and ble adapter (mi flora plant sensor) devices. The adapter looks every sixty minutes for the rssi/link quality and battery states and create lists of them. If one device is longer not reachable, then you can get a notification of it. 
+This is a watchdog for wireless devices. Currently it works with the zigbee adapter and ble adapter (mi flora plant sensor). The adapter looks every sixty minutes for the rssi/link quality and battery states and create lists of them. If one device is longer not reachable, then you can get a notification of it. 
 
 The adapter is not ready now, so it can have bugs and isn't perfect. If you found something or if you've an improvement suggestion, feel free to open an issue.
 
