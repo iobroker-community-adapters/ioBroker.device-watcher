@@ -48,14 +48,14 @@ class DeviceWatcher extends utils.Adapter {
 		const jsonLinkQualityDevices    = []; //JSON-Info alle mit LinkQuality
 		const arrBatteryPowered         = []; //JSON-Info alle batteriebetriebenen Geräte
 		const arrListAllDevices         = []; //JSON-Info Gesamtliste mit Info je Gerät
-		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
-		const myBlacklist 				= this.config.tableBlacklist;
-		const myBlacklistArr			= [];
+
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 			return;
 		}
+
+		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
 		if (this.config.test) {
 			myArrDev.push({'Selektor':'0_userdata.*.link_quality','theName':'common', 'adapter':'Test'});
@@ -79,6 +79,9 @@ class DeviceWatcher extends utils.Adapter {
 
 			this.log.debug(JSON.stringify(devices));
 
+			const myBlacklist 				= this.config.tableBlacklist;
+			const myBlacklistArr			= [];
+
 			for(const i in myBlacklist){
 				myBlacklistArr.push(myBlacklist[i].device);
 				this.log.debug('Found items on the blacklist: ' + myBlacklistArr);
@@ -97,7 +100,6 @@ class DeviceWatcher extends utils.Adapter {
 						deviceName = deviceObject.common.name;
 					}
 					//Raum Namen
-					//const deviceRoomName;
 					let currRoom;
 
 					//Link Qualität
@@ -183,7 +185,6 @@ class DeviceWatcher extends utils.Adapter {
 							link_quality: linkQuality
 						}
 					);
-					//}
 
 					// 1b. Zähle, wie viele Geräte existieren
 					//------------------------
