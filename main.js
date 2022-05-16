@@ -59,16 +59,16 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (this.config.test) {
 			myArrDev.push({'Selektor':'0_userdata.*.link_quality','theName':'common', 'adapter':'Test'});
-			this.log.warn('Teststates wurden ausgewählt. Lade Daten');
+			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
 
 		if (this.config.bleDevices) {
 			myArrDev.push({'Selektor':'ble.*.rssi','theName':'common', 'adapter':'Ble'});
-			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten');
+			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten...');
 		}
 		if (this.config.zigbeeDevices) {
 			myArrDev.push({'Selektor':'zigbee.*.link_quality','theName':'common', 'adapter':'Zigbee'});
-			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten');
+			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));
@@ -205,6 +205,33 @@ class DeviceWatcher extends utils.Adapter {
 					const arrBatteryPoweredZero       = [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
 					const arrListAllDevicesZero       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
 
+					//Notifications
+					const pushoverInstanz = this.config.instancePushover;
+					const telegramInstanz = this.config.instanceTelegram;
+					let msg = '';
+					const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
+
+					if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
+						if (offlineDevicesCount > offlineDevicesCountOld.val) {
+							if (offlineDevicesCount == 1) {
+								msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
+							} else if (offlineDevicesCount >= 2) {
+								msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
+							}
+							for (const id of arrOfflineDevices) {
+								msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ') ';
+							}
+							this.log.warn(msg);
+							if (pushoverInstanz) {
+								await this.sendToAsync(pushoverInstanz, 'Device-Watcher Alarm: ' + msg);
+							}
+							if (telegramInstanz) {
+								await this.sendToAsync(telegramInstanz, 'Device-Watcher Alarm: ' + msg);
+							}
+						}
+
+					}
+
 					// Datenpunkte beschreiben
 					this.log.debug('write the datapoints ' + this.main.name);
 
@@ -242,19 +269,7 @@ class DeviceWatcher extends utils.Adapter {
 					catch (e) {
 						this.log.error('(05) Error while writing the states ' + e);
 					}
-					/*
-				try {
-					//Notifications
-					const pushoverInstanz = this.config.instancePushover;
-					const msg = 'TestNachricht';
-					if (pushoverInstanz) {
-						await this.sendToAsync(pushoverInstanz, msg);
-					}
-				}
-				catch (e) {
-					this.log.error('(06) Error send notification ' + e);
-				}
-*/
+
 
 					this.log.debug('Function finished: ' + this.main.name);
 				}
