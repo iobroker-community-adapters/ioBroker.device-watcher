@@ -54,7 +54,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
-			//return;
+			return;
 		}
 
 		if (this.config.test) {
