@@ -223,10 +223,19 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							this.log.warn(msg);
 							if (pushoverInstanz) {
-								await this.sendToAsync(pushoverInstanz, 'Device-Watcher Alarm: ' + msg);
+								try {
+									await this.sendToAsync(pushoverInstanz, 'Device-Watcher Alarm: ' + msg);
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
+
 							}
 							if (telegramInstanz) {
-								await this.sendToAsync(telegramInstanz, 'Device-Watcher Alarm: ' + msg);
+								try {
+									await this.sendToAsync(telegramInstanz, 'Device-Watcher Alarm: ' + msg);
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
 							}
 						}
 
@@ -272,6 +281,7 @@ class DeviceWatcher extends utils.Adapter {
 
 
 					this.log.debug('Function finished: ' + this.main.name);
+					return;
 				}
 			}
 		}
