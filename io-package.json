@@ -86,9 +86,16 @@
 		"trueState": false,
 		"maxMinutes": 300,
 		"test": false,
+		"checkSendOfflineMsg": false,
+		"checkSendBatteryMsg": false,
+		"minWarnBatterie": 35,
 		"instancePushover": "none",
-		"instanceTelegram": "none",
 		"titlePushover": "ioBroker",
+		"devicePushover": "",
+		"instanceTelegram": "none",
+		"deviceTelegram": "",
+		"instanceJarvis": "none",
+		"titleJarvis": "Device-Watcher",
 		"tableBlacklist": []
 	},
 	"objects": [],
@@ -190,6 +197,19 @@
 			"common": {
 				"name": "Timestamp of last run",
 				"type": "object",
+				"role": "indicator",
+				"read": true,
+				"write": false,
+				"def": ""
+			},
+			"native": {}
+		},
+		{
+			"_id": "deviceWatcherLog",
+			"type": "state",
+			"common": {
+				"name": "Log of Device-Watcher",
+				"type": "string",
 				"role": "indicator",
 				"read": true,
 				"write": false,

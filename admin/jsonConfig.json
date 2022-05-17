@@ -63,7 +63,39 @@
             "type": "panel",
             "label": "Notifications",
             "items": {
+                "_headerCommon": {
+                    "type":"header",
+                    "text":"Common Notification Settings",
+                    "size": 1
+                },
+                "checkSendOfflineMsg": {
+                    "type":"checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Send offline message",
+                    "help": "Get message if an device is not reachable"
+                },
+                "checkSendBatteryMsg": {
+                    "type":"checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Send batterie message",
+                    "help": "Get message if an device has low battery"
+                },
+                "minWarnBatterie": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "From how much min % would you get a message",
+                    "help": "in percent"
+                },
                 "_headerPushover": {
+                    "newLine": true,
                     "type": "header", 
                     "text": "Pushover",
                     "size": 1
@@ -121,6 +153,32 @@
                     "lg": 4,
                     "label": "Device-ID (optional)",
                     "help": "Choose your device"
+                },
+                "headerJarvis": {
+                    "newLine": "true",
+                    "type": "header", 
+                    "text": "Jarvis Notification",
+                    "size": 1
+                },
+                "instanceJarvis": {
+                    "newLine": true,
+                    "type": "instance",
+                    "adapter": "jarvis",
+                    "allowDeactivate": true,
+                    "all": true,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Jarvis Instanz",
+                    "help": "Please choose the jarvis instance"
+                },
+                "titleJarvis": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Title (optional)",
+                    "help": "Choose your title for Pushmessage"
                 }
             } 
         },
