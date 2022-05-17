@@ -332,10 +332,12 @@ class DeviceWatcher extends utils.Adapter {
 
 							let infotext = '';
 							for (const id of batteryDataJson) {
-								const batteryValue = id['battery'].replace('%', '');
-								if (batteryValue < batteryWarningMin) {
-									infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')';
-									++batteryMinCount;
+								if (batteryDataJson.length > 0) {
+									const batteryValue = id['battery'].replace('%', '');
+									if (batteryValue < batteryWarningMin) {
+										infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')';
+										++batteryMinCount;
+									}
 								}
 							}
 
