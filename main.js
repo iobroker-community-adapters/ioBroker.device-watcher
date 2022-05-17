@@ -343,13 +343,25 @@ class DeviceWatcher extends utils.Adapter {
 								this.log.info('Batteriezustand: ' + infotext);
 								await this.setStateAsync('deviceWatcherLog', infotext, true);
 								if (jarvis.instance) {
-									await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+									try {
+										await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+									} catch (e) {
+										this.log.warn ('Getting error at sending notification' + (e));
+									}
 								}
 								if (pushover.instance) {
-									await sendPushover('Batteriezustand: ' + infotext);
+									try {
+										await sendPushover('Batteriezustand: ' + infotext);
+									} catch (e) {
+										this.log.warn ('Getting error at sending notification' + (e));
+									}
 								}
 								if (telegram.instance) {
-									await sendTelegram('Batteriezustand: ' + infotext);
+									try {
+										await sendTelegram('Batteriezustand: ' + infotext);
+									} catch (e) {
+										this.log.warn ('Getting error at sending notification' + (e));
+									}
 								}
 
 							}
@@ -358,8 +370,6 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						}
 					}
-
-
 					this.log.debug('Function finished: ' + this.main.name);
 				}
 			}
