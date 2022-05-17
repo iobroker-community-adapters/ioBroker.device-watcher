@@ -281,7 +281,6 @@ class DeviceWatcher extends utils.Adapter {
 
 
 					this.log.debug('Function finished: ' + this.main.name);
-					return;
 				}
 			}
 		}
