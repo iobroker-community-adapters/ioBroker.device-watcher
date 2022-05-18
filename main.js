@@ -329,12 +329,15 @@ class DeviceWatcher extends utils.Adapter {
 						const batteryData = await this.getStateAsync('batteryList');
 						if ((batteryData != null) && (batteryData != undefined) && (batteryData.val != null)) {
 							const batteryDataJson = JSON.parse(String(batteryData.val));
+							this.log.debug(JSON.stringify(batteryDataJson));
 
 							let infotext = '';
 							for (const id of batteryDataJson) {
 								if (id != undefined) {
-									const batteryValue = id['battery'].replace('%', '');
-									if (batteryValue < batteryWarningMin) {
+									const batteryValue = id['battery'];//.replace('%', '');
+									const blnBatteryValue = batteryValue.replace('%', '');
+									this.log.warn(batteryValue + blnBatteryValue);
+									if (blnBatteryValue < batteryWarningMin) {
 										infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')';
 										++batteryMinCount;
 									}
