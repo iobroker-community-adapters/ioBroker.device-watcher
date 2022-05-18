@@ -85,7 +85,12 @@ class DeviceWatcher extends utils.Adapter {
 		const arrBatteryPowered         = []; //JSON-Info alle batteriebetriebenen Geräte
 		const arrListAllDevices         = []; //JSON-Info Gesamtliste mit Info je Gerät
 		let offlineDevicesCount			= 0;
-		let offlineDevicesCountOld;
+		let deviceCounter;
+		let batteryPoweredCount;
+		let arrOfflineDevicesZero	= [];
+		let arrLinkQualityDevicesZero = [];
+		let arrBatteryPoweredZero = [];
+		let arrListAllDevicesZero = [];
 
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
@@ -226,7 +231,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 1b. Zähle, wie viele Geräte existieren
 					//------------------------
-					const deviceCounter = jsonLinkQualityDevices.length;
+					deviceCounter = jsonLinkQualityDevices.length;
 
 					// 2c. Wie viele Geräte sind offline?
 					//------------------------
@@ -234,54 +239,15 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 3c. Wie viele Geräte sind batteriebetrieben?
 					//------------------------
-					const batteryPoweredCount = arrBatteryPowered.length;
+					batteryPoweredCount = arrBatteryPowered.length;
 
 					// Wenn keine Devices gezählt sind
 					//------------------------
-					const arrOfflineDevicesZero       = [{Device: '--keine--', Room: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
-					const arrLinkQualityDevicesZero   = [{Device: '--keine--', Room: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality = 0
-					const arrBatteryPoweredZero       = [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
-					const arrListAllDevicesZero       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
+					arrOfflineDevicesZero       = [{Device: '--keine--', Room: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
+					arrLinkQualityDevicesZero   = [{Device: '--keine--', Room: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality = 0
+					arrBatteryPoweredZero       = [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+					arrListAllDevicesZero       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
 
-					offlineDevicesCountOld = await this.getStateAsync('offlineCount');
-
-					// Datenpunkte beschreiben
-					this.log.debug('write the datapoints ' + this.main.name);
-
-					try {
-						await this.setStateAsync('offlineCount', {val: offlineDevicesCount, ack: true});
-						await this.setStateAsync('countAll', {val: deviceCounter, ack: true});
-						await this.setStateAsync('batteryCount', {val: batteryPoweredCount, ack: true});
-
-						if (deviceCounter == 0) {
-							await this.setStateAsync('linkQualityList', {val: JSON.stringify(arrLinkQualityDevicesZero), ack: true});
-							await this.setStateAsync('ListAll', {val: JSON.stringify(arrListAllDevicesZero), ack: true});
-						} else {
-							await this.setStateAsync('linkQualityList', {val: JSON.stringify(jsonLinkQualityDevices), ack: true});
-							await this.setStateAsync('listAll', {val: JSON.stringify(arrListAllDevices), ack: true});
-						}
-
-						if (offlineDevicesCount == 0) {
-							await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevicesZero), ack: true});
-						} else {
-							await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevices), ack: true});
-						}
-
-						if (batteryPoweredCount == 0) {
-							await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPoweredZero), ack: true});
-						} else {
-							await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
-						}
-
-						//Zeitstempel wann die Datenpunkte zuletzt gecheckt wurden
-						const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh.mm.ss');
-						await this.setStateAsync('lastCheck', lastCheck, true);
-
-						this.log.debug('write the datapoints finished ' + this.main.name);
-					}
-					catch (e) {
-						this.log.error('(05) Error while writing the states ' + e);
-					}
 					//const time = new Date();
 					//this.log.warn('The Day Number Today: ' + time.getUTCDay());
 				}
@@ -293,6 +259,7 @@ class DeviceWatcher extends utils.Adapter {
 		if(this.config.checkSendOfflineMsg) {
 			try {
 				let msg = '';
+				const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
 
 				if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
 					this.log.warn('Offline Devices Count New: ' + offlineDevicesCount + ' Offline Devices Count Old: ' + offlineDevicesCountOld.val);
@@ -391,6 +358,45 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 		}
+
+		// Datenpunkte beschreiben
+		this.log.debug('write the datapoints ' + this.main.name);
+
+		try {
+			await this.setStateAsync('offlineCount', {val: offlineDevicesCount, ack: true});
+			await this.setStateAsync('countAll', {val: deviceCounter, ack: true});
+			await this.setStateAsync('batteryCount', {val: batteryPoweredCount, ack: true});
+
+			if (deviceCounter == 0) {
+				await this.setStateAsync('linkQualityList', {val: JSON.stringify(arrLinkQualityDevicesZero), ack: true});
+				await this.setStateAsync('ListAll', {val: JSON.stringify(arrListAllDevicesZero), ack: true});
+			} else {
+				await this.setStateAsync('linkQualityList', {val: JSON.stringify(jsonLinkQualityDevices), ack: true});
+				await this.setStateAsync('listAll', {val: JSON.stringify(arrListAllDevices), ack: true});
+			}
+
+			if (offlineDevicesCount == 0) {
+				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevicesZero), ack: true});
+			} else {
+				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevices), ack: true});
+			}
+
+			if (batteryPoweredCount == 0) {
+				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPoweredZero), ack: true});
+			} else {
+				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
+			}
+
+			//Zeitstempel wann die Datenpunkte zuletzt gecheckt wurden
+			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh.mm.ss');
+			await this.setStateAsync('lastCheck', lastCheck, true);
+
+			this.log.debug('write the datapoints finished ' + this.main.name);
+		}
+		catch (e) {
+			this.log.error('(05) Error while writing the states ' + e);
+		}
+
 		this.log.debug('Function finished: ' + this.main.name);
 	}
 
