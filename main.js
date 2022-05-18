@@ -326,13 +326,13 @@ class DeviceWatcher extends utils.Adapter {
 					if (batteryMinCount > 0) {
 						this.log.info('Batteriezustand: ' + infotext);
 						await this.setStateAsync('deviceWatcherLog', infotext, true);
-						if (jarvis.instance) {
+						/*if (jarvis.instance) {
 							try {
 								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
 							} catch (e) {
 								this.log.warn ('Getting error at sending notification' + (e));
 							}
-						}
+						}*/
 						if (pushover.instance) {
 							try {
 								await sendPushover('Batteriezustand: ' + infotext);
