@@ -42,12 +42,50 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async main() {
+
+		const pushover = {
+			instance: this.config.instancePushover,
+			title: this.config.titlePushover,
+			device: this.config.devicePushover
+
+		};
+		const telegram = {
+			instance: this.config.instanceTelegram,
+			user: this.config.deviceTelegram
+		};
+		const jarvis = {
+			instance: this.config.instanceJarvis,
+			title: this.config.titleJarvis
+
+		};
+
+		const sendPushover = async (text) => {
+			await this.sendToAsync(pushover.instanz, 'send', {
+				message: 'Device-Watcher: ' + text,
+				title: pushover.title,
+				device: pushover.device
+			});
+		};
+
+		const sendTelegram = async (text) => {
+			await this.sendToAsync(telegram.instance, 'send', {
+				text: text,
+				user: telegram.user
+			});
+		};
+
+		const sendJarvis = async (text) => {
+			await this.setForeignStateAsync('jarvis.0.addNotification', text);
+		};
+
 		this.log.debug('Function started: ' + this.main.name);
 
 		const arrOfflineDevices         = []; //JSON-Info alle offline-Geräte
 		const jsonLinkQualityDevices    = []; //JSON-Info alle mit LinkQuality
 		const arrBatteryPowered         = []; //JSON-Info alle batteriebetriebenen Geräte
 		const arrListAllDevices         = []; //JSON-Info Gesamtliste mit Info je Gerät
+		let offlineDevicesCount			= 0;
+		let offlineDevicesCountOld;
 
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
@@ -192,7 +230,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 2c. Wie viele Geräte sind offline?
 					//------------------------
-					const offlineDevicesCount = arrOfflineDevices.length;
+					offlineDevicesCount = arrOfflineDevices.length;
 
 					// 3c. Wie viele Geräte sind batteriebetrieben?
 					//------------------------
@@ -205,84 +243,7 @@ class DeviceWatcher extends utils.Adapter {
 					const arrBatteryPoweredZero       = [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
 					const arrListAllDevicesZero       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
 
-					//Notifications
-					const pushover = {
-						instance: this.config.instancePushover,
-						title: this.config.titlePushover,
-						device: this.config.devicePushover
-
-					};
-					const telegram = {
-						instance: this.config.instanceTelegram,
-						user: this.config.deviceTelegram
-					};
-					const jarvis = {
-						instance: this.config.instanceJarvis,
-						title: this.config.titleJarvis
-
-					};
-
-					const sendPushover = async (text) => {
-						await this.sendToAsync(pushover.instanz, 'send', {
-							message: 'Device-Watcher: ' + text,
-							title: pushover.title,
-							device: pushover.device
-						});
-					};
-
-					const sendTelegram = async (text) => {
-						await this.sendToAsync(telegram.instance, 'send', {
-							text: text,
-							user: telegram.user
-						});
-					};
-
-					const sendJarvis = async (text) => {
-						await this.setForeignStateAsync('jarvis.0.addNotification', text);
-					};
-
-					if(this.config.checkSendOfflineMsg) {
-						let msg = '';
-						const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
-
-						if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
-							if (offlineDevicesCount > offlineDevicesCountOld.val) {
-								if (offlineDevicesCount == 1) {
-									msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-								} else if (offlineDevicesCount >= 2) {
-									msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
-								}
-								for (const id of arrOfflineDevices) {
-									msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ') ';
-								}
-								this.log.warn(msg);
-								await this.setStateAsync('deviceWatcherLog', msg, true);
-								if (pushover.instanz) {
-									try {
-										sendPushover(msg);
-									} catch (e) {
-										this.log.warn ('Getting error at sending notification' + (e));
-									}
-
-								}
-								if (telegram.instance) {
-									try {
-										sendTelegram(msg);
-									} catch (e) {
-										this.log.warn ('Getting error at sending notification' + (e));
-									}
-								}
-								if (jarvis.instance) {
-									try {
-										sendJarvis('{title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
-									} catch (e) {
-										this.log.warn ('Getting error at sending notification' + (e));
-									}
-								}
-							}
-
-						}
-					}
+					offlineDevicesCountOld = await this.getStateAsync('offlineCount');
 
 					// Datenpunkte beschreiben
 					this.log.debug('write the datapoints ' + this.main.name);
@@ -321,66 +282,110 @@ class DeviceWatcher extends utils.Adapter {
 					catch (e) {
 						this.log.error('(05) Error while writing the states ' + e);
 					}
+					//const time = new Date();
+					//this.log.warn('The Day Number Today: ' + time.getUTCDay());
+				}
+			} //<--Ende zweite Schleife
+		} //<---Ende Hauptschleife
 
-					//Batterie Notification
-					if (this.config.checkSendBatteryMsg) {
-						let batteryMinCount = 0;
-						const batteryWarningMin = this.config.minWarnBatterie;
-						const batteryData = await this.getStateAsync('batteryList');
-						if ((batteryData != null) && (batteryData != undefined) && (batteryData.val != null)) {
-							const batteryDataJson = JSON.parse(String(batteryData.val));
-							this.log.debug(JSON.stringify(batteryDataJson));
+		//Notifications
+		//Offline Message
+		if(this.config.checkSendOfflineMsg) {
+			let msg = '';
 
-							let infotext = '';
-							for (const id of batteryDataJson) {
-								if (id['battery']) {
-									const batteryValue = id['battery'];//.replace('%', '');
-									const blnBatteryValue = batteryValue.replace('%', '');
-									this.log.warn(batteryValue + blnBatteryValue);
-									if (blnBatteryValue < batteryWarningMin) {
-										infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')';
-										++batteryMinCount;
-									}
-								}
-							}
+			if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
+				this.log.warn('Offline Devices Count New: ' + offlineDevicesCount + ' Offline Devices Count Old: ' + offlineDevicesCountOld.val);
+				if (offlineDevicesCount > offlineDevicesCountOld.val) {
+					if (offlineDevicesCount == 1) {
+						msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
+					} else if (offlineDevicesCount >= 2) {
+						msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
+					}
+					for (const id of arrOfflineDevices) {
+						msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ') ';
+					}
+					this.log.warn(msg);
+					await this.setStateAsync('deviceWatcherLog', msg, true);
+					if (pushover.instanz) {
+						try {
+							sendPushover(msg);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
 
-							if (batteryMinCount > 0) {
-								this.log.info('Batteriezustand: ' + infotext);
-								await this.setStateAsync('deviceWatcherLog', infotext, true);
-								if (jarvis.instance) {
-									try {
-										await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
-									} catch (e) {
-										this.log.warn ('Getting error at sending notification' + (e));
-									}
-								}
-								if (pushover.instance) {
-									try {
-										await sendPushover('Batteriezustand: ' + infotext);
-									} catch (e) {
-										this.log.warn ('Getting error at sending notification' + (e));
-									}
-								}
-								if (telegram.instance) {
-									try {
-										await sendTelegram('Batteriezustand: ' + infotext);
-									} catch (e) {
-										this.log.warn ('Getting error at sending notification' + (e));
-									}
-								}
-
-							}
-							else {
-								await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
-							}
+					}
+					if (telegram.instance) {
+						try {
+							sendTelegram(msg);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
 						}
 					}
-					this.log.debug('Function finished: ' + this.main.name);
-					const time = new Date();
-					this.log.warn('The Day Number Today: ' + time.getUTCDay());
+					if (jarvis.instance) {
+						try {
+							sendJarvis('{title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
+					}
+				}
+
+			}
+		}
+		//Batterie Notification
+		if (this.config.checkSendBatteryMsg) {
+			let batteryMinCount = 0;
+			const batteryWarningMin = this.config.minWarnBatterie;
+			const batteryData = await this.getStateAsync('batteryList');
+			if ((batteryData != null) && (batteryData != undefined) && (batteryData.val != null)) {
+				const batteryDataJson = JSON.parse(String(batteryData.val));
+				this.log.debug(JSON.stringify(batteryDataJson));
+
+				let infotext = '';
+				for (const id of batteryDataJson) {
+					if (id['battery']) {
+						const batteryValue = id['battery'].replace('%', '');
+						//const blnBatteryValue = batteryValue.replace('%', '');
+						this.log.warn(batteryValue + batteryValue);
+						if (batteryValue < batteryWarningMin) {
+							infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')';
+							++batteryMinCount;
+						}
+					}
+				}
+
+				if (batteryMinCount > 0) {
+					this.log.info('Batteriezustand: ' + infotext);
+					await this.setStateAsync('deviceWatcherLog', infotext, true);
+					if (jarvis.instance) {
+						try {
+							await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
+					}
+					if (pushover.instance) {
+						try {
+							await sendPushover('Batteriezustand: ' + infotext);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
+					}
+					if (telegram.instance) {
+						try {
+							await sendTelegram('Batteriezustand: ' + infotext);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
+					}
+
+				}
+				else {
+					await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
 				}
 			}
 		}
+		this.log.debug('Function finished: ' + this.main.name);
 	}
 
 	onUnload(callback) {
