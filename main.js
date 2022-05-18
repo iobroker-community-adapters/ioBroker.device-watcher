@@ -80,10 +80,10 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug('Function started: ' + this.main.name);
 
-		const arrOfflineDevices         = []; //JSON-Info alle offline-Geräte
-		const jsonLinkQualityDevices    = []; //JSON-Info alle mit LinkQuality
-		const arrBatteryPowered         = []; //JSON-Info alle batteriebetriebenen Geräte
-		const arrListAllDevices         = []; //JSON-Info Gesamtliste mit Info je Gerät
+		const arrOfflineDevices         = []; //JSON-Info of all offline-devices
+		const jsonLinkQualityDevices    = []; //JSON-Info of all devices with linkquality
+		const arrBatteryPowered         = []; //JSON-Info of all devices with battery
+		const arrListAllDevices         = []; //JSON-Info total list with info of all devices
 		let offlineDevicesCount			= 0;
 		let deviceCounter;
 		let batteryPoweredCount;
@@ -116,6 +116,9 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug(JSON.stringify(myArrDev));
 
+		/*=============================================
+		=            Start of main loop    		   	  =
+		=============================================*/
 		for (let i = 0; i < myArrDev.length; i++) {
 			const devices = await this.getForeignStatesAsync(myArrDev[i].Selektor);
 			const deviceAdapterName = myArrDev[i].adapter;
@@ -125,6 +128,7 @@ class DeviceWatcher extends utils.Adapter {
 			const myBlacklist 				= this.config.tableBlacklist;
 			const myBlacklistArr			= [];
 
+			/*----------  Start of second loop  ----------*/
 			for(const i in myBlacklist){
 				myBlacklistArr.push(myBlacklist[i].device);
 				this.log.debug('Found items on the blacklist: ' + myBlacklistArr);
@@ -135,17 +139,17 @@ class DeviceWatcher extends utils.Adapter {
 
 					const currDeviceString    = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
 
-					//Device Namen
+					//Get device name
 					const deviceObject = await this.getForeignObjectAsync(currDeviceString);
 					let deviceName;
 
 					if (deviceObject && typeof deviceObject === 'object') {
 						deviceName = deviceObject.common.name;
 					}
-					//Raum Namen
+					//Get room name
 					let currRoom;
 
-					//Link Qualität
+					//Get link quality
 					const deviceQualityState = await this.getForeignStateAsync(id);
 					let linkQuality;
 
@@ -160,7 +164,6 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						}
 					}
-
 					jsonLinkQualityDevices.push(
 						{
 							device: deviceName,
@@ -170,7 +173,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					);
 
-					// 2. Wann bestand letzter Kontakt zum Gerät
+					// 2. When was the last contact to the device?
 					if (deviceQualityState) {
 						try {
 							const time = new Date();
@@ -199,7 +202,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 
-					// 3. Batteriestatus abfragen
+					// 3. Get battery states
 					const currDeviceBatteryString = currDeviceString + '.battery';
 					const deviceBatteryState = await this.getForeignStateAsync(currDeviceBatteryString);
 					let batteryHealth;
@@ -218,7 +221,7 @@ class DeviceWatcher extends utils.Adapter {
 						);
 					}
 
-					// 4. Alle Geräte in die Liste eintragen
+					// 4. Add all devices in the list
 					arrListAllDevices.push(
 						{
 							device: deviceName,
@@ -229,33 +232,33 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					);
 
-					// 1b. Zähle, wie viele Geräte existieren
+					// 1b. Count how many devices are exists
 					//------------------------
 					deviceCounter = jsonLinkQualityDevices.length;
 
-					// 2c. Wie viele Geräte sind offline?
+					// 2c. Count how many devcies are offline
 					//------------------------
 					offlineDevicesCount = arrOfflineDevices.length;
 
-					// 3c. Wie viele Geräte sind batteriebetrieben?
+					// 3c. Count how many devices are with battery
 					//------------------------
 					batteryPoweredCount = arrBatteryPowered.length;
 
-					// Wenn keine Devices gezählt sind
+					// When no devices are counted
 					//------------------------
 					arrOfflineDevicesZero       = [{Device: '--keine--', Room: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
 					arrLinkQualityDevicesZero   = [{Device: '--keine--', Room: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality = 0
 					arrBatteryPoweredZero       = [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
 					arrListAllDevicesZero       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
-
-					//const time = new Date();
-					//this.log.warn('The Day Number Today: ' + time.getUTCDay());
 				}
-			} //<--Ende zweite Schleife
-		} //<---Ende Hauptschleife
+			} //<--End of second loop
+		} //<---End of main loop
 
-		//Notifications
-		//Offline Message
+		/*=============================================
+		=         	  	 Notifications 		          =
+		=============================================*/
+
+		/*----------  oflline notification ----------*/
 		if(this.config.checkSendOfflineMsg) {
 			try {
 				let msg = '';
@@ -263,18 +266,18 @@ class DeviceWatcher extends utils.Adapter {
 
 				if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
 					this.log.warn('Offline Devices Count New: ' + offlineDevicesCount + ' Offline Devices Count Old: ' + offlineDevicesCountOld.val);
-					if (offlineDevicesCount > offlineDevicesCountOld.val) {
+					if (offlineDevicesCount != offlineDevicesCountOld.val) {
 						if (offlineDevicesCount == 1) {
 							msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
 						} else if (offlineDevicesCount >= 2) {
 							msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
 						}
 						for (const id of arrOfflineDevices) {
-							msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ') ';
+							msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ')';
 						}
 						this.log.warn(msg);
 						await this.setStateAsync('deviceWatcherLog', msg, true);
-						if (pushover.instanz) {
+						if (pushover.instance) {
 							try {
 								await sendPushover(msg);
 							} catch (e) {
@@ -303,21 +306,22 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 		}
-		//Batterie Notification
+
+		/*----------  Low battery Notification ----------*/
 		if (this.config.checkSendBatteryMsg) {
 			try {
 				let batteryMinCount = 0;
 				const batteryWarningMin = this.config.minWarnBatterie;
 				const batteryData = await this.getStateAsync('batteryList');
 				if ((batteryData != null) && (batteryData != undefined) && (batteryData.val != null)) {
-					const batteryDataJson = JSON.parse(String(batteryData.val));
+					const batteryDataRaw = String(batteryData.val);
 
 					let infotext = '';
-					for (const id of batteryDataJson) {
+					for (const id of batteryDataRaw) {
 						if (id['battery']) {
 							const batteryValue = id['battery'].replace('%', '');
 							if (batteryValue < batteryWarningMin) {
-								infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')';
+								infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
 								++batteryMinCount;
 							}
 						}
@@ -358,8 +362,12 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 		}
+		/*=====  End of Section notifications ======*/
 
-		// Datenpunkte beschreiben
+
+		/*=============================================
+		=            	Write Datapoints 		      =
+		=============================================*/
 		this.log.debug('write the datapoints ' + this.main.name);
 
 		try {
@@ -396,6 +404,7 @@ class DeviceWatcher extends utils.Adapter {
 		catch (e) {
 			this.log.error('(05) Error while writing the states ' + e);
 		}
+		/*=====  End of writing Datapoints ======*/
 
 		this.log.debug('Function finished: ' + this.main.name);
 	}
