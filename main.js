@@ -333,7 +333,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							let infotext = '';
 							for (const id of batteryDataJson) {
-								if (id != undefined) {
+								if (id['battery']) {
 									const batteryValue = id['battery'];//.replace('%', '');
 									const blnBatteryValue = batteryValue.replace('%', '');
 									this.log.warn(batteryValue + blnBatteryValue);
