@@ -60,7 +60,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		const sendPushover = async (text) => {
-			await this.sendToAsync(pushover.instanz, 'send', {
+			await this.sendToAsync(pushover.instance, 'send', {
 				message: 'Device-Watcher: ' + text,
 				title: pushover.title,
 				device: pushover.device
@@ -276,21 +276,21 @@ class DeviceWatcher extends utils.Adapter {
 						await this.setStateAsync('deviceWatcherLog', msg, true);
 						if (pushover.instanz) {
 							try {
-								sendPushover(msg);
+								await sendPushover(msg);
 							} catch (e) {
 								this.log.warn ('Getting error at sending notification' + (e));
 							}
 						}
 						if (telegram.instance) {
 							try {
-								sendTelegram(msg);
+								await sendTelegram(msg);
 							} catch (e) {
 								this.log.warn ('Getting error at sending notification' + (e));
 							}
 						}
 						if (jarvis.instance) {
 							try {
-								sendJarvis('{title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
+								await sendJarvis('{title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
 							} catch (e) {
 								this.log.warn ('Getting error at sending notification' + (e));
 							}
@@ -326,13 +326,13 @@ class DeviceWatcher extends utils.Adapter {
 					if (batteryMinCount > 0) {
 						this.log.info('Batteriezustand: ' + infotext);
 						await this.setStateAsync('deviceWatcherLog', infotext, true);
-						/*if (jarvis.instance) {
+						if (jarvis.instance) {
 							try {
 								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
 							} catch (e) {
 								this.log.warn ('Getting error at sending notification' + (e));
 							}
-						}*/
+						}
 						if (pushover.instance) {
 							try {
 								await sendPushover('Batteriezustand: ' + infotext);
