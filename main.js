@@ -332,7 +332,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							let infotext = '';
 							for (const id of batteryDataJson) {
-								if (batteryDataJson.length > 0) {
+								if (id != undefined) {
 									const batteryValue = id['battery'].replace('%', '');
 									if (batteryValue < batteryWarningMin) {
 										infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')';
@@ -373,6 +373,8 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 					this.log.debug('Function finished: ' + this.main.name);
+					const time = new Date();
+					this.log.warn('The Day Number Today: ' + time.getUTCDay());
 				}
 			}
 		}
