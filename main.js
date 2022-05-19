@@ -42,6 +42,12 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async main() {
+		//Helperfunctions
+		//capitalize the first letter
+		async function capitalize(sentence)
+		{
+			return sentence && sentence[0].toUpperCase() + sentence.slice(1);
+		}
 
 		const pushover = {
 			instance: this.config.instancePushover,
@@ -128,12 +134,13 @@ class DeviceWatcher extends utils.Adapter {
 			const myBlacklist 				= this.config.tableBlacklist;
 			const myBlacklistArr			= [];
 
-			/*----------  Start of second loop  ----------*/
+			/*----------  Loop for blacklist ----------*/
 			for(const i in myBlacklist){
 				myBlacklistArr.push(myBlacklist[i].device);
 				this.log.debug('Found items on the blacklist: ' + myBlacklistArr);
 			}
 
+			/*----------  Start of second main loop  ----------*/
 			for(const [id] of Object.entries(devices)) {
 				if (!myBlacklistArr.includes(id)) {
 
@@ -146,8 +153,17 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceObject && typeof deviceObject === 'object') {
 						deviceName = deviceObject.common.name;
 					}
-					//Get room name
+
+
+					//Get room name (not implement yet)
+					//const getRoomName = await this.getEnumAsync('rooms');
 					let currRoom;
+					//this.log.warn(JSON.stringify(getRoomName));
+
+					/*for(const [id] of Object.entries(getRoomName.result)) {
+						currRoom = await capitalize(id.substring(id.lastIndexOf('.') + 1)) ;
+						this.log.warn(currRoom);
+					}*/
 
 					//Get link quality
 					const deviceQualityState = await this.getForeignStateAsync(id);
@@ -266,7 +282,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
 					this.log.warn('Offline Devices Count New: ' + offlineDevicesCount + ' Offline Devices Count Old: ' + offlineDevicesCountOld.val);
-					if (offlineDevicesCount != offlineDevicesCountOld.val) {
+					if ((offlineDevicesCount != offlineDevicesCountOld.val) && (offlineDevicesCount != 0)) {
 						if (offlineDevicesCount == 1) {
 							msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
 						} else if (offlineDevicesCount >= 2) {
@@ -312,50 +328,45 @@ class DeviceWatcher extends utils.Adapter {
 			try {
 				let batteryMinCount = 0;
 				const batteryWarningMin = this.config.minWarnBatterie;
-				const batteryData = await this.getStateAsync('batteryList');
-				if ((batteryData != null) && (batteryData != undefined) && (batteryData.val != null)) {
-					const batteryDataRaw = String(batteryData.val);
 
-					let infotext = '';
-					for (const id of batteryDataRaw) {
-						if (id['battery']) {
-							const batteryValue = id['battery'].replace('%', '');
-							if (batteryValue < batteryWarningMin) {
-								infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
-								++batteryMinCount;
-							}
+				let infotext = '';
+				for (const id of arrBatteryPowered) {
+					if (id['battery']) {
+						const batteryValue = parseFloat(id['battery'].replace('%', ''));
+						if (batteryValue < batteryWarningMin) {
+							infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
+							++batteryMinCount;
 						}
 					}
+				}
 
-					if (batteryMinCount > 0) {
-						this.log.info('Batteriezustand: ' + infotext);
-						await this.setStateAsync('deviceWatcherLog', infotext, true);
-						if (jarvis.instance) {
-							try {
-								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
-							}
+				if (batteryMinCount > 0) {
+					this.log.info('Batteriezustand: ' + infotext);
+					await this.setStateAsync('deviceWatcherLog', infotext, true);
+					if (jarvis.instance) {
+						try {
+							await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
 						}
-						if (pushover.instance) {
-							try {
-								await sendPushover('Batteriezustand: ' + infotext);
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
-							}
-						}
-						if (telegram.instance) {
-							try {
-								await sendTelegram('Batteriezustand: ' + infotext);
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
-							}
-						}
-
 					}
-					else {
-						await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
+					if (pushover.instance) {
+						try {
+							await sendPushover('Batteriezustand: ' + infotext);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
 					}
+					if (telegram.instance) {
+						try {
+							await sendTelegram('Batteriezustand: ' + infotext);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
+					}
+				}
+				else {
+					await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
 				}
 			} catch (e) {
 				this.log.debug('Getting error at batterynotification ' + e);
