@@ -5,6 +5,7 @@
 'use strict';
 
 const utils = require('@iobroker/adapter-core');
+const { stringify } = require('querystring');
 const adapterName = require('./package.json').name.split('.').pop();
 
 class DeviceWatcher extends utils.Adapter {
@@ -42,6 +43,7 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async main() {
+
 		//Helperfunctions
 		//capitalize the first letter
 		async function capitalize(sentence)
@@ -281,7 +283,6 @@ class DeviceWatcher extends utils.Adapter {
 				const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
 
 				if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
-					this.log.warn('Offline Devices Count New: ' + offlineDevicesCount + ' Offline Devices Count Old: ' + offlineDevicesCountOld.val);
 					if ((offlineDevicesCount != offlineDevicesCountOld.val) && (offlineDevicesCount != 0)) {
 						if (offlineDevicesCount == 1) {
 							msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
@@ -324,54 +325,70 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		/*----------  Low battery Notification ----------*/
-		if (this.config.checkSendBatteryMsg) {
-			try {
-				let batteryMinCount = 0;
-				const batteryWarningMin = this.config.minWarnBatterie;
+		const now = new Date();
+		const today = now.getDay();
+		const checkDays = [0, 3, 5, 6];
+		let checkToday;
 
-				let infotext = '';
-				for (const id of arrBatteryPowered) {
-					if (id['battery']) {
-						const batteryValue = parseFloat(id['battery'].replace('%', ''));
-						if (batteryValue < batteryWarningMin) {
-							infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
-							++batteryMinCount;
-						}
-					}
-				}
-
-				if (batteryMinCount > 0) {
-					this.log.info('Batteriezustand: ' + infotext);
-					await this.setStateAsync('deviceWatcherLog', infotext, true);
-					if (jarvis.instance) {
-						try {
-							await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
-						} catch (e) {
-							this.log.warn ('Getting error at sending notification' + (e));
-						}
-					}
-					if (pushover.instance) {
-						try {
-							await sendPushover('Batteriezustand: ' + infotext);
-						} catch (e) {
-							this.log.warn ('Getting error at sending notification' + (e));
-						}
-					}
-					if (telegram.instance) {
-						try {
-							await sendTelegram('Batteriezustand: ' + infotext);
-						} catch (e) {
-							this.log.warn ('Getting error at sending notification' + (e));
-						}
-					}
-				}
-				else {
-					await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
-				}
-			} catch (e) {
-				this.log.debug('Getting error at batterynotification ' + e);
+		checkDays.forEach(object =>{
+			if((object >= 0) && today == object){
+				checkToday = true;
 			}
+		});
 
+		this.log.warn('Heute prüfen ' + checkToday);
+
+		//Nur einmal abfragen
+		if ((now.getHours() > 11) && (now.getHours() < 13) && (checkToday)){
+			if (this.config.checkSendBatteryMsg) {
+				try {
+					let batteryMinCount = 0;
+					const batteryWarningMin = this.config.minWarnBatterie;
+
+					let infotext = '';
+					for (const id of arrBatteryPowered) {
+						if (id['battery']) {
+							const batteryValue = parseFloat(id['battery'].replace('%', ''));
+							if (batteryValue < batteryWarningMin) {
+								infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
+								++batteryMinCount;
+							}
+						}
+					}
+
+					if (batteryMinCount > 0) {
+						this.log.info('Batteriezustand: ' + infotext);
+						await this.setStateAsync('deviceWatcherLog', infotext, true);
+						if (jarvis.instance) {
+							try {
+								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
+						}
+						if (pushover.instance) {
+							try {
+								await sendPushover('Batteriezustand: ' + infotext);
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
+						}
+						if (telegram.instance) {
+							try {
+								await sendTelegram('Batteriezustand: ' + infotext);
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
+						}
+					}
+					else {
+						await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
+					}
+				} catch (e) {
+					this.log.debug('Getting error at batterynotification ' + e);
+				}
+
+			}
 		}
 		/*=====  End of Section notifications ======*/
 

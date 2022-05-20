@@ -216,6 +216,19 @@
 				"def": ""
 			},
 			"native": {}
+		},
+		{
+			"_id": "batteryMessageSent",
+			"type": "state",
+			"common": {
+				"name": "Shows if Battery Message was already sent.",
+				"type": "boolean",
+				"role": "value",
+				"read": false,
+				"write": false,
+				"def": false
+			},
+			"native": {}
 		}
 	]
 }
