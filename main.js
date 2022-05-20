@@ -65,6 +65,15 @@ class DeviceWatcher extends utils.Adapter {
 			title: this.config.titleJarvis
 
 		};
+		const choosedDays = {
+			monday: this.config.checkMonday,
+			tuesday: this.config.checkTuesday,
+			wednesday: this.config.checkWednesday,
+			thursday: this.config.checkThursday,
+			friday: this.config.checkFriday,
+			saturday: this.config.checkSaturday,
+			sunday: this.config.checkSunday,
+		};
 
 		const sendPushover = async (text) => {
 			await this.sendToAsync(pushover.instance, 'send', {
@@ -326,8 +335,18 @@ class DeviceWatcher extends utils.Adapter {
 		/*----------  Low battery Notification ----------*/
 		const now = new Date();
 		const today = now.getDay();
-		const checkDays = [0, 3, 5, 6];
+		const checkDays = [];
 		let checkToday;
+
+		if (choosedDays.monday) checkDays.push(1);
+		if (choosedDays.tuesday) checkDays.push(2);
+		if (choosedDays.wednesday) checkDays.push(3);
+		if (choosedDays.thursday) checkDays.push(4);
+		if (choosedDays.friday) checkDays.push(5);
+		if (choosedDays.saturday) checkDays.push(6);
+		if (choosedDays.sunday) checkDays.push(0);
+
+		this.log.debug(JSON.stringify(checkDays));
 
 		checkDays.forEach(object =>{
 			if((object >= 0) && today == object){
@@ -335,10 +354,10 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		});
 
-		this.log.warn('Heute prüfen ' + checkToday);
+		this.log.debug('Heute prüfen ' + checkToday);
 
 		//Nur einmal abfragen
-		if ((now.getHours() > 11) && (now.getHours() < 13) && (checkToday)){
+		if ((now.getHours() > 11) && (now.getHours() < 13) && (checkToday != undefined)){
 			if (this.config.checkSendBatteryMsg) {
 				try {
 					let batteryMinCount = 0;

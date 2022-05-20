@@ -45,7 +45,7 @@
                     "md": 6,
                     "lg": 4,
                     "label": "True State",
-                    "help": "True state for quality"
+                    "help": "Use the true state for quality"
                 },
                 "maxMinutes": {
                     "type": "number",
@@ -76,10 +76,15 @@
                     "label": "Send offline message",
                     "help": "Get message if an device is not reachable"
                 },
+                "trenner": {
+                    "newLine": true,
+                    "type": "divider"
+                },
                 "checkSendBatteryMsg": {
+                    "newLine": "true",
                     "type":"checkbox",
-                    "sm": 12,
-                    "md": 6,
+                    "sm": 4,
+                    "md": 4,
                     "lg": 4,
                     "label": "Send batterie message",
                     "help": "Get message if an device has low battery"
@@ -88,11 +93,45 @@
                     "type": "number",
                     "min": 0,
                     "max": 100,
-                    "sm": 12,
+                    "sm": 8,
                     "md": 6,
                     "lg": 4,
                     "label": "From how much min % would you get a message",
                     "help": "in percent"
+                },
+                "chooseDay": {
+                    "sm": 8,
+                    "md": 6,
+                    "lg": 4,
+                    "items": {
+                        "checkMonday": {
+                            "type": "checkbox",
+                            "label": "Mo"
+                        },
+                        "checkTuesday": {
+                            "type": "checkbox",
+                            "label": "Tu"
+                        },
+                        "checkWednesday": {
+                            "type": "checkbox",
+                            "label": "We"
+                        },
+                        "checkThursday": {
+                            "type": "checkbox",
+                            "label": "Tue"
+                        },"checkFriday": {
+                            "type": "checkbox",
+                            "label": "Fr"
+                        },
+                        "checkSaturday": {
+                            "type": "checkbox",
+                            "label": "Sa"
+                        },
+                        "checkSunday": {
+                            "type": "checkbox",
+                            "label": "Su"
+                        }
+                    }
                 },
                 "_headerPushover": {
                     "newLine": true,
