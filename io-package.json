@@ -223,6 +223,19 @@
 				"def": ""
 			},
 			"native": {}
+		},
+		{
+			"_id": "info.lastBatteryNotification",
+			"type": "state",
+			"common": {
+				"name": "Indicator if last battery notification was send successfully.",
+				"type": "boolean",
+				"role": "indicator",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
 		}
 	]
 }

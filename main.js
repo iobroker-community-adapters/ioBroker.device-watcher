@@ -97,20 +97,24 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug('Function started: ' + this.main.name);
 
 		const arrOfflineDevices         = []; //JSON-Info of all offline-devices
+		let arrOfflineDevicesZero		= [];
 		const jsonLinkQualityDevices    = []; //JSON-Info of all devices with linkquality
+		let arrLinkQualityDevicesZero 	= [];
 		const arrBatteryPowered         = []; //JSON-Info of all devices with battery
+		let arrBatteryPoweredZero 		= [];
 		const arrListAllDevices         = []; //JSON-Info total list with info of all devices
+		let arrListAllDevicesZero 		= [];
 		let offlineDevicesCount			= 0;
 		let deviceCounter;
 		let batteryPoweredCount;
-		let arrOfflineDevicesZero	= [];
-		let arrLinkQualityDevicesZero = [];
-		let arrBatteryPoweredZero = [];
-		let arrListAllDevicesZero = [];
-
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
+			return;
+		}
+
+		if ((this.config.instanceJarvis == undefined) || (!this.config.instancePushover == undefined) || (!this.config.instanceTelegram  == undefined)) {
+			this.log.warn('No instances for notification selected. Please check the instance configuration and choose an instance or set it to "none"');
 			return;
 		}
 
@@ -288,42 +292,48 @@ class DeviceWatcher extends utils.Adapter {
 		if(this.config.checkSendOfflineMsg) {
 			try {
 				let msg = '';
-				const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
+				let offlineDevicesCountOld;
 
-				if ((offlineDevicesCountOld != null) && (offlineDevicesCountOld != undefined) && (offlineDevicesCountOld.val != null)) {
-					if ((offlineDevicesCount != offlineDevicesCountOld.val) && (offlineDevicesCount != 0)) {
-						if (offlineDevicesCount == 1) {
-							msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-						} else if (offlineDevicesCount >= 2) {
-							msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
-						}
-						for (const id of arrOfflineDevices) {
-							msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ')';
-						}
-						this.log.warn(msg);
-						await this.setStateAsync('deviceWatcherLog', msg, true);
-						if (pushover.instance) {
-							try {
-								await sendPushover(msg);
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
-							}
-						}
-						if (telegram.instance) {
-							try {
-								await sendTelegram(msg);
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
-							}
-						}
-						if (jarvis.instance) {
-							try {
-								await sendJarvis('{title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
-							}
+				this.getStateAsync('offlineCount', (state) => {
+					// state can be null!
+					if (state) {
+						offlineDevicesCountOld(state.val);
+					}
+				});
+
+				if ((offlineDevicesCount != offlineDevicesCountOld) && (offlineDevicesCount != 0)) {
+					if (offlineDevicesCount == 1) {
+						msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
+					} else if (offlineDevicesCount >= 2) {
+						msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
+					}
+					for (const id of arrOfflineDevices) {
+						msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ')';
+					}
+					this.log.warn(msg);
+					await this.setStateAsync('deviceWatcherLog', msg, true);
+					if (pushover.instance) {
+						try {
+							await sendPushover(msg);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
 						}
 					}
+					if (telegram.instance) {
+						try {
+							await sendTelegram(msg);
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
+					}
+					if (jarvis.instance) {
+						try {
+							await sendJarvis('{title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
+						} catch (e) {
+							this.log.warn ('Getting error at sending notification' + (e));
+						}
+					}
+
 
 				}
 			} catch (e) {
@@ -348,7 +358,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug(JSON.stringify(checkDays));
 
-		checkDays.forEach(object =>{
+		checkDays.forEach(object => {
 			if((object >= 0) && today == object){
 				checkToday = true;
 			}
