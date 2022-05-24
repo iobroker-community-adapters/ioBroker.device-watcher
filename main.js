@@ -96,6 +96,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug('Function started: ' + this.main.name);
 
+		this.log.warn(pushover.instance);
+
 		const arrOfflineDevices         = []; //JSON-Info of all offline-devices
 		let arrOfflineDevicesZero		= [];
 		const jsonLinkQualityDevices    = []; //JSON-Info of all devices with linkquality
