@@ -323,7 +323,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					if (jarvis.instance) {
 						try {
-							await sendJarvis('{title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
+							await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
 						} catch (e) {
 							this.log.warn ('Getting error at sending notification' + (e));
 						}
