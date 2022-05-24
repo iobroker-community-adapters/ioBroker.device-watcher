@@ -115,11 +115,6 @@ class DeviceWatcher extends utils.Adapter {
 			return;
 		}
 
-		if ((this.config.instanceJarvis == undefined) || (!this.config.instancePushover == undefined) || (!this.config.instanceTelegram  == undefined)) {
-			this.log.warn('No instances for notification selected. Please check the instance configuration and choose an instance or set it to "none"');
-			return;
-		}
-
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
 		if (this.config.test) {
