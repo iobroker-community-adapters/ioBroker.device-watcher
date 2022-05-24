@@ -45,10 +45,11 @@ class DeviceWatcher extends utils.Adapter {
 
 		//Helperfunctions
 		//capitalize the first letter
+		/*
 		async function capitalize(sentence)
 		{
 			return sentence && sentence[0].toUpperCase() + sentence.slice(1);
-		}
+		}*/
 
 		const pushover = {
 			instance: this.config.instancePushover,
