@@ -288,50 +288,46 @@ class DeviceWatcher extends utils.Adapter {
 		if(this.config.checkSendOfflineMsg) {
 			try {
 				let msg = '';
-				let offlineDevicesCountOld;
+				const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
 
-				this.getStateAsync('offlineCount', (state) => {
-					// state can be null!
-					if (state) {
-						offlineDevicesCountOld(state.val);
-					}
-				});
-
-				if ((offlineDevicesCount != offlineDevicesCountOld) && (offlineDevicesCount != 0)) {
-					if (offlineDevicesCount == 1) {
-						msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-					} else if (offlineDevicesCount >= 2) {
-						msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
-					}
-					for (const id of arrOfflineDevices) {
-						msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ')';
-					}
-					this.log.warn(msg);
-					await this.setStateAsync('deviceWatcherLog', msg, true);
-					if (pushover.instance) {
-						try {
-							await sendPushover(msg);
-						} catch (e) {
-							this.log.warn ('Getting error at sending notification' + (e));
+				if ((offlineDevicesCountOld != undefined) && (offlineDevicesCountOld != null)) {
+					if ((offlineDevicesCount != offlineDevicesCountOld.val) && (offlineDevicesCount != 0)) {
+						if (offlineDevicesCount == 1) {
+							msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
+						} else if (offlineDevicesCount >= 2) {
+							msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
 						}
-					}
-					if (telegram.instance) {
-						try {
-							await sendTelegram(msg);
-						} catch (e) {
-							this.log.warn ('Getting error at sending notification' + (e));
+						for (const id of arrOfflineDevices) {
+							msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ')';
 						}
-					}
-					if (jarvis.instance) {
-						try {
-							await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
-						} catch (e) {
-							this.log.warn ('Getting error at sending notification' + (e));
+						this.log.warn(msg);
+						await this.setStateAsync('deviceWatcherLog', msg, true);
+						if (pushover.instance) {
+							try {
+								await sendPushover(msg);
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
 						}
-					}
+						if (telegram.instance) {
+							try {
+								await sendTelegram(msg);
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
+						}
+						if (jarvis.instance) {
+							try {
+								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
+						}
 
 
+					}
 				}
+
 			} catch (e) {
 				this.log.debug('Getting error at sending offline notification ' + e);
 			}
