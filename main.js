@@ -300,7 +300,7 @@ class DeviceWatcher extends utils.Adapter {
 						for (const id of arrOfflineDevices) {
 							msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ')';
 						}
-						this.log.warn(msg);
+						this.log.info(msg);
 						await this.setStateAsync('deviceWatcherLog', msg, true);
 						if (pushover.instance) {
 							try {
