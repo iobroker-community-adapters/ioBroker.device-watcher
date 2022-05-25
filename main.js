@@ -348,7 +348,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (choosedDays.saturday) checkDays.push(6);
 		if (choosedDays.sunday) checkDays.push(0);
 
-		this.log.debug(JSON.stringify(checkDays));
+		if (this.config.checkSendBatteryMsg) this.log.debug(JSON.stringify(checkDays));
 
 		checkDays.forEach(object => {
 			if((object >= 0) && today == object){
