@@ -28,18 +28,18 @@
 				"zh-cn": "达到测试状态"
 			}
 		},
-		"title": "Device Watcher",
+		"title": "Device-Watcher",
 		"titleLang": {
-			"en": "Device Watcher",
-			"de": "Gerätebeobachter",
-			"ru": "Наблюдатель за устройствами",
-			"pt": "Observador de dispositivos",
-			"nl": "Device Watcher",
-			"fr": "Observateur de périphérique",
-			"it": "Dispositivo di controllo",
+			"en": "Device-Watcher",
+			"de": "Device-Watcher",
+			"ru": "Устройство-наблюдатель",
+			"pt": "Dispositivo-Observador",
+			"nl": "Device-Watcher",
+			"fr": "Device-Watcher",
+			"it": "Dispositivo di osservazione",
 			"es": "Vigilante de dispositivos",
 			"pl": "Obserwator urządzeń",
-			"zh-cn": "设备观察器"
+			"zh-cn": "设备观察者"
 		},
 		"desc": {
 			"en": "Watchdog for wireless devices",
