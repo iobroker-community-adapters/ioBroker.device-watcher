@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "0.0.1",
+		"version": "0.0.5",
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
@@ -19,7 +19,7 @@
 		"title": "Device Watcher",
 		"titleLang": {
 			"en": "Device Watcher",
-			"de": "Gerätebeobachter",
+			"de": "Device Watcher",
 			"ru": "Наблюдатель за устройствами",
 			"pt": "Observador de dispositivos",
 			"nl": "Device Watcher",
