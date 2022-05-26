@@ -240,7 +240,7 @@
 			"_id": "info.lastBatteryNotification",
 			"type": "state",
 			"common": {
-				"name": "Indicator if last battery notification was today.",
+				"name": "Indicator if last battery notification was send today.",
 				"type": "boolean",
 				"role": "indicator",
 				"read": true,
