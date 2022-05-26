@@ -21,7 +21,7 @@ If you found a bug or if you've an improvement suggestion, feel free to open an 
 
 
 ## Changelog
-#### Version 0.0.5
+### **0.0.5 (2022-05-26)**
 Adapter is ready for tests.
 
 #### **WORK IN PROGRESS**
