@@ -2,7 +2,10 @@
   "name": "iobroker.device-watcher",
   "version": "0.0.5",
   "description": "Watchdog for wireless devices",
-  "author": "Christian Behrends <mail@christian-behrends.de>",
+  "author": {
+    "name": "Christian Behrends",
+    "email": "mail@christian-behrends.de"
+  },
   "homepage": "https://github.com/ciddi89/ioBroker.device-watcher",
   "license": "MIT",
   "keywords": [
@@ -62,8 +65,5 @@
   "bugs": {
     "url": "https://github.com/ciddi89/ioBroker.device-watcher/issues"
   },
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  }
+  "readmeFilename": "README.md"
 }
