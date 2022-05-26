@@ -228,7 +228,7 @@
 			"_id": "info.lastBatteryNotification",
 			"type": "state",
 			"common": {
-				"name": "Indicator if last battery notification was send successfully.",
+				"name": "Indicator if last battery notification was today.",
 				"type": "boolean",
 				"role": "indicator",
 				"read": true,

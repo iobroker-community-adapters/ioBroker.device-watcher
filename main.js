@@ -358,58 +358,65 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug('Heute prüfen ' + checkToday);
 
-		//Nur einmal abfragen
-		if ((now.getHours() > 11) && (now.getHours() < 13) && (checkToday != undefined)){
-			if (this.config.checkSendBatteryMsg) {
-				try {
-					let batteryMinCount = 0;
-					const batteryWarningMin = this.config.minWarnBatterie;
 
-					let infotext = '';
-					for (const id of arrBatteryPowered) {
-						if (id['battery']) {
-							const batteryValue = parseFloat(id['battery'].replace('%', ''));
-							if (batteryValue < batteryWarningMin) {
-								infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
-								++batteryMinCount;
-							}
-						}
-					}
+		if (this.config.checkSendBatteryMsg) {
+			try {
+			//Nur einmal abfragen
+				const lastBatteryNotifyIndicator = await this.getStateAsync('info.lastBatteryNotification');
 
-					if (batteryMinCount > 0) {
-						this.log.info('Batteriezustand: ' + infotext);
-						await this.setStateAsync('deviceWatcherLog', infotext, true);
-						if (jarvis.instance) {
-							try {
-								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
+				if ((lastBatteryNotifyIndicator != undefined) && (lastBatteryNotifyIndicator != null)) {
+					if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);}
+					if ((now.getHours() > 11) && (lastBatteryNotifyIndicator.val == false) && (checkToday != undefined)){
+						let batteryMinCount = 0;
+						const batteryWarningMin = this.config.minWarnBatterie;
+
+						let infotext = '';
+						for (const id of arrBatteryPowered) {
+							if (id['battery']) {
+								const batteryValue = parseFloat(id['battery'].replace('%', ''));
+								if (batteryValue < batteryWarningMin) {
+									infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
+									++batteryMinCount;
+								}
 							}
 						}
-						if (pushover.instance) {
-							try {
-								await sendPushover('Batteriezustand: ' + infotext);
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
+						if (batteryMinCount > 0) {
+							this.log.info('Batteriezustand: ' + infotext);
+							await this.setStateAsync('deviceWatcherLog', infotext, true);
+							if (jarvis.instance) {
+								try {
+									await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
 							}
+							if (pushover.instance) {
+								try {
+									await sendPushover('Batteriezustand: ' + infotext);
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
+							}
+							if (telegram.instance) {
+								try {
+									await sendTelegram('Batteriezustand: ' + infotext);
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
+							}
+							await this.setStateAsync('info.lastBatteryNotification', true, true);
 						}
-						if (telegram.instance) {
-							try {
-								await sendTelegram('Batteriezustand: ' + infotext);
-							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
-							}
+						else {
+							await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
 						}
 					}
-					else {
-						await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
-					}
-				} catch (e) {
-					this.log.debug('Getting error at batterynotification ' + e);
 				}
-
+			} catch (e) {
+				this.log.debug('Getting error at batterynotification ' + e);
 			}
 		}
+
+
 		/*=====  End of Section notifications ======*/
 
 
