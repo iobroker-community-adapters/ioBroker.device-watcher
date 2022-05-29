@@ -453,7 +453,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			//Zeitstempel wann die Datenpunkte zuletzt gecheckt wurden
-			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh.mm.ss');
+			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
 			await this.setStateAsync('lastCheck', lastCheck, true);
 
 			this.log.debug('write the datapoints finished ' + this.main.name);
