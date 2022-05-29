@@ -78,7 +78,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		const sendPushover = async (text) => {
 			await this.sendToAsync(pushover.instance, 'send', {
-				message: 'Device-Watcher: ' + text,
+				message: text,
 				title: pushover.title,
 				device: pushover.device
 			});
@@ -108,6 +108,7 @@ class DeviceWatcher extends utils.Adapter {
 		let offlineDevicesCount			= 0;
 		let deviceCounter;
 		let batteryPoweredCount;
+		let lastContactString;
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
@@ -206,7 +207,7 @@ class DeviceWatcher extends utils.Adapter {
 							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
-							let lastContactString = Math.round(lastContact) + ' Minuten';
+							lastContactString = Math.round(lastContact) + ' Minuten';
 							if (Math.round(lastContact) > 100) {
 								lastContactString = Math.round(lastContact/60) + ' Stunden';
 							}
@@ -254,6 +255,7 @@ class DeviceWatcher extends utils.Adapter {
 							adapter: deviceAdapterName,
 							room: currRoom,
 							battery: batteryHealth,
+							lastContact: lastContactString,
 							link_quality: linkQuality
 						}
 					);
