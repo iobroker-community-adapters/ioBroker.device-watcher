@@ -165,7 +165,8 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Title (optional)",
-                    "help": "Choose your title for Pushmessage"
+                    "help": "Choose your title for Pushmessage",
+                    "default": "ioBroker Device-Watcher"
                 },
                 "headerTelegram": {
                     "newLine": "true",
