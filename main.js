@@ -97,22 +97,18 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug('Function started: ' + this.main.name);
 
-		const arrOfflineDevices         = []; //JSON-Info of all offline-devices
-		let arrOfflineDevicesZero		= [];
-		const jsonLinkQualityDevices    = []; //JSON-Info of all devices with linkquality
-		let arrLinkQualityDevicesZero 	= [];
-		const arrBatteryPowered         = []; //JSON-Info of all devices with battery
-		let arrBatteryPoweredZero 		= [];
-		const arrListAllDevices         = []; //JSON-Info total list with info of all devices
-		let arrListAllDevicesZero 		= [];
-		let offlineDevicesCount			= 0;
-		let deviceCounter;
-		let batteryPoweredCount;
+		let arrOfflineDevices         = []; //JSON-Info of all offline-devices
+		let jsonLinkQualityDevices    = []; //JSON-Info of all devices with linkquality
+		let arrBatteryPowered         = []; //JSON-Info of all devices with battery
+		let arrListAllDevices         = []; //JSON-Info total list with info of all devices
+		let offlineDevicesCount	= 0;
+		let deviceCounter		= 0;
+		let batteryPoweredCount = 0;
 		let lastContactString;
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
-			return;
+			//return;
 		}
 
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
@@ -272,12 +268,6 @@ class DeviceWatcher extends utils.Adapter {
 					//------------------------
 					batteryPoweredCount = arrBatteryPowered.length;
 
-					// When no devices are counted
-					//------------------------
-					arrOfflineDevicesZero       = [{Device: '--keine--', Room: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
-					arrLinkQualityDevicesZero   = [{Device: '--keine--', Room: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality = 0
-					arrBatteryPoweredZero       = [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
-					arrListAllDevicesZero       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
 				}
 			} //<--End of second loop
 		} //<---End of main loop
@@ -358,9 +348,6 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		});
 
-		this.log.debug('Heute prüfen ' + checkToday);
-
-
 		if (this.config.checkSendBatteryMsg) {
 			try {
 			//Nur einmal abfragen
@@ -433,21 +420,28 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync('batteryCount', {val: batteryPoweredCount, ack: true});
 
 			if (deviceCounter == 0) {
-				await this.setStateAsync('linkQualityList', {val: JSON.stringify(arrLinkQualityDevicesZero), ack: true});
-				await this.setStateAsync('ListAll', {val: JSON.stringify(arrListAllDevicesZero), ack: true});
+				jsonLinkQualityDevices	= [{Device: '--keine--', Room: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality
+				arrListAllDevices       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
+
+				await this.setStateAsync('linkQualityList', {val: JSON.stringify(jsonLinkQualityDevices), ack: true});
+				await this.setStateAsync('listAll', {val: JSON.stringify(arrListAllDevices), ack: true});
 			} else {
 				await this.setStateAsync('linkQualityList', {val: JSON.stringify(jsonLinkQualityDevices), ack: true});
 				await this.setStateAsync('listAll', {val: JSON.stringify(arrListAllDevices), ack: true});
 			}
 
 			if (offlineDevicesCount == 0) {
-				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevicesZero), ack: true});
+				arrOfflineDevices	= [{Device: '--keine--', Room: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
+
+				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevices), ack: true});
 			} else {
 				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevices), ack: true});
 			}
 
 			if (batteryPoweredCount == 0) {
-				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPoweredZero), ack: true});
+				arrBatteryPowered	= [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+
+				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
 			} else {
 				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
 			}
