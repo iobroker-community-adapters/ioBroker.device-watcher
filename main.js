@@ -164,7 +164,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					//Get room name (not implement yet)
 					//const getRoomName = await this.getEnumAsync('rooms');
-					let currRoom;
+					//let currRoom;
 					//this.log.warn(JSON.stringify(getRoomName));
 
 					/*for(const [id] of Object.entries(getRoomName.result)) {
@@ -172,7 +172,7 @@ class DeviceWatcher extends utils.Adapter {
 						this.log.warn(currRoom);
 					}*/
 
-					//Get link quality
+					// 1. Get link quality
 					const deviceQualityState = await this.getForeignStateAsync(id);
 					let linkQuality;
 
@@ -195,11 +195,15 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					);
 
+					// 1b. Count how many devices are exists
+					deviceCounter = jsonLinkQualityDevices.length;
+
 					// 2. When was the last contact to the device?
 					if (deviceQualityState) {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
+
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
 							lastContactString = Math.round(lastContact) + ' Minuten';
@@ -223,6 +227,9 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 
+					// 2c. Count how many devcies are offline
+					offlineDevicesCount = arrOfflineDevices.length;
+
 					// 3. Get battery states
 					const currDeviceBatteryString = currDeviceString + '.battery';
 					const deviceBatteryState = await this.getForeignStateAsync(currDeviceBatteryString);
@@ -240,6 +247,8 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						);
 					}
+					// 3b. Count how many devices are with battery
+					batteryPoweredCount = arrBatteryPowered.length;
 
 					// 4. Add all devices in the list
 					arrListAllDevices.push(
@@ -251,19 +260,6 @@ class DeviceWatcher extends utils.Adapter {
 							Link_quality: linkQuality
 						}
 					);
-
-					// 1b. Count how many devices are exists
-					//------------------------
-					deviceCounter = jsonLinkQualityDevices.length;
-
-					// 2c. Count how many devcies are offline
-					//------------------------
-					offlineDevicesCount = arrOfflineDevices.length;
-
-					// 3c. Count how many devices are with battery
-					//------------------------
-					batteryPoweredCount = arrBatteryPowered.length;
-
 				}
 			} //<--End of second loop
 		} //<---End of main loop
