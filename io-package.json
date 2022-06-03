@@ -97,7 +97,6 @@
 		"bleDevices": false,
 		"trueState": false,
 		"maxMinutes": 300,
-		"test": false,
 		"checkSendOfflineMsg": false,
 		"checkSendBatteryMsg": false,
 		"minWarnBatterie": 35,

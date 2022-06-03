@@ -105,15 +105,15 @@ class DeviceWatcher extends utils.Adapter {
 		let deviceCounter		= 0;
 		let batteryPoweredCount = 0;
 		let lastContactString;
+		const testMe = false;
 
-		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.test) {
+		if (!this.config.zigbeeDevices && !this.config.bleDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
-			//return;
 		}
 
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
-		if (this.config.test) {
+		if (testMe) {
 			myArrDev.push({'Selektor':'0_userdata.*.link_quality','theName':'common', 'adapter':'Test'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}

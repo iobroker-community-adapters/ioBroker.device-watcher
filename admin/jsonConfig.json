@@ -11,13 +11,6 @@
                     "text": "Devices",
                     "size": 1
                 },
-                "test": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "Test Devices"
-                },
                 "zigbeeDevices": {
                     "type": "checkbox",
                     "sm": 12,
