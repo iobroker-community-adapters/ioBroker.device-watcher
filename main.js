@@ -189,10 +189,9 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					jsonLinkQualityDevices.push(
 						{
-							device: deviceName,
-							adapter: deviceAdapterName,
-							room: currRoom,
-							link_quality: linkQuality
+							Device: deviceName,
+							Adapter: deviceAdapterName,
+							Link_quality: linkQuality
 						}
 					);
 
@@ -213,10 +212,9 @@ class DeviceWatcher extends utils.Adapter {
 							if (lastContact > this.config.maxMinutes) {
 								arrOfflineDevices.push(
 									{
-										device: deviceName,
-										adapter: deviceAdapterName,
-										room: currRoom,
-										lastContact: lastContactString
+										Device: deviceName,
+										Adapter: deviceAdapterName,
+										Last_contact: lastContactString
 									}
 								);
 							}
@@ -236,10 +234,9 @@ class DeviceWatcher extends utils.Adapter {
 						batteryHealth = (deviceBatteryState).val + '%';
 						arrBatteryPowered.push(
 							{
-								device: deviceName,
-								adapter: deviceAdapterName,
-								room: currRoom,
-								battery: batteryHealth
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Battery: batteryHealth
 							}
 						);
 					}
@@ -247,12 +244,11 @@ class DeviceWatcher extends utils.Adapter {
 					// 4. Add all devices in the list
 					arrListAllDevices.push(
 						{
-							device: deviceName,
-							adapter: deviceAdapterName,
-							room: currRoom,
-							battery: batteryHealth,
-							lastContact: lastContactString,
-							link_quality: linkQuality
+							Device: deviceName,
+							Adapter: deviceAdapterName,
+							Battery: batteryHealth,
+							Last_contact: lastContactString,
+							Link_quality: linkQuality
 						}
 					);
 
@@ -420,8 +416,8 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync('batteryCount', {val: batteryPoweredCount, ack: true});
 
 			if (deviceCounter == 0) {
-				jsonLinkQualityDevices	= [{Device: '--keine--', Room: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality
-				arrListAllDevices       = [{Device: '--keine--', Room: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
+				jsonLinkQualityDevices	= [{Device: '--keine--', Adapter: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality
+				arrListAllDevices       = [{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
 
 				await this.setStateAsync('linkQualityList', {val: JSON.stringify(jsonLinkQualityDevices), ack: true});
 				await this.setStateAsync('listAll', {val: JSON.stringify(arrListAllDevices), ack: true});
@@ -431,7 +427,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (offlineDevicesCount == 0) {
-				arrOfflineDevices	= [{Device: '--keine--', Room: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
+				arrOfflineDevices	= [{Device: '--keine--', Adapter: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
 
 				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevices), ack: true});
 			} else {
@@ -439,7 +435,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (batteryPoweredCount == 0) {
-				arrBatteryPowered	= [{Device: '--keine--', Room: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+				arrBatteryPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
 
 				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
 			} else {
