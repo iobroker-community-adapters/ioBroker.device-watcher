@@ -21,12 +21,11 @@ If you found a bug or if you've an improvement suggestion, feel free to open an 
 
 
 ### Changelog
-
 <!--
     Placeholder for the next version (at the beginning of the line):
     ## **WORK IN PROGRESS**
 -->
-### 0.0.4 (2022-06-05)
+### **WORK IN PROGRESS**
 -   added Shelly and Sonoff Devices
 
 ### 0.0.2 (2022-06-05)
