@@ -28,12 +28,7 @@ If you found a bug or if you've an improvement suggestion, feel free to open an 
 -->
 ### 0.1.0 (2022-06-05)
 
--   Did some changes
--   Did some more changes
-
-### v0.0.1 (2020-01-01)
-
-Initial release
+-   Release for testing
 
 ## License
 MIT License
