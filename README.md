@@ -20,9 +20,21 @@ If you like, you can choose that you get a message if one device is no longer re
 If you found a bug or if you've an improvement suggestion, feel free to open an issue.
 
 
-## Changelog
+### Changelog
+
+<!--
+    Placeholder for the next version (at the beginning of the line):
+    ## **WORK IN PROGRESS**
+-->
 
 ### **WORK IN PROGRESS**
+
+-   Did some changes
+-   Did some more changes
+
+### v0.0.1 (2020-01-01)
+
+Initial release
 
 ## License
 MIT License
