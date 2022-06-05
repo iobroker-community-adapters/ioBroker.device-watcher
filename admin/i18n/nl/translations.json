@@ -1,5 +1,16 @@
 {
-	"device-watcher adapter settings": "Adapterinstellingen voor device-watcher",
-	"option1": "Optie 1",
-	"option2": "Optie 2"
+    "device-watcher adapter settings": "Adapterinstellingen voor device-watcher",
+    "option1": "Optie 1",
+    "option2": "Optie 2",
+    "Choose devices to watch": "Kies apparaten om naar te kijken",
+    "Other Settings": "Andere instellingen",
+    "True State": "Ware staat",
+    "in minutes": "in minuten",
+    "Common Notification Settings": "Algemene meldingsinstellingen",
+    "Send offline message": "Offline bericht verzenden",
+    "Get message if an device is not reachable": "Ontvang een bericht als een apparaat niet bereikbaar is",
+    "Send batterie message": "Stuur batterij bericht",
+    "Get message if an device has low battery": "Ontvang een bericht als de batterij van een apparaat bijna leeg is",
+    "From how much min % would you get a message": "Vanaf hoeveel min % zou je een bericht krijgen",
+    "in percent": "in procenten"
 }

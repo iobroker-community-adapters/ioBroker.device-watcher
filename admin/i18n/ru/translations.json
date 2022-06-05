@@ -1,5 +1,16 @@
 {
-	"device-watcher adapter settings": "Настройки адаптера для device-watcher",
-	"option1": "Опция 1",
-	"option2": "вариант 2"
+    "device-watcher adapter settings": "Настройки адаптера для device-watcher",
+    "option1": "Опция 1",
+    "option2": "вариант 2",
+    "Choose devices to watch": "Выберите устройства для просмотра",
+    "Other Settings": "Другие настройки",
+    "True State": "Истинное состояние",
+    "in minutes": "в минутах",
+    "Common Notification Settings": "Общие настройки уведомлений",
+    "Send offline message": "Отправить оффлайн сообщение",
+    "Get message if an device is not reachable": "Получить сообщение, если устройство недоступно",
+    "Send batterie message": "Отправить сообщение о разряде батареи",
+    "Get message if an device has low battery": "Получить сообщение, если на устройстве разряжена батарея",
+    "From how much min % would you get a message": "От скольки мин % вы получите сообщение",
+    "in percent": "в процентах"
 }

@@ -1,5 +1,16 @@
 {
-	"device-watcher adapter settings": "Paramètres d'adaptateur pour device-watcher",
-	"option1": "Option 1",
-	"option2": "Option 2"
+    "device-watcher adapter settings": "Paramètres d'adaptateur pour device-watcher",
+    "option1": "Option 1",
+    "option2": "Option 2",
+    "Choose devices to watch": "Choisissez les appareils à regarder",
+    "Other Settings": "Autres réglages",
+    "True State": "État réel",
+    "in minutes": "en minutes",
+    "Common Notification Settings": "Paramètres de notification communs",
+    "Send offline message": "Envoyer un message hors ligne",
+    "Get message if an device is not reachable": "Recevoir un message si un appareil n'est pas accessible",
+    "Send batterie message": "Envoyer un message de batterie",
+    "Get message if an device has low battery": "Recevoir un message si un appareil a une batterie faible",
+    "From how much min % would you get a message": "À partir de combien de min % obtiendriez-vous un message ?",
+    "in percent": "en pourcentage"
 }

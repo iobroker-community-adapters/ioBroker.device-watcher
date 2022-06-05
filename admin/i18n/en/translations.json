@@ -1,5 +1,14 @@
 {
 	"device-watcher adapter settings": "Adapter settings for device-watcher",
-	"option1": "option1",
-	"option2": "option2"
+	"Choose devices to watch": "Choose devices to watch",
+	"Other Settings": "Other Settings",
+	"True State": "True State",
+	"in minutes": "in minutes",
+	"Common Notification Settings": "Common Notification Settings",
+	"Send offline message": "Send offline message",
+	"Get message if an device is not reachable": "Get message if an device is not reachable",
+	"Send batterie message": "Send batterie message",
+	"Get message if an device has low battery": "Get message if an device has low battery",
+	"From how much min % would you get a message": "From how much min % would you get a message",
+	"in percent": "in percent"
 }

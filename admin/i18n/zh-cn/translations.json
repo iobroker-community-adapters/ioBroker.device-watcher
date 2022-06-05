@@ -1,5 +1,16 @@
 {
-	"device-watcher adapter settings": "device-watcher的适配器设置",
-	"option1": "选项1",
-	"option2": "选项2"
+    "device-watcher adapter settings": "device-watcher的适配器设置",
+    "option1": "选项1",
+    "option2": "选项2",
+    "Choose devices to watch": "选择要观看的设备",
+    "Other Settings": "其他设置",
+    "True State": "真实状态",
+    "in minutes": "在几分钟内",
+    "Common Notification Settings": "常用通知设置",
+    "Send offline message": "发送离线消息",
+    "Get message if an device is not reachable": "如果设备无法访问，则获取消息",
+    "Send batterie message": "发送电池信息",
+    "Get message if an device has low battery": "如果设备电池电量不足，则获取消息",
+    "From how much min % would you get a message": "您收到消息的最低百分比是多少",
+    "in percent": "百分比"
 }

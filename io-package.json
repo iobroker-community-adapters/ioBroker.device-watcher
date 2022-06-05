@@ -1,266 +1,266 @@
 {
-	"common": {
-		"name": "device-watcher",
-		"version": "0.0.3",
-		"news": {
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"zh-cn": "首次出版"
-			},
-			"0.0.2": {
-				"en": "Release for testing",
-				"de": "Freigabe zum Testen",
-				"ru": "Выпуск для тестирования",
-				"pt": "Liberação para teste",
-				"nl": "Vrijgeven voor testen",
-				"fr": "Libération pour test",
-				"it": "Rilascio per il test",
-				"es": "Liberación para prueba",
-				"pl": "Wydanie do testów",
-				"zh-cn": "发布测试"
-			},
-			"0.0.3": {
-				"en": "added Shelly and Sonoff Devices",
-				"de": "Shelly und Sonoff Geräte hinzugefügt",
-				"ru": "добавлены устройства Shelly и Sonoff",
-				"pt": "adicionados dispositivos Shelly e Sonoff",
-				"nl": "Shelly- en Sonoff-apparaten toegevoegd",
-				"fr": "ajout des appareils Shelly et Sonoff",
-				"it": "aggiunti dispositivi Shelly e Sonoff",
-				"es": "Dispositivos Shelly y Sonoff agregados",
-				"pl": "dodano urządzenia Shelly i Sonoff",
-				"zh-cn": "添加了 Shelly 和 Sonoff 设备"
-			}
-		},
-		"title": "Device-Watcher",
-		"titleLang": {
-			"en": "Device-Watcher",
-			"de": "Device-Watcher",
-			"ru": "Устройство-наблюдатель",
-			"pt": "Dispositivo-Observador",
-			"nl": "Device-Watcher",
-			"fr": "Device-Watcher",
-			"it": "Dispositivo di osservazione",
-			"es": "Vigilante de dispositivos",
-			"pl": "Obserwator urządzeń",
-			"zh-cn": "设备观察者"
-		},
-		"desc": {
-			"en": "Watchdog for wireless devices",
-			"de": "Watchdog für drahtlose Geräte",
-			"ru": "Сторожевой таймер для беспроводных устройств",
-			"pt": "Watchdog para dispositivos sem fio",
-			"nl": "Watchdog voor draadloze apparaten",
-			"fr": "Chien de garde pour les appareils sans fil",
-			"it": "Watchdog per dispositivi wireless",
-			"es": "Watchdog para dispositivos inalámbricos",
-			"pl": "Watchdog dla urządzeń bezprzewodowych",
-			"zh-cn": "无线设备看门狗"
-		},
-		"authors": [
-			"Christian Behrends <mail@christian-behrends.de>"
-		],
-		"keywords": [
-			"watchdog",
-			"devices",
-			"wireless",
-			"watcher"
-		],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "device-watcher.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/ciddi89/ioBroker.device-watcher/main/admin/device-watcher.png",
-		"readme": "https://github.com/ciddi89/ioBroker.device-watcher/blob/main/README.md",
-		"loglevel": "info",
-		"mode": "schedule",
-		"schedule": "*/60 * * * *",
-		"allowInit": true,
-		"type": "misc-data",
-		"compact": true,
-		"connectionType": "local",
-		"dataSource": "poll",
-		"materialize": true,
-		"adminUI": {
-			"config": "json"
-		},
-		"dependencies": [
-			{
-				"js-controller": ">=2.0.0"
-			}
-		],
-		"globalDependencies": [
-			{
-				"admin": ">=5.1.28"
-			}
-		]
-	},
-	"native": {
-		"zigbeeDevices": false,
-		"bleDevices": false,
-		"sonoffDevices": false,
-		"shellyDevices": false,
-		"trueState": false,
-		"maxMinutes": 300,
-		"checkSendOfflineMsg": false,
-		"checkSendBatteryMsg": false,
-		"minWarnBatterie": 35,
-		"checkMonday": false,
-		"checkTuesday": false,
-		"checkWednesday": false,
-		"checkThursday": false,
-		"checkFriday": false,
-		"checkSaturday": false,
-		"checkSunday": false,
-		"instancePushover": "",
-		"titlePushover": "ioBroker",
-		"devicePushover": "",
-		"instanceTelegram": "",
-		"deviceTelegram": "",
-		"instanceJarvis": "",
-		"titleJarvis": "Device-Watcher",
-		"tableBlacklist": []
-	},
-	"objects": [],
-	"instanceObjects": [
-		{
-			"_id": "offlineCount",
-			"type": "state",
-			"common": {
-				"name": "Quantity devices offline",
-				"type": "number",
-				"role": "value",
-				"read": true,
-				"write": false,
-				"def": 0
-			},
-			"native": {}
-		},
-		{
-			"_id": "offlineList",
-			"type": "state",
-			"common": {
-				"name": "List devices offline",
-				"type": "array",
-				"role": "json",
-				"read": true,
-				"write": false,
-				"def": "{}"
-			},
-			"native": {}
-		},
-		{
-			"_id": "listAll",
-			"type": "state",
-			"common": {
-				"name": "List all devices",
-				"type": "array",
-				"role": "json",
-				"read": true,
-				"write": false,
-				"def": "{}"
-			},
-			"native": {}
-		},
-		{
-			"_id": "linkQualityList",
-			"type": "state",
-			"common": {
-				"name": "List devices with qualitiy strength",
-				"type": "array",
-				"role": "json",
-				"read": true,
-				"write": false,
-				"def": "{}"
-			},
-			"native": {}
-		},
-		{
-			"_id": "countAll",
-			"type": "state",
-			"common": {
-				"name": "Quantity devices all",
-				"type": "number",
-				"role": "value",
-				"read": true,
-				"write": false,
-				"def": 0
-			},
-			"native": {}
-		},
-		{
-			"_id": "batteryList",
-			"type": "state",
-			"common": {
-				"name": "List devices with battery state",
-				"type": "array",
-				"role": "json",
-				"read": true,
-				"write": false,
-				"def": "{}"
-			},
-			"native": {}
-		},
-		{
-			"_id": "batteryCount",
-			"type": "state",
-			"common": {
-				"name": "Quantity devices with battery",
-				"type": "number",
-				"role": "value",
-				"read": true,
-				"write": false,
-				"def": 0
-			},
-			"native": {}
-		},
-		{
-			"_id": "lastCheck",
-			"type": "state",
-			"common": {
-				"name": "Timestamp of last run",
-				"type": "object",
-				"role": "indicator",
-				"read": true,
-				"write": false,
-				"def": ""
-			},
-			"native": {}
-		},
-		{
-			"_id": "deviceWatcherLog",
-			"type": "state",
-			"common": {
-				"name": "Log of Device-Watcher",
-				"type": "string",
-				"role": "indicator",
-				"read": true,
-				"write": false,
-				"def": ""
-			},
-			"native": {}
-		},
-		{
-			"_id": "info.lastBatteryNotification",
-			"type": "state",
-			"common": {
-				"name": "Indicator if last battery notification was send today.",
-				"type": "boolean",
-				"role": "indicator",
-				"read": true,
-				"write": false,
-				"def": false
-			},
-			"native": {}
-		}
-	]
+    "common": {
+        "name": "device-watcher",
+        "version": "0.0.3",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            },
+            "0.0.2": {
+                "en": "Release for testing",
+                "de": "Freigabe zum Testen",
+                "ru": "Выпуск для тестирования",
+                "pt": "Liberação para teste",
+                "nl": "Vrijgeven voor testen",
+                "fr": "Libération pour test",
+                "it": "Rilascio per il test",
+                "es": "Liberación para prueba",
+                "pl": "Wydanie do testów",
+                "zh-cn": "发布测试"
+            },
+            "0.0.3": {
+                "en": "added Shelly and Sonoff Devices",
+                "de": "Shelly und Sonoff Geräte hinzugefügt",
+                "ru": "добавлены устройства Shelly и Sonoff",
+                "pt": "adicionados dispositivos Shelly e Sonoff",
+                "nl": "Shelly- en Sonoff-apparaten toegevoegd",
+                "fr": "ajout des appareils Shelly et Sonoff",
+                "it": "aggiunti dispositivi Shelly e Sonoff",
+                "es": "Dispositivos Shelly y Sonoff agregados",
+                "pl": "dodano urządzenia Shelly i Sonoff",
+                "zh-cn": "添加了 Shelly 和 Sonoff 设备"
+            }
+        },
+        "title": "Device-Watcher",
+        "titleLang": {
+            "en": "Device-Watcher",
+            "de": "Device-Watcher",
+            "ru": "Устройство-наблюдатель",
+            "pt": "Dispositivo-Observador",
+            "nl": "Device-Watcher",
+            "fr": "Device-Watcher",
+            "it": "Dispositivo di osservazione",
+            "es": "Vigilante de dispositivos",
+            "pl": "Obserwator urządzeń",
+            "zh-cn": "设备观察者"
+        },
+        "desc": {
+            "en": "Watchdog for wireless devices",
+            "de": "Watchdog für drahtlose Geräte",
+            "ru": "Сторожевой таймер для беспроводных устройств",
+            "pt": "Watchdog para dispositivos sem fio",
+            "nl": "Watchdog voor draadloze apparaten",
+            "fr": "Chien de garde pour les appareils sans fil",
+            "it": "Watchdog per dispositivi wireless",
+            "es": "Watchdog para dispositivos inalámbricos",
+            "pl": "Watchdog dla urządzeń bezprzewodowych",
+            "zh-cn": "无线设备看门狗"
+        },
+        "authors": [
+            "Christian Behrends <mail@christian-behrends.de>"
+        ],
+        "keywords": [
+            "watchdog",
+            "devices",
+            "wireless",
+            "watcher"
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "main.js",
+        "icon": "device-watcher.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/ciddi89/ioBroker.device-watcher/main/admin/device-watcher.png",
+        "readme": "https://github.com/ciddi89/ioBroker.device-watcher/blob/main/README.md",
+        "loglevel": "info",
+        "mode": "schedule",
+        "schedule": "*/60 * * * *",
+        "allowInit": true,
+        "type": "misc-data",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "materialize": true,
+        "adminUI": {
+            "config": "json"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=5.1.28"
+            }
+        ]
+    },
+    "native": {
+        "zigbeeDevices": false,
+        "bleDevices": false,
+        "sonoffDevices": false,
+        "shellyDevices": false,
+        "trueState": false,
+        "maxMinutes": 300,
+        "checkSendOfflineMsg": false,
+        "checkSendBatteryMsg": false,
+        "minWarnBatterie": 35,
+        "checkMonday": false,
+        "checkTuesday": false,
+        "checkWednesday": false,
+        "checkThursday": false,
+        "checkFriday": false,
+        "checkSaturday": false,
+        "checkSunday": false,
+        "instancePushover": "",
+        "titlePushover": "ioBroker",
+        "devicePushover": "",
+        "instanceTelegram": "",
+        "deviceTelegram": "",
+        "instanceJarvis": "",
+        "titleJarvis": "Device-Watcher",
+        "tableBlacklist": []
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "offlineCount",
+            "type": "state",
+            "common": {
+                "name": "Quantity devices offline",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "offlineList",
+            "type": "state",
+            "common": {
+                "name": "List devices offline",
+                "type": "array",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
+        },
+        {
+            "_id": "listAll",
+            "type": "state",
+            "common": {
+                "name": "List all devices",
+                "type": "array",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
+        },
+        {
+            "_id": "linkQualityList",
+            "type": "state",
+            "common": {
+                "name": "List devices with qualitiy strength",
+                "type": "array",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
+        },
+        {
+            "_id": "countAll",
+            "type": "state",
+            "common": {
+                "name": "Quantity devices all",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "batteryList",
+            "type": "state",
+            "common": {
+                "name": "List devices with battery state",
+                "type": "array",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
+        },
+        {
+            "_id": "batteryCount",
+            "type": "state",
+            "common": {
+                "name": "Quantity devices with battery",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "lastCheck",
+            "type": "state",
+            "common": {
+                "name": "Timestamp of last run",
+                "type": "object",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "def": ""
+            },
+            "native": {}
+        },
+        {
+            "_id": "deviceWatcherLog",
+            "type": "state",
+            "common": {
+                "name": "Log of Device-Watcher",
+                "type": "string",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "def": ""
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.lastBatteryNotification",
+            "type": "state",
+            "common": {
+                "name": "Indicator if last battery notification was send today.",
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
 }
