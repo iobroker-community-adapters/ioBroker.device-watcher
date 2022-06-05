@@ -112,30 +112,31 @@
                     "items": {
                         "checkMonday": {
                             "type": "checkbox",
-                            "label": "Mo"
+                            "label": "Mon"
                         },
                         "checkTuesday": {
                             "type": "checkbox",
-                            "label": "Tu"
+                            "label": "Tue"
                         },
                         "checkWednesday": {
                             "type": "checkbox",
-                            "label": "We"
+                            "label": "Wed"
                         },
                         "checkThursday": {
                             "type": "checkbox",
-                            "label": "Tue"
-                        },"checkFriday": {
+                            "label": "Thu"
+                        },
+                        "checkFriday": {
                             "type": "checkbox",
-                            "label": "Fr"
+                            "label": "Fri"
                         },
                         "checkSaturday": {
                             "type": "checkbox",
-                            "label": "Sa"
+                            "label": "Sat"
                         },
                         "checkSunday": {
                             "type": "checkbox",
-                            "label": "Su"
+                            "label": "Sun"
                         }
                     }
                 },
@@ -154,7 +155,7 @@
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "Pushover Instanz",
+                    "label": "Pushover Instance",
                     "help": "Please choose the pushover instance"
                 },
                 "devicePushover": {
@@ -188,7 +189,7 @@
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "Telegram Instanz",
+                    "label": "Telegram Instance",
                     "help": "Please choose the telegram instance"
                 },
                 "deviceTelegram": {
@@ -214,7 +215,7 @@
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "Jarvis Instanz",
+                    "label": "Jarvis Instance",
                     "help": "Please choose the jarvis instance"
                 },
                 "titleJarvis": {
