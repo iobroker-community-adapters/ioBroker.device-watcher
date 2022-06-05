@@ -22,10 +22,7 @@ If you found a bug or if you've an improvement suggestion, feel free to open an 
 
 ## Changelog
 
-<!--
-  Placeholder for the next version (at the beginning of the line):
   ### **WORK IN PROGRESS**
--->
 
 ## License
 MIT License
