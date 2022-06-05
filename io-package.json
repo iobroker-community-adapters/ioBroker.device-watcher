@@ -15,17 +15,17 @@
 				"pl": "Pierwsze wydanie",
 				"zh-cn": "首次出版"
 			},
-			"0.0.5": {
-				"en": "reached test state",
-				"de": "Testzustand erreicht",
-				"ru": "достигнуто тестовое состояние",
-				"pt": "atingiu o estado de teste",
-				"nl": "teststatus bereikt",
-				"fr": "atteint l'état de test",
-				"it": "raggiunto lo stato di prova",
-				"es": "estado de prueba alcanzado",
-				"pl": "osiągnął stan testowy",
-				"zh-cn": "达到测试状态"
+			"0.1.0": {
+				"en": "Release for testing",
+				"de": "Freigabe zum Testen",
+				"ru": "Выпуск для тестирования",
+				"pt": "Liberação para teste",
+				"nl": "Vrijgeven voor testen",
+				"fr": "Libération pour test",
+				"it": "Rilascio per il test",
+				"es": "Liberación para prueba",
+				"pl": "Wydanie do testów",
+				"zh-cn": "发布测试"
 			}
 		},
 		"title": "Device-Watcher",
