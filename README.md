@@ -21,11 +21,11 @@ If you found a bug or if you've an improvement suggestion, feel free to open an 
 
 
 ## Changelog
-### **0.0.5 (2022-05-26)**
-Adapter is ready for tests.
 
-#### **WORK IN PROGRESS**
-* (Christian Behrends) initial release
+<!--
+  Placeholder for the next version (at the beginning of the line):
+  ### **WORK IN PROGRESS**
+-->
 
 ## License
 MIT License
