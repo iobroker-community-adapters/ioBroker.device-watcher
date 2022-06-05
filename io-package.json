@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "0.1.0",
+		"version": "0.0.1",
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
@@ -15,7 +15,7 @@
 				"pl": "Pierwsze wydanie",
 				"zh-cn": "首次出版"
 			},
-			"0.1.0": {
+			"0.0.2": {
 				"en": "Release for testing",
 				"de": "Freigabe zum Testen",
 				"ru": "Выпуск для тестирования",

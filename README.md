@@ -26,9 +26,13 @@ If you found a bug or if you've an improvement suggestion, feel free to open an 
     Placeholder for the next version (at the beginning of the line):
     ## **WORK IN PROGRESS**
 -->
-### 0.1.0 (2022-06-05)
+### **WORK IN PROGRESS**
 
 -   Release for testing
+
+### 0.0.1 (2022-05-01)
+
+-   initial release
 
 ## License
 MIT License
