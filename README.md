@@ -22,7 +22,7 @@ If you found a bug or if you've an improvement suggestion, feel free to open an 
 
 ## Changelog
 
-## **WORK IN PROGRESS**
+### **WORK IN PROGRESS**
 
 ## License
 MIT License
