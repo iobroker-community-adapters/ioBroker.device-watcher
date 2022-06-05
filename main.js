@@ -113,7 +113,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
-		if (testMe) {
+		if (testMe) { //Only for Developer to test the functions!!
 			myArrDev.push({'Selektor':'0_userdata.*.link_quality','theName':'common', 'adapter':'Test'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
@@ -125,6 +125,14 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.zigbeeDevices) {
 			myArrDev.push({'Selektor':'zigbee.*.link_quality','theName':'common', 'adapter':'Zigbee'});
 			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.sonoffDevices) {
+			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI','theName':'common', 'adapter':'Sonoff'});
+			this.log.info('Sonoff Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.shellyDevices) {
+			myArrDev.push({'Selektor':'shelly.*.rssi','theName':'common', 'adapter':'Shelly'});
+			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));

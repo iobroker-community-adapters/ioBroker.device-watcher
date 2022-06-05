@@ -8,24 +8,37 @@
             "items": {
                 "_headerDevices": {
                     "type": "header", 
-                    "text": "Devices",
+                    "text": "Choose devices to watch",
                     "size": 1
                 },
                 "zigbeeDevices": {
                     "type": "checkbox",
                     "sm": 12,
                     "md": 6,
-                    "lg": 4,
-                    "label": "Zigbee Devices"
+                    "lg": 3,
+                    "label": "Zigbee"
                 },
                 "bleDevices": {
                     "type": "checkbox",
                     "sm": 12,
                     "md": 6,
-                    "lg": 4,
-                    "label": "Ble Devices"
-                }
-                ,
+                    "lg": 3,
+                    "label": "Ble"
+                },
+                "sonoffDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Sonoff"
+                },
+                "shellyDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Shelly"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",
@@ -38,7 +51,7 @@
                     "md": 6,
                     "lg": 4,
                     "label": "True State",
-                    "help": "Use the true state for quality"
+                    "help": "Use the true state from quality state"
                 },
                 "maxMinutes": {
                     "type": "number",
