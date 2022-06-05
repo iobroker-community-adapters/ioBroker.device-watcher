@@ -1,7 +1,7 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "0.0.3",
+		"version": "0.0.4",
 		"news": {
 			"0.0.1": {
 				"en": "initial release",
@@ -27,7 +27,7 @@
 				"pl": "Wydanie do testów",
 				"zh-cn": "发布测试"
 			},
-			"0.0.3": {
+			"0.0.4": {
 				"en": "added Shelly and Sonoff Devices",
 				"de": "Shelly und Sonoff Geräte hinzugefügt",
 				"ru": "добавлены устройства Shelly и Sonoff",
