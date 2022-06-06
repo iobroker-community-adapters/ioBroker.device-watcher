@@ -17,17 +17,17 @@ This is a watchdog for wireless devices. It works currently with the Zigbee, She
 
 The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries. Currently supported notification services are Pushover, Telegram and Jarvis Notification.
 
-If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it. Please add the "link_quality" or "rssi" object of this device in the blacklist and it would work.
+ If you found a bug or you have an improvement suggestion, feel free to open an issue.
 
-admin/images/add_blacklist.png
+ If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it. Please add the "link_quality" or "rssi" object of this device in the blacklist and it would work.
 
-### If you found a bug or you have an improvement suggestion, feel free to open an issue.
+![add_blacklist.png](admin/images/add_blacklist.png)
 
 ## Here are some images how the lists look:
 
-admin/images/list1.png
-admin/images/list2.png
-admin/images/list3.png
+![list1.png](admin/images/list1.png)
+![list2.png](admin/images/list2.png)
+![list3.png](admin/images/list3.png)
 
 
 ### Changelog
