@@ -21,7 +21,7 @@ The adapter has also the option to send notifications if the number of offline d
 
 ### Blacklist
 
- If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it. Please add the "link_quality" or "rssi" object of this device in the blacklist and it would work.
+ If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it. Please add the "link_quality" or "rssi" object of this device in the blacklist and it won't be listet and count.
 
 ![add_blacklist.png](admin/images/add_blacklist.png)
 
