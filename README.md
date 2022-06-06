@@ -13,17 +13,21 @@
 
 ## Device-Watcher adapter for ioBroker
 
-This is a watchdog for wireless devices.It works with the zigbee adapter and ble adapter (mi flora plant sensor). The adapter looks every sixty minutes for the rssi/link quality and battery states and create JSON lists of them. You can use the lists for Grafana, Jarvis etc.
+This is a watchdog for wireless devices. It works currently with the Zigbee, Shelly, Sonoff and Ble adapter (mi flora plant sensor). The adapter looks every sixty minutes for the rssi/link quality and battery states and create JSON lists of them (devices with battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
 
-If you like, you can choose that you get a message if one device is no longer reachable and you can choose if you want a notification with devices which have a low battery level.
+The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries.
 
-If you found a bug or if you've an improvement suggestion, feel free to open an issue.
+If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it. Please add the "link_quality" or "rssi" object of this device in the blacklist and it would work.
+
+admin/images/add_blacklist.png
+
+If you found a bug or you have an improvement suggestion, feel free to open an issue.
 
 
 ### Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
-    ## **WORK IN PROGRESS**
+    ### **WORK IN PROGRESS**
 -->
 ### 0.0.5 (2022-06-05)
 
