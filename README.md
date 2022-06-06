@@ -15,13 +15,19 @@
 
 This is a watchdog for wireless devices. It works currently with the Zigbee, Shelly, Sonoff and Ble adapter (mi flora plant sensor). The adapter looks every sixty minutes for the rssi/link quality and battery states and create JSON lists of them (devices with battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
 
-The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries.
+The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries. Currently supported notification services are Pushover, Telegram and Jarvis Notification.
 
 If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it. Please add the "link_quality" or "rssi" object of this device in the blacklist and it would work.
 
 admin/images/add_blacklist.png
 
-If you found a bug or you have an improvement suggestion, feel free to open an issue.
+### If you found a bug or you have an improvement suggestion, feel free to open an issue.
+
+## Here are some images how the lists look:
+
+admin/images/list1.png
+admin/images/list2.png
+admin/images/list3.png
 
 
 ### Changelog
