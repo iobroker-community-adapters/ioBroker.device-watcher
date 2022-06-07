@@ -105,7 +105,7 @@ class DeviceWatcher extends utils.Adapter {
 		let deviceCounter		= 0;
 		let batteryPoweredCount = 0;
 		let lastContactString;
-		const testMe = true;
+		const testMe = false;
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
