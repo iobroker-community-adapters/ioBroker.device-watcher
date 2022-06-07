@@ -263,19 +263,10 @@ class DeviceWatcher extends utils.Adapter {
 					const hmBatteryState = await this.getForeignStateAsync(currHmBatteryString);
 					let batteryHealth;
 
-					if (!deviceBatteryState) {
+					if ((!deviceBatteryState) && (!hmBatteryState)) {
 						batteryHealth = ' - ';
-					} else if (deviceBatteryState) {
-						batteryHealth = (deviceBatteryState).val + '%';
-						arrBatteryPowered.push(
-							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Battery: batteryHealth
-							}
-						);
-					} else if (hmBatteryState) {
-						batteryHealth = (hmBatteryState).val + 'V';
+					} else if ((deviceBatteryState) && (hmBatteryState)) {
+						batteryHealth = (((deviceBatteryState).val + '%') && (hmBatteryState).val + 'V');
 						arrBatteryPowered.push(
 							{
 								Device: deviceName,
