@@ -119,7 +119,7 @@ class DeviceWatcher extends utils.Adapter {
 		let deviceCounter		= 0;
 		let batteryPoweredCount = 0;
 		let lastContactString;
-		const testMe = false;
+		const testMe = true;
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
@@ -259,14 +259,24 @@ class DeviceWatcher extends utils.Adapter {
 					// 3. Get battery states
 					const currDeviceBatteryString = currDeviceString + '.battery';
 					const currHmBatteryString	= currDeviceString + '.OPERATING_VOLTAGE';
+
 					const deviceBatteryState = await this.getForeignStateAsync(currDeviceBatteryString);
 					const hmBatteryState = await this.getForeignStateAsync(currHmBatteryString);
 					let batteryHealth;
 
 					if ((!deviceBatteryState) && (!hmBatteryState)) {
 						batteryHealth = ' - ';
-					} else if ((deviceBatteryState) && (hmBatteryState)) {
-						batteryHealth = (((deviceBatteryState).val + '%') && (hmBatteryState).val + 'V');
+					} else if (deviceBatteryState) {
+						batteryHealth = (deviceBatteryState).val + '%';
+						arrBatteryPowered.push(
+							{
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Battery: batteryHealth
+							}
+						);
+					} else if (hmBatteryState) {
+						batteryHealth = (hmBatteryState).val + 'V';
 						arrBatteryPowered.push(
 							{
 								Device: deviceName,
