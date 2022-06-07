@@ -148,6 +148,10 @@ class DeviceWatcher extends utils.Adapter {
 			myArrDev.push({'Selektor':'shelly.*.rssi','theName':'common', 'adapter':'Shelly'});
 			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
 		}
+		if (this.config.homematicDevices) {
+			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE','theName':'common', 'adapter':'Homematic'});
+			this.log.info('Homematic Devices wurden ausgewählt. Lade Daten...');
+		}
 
 		this.log.debug(JSON.stringify(myArrDev));
 
@@ -254,13 +258,24 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 3. Get battery states
 					const currDeviceBatteryString = currDeviceString + '.battery';
+					const currHmBatteryString	= currDeviceString + '.OPERATING_VOLTAGE';
 					const deviceBatteryState = await this.getForeignStateAsync(currDeviceBatteryString);
+					const hmBatteryState = await this.getForeignStateAsync(currHmBatteryString);
 					let batteryHealth;
 
 					if (!deviceBatteryState) {
 						batteryHealth = ' - ';
 					} else if (deviceBatteryState) {
 						batteryHealth = (deviceBatteryState).val + '%';
+						arrBatteryPowered.push(
+							{
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Battery: batteryHealth
+							}
+						);
+					} else if (hmBatteryState) {
+						batteryHealth = (hmBatteryState).val + 'V';
 						arrBatteryPowered.push(
 							{
 								Device: deviceName,

@@ -39,6 +39,13 @@
                     "lg": 3,
                     "label": "Shelly"
                 },
+                "homematicDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Homematic"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",

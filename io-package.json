@@ -122,6 +122,7 @@
         "bleDevices": false,
         "sonoffDevices": false,
         "shellyDevices": false,
+        "homematicDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,
