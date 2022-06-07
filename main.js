@@ -61,6 +61,12 @@ class DeviceWatcher extends utils.Adapter {
 			instance: this.config.instanceTelegram,
 			user: this.config.deviceTelegram
 		};
+		const email = {
+			instance: this.config.instanceEmail,
+			subject: this.config.subjectEmail,
+			sendTo: this.config.sendToEmail
+
+		};
 		const jarvis = {
 			instance: this.config.instanceJarvis,
 			title: this.config.titleJarvis
@@ -88,6 +94,14 @@ class DeviceWatcher extends utils.Adapter {
 			await this.sendToAsync(telegram.instance, 'send', {
 				text: text,
 				user: telegram.user
+			});
+		};
+
+		const sendEmail = async (text) => {
+			await this.sendToAsync(email.instance, 'send', {
+				sendTo: email.sendTo,
+				text: text,
+				subject: email.subject
 			});
 		};
 
@@ -304,6 +318,13 @@ class DeviceWatcher extends utils.Adapter {
 						if (telegram.instance) {
 							try {
 								await sendTelegram(msg);
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
+						}
+						if (email.instance) {
+							try {
+								await sendEmail(msg);
 							} catch (e) {
 								this.log.warn ('Getting error at sending notification' + (e));
 							}

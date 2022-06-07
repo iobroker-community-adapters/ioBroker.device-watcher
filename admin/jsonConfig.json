@@ -200,6 +200,40 @@
                     "label": "Device-ID (optional)",
                     "help": "Choose your device"
                 },
+                "_headerEmail": {
+                    "newLine": true,
+                    "type": "header", 
+                    "text": "Email",
+                    "size": 1
+                },
+                "instanceEmail": {
+                    "newLine": true,
+                    "type": "instance",
+                    "adapter": "email",
+                    "all": true,
+                    "allowDeactivate": true,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Email Instance",
+                    "help": "Please choose the email instance"
+                },
+                "sendToEmail": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Send to (optional)",
+                    "help": "Choose your email address"
+                },
+                "subjectEmail": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Subject (optional)",
+                    "help": "Choose your subject for the Email"
+                },
                 "headerJarvis": {
                     "newLine": "true",
                     "type": "header", 
