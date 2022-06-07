@@ -105,7 +105,7 @@ class DeviceWatcher extends utils.Adapter {
 		let deviceCounter		= 0;
 		let batteryPoweredCount = 0;
 		let lastContactString;
-		const testMe = false;
+		const testMe = true;
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
@@ -290,7 +290,7 @@ class DeviceWatcher extends utils.Adapter {
 							msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
 						}
 						for (const id of arrOfflineDevices) {
-							msg = msg + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['lastContact'] + ')';
+							msg = msg + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Last_contact'] + ')';
 						}
 						this.log.info(msg);
 						await this.setStateAsync('deviceWatcherLog', msg, true);
@@ -361,10 +361,10 @@ class DeviceWatcher extends utils.Adapter {
 
 						let infotext = '';
 						for (const id of arrBatteryPowered) {
-							if (id['battery']) {
-								const batteryValue = parseFloat(id['battery'].replace('%', ''));
+							if (id['Battery']) {
+								const batteryValue = parseFloat(id['Battery'].replace('%', ''));
 								if (batteryValue < batteryWarningMin) {
-									infotext = infotext + '\n' + id['device'] + ' ' + /*id['room'] +*/ ' (' + id['battery'] + ')'.split(', ');
+									infotext = infotext + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Battery'] + ')'.split(', ');
 									++batteryMinCount;
 								}
 							}
