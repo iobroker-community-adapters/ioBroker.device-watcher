@@ -275,7 +275,7 @@ class DeviceWatcher extends utils.Adapter {
 								Battery: batteryHealth
 							}
 						);
-					} else if (hmBatteryState) {
+					} else if ((hmBatteryState) && (hmBatteryState).val != 0) {
 						batteryHealth = (hmBatteryState).val + 'V';
 						arrBatteryPowered.push(
 							{
