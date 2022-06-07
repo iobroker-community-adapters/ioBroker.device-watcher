@@ -39,5 +39,11 @@
     "Thu": "Jue",
     "Fri": "Vie",
     "Sat": "Se sentó",
-    "Sun": "Sol"
+    "Sun": "Sol",
+    "Email Instance": "Instancia de correo electrónico",
+    "Please choose the email instance": "Elija la instancia de correo electrónico",
+    "Send to (optional)": "Enviar a (opcional)",
+    "Choose your email address": "Elige tu dirección de correo electrónico",
+    "Subject (optional)": "Asunto (opcional)",
+    "Choose your subject for the Email": "Elija su asunto para el correo electrónico"
 }

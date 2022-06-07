@@ -39,5 +39,11 @@
     "Thu": "Чт",
     "Fri": "пт",
     "Sat": "Сидел",
-    "Sun": "Солнце"
+    "Sun": "Солнце",
+    "Email Instance": "Электронная почта",
+    "Please choose the email instance": "Пожалуйста, выберите экземпляр электронной почты",
+    "Send to (optional)": "Отправить (необязательно)",
+    "Choose your email address": "Выберите свой адрес электронной почты",
+    "Subject (optional)": "Тема (необязательно)",
+    "Choose your subject for the Email": "Выберите тему для письма"
 }

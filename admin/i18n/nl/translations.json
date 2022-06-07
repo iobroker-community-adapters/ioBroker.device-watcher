@@ -39,5 +39,11 @@
     "Thu": "do",
     "Fri": "vrij",
     "Sat": "Za",
-    "Sun": "Zon"
+    "Sun": "Zon",
+    "Email Instance": "E-mailinstantie",
+    "Please choose the email instance": "Kies de e-mailinstantie",
+    "Send to (optional)": "Verzenden naar (optioneel)",
+    "Choose your email address": "Kies je e-mailadres",
+    "Subject (optional)": "Onderwerp (optioneel)",
+    "Choose your subject for the Email": "Kies uw onderwerp voor de e-mail"
 }

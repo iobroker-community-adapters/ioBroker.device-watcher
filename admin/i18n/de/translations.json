@@ -31,5 +31,11 @@
     "Please choose the telegram instance": "Bitte wähle die Telegramminstanz aus",
     "Jarvis Instance": "Jarvis-Instanz",
     "Please choose the jarvis instance": "Bitte wähle die Jarvis-Instanz aus",
-    "Choose which devices should be excluded": "Wähle aus, welche Geräte ausgeschlossen werden sollen"
+    "Choose which devices should be excluded": "Wähle aus, welche Geräte ausgeschlossen werden sollen",
+    "Email Instance": "E-Mail-Instanz",
+    "Please choose the email instance": "Bitte wählen Sie die E-Mail-Instanz aus",
+    "Send to (optional)": "Senden an (optional)",
+    "Choose your email address": "Wählen Sie Ihre E-Mail-Adresse",
+    "Subject (optional)": "Betreff (optional)",
+    "Choose your subject for the Email": "Wählen Sie Ihren Betreff für die E-Mail"
 }

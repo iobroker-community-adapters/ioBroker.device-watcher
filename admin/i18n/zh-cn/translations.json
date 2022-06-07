@@ -39,5 +39,11 @@
     "Thu": "周四",
     "Fri": "周五",
     "Sat": "星期六",
-    "Sun": "太阳"
+    "Sun": "太阳",
+    "Email Instance": "电子邮件实例",
+    "Please choose the email instance": "请选择邮箱实例",
+    "Send to (optional)": "发送至（可选）",
+    "Choose your email address": "选择您的电子邮件地址",
+    "Subject (optional)": "主题（可选）",
+    "Choose your subject for the Email": "选择您的电子邮件主题"
 }

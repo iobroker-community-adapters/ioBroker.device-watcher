@@ -31,5 +31,13 @@
 	"Please choose the telegram instance": "Please choose the telegram instance",
 	"Jarvis Instance": "Jarvis Instance",
 	"Please choose the jarvis instance": "Please choose the jarvis instance",
-	"Choose which devices should be excluded": "Choose which devices should be excluded"
+	"Choose which devices should be excluded": "Choose which devices should be excluded",
+	"Email Instance": "Email Instance",
+	"Please choose the email instance": "Please choose the email instance",
+	"Send to (optional)": "Send to (optional)",
+	"Choose your email address": "Choose your email address",
+	"Subject (optional)": "Subject (optional)",
+	"Choose your subject for the Email": "Choose your subject for the Email"
+
+
 }

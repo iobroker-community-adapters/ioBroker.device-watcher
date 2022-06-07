@@ -39,17 +39,17 @@
                 "pl": "dodano urządzenia Shelly i Sonoff",
                 "zh-cn": "添加了 Shelly 和 Sonoff 设备"
             },
-			"0.0.5": {
+            "0.0.5": {
                 "en": "added admin translations",
-				"de": "Admin-Übersetzungen hinzugefügt",
-				"ru": "добавлены переводы администратора",
-				"pt": "traduções de administrador adicionadas",
-				"nl": "admin-vertalingen toegevoegd",
-				"fr": "traductions d'administration ajoutées",
-				"it": "aggiunte traduzioni di amministrazione",
-				"es": "Traducciones de administrador agregadas",
-				"pl": "dodane tłumaczenia administracyjne",
-				"zh-cn": "添加了管理员翻译"
+                "de": "Admin-Übersetzungen hinzugefügt",
+                "ru": "добавлены переводы администратора",
+                "pt": "traduções de administrador adicionadas",
+                "nl": "admin-vertalingen toegevoegd",
+                "fr": "traductions d'administration ajoutées",
+                "it": "aggiunte traduzioni di amministrazione",
+                "es": "Traducciones de administrador agregadas",
+                "pl": "dodane tłumaczenia administracyjne",
+                "zh-cn": "添加了管理员翻译"
             }
         },
         "title": "Device-Watcher",
