@@ -248,7 +248,7 @@ class DeviceWatcher extends utils.Adapter {
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
-							if (myArrDev[i].unreach == 'none') {
+							if (myArrDev[i].unreach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
 									arrOfflineDevices.push(
 										{
@@ -260,7 +260,7 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							} else {
 								if (deviceUnreachState) {
-									if ((deviceUnreachState.val == true) && (myArrDev[i].adapter == 'Homematic')) {
+									if ((deviceUnreachState.val === true) && (myArrDev[i].adapter == 'Homematic')) {
 										arrOfflineDevices.push(
 											{
 												Device: deviceName,
@@ -268,7 +268,7 @@ class DeviceWatcher extends utils.Adapter {
 												Last_contact: lastContactString
 											}
 										);
-									} else if (deviceUnreachState.val == false) {
+									} else if (deviceUnreachState.val === false) {
 										arrOfflineDevices.push(
 											{
 												Device: deviceName,
