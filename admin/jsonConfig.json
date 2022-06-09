@@ -46,6 +46,13 @@
                     "lg": 3,
                     "label": "Homematic"
                 },
+                "deconzDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Deconz"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",

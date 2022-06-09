@@ -123,6 +123,7 @@
         "sonoffDevices": false,
         "shellyDevices": false,
         "homematicDevices": false,
+        "deconzDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,

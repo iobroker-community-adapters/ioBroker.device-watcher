@@ -121,38 +121,43 @@ class DeviceWatcher extends utils.Adapter {
 		let lastContactString;
 		const testMe = false;
 
-		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices) {
+		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
 
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
 		if (testMe) { //Only for Developer to test the functions!!
-			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE'});
+			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'unreach':'.UNREACH'});
 			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
 			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
 
 		if (this.config.bleDevices) {
-			myArrDev.push({'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery'});
+			myArrDev.push({'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'unreach':'none'});
 			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten...');
 		}
 		if (this.config.zigbeeDevices) {
-			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery'});
+			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'unreach':'none'});
 			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.sonoffDevices) {
-			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery'});
+			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'unreach':'none'});
+			myArrDev.push({'Selektor':'sonoff.*.Wifi_Signal', 'adapter':'Sonoff', 'battery':'.battery', 'unreach':'none'});
 			this.log.info('Sonoff Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.shellyDevices) {
-			myArrDev.push({'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery'});
+			myArrDev.push({'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'unreach':'none'});
 			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.homematicDevices) {
-			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE'});
+			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'unreach':'.UNREACH'});
 			this.log.info('Homematic Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.deconzDevices) {
+			myArrDev.push({'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'unreach':'.reachable'});
+			this.log.info('Deconz Devices wurden ausgewählt. Lade Daten...');
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));
@@ -231,6 +236,8 @@ class DeviceWatcher extends utils.Adapter {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
+							const currDeviceUnreachString = currDeviceString + myArrDev[i].unreach;
+							const deviceUnreachState = await this.getForeignStateAsync(currDeviceUnreachString);
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
@@ -241,19 +248,42 @@ class DeviceWatcher extends utils.Adapter {
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
-							if (lastContact > this.config.maxMinutes) {
-								arrOfflineDevices.push(
-									{
-										Device: deviceName,
-										Adapter: deviceAdapterName,
-										Last_contact: lastContactString
+							if (myArrDev[i].unreach == 'none') {
+								if (lastContact > this.config.maxMinutes) {
+									arrOfflineDevices.push(
+										{
+											Device: deviceName,
+											Adapter: deviceAdapterName,
+											Last_contact: lastContactString
+										}
+									);
+								}
+							} else {
+								if (deviceUnreachState) {
+									if ((deviceUnreachState.val == true) && (myArrDev[i].adapter == 'Homematic')) {
+										arrOfflineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									} else if (deviceUnreachState.val == false) {
+										arrOfflineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
 									}
-								);
+								}
 							}
 						} catch (e) {
 							this.log.error('(03) Error while getting timestate ' + e);
 						}
 					}
+
 
 					// 2c. Count how many devcies are offline
 					offlineDevicesCount = arrOfflineDevices.length;
@@ -393,7 +423,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				if ((lastBatteryNotifyIndicator != undefined) && (lastBatteryNotifyIndicator != null)) {
 					if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);}
-					if ((now.getHours() > 11) && (lastBatteryNotifyIndicator.val == false) && (checkToday != undefined)){
+					if ((now.getHours() > 11) && (lastBatteryNotifyIndicator.val == true) && (checkToday != undefined)){
 						let batteryMinCount = 0;
 						const batteryWarningMin = this.config.minWarnBatterie;
 
@@ -401,7 +431,7 @@ class DeviceWatcher extends utils.Adapter {
 						for (const id of arrBatteryPowered) {
 							if (id['Battery']) {
 								const batteryValue = parseFloat(id['Battery'].replace('%', ''));
-								if (batteryValue < batteryWarningMin) {
+								if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'Homematic')) {
 									infotext = infotext + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Battery'] + ')'.split(', ');
 									++batteryMinCount;
 								}
@@ -419,14 +449,14 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							if (pushover.instance) {
 								try {
-									await sendPushover('Batteriezustand: ' + infotext);
+									await sendPushover('Batteriezustände: ' + infotext);
 								} catch (e) {
 									this.log.warn ('Getting error at sending notification' + (e));
 								}
 							}
 							if (telegram.instance) {
 								try {
-									await sendTelegram('Batteriezustand: ' + infotext);
+									await sendTelegram('Batteriezuständ: ' + infotext);
 								} catch (e) {
 									this.log.warn ('Getting error at sending notification' + (e));
 								}
