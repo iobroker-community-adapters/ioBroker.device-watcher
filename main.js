@@ -260,7 +260,7 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							} else {
 								if (deviceUnreachState) {
-									if ((deviceUnreachState.val === true) && (myArrDev[i].adapter == 'Homematic')) {
+									if ((deviceUnreachState.val === true) && (myArrDev[i].adapter === 'Homematic')) {
 										arrOfflineDevices.push(
 											{
 												Device: deviceName,
