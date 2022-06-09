@@ -231,15 +231,13 @@ class DeviceWatcher extends utils.Adapter {
 					// 1b. Count how many devices are exists
 					deviceCounter = jsonLinkQualityDevices.length;
 
-					//Get Unreach State
-					const currDeviceUnreachString = currDeviceString + myArrDev[i].unreach;
-					const deviceUnreachState = await this.getForeignStateAsync(currDeviceUnreachString);
-
 					// 2. When was the last contact to the device?
-					if (deviceQualityState && deviceUnreachState) {
+					if (deviceQualityState) {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
+							const currDeviceUnreachString = currDeviceString + myArrDev[i].unreach;
+							const deviceUnreachState = await this.getForeignStateAsync(currDeviceUnreachString);
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
@@ -260,25 +258,25 @@ class DeviceWatcher extends utils.Adapter {
 										}
 									);
 								}
-							} else if (myArrDev[i].adapter === 'Homematic') {
-								if (deviceUnreachState.val === true) {
-									arrOfflineDevices.push(
-										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
-										}
-									);
-								}
 							} else {
-								if (deviceUnreachState.val === false) {
-									arrOfflineDevices.push(
-										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
-										}
-									);
+								if (deviceUnreachState) {
+									if ((deviceUnreachState.val === true) && (myArrDev[i].adapter === 'Homematic')) {
+										arrOfflineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									} else if (deviceUnreachState.val === false) {
+										arrOfflineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
 								}
 							}
 						} catch (e) {
