@@ -268,7 +268,7 @@ class DeviceWatcher extends utils.Adapter {
 												Last_contact: lastContactString
 											}
 										);
-									} else if (deviceUnreachState.val === false) {
+									} else if ((deviceUnreachState.val === false) && (myArrDev[i].adapter != 'Homematic')) {
 										arrOfflineDevices.push(
 											{
 												Device: deviceName,
