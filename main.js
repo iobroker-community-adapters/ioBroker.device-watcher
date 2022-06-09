@@ -128,28 +128,30 @@ class DeviceWatcher extends utils.Adapter {
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
 		if (testMe) { //Only for Developer to test the functions!!
-			myArrDev.push({'Selektor':'0_userdata.*.link_quality','theName':'common', 'adapter':'Test'});
+			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Test', 'battery':'.battery'});
+			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
+			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
 
 		if (this.config.bleDevices) {
-			myArrDev.push({'Selektor':'ble.*.rssi','theName':'common', 'adapter':'Ble'});
+			myArrDev.push({'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery'});
 			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten...');
 		}
 		if (this.config.zigbeeDevices) {
-			myArrDev.push({'Selektor':'zigbee.*.link_quality','theName':'common', 'adapter':'Zigbee'});
+			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery'});
 			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.sonoffDevices) {
-			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI','theName':'common', 'adapter':'Sonoff'});
+			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery'});
 			this.log.info('Sonoff Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.shellyDevices) {
-			myArrDev.push({'Selektor':'shelly.*.rssi','theName':'common', 'adapter':'Shelly'});
+			myArrDev.push({'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery'});
 			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.homematicDevices) {
-			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE','theName':'common', 'adapter':'Homematic'});
+			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'*.battery'});
 			this.log.info('Homematic Devices wurden ausgewählt. Lade Daten...');
 		}
 
@@ -257,11 +259,11 @@ class DeviceWatcher extends utils.Adapter {
 					offlineDevicesCount = arrOfflineDevices.length;
 
 					// 3. Get battery states
-					const currDeviceBatteryString = currDeviceString + '.battery';
-					const currHmBatteryString	= currDeviceString + '.OPERATING_VOLTAGE';
+					const currDeviceBatteryString 	= currDeviceString + myArrDev[i].battery;
+					const currHmBatteryString		= currDeviceString + '.OPERATING_VOLTAGE';
 
-					const deviceBatteryState = await this.getForeignStateAsync(currDeviceBatteryString);
-					const hmBatteryState = await this.getForeignStateAsync(currHmBatteryString);
+					const deviceBatteryState	= await this.getForeignStateAsync(currDeviceBatteryString);
+					const hmBatteryState		= await this.getForeignStateAsync(currHmBatteryString);
 					let batteryHealth;
 
 					if ((!deviceBatteryState) && (!hmBatteryState)) {
