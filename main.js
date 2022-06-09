@@ -128,7 +128,7 @@ class DeviceWatcher extends utils.Adapter {
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
 		if (testMe) { //Only for Developer to test the functions!!
-			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Test', 'battery':'.battery'});
+			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE'});
 			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
 			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
@@ -151,7 +151,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.homematicDevices) {
-			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'*.battery'});
+			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE'});
 			this.log.info('Homematic Devices wurden ausgewählt. Lade Daten...');
 		}
 
@@ -260,17 +260,14 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 3. Get battery states
 					const currDeviceBatteryString 	= currDeviceString + myArrDev[i].battery;
-					const currHmBatteryString		= currDeviceString + '.OPERATING_VOLTAGE';
-
 					const deviceBatteryState	= await this.getForeignStateAsync(currDeviceBatteryString);
-					const hmBatteryState		= await this.getForeignStateAsync(currHmBatteryString);
 					let batteryHealth;
 
-					if ((!deviceBatteryState) && (!hmBatteryState)) {
+					if (!deviceBatteryState) {
 						batteryHealth = ' - ';
-					} else if ((hmBatteryState) && (hmBatteryState).val === 0) {
+					} else if ((myArrDev[i].adapter === 'Homematic') && (deviceBatteryState).val === 0) {
 						batteryHealth = ' - ';
-					} else if (deviceBatteryState) {
+					} else if ((deviceBatteryState) && (myArrDev[i].adapter != 'Homematic')) {
 						batteryHealth = (deviceBatteryState).val + '%';
 						arrBatteryPowered.push(
 							{
@@ -279,8 +276,8 @@ class DeviceWatcher extends utils.Adapter {
 								Battery: batteryHealth
 							}
 						);
-					} else if ((hmBatteryState) && (hmBatteryState).val != 0) {
-						batteryHealth = (hmBatteryState).val + 'V';
+					} else if ((deviceBatteryState) && (deviceBatteryState).val != 0 && myArrDev[i].adapter === 'Homematic') {
+						batteryHealth = (deviceBatteryState).val + 'V';
 						arrBatteryPowered.push(
 							{
 								Device: deviceName,
