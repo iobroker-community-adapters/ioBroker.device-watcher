@@ -37,6 +37,16 @@ The adapter has also the option to send notifications if the number of offline d
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+- added Homematic, Deconz, Zwave
+- added Email notification
+- added count and list for low battery devices
+- changes Log state dp to last notification state dp
+- Using available state instead of link quality state for zigbee devices
+- Show the correct time of last contact instead the minutes if the time is under 100minutes
+- small bugfixes
+
 ### 0.0.5 (2022-06-05)
 
 -   added admin translations
