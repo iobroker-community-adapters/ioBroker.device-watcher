@@ -1,6 +1,6 @@
 {
   "name": "iobroker.device-watcher",
-  "version": "0.0.6",
+  "version": "0.0.5",
   "description": "Watchdog for wireless devices",
   "author": "Christian Behrends <mail@christian-behrends.de>",
   "homepage": "https://github.com/ciddi89/ioBroker.device-watcher",
