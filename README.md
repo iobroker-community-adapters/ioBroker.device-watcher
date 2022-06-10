@@ -37,7 +37,7 @@ The adapter has also the option to send notifications if the number of offline d
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### 0.0.7 (2022-06-10)
+### 0.0.6 (2022-06-10)
 
 - added Homematic, Deconz, Zwave
 - added Email notification
