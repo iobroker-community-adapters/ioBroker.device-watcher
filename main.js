@@ -131,7 +131,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (testMe) { //Only for Developer to test the functions!!
 			myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'});
-			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none'});
+			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available'});
 			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
 			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
@@ -142,7 +142,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten...');
 		}
 		if (this.config.zigbeeDevices) {
-			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available', 'isLowBat':'none'});
 			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.sonoffDevices) {
@@ -248,7 +248,8 @@ class DeviceWatcher extends utils.Adapter {
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
-							lastContactString = Math.round(lastContact) + ' Minuten';
+							//lastContactString = Math.round(lastContact) + ' Minuten';
+							lastContactString = this.formatDate(new Date((deviceQualityState.ts)), 'hh:mm') + ' Uhr';
 							if (Math.round(lastContact) > 100) {
 								lastContactString = Math.round(lastContact/60) + ' Stunden';
 							}
