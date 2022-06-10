@@ -53,6 +53,13 @@
                     "lg": 3,
                     "label": "Deconz"
                 },
+                "zwaveDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Zwave"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",

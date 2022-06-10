@@ -124,6 +124,7 @@
         "shellyDevices": false,
         "homematicDevices": false,
         "deconzDevices": false,
+        "zwaveDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,

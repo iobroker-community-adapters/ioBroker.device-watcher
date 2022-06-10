@@ -123,44 +123,48 @@ class DeviceWatcher extends utils.Adapter {
 		let lastContactString;
 		const testMe = false;
 
-		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices) {
+		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices && !this.config.zwaveDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
 
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
 		if (testMe) { //Only for Developer to test the functions!!
-			myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'unreach':'.UNREACH'});
-			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'unreach':'none'});
+			myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'});
+			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none'});
 			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
 			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
 
 		if (this.config.bleDevices) {
-			myArrDev.push({'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'unreach':'none'});
+			myArrDev.push({'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten...');
 		}
 		if (this.config.zigbeeDevices) {
-			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'unreach':'none'});
+			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.sonoffDevices) {
-			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'unreach':'none'});
-			myArrDev.push({'Selektor':'sonoff.*.Wifi_Signal', 'adapter':'Sonoff', 'battery':'.battery', 'unreach':'none'});
+			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'sonoff.*.Wifi_Signal', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.info('Sonoff Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.shellyDevices) {
-			myArrDev.push({'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'unreach':'none'});
+			myArrDev.push({'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.homematicDevices) {
-			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'unreach':'.UNREACH'});
+			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'none'});
 			this.log.info('Homematic Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.deconzDevices) {
-			myArrDev.push({'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'unreach':'.reachable'});
+			myArrDev.push({'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'});
 			this.log.info('Deconz Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.zwaveDevices) {
+			myArrDev.push({'Selektor':'zwave.*.ready', 'adapter':'Zwave', 'battery':'.battery.level', 'reach':'.ready', 'isLowBat':'.battery.isLow'});
+			this.log.info('Zwave Devices wurden ausgewählt. Lade Daten...');
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));
@@ -239,7 +243,7 @@ class DeviceWatcher extends utils.Adapter {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
-							const currDeviceUnreachString = currDeviceString + myArrDev[i].unreach;
+							const currDeviceUnreachString = currDeviceString + myArrDev[i].reach;
 							const deviceUnreachState = await this.getForeignStateAsync(currDeviceUnreachString);
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
@@ -251,7 +255,7 @@ class DeviceWatcher extends utils.Adapter {
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
-							if (myArrDev[i].unreach === 'none') {
+							if (myArrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
 									arrOfflineDevices.push(
 										{
