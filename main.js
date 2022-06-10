@@ -111,13 +111,15 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug('Function started: ' + this.main.name);
 
-		let arrOfflineDevices         = []; //JSON-Info of all offline-devices
-		let jsonLinkQualityDevices    = []; //JSON-Info of all devices with linkquality
-		let arrBatteryPowered         = []; //JSON-Info of all devices with battery
-		let arrListAllDevices         = []; //JSON-Info total list with info of all devices
-		let offlineDevicesCount	= 0;
-		let deviceCounter		= 0;
-		let batteryPoweredCount = 0;
+		let arrOfflineDevices        	= []; //JSON-Info of all offline-devices
+		let jsonLinkQualityDevices    	= []; //JSON-Info of all devices with linkquality
+		let arrBatteryPowered         	= []; //JSON-Info of all devices with battery
+		let arrBatteryLowPowered		= [];
+		let arrListAllDevices         	= []; //JSON-Info total list with info of all devices
+		let offlineDevicesCount			= 0;
+		let deviceCounter				= 0;
+		let batteryPoweredCount 		= 0;
+		let lowBatteryPoweredCount		= 0;
 		let lastContactString;
 		const testMe = false;
 
@@ -128,7 +130,8 @@ class DeviceWatcher extends utils.Adapter {
 		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
 
 		if (testMe) { //Only for Developer to test the functions!!
-			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'unreach':'.UNREACH'});
+			myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'unreach':'.UNREACH'});
+			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'unreach':'none'});
 			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
 			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
@@ -319,6 +322,23 @@ class DeviceWatcher extends utils.Adapter {
 					// 3b. Count how many devices are with battery
 					batteryPoweredCount = arrBatteryPowered.length;
 
+					// 3c. Count how many devices are with low battery
+					if (deviceBatteryState && deviceBatteryState.val) {
+						const batteryWarningMin = this.config.minWarnBatterie;
+						if ((deviceBatteryState.val < batteryWarningMin) && (myArrDev[i].adapter != 'Homematic')) {
+							arrBatteryLowPowered.push(
+								{
+									Device: deviceName,
+									Adapter: deviceAdapterName,
+									Battery: batteryHealth
+								}
+							);
+						}
+
+					}
+					// 3d. Count how many devices are with low battery
+					lowBatteryPoweredCount = arrBatteryLowPowered.length;
+
 					// 4. Add all devices in the list
 					arrListAllDevices.push(
 						{
@@ -486,6 +506,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync('offlineCount', {val: offlineDevicesCount, ack: true});
 			await this.setStateAsync('countAll', {val: deviceCounter, ack: true});
 			await this.setStateAsync('batteryCount', {val: batteryPoweredCount, ack: true});
+			await this.setStateAsync('lowBatteryCount', {val: lowBatteryPoweredCount, ack: true});
 
 			if (deviceCounter == 0) {
 				jsonLinkQualityDevices	= [{Device: '--keine--', Adapter: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality
@@ -512,6 +533,14 @@ class DeviceWatcher extends utils.Adapter {
 				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
 			} else {
 				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
+			}
+
+			if (lowBatteryPoweredCount == 0) {
+				arrBatteryLowPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+
+				await this.setStateAsync('lowBatteryList', {val: JSON.stringify(arrBatteryLowPowered), ack: true});
+			} else {
+				await this.setStateAsync('lowBatteryList', {val: JSON.stringify(arrBatteryLowPowered), ack: true});
 			}
 
 			//Zeitstempel wann die Datenpunkte zuletzt gecheckt wurden

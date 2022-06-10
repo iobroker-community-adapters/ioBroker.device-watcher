@@ -229,6 +229,32 @@
             "native": {}
         },
         {
+            "_id": "lowBatteryList",
+            "type": "state",
+            "common": {
+                "name": "List devices with low battery state",
+                "type": "array",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
+        },
+        {
+            "_id": "lowBatteryCount",
+            "type": "state",
+            "common": {
+                "name": "Quantity devices with low battery",
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
             "_id": "batteryCount",
             "type": "state",
             "common": {
