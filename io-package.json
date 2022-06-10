@@ -281,10 +281,10 @@
             "native": {}
         },
         {
-            "_id": "deviceWatcherLog",
+            "_id": "lastNotification",
             "type": "state",
             "common": {
-                "name": "Log of Device-Watcher",
+                "name": "Last Notification",
                 "type": "string",
                 "role": "indicator",
                 "read": true,

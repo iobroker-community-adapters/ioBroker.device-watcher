@@ -374,7 +374,7 @@ class DeviceWatcher extends utils.Adapter {
 							msg = msg + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Last_contact'] + ')';
 						}
 						this.log.info(msg);
-						await this.setStateAsync('deviceWatcherLog', msg, true);
+						await this.setStateAsync('lastNotification', msg, true);
 						if (pushover.instance) {
 							try {
 								await sendPushover(msg);
@@ -458,8 +458,8 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						}
 						if (batteryMinCount > 0) {
-							this.log.info('Batteriezustand: ' + infotext);
-							await this.setStateAsync('deviceWatcherLog', infotext, true);
+							this.log.info('Batteriezustände: ' + infotext);
+							await this.setStateAsync('lastNotification', infotext, true);
 							if (jarvis.instance) {
 								try {
 									await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
@@ -482,9 +482,6 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							}
 							await this.setStateAsync('info.lastBatteryNotification', true, true);
-						}
-						else {
-							await this.setStateAsync('deviceWatcherLog', 'Batterien der Geräte in Ordnung', true);
 						}
 					}
 				}
