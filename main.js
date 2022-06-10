@@ -423,7 +423,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				if ((lastBatteryNotifyIndicator != undefined) && (lastBatteryNotifyIndicator != null)) {
 					if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);}
-					if ((now.getHours() > 11) && (lastBatteryNotifyIndicator.val == true) && (checkToday != undefined)){
+					if ((now.getHours() > 11) && (lastBatteryNotifyIndicator.val == false) && (checkToday != undefined)){
 						let batteryMinCount = 0;
 						const batteryWarningMin = this.config.minWarnBatterie;
 
