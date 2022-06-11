@@ -37,7 +37,8 @@
 	"Send to (optional)": "Send to (optional)",
 	"Choose your email address": "Choose your email address",
 	"Subject (optional)": "Subject (optional)",
-	"Choose your subject for the Email": "Choose your subject for the Email"
-
-
+	"Choose your subject for the Email": "Choose your subject for the Email",
+	"Lovelace Notification": "Lovelace Notification",
+	"Lovelace Instance": "Lovelace Instance",
+	"Please choose the lovelace instance": "Please choose the lovelace instance"
 }

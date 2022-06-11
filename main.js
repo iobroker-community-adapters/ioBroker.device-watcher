@@ -72,6 +72,12 @@ class DeviceWatcher extends utils.Adapter {
 			title: this.config.titleJarvis
 
 		};
+		const lovelace = {
+			instance: this.config.instanceLovelace,
+			title: this.config.titleLovelace
+
+		};
+
 		const choosedDays = {
 			monday: this.config.checkMonday,
 			tuesday: this.config.checkTuesday,
@@ -106,7 +112,11 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		const sendJarvis = async (text) => {
-			await this.setForeignStateAsync('jarvis.0.addNotification', text);
+			await this.setForeignStateAsync(jarvis.instance + '.addNotification', text);
+		};
+
+		const sendLovelace = async (text) => {
+			await this.setForeignStateAsync(lovelace.instance + '.notifications.add', text);
 		};
 
 		this.log.debug('Function started: ' + this.main.name);
@@ -134,6 +144,7 @@ class DeviceWatcher extends utils.Adapter {
 			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available'});
 			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
 			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
+			myArrDev.push({'Selektor':'0_userdata.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
 
@@ -421,15 +432,18 @@ class DeviceWatcher extends utils.Adapter {
 								this.log.warn ('Getting error at sending notification' + (e));
 							}
 						}
-
-
+						if (lovelace.instance) {
+							try {
+								await sendLovelace('{"message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+							} catch (e) {
+								this.log.warn ('Getting error at sending notification' + (e));
+							}
+						}
 					}
 				}
-
 			} catch (e) {
 				this.log.debug('Getting error at sending offline notification ' + e);
 			}
-
 		}
 
 		/*----------  Low battery Notification ----------*/
@@ -478,13 +492,7 @@ class DeviceWatcher extends utils.Adapter {
 						if (batteryMinCount > 0) {
 							this.log.info('Batteriezustände: ' + infotext);
 							await this.setStateAsync('lastNotification', infotext, true);
-							if (jarvis.instance) {
-								try {
-									await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
-								} catch (e) {
-									this.log.warn ('Getting error at sending notification' + (e));
-								}
-							}
+
 							if (pushover.instance) {
 								try {
 									await sendPushover('Batteriezustände: ' + infotext);
@@ -499,6 +507,28 @@ class DeviceWatcher extends utils.Adapter {
 									this.log.warn ('Getting error at sending notification' + (e));
 								}
 							}
+							if (email.instance) {
+								try {
+									await sendEmail('Batteriezuständ: ' + infotext);
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
+							}
+							if (jarvis.instance) {
+								try {
+									await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
+							}
+							if (lovelace.instance) {
+								try {
+									await sendLovelace('{"message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+								} catch (e) {
+									this.log.warn ('Getting error at sending notification' + (e));
+								}
+							}
+
 							await this.setStateAsync('info.lastBatteryNotification', true, true);
 						}
 					}

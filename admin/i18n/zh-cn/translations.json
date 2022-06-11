@@ -45,5 +45,8 @@
     "Send to (optional)": "发送至（可选）",
     "Choose your email address": "选择您的电子邮件地址",
     "Subject (optional)": "主题（可选）",
-    "Choose your subject for the Email": "选择您的电子邮件主题"
+    "Choose your subject for the Email": "选择您的电子邮件主题",
+    "Lovelace Notification": "洛夫莱斯通知",
+    "Lovelace Instance": "Lovelace 实例",
+    "Please choose the lovelace instance": "请选择lovelace实例"
 }

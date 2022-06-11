@@ -150,6 +150,8 @@
         "deviceTelegram": "",
         "instanceJarvis": "",
         "titleJarvis": "Device-Watcher",
+        "instanceLovelace": "",
+        "titleLovelace": "Device-Watcher",
         "tableBlacklist": []
     },
     "objects": [],

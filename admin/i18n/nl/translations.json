@@ -45,5 +45,8 @@
     "Send to (optional)": "Verzenden naar (optioneel)",
     "Choose your email address": "Kies je e-mailadres",
     "Subject (optional)": "Onderwerp (optioneel)",
-    "Choose your subject for the Email": "Kies uw onderwerp voor de e-mail"
+    "Choose your subject for the Email": "Kies uw onderwerp voor de e-mail",
+    "Lovelace Notification": "Lovelace-melding",
+    "Lovelace Instance": "Lovelace-instantie",
+    "Please choose the lovelace instance": "Kies de lovelace-instantie"
 }

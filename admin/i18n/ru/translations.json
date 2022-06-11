@@ -45,5 +45,8 @@
     "Send to (optional)": "Отправить (необязательно)",
     "Choose your email address": "Выберите свой адрес электронной почты",
     "Subject (optional)": "Тема (необязательно)",
-    "Choose your subject for the Email": "Выберите тему для письма"
+    "Choose your subject for the Email": "Выберите тему для письма",
+    "Lovelace Notification": "Уведомление Лавлейс",
+    "Lovelace Instance": "Экземпляр ловеласа",
+    "Please choose the lovelace instance": "Пожалуйста, выберите экземпляр lovelace"
 }

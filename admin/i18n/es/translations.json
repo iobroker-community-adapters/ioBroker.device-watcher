@@ -45,5 +45,8 @@
     "Send to (optional)": "Enviar a (opcional)",
     "Choose your email address": "Elige tu dirección de correo electrónico",
     "Subject (optional)": "Asunto (opcional)",
-    "Choose your subject for the Email": "Elija su asunto para el correo electrónico"
+    "Choose your subject for the Email": "Elija su asunto para el correo electrónico",
+    "Lovelace Notification": "Notificación de Lovelace",
+    "Lovelace Instance": "Instancia Lovelace",
+    "Please choose the lovelace instance": "Elija la instancia de lovelace"
 }

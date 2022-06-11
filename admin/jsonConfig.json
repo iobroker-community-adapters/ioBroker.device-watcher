@@ -294,6 +294,32 @@
                     "label": "Jarvis Instance",
                     "help": "Please choose the jarvis instance"
                 },
+                "titleLovelace": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Title (optional)",
+                    "help": "Choose your title for Pushmessage"
+                },
+                "headerLovelace": {
+                    "newLine": "true",
+                    "type": "header", 
+                    "text": "Lovelace Notification",
+                    "size": 1
+                },
+                "instanceLovelace": {
+                    "newLine": true,
+                    "type": "instance",
+                    "adapter": "lovelace",
+                    "allowDeactivate": true,
+                    "all": true,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Lovelace Instance",
+                    "help": "Please choose the lovelace instance"
+                },
                 "titleJarvis": {
                     "type": "text",
                     "sm": 12,
