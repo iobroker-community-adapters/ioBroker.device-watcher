@@ -155,8 +155,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		if (this.config.sonoffDevices) {
 			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
-			myArrDev.push({'Selektor':'sonoff.*.Wifi_Signal', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
-			myArrDev.push({'Selektor':'sonoff.*.RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.info('Sonoff Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.shellyDevices) {
