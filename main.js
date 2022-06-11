@@ -150,7 +150,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten...');
 		}
 		if (this.config.zigbeeDevices) {
-			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.sonoffDevices) {
