@@ -67,6 +67,20 @@
                     "lg": 3,
                     "label": "FritzDect"
                 },
+                "hueDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Hue"
+                },
+                "hueExtDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Hue Extended"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",

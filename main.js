@@ -123,7 +123,7 @@ class DeviceWatcher extends utils.Adapter {
 		let lastContactString;
 		const testMe = false;
 
-		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices && !this.config.zwaveDevices && !this.config.dectDevices) {
+		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices && !this.config.zwaveDevices && !this.config.dectDevices && !this.config.hueDevices&& !this.config.hueExtDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
 
@@ -170,6 +170,14 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.dectDevices) {
 			myArrDev.push({'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'});
 			this.log.info('FritzDect Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.hueDevices) {
+			myArrDev.push({'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'});
+			this.log.info('Hue Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.hueDevices) {
+			myArrDev.push({'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'});
+			this.log.info('Hue Extended Devices wurden ausgewählt. Lade Daten...');
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));

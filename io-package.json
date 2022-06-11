@@ -126,6 +126,8 @@
         "deconzDevices": false,
         "zwaveDevices": false,
         "dectDevices": false,
+        "hueDevices": false,
+        "hueExtDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,
