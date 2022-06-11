@@ -256,17 +256,7 @@ class DeviceWatcher extends utils.Adapter {
 								Link_quality: linkQuality
 							}
 						);
-					} else {
-						linkQuality = ' - ';
-						jsonLinkQualityDevices.push(
-							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Link_quality: linkQuality
-							}
-						);
 					}
-
 
 					// 1b. Count how many devices are exists
 					deviceCounter = jsonLinkQualityDevices.length;
