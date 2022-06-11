@@ -188,7 +188,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info('Hue Extended Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.nukiExtDevices) {
-			myArrDev.push({'Selektor':'nuki-extended.*.batteryChargeState', 'adapter':'Nuki Extended', 'battery':'.batteryChargeState', 'reach':'none', 'isLowBat':'.batteryCritical'});
+			myArrDev.push({'Selektor':'nuki-extended.*.batteryCritical', 'adapter':'Nuki Extended', 'battery':'.batteryChargeState', 'reach':'none', 'isLowBat':'.batteryCritical'});
 			this.log.info('Nuki Extended Devices wurden ausgewählt. Lade Daten...');
 		}
 
