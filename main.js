@@ -123,7 +123,7 @@ class DeviceWatcher extends utils.Adapter {
 		let lastContactString;
 		const testMe = false;
 
-		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices && !this.config.zwaveDevices) {
+		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices && !this.config.zwaveDevices && !this.config.dectDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
 
@@ -166,6 +166,10 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.zwaveDevices) {
 			myArrDev.push({'Selektor':'zwave.*.ready', 'adapter':'Zwave', 'battery':'.battery.level', 'reach':'.ready', 'isLowBat':'.battery.isLow'});
 			this.log.info('Zwave Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.dectDevices) {
+			myArrDev.push({'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'});
+			this.log.info('FritzDect Devices wurden ausgewählt. Lade Daten...');
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));

@@ -125,6 +125,7 @@
         "homematicDevices": false,
         "deconzDevices": false,
         "zwaveDevices": false,
+        "dectDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,
