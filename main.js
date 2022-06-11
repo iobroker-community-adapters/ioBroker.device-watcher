@@ -162,7 +162,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.homematicDevices) {
-			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'LOW_BAT'});
 			this.log.info('Homematic Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (this.config.deconzDevices) {
