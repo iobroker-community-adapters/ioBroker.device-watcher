@@ -181,7 +181,7 @@ class DeviceWatcher extends utils.Adapter {
 			myArrDev.push({'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'});
 			this.log.info('Hue Devices wurden ausgewählt. Lade Daten...');
 		}
-		if (this.config.hueDevices) {
+		if (this.config.hueExtDevices) {
 			myArrDev.push({'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'});
 			this.log.info('Hue Extended Devices wurden ausgewählt. Lade Daten...');
 		}
