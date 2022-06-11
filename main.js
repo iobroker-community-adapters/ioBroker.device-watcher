@@ -141,7 +141,7 @@ class DeviceWatcher extends utils.Adapter {
 			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available'});
 			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
 			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
-			myArrDev.push({'Selektor':'0_userdata.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'0_userdata.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'.LOW_BAT'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
 
@@ -321,7 +321,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 3. Get battery states
 					const currDeviceBatteryString 	= currDeviceString + myArrDev[i].battery;
-					const deviceBatteryState	= await this.getForeignStateAsync(currDeviceBatteryString);
+					const deviceBatteryState		= await this.getForeignStateAsync(currDeviceBatteryString);
 					let batteryHealth;
 
 					if (!deviceBatteryState) {
@@ -351,19 +351,36 @@ class DeviceWatcher extends utils.Adapter {
 					batteryPoweredCount = arrBatteryPowered.length;
 
 					// 3c. Count how many devices are with low battery
-					if (deviceBatteryState && deviceBatteryState.val) {
-						const batteryWarningMin = this.config.minWarnBatterie;
-						if ((deviceBatteryState.val < batteryWarningMin) && (myArrDev[i].adapter != 'Homematic')) {
-							arrBatteryLowPowered.push(
-								{
-									Device: deviceName,
-									Adapter: deviceAdapterName,
-									Battery: batteryHealth
-								}
-							);
-						}
+					const batteryWarningMin 		= this.config.minWarnBatterie;
+					const currDeviceLowBatString	= currDeviceString + myArrDev[i].isLowBat;
+					const deviceLowBatState			= await this.getForeignStateAsync(currDeviceLowBatString);
 
+					if (myArrDev[i].isLowBat === 'none') {
+						if (deviceBatteryState && deviceBatteryState.val) {
+							if (deviceBatteryState.val < batteryWarningMin) {
+								arrBatteryLowPowered.push(
+									{
+										Device: deviceName,
+										Adapter: deviceAdapterName,
+										Battery: batteryHealth
+									}
+								);
+							}
+						}
+					} else {
+						if (deviceLowBatState && deviceLowBatState.val) {
+							if (deviceLowBatState.val === true) {
+								arrBatteryLowPowered.push(
+									{
+										Device: deviceName,
+										Adapter: deviceAdapterName,
+										Battery: batteryHealth
+									}
+								);
+							}
+						}
 					}
+
 					// 3d. Count how many devices are with low battery
 					lowBatteryPoweredCount = arrBatteryLowPowered.length;
 
