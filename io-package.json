@@ -128,6 +128,7 @@
         "dectDevices": false,
         "hueDevices": false,
         "hueExtDevices": false,
+        "nukiExtDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,

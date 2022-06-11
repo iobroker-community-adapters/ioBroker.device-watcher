@@ -36,9 +36,6 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.error('Error while running Device-Watcher. Error Message:' + e);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
-
-
-
 	}
 
 	async main() {
@@ -189,6 +186,10 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.hueDevices) {
 			myArrDev.push({'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'});
 			this.log.info('Hue Extended Devices wurden ausgewählt. Lade Daten...');
+		}
+		if (this.config.nukiExtDevices) {
+			myArrDev.push({'Selektor':'nuki-extended.*.batteryChargeState', 'adapter':'Nuki Extended', 'battery':'.batteryChargeState', 'reach':'none', 'isLowBat':'.batteryCritical'});
+			this.log.info('Nuki Extended Devices wurden ausgewählt. Lade Daten...');
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));

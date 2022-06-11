@@ -81,6 +81,13 @@
                     "lg": 3,
                     "label": "Hue Extended"
                 },
+                "nukiExtDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Nuki Extended"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",
