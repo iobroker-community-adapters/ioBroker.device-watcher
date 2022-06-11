@@ -128,7 +128,7 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryPoweredCount 		= 0;
 		let lowBatteryPoweredCount		= 0;
 		let lastContactString;
-		const testMe = false;
+		const testMe = true;
 
 		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices && !this.config.zwaveDevices && !this.config.dectDevices && !this.config.hueDevices&& !this.config.hueExtDevices) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
@@ -239,24 +239,34 @@ class DeviceWatcher extends utils.Adapter {
 					const deviceQualityState = await this.getForeignStateAsync(id);
 					let linkQuality;
 
-					if (deviceQualityState){
+					if ((deviceQualityState) && (typeof deviceQualityState.val === 'number')){
 						if (this.config.trueState) {
 							linkQuality = deviceQualityState.val;
-						} else if ((deviceQualityState.val != null) && (typeof deviceQualityState.val === 'number')) {
+						} else {
 							if (deviceQualityState.val < 0) {
 								linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
 							} else if ((deviceQualityState.val) >= 0) {
 								linkQuality = parseFloat((100/255 * deviceQualityState.val).toFixed(0)) + '%';
 							}
 						}
+						jsonLinkQualityDevices.push(
+							{
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Link_quality: linkQuality
+							}
+						);
+					} else {
+						linkQuality = ' - ';
+						jsonLinkQualityDevices.push(
+							{
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Link_quality: linkQuality
+							}
+						);
 					}
-					jsonLinkQualityDevices.push(
-						{
-							Device: deviceName,
-							Adapter: deviceAdapterName,
-							Link_quality: linkQuality
-						}
-					);
+
 
 					// 1b. Count how many devices are exists
 					deviceCounter = jsonLinkQualityDevices.length;
