@@ -40,14 +40,6 @@ class DeviceWatcher extends utils.Adapter {
 
 	async main() {
 
-		//Helperfunctions
-		//capitalize the first letter
-		/*
-		async function capitalize(sentence)
-		{
-			return sentence && sentence[0].toUpperCase() + sentence.slice(1);
-		}*/
-
 		const pushover = {
 			instance: this.config.instancePushover,
 			title: this.config.titlePushover,
@@ -142,7 +134,8 @@ class DeviceWatcher extends utils.Adapter {
 			zwave: this.config.zwaveDevices,
 			dect: this.config.dectDevices,
 			hue: this.config.hueDevices,
-			hueExt: this.config.hueExtDevices
+			hueExt: this.config.hueExtDevices,
+			nukiExt: this.config.nukiExtDevices
 		};
 
 		if (!supAdapter.zigbee &&
@@ -154,7 +147,8 @@ class DeviceWatcher extends utils.Adapter {
 			!supAdapter.zwave &&
 			!supAdapter.dect &&
 			!supAdapter.hue &&
-			!supAdapter.hueExt
+			!supAdapter.hueExt &&
+			!supAdapter.nukiExt
 		) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
