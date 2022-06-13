@@ -130,7 +130,7 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryPoweredCount 		= 0;
 		let lowBatteryPoweredCount		= 0;
 		let lastContactString;
-		const testMe = true;
+		const testMe = false;
 
 		const supAdapter = {
 			zigbee: this.config.zigbeeDevices,
