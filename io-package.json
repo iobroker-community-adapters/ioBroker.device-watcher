@@ -149,6 +149,7 @@
         "sendToEmail": "",
         "instanceTelegram": "",
         "deviceTelegram": "",
+        "chatIdTelegram": "",
         "instanceJarvis": "",
         "titleJarvis": "Device-Watcher",
         "instanceLovelace": "",

@@ -48,5 +48,6 @@
     "Choose your subject for the Email": "Выберите тему для письма",
     "Lovelace Notification": "Уведомление Лавлейс",
     "Lovelace Instance": "Экземпляр ловеласа",
-    "Please choose the lovelace instance": "Пожалуйста, выберите экземпляр lovelace"
+    "Please choose the lovelace instance": "Пожалуйста, выберите экземпляр lovelace",
+    "Choose your Chat-ID": "Выберите свой идентификатор чата"
 }

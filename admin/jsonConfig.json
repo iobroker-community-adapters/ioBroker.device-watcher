@@ -249,6 +249,14 @@
                     "label": "Device-ID (optional)",
                     "help": "Choose your device"
                 },
+                "chatIdTelegram": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Chat-ID (optional)",
+                    "help": "Choose your Chat-ID"
+                },
                 "_headerEmail": {
                     "newLine": true,
                     "type": "header", 

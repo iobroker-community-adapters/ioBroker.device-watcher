@@ -56,7 +56,8 @@ class DeviceWatcher extends utils.Adapter {
 		};
 		const telegram = {
 			instance: this.config.instanceTelegram,
-			user: this.config.deviceTelegram
+			user: this.config.deviceTelegram,
+			chatId: this.config.chatIdTelegram
 		};
 		const email = {
 			instance: this.config.instanceEmail,
@@ -96,7 +97,8 @@ class DeviceWatcher extends utils.Adapter {
 		const sendTelegram = async (text) => {
 			await this.sendToAsync(telegram.instance, 'send', {
 				text: text,
-				user: telegram.user
+				user: telegram.user,
+				chatId: telegram.chatId
 			});
 		};
 
@@ -128,13 +130,36 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryPoweredCount 		= 0;
 		let lowBatteryPoweredCount		= 0;
 		let lastContactString;
-		const testMe = false;
+		const testMe = true;
 
-		if (!this.config.zigbeeDevices && !this.config.bleDevices && !this.config.sonoffDevices && !this.config.shellyDevices && !this.config.homematicDevices && !this.config.deconzDevices && !this.config.zwaveDevices && !this.config.dectDevices && !this.config.hueDevices&& !this.config.hueExtDevices) {
+		const supAdapter = {
+			zigbee: this.config.zigbeeDevices,
+			ble: this.config.bleDevices,
+			sonoff: this.config.sonoffDevices,
+			shelly: this.config.shellyDevices,
+			homematic: this.config.homematicDevices,
+			deconz: this.config.deconzDevices,
+			zwave: this.config.zwaveDevices,
+			dect: this.config.dectDevices,
+			hue: this.config.hueDevices,
+			hueExt: this.config.hueExtDevices
+		};
+
+		if (!supAdapter.zigbee &&
+			!supAdapter.ble &&
+			!supAdapter.sonoff &&
+			!supAdapter.shelly &&
+			!supAdapter.homematic &&
+			!supAdapter.deconz &&
+			!supAdapter.zwave &&
+			!supAdapter.dect &&
+			!supAdapter.hue &&
+			!supAdapter.hueExt
+		) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
 
-		const myArrDev                  = []; //JSON mit Gesamtliste aller Geräte
+		const myArrDev = []; //JSON mit Gesamtliste aller Geräte
 
 		if (testMe) { //Only for Developer to test the functions!!
 			myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'});
@@ -224,17 +249,6 @@ class DeviceWatcher extends utils.Adapter {
 						deviceName = deviceObject.common.name;
 					}
 
-
-					//Get room name (not implement yet)
-					//const getRoomName = await this.getEnumAsync('rooms');
-					//let currRoom;
-					//this.log.warn(JSON.stringify(getRoomName));
-
-					/*for(const [id] of Object.entries(getRoomName.result)) {
-						currRoom = await capitalize(id.substring(id.lastIndexOf('.') + 1)) ;
-						this.log.warn(currRoom);
-					}*/
-
 					// 1. Get link quality
 					const deviceQualityState = await this.getForeignStateAsync(id);
 					let linkQuality;
@@ -315,7 +329,6 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 
-
 					// 2c. Count how many devcies are offline
 					offlineDevicesCount = arrOfflineDevices.length;
 
@@ -347,6 +360,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						);
 					}
+
 					// 3b. Count how many devices are with battery
 					batteryPoweredCount = arrBatteryPowered.length;
 
@@ -397,6 +411,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			} //<--End of second loop
 		} //<---End of main loop
+
 
 		/*=============================================
 		=         	  	 Notifications 		          =
