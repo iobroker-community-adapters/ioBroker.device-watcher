@@ -164,12 +164,12 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (testMe) { //Only for Developer to test the functions!!
 
-			//myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'});
-			//myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available'});
+			myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'});
+			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available'});
 			//myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
-			//myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
-			//myArrDev.push({'Selektor':'0_userdata.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'.LOW_BAT'});
-			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'HueExt', 'battery':'none', 'reach':'.reachable', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
+			myArrDev.push({'Selektor':'0_userdata.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'.LOW_BAT'});
+			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'none', 'isLowBat':'none'});
 			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
 		}
 
@@ -259,10 +259,10 @@ class DeviceWatcher extends utils.Adapter {
 					let deviceName;
 
 					if ((deviceObject && typeof deviceObject === 'object') && (shortDeviceObject && typeof shortDeviceObject === 'object')) {
-						if (myArrDev[i].adapter === 'HueExt') {
-							deviceName = shortDeviceObject.common.name;
-						} else {
+						if (myArrDev[i].adapter !== 'Hue Extended') {
 							deviceName = deviceObject.common.name;
+						} else {
+							deviceName = shortDeviceObject.common.name;
 						}
 					}
 
@@ -274,9 +274,6 @@ class DeviceWatcher extends utils.Adapter {
 							deviceName = switchbotID.val;
 						}
 					}
-
-					// 1. Count how many devices are exists
-					deviceCounter = myArrDev.length;
 
 					// 1. Get link quality
 					const deviceQualityState = await this.getForeignStateAsync(id);
@@ -364,14 +361,25 @@ class DeviceWatcher extends utils.Adapter {
 					// 3. Get battery states
 					const currDeviceBatteryString 	= currDeviceString + myArrDev[i].battery;
 					const deviceBatteryState		= await this.getForeignStateAsync(currDeviceBatteryString);
+					const shortCurrDeviceBatteryString 	= shortCurrDeviceString + myArrDev[i].battery;
+					const shortDeviceBatteryState		= await this.getForeignStateAsync(shortCurrDeviceBatteryString);
 					let batteryHealth;
 
-					if (!deviceBatteryState) {
+					if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
 						batteryHealth = ' - ';
-					} else if ((myArrDev[i].adapter === 'Homematic') && (deviceBatteryState).val === 0) {
+					} else if ((deviceBatteryState) && (myArrDev[i].adapter === 'Homematic') && (deviceBatteryState).val === 0) {
 						batteryHealth = ' - ';
 					} else if ((deviceBatteryState) && (myArrDev[i].adapter != 'Homematic')) {
 						batteryHealth = (deviceBatteryState).val + '%';
+						arrBatteryPowered.push(
+							{
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Battery: batteryHealth
+							}
+						);
+					} else if ((shortDeviceBatteryState) && (myArrDev[i].adapter === 'Hue Extended')) {
+						batteryHealth = (shortDeviceBatteryState).val + '%';
 						arrBatteryPowered.push(
 							{
 								Device: deviceName,
@@ -437,6 +445,9 @@ class DeviceWatcher extends utils.Adapter {
 							Link_quality: linkQuality
 						}
 					);
+
+					// 4a. Count how many devices are exists
+					deviceCounter = arrListAllDevices.length;
 				}
 			} //<--End of second loop
 		} //<---End of main loop
