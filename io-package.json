@@ -129,6 +129,8 @@
         "hueDevices": false,
         "hueExtDevices": false,
         "nukiExtDevices": false,
+        "pingDevices": false,
+        "switchbotBleDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,

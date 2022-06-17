@@ -88,6 +88,20 @@
                     "lg": 3,
                     "label": "Nuki Extended"
                 },
+                "pingDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Ping"
+                },
+                "switchbotBleDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Switchbot Ble"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",
