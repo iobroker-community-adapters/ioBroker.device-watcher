@@ -137,7 +137,8 @@ class DeviceWatcher extends utils.Adapter {
 			hueExt: this.config.hueExtDevices,
 			nukiExt: this.config.nukiExtDevices,
 			ping: this.config.pingDevices,
-			switchbotBle: this.config.switchbotBleDevices
+			switchbotBle: this.config.switchbotBleDevices,
+			sonos: this.config.sonosDevices
 		};
 
 		if (!supAdapter.zigbee &&
@@ -152,7 +153,8 @@ class DeviceWatcher extends utils.Adapter {
 			!supAdapter.hueExt &&
 			!supAdapter.nukiExt &&
 			!supAdapter.ping &&
-			!supAdapter.switchbotBle
+			!supAdapter.switchbotBle &&
+			!supAdapter.sonos
 		) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
@@ -217,6 +219,10 @@ class DeviceWatcher extends utils.Adapter {
 			myArrDev.push({'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'});
 			this.log.info('Switchbot Ble Devices wurden ausgewählt. Lade Daten...');
 		}
+		if (supAdapter.Sonos) {
+			myArrDev.push({'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'});
+			this.log.info('Sonos Devices wurden ausgewählt. Lade Daten...');
+		}
 
 		this.log.debug(JSON.stringify(myArrDev));
 
@@ -251,6 +257,8 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceObject && typeof deviceObject === 'object') {
 						deviceName = deviceObject.common.name;
 					}
+
+					//Get ID for Switchbot Devices
 					if (myArrDev[i].adapter === 'Switchbot Ble') {
 						const switchbotID = await this.getForeignStateAsync(currDeviceString + myArrDev[i].id);
 						if (switchbotID) {

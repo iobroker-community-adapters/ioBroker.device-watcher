@@ -131,6 +131,7 @@
         "nukiExtDevices": false,
         "pingDevices": false,
         "switchbotBleDevices": false,
+        "sonosDevices": false,
         "trueState": false,
         "maxMinutes": 300,
         "checkSendOfflineMsg": false,

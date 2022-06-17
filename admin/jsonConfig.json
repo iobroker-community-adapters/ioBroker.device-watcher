@@ -102,6 +102,13 @@
                     "lg": 3,
                     "label": "Switchbot Ble"
                 },
+                "sonosDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Sonos"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",
