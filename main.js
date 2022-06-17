@@ -258,14 +258,15 @@ class DeviceWatcher extends utils.Adapter {
 					const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 					let deviceName;
 
-					if ((deviceObject && typeof deviceObject === 'object') && (shortDeviceObject && typeof shortDeviceObject === 'object')) {
-						if (myArrDev[i].adapter !== 'Hue Extended') {
-							deviceName = deviceObject.common.name;
-						} else {
+					if (deviceObject && typeof deviceObject === 'object') {
+						deviceName = deviceObject.common.name;
+					}
+
+					if  (shortDeviceObject && typeof shortDeviceObject === 'object') {
+						if (myArrDev[i].adapter === 'Hue Extended') {
 							deviceName = shortDeviceObject.common.name;
 						}
 					}
-
 
 					//Get ID for Switchbot Devices
 					if (myArrDev[i].adapter === 'Switchbot Ble') {
