@@ -219,7 +219,7 @@ class DeviceWatcher extends utils.Adapter {
 			myArrDev.push({'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'});
 			this.log.info('Switchbot Ble Devices wurden ausgewählt. Lade Daten...');
 		}
-		if (supAdapter.Sonos) {
+		if (supAdapter.sonos) {
 			myArrDev.push({'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'});
 			this.log.info('Sonos Devices wurden ausgewählt. Lade Daten...');
 		}
