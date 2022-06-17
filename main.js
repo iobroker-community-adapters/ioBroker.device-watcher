@@ -210,7 +210,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info('Hue Extended Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (supAdapter.ping) {
-			myArrDev.push({'Selektor':'ping.*', 'adapter':'Ping', 'battery':'none', 'reach':'none', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'});
 			this.log.info('Ping Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (supAdapter.switchbotBle) {
