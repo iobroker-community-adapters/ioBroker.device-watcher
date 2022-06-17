@@ -214,7 +214,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info('Ping Devices wurden ausgewählt. Lade Daten...');
 		}
 		if (supAdapter.switchbotBle) {
-			myArrDev.push({'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
+			myArrDev.push({'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'});
 			this.log.info('Switchbot Ble Devices wurden ausgewählt. Lade Daten...');
 		}
 
@@ -250,6 +250,12 @@ class DeviceWatcher extends utils.Adapter {
 
 					if (deviceObject && typeof deviceObject === 'object') {
 						deviceName = deviceObject.common.name;
+					}
+					if (myArrDev[i].adapter === 'Switchbot Ble') {
+						const switchbotID = await this.getForeignStateAsync(currDeviceString + myArrDev[i].id);
+						if (switchbotID) {
+							deviceName = switchbotID.val;
+						}
 					}
 
 					// 1. Get link quality
