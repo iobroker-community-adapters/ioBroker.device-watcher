@@ -49,5 +49,6 @@
     "Lovelace Notification": "Уведомление Лавлейс",
     "Lovelace Instance": "Экземпляр ловеласа",
     "Please choose the lovelace instance": "Пожалуйста, выберите экземпляр lovelace",
-    "Choose your Chat-ID": "Выберите свой идентификатор чата"
+    "Choose your Chat-ID": "Выберите свой идентификатор чата",
+    "Add own notes, name, etc": "Добавляйте собственные заметки, имя и т. д."
 }

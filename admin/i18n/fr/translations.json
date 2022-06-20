@@ -49,5 +49,6 @@
     "Lovelace Notification": "Notification Lovelace",
     "Lovelace Instance": "Instance de Lovelace",
     "Please choose the lovelace instance": "Veuillez choisir l'instance lovelace",
-    "Choose your Chat-ID": "Choisissez votre identifiant de chat"
+    "Choose your Chat-ID": "Choisissez votre identifiant de chat",
+    "Add own notes, name, etc": "Ajoutez vos propres notes, nom, etc."
 }
