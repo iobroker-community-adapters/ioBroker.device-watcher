@@ -377,15 +377,23 @@
                     "sm": 12,
                     "md": 12,
                     "lg": 12,
-                    "items": [{
+                    "items": [
+                    {
                         "type": "objectId",
-                        "width":"100%",
+                        "width": "40%",
                         "title": "Choose which devices should be excluded", 
                         "attr": "device", 
                         "filter": false, 
                         "sort": false,
                         "default": ""
-                    }]
+                    },
+                {
+                    "type": "text",
+                    "width": "60%",
+                    "title": "Info", 
+                    "label": "Add own notes, name, etc"
+                }
+                ]
                 }
             }
         }

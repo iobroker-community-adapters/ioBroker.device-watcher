@@ -38,6 +38,12 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
+	//Hilfsfuntkionen
+	async capitalize(sentence)
+	{
+		return sentence && sentence[0].toUpperCase() + sentence.slice(1);
+	}
+
 	async main() {
 
 		const pushover = {
@@ -123,23 +129,24 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryPoweredCount 		= 0;
 		let lowBatteryPoweredCount		= 0;
 		let lastContactString;
-		const testMe = false;
 
 		const supAdapter = {
-			zigbee: this.config.zigbeeDevices,
-			ble: this.config.bleDevices,
-			sonoff: this.config.sonoffDevices,
-			shelly: this.config.shellyDevices,
-			homematic: this.config.homematicDevices,
-			deconz: this.config.deconzDevices,
-			zwave: this.config.zwaveDevices,
-			dect: this.config.dectDevices,
-			hue: this.config.hueDevices,
-			hueExt: this.config.hueExtDevices,
-			nukiExt: this.config.nukiExtDevices,
-			ping: this.config.pingDevices,
-			switchbotBle: this.config.switchbotBleDevices,
-			sonos: this.config.sonosDevices
+			zigbee: 		this.config.zigbeeDevices,
+			ble: 			this.config.bleDevices,
+			sonoff: 		this.config.sonoffDevices,
+			shelly: 		this.config.shellyDevices,
+			homematic: 		this.config.homematicDevices,
+			deconz:			this.config.deconzDevices,
+			zwave: 			this.config.zwaveDevices,
+			dect: 			this.config.dectDevices,
+			hue: 			this.config.hueDevices,
+			hueExt: 		this.config.hueExtDevices,
+			nukiExt: 		this.config.nukiExtDevices,
+			ping: 			this.config.pingDevices,
+			switchbotBle: 	this.config.switchbotBleDevices,
+			sonos: 			this.config.sonosDevices,
+			test: 			false, // Only for Developer
+			test2: 			false // Only for Developer
 		};
 
 		if (!supAdapter.zigbee &&
@@ -162,68 +169,31 @@ class DeviceWatcher extends utils.Adapter {
 
 		const myArrDev = []; //JSON mit Gesamtliste aller Geräte
 
-		if (testMe) { //Only for Developer to test the functions!!
+		const arrApart = {
+			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
+			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'none', 'isLowBat':'none'},
 
-			myArrDev.push({'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'});
-			myArrDev.push({'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'.available'});
-			//myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Test', 'battery':'.battery'});
-			myArrDev.push({'Selektor':'0_userdata.*.rssi', 'adapter':'Test', 'battery':'.sensor.battery'});
-			myArrDev.push({'Selektor':'0_userdata.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'.LOW_BAT'});
-			myArrDev.push({'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'none', 'isLowBat':'none'});
-			this.log.warn('Teststates wurden ausgewählt. Lade Daten...');
-		}
+			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
+			homematic: 		{'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'LOW_BAT'},
+			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			zwave: 			{'Selektor':'zwave.*.ready', 'adapter':'Zwave', 'battery':'.battery.level', 'reach':'.ready', 'isLowBat':'.battery.isLow'},
+			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
+			hue: 			{'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			ping: 			{'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
+			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
+			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'}
+		};
 
-		if (supAdapter.ble) {
-			myArrDev.push({'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
-			this.log.info('Ble Devices wurden ausgewählt (Xiaomi Plant Sensor). Lade Daten...');
-		}
-		if (supAdapter.zigbee) {
-			myArrDev.push({'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
-			this.log.info('Zigbee Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.sonoff) {
-			myArrDev.push({'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'});
-			this.log.info('Sonoff Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.shelly) {
-			myArrDev.push({'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'});
-			this.log.info('Shelly Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.homematic) {
-			myArrDev.push({'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'LOW_BAT'});
-			this.log.info('Homematic Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.deconz) {
-			myArrDev.push({'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'});
-			this.log.info('Deconz Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.zwave) {
-			myArrDev.push({'Selektor':'zwave.*.ready', 'adapter':'Zwave', 'battery':'.battery.level', 'reach':'.ready', 'isLowBat':'.battery.isLow'});
-			this.log.info('Zwave Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.dect) {
-			myArrDev.push({'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'});
-			this.log.info('FritzDect Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.hue) {
-			myArrDev.push({'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'});
-			this.log.info('Hue Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.hueExt) {
-			myArrDev.push({'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'});
-			this.log.info('Hue Extended Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.ping) {
-			myArrDev.push({'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'});
-			this.log.info('Ping Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.switchbotBle) {
-			myArrDev.push({'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'});
-			this.log.info('Switchbot Ble Devices wurden ausgewählt. Lade Daten...');
-		}
-		if (supAdapter.sonos) {
-			myArrDev.push({'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'});
-			this.log.info('Sonos Devices wurden ausgewählt. Lade Daten...');
+		for(const [id] of Object.entries(arrApart)) {
+			const idAdapter = supAdapter[id];
+			if (idAdapter) {
+				this.log.info(await this.capitalize(id + ' was selected. Loading data...'));
+				myArrDev.push(arrApart[id]);
+			}
 		}
 
 		this.log.debug(JSON.stringify(myArrDev));

@@ -95,7 +95,7 @@
         "readme": "https://github.com/ciddi89/ioBroker.device-watcher/blob/main/README.md",
         "loglevel": "info",
         "mode": "schedule",
-        "schedule": "*/60 * * * *",
+        "schedule": "*/15 * * * *",
         "allowInit": true,
         "type": "misc-data",
         "compact": true,
