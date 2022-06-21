@@ -179,7 +179,7 @@ class DeviceWatcher extends utils.Adapter {
 			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
 			homematic: 		{'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'LOW_BAT'},
 			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			zwave: 			{'Selektor':'zwave.*.ready', 'adapter':'Zwave', 'battery':'.battery.level', 'reach':'.ready', 'isLowBat':'.battery.isLow'},
+			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'Zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
 			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
 			hue: 			{'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
 			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
@@ -260,14 +260,18 @@ class DeviceWatcher extends utils.Adapter {
 								linkQuality = parseFloat((100/255 * deviceQualityState.val).toFixed(0)) + '%';
 							}
 						}
-						jsonLinkQualityDevices.push(
-							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Link_quality: linkQuality
-							}
-						);
-					}
+					} else {
+					// no linkQuality available for powered devices
+						linkQuality = ' - ';
+				        }
+					//  push always
+					jsonLinkQualityDevices.push(
+     					 {
+					    Device: deviceName,
+					    Adapter: deviceAdapterName,
+					    Link_quality: linkQuality
+					 }
+					);
 
 					// 1b. Count how many devices with link Quality
 					linkQualityCount = jsonLinkQualityDevices.length;
@@ -338,35 +342,48 @@ class DeviceWatcher extends utils.Adapter {
 
 					if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
 						batteryHealth = ' - ';
-					} else if ((deviceBatteryState) && (myArrDev[i].adapter === 'Homematic') && (deviceBatteryState).val === 0) {
-						batteryHealth = ' - ';
-					} else if ((deviceBatteryState) && (myArrDev[i].adapter != 'Homematic')) {
-						batteryHealth = (deviceBatteryState).val + '%';
-						arrBatteryPowered.push(
+					} else {
+						this.log.debug('Adapter ' + (myArrDev[i].adapter));
+
+						switch (myArrDev[i].adapter) {
+						case 'Homematic':
+						    if ((deviceBatteryState).val === 0) {
+							batteryHealth = ' - ';
+						    } else {
+							batteryHealth = (deviceBatteryState).val + 'V';
+						    }
+
+						    arrBatteryPowered.push(
 							{
+							    Device: deviceName,
+							    Adapter: deviceAdapterName,
+							    Battery: batteryHealth
+							}
+						    );
+						    break;
+						case 'Hue Extended':
+						    if (shortDeviceBatteryState) {
+							batteryHealth = (shortDeviceBatteryState).val + '%';
+							arrBatteryPowered.push(
+							    {
 								Device: deviceName,
 								Adapter: deviceAdapterName,
 								Battery: batteryHealth
-							}
-						);
-					} else if ((shortDeviceBatteryState) && (myArrDev[i].adapter === 'Hue Extended')) {
-						batteryHealth = (shortDeviceBatteryState).val + '%';
-						arrBatteryPowered.push(
+							    }
+							);
+						    }
+						    break;
+
+						default:
+						    batteryHealth = (deviceBatteryState).val + '%';
+						    arrBatteryPowered.push(
 							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Battery: batteryHealth
+							    Device: deviceName,
+							    Adapter: deviceAdapterName,
+							    Battery: batteryHealth
 							}
-						);
-					} else if ((deviceBatteryState) && (deviceBatteryState).val != 0 && myArrDev[i].adapter === 'Homematic') {
-						batteryHealth = (deviceBatteryState).val + 'V';
-						arrBatteryPowered.push(
-							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Battery: batteryHealth
-							}
-						);
+						    );
+						}
 					}
 
 					// 3b. Count how many devices are with battery
@@ -407,15 +424,18 @@ class DeviceWatcher extends utils.Adapter {
 					lowBatteryPoweredCount = arrBatteryLowPowered.length;
 
 					// 4. Add all devices in the list
-					arrListAllDevices.push(
-						{
-							Device: deviceName,
-							Adapter: deviceAdapterName,
-							Battery: batteryHealth,
-							Last_contact: lastContactString,
-							Link_quality: linkQuality
-						}
-					);
+					// only pusk if available
+					if (deviceBatteryState !== null || shortDeviceBatteryState !== null) {
+						arrListAllDevices.push(
+							{
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Battery: batteryHealth,
+								Last_contact: lastContactString,
+								Link_quality: linkQuality
+							}
+						);
+					}
 
 					// 4a. Count how many devices are exists
 					deviceCounter = arrListAllDevices.length;
