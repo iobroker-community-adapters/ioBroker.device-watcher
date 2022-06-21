@@ -50,5 +50,7 @@
     "Lovelace Instance": "Экземпляр ловеласа",
     "Please choose the lovelace instance": "Пожалуйста, выберите экземпляр lovelace",
     "Choose your Chat-ID": "Выберите свой идентификатор чата",
-    "Add own notes, name, etc": "Добавляйте собственные заметки, имя и т. д."
+    "Add own notes, name, etc": "Добавляйте собственные заметки, имя и т. д.",
+    "List only devices with battery": "Список только устройств с аккумулятором",
+    "Choose if only devices with battery should be listed or all devices": "Выберите, должны ли быть перечислены только устройства с аккумулятором или все устройства"
 }

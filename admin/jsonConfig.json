@@ -109,6 +109,13 @@
                     "lg": 3,
                     "label": "Sonos"
                 },
+                "mihomeDevices": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "MiHome"
+                },
                 "_headerOtherSettings": {
                     "type": "header", 
                     "text": "Other Settings",
@@ -122,6 +129,14 @@
                     "lg": 4,
                     "label": "True State",
                     "help": "Use the true state from quality state"
+                },
+                "listOnlyBattery": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "List only devices with battery",
+                    "help": "Choose if only devices with battery should be listed or all devices"
                 },
                 "maxMinutes": {
                     "type": "number",

@@ -50,5 +50,7 @@
     "Lovelace Instance": "Lovelace-instantie",
     "Please choose the lovelace instance": "Kies de lovelace-instantie",
     "Choose your Chat-ID": "Kies je Chat-ID",
-    "Add own notes, name, etc": "Eigen notities, naam, enz. toevoegen"
+    "Add own notes, name, etc": "Eigen notities, naam, enz. toevoegen",
+    "List only devices with battery": "Alleen apparaten met batterij weergeven",
+    "Choose if only devices with battery should be listed or all devices": "Kies of alleen apparaten met batterij moeten worden vermeld of alle apparaten"
 }

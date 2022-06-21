@@ -50,5 +50,7 @@
     "Lovelace Instance": "Lovelace 实例",
     "Please choose the lovelace instance": "请选择lovelace实例",
     "Choose your Chat-ID": "选择您的聊天 ID",
-    "Add own notes, name, etc": "添加自己的注释、姓名等"
+    "Add own notes, name, etc": "添加自己的注释、姓名等",
+    "List only devices with battery": "仅列出带电池的设备",
+    "Choose if only devices with battery should be listed or all devices": "选择是否应仅列出带电池的设备或所有设备"
 }

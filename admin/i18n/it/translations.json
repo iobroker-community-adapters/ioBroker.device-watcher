@@ -50,5 +50,7 @@
     "Lovelace Instance": "Istanza di Lovelace",
     "Please choose the lovelace instance": "Scegli l'istanza lovelace",
     "Choose your Chat-ID": "Scegli il tuo ID chat",
-    "Add own notes, name, etc": "Aggiungi le proprie note, nome, ecc"
+    "Add own notes, name, etc": "Aggiungi le proprie note, nome, ecc",
+    "List only devices with battery": "Elenca solo i dispositivi con batteria",
+    "Choose if only devices with battery should be listed or all devices": "Scegli se devono essere elencati solo i dispositivi con batteria o tutti i dispositivi"
 }

@@ -50,5 +50,7 @@
     "Lovelace Instance": "Instancja Lovelace",
     "Please choose the lovelace instance": "Proszę wybrać instancję lovelace",
     "Choose your Chat-ID": "Wybierz swój identyfikator czatu",
-    "Add own notes, name, etc": "Dodaj własne notatki, imię itp."
+    "Add own notes, name, etc": "Dodaj własne notatki, imię itp.",
+    "List only devices with battery": "Wyświetlaj tylko urządzenia z baterią",
+    "Choose if only devices with battery should be listed or all devices": "Wybierz, czy mają być wyświetlane tylko urządzenia z baterią, czy wszystkie urządzenia"
 }

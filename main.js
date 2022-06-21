@@ -145,6 +145,7 @@ class DeviceWatcher extends utils.Adapter {
 			ping: 			this.config.pingDevices,
 			switchbotBle: 	this.config.switchbotBleDevices,
 			sonos: 			this.config.sonosDevices,
+			mihome:			this.config.mihomeDevices,
 			test: 			false, // Only for Developer
 			test2: 			false // Only for Developer
 		};
@@ -162,7 +163,8 @@ class DeviceWatcher extends utils.Adapter {
 			!supAdapter.nukiExt &&
 			!supAdapter.ping &&
 			!supAdapter.switchbotBle &&
-			!supAdapter.sonos
+			!supAdapter.sonos &&
+			!supAdapter.mihome
 		) {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
@@ -171,7 +173,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		const arrApart = {
 			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
-			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'none', 'isLowBat':'none'},
+			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
 
 			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
@@ -185,7 +187,8 @@ class DeviceWatcher extends utils.Adapter {
 			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
 			ping: 			{'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
 			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
-			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'}
+			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
+			mihome: 		{'Selektor':'mihome.*.state', 'adapter':'MiHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'}
 		};
 
 		for(const [id] of Object.entries(arrApart)) {
@@ -263,14 +266,14 @@ class DeviceWatcher extends utils.Adapter {
 					} else {
 					// no linkQuality available for powered devices
 						linkQuality = ' - ';
-				        }
+					}
 					//  push always
 					jsonLinkQualityDevices.push(
-     					 {
-					    Device: deviceName,
-					    Adapter: deviceAdapterName,
-					    Link_quality: linkQuality
-					 }
+						{
+							Device: deviceName,
+							Adapter: deviceAdapterName,
+							Link_quality: linkQuality
+						}
 					);
 
 					// 1b. Count how many devices with link Quality
@@ -346,43 +349,43 @@ class DeviceWatcher extends utils.Adapter {
 						this.log.debug('Adapter ' + (myArrDev[i].adapter));
 
 						switch (myArrDev[i].adapter) {
-						case 'Homematic':
-						    if ((deviceBatteryState).val === 0) {
-							batteryHealth = ' - ';
-						    } else {
-							batteryHealth = (deviceBatteryState).val + 'V';
-						    }
+							case 'Homematic':
+								if ((deviceBatteryState).val === 0) {
+									batteryHealth = ' - ';
+								} else {
+									batteryHealth = (deviceBatteryState).val + 'V';
+								}
 
-						    arrBatteryPowered.push(
-							{
-							    Device: deviceName,
-							    Adapter: deviceAdapterName,
-							    Battery: batteryHealth
-							}
-						    );
-						    break;
-						case 'Hue Extended':
-						    if (shortDeviceBatteryState) {
-							batteryHealth = (shortDeviceBatteryState).val + '%';
-							arrBatteryPowered.push(
-							    {
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Battery: batteryHealth
-							    }
-							);
-						    }
-						    break;
+								arrBatteryPowered.push(
+									{
+										Device: deviceName,
+										Adapter: deviceAdapterName,
+										Battery: batteryHealth
+									}
+								);
+								break;
+							case 'Hue Extended':
+								if (shortDeviceBatteryState) {
+									batteryHealth = (shortDeviceBatteryState).val + '%';
+									arrBatteryPowered.push(
+										{
+											Device: deviceName,
+											Adapter: deviceAdapterName,
+											Battery: batteryHealth
+										}
+									);
+								}
+								break;
 
-						default:
-						    batteryHealth = (deviceBatteryState).val + '%';
-						    arrBatteryPowered.push(
-							{
-							    Device: deviceName,
-							    Adapter: deviceAdapterName,
-							    Battery: batteryHealth
-							}
-						    );
+							default:
+								batteryHealth = (deviceBatteryState).val + '%';
+								arrBatteryPowered.push(
+									{
+										Device: deviceName,
+										Adapter: deviceAdapterName,
+										Battery: batteryHealth
+									}
+								);
 						}
 					}
 
@@ -425,7 +428,19 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 4. Add all devices in the list
 					// only pusk if available
-					if (deviceBatteryState !== null || shortDeviceBatteryState !== null) {
+					if (this.config.listOnlyBattery) {
+						if (deviceBatteryState !== null || shortDeviceBatteryState !== null) {
+							arrListAllDevices.push(
+								{
+									Device: deviceName,
+									Adapter: deviceAdapterName,
+									Battery: batteryHealth,
+									Last_contact: lastContactString,
+									Link_quality: linkQuality
+								}
+							);
+						}
+					} else if (!this.config.listOnlyBattery) {
 						arrListAllDevices.push(
 							{
 								Device: deviceName,
@@ -436,6 +451,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						);
 					}
+
 
 					// 4a. Count how many devices are exists
 					deviceCounter = arrListAllDevices.length;

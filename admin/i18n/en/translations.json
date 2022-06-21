@@ -42,5 +42,7 @@
 	"Lovelace Notification": "Lovelace Notification",
 	"Lovelace Instance": "Lovelace Instance",
 	"Please choose the lovelace instance": "Please choose the lovelace instance",
-	"Add own notes, name, etc": "Add own notes, name, etc"
+	"Add own notes, name, etc": "Add own notes, name, etc",
+	"List only devices with battery": "List only devices with battery",
+	"Choose if only devices with battery should be listed or all devices": "Choose if only devices with battery should be listed or all devices"
 }
