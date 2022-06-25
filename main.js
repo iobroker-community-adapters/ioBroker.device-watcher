@@ -26,19 +26,19 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async onReady() {
-		this.log.debug('Adapter Device-Watcher was started');
+		this.log.debug(`Adapter ${adapterName} was started`);
 
 		try {
 			await this.main();
 			this.log.debug('all done, exiting');
 			this.terminate ? this.terminate('Everything done. Going to terminate till next schedule', 11) : process.exit(0);
 		} catch (e) {
-			this.log.error('Error while running Device-Watcher. Error Message:' + e);
+			this.log.error(`Error while running Device-Watcher. Error Message: ${e}`);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
 	}
 
-	//Hilfsfuntkionen
+	//Helpfunctions
 	async capitalize(sentence)
 	{
 		return sentence && sentence[0].toUpperCase() + sentence.slice(1);
@@ -116,7 +116,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setForeignStateAsync(lovelace.instance + '.notifications.add', text);
 		};
 
-		this.log.debug('Function started: ' + this.main.name);
+		this.log.debug(`Function started: ${this.main.name}`);
 
 		let arrOfflineDevices        	= []; //JSON-Info of all offline-devices
 		let jsonLinkQualityDevices    	= []; //JSON-Info of all devices with linkquality
@@ -194,7 +194,7 @@ class DeviceWatcher extends utils.Adapter {
 		for(const [id] of Object.entries(arrApart)) {
 			const idAdapter = supAdapter[id];
 			if (idAdapter) {
-				this.log.info(await this.capitalize(id + ' was selected. Loading data...'));
+				this.log.info(await this.capitalize(`${id} was selected. Loading data...`));
 				myArrDev.push(arrApart[id]);
 			}
 		}
@@ -216,7 +216,7 @@ class DeviceWatcher extends utils.Adapter {
 			/*----------  Loop for blacklist ----------*/
 			for(const i in myBlacklist){
 				myBlacklistArr.push(myBlacklist[i].device);
-				this.log.debug('Found items on the blacklist: ' + myBlacklistArr);
+				this.log.debug(`Found items on the blacklist: ${myBlacklistArr}`);
 			}
 
 			/*----------  Start of second main loop  ----------*/
@@ -329,7 +329,7 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							}
 						} catch (e) {
-							this.log.error('(03) Error while getting timestate ' + e);
+							this.log.error(`(03) Error while getting timestate ${e}`);
 						}
 					}
 
@@ -346,7 +346,7 @@ class DeviceWatcher extends utils.Adapter {
 					if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
 						batteryHealth = ' - ';
 					} else {
-						this.log.debug('Adapter ' + (myArrDev[i].adapter));
+						this.log.debug(`Adapter ${myArrDev[i].adapter}`);
 
 						switch (myArrDev[i].adapter) {
 							case 'Homematic':
@@ -486,41 +486,41 @@ class DeviceWatcher extends utils.Adapter {
 							try {
 								await sendPushover(msg);
 							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
+								this.log.warn (`Getting error at sending notification ${e}`);
 							}
 						}
 						if (telegram.instance) {
 							try {
 								await sendTelegram(msg);
 							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
+								this.log.warn (`Getting error at sending notification ${e}`);
 							}
 						}
 						if (email.instance) {
 							try {
 								await sendEmail(msg);
 							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
+								this.log.warn (`Getting error at sending notification ${e}`);
 							}
 						}
 						if (jarvis.instance) {
 							try {
 								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
 							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
+								this.log.warn (`Getting error at sending notification ${e}`);
 							}
 						}
 						if (lovelace.instance) {
 							try {
 								await sendLovelace('{"message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
 							} catch (e) {
-								this.log.warn ('Getting error at sending notification' + (e));
+								this.log.warn (`Getting error at sending notification ${e}`);
 							}
 						}
 					}
 				}
 			} catch (e) {
-				this.log.debug('Getting error at sending offline notification ' + e);
+				this.log.debug(`Getting error at sending offline notification ${e}`);
 			}
 		}
 
@@ -568,42 +568,42 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						}
 						if (batteryMinCount > 0) {
-							this.log.info('Batteriezustände: ' + infotext);
+							this.log.info(`Batteriezustände: ${infotext}`);
 							await this.setStateAsync('lastNotification', infotext, true);
 
 							if (pushover.instance) {
 								try {
-									await sendPushover('Batteriezustände: ' + infotext);
+									await sendPushover(`Batteriezustände: ${infotext}`);
 								} catch (e) {
-									this.log.warn ('Getting error at sending notification' + (e));
+									this.log.warn (`Getting error at sending notification ${e}`);
 								}
 							}
 							if (telegram.instance) {
 								try {
-									await sendTelegram('Batteriezuständ: ' + infotext);
+									await sendTelegram(`Batteriezustände: ${infotext}`);
 								} catch (e) {
-									this.log.warn ('Getting error at sending notification' + (e));
+									this.log.warn (`Getting error at sending notification ${e}`);
 								}
 							}
 							if (email.instance) {
 								try {
-									await sendEmail('Batteriezuständ: ' + infotext);
+									await sendEmail(`Batteriezustände: ${infotext}`);
 								} catch (e) {
-									this.log.warn ('Getting error at sending notification' + (e));
+									this.log.warn (`Getting error at sending notification ${e}`);
 								}
 							}
 							if (jarvis.instance) {
 								try {
 									await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
 								} catch (e) {
-									this.log.warn ('Getting error at sending notification' + (e));
+									this.log.warn (`Getting error at sending notification ${e}`);
 								}
 							}
 							if (lovelace.instance) {
 								try {
 									await sendLovelace('{"message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
 								} catch (e) {
-									this.log.warn ('Getting error at sending notification' + (e));
+									this.log.warn (`Getting error at sending notification ${e}`);
 								}
 							}
 
@@ -612,7 +612,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 			} catch (e) {
-				this.log.debug('Getting error at batterynotification ' + e);
+				this.log.debug(`Getting error at sending battery notification ${e}`);
 			}
 		}
 
@@ -623,7 +623,7 @@ class DeviceWatcher extends utils.Adapter {
 		/*=============================================
 		=            	Write Datapoints 		      =
 		=============================================*/
-		this.log.debug('write the datapoints ' + this.main.name);
+		this.log.debug(`write the datapoints ${this.main.name}`);
 
 		try {
 			await this.setStateAsync('offlineCount', {val: offlineDevicesCount, ack: true});
@@ -676,14 +676,14 @@ class DeviceWatcher extends utils.Adapter {
 			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
 			await this.setStateAsync('lastCheck', lastCheck, true);
 
-			this.log.debug('write the datapoints finished ' + this.main.name);
+			this.log.debug(`write the datapoints finished ${this.main.name}`);
 		}
 		catch (e) {
-			this.log.error('(05) Error while writing the states ' + e);
+			this.log.error(`(05) Error while writing the states ${e}`);
 		}
 		/*=====  End of writing Datapoints ======*/
 
-		this.log.debug('Function finished: ' + this.main.name);
+		this.log.debug(`Function finished: ${this.main.name}`);
 	}
 
 	onUnload(callback) {
