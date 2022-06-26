@@ -109,11 +109,11 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		const sendJarvis = async (text) => {
-			await this.setForeignStateAsync(jarvis.instance + '.addNotification', text);
+			await this.setForeignStateAsync(`${jarvis.instance}.addNotification`, text);
 		};
 
 		const sendLovelace = async (text) => {
-			await this.setForeignStateAsync(lovelace.instance + '.notifications.add', text);
+			await this.setForeignStateAsync(`${lovelace.instance}.notifications.add`, text);
 		};
 
 		this.log.debug(`Function started: ${this.main.name}`);
@@ -337,8 +337,8 @@ class DeviceWatcher extends utils.Adapter {
 					offlineDevicesCount = arrOfflineDevices.length;
 
 					// 3. Get battery states
-					const currDeviceBatteryString 	= currDeviceString + myArrDev[i].battery;
-					const deviceBatteryState		= await this.getForeignStateAsync(currDeviceBatteryString);
+					const currDeviceBatteryString 		= currDeviceString + myArrDev[i].battery;
+					const deviceBatteryState			= await this.getForeignStateAsync(currDeviceBatteryString);
 					const shortCurrDeviceBatteryString 	= shortCurrDeviceString + myArrDev[i].battery;
 					const shortDeviceBatteryState		= await this.getForeignStateAsync(shortCurrDeviceBatteryString);
 					let batteryHealth;
