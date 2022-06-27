@@ -16,13 +16,46 @@ class DeviceWatcher extends utils.Adapter {
 			useFormatDate: true,
 		});
 
-		this.refreshEverythingTimeout = null;
-
 		this.on('ready', this.onReady.bind(this));
 		//this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
 		// this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
+
+		// arrays
+		this.offlineDevices 	= [],
+		this.linkQualityDevices = [];
+		this.batteryPowered 	= [];
+		this.batteryLowPowered 	= [];
+		this.listAllDevices 	= [];
+
+		// counts
+		this.offlineDevicesCount		= 0;
+		this.deviceCounter				= 0;
+		this.linkQualityCount			= 0;
+		this.batteryPoweredCount 		= 0;
+		this.lowBatteryPoweredCount		= 0;
+
+		// arrays of supported adapters
+		this.arrApart = {
+			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
+			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
+
+			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
+			homematic: 		{'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'LOW_BAT'},
+			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'Zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
+			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
+			hue: 			{'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			ping: 			{'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
+			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
+			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
+			mihome: 		{'Selektor':'mihome.*.state', 'adapter':'MiHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'}
+		};
 	}
 
 	async onReady() {
@@ -118,18 +151,6 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug(`Function started: ${this.main.name}`);
 
-		let arrOfflineDevices        	= []; //JSON-Info of all offline-devices
-		let jsonLinkQualityDevices    	= []; //JSON-Info of all devices with linkquality
-		let arrBatteryPowered         	= []; //JSON-Info of all devices with battery
-		let arrBatteryLowPowered		= [];
-		let arrListAllDevices         	= []; //JSON-Info total list with info of all devices
-		let offlineDevicesCount			= 0;
-		let deviceCounter				= 0;
-		let linkQualityCount			= 0;
-		let batteryPoweredCount 		= 0;
-		let lowBatteryPoweredCount		= 0;
-		let lastContactString;
-
 		const supAdapter = {
 			zigbee: 		this.config.zigbeeDevices,
 			ble: 			this.config.bleDevices,
@@ -171,31 +192,11 @@ class DeviceWatcher extends utils.Adapter {
 
 		const myArrDev = []; //JSON mit Gesamtliste aller Geräte
 
-		const arrApart = {
-			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
-			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
-
-			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
-			homematic: 		{'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'LOW_BAT'},
-			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'Zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
-			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
-			hue: 			{'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			ping: 			{'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
-			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			mihome: 		{'Selektor':'mihome.*.state', 'adapter':'MiHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'}
-		};
-
-		for(const [id] of Object.entries(arrApart)) {
+		for(const [id] of Object.entries(this.arrApart)) {
 			const idAdapter = supAdapter[id];
 			if (idAdapter) {
 				this.log.info(await this.capitalize(`${id} was selected. Loading data...`));
-				myArrDev.push(arrApart[id]);
+				myArrDev.push(this.arrApart[id]);
 			}
 		}
 
@@ -268,7 +269,7 @@ class DeviceWatcher extends utils.Adapter {
 						linkQuality = ' - ';
 					}
 					//  push always
-					jsonLinkQualityDevices.push(
+					this.linkQualityDevices.push(
 						{
 							Device: deviceName,
 							Adapter: deviceAdapterName,
@@ -277,9 +278,11 @@ class DeviceWatcher extends utils.Adapter {
 					);
 
 					// 1b. Count how many devices with link Quality
-					linkQualityCount = jsonLinkQualityDevices.length;
+					this.linkQualityCount = this.linkQualityDevices.length;
 
 					// 2. When was the last contact to the device?
+					let lastContactString;
+
 					if (deviceQualityState) {
 						try {
 							const time = new Date();
@@ -299,7 +302,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							if (myArrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
-									arrOfflineDevices.push(
+									this.offlineDevices.push(
 										{
 											Device: deviceName,
 											Adapter: deviceAdapterName,
@@ -310,7 +313,7 @@ class DeviceWatcher extends utils.Adapter {
 							} else {
 								if (deviceUnreachState) {
 									if ((deviceUnreachState.val === true) && (myArrDev[i].adapter === 'Homematic')) {
-										arrOfflineDevices.push(
+										this.offlineDevices.push(
 											{
 												Device: deviceName,
 												Adapter: deviceAdapterName,
@@ -318,7 +321,7 @@ class DeviceWatcher extends utils.Adapter {
 											}
 										);
 									} else if ((deviceUnreachState.val === false) && (myArrDev[i].adapter != 'Homematic')) {
-										arrOfflineDevices.push(
+										this.offlineDevices.push(
 											{
 												Device: deviceName,
 												Adapter: deviceAdapterName,
@@ -334,7 +337,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					// 2c. Count how many devcies are offline
-					offlineDevicesCount = arrOfflineDevices.length;
+					this.offlineDevicesCount = this.offlineDevices.length;
 
 					// 3. Get battery states
 					const currDeviceBatteryString 		= currDeviceString + myArrDev[i].battery;
@@ -356,7 +359,7 @@ class DeviceWatcher extends utils.Adapter {
 									batteryHealth = (deviceBatteryState).val + 'V';
 								}
 
-								arrBatteryPowered.push(
+								this.batteryPowered.push(
 									{
 										Device: deviceName,
 										Adapter: deviceAdapterName,
@@ -367,7 +370,7 @@ class DeviceWatcher extends utils.Adapter {
 							case 'Hue Extended':
 								if (shortDeviceBatteryState) {
 									batteryHealth = (shortDeviceBatteryState).val + '%';
-									arrBatteryPowered.push(
+									this.batteryPowered.push(
 										{
 											Device: deviceName,
 											Adapter: deviceAdapterName,
@@ -379,7 +382,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							default:
 								batteryHealth = (deviceBatteryState).val + '%';
-								arrBatteryPowered.push(
+								this.batteryPowered.push(
 									{
 										Device: deviceName,
 										Adapter: deviceAdapterName,
@@ -390,7 +393,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					// 3b. Count how many devices are with battery
-					batteryPoweredCount = arrBatteryPowered.length;
+					this.batteryPoweredCount = this.batteryPowered.length;
 
 					// 3c. Count how many devices are with low battery
 					const batteryWarningMin 		= this.config.minWarnBatterie;
@@ -400,7 +403,7 @@ class DeviceWatcher extends utils.Adapter {
 					if (myArrDev[i].isLowBat === 'none') {
 						if (deviceBatteryState && deviceBatteryState.val) {
 							if (deviceBatteryState.val < batteryWarningMin) {
-								arrBatteryLowPowered.push(
+								this.batteryLowPowered.push(
 									{
 										Device: deviceName,
 										Adapter: deviceAdapterName,
@@ -412,7 +415,7 @@ class DeviceWatcher extends utils.Adapter {
 					} else {
 						if (deviceLowBatState && deviceLowBatState.val) {
 							if (deviceLowBatState.val === true) {
-								arrBatteryLowPowered.push(
+								this.batteryLowPowered.push(
 									{
 										Device: deviceName,
 										Adapter: deviceAdapterName,
@@ -424,13 +427,13 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					// 3d. Count how many devices are with low battery
-					lowBatteryPoweredCount = arrBatteryLowPowered.length;
+					this.lowBatteryPoweredCount = this.batteryLowPowered.length;
 
 					// 4. Add all devices in the list
 					// only pusk if available
 					if (this.config.listOnlyBattery) {
 						if (deviceBatteryState !== null || shortDeviceBatteryState !== null) {
-							arrListAllDevices.push(
+							this.listAllDevices.push(
 								{
 									Device: deviceName,
 									Adapter: deviceAdapterName,
@@ -441,7 +444,7 @@ class DeviceWatcher extends utils.Adapter {
 							);
 						}
 					} else if (!this.config.listOnlyBattery) {
-						arrListAllDevices.push(
+						this.listAllDevices.push(
 							{
 								Device: deviceName,
 								Adapter: deviceAdapterName,
@@ -454,7 +457,7 @@ class DeviceWatcher extends utils.Adapter {
 
 
 					// 4a. Count how many devices are exists
-					deviceCounter = arrListAllDevices.length;
+					this.deviceCounter = this.listAllDevices.length;
 				}
 			} //<--End of second loop
 		} //<---End of main loop
@@ -471,13 +474,13 @@ class DeviceWatcher extends utils.Adapter {
 				const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
 
 				if ((offlineDevicesCountOld != undefined) && (offlineDevicesCountOld != null)) {
-					if ((offlineDevicesCount != offlineDevicesCountOld.val) && (offlineDevicesCount != 0)) {
-						if (offlineDevicesCount == 1) {
+					if ((this.offlineDevicesCount != offlineDevicesCountOld.val) && (this.offlineDevicesCount != 0)) {
+						if (this.offlineDevicesCount == 1) {
 							msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-						} else if (offlineDevicesCount >= 2) {
-							msg = 'Folgende ' + offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
+						} else if (this.offlineDevicesCount >= 2) {
+							msg = 'Folgende ' + this.offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
 						}
-						for (const id of arrOfflineDevices) {
+						for (const id of this.offlineDevices) {
 							msg = msg + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Last_contact'] + ')';
 						}
 						this.log.info(msg);
@@ -505,14 +508,14 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						if (jarvis.instance) {
 							try {
-								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
+								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
 							} catch (e) {
 								this.log.warn (`Getting error at sending notification ${e}`);
 							}
 						}
 						if (lovelace.instance) {
 							try {
-								await sendLovelace('{"message":" ' + offlineDevicesCount + ' Geräte sind nicht erreichbar", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+								await sendLovelace('{"message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
 							} catch (e) {
 								this.log.warn (`Getting error at sending notification ${e}`);
 							}
@@ -558,7 +561,7 @@ class DeviceWatcher extends utils.Adapter {
 						const batteryWarningMin = this.config.minWarnBatterie;
 
 						let infotext = '';
-						for (const id of arrBatteryPowered) {
+						for (const id of this.batteryPowered) {
 							if (id['Battery']) {
 								const batteryValue = parseFloat(id['Battery'].replace('%', ''));
 								if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'Homematic')) {
@@ -626,50 +629,50 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`write the datapoints ${this.main.name}`);
 
 		try {
-			await this.setStateAsync('offlineCount', {val: offlineDevicesCount, ack: true});
-			await this.setStateAsync('countAll', {val: deviceCounter, ack: true});
-			await this.setStateAsync('batteryCount', {val: batteryPoweredCount, ack: true});
-			await this.setStateAsync('lowBatteryCount', {val: lowBatteryPoweredCount, ack: true});
+			await this.setStateAsync('offlineCount', {val: this.offlineDevicesCount, ack: true});
+			await this.setStateAsync('countAll', {val: this.deviceCounter, ack: true});
+			await this.setStateAsync('batteryCount', {val: this.batteryPoweredCount, ack: true});
+			await this.setStateAsync('lowBatteryCount', {val: this.lowBatteryPoweredCount, ack: true});
 
-			if (deviceCounter == 0) {
-				arrListAllDevices       = [{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
+			if (this.deviceCounter == 0) {
+				this.listAllDevices       = [{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
 
-				await this.setStateAsync('listAll', {val: JSON.stringify(arrListAllDevices), ack: true});
+				await this.setStateAsync('listAll', {val: JSON.stringify(this.listAllDevices), ack: true});
 			} else {
-				await this.setStateAsync('listAll', {val: JSON.stringify(arrListAllDevices), ack: true});
+				await this.setStateAsync('listAll', {val: JSON.stringify(this.listAllDevices), ack: true});
 			}
 
-			if (linkQualityCount == 0) {
-				jsonLinkQualityDevices	= [{Device: '--keine--', Adapter: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality
+			if (this.linkQualityCount == 0) {
+				this.linkQualityDevices	= [{Device: '--keine--', Adapter: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality
 
-				await this.setStateAsync('linkQualityList', {val: JSON.stringify(jsonLinkQualityDevices), ack: true});
+				await this.setStateAsync('linkQualityList', {val: JSON.stringify(this.linkQualityDevices), ack: true});
 			} else {
-				await this.setStateAsync('linkQualityList', {val: JSON.stringify(jsonLinkQualityDevices), ack: true});
+				await this.setStateAsync('linkQualityList', {val: JSON.stringify(this.linkQualityDevices), ack: true});
 			}
 
 
-			if (offlineDevicesCount == 0) {
-				arrOfflineDevices	= [{Device: '--keine--', Adapter: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
+			if (this.offlineDevicesCount == 0) {
+				this.offlineDevices	= [{Device: '--keine--', Adapter: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
 
-				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevices), ack: true});
+				await this.setStateAsync('offlineList', {val: JSON.stringify(this.offlineDevices), ack: true});
 			} else {
-				await this.setStateAsync('offlineList', {val: JSON.stringify(arrOfflineDevices), ack: true});
+				await this.setStateAsync('offlineList', {val: JSON.stringify(this.offlineDevices), ack: true});
 			}
 
-			if (batteryPoweredCount == 0) {
-				arrBatteryPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+			if (this.batteryPoweredCount == 0) {
+				this.batteryPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
 
-				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
+				await this.setStateAsync('batteryList', {val: JSON.stringify(this.batteryPowered), ack: true});
 			} else {
-				await this.setStateAsync('batteryList', {val: JSON.stringify(arrBatteryPowered), ack: true});
+				await this.setStateAsync('batteryList', {val: JSON.stringify(this.batteryPowered), ack: true});
 			}
 
-			if (lowBatteryPoweredCount == 0) {
-				arrBatteryLowPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+			if (this.lowBatteryPoweredCount == 0) {
+				this.batteryLowPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
 
-				await this.setStateAsync('lowBatteryList', {val: JSON.stringify(arrBatteryLowPowered), ack: true});
+				await this.setStateAsync('lowBatteryList', {val: JSON.stringify(this.batteryLowPowered), ack: true});
 			} else {
-				await this.setStateAsync('lowBatteryList', {val: JSON.stringify(arrBatteryLowPowered), ack: true});
+				await this.setStateAsync('lowBatteryList', {val: JSON.stringify(this.batteryLowPowered), ack: true});
 			}
 
 			//Zeitstempel wann die Datenpunkte zuletzt gecheckt wurden
