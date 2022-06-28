@@ -28,6 +28,8 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPowered 	= [];
 		this.batteryLowPowered 	= [];
 		this.listAllDevices 	= [];
+		this.blacklistArr		= [];
+		this.arrDev				= [];
 
 		// counts
 		this.offlineDevicesCount		= 0;
@@ -190,39 +192,33 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.warn('No devices selected. Pleased check the instance configuration');
 		}
 
-		const myArrDev = []; //JSON mit Gesamtliste aller Geräte
-
 		for(const [id] of Object.entries(this.arrApart)) {
 			const idAdapter = supAdapter[id];
 			if (idAdapter) {
 				this.log.info(await this.capitalize(`${id} was selected. Loading data...`));
-				myArrDev.push(this.arrApart[id]);
+				this.arrDev.push(this.arrApart[id]);
 			}
 		}
 
-		this.log.debug(JSON.stringify(myArrDev));
+		this.log.debug(JSON.stringify(this.arrDev));
 
 		/*=============================================
 		=            Start of main loop    		   	  =
 		=============================================*/
-		for (let i = 0; i < myArrDev.length; i++) {
-			const devices = await this.getForeignStatesAsync(myArrDev[i].Selektor);
-			const deviceAdapterName = myArrDev[i].adapter;
-
-			this.log.debug(JSON.stringify(devices));
-
-			const myBlacklist 				= this.config.tableBlacklist;
-			const myBlacklistArr			= [];
+		for (let i = 0; i < this.arrDev.length; i++) {
+			const devices 			= await this.getForeignStatesAsync(this.arrDev[i].Selektor);
+			const deviceAdapterName = this.arrDev[i].adapter;
+			const myBlacklist 		= this.config.tableBlacklist;
 
 			/*----------  Loop for blacklist ----------*/
 			for(const i in myBlacklist){
-				myBlacklistArr.push(myBlacklist[i].device);
-				this.log.debug(`Found items on the blacklist: ${myBlacklistArr}`);
+				this.blacklistArr.push(myBlacklist[i].device);
+				this.log.debug(`Found items on the blacklist: ${this.blacklistArr}`);
 			}
 
 			/*----------  Start of second main loop  ----------*/
 			for(const [id] of Object.entries(devices)) {
-				if (!myBlacklistArr.includes(id)) {
+				if (!this.blacklistArr.includes(id)) {
 
 					const currDeviceString    	= id.slice(0, (id.lastIndexOf('.') + 1) - 1);
 					const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
@@ -237,14 +233,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					if  (shortDeviceObject && typeof shortDeviceObject === 'object') {
-						if (myArrDev[i].adapter === 'Hue Extended') {
+						if (this.arrDev[i].adapter === 'Hue Extended') {
 							deviceName = shortDeviceObject.common.name;
 						}
 					}
 
 					//Get ID for Switchbot Devices
-					if (myArrDev[i].adapter === 'Switchbot Ble') {
-						const switchbotID = await this.getForeignStateAsync(currDeviceString + myArrDev[i].id);
+					if (this.arrDev[i].adapter === 'Switchbot Ble') {
+						const switchbotID = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].id);
 						if (switchbotID) {
 							deviceName = switchbotID.val;
 						}
@@ -264,18 +260,17 @@ class DeviceWatcher extends utils.Adapter {
 								linkQuality = parseFloat((100/255 * deviceQualityState.val).toFixed(0)) + '%';
 							}
 						}
+						this.linkQualityDevices.push(
+							{
+								Device: deviceName,
+								Adapter: deviceAdapterName,
+								Link_quality: linkQuality
+							}
+						);
 					} else {
 					// no linkQuality available for powered devices
 						linkQuality = ' - ';
 					}
-					//  push always
-					this.linkQualityDevices.push(
-						{
-							Device: deviceName,
-							Adapter: deviceAdapterName,
-							Link_quality: linkQuality
-						}
-					);
 
 					// 1b. Count how many devices with link Quality
 					this.linkQualityCount = this.linkQualityDevices.length;
@@ -287,7 +282,7 @@ class DeviceWatcher extends utils.Adapter {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
-							const currDeviceUnreachString = currDeviceString + myArrDev[i].reach;
+							const currDeviceUnreachString = currDeviceString + this.arrDev[i].reach;
 							const deviceUnreachState = await this.getForeignStateAsync(currDeviceUnreachString);
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
@@ -300,7 +295,7 @@ class DeviceWatcher extends utils.Adapter {
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
-							if (myArrDev[i].reach === 'none') {
+							if (this.arrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
 									this.offlineDevices.push(
 										{
@@ -312,7 +307,7 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							} else {
 								if (deviceUnreachState) {
-									if ((deviceUnreachState.val === true) && (myArrDev[i].adapter === 'Homematic')) {
+									if ((deviceUnreachState.val === true) && (this.arrDev[i].adapter === 'Homematic')) {
 										this.offlineDevices.push(
 											{
 												Device: deviceName,
@@ -320,7 +315,7 @@ class DeviceWatcher extends utils.Adapter {
 												Last_contact: lastContactString
 											}
 										);
-									} else if ((deviceUnreachState.val === false) && (myArrDev[i].adapter != 'Homematic')) {
+									} else if ((deviceUnreachState.val === false) && (this.arrDev[i].adapter != 'Homematic')) {
 										this.offlineDevices.push(
 											{
 												Device: deviceName,
@@ -340,18 +335,18 @@ class DeviceWatcher extends utils.Adapter {
 					this.offlineDevicesCount = this.offlineDevices.length;
 
 					// 3. Get battery states
-					const currDeviceBatteryString 		= currDeviceString + myArrDev[i].battery;
+					const currDeviceBatteryString 		= currDeviceString + this.arrDev[i].battery;
 					const deviceBatteryState			= await this.getForeignStateAsync(currDeviceBatteryString);
-					const shortCurrDeviceBatteryString 	= shortCurrDeviceString + myArrDev[i].battery;
+					const shortCurrDeviceBatteryString 	= shortCurrDeviceString + this.arrDev[i].battery;
 					const shortDeviceBatteryState		= await this.getForeignStateAsync(shortCurrDeviceBatteryString);
 					let batteryHealth;
 
 					if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
 						batteryHealth = ' - ';
 					} else {
-						this.log.debug(`Adapter ${myArrDev[i].adapter}`);
+						this.log.debug(`Adapter ${this.arrDev[i].adapter}`);
 
-						switch (myArrDev[i].adapter) {
+						switch (this.arrDev[i].adapter) {
 							case 'Homematic':
 								if ((deviceBatteryState).val === 0) {
 									batteryHealth = ' - ';
@@ -397,10 +392,10 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 3c. Count how many devices are with low battery
 					const batteryWarningMin 		= this.config.minWarnBatterie;
-					const currDeviceLowBatString	= currDeviceString + myArrDev[i].isLowBat;
+					const currDeviceLowBatString	= currDeviceString + this.arrDev[i].isLowBat;
 					const deviceLowBatState			= await this.getForeignStateAsync(currDeviceLowBatString);
 
-					if (myArrDev[i].isLowBat === 'none') {
+					if (this.arrDev[i].isLowBat === 'none') {
 						if (deviceBatteryState && deviceBatteryState.val) {
 							if (deviceBatteryState.val < batteryWarningMin) {
 								this.batteryLowPowered.push(
