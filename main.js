@@ -59,7 +59,7 @@ class DeviceWatcher extends utils.Adapter {
 			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
 			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
 			mihome: 		{'Selektor':'mihome.*.percent', 'adapter':'MiHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'},
-			mihomeGW:		{'Selektor':'mihome.*.connected', 'adapter':'MiHome', 'battery':'none', 'reach':'connected', 'isLowBat':'none'}
+			mihomeGW:		{'Selektor':'mihome.*.connected', 'adapter':'MiHome', 'battery':'none', 'reach':'.connected', 'isLowBat':'none'}
 		};
 	}
 
