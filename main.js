@@ -42,6 +42,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.arrApart = {
 			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
 			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
+			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 
 			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
@@ -65,6 +66,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		try {
 			await this.main();
+			await this.writeDatapoints();
 			this.log.debug('all done, exiting');
 			this.terminate ? this.terminate('Everything done. Going to terminate till next schedule', 11) : process.exit(0);
 		} catch (e) {
@@ -79,7 +81,18 @@ class DeviceWatcher extends utils.Adapter {
 		return sentence && sentence[0].toUpperCase() + sentence.slice(1);
 	}
 
+	async getInitValue(obj) {
+		const foreignState = await this.getForeignStateAsync(obj);
+		if (foreignState) return foreignState.val;
+	}
+
+	async getOwnInitValue(obj) {
+		const stateVal = await this.getStateAsync(obj);
+		if (stateVal) return stateVal.val;
+	}
+
 	async main() {
+		this.log.debug(`Function started: ${this.main.name}`);
 
 		const pushover = {
 			instance: this.config.instancePushover,
@@ -151,8 +164,6 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setForeignStateAsync(`${lovelace.instance}.notifications.add`, text);
 		};
 
-		this.log.debug(`Function started: ${this.main.name}`);
-
 		const supAdapter = {
 			zigbee: 		this.config.zigbeeDevices,
 			ble: 			this.config.bleDevices,
@@ -169,8 +180,9 @@ class DeviceWatcher extends utils.Adapter {
 			switchbotBle: 	this.config.switchbotBleDevices,
 			sonos: 			this.config.sonosDevices,
 			mihome:			this.config.mihomeDevices,
-			test: 			false, // Only for Developer
-			test2: 			false // Only for Developer
+			test: 			true, // Only for Developer
+			test2: 			true, // Only for Developer
+			test3:			true // Only for Developer
 		};
 
 		if (!supAdapter.zigbee &&
@@ -282,8 +294,7 @@ class DeviceWatcher extends utils.Adapter {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
-							const currDeviceUnreachString = currDeviceString + this.arrDev[i].reach;
-							const deviceUnreachState = await this.getForeignStateAsync(currDeviceUnreachString);
+							const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
@@ -306,24 +317,22 @@ class DeviceWatcher extends utils.Adapter {
 									);
 								}
 							} else {
-								if (deviceUnreachState) {
-									if ((deviceUnreachState.val === true) && (this.arrDev[i].adapter === 'Homematic')) {
-										this.offlineDevices.push(
-											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
-											}
-										);
-									} else if ((deviceUnreachState.val === false) && (this.arrDev[i].adapter != 'Homematic')) {
-										this.offlineDevices.push(
-											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
-											}
-										);
-									}
+								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'Homematic')) {
+									this.offlineDevices.push(
+										{
+											Device: deviceName,
+											Adapter: deviceAdapterName,
+											Last_contact: lastContactString
+										}
+									);
+								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter != 'Homematic')) {
+									this.offlineDevices.push(
+										{
+											Device: deviceName,
+											Adapter: deviceAdapterName,
+											Last_contact: lastContactString
+										}
+									);
 								}
 							}
 						} catch (e) {
@@ -335,10 +344,8 @@ class DeviceWatcher extends utils.Adapter {
 					this.offlineDevicesCount = this.offlineDevices.length;
 
 					// 3. Get battery states
-					const currDeviceBatteryString 		= currDeviceString + this.arrDev[i].battery;
-					const deviceBatteryState			= await this.getForeignStateAsync(currDeviceBatteryString);
-					const shortCurrDeviceBatteryString 	= shortCurrDeviceString + this.arrDev[i].battery;
-					const shortDeviceBatteryState		= await this.getForeignStateAsync(shortCurrDeviceBatteryString);
+					const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+					const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 					let batteryHealth;
 
 					if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
@@ -348,10 +355,10 @@ class DeviceWatcher extends utils.Adapter {
 
 						switch (this.arrDev[i].adapter) {
 							case 'Homematic':
-								if ((deviceBatteryState).val === 0) {
+								if (deviceBatteryState === 0) {
 									batteryHealth = ' - ';
 								} else {
-									batteryHealth = (deviceBatteryState).val + 'V';
+									batteryHealth = deviceBatteryState + 'V';
 								}
 
 								this.batteryPowered.push(
@@ -364,7 +371,7 @@ class DeviceWatcher extends utils.Adapter {
 								break;
 							case 'Hue Extended':
 								if (shortDeviceBatteryState) {
-									batteryHealth = (shortDeviceBatteryState).val + '%';
+									batteryHealth = shortDeviceBatteryState + '%';
 									this.batteryPowered.push(
 										{
 											Device: deviceName,
@@ -374,9 +381,8 @@ class DeviceWatcher extends utils.Adapter {
 									);
 								}
 								break;
-
 							default:
-								batteryHealth = (deviceBatteryState).val + '%';
+								batteryHealth = (deviceBatteryState) + '%';
 								this.batteryPowered.push(
 									{
 										Device: deviceName,
@@ -392,32 +398,28 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 3c. Count how many devices are with low battery
 					const batteryWarningMin 		= this.config.minWarnBatterie;
-					const currDeviceLowBatString	= currDeviceString + this.arrDev[i].isLowBat;
-					const deviceLowBatState			= await this.getForeignStateAsync(currDeviceLowBatString);
+					const deviceLowBatState			= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+
 
 					if (this.arrDev[i].isLowBat === 'none') {
-						if (deviceBatteryState && deviceBatteryState.val) {
-							if (deviceBatteryState.val < batteryWarningMin) {
-								this.batteryLowPowered.push(
-									{
-										Device: deviceName,
-										Adapter: deviceAdapterName,
-										Battery: batteryHealth
-									}
-								);
-							}
+						if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) {
+							this.batteryLowPowered.push(
+								{
+									Device: deviceName,
+									Adapter: deviceAdapterName,
+									Battery: batteryHealth
+								}
+							);
 						}
 					} else {
-						if (deviceLowBatState && deviceLowBatState.val) {
-							if (deviceLowBatState.val === true) {
-								this.batteryLowPowered.push(
-									{
-										Device: deviceName,
-										Adapter: deviceAdapterName,
-										Battery: batteryHealth
-									}
-								);
-							}
+						if (deviceLowBatState) {
+							this.batteryLowPowered.push(
+								{
+									Device: deviceName,
+									Adapter: deviceAdapterName,
+									Battery: batteryHealth
+								}
+							);
 						}
 					}
 
@@ -466,54 +468,52 @@ class DeviceWatcher extends utils.Adapter {
 		if(this.config.checkSendOfflineMsg) {
 			try {
 				let msg = '';
-				const offlineDevicesCountOld = await this.getStateAsync('offlineCount');
+				const offlineDevicesCountOld = await this.getOwnInitValue('offlineCount');
 
-				if ((offlineDevicesCountOld != undefined) && (offlineDevicesCountOld != null)) {
-					if ((this.offlineDevicesCount != offlineDevicesCountOld.val) && (this.offlineDevicesCount != 0)) {
-						if (this.offlineDevicesCount == 1) {
-							msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-						} else if (this.offlineDevicesCount >= 2) {
-							msg = 'Folgende ' + this.offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
+				if ((this.offlineDevicesCount != offlineDevicesCountOld) && (this.offlineDevicesCount != 0)) {
+					if (this.offlineDevicesCount == 1) {
+						msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
+					} else if (this.offlineDevicesCount >= 2) {
+						msg = 'Folgende ' + this.offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
+					}
+					for (const id of this.offlineDevices) {
+						msg = msg + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Last_contact'] + ')';
+					}
+					this.log.info(msg);
+					await this.setStateAsync('lastNotification', msg, true);
+					if (pushover.instance) {
+						try {
+							await sendPushover(msg);
+						} catch (e) {
+							this.log.warn (`Getting error at sending notification ${e}`);
 						}
-						for (const id of this.offlineDevices) {
-							msg = msg + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Last_contact'] + ')';
+					}
+					if (telegram.instance) {
+						try {
+							await sendTelegram(msg);
+						} catch (e) {
+							this.log.warn (`Getting error at sending notification ${e}`);
 						}
-						this.log.info(msg);
-						await this.setStateAsync('lastNotification', msg, true);
-						if (pushover.instance) {
-							try {
-								await sendPushover(msg);
-							} catch (e) {
-								this.log.warn (`Getting error at sending notification ${e}`);
-							}
+					}
+					if (email.instance) {
+						try {
+							await sendEmail(msg);
+						} catch (e) {
+							this.log.warn (`Getting error at sending notification ${e}`);
 						}
-						if (telegram.instance) {
-							try {
-								await sendTelegram(msg);
-							} catch (e) {
-								this.log.warn (`Getting error at sending notification ${e}`);
-							}
+					}
+					if (jarvis.instance) {
+						try {
+							await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
+						} catch (e) {
+							this.log.warn (`Getting error at sending notification ${e}`);
 						}
-						if (email.instance) {
-							try {
-								await sendEmail(msg);
-							} catch (e) {
-								this.log.warn (`Getting error at sending notification ${e}`);
-							}
-						}
-						if (jarvis.instance) {
-							try {
-								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
-							} catch (e) {
-								this.log.warn (`Getting error at sending notification ${e}`);
-							}
-						}
-						if (lovelace.instance) {
-							try {
-								await sendLovelace('{"message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
-							} catch (e) {
-								this.log.warn (`Getting error at sending notification ${e}`);
-							}
+					}
+					if (lovelace.instance) {
+						try {
+							await sendLovelace('{"message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+						} catch (e) {
+							this.log.warn (`Getting error at sending notification ${e}`);
 						}
 					}
 				}
@@ -546,82 +546,79 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (this.config.checkSendBatteryMsg) {
 			try {
-			//Nur einmal abfragen
-				const lastBatteryNotifyIndicator = await this.getStateAsync('info.lastBatteryNotification');
+				const lastBatteryNotifyIndicator = await this.getOwnInitValue('info.lastBatteryNotification');
+				const batteryWarningMin = this.config.minWarnBatterie;
 
-				if ((lastBatteryNotifyIndicator != undefined) && (lastBatteryNotifyIndicator != null)) {
-					if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);}
-					if ((now.getHours() > 11) && (lastBatteryNotifyIndicator.val == false) && (checkToday != undefined)){
-						let batteryMinCount = 0;
-						const batteryWarningMin = this.config.minWarnBatterie;
+				if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);} //Nur einmal abfragen
+				if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)){
+					let batteryMinCount = 0;
+					let infotext = '';
 
-						let infotext = '';
-						for (const id of this.batteryPowered) {
-							if (id['Battery']) {
-								const batteryValue = parseFloat(id['Battery'].replace('%', ''));
-								if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'Homematic')) {
-									infotext = infotext + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Battery'] + ')'.split(', ');
-									++batteryMinCount;
-								}
+					for (const id of this.batteryPowered) {
+						if (id['Battery']) {
+							const batteryValue = parseFloat(id['Battery'].replace('%', ''));
+							if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'Homematic')) {
+								infotext = infotext + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Battery'] + ')'.split(', ');
+								++batteryMinCount;
 							}
 						}
-						if (batteryMinCount > 0) {
-							this.log.info(`Batteriezustände: ${infotext}`);
-							await this.setStateAsync('lastNotification', infotext, true);
+					}
+					if (batteryMinCount > 0) {
+						this.log.info(`Batteriezustände: ${infotext}`);
+						await this.setStateAsync('lastNotification', infotext, true);
 
-							if (pushover.instance) {
-								try {
-									await sendPushover(`Batteriezustände: ${infotext}`);
-								} catch (e) {
-									this.log.warn (`Getting error at sending notification ${e}`);
-								}
+						if (pushover.instance) {
+							try {
+								await sendPushover(`Batteriezustände: ${infotext}`);
+							} catch (e) {
+								this.log.warn (`Getting error at sending notification ${e}`);
 							}
-							if (telegram.instance) {
-								try {
-									await sendTelegram(`Batteriezustände: ${infotext}`);
-								} catch (e) {
-									this.log.warn (`Getting error at sending notification ${e}`);
-								}
-							}
-							if (email.instance) {
-								try {
-									await sendEmail(`Batteriezustände: ${infotext}`);
-								} catch (e) {
-									this.log.warn (`Getting error at sending notification ${e}`);
-								}
-							}
-							if (jarvis.instance) {
-								try {
-									await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
-								} catch (e) {
-									this.log.warn (`Getting error at sending notification ${e}`);
-								}
-							}
-							if (lovelace.instance) {
-								try {
-									await sendLovelace('{"message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
-								} catch (e) {
-									this.log.warn (`Getting error at sending notification ${e}`);
-								}
-							}
-
-							await this.setStateAsync('info.lastBatteryNotification', true, true);
 						}
+						if (telegram.instance) {
+							try {
+								await sendTelegram(`Batteriezustände: ${infotext}`);
+							} catch (e) {
+								this.log.warn (`Getting error at sending notification ${e}`);
+							}
+						}
+						if (email.instance) {
+							try {
+								await sendEmail(`Batteriezustände: ${infotext}`);
+							} catch (e) {
+								this.log.warn (`Getting error at sending notification ${e}`);
+							}
+						}
+						if (jarvis.instance) {
+							try {
+								await sendJarvis('{"title":"'+ jarvis.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
+							} catch (e) {
+								this.log.warn (`Getting error at sending notification ${e}`);
+							}
+						}
+						if (lovelace.instance) {
+							try {
+								await sendLovelace('{"message":" ' + batteryMinCount + ' Geräte mit schwacher Batterie", "title":"'+ lovelace.title +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+							} catch (e) {
+								this.log.warn (`Getting error at sending notification ${e}`);
+							}
+						}
+
+						await this.setStateAsync('info.lastBatteryNotification', true, true);
 					}
 				}
 			} catch (e) {
 				this.log.debug(`Getting error at sending battery notification ${e}`);
 			}
 		}
-
-
 		/*=====  End of Section notifications ======*/
+		this.log.debug(`Function finished: ${this.main.name}`);
+	}
 
-
+	async writeDatapoints() {
 		/*=============================================
 		=            	Write Datapoints 		      =
 		=============================================*/
-		this.log.debug(`write the datapoints ${this.main.name}`);
+		this.log.debug(`Start the function: ${this.writeDatapoints.name}`);
 
 		try {
 			await this.setStateAsync('offlineCount', {val: this.offlineDevicesCount, ack: true});
@@ -673,15 +670,12 @@ class DeviceWatcher extends utils.Adapter {
 			//Zeitstempel wann die Datenpunkte zuletzt gecheckt wurden
 			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
 			await this.setStateAsync('lastCheck', lastCheck, true);
-
-			this.log.debug(`write the datapoints finished ${this.main.name}`);
 		}
 		catch (e) {
 			this.log.error(`(05) Error while writing the states ${e}`);
 		}
 		/*=====  End of writing Datapoints ======*/
-
-		this.log.debug(`Function finished: ${this.main.name}`);
+		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	}
 
 	onUnload(callback) {
