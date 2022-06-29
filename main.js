@@ -40,15 +40,16 @@ class DeviceWatcher extends utils.Adapter {
 
 		// arrays of supported adapters
 		this.arrApart = {
-			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
+			//**** This Datapoints are only for the dev ****//
+			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
 			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
 			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-
+			//**** End of Dev Datapoints ****//
 			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
-			homematic: 		{'Selektor':'hm-rpc.*.RSSI_DEVICE', 'adapter':'Homematic', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'LOW_BAT'},
+			homematic: 		{'Selektor':'hm-rpc.*.UNREACH', 'adapter':'Homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'.LOW_BAT', 'isLowBat2':'.LOWBAT'},
 			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
 			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'Zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
 			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
@@ -57,7 +58,8 @@ class DeviceWatcher extends utils.Adapter {
 			ping: 			{'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
 			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
 			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			mihome: 		{'Selektor':'mihome.*.state', 'adapter':'MiHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'}
+			mihome: 		{'Selektor':'mihome.*.percent', 'adapter':'MiHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'},
+			mihomeGW:		{'Selektor':'mihome.*.connected', 'adapter':'MiHome', 'battery':'none', 'reach':'connected', 'isLowBat':'none'}
 		};
 	}
 
@@ -66,6 +68,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		try {
 			await this.main();
+			await this.sendNotifications();
 			await this.writeDatapoints();
 			this.log.debug('all done, exiting');
 			this.terminate ? this.terminate('Everything done. Going to terminate till next schedule', 11) : process.exit(0);
@@ -94,76 +97,6 @@ class DeviceWatcher extends utils.Adapter {
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
 
-		const pushover = {
-			instance: this.config.instancePushover,
-			title: this.config.titlePushover,
-			device: this.config.devicePushover
-
-		};
-		const telegram = {
-			instance: this.config.instanceTelegram,
-			user: this.config.deviceTelegram,
-			chatId: this.config.chatIdTelegram
-		};
-		const email = {
-			instance: this.config.instanceEmail,
-			subject: this.config.subjectEmail,
-			sendTo: this.config.sendToEmail
-
-		};
-		const jarvis = {
-			instance: this.config.instanceJarvis,
-			title: this.config.titleJarvis
-
-		};
-		const lovelace = {
-			instance: this.config.instanceLovelace,
-			title: this.config.titleLovelace
-
-		};
-
-		const choosedDays = {
-			monday: this.config.checkMonday,
-			tuesday: this.config.checkTuesday,
-			wednesday: this.config.checkWednesday,
-			thursday: this.config.checkThursday,
-			friday: this.config.checkFriday,
-			saturday: this.config.checkSaturday,
-			sunday: this.config.checkSunday,
-		};
-
-		const sendPushover = async (text) => {
-			await this.sendToAsync(pushover.instance, 'send', {
-				message: text,
-				title: pushover.title,
-				device: pushover.device
-			});
-		};
-
-		const sendTelegram = async (text) => {
-			await this.sendToAsync(telegram.instance, 'send', {
-				text: text,
-				user: telegram.user,
-				chatId: telegram.chatId
-			});
-		};
-
-		const sendEmail = async (text) => {
-			await this.sendToAsync(email.instance, 'send', {
-				sendTo: email.sendTo,
-				text: text,
-				subject: email.subject
-			});
-		};
-
-		const sendJarvis = async (text) => {
-			await this.setForeignStateAsync(`${jarvis.instance}.addNotification`, text);
-		};
-
-		const sendLovelace = async (text) => {
-			await this.setForeignStateAsync(`${lovelace.instance}.notifications.add`, text);
-		};
-
 		const supAdapter = {
 			zigbee: 		this.config.zigbeeDevices,
 			ble: 			this.config.bleDevices,
@@ -180,6 +113,7 @@ class DeviceWatcher extends utils.Adapter {
 			switchbotBle: 	this.config.switchbotBleDevices,
 			sonos: 			this.config.sonosDevices,
 			mihome:			this.config.mihomeDevices,
+			mihomeGW:		this.config.mihomeDevices,
 			test: 			false, // Only for Developer
 			test2: 			false, // Only for Developer
 			test3:			false // Only for Developer
@@ -259,8 +193,16 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					// 1. Get link quality
-					const deviceQualityState = await this.getForeignStateAsync(id);
+					let deviceQualityState;
 					let linkQuality;
+
+					switch (this.arrDev[i].adapter) {
+						case 'Homematic':
+							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+							break;
+						default:
+							deviceQualityState = await this.getForeignStateAsync(id);
+					}
 
 					if ((deviceQualityState) && (typeof deviceQualityState.val === 'number')){
 						if (this.config.trueState) {
@@ -306,6 +248,7 @@ class DeviceWatcher extends utils.Adapter {
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
+
 							if (this.arrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
 									this.offlineDevices.push(
@@ -399,6 +342,7 @@ class DeviceWatcher extends utils.Adapter {
 					// 3c. Count how many devices are with low battery
 					const batteryWarningMin 		= this.config.minWarnBatterie;
 					const deviceLowBatState			= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+					const deviceLowBatStateHM		= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 
 					if (this.arrDev[i].isLowBat === 'none') {
@@ -412,7 +356,7 @@ class DeviceWatcher extends utils.Adapter {
 							);
 						}
 					} else {
-						if (deviceLowBatState) {
+						if (deviceLowBatState || deviceLowBatStateHM) {
 							this.batteryLowPowered.push(
 								{
 									Device: deviceName,
@@ -458,11 +402,84 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			} //<--End of second loop
 		} //<---End of main loop
+		this.log.debug(`Function finished: ${this.main.name}`);
+	}
 
-
+	async sendNotifications() {
 		/*=============================================
 		=         	  	 Notifications 		          =
 		=============================================*/
+		this.log.debug(`Start the function: ${this.sendNotifications.name}`);
+
+		const pushover = {
+			instance: this.config.instancePushover,
+			title: this.config.titlePushover,
+			device: this.config.devicePushover
+
+		};
+		const telegram = {
+			instance: this.config.instanceTelegram,
+			user: this.config.deviceTelegram,
+			chatId: this.config.chatIdTelegram
+		};
+		const email = {
+			instance: this.config.instanceEmail,
+			subject: this.config.subjectEmail,
+			sendTo: this.config.sendToEmail
+
+		};
+		const jarvis = {
+			instance: this.config.instanceJarvis,
+			title: this.config.titleJarvis
+
+		};
+		const lovelace = {
+			instance: this.config.instanceLovelace,
+			title: this.config.titleLovelace
+
+		};
+
+		const choosedDays = {
+			monday: this.config.checkMonday,
+			tuesday: this.config.checkTuesday,
+			wednesday: this.config.checkWednesday,
+			thursday: this.config.checkThursday,
+			friday: this.config.checkFriday,
+			saturday: this.config.checkSaturday,
+			sunday: this.config.checkSunday,
+		};
+
+		const sendPushover = async (text) => {
+			await this.sendToAsync(pushover.instance, 'send', {
+				message: text,
+				title: pushover.title,
+				device: pushover.device
+			});
+		};
+
+		const sendTelegram = async (text) => {
+			await this.sendToAsync(telegram.instance, 'send', {
+				text: text,
+				user: telegram.user,
+				chatId: telegram.chatId
+			});
+		};
+
+		const sendEmail = async (text) => {
+			await this.sendToAsync(email.instance, 'send', {
+				sendTo: email.sendTo,
+				text: text,
+				subject: email.subject
+			});
+		};
+
+		const sendJarvis = async (text) => {
+			await this.setForeignStateAsync(`${jarvis.instance}.addNotification`, text);
+		};
+
+		const sendLovelace = async (text) => {
+			await this.setForeignStateAsync(`${lovelace.instance}.notifications.add`, text);
+		};
 
 		/*----------  oflline notification ----------*/
 		if(this.config.checkSendOfflineMsg) {
@@ -611,7 +628,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		}
 		/*=====  End of Section notifications ======*/
-		this.log.debug(`Function finished: ${this.main.name}`);
+		this.log.debug(`Function finished: ${this.sendNotifications.name}`);
 	}
 
 	async writeDatapoints() {
@@ -677,6 +694,7 @@ class DeviceWatcher extends utils.Adapter {
 		/*=====  End of writing Datapoints ======*/
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	}
+
 
 	onUnload(callback) {
 		try {
