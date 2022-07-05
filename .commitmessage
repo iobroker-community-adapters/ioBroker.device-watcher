@@ -1,5 +1,0 @@
-chore: release v0.0.7
-
-- added own notes field for blacklist
-- added ping, switchbot ble, mihome, sonos, fritzdect, hue, hue extended and nuki extended
-- some improvements of code
