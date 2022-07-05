@@ -185,7 +185,7 @@
                 "role": "json",
                 "read": true,
                 "write": false,
-                "def": "{}"
+                "def": "[{Device: '--keine--', Adapter: '', Last_contact: ''}]"
             },
             "native": {}
         },
@@ -198,7 +198,7 @@
                 "role": "json",
                 "read": true,
                 "write": false,
-                "def": "{}"
+                "def": "[{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}]"
             },
             "native": {}
         },
@@ -211,7 +211,7 @@
                 "role": "json",
                 "read": true,
                 "write": false,
-                "def": "{}"
+                "def": "[{Device: '--keine--', Adapter: '', Link_quality: ''}]"
             },
             "native": {}
         },
@@ -237,7 +237,7 @@
                 "role": "json",
                 "read": true,
                 "write": false,
-                "def": "{}"
+                "def": "[{Device: '--keine--', Adapter: '', Battery: ''}]"
             },
             "native": {}
         },
@@ -250,7 +250,7 @@
                 "role": "json",
                 "read": true,
                 "write": false,
-                "def": "{}"
+                "def": "[{Device: '--keine--', Adapter: '', Battery: ''}]"
             },
             "native": {}
         },
