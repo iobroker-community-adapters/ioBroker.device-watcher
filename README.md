@@ -38,6 +38,10 @@ The adapter has also the option to send notifications if the number of offline d
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+
+- added own notes field for blacklist
+- added ping, switchbot ble, mihome, sonos, fritzdect, hue, hue extended and nuki extended
+- some improvements of code
 ### 0.0.6 (2022-06-10)
 
 - added Homematic, Deconz, Zwave
