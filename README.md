@@ -5,7 +5,6 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
 ![Number of Installations](https://iobroker.live/badges/device-watcher-installed.svg)
 ![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)
-[![Dependency Status](https://img.shields.io/david/ciddi89/iobroker.device-watcher.svg)](https://david-dm.org/ciddi89/iobroker.device-watcher)
 
 [![NPM](https://nodei.co/npm/iobroker.device-watcher.png?downloads=true)](https://nodei.co/npm/iobroker.device-watcher/)
 
