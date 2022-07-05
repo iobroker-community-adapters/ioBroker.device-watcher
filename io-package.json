@@ -50,7 +50,19 @@
                 "es": "Traducciones de administrador agregadas",
                 "pl": "dodane tłumaczenia administracyjne",
                 "zh-cn": "添加了管理员翻译"
-            }
+            },
+            "0.0.6": {
+                    "en": "some improvements of code",
+                    "de": "einige verbesserungen des codes",
+                    "ru": "некоторые улучшения кода",
+                    "pt": "algumas melhorias de código",
+                    "nl": "wat verbetering van code",
+                    "fr": "quelques améliorations du code",
+                    "it": "alcuni miglioramenti del codice",
+                    "es": "algunas mejoras del código",
+                    "pl": "ulepszenia kodu",
+                    "zh-cn": "守则的一些改进"
+                  }
         },
         "title": "Device-Watcher",
         "titleLang": {
