@@ -41,25 +41,25 @@ class DeviceWatcher extends utils.Adapter {
 		// arrays of supported adapters
 		this.arrApart = {
 			//**** This Datapoints are only for the dev ****//
-			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'Homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
-			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'Hue Extended', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
-			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'test', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
+			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'test2', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
+			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'test3', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
 			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'Zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'Sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'Shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
-			homematic: 		{'Selektor':'hm-rpc.*.UNREACH', 'adapter':'Homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'.LOW_BAT', 'isLowBat2':'.LOWBAT'},
-			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'Deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'Zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
-			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'FritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
-			hue: 			{'Selektor':'hue.*.reachable', 'adapter':'Hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'Hue Extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			ping: 			{'Selektor':'ping.*.alive', 'adapter':'Ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'Switchbot Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
-			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'Sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			mihome: 		{'Selektor':'mihome.*.percent', 'adapter':'MiHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'},
-			mihomeGW:		{'Selektor':'mihome.*.connected', 'adapter':'MiHome', 'battery':'none', 'reach':'.connected', 'isLowBat':'none'}
+			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
+			homematic: 		{'Selektor':'hm-rpc.*.UNREACH', 'adapter':'homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'.LOW_BAT', 'isLowBat2':'.LOWBAT'},
+			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
+			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'fritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
+			hue: 			{'Selektor':'hue.*.reachable', 'adapter':'hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'hue extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
+			ping: 			{'Selektor':'ping.*.alive', 'adapter':'ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
+			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'switchbot ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
+			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
+			mihome: 		{'Selektor':'mihome.*.percent', 'adapter':'miHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'},
+			mihomeGW:		{'Selektor':'mihome.*.connected', 'adapter':'miHome', 'battery':'none', 'reach':'.connected', 'isLowBat':'none'}
 		};
 	}
 
@@ -92,6 +92,127 @@ class DeviceWatcher extends utils.Adapter {
 	async getOwnInitValue(obj) {
 		const stateVal = await this.getStateAsync(obj);
 		if (stateVal) return stateVal.val;
+	}
+
+	async createDPsForEachAdapter(adptName) {
+		await this.setObjectNotExistsAsync(`${adptName}.offlineCount`, {
+			'type': 'state',
+			'common': {
+				'name': 'Quantity devices offline',
+				'type': 'number',
+				'role': 'value',
+				'read': true,
+				'write': false,
+				'def': 0
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.offlineList`, {
+			'type': 'state',
+			'common': {
+				'name': 'List devices offline',
+				'type': 'array',
+				'role': 'json',
+				'read': true,
+				'write': false,
+				'def': [{Device: '--keine--', Adapter: '', Last_contact: ''}]
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
+			'type': 'state',
+			'common': {
+				'name': 'List all devices',
+				'type': 'array',
+				'role': 'json',
+				'read': true,
+				'write': false,
+				'def': [{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}]
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.linkQualityList`, {
+			'type': 'state',
+			'common': {
+				'name': 'List devices with qualitiy strength',
+				'type': 'array',
+				'role': 'json',
+				'read': true,
+				'write': false,
+				'def': [{Device: '--keine--', Adapter: '', Link_quality: ''}]
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.countAll`, {
+			'type': 'state',
+			'common': {
+				'name': 'Quantity devices all',
+				'type': 'number',
+				'role': 'value',
+				'read': true,
+				'write': false,
+				'def': 0
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.batteryList`, {
+			'type': 'state',
+			'common': {
+				'name': 'List devices with battery state',
+				'type': 'array',
+				'role': 'json',
+				'read': true,
+				'write': false,
+				'def': [{Device: '--keine--', Adapter: '', Battery: ''}]
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryList`, {
+			'type': 'state',
+			'common': {
+				'name': 'List devices with low battery state',
+				'type': 'array',
+				'role': 'json',
+				'read': true,
+				'write': false,
+				'def': [{Device: '--keine--', Adapter: '', Battery: ''}]
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryCount`, {
+			'type': 'state',
+			'common': {
+				'name': 'Quantity devices with low battery',
+				'type': 'number',
+				'role': 'value',
+				'read': true,
+				'write': false,
+				'def': 0
+			},
+			'native': {}
+		});
+		await this.setObjectNotExistsAsync(`${adptName}.batteryCount`, {
+			'type': 'state',
+			'common': {
+				'name': 'Quantity devices with battery',
+				'type': 'number',
+				'role': 'value',
+				'read': true,
+				'write': false,
+				'def': 0
+			},
+			'native': {}
+		});
+	}
+
+	async mainForAdapter(adptName) {
+		for (let i = 0; i < this.arrDev.length; i++) {
+			switch (this.arrDev[i].adapter) {
+				case adptName:
+					await this.setStateAsync(`${adptName}.offlineCount`, {val: 2, ack: true});
+					break;
+			}
+		}
 	}
 
 	async main() {
@@ -141,8 +262,15 @@ class DeviceWatcher extends utils.Adapter {
 		for(const [id] of Object.entries(this.arrApart)) {
 			const idAdapter = supAdapter[id];
 			if (idAdapter) {
-				this.log.info(await this.capitalize(`${id} was selected. Loading data...`));
+				this.log.info(`${await this.capitalize(id)} was selected. Loading data...`);
 				this.arrDev.push(this.arrApart[id]);
+				/*try {
+					await this.createDPsForEachAdapter(id);
+					this.log.debug(`Created datapoints for ${await this.capitalize(id)}`);
+					await this.mainForAdapter(id);
+				} catch (e) {
+					this.log.warn(`Error at creating datapoints for each adapter: ${e}`);
+				}*/
 			}
 		}
 
@@ -179,13 +307,13 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					if  (shortDeviceObject && typeof shortDeviceObject === 'object') {
-						if (this.arrDev[i].adapter === 'Hue Extended') {
+						if (this.arrDev[i].adapter === 'hue extended') {
 							deviceName = shortDeviceObject.common.name;
 						}
 					}
 
 					//Get ID for Switchbot Devices
-					if (this.arrDev[i].adapter === 'Switchbot Ble') {
+					if (this.arrDev[i].adapter === 'switchbot ble') {
 						const switchbotID = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].id);
 						if (switchbotID) {
 							deviceName = switchbotID.val;
@@ -197,7 +325,7 @@ class DeviceWatcher extends utils.Adapter {
 					let linkQuality;
 
 					switch (this.arrDev[i].adapter) {
-						case 'Homematic':
+						case 'homematic':
 							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 							break;
 						default:
@@ -260,7 +388,7 @@ class DeviceWatcher extends utils.Adapter {
 									);
 								}
 							} else {
-								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'Homematic')) {
+								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'homematic')) {
 									this.offlineDevices.push(
 										{
 											Device: deviceName,
@@ -268,7 +396,7 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
-								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter != 'Homematic')) {
+								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter != 'homematic')) {
 									this.offlineDevices.push(
 										{
 											Device: deviceName,
@@ -297,7 +425,7 @@ class DeviceWatcher extends utils.Adapter {
 						this.log.debug(`Adapter ${this.arrDev[i].adapter}`);
 
 						switch (this.arrDev[i].adapter) {
-							case 'Homematic':
+							case 'homematic':
 								if (deviceBatteryState === 0) {
 									batteryHealth = ' - ';
 								} else {
@@ -312,7 +440,7 @@ class DeviceWatcher extends utils.Adapter {
 									}
 								);
 								break;
-							case 'Hue Extended':
+							case 'hue extended':
 								if (shortDeviceBatteryState) {
 									batteryHealth = shortDeviceBatteryState + '%';
 									this.batteryPowered.push(
@@ -574,7 +702,7 @@ class DeviceWatcher extends utils.Adapter {
 					for (const id of this.batteryPowered) {
 						if (id['Battery']) {
 							const batteryValue = parseFloat(id['Battery'].replace('%', ''));
-							if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'Homematic')) {
+							if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'homematic')) {
 								infotext = infotext + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Battery'] + ')'.split(', ');
 								++batteryMinCount;
 							}
