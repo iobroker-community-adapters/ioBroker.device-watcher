@@ -1,9 +1,5 @@
 chore: release v0.0.7
 
-- added Homematic, Deconz, Zwave
-- added Email notification
-- added count and list for low battery devices
-- changes Log state dp to last notification state dp
-- Using available state instead of link quality state for zigbee devices
-- Show the correct time of last contact instead the minutes if the time is under 100minutes
-- small bugfixes
+- added own notes field for blacklist
+- added ping, switchbot ble, mihome, sonos, fritzdect, hue, hue extended and nuki extended
+- some improvements of code

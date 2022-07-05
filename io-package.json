@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.0.6",
+        "version": "0.0.7",
         "news": {
             "0.0.1": {
                 "en": "initial release",
@@ -51,7 +51,7 @@
                 "pl": "dodane tłumaczenia administracyjne",
                 "zh-cn": "添加了管理员翻译"
             },
-            "0.0.6": {
+            "0.0.8": {
                     "en": "some improvements of code",
                     "de": "einige verbesserungen des codes",
                     "ru": "некоторые улучшения кода",
