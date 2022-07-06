@@ -9,7 +9,7 @@
                 "_headerDevices": {
                     "type": "header", 
                     "text": "Choose devices to watch",
-                    "size": 1
+                    "size": 2
                 },
                 "zigbeeDevices": {
                     "type": "checkbox",
@@ -115,38 +115,6 @@
                     "md": 6,
                     "lg": 3,
                     "label": "MiHome"
-                },
-                "_headerOtherSettings": {
-                    "type": "header", 
-                    "text": "Other Settings",
-                    "size": 1
-                },
-                "trueState": {
-                    "newLine": true,
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "True State",
-                    "help": "Use the true state from quality state"
-                },
-                "listOnlyBattery": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "List only devices with battery",
-                    "help": "Choose if only devices with battery should be listed or all devices"
-                },
-                "maxMinutes": {
-                    "type": "number",
-                    "min": 0,
-                    "max": 100000,
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "Offline time of Devices",
-                    "help": "in minutes"
                 }
             }
         },
@@ -157,7 +125,7 @@
                 "_headerCommon": {
                     "type":"header",
                     "text":"Common Notification Settings",
-                    "size": 1
+                    "size": 2
                 },
                 "checkSendOfflineMsg": {
                     "type":"checkbox",
@@ -229,7 +197,7 @@
                     "newLine": true,
                     "type": "header", 
                     "text": "Pushover",
-                    "size": 1
+                    "size": 2
                 },
                 "instancePushover": {
                     "newLine": true,
@@ -263,7 +231,7 @@
                     "newLine": "true",
                     "type": "header", 
                     "text": "Telegram",
-                    "size": 1
+                    "size": 2
                 },
                 "instanceTelegram": {
                     "newLine": true,
@@ -297,7 +265,7 @@
                     "newLine": true,
                     "type": "header", 
                     "text": "Email",
-                    "size": 1
+                    "size": 2
                 },
                 "instanceEmail": {
                     "newLine": true,
@@ -331,7 +299,7 @@
                     "newLine": "true",
                     "type": "header", 
                     "text": "Jarvis Notification",
-                    "size": 1
+                    "size": 2
                 },
                 "instanceJarvis": {
                     "newLine": true,
@@ -357,7 +325,7 @@
                     "newLine": "true",
                     "type": "header", 
                     "text": "Lovelace Notification",
-                    "size": 1
+                    "size": 2
                 },
                 "instanceLovelace": {
                     "newLine": true,
@@ -409,6 +377,62 @@
                     "label": "Add own notes, name, etc"
                 }
                 ]
+                }
+            }
+        },
+        "_expertSettings": {
+            "type": "panel",
+            "label": "Expert Settings",
+            "items": {
+                "_headerOtherSettings": {
+                    "type": "header", 
+                    "text": "Other Settings",
+                    "size": 2
+                },
+                "trueState": {
+                    "newLine": true,
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "True State",
+                    "help": "Use the true state from quality state"
+                },
+                "listOnlyBattery": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "List only devices with battery",
+                    "help": "Choose if only devices with battery should be listed or all devices"
+                },
+                "_headerOfflineTime": {
+                    "type": "header", 
+                    "text": "Offline Time",
+                    "size": 2
+                },
+                "textOfflineTime": {
+                    "type": "staticText",
+                    "text": "Here you can choose the offline time of devices for each adapter. This is only possible if the device has an reachable, alive, available datapoint."
+                },
+                "zigbeeOfflineTime": {
+                    "newLine": true,
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Zigbee",
+                    "default": true
+                },
+                "maxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Offline time of Devices",
+                    "help": "in minutes"
                 }
             }
         }
