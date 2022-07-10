@@ -377,6 +377,7 @@ class DeviceWatcher extends utils.Adapter {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
 
+							/*
 							for(const [id] of Object.entries(this.arrApart)) {
 								const idAdapter = supAdapter[id];
 								const configData = this.config + '.' + id;
@@ -384,7 +385,7 @@ class DeviceWatcher extends utils.Adapter {
 									this.log.warn(configData);
 								}
 							}
-							/*
+
 							switch (this.arrDev[i].adapter) {
 								case 'ping':
 									if (this.config.pingMaxMinutes === -1) {
