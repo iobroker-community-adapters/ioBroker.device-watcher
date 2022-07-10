@@ -41,14 +41,14 @@ class DeviceWatcher extends utils.Adapter {
 		// arrays of supported adapters
 		this.arrApart = {
 			//**** This Datapoints are only for the dev ****//
-			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'test', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
+			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'ping', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
 			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'test2', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
 			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'test3', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
-			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'Ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'sonoff', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'shelly', 'battery':'.sensor.battery', 'reach':'none', 'isLowBat':'none'},
+			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'sonoff', 'battery':'.battery', 'reach':'.alive', 'isLowBat':'none'},
+			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'shelly', 'battery':'.sensor.battery', 'reach':'.online', 'isLowBat':'none'},
 			homematic: 		{'Selektor':'hm-rpc.*.UNREACH', 'adapter':'homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'.LOW_BAT', 'isLowBat2':'.LOWBAT'},
 			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
 			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
@@ -377,6 +377,40 @@ class DeviceWatcher extends utils.Adapter {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
 
+							for(const [id] of Object.entries(this.arrApart)) {
+								const idAdapter = supAdapter[id];
+								const configData = this.config + '.' + id;
+								if (idAdapter) {
+									this.log.warn(configData);
+								}
+							}
+							/*
+							switch (this.arrDev[i].adapter) {
+								case 'ping':
+									if (this.config.pingMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else {
+										if (lastContact > this.config.pingMaxMinutes) {
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									}
+									break;
+							}*/
+
 							if (this.arrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
 									this.offlineDevices.push(
@@ -396,7 +430,7 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
-								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter != 'homematic')) {
+								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) {
 									this.offlineDevices.push(
 										{
 											Device: deviceName,
