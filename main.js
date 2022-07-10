@@ -281,7 +281,7 @@ class DeviceWatcher extends utils.Adapter {
 		=============================================*/
 		for (let i = 0; i < this.arrDev.length; i++) {
 			const devices 			= await this.getForeignStatesAsync(this.arrDev[i].Selektor);
-			const deviceAdapterName = this.arrDev[i].adapter;
+			const deviceAdapterName = await this.capitalize(this.arrDev[i].adapter);
 			const myBlacklist 		= this.config.tableBlacklist;
 
 			/*----------  Loop for blacklist ----------*/
