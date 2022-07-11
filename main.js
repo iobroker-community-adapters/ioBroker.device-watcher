@@ -42,12 +42,12 @@ class DeviceWatcher extends utils.Adapter {
 		this.arrApart = {
 			//**** This Datapoints are only for the dev ****//
 			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'ping', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
-			test2: 		{'Selektor':'0_userdata.*.reachable', 'adapter':'test2', 'battery':'none', 'reach':'none', 'isLowBat':'none'},
+			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'sonoff',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
 			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'test3', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
 			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			sonoff: 		{'Selektor':'sonoff.*.Wifi_RSSI', 'adapter':'sonoff', 'battery':'.battery', 'reach':'.alive', 'isLowBat':'none'},
+			sonoff: 		{'Selektor':'sonoff.*.alive', 'adapter':'sonoff', 'rssiState': '.Wifi_RSSI', 'battery':'.battery', 'reach':'.alive', 'isLowBat':'none'},
 			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'shelly', 'battery':'.sensor.battery', 'reach':'.online', 'isLowBat':'none'},
 			homematic: 		{'Selektor':'hm-rpc.*.UNREACH', 'adapter':'homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'.LOW_BAT', 'isLowBat2':'.LOWBAT'},
 			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
@@ -328,6 +328,9 @@ class DeviceWatcher extends utils.Adapter {
 						case 'homematic':
 							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 							break;
+						case 'sonoff':
+							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+							break;
 						default:
 							deviceQualityState = await this.getForeignStateAsync(id);
 					}
@@ -376,16 +379,7 @@ class DeviceWatcher extends utils.Adapter {
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
-
 							/*
-							for(const [id] of Object.entries(this.arrApart)) {
-								const idAdapter = supAdapter[id];
-								const configData = this.config + '.' + id;
-								if (idAdapter) {
-									this.log.warn(configData);
-								}
-							}
-
 							switch (this.arrDev[i].adapter) {
 								case 'ping':
 									if (this.config.pingMaxMinutes === -1) {
@@ -410,8 +404,8 @@ class DeviceWatcher extends utils.Adapter {
 										}
 									}
 									break;
-							}*/
-
+							}
+*/
 							if (this.arrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
 									this.offlineDevices.push(
@@ -457,7 +451,6 @@ class DeviceWatcher extends utils.Adapter {
 					if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
 						batteryHealth = ' - ';
 					} else {
-						this.log.debug(`Adapter ${this.arrDev[i].adapter}`);
 
 						switch (this.arrDev[i].adapter) {
 							case 'homematic':
