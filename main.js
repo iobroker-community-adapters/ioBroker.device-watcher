@@ -730,7 +730,7 @@ class DeviceWatcher extends utils.Adapter {
 					for (const id of this.batteryPowered) {
 						if (id['Battery']) {
 							const batteryValue = parseFloat(id['Battery'].replace('%', ''));
-							if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'homematic')) {
+							if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'Homematic')) {
 								infotext = infotext + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Battery'] + ')'.split(', ');
 								++batteryMinCount;
 							}
