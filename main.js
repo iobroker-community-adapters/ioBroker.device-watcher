@@ -329,9 +329,9 @@ class DeviceWatcher extends utils.Adapter {
 			sonos: 			this.config.sonosDevices,
 			mihome:			this.config.mihomeDevices,
 			mihomeGW:		this.config.mihomeDevices,
-			test: 			true, // Only for Developer
-			test2: 			true, // Only for Developer
-			test3:			true // Only for Developer
+			test: 			false, // Only for Developer
+			test2: 			false, // Only for Developer
+			test3:			false // Only for Developer
 		};
 
 		if (!supAdapter.zigbee &&
