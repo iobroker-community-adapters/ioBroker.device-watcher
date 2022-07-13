@@ -45,21 +45,115 @@ class DeviceWatcher extends utils.Adapter {
 			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'sonoff',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
 			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'test3', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
-			ble: 			{'Selektor':'ble.*.rssi', 'adapter':'ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			zigbee: 		{'Selektor':'zigbee.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
-			sonoff: 		{'Selektor':'sonoff.*.alive', 'adapter':'sonoff', 'rssiState': '.Wifi_RSSI', 'battery':'.battery', 'reach':'.alive', 'isLowBat':'none'},
-			shelly: 		{'Selektor':'shelly.*.rssi', 'adapter':'shelly', 'battery':'.sensor.battery', 'reach':'.online', 'isLowBat':'none'},
-			homematic: 		{'Selektor':'hm-rpc.*.UNREACH', 'adapter':'homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'.LOW_BAT', 'isLowBat2':'.LOWBAT'},
-			deconz: 		{'Selektor':'deconz.*.reachable', 'adapter':'deconz', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			zwave: 			{'Selektor':'zwave2.*.ready', 'adapter':'zwave', 'battery':'.Battery.level', 'reach':'.ready', 'isLowBat':'.Battery.isLow'},
-			dect: 			{'Selektor':'fritzdect.*.present', 'adapter':'fritzDect', 'battery':'.battery', 'reach':'.present', 'isLowBat':'.batterylow'},
-			hue: 			{'Selektor':'hue.*.reachable', 'adapter':'hue', 'battery':'.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			hueExt: 		{'Selektor':'hue-extended.*.reachable', 'adapter':'hue extended', 'battery':'.config.battery', 'reach':'.reachable', 'isLowBat':'none'},
-			ping: 			{'Selektor':'ping.*.alive', 'adapter':'ping', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			switchbotBle: 	{'Selektor':'switchbot-ble.*.rssi', 'adapter':'switchbot ble', 'battery':'.battery', 'reach':'none', 'isLowBat':'none', 'id':'.id'},
-			sonos: 			{'Selektor':'sonos.*.alive', 'adapter':'sonos', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			mihome: 		{'Selektor':'mihome.*.percent', 'adapter':'miHome', 'battery':'.percent', 'reach':'none', 'isLowBat':'none'},
-			mihomeGW:		{'Selektor':'mihome.*.connected', 'adapter':'miHome', 'battery':'none', 'reach':'.connected', 'isLowBat':'none'}
+			ble: 			{
+				'Selektor':'ble.*.rssi',
+				'adapter':'ble',
+				'battery':'.battery',
+				'reach':'none',
+				'isLowBat':'none'
+			},
+			zigbee: 		{
+				'Selektor':'zigbee.*.link_quality',
+				'adapter':'zigbee',
+				'battery':'.battery',
+				'reach':'none',
+				'isLowBat':'none'
+			},
+			sonoff: 		{
+				'Selektor':'sonoff.*.alive',
+				'adapter':'sonoff',
+				'rssiState': '.Wifi_RSSI',
+				'battery':'.battery',
+				'reach':'.alive',
+				'isLowBat':'none'
+			},
+			shelly: 		{
+				'Selektor':'shelly.*.rssi',
+				'adapter':'shelly',
+				'battery':'.sensor.battery',
+				'reach':'.online',
+				'isLowBat':'none'
+			},
+			homematic: 		{
+				'Selektor':'hm-rpc.*.UNREACH',
+				'adapter':'homematic',
+				'rssiState':'.RSSI_DEVICE',
+				'battery':'.OPERATING_VOLTAGE',
+				'reach':'.UNREACH',
+				'isLowBat':'.LOW_BAT',
+				'isLowBat2':'.LOWBAT'
+			},
+			deconz: 		{
+				'Selektor':'deconz.*.reachable',
+				'adapter':'deconz',
+				'battery':'.battery',
+				'reach':'.reachable',
+				'isLowBat':'none'
+			},
+			zwave: 			{
+				'Selektor':'zwave2.*.ready',
+				'adapter':'zwave',
+				'battery':'.Battery.level',
+				'reach':'.ready',
+				'isLowBat':'.Battery.isLow'
+			},
+			dect: 			{
+				'Selektor':'fritzdect.*.present',
+				'adapter':'fritzDect',
+				'battery':'.battery',
+				'reach':'.present',
+				'isLowBat':'.batterylow'
+			},
+			hue: 			{
+				'Selektor':'hue.*.reachable',
+				'adapter':'hue',
+				'battery':'.battery',
+				'reach':'.reachable',
+				'isLowBat':'none'
+			},
+			hueExt: 		{
+				'Selektor':'hue-extended.*.reachable',
+				'adapter':'hue extended',
+				'battery':'.config.battery',
+				'reach':'.reachable',
+				'isLowBat':'none'
+			},
+			ping: 			{
+				'Selektor':'ping.*.alive',
+				'adapter':'ping',
+				'battery':'none',
+				'reach':'.alive',
+				'isLowBat':'none'
+			},
+			switchbotBle: 	{
+				'Selektor':'switchbot-ble.*.rssi',
+				'adapter':'switchbot ble',
+				'battery':'.battery',
+				'reach':'none',
+				'isLowBat':'none',
+				'id':'.id'
+			},
+			sonos: 			{
+				'Selektor':'sonos.*.alive',
+				'adapter':'sonos',
+				'battery':'none',
+				'reach':'.alive',
+				'isLowBat':'none'
+			},
+			mihome: 		{
+				'Selektor':'mihome.*.percent',
+				'adapter':'miHome',
+				'battery':'.percent',
+				'reach':'none',
+				'isLowBat':'none'
+			},
+			mihomeGW:		{
+				'Selektor':'mihome.*.connected',
+				'adapter':'miHome',
+				'battery':'none',
+				'reach':'.connected',
+				'isLowBat':'none'
+			}
 		};
 	}
 
@@ -235,9 +329,9 @@ class DeviceWatcher extends utils.Adapter {
 			sonos: 			this.config.sonosDevices,
 			mihome:			this.config.mihomeDevices,
 			mihomeGW:		this.config.mihomeDevices,
-			test: 			false, // Only for Developer
-			test2: 			false, // Only for Developer
-			test3:			false // Only for Developer
+			test: 			true, // Only for Developer
+			test2: 			true, // Only for Developer
+			test3:			true // Only for Developer
 		};
 
 		if (!supAdapter.zigbee &&
@@ -326,8 +420,6 @@ class DeviceWatcher extends utils.Adapter {
 
 					switch (this.arrDev[i].adapter) {
 						case 'homematic':
-							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
-							break;
 						case 'sonoff':
 							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 							break;
@@ -362,17 +454,18 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 2. When was the last contact to the device?
 					let lastContactString;
+					const deviceMainState = await this.getForeignStateAsync(id);
 
-					if (deviceQualityState) {
+					if (deviceMainState) {
 						try {
 							const time = new Date();
-							const lastContact = Math.round((time.getTime() - deviceQualityState.ts) / 1000 / 60);
+							const lastContact = Math.round((time.getTime() - deviceMainState.ts) / 1000 / 60);
 							const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
 							//lastContactString = Math.round(lastContact) + ' Minuten';
-							lastContactString = this.formatDate(new Date((deviceQualityState.ts)), 'hh:mm') + ' Uhr';
+							lastContactString = this.formatDate(new Date((deviceMainState.ts)), 'hh:mm') + ' Uhr';
 							if (Math.round(lastContact) > 100) {
 								lastContactString = Math.round(lastContact/60) + ' Stunden';
 							}
@@ -527,7 +620,6 @@ class DeviceWatcher extends utils.Adapter {
 					this.lowBatteryPoweredCount = this.batteryLowPowered.length;
 
 					// 4. Add all devices in the list
-					// only pusk if available
 					if (this.config.listOnlyBattery) {
 						if (deviceBatteryState !== null || shortDeviceBatteryState !== null) {
 							this.listAllDevices.push(
