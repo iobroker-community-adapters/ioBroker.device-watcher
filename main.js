@@ -60,7 +60,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat':'none'
 			},
 			sonoff: 		{
-				'Selektor':'sonoff.*.alive',
+				'Selektor':'sonoff.*.Uptime',
 				'adapter':'sonoff',
 				'rssiState': '.Wifi_RSSI',
 				'battery':'.battery',
