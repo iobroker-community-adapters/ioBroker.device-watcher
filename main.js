@@ -454,18 +454,18 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 2. When was the last contact to the device?
 					let lastContactString;
-					const deviceMainState = await this.getForeignStateAsync(id);
+					const deviceMainSelector = await this.getForeignStateAsync(id);
 
-					if (deviceMainState) {
+					if (deviceMainSelector) {
 						try {
 							const time = new Date();
-							const lastContact = Math.round((time.getTime() - deviceMainState.ts) / 1000 / 60);
+							const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
 							const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
 							//lastContactString = Math.round(lastContact) + ' Minuten';
-							lastContactString = this.formatDate(new Date((deviceMainState.ts)), 'hh:mm') + ' Uhr';
+							lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
 							if (Math.round(lastContact) > 100) {
 								lastContactString = Math.round(lastContact/60) + ' Stunden';
 							}
