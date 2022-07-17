@@ -11,110 +11,110 @@
                     "text": "Choose devices to watch",
                     "size": 2
                 },
-                "zigbeeDevices": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zigbee"
-                },
                 "bleDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "Ble"
                 },
-                "sonoffDevices": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Sonoff"
-                },
-                "shellyDevices": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Shelly"
-                },
-                "homematicDevices": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Homematic"
-                },
                 "deconzDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "Deconz"
                 },
-                "zwaveDevices": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zwave"
-                },
                 "dectDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "FritzDect"
                 },
+                "homematicDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Homematic"
+                },
                 "hueDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "Hue"
                 },
                 "hueExtDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "Hue Extended"
                 },
+                "mihomeDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "MiHome"
+                },
                 "nukiExtDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "Nuki Extended"
                 },
                 "pingDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "Ping"
                 },
-                "switchbotBleDevices": {
+                "shellyDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Switchbot Ble"
+                    "label": "Shelly"
+                },
+                "sonoffDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Sonoff"
                 },
                 "sonosDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
                     "label": "Sonos"
                 },
-                "mihomeDevices": {
+                "switchbotBleDevices": {
                     "type": "checkbox",
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "MiHome"
+                    "label": "Switchbot Ble"
+                },
+                "zigbeeDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Zigbee"
+                },
+                "zwaveDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Zwave"
                 }
             }
         },
@@ -131,7 +131,7 @@
                     "type":"checkbox",
                     "sm": 12,
                     "md": 6,
-                    "lg": 4,
+                    "lg": 3,
                     "label": "Send offline message",
                     "help": "Get message if an device is not reachable"
                 },
@@ -142,9 +142,9 @@
                 "checkSendBatteryMsg": {
                     "newLine": "true",
                     "type":"checkbox",
-                    "sm": 4,
-                    "md": 4,
-                    "lg": 4,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 6,
                     "label": "Send batterie message",
                     "help": "Get message if an device has low battery"
                 },
@@ -152,18 +152,28 @@
                     "type": "number",
                     "min": 0,
                     "max": 100,
-                    "sm": 8,
-                    "md": 6,
+                    "sm": 12,
+                    "md": 12,
                     "lg": 4,
                     "label": "From how much min % would you get a message",
                     "help": "in percent"
                 },
                 "chooseDay": {
-                    "sm": 8,
-                    "md": 6,
-                    "lg": 4,
+                    "newLine": true,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 6,
                     "items": {
+                        "_textDays": {
+                            "type": "staticText",
+                            "text": "Choose the day(s) where you want to get the message of low battery:",
+                            "style": {
+                                "fontSize": 16,
+                                "marginTop": 20
+                              }
+                        },
                         "checkMonday": {
+                            "newLine": true,
                             "type": "checkbox",
                             "label": "Mon"
                         },
@@ -218,6 +228,19 @@
                     "lg": 4,
                     "label": "Device-ID (optional)",
                     "help": "Choose your device"
+                },
+                "prioPushover": {
+                    "type": "select",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "help": "Choose the priority",
+                    "options": [
+                        {"label": "Normal", "value": ""}, 
+                        {"label": "High Priority", "value": 1},
+                        {"label": "Silent", "value": -1},
+                        {"label": "With confirmation", "value": 2}
+                    ]
                 },
                 "titlePushover": {
                     "type": "text",
@@ -396,7 +419,14 @@
                     "md": 6,
                     "lg": 4,
                     "label": "True State",
-                    "help": "Use the true state from quality state"
+                    "help": "Use the true state from quality state, otherwise it will be converted in percent value."
+                },
+                "_placeholder": {
+                    "type":"staticText",
+                    "sm": 0,
+                    "md": 0,
+                    "lg": 1,
+                    "placeholder": true
                 },
                 "listOnlyBattery": {
                     "type": "checkbox",
@@ -413,25 +443,163 @@
                 },
                 "textOfflineTime": {
                     "type": "staticText",
-                    "text": "Here you can choose the offline time of devices for each adapter. This is only possible if the device has an reachable, alive, available datapoint."
-                },
-                "zigbeeOfflineTime": {
-                    "newLine": true,
-                    "type": "checkbox",
+                    "text": "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.",
                     "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "style": {
+                        "fontSize": 16,
+                        "marginBottom": 20
+                      }
+               },
+            "bleMaxMinutes": {
+                "type": "number",
+                "min": 0,
+                "max": 100000,
+                "sm": 6,
+                "md": 6,
+                "lg": 3,
+                "label": "Offline time of Ble devices",
+                "help": "in minutes"
+            },
+            "deconzMaxMinutes": {
+                "type": "number",
+                "min": -1,
+                "max": 100000,
+                "sm": 6,
+                "md": 6,
+                "lg": 3,
+                "label": "Offline time of Deconz devices",
+                "help": "in minutes"
+            },
+            "fritzdectMaxMinutes": {
+                "type": "number",
+                "min": -1,
+                "max": 100000,
+                "sm": 6,
+                "md": 6,
+                "lg": 3,
+                "label": "Offline time of FritzDect devices",
+                "help": "in minutes"
+                },
+                "homematicMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Zigbee",
-                    "default": true
+                    "label": "Offline time of Homematic devices",
+                    "help": "in minutes"
                 },
-                "maxMinutes": {
+                "hueMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Hue devices",
+                    "help": "in minutes"
+                },
+                "hueextMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of HueExtended devices",
+                    "help": "in minutes"
+                },
+                "mihomeMaxMinutes": {
                     "type": "number",
                     "min": 0,
                     "max": 100000,
-                    "sm": 12,
+                    "sm": 6,
                     "md": 6,
-                    "lg": 4,
-                    "label": "Offline time of Devices",
+                    "lg": 3,
+                    "label": "Offline time of MiHome devices",
+                    "help": "in minutes"
+                },
+                "nukiextendMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Nuki Extended devices",
+                    "help": "in minutes"
+                },
+                "pingMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Ping devices",
+                    "help": "in minutes"
+                },
+                "shellyMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Shelly devices",
+                    "help": "in minutes"
+                },
+                "sonoffMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Sonoff devices",
+                    "help": "in minutes"
+                },
+                "sonosMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Sonos devices",
+                    "help": "in minutes"
+                },
+                "switchbotMaxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Switchbot Ble devices",
+                    "help": "in minutes"
+                },
+                "zigbeeMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Zigbee devices",
+                    "help": "in minutes"
+                },
+                "zwaveMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Offline time of Zwave devices",
                     "help": "in minutes"
                 }
             }

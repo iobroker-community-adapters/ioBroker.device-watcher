@@ -114,7 +114,6 @@
         "connectionType": "local",
         "dataSource": "poll",
         "materialize": true,
-        "eraseOnUpload": true,
         "adminUI": {
             "config": "json"
         },
@@ -147,7 +146,6 @@
         "mihomeDevices": false,
         "trueState": false,
         "listOnlyBattery": false,
-        "maxMinutes": 300,
         "checkSendOfflineMsg": false,
         "checkSendBatteryMsg": false,
         "minWarnBatterie": 35,
@@ -161,6 +159,7 @@
         "instancePushover": "",
         "titlePushover": "",
         "devicePushover": "",
+        "prioPushover": "",
         "instanceEmail": "",
         "subjectEmail": "",
         "sendToEmail": "",
@@ -171,7 +170,29 @@
         "titleJarvis": "Device-Watcher",
         "instanceLovelace": "",
         "titleLovelace": "Device-Watcher",
-        "tableBlacklist": []
+        "tableBlacklist": [],
+        "bleMaxMinutes": 300,
+        "deconzMaxMinutes": -1,
+        "fritzdectMaxMinutes": -1,
+        "homematicMaxMinutes": -1,
+        "hueMaxMinutes": -1,
+        "hueextMaxMinutes": -1,
+        "mihomeMaxMinutes": 300,
+        "nukiextendMaxMinutes": -1,
+        "pingMaxMinutes": -1,
+        "shellyMaxMinutes": -1,
+        "sonoffMaxMinutes": -1,
+        "sonosMaxMinutes": -1,
+        "switchbotMaxMinutes": 300,
+        "zigbeeMaxMinutes": 300,
+        "zwaveMaxMinutes": -1
+
+
+
+
+
+
+
     },
     "objects": [],
     "instanceObjects": [

@@ -46,7 +46,7 @@ class DeviceWatcher extends utils.Adapter {
 			//**** This Datapoints are only for the dev ****//
 			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'ping', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
 			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'sonoff',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
-			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'test3', 'battery':'.battery', 'reach':'none', 'isLowBat':'none'},
+			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'available', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
 			ble: 			{
 				'Selektor':'ble.*.rssi',
@@ -59,7 +59,7 @@ class DeviceWatcher extends utils.Adapter {
 				'Selektor':'zigbee.*.link_quality',
 				'adapter':'zigbee',
 				'battery':'.battery',
-				'reach':'none',
+				'reach':'.available',
 				'isLowBat':'none'
 			},
 			sonoff: 		{
@@ -156,6 +156,13 @@ class DeviceWatcher extends utils.Adapter {
 				'battery':'none',
 				'reach':'.connected',
 				'isLowBat':'none'
+			},
+			nukiExt:		{
+				'Selektor':'nuki-extended.*.batteryCritical',
+				'adapter':'nuki_extended',
+				'battery':'none',
+				'reach':'none',
+				'isLowBat':'.batteryCritical'
 			}
 		};
 	}
@@ -178,19 +185,23 @@ class DeviceWatcher extends utils.Adapter {
 	//Helpfunctions
 	async capitalize(sentence)
 	{
+		//make the first letter uppercase
 		return sentence && sentence[0].toUpperCase() + sentence.slice(1);
 	}
 
 	async getInitValue(obj) {
+		//state can be null or undefinded
 		const foreignState = await this.getForeignStateAsync(obj);
 		if (foreignState) return foreignState.val;
 	}
 
 	async getOwnInitValue(obj) {
+		//state can be null or undefinded for own states
 		const stateVal = await this.getStateAsync(obj);
 		if (stateVal) return stateVal.val;
 	}
 
+	//create datapoints for each adapter
 	async createDPsForEachAdapter(adptName) {
 		await this.setObjectNotExistsAsync(`${adptName}.offlineCount`, {
 			'type': 'state',
@@ -315,7 +326,7 @@ class DeviceWatcher extends utils.Adapter {
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
 
-		const supAdapter = {
+		this.supAdapter = {
 			zigbee: 		this.config.zigbeeDevices,
 			ble: 			this.config.bleDevices,
 			sonoff: 		this.config.sonoffDevices,
@@ -338,7 +349,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		for(const [id] of Object.entries(this.arrApart)) {
-			const idAdapter = supAdapter[id];
+			const idAdapter = this.supAdapter[id];
 			if (idAdapter) {
 				this.arrDev.push(this.arrApart[id]);
 				this.adapterSelected.push(await this.capitalize(id));
@@ -463,11 +474,196 @@ class DeviceWatcher extends utils.Adapter {
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
 							}
-							/*
+
 							switch (this.arrDev[i].adapter) {
+								case 'ble':
+									if (this.config.bleMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.bleMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'deconz':
+									if (this.config.deconzMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.deconzMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'fritzDect':
+									if (this.config.fritzdectMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.fritzdectMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'homematic':
+									if (this.config.homematicMaxMinutes === -1) {
+										if (deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.homematicMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'hue':
+									if (this.config.hueMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.hueMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'hue extended':
+									if (this.config.hueextMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.hueextMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'miHome':
+									if (this.config.mihomeMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.mihomeMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'nuki_extended':
+									if (this.config.nukiextendMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.nukiextendMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
 								case 'ping':
 									if (this.config.pingMaxMinutes === -1) {
 										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
 											this.offlineDevices.push(
 												{
 													Device: deviceName,
@@ -476,8 +672,21 @@ class DeviceWatcher extends utils.Adapter {
 												}
 											);
 										}
-									} else {
-										if (lastContact > this.config.pingMaxMinutes) {
+									} else if (lastContact > this.config.pingMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'shelly':
+									if (this.config.shellyMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
 											this.offlineDevices.push(
 												{
 													Device: deviceName,
@@ -486,11 +695,135 @@ class DeviceWatcher extends utils.Adapter {
 												}
 											);
 										}
+									} else if (lastContact > this.config.shellyMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'sonoff':
+									if (this.config.sonoffMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.sonoffMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'sonos':
+									if (this.config.sonosMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.sonosMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'switchbot ble':
+									if (this.config.switchbotMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.switchbotMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'zigbee':
+									if (this.config.zigbeeMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.zigbeeMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'zwave':
+									if (this.config.zwaveMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.zwaveMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
 									}
 									break;
 							}
-*/
-							if (this.arrDev[i].reach === 'none') {
+
+						/*if (this.arrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
@@ -502,7 +835,7 @@ class DeviceWatcher extends utils.Adapter {
 									);
 								}
 							} else {
-								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'homematic')) {
+								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'homematic')) { //Only Working for homematic devices
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
@@ -511,7 +844,7 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
-								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) {
+								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) { //Working for all other devices
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
@@ -521,7 +854,7 @@ class DeviceWatcher extends utils.Adapter {
 										}
 									);
 								}
-							}
+							}*/
 						} catch (e) {
 							this.log.error(`(03) Error while getting timestate ${e}`);
 						}
