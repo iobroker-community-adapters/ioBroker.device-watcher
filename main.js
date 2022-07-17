@@ -492,6 +492,7 @@ class DeviceWatcher extends utils.Adapter {
 */
 							if (this.arrDev[i].reach === 'none') {
 								if (lastContact > this.config.maxMinutes) {
+									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
 											Device: deviceName,
@@ -499,10 +500,10 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
-									deviceState = 'Offline';
 								}
 							} else {
 								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'homematic')) {
+									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
 											Device: deviceName,
@@ -510,8 +511,8 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
-									deviceState = 'Offline';
 								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) {
+									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
 											Device: deviceName,
@@ -519,7 +520,6 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
-									deviceState = 'Offline';
 								}
 							}
 						} catch (e) {
