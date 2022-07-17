@@ -52,5 +52,15 @@
     "Choose your Chat-ID": "选择您的聊天 ID",
     "Add own notes, name, etc": "添加自己的注释、姓名等",
     "List only devices with battery": "仅列出带电池的设备",
-    "Choose if only devices with battery should be listed or all devices": "选择是否应仅列出带电池的设备或所有设备"
+    "Choose if only devices with battery should be listed or all devices": "选择是否应仅列出带电池的设备或所有设备",
+    "Choose the priority": "选择优先级",
+    "High Priority": "高优先级",
+    "With confirmation": "经确认",
+    "Use the true state from quality state, otherwise it will be converted in percent value.": "使用质量状态中的真实状态，否则将转换为百分比值。",
+    "Offline Time": "离线时间",
+    "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.": "您可以在此处为每个适配器选择设备的离线时间。",
+    "Choose the day(s) where you want to get the message of low battery:": "选择您希望收到电池电量不足消息的日期：",
+    "Here you can choose the offline time of devices for each adapter. ": "您可以在此处为每个适配器选择设备的离线时间。",
+    "If set to '-1', the adapter will use the datapoint available, reachable, alive etc.": "如果设置为“-1”，适配器将使用可用、可达、活动等数据点。",
+    "when the device has one of these.": "当设备具有其中之一时。"
 }

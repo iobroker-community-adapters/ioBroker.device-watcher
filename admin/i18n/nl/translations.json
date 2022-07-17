@@ -52,5 +52,15 @@
     "Choose your Chat-ID": "Kies je Chat-ID",
     "Add own notes, name, etc": "Eigen notities, naam, enz. toevoegen",
     "List only devices with battery": "Alleen apparaten met batterij weergeven",
-    "Choose if only devices with battery should be listed or all devices": "Kies of alleen apparaten met batterij moeten worden vermeld of alle apparaten"
+    "Choose if only devices with battery should be listed or all devices": "Kies of alleen apparaten met batterij moeten worden vermeld of alle apparaten",
+    "Choose the priority": "Kies de prioriteit",
+    "High Priority": "Hoge prioriteit",
+    "With confirmation": "Met bevestiging",
+    "Use the true state from quality state, otherwise it will be converted in percent value.": "Gebruik de ware staat van de kwaliteitsstatus, anders wordt deze omgezet in procentuele waarde.",
+    "Offline Time": "Offline tijd",
+    "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.": "Hier kunt u voor elke adapter de offline tijd van apparaten kiezen. ",
+    "Choose the day(s) where you want to get the message of low battery:": "Kies de dag(en) waarop u de melding batterij bijna leeg wilt krijgen:",
+    "Here you can choose the offline time of devices for each adapter. ": "Hier kunt u voor elke adapter de offline tijd van apparaten kiezen.",
+    "If set to '-1', the adapter will use the datapoint available, reachable, alive etc.": "Indien ingesteld op '-1', gebruikt de adapter het beschikbare, bereikbare, actieve enz. Datapunt.",
+    "when the device has one of these.": "wanneer het apparaat een van deze heeft."
 }

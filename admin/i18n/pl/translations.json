@@ -52,5 +52,15 @@
     "Choose your Chat-ID": "Wybierz swój identyfikator czatu",
     "Add own notes, name, etc": "Dodaj własne notatki, imię itp.",
     "List only devices with battery": "Wyświetlaj tylko urządzenia z baterią",
-    "Choose if only devices with battery should be listed or all devices": "Wybierz, czy mają być wyświetlane tylko urządzenia z baterią, czy wszystkie urządzenia"
+    "Choose if only devices with battery should be listed or all devices": "Wybierz, czy mają być wyświetlane tylko urządzenia z baterią, czy wszystkie urządzenia",
+    "Choose the priority": "Wybierz priorytet",
+    "High Priority": "Wysoki priorytet",
+    "With confirmation": "Z potwierdzeniem",
+    "Use the true state from quality state, otherwise it will be converted in percent value.": "Użyj prawdziwego stanu ze stanu jakości, w przeciwnym razie zostanie przekonwertowany w wartości procentowej.",
+    "Offline Time": "Czas offline",
+    "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.": "Tutaj możesz wybrać czas offline urządzeń dla każdego adaptera. ",
+    "Choose the day(s) where you want to get the message of low battery:": "Wybierz dzień lub dni, w których chcesz otrzymać komunikat o niskim poziomie baterii:",
+    "Here you can choose the offline time of devices for each adapter. ": "Tutaj możesz wybrać czas offline urządzeń dla każdego adaptera.",
+    "If set to '-1', the adapter will use the datapoint available, reachable, alive etc.": "Jeśli ustawiono na „-1”, adapter użyje dostępnego, osiągalnego, aktywnego itp. punktu danych.",
+    "when the device has one of these.": "gdy urządzenie ma jeden z nich."
 }

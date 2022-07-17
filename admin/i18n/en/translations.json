@@ -26,6 +26,9 @@
 	"Device-ID (optional)": "Device-ID (optional)",
 	"Choose your device": "Choose your device",
 	"Title (optional)": "Title (optional)",
+	"Choose the priority": "Choose the priority",
+	"High Priority": "High Priority",
+	"With confirmation": "With confirmation",
 	"Choose your title for Pushmessage": "Choose your title for Pushmessage",
 	"Telegram Instance": "Telegram Instance",
 	"Please choose the telegram instance": "Please choose the telegram instance",
@@ -44,5 +47,9 @@
 	"Please choose the lovelace instance": "Please choose the lovelace instance",
 	"Add own notes, name, etc": "Add own notes, name, etc",
 	"List only devices with battery": "List only devices with battery",
-	"Choose if only devices with battery should be listed or all devices": "Choose if only devices with battery should be listed or all devices"
+	"Choose if only devices with battery should be listed or all devices": "Choose if only devices with battery should be listed or all devices",
+	"Use the true state from quality state, otherwise it will be converted in percent value.": "Use the true state from quality state, otherwise it will be converted in percent value.",
+	"Offline Time": "Offline Time",
+	"Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.": "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.",
+	"Choose the day(s) where you want to get the message of low battery:": "Choose the day(s) where you want to get the message of low battery:"
 }
