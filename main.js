@@ -23,13 +23,14 @@ class DeviceWatcher extends utils.Adapter {
 		this.on('unload', this.onUnload.bind(this));
 
 		// arrays
-		this.offlineDevices 	= [],
-		this.linkQualityDevices = [];
-		this.batteryPowered 	= [];
-		this.batteryLowPowered 	= [];
-		this.listAllDevices 	= [];
-		this.blacklistArr		= [];
-		this.arrDev				= [];
+		this.offlineDevices 		= [],
+		this.linkQualityDevices 	= [];
+		this.batteryPowered 		= [];
+		this.batteryLowPowered 		= [];
+		this.listAllDevices 		= [];
+		this.blacklistArr			= [];
+		this.arrDev					= [];
+		this.adapterSelected		= [];
 
 		// counts
 		this.offlineDevicesCount		= 0;
@@ -37,6 +38,8 @@ class DeviceWatcher extends utils.Adapter {
 		this.linkQualityCount			= 0;
 		this.batteryPoweredCount 		= 0;
 		this.lowBatteryPoweredCount		= 0;
+
+		this.deviceReachable	= '';
 
 		// arrays of supported adapters
 		this.arrApart = {
@@ -334,30 +337,11 @@ class DeviceWatcher extends utils.Adapter {
 			test3:			false // Only for Developer
 		};
 
-		if (!supAdapter.zigbee &&
-			!supAdapter.ble &&
-			!supAdapter.sonoff &&
-			!supAdapter.shelly &&
-			!supAdapter.homematic &&
-			!supAdapter.deconz &&
-			!supAdapter.zwave &&
-			!supAdapter.dect &&
-			!supAdapter.hue &&
-			!supAdapter.hueExt &&
-			!supAdapter.nukiExt &&
-			!supAdapter.ping &&
-			!supAdapter.switchbotBle &&
-			!supAdapter.sonos &&
-			!supAdapter.mihome
-		) {
-			this.log.warn('No devices selected. Pleased check the instance configuration');
-		}
-
 		for(const [id] of Object.entries(this.arrApart)) {
 			const idAdapter = supAdapter[id];
 			if (idAdapter) {
-				this.log.info(`${await this.capitalize(id)} was selected. Loading data...`);
 				this.arrDev.push(this.arrApart[id]);
+				this.adapterSelected.push(await this.capitalize(id));
 				/*try {
 					await this.createDPsForEachAdapter(id);
 					this.log.debug(`Created datapoints for ${await this.capitalize(id)}`);
@@ -366,6 +350,13 @@ class DeviceWatcher extends utils.Adapter {
 					this.log.warn(`Error at creating datapoints for each adapter: ${e}`);
 				}*/
 			}
+		}
+
+		//Check if one Adapter is selected.
+		if (this.adapterSelected.length >= 1) {
+			this.log.info(`${this.adapterSelected.length} adapter are selected. Loading data from: ${(this.adapterSelected).join(', ')} ...`);
+		} else {
+			this.log.warn(`No devices selected. Please check the instance configuration!`);
 		}
 
 		this.log.debug(JSON.stringify(this.arrDev));
@@ -455,7 +446,7 @@ class DeviceWatcher extends utils.Adapter {
 					// 2. When was the last contact to the device?
 					let lastContactString;
 					const deviceMainSelector = await this.getForeignStateAsync(id);
-
+					let deviceState;
 					if (deviceMainSelector) {
 						try {
 							const time = new Date();
@@ -471,6 +462,12 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
+							}
+
+							if (deviceUnreachState) {
+								deviceState = 'Online';
+							} else {
+								deviceState = 'Offline';
 							}
 							/*
 							switch (this.arrDev[i].adapter) {
@@ -627,8 +624,9 @@ class DeviceWatcher extends utils.Adapter {
 									Device: deviceName,
 									Adapter: deviceAdapterName,
 									Battery: batteryHealth,
+									Link_quality: linkQuality,
 									Last_contact: lastContactString,
-									Link_quality: linkQuality
+									Status: deviceState
 								}
 							);
 						}
@@ -638,8 +636,9 @@ class DeviceWatcher extends utils.Adapter {
 								Device: deviceName,
 								Adapter: deviceAdapterName,
 								Battery: batteryHealth,
+								Link_quality: linkQuality,
 								Last_contact: lastContactString,
-								Link_quality: linkQuality
+								Status: deviceState
 							}
 						);
 					}
