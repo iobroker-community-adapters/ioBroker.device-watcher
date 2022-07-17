@@ -446,7 +446,7 @@ class DeviceWatcher extends utils.Adapter {
 					// 2. When was the last contact to the device?
 					let lastContactString;
 					const deviceMainSelector = await this.getForeignStateAsync(id);
-					let deviceState;
+					let deviceState = 'Online';
 					if (deviceMainSelector) {
 						try {
 							const time = new Date();
@@ -462,12 +462,6 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							if (Math.round(lastContact/60) > 48) {
 								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
-							}
-
-							if (deviceUnreachState) {
-								deviceState = 'Online';
-							} else {
-								deviceState = 'Offline';
 							}
 							/*
 							switch (this.arrDev[i].adapter) {
@@ -505,6 +499,7 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
+									deviceState = 'Offline';
 								}
 							} else {
 								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'homematic')) {
@@ -515,6 +510,7 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
+									deviceState = 'Offline';
 								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) {
 									this.offlineDevices.push(
 										{
@@ -523,6 +519,7 @@ class DeviceWatcher extends utils.Adapter {
 											Last_contact: lastContactString
 										}
 									);
+									deviceState = 'Offline';
 								}
 							}
 						} catch (e) {
@@ -661,7 +658,8 @@ class DeviceWatcher extends utils.Adapter {
 		const pushover = {
 			instance: this.config.instancePushover,
 			title: this.config.titlePushover,
-			device: this.config.devicePushover
+			device: this.config.devicePushover,
+			prio: this.config.prioPushover
 
 		};
 		const telegram = {
@@ -700,7 +698,8 @@ class DeviceWatcher extends utils.Adapter {
 			await this.sendToAsync(pushover.instance, 'send', {
 				message: text,
 				title: pushover.title,
-				device: pushover.device
+				device: pushover.device,
+				priority: pushover.prio
 			});
 		};
 
