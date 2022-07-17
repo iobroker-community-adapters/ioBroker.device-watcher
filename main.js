@@ -354,9 +354,9 @@ class DeviceWatcher extends utils.Adapter {
 
 		//Check if one Adapter is selected.
 		if (this.adapterSelected.length >= 1) {
-			this.log.info(`${this.adapterSelected.length} adapter are selected. Loading data from: ${(this.adapterSelected).join(', ')} ...`);
+			this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${(this.adapterSelected).join(', ')} ...`);
 		} else {
-			this.log.warn(`No devices selected. Please check the instance configuration!`);
+			this.log.warn(`No adapter selected. Please check the instance configuration!`);
 		}
 
 		this.log.debug(JSON.stringify(this.arrDev));
