@@ -11,6 +11,13 @@
                     "text": "Choose devices to watch",
                     "size": 2
                 },
+                "alexa2Devices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Alexa2"
+                },
                 "bleDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -31,6 +38,13 @@
                     "md": 6,
                     "lg": 3,
                     "label": "FritzDect"
+                },
+                "esphomeDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "EspHome"
                 },
                 "homematicDevices": {
                     "type": "checkbox",
@@ -452,6 +466,16 @@
                         "marginBottom": 20
                       }
                },
+               "alexa2MaxMinutes": {
+                "type": "number",
+                "min": -1,
+                "max": 100000,
+                "sm": 6,
+                "md": 6,
+                "lg": 3,
+                "label": "Alexa2",
+                "help": "in minutes"
+            },
             "bleMaxMinutes": {
                 "type": "number",
                 "min": 0,
@@ -459,7 +483,7 @@
                 "sm": 6,
                 "md": 6,
                 "lg": 3,
-                "label": "Offline time of Ble devices",
+                "label": "Ble",
                 "help": "in minutes"
             },
             "deconzMaxMinutes": {
@@ -469,7 +493,17 @@
                 "sm": 6,
                 "md": 6,
                 "lg": 3,
-                "label": "Offline time of Deconz devices",
+                "label": "Deconz",
+                "help": "in minutes"
+            },
+            "esphomeMaxMinutes": {
+                "type": "number",
+                "min": -1,
+                "max": 100000,
+                "sm": 6,
+                "md": 6,
+                "lg": 3,
+                "label": "EspHome",
                 "help": "in minutes"
             },
             "fritzdectMaxMinutes": {
@@ -479,7 +513,7 @@
                 "sm": 6,
                 "md": 6,
                 "lg": 3,
-                "label": "Offline time of FritzDect devices",
+                "label": "FritzDect",
                 "help": "in minutes"
                 },
                 "homematicMaxMinutes": {
@@ -489,7 +523,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Homematic devices",
+                    "label": "Homematic",
                     "help": "in minutes"
                 },
                 "hueMaxMinutes": {
@@ -499,7 +533,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Hue devices",
+                    "label": "Hue",
                     "help": "in minutes"
                 },
                 "hueextMaxMinutes": {
@@ -509,7 +543,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of HueExtended devices",
+                    "label": "HueExtended",
                     "help": "in minutes"
                 },
                 "mihomeMaxMinutes": {
@@ -519,7 +553,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of MiHome devices",
+                    "label": "MiHome",
                     "help": "in minutes"
                 },
                 "nukiextendMaxMinutes": {
@@ -529,7 +563,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Nuki Extended devices",
+                    "label": "Nuki Extended",
                     "help": "in minutes"
                 },
                 "pingMaxMinutes": {
@@ -539,7 +573,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Ping devices",
+                    "label": "Ping",
                     "help": "in minutes"
                 },
                 "shellyMaxMinutes": {
@@ -549,7 +583,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Shelly devices",
+                    "label": "Shelly",
                     "help": "in minutes"
                 },
                 "sonoffMaxMinutes": {
@@ -559,7 +593,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Sonoff devices",
+                    "label": "Sonoff",
                     "help": "in minutes"
                 },
                 "sonosMaxMinutes": {
@@ -569,7 +603,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Sonos devices",
+                    "label": "Sonos",
                     "help": "in minutes"
                 },
                 "switchbotMaxMinutes": {
@@ -579,7 +613,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Switchbot Ble devices",
+                    "label": "Switchbot Ble",
                     "help": "in minutes"
                 },
                 "zigbeeMaxMinutes": {
@@ -589,7 +623,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Zigbee devices",
+                    "label": "Zigbee",
                     "help": "in minutes"
                 },
                 "zwaveMaxMinutes": {
@@ -599,7 +633,7 @@
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Offline time of Zwave devices",
+                    "label": "Zwave",
                     "help": "in minutes"
                 }
             }

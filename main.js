@@ -48,11 +48,25 @@ class DeviceWatcher extends utils.Adapter {
 			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'sonoff',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
 			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'available', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
+			alexa2: 			{
+				'Selektor':'alexa2.*.online',
+				'adapter':'alexa2',
+				'battery':'none',
+				'reach':'.online',
+				'isLowBat':'none'
+			},
 			ble: 			{
 				'Selektor':'ble.*.rssi',
 				'adapter':'ble',
 				'battery':'.battery',
 				'reach':'none',
+				'isLowBat':'none'
+			},
+			esphome: 			{
+				'Selektor':'esphome.*._online',
+				'adapter':'esphome',
+				'battery':'none',
+				'reach':'._online',
 				'isLowBat':'none'
 			},
 			zigbee: 		{
@@ -327,6 +341,8 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.main.name}`);
 
 		this.supAdapter = {
+			alexa2:			this.config.alexa2Devices,
+			esphome:		this.config.esphomeDevices,
 			zigbee: 		this.config.zigbeeDevices,
 			ble: 			this.config.bleDevices,
 			sonoff: 		this.config.sonoffDevices,
@@ -476,6 +492,29 @@ class DeviceWatcher extends utils.Adapter {
 							}
 
 							switch (this.arrDev[i].adapter) {
+								case 'alexa2':
+									if (this.config.alexa2MaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.alexa2MaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
 								case 'ble':
 									if (this.config.bleMaxMinutes === -1) {
 										if (!deviceUnreachState) {
@@ -512,6 +551,29 @@ class DeviceWatcher extends utils.Adapter {
 											);
 										}
 									} else if (lastContact > this.config.deconzMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										this.offlineDevices.push(
+											{
+												Device: deviceName,
+												Adapter: deviceAdapterName,
+												Last_contact: lastContactString
+											}
+										);
+									}
+									break;
+								case 'esphome':
+									if (this.config.esphomeMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											this.offlineDevices.push(
+												{
+													Device: deviceName,
+													Adapter: deviceAdapterName,
+													Last_contact: lastContactString
+												}
+											);
+										}
+									} else if (lastContact > this.config.esphomeMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{

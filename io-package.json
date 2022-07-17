@@ -52,17 +52,17 @@
                 "zh-cn": "添加了管理员翻译"
             },
             "0.0.8": {
-                    "en": "some improvements of code",
-                    "de": "einige verbesserungen des codes",
-                    "ru": "некоторые улучшения кода",
-                    "pt": "algumas melhorias de código",
-                    "nl": "wat verbetering van code",
-                    "fr": "quelques améliorations du code",
-                    "it": "alcuni miglioramenti del codice",
-                    "es": "algunas mejoras del código",
-                    "pl": "ulepszenia kodu",
-                    "zh-cn": "守则的一些改进"
-                  }
+                "en": "some improvements of code",
+                "de": "einige verbesserungen des codes",
+                "ru": "некоторые улучшения кода",
+                "pt": "algumas melhorias de código",
+                "nl": "wat verbetering van code",
+                "fr": "quelques améliorations du code",
+                "it": "alcuni miglioramenti del codice",
+                "es": "algunas mejoras del código",
+                "pl": "ulepszenia kodu",
+                "zh-cn": "守则的一些改进"
+            }
         },
         "title": "Device-Watcher",
         "titleLang": {
@@ -129,6 +129,8 @@
         ]
     },
     "native": {
+        "alexa2Devices": false,
+        "esphomeDevices": false,
         "zigbeeDevices": false,
         "bleDevices": false,
         "sonoffDevices": false,
@@ -171,8 +173,10 @@
         "instanceLovelace": "",
         "titleLovelace": "Device-Watcher",
         "tableBlacklist": [],
+        "alexa2MaxMinutes": -1,
         "bleMaxMinutes": 300,
         "deconzMaxMinutes": -1,
+        "esphomeMaxMinutes": -1,
         "fritzdectMaxMinutes": -1,
         "homematicMaxMinutes": -1,
         "hueMaxMinutes": -1,
@@ -186,13 +190,6 @@
         "switchbotMaxMinutes": 300,
         "zigbeeMaxMinutes": 300,
         "zwaveMaxMinutes": -1
-
-
-
-
-
-
-
     },
     "objects": [],
     "instanceObjects": [
