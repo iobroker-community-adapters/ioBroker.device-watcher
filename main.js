@@ -473,23 +473,55 @@ class DeviceWatcher extends utils.Adapter {
 
 					// 2. When was the last contact to the device?
 					let lastContactString;
+
 					const deviceMainSelector = await this.getForeignStateAsync(id);
 					let deviceState = 'Online';
 					if (deviceMainSelector) {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
+							const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
 							const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
+
+
+							const getLastContact = async () => {
+								lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
+								if (Math.round(lastContact) > 100) {
+									lastContactString = Math.round(lastContact/60) + ' Stunden';
+								}
+								if (Math.round(lastContact/60) > 48) {
+									lastContactString = Math.round(lastContact/60/24) + ' Tagen';
+								}
+								return lastContactString;
+							};
+
+							const getLastStateChange = async () => {
+								lastContactString = this.formatDate(new Date((deviceMainSelector.lc)), 'hh:mm') + ' Uhr';
+								if (Math.round(lastStateChange) > 100) {
+									lastContactString = Math.round(lastStateChange/60) + ' Stunden';
+								}
+								if (Math.round(lastStateChange/60) > 48) {
+									lastContactString = Math.round(lastStateChange/60/24) + ' Tagen';
+								}
+								return lastContactString;
+							};
 
 							// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 							//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
 							//lastContactString = Math.round(lastContact) + ' Minuten';
-							lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
-							if (Math.round(lastContact) > 100) {
-								lastContactString = Math.round(lastContact/60) + ' Stunden';
-							}
-							if (Math.round(lastContact/60) > 48) {
-								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
+							switch (this.arrDev[i].adapter) {
+								case 'ping':
+									//State changed
+									if (!deviceUnreachState) {
+										await getLastStateChange();
+									} else {
+										await getLastContact();
+									}
+									break;
+
+								default:
+									await getLastContact();
+									break;
 							}
 
 							switch (this.arrDev[i].adapter) {
@@ -735,7 +767,7 @@ class DeviceWatcher extends utils.Adapter {
 												}
 											);
 										}
-									} else if (lastContact > this.config.pingMaxMinutes) {
+									} else if ((lastStateChange > this.config.pingMaxMinutes) && (!deviceUnreachState)) {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
@@ -885,39 +917,6 @@ class DeviceWatcher extends utils.Adapter {
 									}
 									break;
 							}
-
-						/*if (this.arrDev[i].reach === 'none') {
-								if (lastContact > this.config.maxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-									this.offlineDevices.push(
-										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
-										}
-									);
-								}
-							} else {
-								if ((deviceUnreachState) && (this.arrDev[i].adapter === 'homematic')) { //Only Working for homematic devices
-									deviceState = 'Offline'; //set online state to offline
-									this.offlineDevices.push(
-										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
-										}
-									);
-								} else if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) { //Working for all other devices
-									deviceState = 'Offline'; //set online state to offline
-									this.offlineDevices.push(
-										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
-										}
-									);
-								}
-							}*/
 						} catch (e) {
 							this.log.error(`(03) Error while getting timestate ${e}`);
 						}
