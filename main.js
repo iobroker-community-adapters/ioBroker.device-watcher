@@ -45,7 +45,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.arrApart = {
 			//**** This Datapoints are only for the dev ****//
 			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'ping', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
-			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'sonoff',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none'},
+			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'esphome',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none', 'id':'.name'},
 			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'available', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
 			alexa2: 			{
@@ -67,7 +67,8 @@ class DeviceWatcher extends utils.Adapter {
 				'adapter':'esphome',
 				'battery':'none',
 				'reach':'._online',
-				'isLowBat':'none'
+				'isLowBat':'none',
+				'id':'.name'
 			},
 			zigbee: 		{
 				'Selektor':'zigbee.*.link_quality',
@@ -424,12 +425,12 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 
-					//Get ID for Switchbot Devices
-					if (this.arrDev[i].adapter === 'switchbot ble') {
-						const switchbotID = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].id);
-						if (switchbotID) {
-							deviceName = switchbotID.val;
-						}
+					//Get ID for Switchbot and ESPHome Devices
+					switch (this.arrDev[i].adapter) {
+						case 'switchbot ble':
+						case 'esphome':
+							deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+							break;
 					}
 
 					// 1. Get link quality
