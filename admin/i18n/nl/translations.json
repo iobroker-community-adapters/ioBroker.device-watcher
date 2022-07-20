@@ -62,5 +62,9 @@
     "Choose the day(s) where you want to get the message of low battery:": "Kies de dag(en) waarop u de melding batterij bijna leeg wilt krijgen:",
     "Here you can choose the offline time of devices for each adapter. ": "Hier kunt u voor elke adapter de offline tijd van apparaten kiezen.",
     "If set to '-1', the adapter will use the datapoint available, reachable, alive etc.": "Indien ingesteld op '-1', gebruikt de adapter het beschikbare, bereikbare, actieve enz. Datapunt.",
-    "when the device has one of these.": "wanneer het apparaat een van deze heeft."
+    "when the device has one of these.": "wanneer het apparaat een van deze heeft.",
+    "Whatsapp Instance": "Whatsapp-instantie",
+    "Please choose the Whatsapp instance": "Kies de WhatsApp-instantie",
+    "Recipient (optional)": "Ontvanger (optioneel)",
+    "Choose your recipient": "Kies je ontvanger"
 }

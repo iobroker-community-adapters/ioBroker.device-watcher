@@ -298,6 +298,32 @@
                     "label": "Chat-ID (optional)",
                     "help": "Choose your Chat-ID"
                 },
+                "headerWhatsapp": {
+                    "newLine": "true",
+                    "type": "header", 
+                    "text": "Whatsapp",
+                    "size": 2
+                },
+                "instanceWhatsapp": {
+                    "newLine": true,
+                    "type": "instance",
+                    "adapter": "whatsapp-cmb",
+                    "all": true,
+                    "allowDeactivate": true,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Whatsapp Instance",
+                    "help": "Please choose the Whatsapp instance"
+                },
+                "phoneWhatapp": {
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Recipient (optional)",
+                    "help": "Choose your recipient"
+                },
                 "_headerEmail": {
                     "newLine": true,
                     "type": "header", 

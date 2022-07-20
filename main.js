@@ -44,7 +44,7 @@ class DeviceWatcher extends utils.Adapter {
 		// arrays of supported adapters
 		this.arrApart = {
 			//**** This Datapoints are only for the dev ****//
-			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'ping', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
+			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH'},
 			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'esphome',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none', 'id':'.name'},
 			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'zigbee', 'battery':'.battery', 'reach':'available', 'isLowBat':'none'},
 			//**** End of Dev Datapoints ****//
@@ -328,16 +328,6 @@ class DeviceWatcher extends utils.Adapter {
 		});
 	}
 
-	async mainForAdapter(adptName) {
-		for (let i = 0; i < this.arrDev.length; i++) {
-			switch (this.arrDev[i].adapter) {
-				case adptName:
-					await this.setStateAsync(`${adptName}.offlineCount`, {val: 2, ack: true});
-					break;
-			}
-		}
-	}
-
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
 
@@ -373,7 +363,6 @@ class DeviceWatcher extends utils.Adapter {
 				/*try {
 					await this.createDPsForEachAdapter(id);
 					this.log.debug(`Created datapoints for ${await this.capitalize(id)}`);
-					await this.mainForAdapter(id);
 				} catch (e) {
 					this.log.warn(`Error at creating datapoints for each adapter: ${e}`);
 				}*/
@@ -1041,6 +1030,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			} //<--End of second loop
 		} //<---End of main loop
+
 		this.log.debug(`Function finished: ${this.main.name}`);
 	}
 
@@ -1061,6 +1051,10 @@ class DeviceWatcher extends utils.Adapter {
 			instance: this.config.instanceTelegram,
 			user: this.config.deviceTelegram,
 			chatId: this.config.chatIdTelegram
+		};
+		const whatsapp = {
+			instance: this.config.instanceWhatsapp,
+			phone: this.config.phoneWhatsapp
 		};
 		const email = {
 			instance: this.config.instanceEmail,
@@ -1103,6 +1097,13 @@ class DeviceWatcher extends utils.Adapter {
 				text: text,
 				user: telegram.user,
 				chatId: telegram.chatId
+			});
+		};
+
+		const sendWhatsapp = async (text) => {
+			await this.sendToAsync(whatsapp.instance, 'send', {
+				text: text,
+				phone: whatsapp.phone
 			});
 		};
 
@@ -1149,6 +1150,13 @@ class DeviceWatcher extends utils.Adapter {
 					if (telegram.instance) {
 						try {
 							await sendTelegram(msg);
+						} catch (e) {
+							this.log.warn (`Getting error at sending notification ${e}`);
+						}
+					}
+					if (whatsapp.instance) {
+						try {
+							await sendWhatsapp(msg);
 						} catch (e) {
 							this.log.warn (`Getting error at sending notification ${e}`);
 						}
@@ -1235,6 +1243,13 @@ class DeviceWatcher extends utils.Adapter {
 						if (telegram.instance) {
 							try {
 								await sendTelegram(`Batteriezustände: ${infotext}`);
+							} catch (e) {
+								this.log.warn (`Getting error at sending notification ${e}`);
+							}
+						}
+						if (whatsapp.instance) {
+							try {
+								await sendWhatsapp(`Batteriezustände: ${infotext}`);
 							} catch (e) {
 								this.log.warn (`Getting error at sending notification ${e}`);
 							}

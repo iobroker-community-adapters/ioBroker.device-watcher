@@ -52,5 +52,9 @@
     "Offline Time": "Offline-Zeit",
     "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.": "Hier können Sie die Offline-Zeit der Geräte für jeden Adapter auswählen. Wenn auf „-1“ gesetzt, verwendet der Adapter den Datenpunkt available, reachable, alive usw. wenn das Gerät einen davon hat.",
     "Choose the day(s) where you want to get the message of low battery:": "Wählen Sie den/die Tag(e), an dem/denen Sie die Meldung über schwache Batterie erhalten möchten:",
-    "Here you can choose the offline time of devices for each adapter. ": "Hier können Sie die Offline-Zeit der Geräte für jeden Adapter auswählen."
+    "Here you can choose the offline time of devices for each adapter. ": "Hier können Sie die Offline-Zeit der Geräte für jeden Adapter auswählen.",
+    "Whatsapp Instance": "WhatsApp-Instanz",
+    "Please choose the Whatsapp instance": "Bitte wählen Sie die WhatsApp-Instanz aus",
+    "Recipient (optional)": "Empfänger (optional)",
+    "Choose your recipient": "Wählen Sie Ihren Empfänger"
 }

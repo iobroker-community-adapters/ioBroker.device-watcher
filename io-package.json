@@ -168,6 +168,8 @@
         "instanceTelegram": "",
         "deviceTelegram": "",
         "chatIdTelegram": "",
+        "instanceWhatsapp": "",
+        "phoneWhatsapp": "",
         "instanceJarvis": "",
         "titleJarvis": "Device-Watcher",
         "instanceLovelace": "",

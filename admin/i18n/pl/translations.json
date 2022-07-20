@@ -62,5 +62,9 @@
     "Choose the day(s) where you want to get the message of low battery:": "Wybierz dzień lub dni, w których chcesz otrzymać komunikat o niskim poziomie baterii:",
     "Here you can choose the offline time of devices for each adapter. ": "Tutaj możesz wybrać czas offline urządzeń dla każdego adaptera.",
     "If set to '-1', the adapter will use the datapoint available, reachable, alive etc.": "Jeśli ustawiono na „-1”, adapter użyje dostępnego, osiągalnego, aktywnego itp. punktu danych.",
-    "when the device has one of these.": "gdy urządzenie ma jeden z nich."
+    "when the device has one of these.": "gdy urządzenie ma jeden z nich.",
+    "Whatsapp Instance": "Instancja Whatsapp",
+    "Please choose the Whatsapp instance": "Wybierz instancję Whatsapp",
+    "Recipient (optional)": "Odbiorca (opcjonalnie)",
+    "Choose your recipient": "Wybierz odbiorcę"
 }

@@ -62,5 +62,9 @@
     "Choose the day(s) where you want to get the message of low battery:": "Выберите день (дни), когда вы хотите получать сообщение о низком заряде батареи:",
     "Here you can choose the offline time of devices for each adapter. ": "Здесь вы можете выбрать время автономной работы устройств для каждого адаптера.",
     "If set to '-1', the adapter will use the datapoint available, reachable, alive etc.": "Если установлено значение «-1», адаптер будет использовать доступную, достижимую, активную точку данных и т. д.",
-    "when the device has one of these.": "когда устройство имеет один из них."
+    "when the device has one of these.": "когда устройство имеет один из них.",
+    "Whatsapp Instance": "WhatsApp экземпляр",
+    "Please choose the Whatsapp instance": "Пожалуйста, выберите экземпляр WhatsApp",
+    "Recipient (optional)": "Получатель (необязательно)",
+    "Choose your recipient": "Выберите получателя"
 }
