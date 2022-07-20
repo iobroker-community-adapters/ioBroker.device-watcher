@@ -1129,14 +1129,15 @@ class DeviceWatcher extends utils.Adapter {
 				let msg = '';
 				const offlineDevicesCountOld = await this.getOwnInitValue('offlineCount');
 
-				if ((this.offlineDevicesCount != offlineDevicesCountOld) && (this.offlineDevicesCount != 0)) {
-					if (this.offlineDevicesCount == 1) {
+				if ((this.offlineDevicesCount != offlineDevicesCountOld)) {
+					if (this.offlineDevicesCount == 1) {	// make singular if it is only one device
 						msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-					} else if (this.offlineDevicesCount >= 2) {
-						msg = 'Folgende ' + this.offlineDevicesCount + ' Geräte sind seit einiger Zeit nicht erreichbar: \n';
+					} else if (this.offlineDevicesCount >= 2) {		//make plural if it is more than one device
+						msg = `Folgende ${this.offlineDevicesCount} Geräte sind seit einiger Zeit nicht erreichbar: \n`;
 					}
+
 					for (const id of this.offlineDevices) {
-						msg = msg + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Last_contact'] + ')';
+						msg = `${msg} \n ${id['Device']} (${id['Last_contact']})`;
 					}
 					this.log.info(msg);
 					await this.setStateAsync('lastNotification', msg, true);
@@ -1224,7 +1225,7 @@ class DeviceWatcher extends utils.Adapter {
 						if (id['Battery']) {
 							const batteryValue = parseFloat(id['Battery'].replace('%', ''));
 							if ((batteryValue < batteryWarningMin) && (id['Adapter'] != 'Homematic')) {
-								infotext = infotext + '\n' + id['Device'] + ' ' + /*id['room'] +*/ ' (' + id['Battery'] + ')'.split(', ');
+								infotext = infotext + '\n' + id['Device'] + ' ' + ' (' + id['Battery'] + ')'.split(', ');
 								++batteryMinCount;
 							}
 						}
