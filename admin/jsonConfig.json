@@ -170,13 +170,17 @@
                     "md": 12,
                     "lg": 4,
                     "label": "From how much min % would you get a message",
-                    "help": "in percent"
+                    "help": "in percent",
+                    "hidden": "!data.checkSendBatteryMsg",
+                    "hideOnlyControl": true
                 },
                 "chooseDay": {
                     "newLine": true,
                     "sm": 12,
                     "md": 12,
                     "lg": 6,
+                    "hidden": "!data.checkSendBatteryMsg",
+                    "hideOnlyControl": true,
                     "items": {
                         "_textDays": {
                             "type": "staticText",
