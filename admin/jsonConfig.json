@@ -430,17 +430,20 @@
                     "items": [
                     {
                         "type": "objectId",
-                        "width": "40%",
-                        "title": "Choose which devices should be excluded", 
-                        "attr": "device", 
+                        "width": "50%",
+                        "title": "Choose which devices should be excluded",
                         "filter": false, 
                         "sort": false,
+                        "attr": "device",
                         "default": ""
                     },
                 {
                     "type": "text",
-                    "width": "60%",
                     "title": "Info", 
+                    "width": "50%",
+                    "attr": "ownNotes",
+                    "filter":false,
+                    "sort":false,
                     "label": "Add own notes, name, etc"
                 }
                 ]
