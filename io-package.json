@@ -172,6 +172,7 @@
         "mihomeDevices": false,
         "trueState": false,
         "listOnlyBattery": false,
+        "createOwnFolder": false,
         "checkSendOfflineMsg": false,
         "checkSendBatteryMsg": false,
         "minWarnBatterie": 35,
