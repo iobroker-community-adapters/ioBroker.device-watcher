@@ -1,0 +1,9 @@
+chore: release v0.1.0
+
+- changed wrong type of datapoint lastCheck
+- added possibility to choose own offline time for each adapter
+- added Whatsapp notification services
+- improved sonoff devices
+- added row with online and offline status in table allDevices
+- added alexa2 and esphome devices
+- Added priority for pushover notifications
