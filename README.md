@@ -47,6 +47,7 @@ Currently supported notification services are:
 * Email
 * Jarvis
 * Lovelace
+* and also an datapoint with the last notification, so you can use it for other services which aren't supported.
 
 If you found a bug or you have an improvement suggestion, feel free to open an issue.
 
