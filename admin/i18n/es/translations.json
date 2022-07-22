@@ -66,5 +66,13 @@
     "Whatsapp Instance": "Instancia de Whatsapp",
     "Please choose the Whatsapp instance": "Elija la instancia de Whatsapp",
     "Recipient (optional)": "Destinatario (opcional)",
-    "Choose your recipient": "Elige tu destinatario"
+    "Choose your recipient": "Elige tu destinatario",
+    "Offline message": "Mensaje fuera de línea",
+    "Battery message": "Mensaje de batería",
+    "Notification Service": "Servicio de notificaciones",
+    "Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.": "Aquí puede elegir su servicio de notificación. ",
+    "Choose your notification services": "Elige tus servicios de notificación",
+    "Create own folders for each adapter !!Doesn't work yet!!": "Cree carpetas propias para cada adaptador !! ¡¡Aún no funciona!!",
+    "If you like to have for every Adapter an own folder with own data": "Si desea tener para cada adaptador una carpeta propia con datos propios",
+    "Please choose": "Por favor elige"
 }

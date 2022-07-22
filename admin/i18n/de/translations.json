@@ -8,7 +8,7 @@
     "Send offline message": "Offline-Nachricht senden",
     "Get message if an device is not reachable": "Erhalten Sie eine Nachricht, wenn ein Gerät nicht erreichbar ist",
     "Send batterie message": "Batterienachricht senden",
-    "Get message if an device has low battery": "Erhalte Sie eine Nachricht, wenn der Akku eines Gerätes schwach ist",
+    "Get message if an device has low battery": "Erhalte Sie eine Nachricht, wenn die Batterie eines Gerätes schwach ist",
     "From how much min % would you get a message": "Ab wie viel min % würden Sie eine Nachricht bekommen wollen",
     "in percent": "in Prozent",
     "Use the true state from quality state": "Verwende den wahren Zustand des Quality States",
@@ -56,5 +56,13 @@
     "Whatsapp Instance": "WhatsApp-Instanz",
     "Please choose the Whatsapp instance": "Bitte wählen Sie die WhatsApp-Instanz aus",
     "Recipient (optional)": "Empfänger (optional)",
-    "Choose your recipient": "Wählen Sie Ihren Empfänger"
+    "Choose your recipient": "Wählen Sie Ihren Empfänger",
+    "Offline message": "Offline-Nachricht",
+    "Battery message": "Batteriemeldung",
+    "Notification Service": "Benachrichtigungsdienst",
+    "Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.": "Hier können Sie Ihren Benachrichtigungsdienst auswählen. Sie können mehr als einen Dienst verwenden. Sie können aber auch alle leer lassen, dann wird nur der Datenpunkt lastNotification gefüllt.",
+    "Choose your notification services": "Wählen Sie Ihre Benachrichtigungsdienste",
+    "Create own folders for each adapter !!Doesn't work yet!!": "Eigene Ordner für jeden Adapter erstellen !!Funktioniert noch nicht!!",
+    "If you like to have for every Adapter an own folder with own data": "Wenn Sie möchten, haben Sie für jeden Adapter einen eigenen Ordner mit eigenen Daten",
+    "Please choose": "Bitte auswählen"
 }

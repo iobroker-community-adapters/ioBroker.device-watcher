@@ -66,5 +66,13 @@
     "Whatsapp Instance": "Whatsapp 实例",
     "Please choose the Whatsapp instance": "请选择 Whatsapp 实例",
     "Recipient (optional)": "收件人（可选）",
-    "Choose your recipient": "选择您的收件人"
+    "Choose your recipient": "选择您的收件人",
+    "Offline message": "离线留言",
+    "Battery message": "电池信息",
+    "Notification Service": "通知服务",
+    "Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.": "在这里您可以选择您的通知服务。",
+    "Choose your notification services": "选择您的通知服务",
+    "Create own folders for each adapter !!Doesn't work yet!!": "为每个适配器创建自己的文件夹！！还不行！！",
+    "If you like to have for every Adapter an own folder with own data": "如果您希望每个适配器都有一个包含自己数据的文件夹",
+    "Please choose": "请选择"
 }

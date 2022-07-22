@@ -66,5 +66,13 @@
     "Whatsapp Instance": "Whatsapp-instantie",
     "Please choose the Whatsapp instance": "Kies de WhatsApp-instantie",
     "Recipient (optional)": "Ontvanger (optioneel)",
-    "Choose your recipient": "Kies je ontvanger"
+    "Choose your recipient": "Kies je ontvanger",
+    "Offline message": "Offline bericht",
+    "Battery message": "Batterij bericht",
+    "Notification Service": "Meldingsservice",
+    "Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.": "Hier kunt u uw meldingsservice kiezen. ",
+    "Choose your notification services": "Kies uw meldingsservices",
+    "Create own folders for each adapter !!Doesn't work yet!!": "Maak voor elke adapter eigen mappen !!Werkt nog niet!!",
+    "If you like to have for every Adapter an own folder with own data": "Als je voor elke Adapter een eigen map met eigen gegevens wilt hebben",
+    "Please choose": "Gelieve te kiezen"
 }

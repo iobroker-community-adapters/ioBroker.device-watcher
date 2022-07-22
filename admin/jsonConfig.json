@@ -146,7 +146,7 @@
                     "sm": 12,
                     "md": 6,
                     "lg": 3,
-                    "label": "Send offline message",
+                    "label": "Offline message",
                     "help": "Get message if an device is not reachable"
                 },
                 "trenner": {
@@ -159,7 +159,7 @@
                     "sm": 12,
                     "md": 12,
                     "lg": 6,
-                    "label": "Send batterie message",
+                    "label": "Battery message",
                     "help": "Get message if an device has low battery"
                 },
                 "minWarnBatterie": {
@@ -221,11 +221,46 @@
                         }
                     }
                 },
+                "_headerMSGservice": {
+                    "newLine": true,
+                    "type": "header", 
+                    "text": "Notification Service",
+                    "size": 2,
+                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsg",
+                    "hideOnlyControl": false
+                },
+                "msgServiceText": {
+                    "type": "staticText",
+                    "text": "Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.",
+                    "style": {
+                        "fontSize": 16,
+                        "marginTop": 20
+                      },
+                      "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsg",
+                      "hideOnlyControl": false
+                },
+                "msgService": {
+                    "newLine": true,
+                    "type": "select",
+                    "help": "Choose your notification services",
+                    "options": [{"label":"Please choose", "value": "none"},
+                                {"label":"Pushover", "value": "pushover"}, 
+                                {"label":"Telegram", "value": "telegram"},
+                                {"label":"Whatsapp", "value": "whatsapp"},
+                                {"label":"E-Mail", "value": "email"},
+                                {"label":"Jarvis", "value": "jarvis"},
+                                {"label":"Lovelace", "value": "lovelace"}],
+                    "default": "none",
+                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsg",
+                    "hideOnlyControl": false
+                },
                 "_headerPushover": {
                     "newLine": true,
                     "type": "header", 
                     "text": "Pushover",
-                    "size": 2
+                    "size": 2,
+                    "hidden": "data.msgService !== 'pushover'",
+                    "hideOnlyControl": false
                 },
                 "instancePushover": {
                     "newLine": true,
@@ -237,7 +272,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Pushover Instance",
-                    "help": "Please choose the pushover instance"
+                    "help": "Please choose the pushover instance",
+                    "hidden": "data.msgService !== 'pushover'",
+                    "hideOnlyControl": false
                 },
                 "devicePushover": {
                     "type": "text",
@@ -245,7 +282,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Device-ID (optional)",
-                    "help": "Choose your device"
+                    "help": "Choose your device",
+                    "hidden": "data.msgService !== 'pushover'",
+                    "hideOnlyControl": false
                 },
                 "prioPushover": {
                     "type": "select",
@@ -258,7 +297,9 @@
                         {"label": "High Priority", "value": 1},
                         {"label": "Silent", "value": -1},
                         {"label": "With confirmation", "value": 2}
-                    ]
+                    ],
+                    "hidden": "data.msgService !== 'pushover'",
+                    "hideOnlyControl": false
                 },
                 "titlePushover": {
                     "type": "text",
@@ -266,13 +307,17 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Title (optional)",
-                    "help": "Choose your title for Pushmessage"
+                    "help": "Choose your title for Pushmessage",
+                    "hidden": "data.msgService !== 'pushover'",
+                    "hideOnlyControl": false
                 },
                 "headerTelegram": {
                     "newLine": "true",
                     "type": "header", 
                     "text": "Telegram",
-                    "size": 2
+                    "size": 2,
+                    "hidden": "data.msgService !== 'telegram'",
+                    "hideOnlyControl": false
                 },
                 "instanceTelegram": {
                     "newLine": true,
@@ -284,7 +329,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Telegram Instance",
-                    "help": "Please choose the telegram instance"
+                    "help": "Please choose the telegram instance",
+                    "hidden": "data.msgService !== 'telegram'",
+                    "hideOnlyControl": false
                 },
                 "deviceTelegram": {
                     "type": "text",
@@ -292,7 +339,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Device-ID (optional)",
-                    "help": "Choose your device"
+                    "help": "Choose your device",
+                    "hidden": "data.msgService !== 'telegram'",
+                    "hideOnlyControl": false
                 },
                 "chatIdTelegram": {
                     "type": "text",
@@ -300,13 +349,17 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Chat-ID (optional)",
-                    "help": "Choose your Chat-ID"
+                    "help": "Choose your Chat-ID",
+                    "hidden": "data.msgService !== 'telegram'",
+                    "hideOnlyControl": false
                 },
                 "headerWhatsapp": {
                     "newLine": "true",
                     "type": "header", 
                     "text": "Whatsapp",
-                    "size": 2
+                    "size": 2,
+                    "hidden": "data.msgService !== 'whatsapp'",
+                    "hideOnlyControl": false
                 },
                 "instanceWhatsapp": {
                     "newLine": true,
@@ -318,7 +371,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Whatsapp Instance",
-                    "help": "Please choose the Whatsapp instance"
+                    "help": "Please choose the Whatsapp instance",
+                    "hidden": "data.msgService !== 'whatsapp'",
+                    "hideOnlyControl": false
                 },
                 "phoneWhatapp": {
                     "type": "text",
@@ -326,13 +381,17 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Recipient (optional)",
-                    "help": "Choose your recipient"
+                    "help": "Choose your recipient",
+                    "hidden": "data.msgService !== 'whatsapp'",
+                    "hideOnlyControl": false
                 },
                 "_headerEmail": {
                     "newLine": true,
                     "type": "header", 
                     "text": "Email",
-                    "size": 2
+                    "size": 2,
+                    "hidden": "data.msgService !== 'email'",
+                    "hideOnlyControl": false
                 },
                 "instanceEmail": {
                     "newLine": true,
@@ -344,7 +403,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Email Instance",
-                    "help": "Please choose the email instance"
+                    "help": "Please choose the email instance",
+                    "hidden": "data.msgService !== 'email'",
+                    "hideOnlyControl": false
                 },
                 "sendToEmail": {
                     "type": "text",
@@ -352,7 +413,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Send to (optional)",
-                    "help": "Choose your email address"
+                    "help": "Choose your email address",
+                    "hidden": "data.msgService !== 'email'",
+                    "hideOnlyControl": false
                 },
                 "subjectEmail": {
                     "type": "text",
@@ -360,13 +423,17 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Subject (optional)",
-                    "help": "Choose your subject for the Email"
+                    "help": "Choose your subject for the Email",
+                    "hidden": "data.msgService !== 'email'",
+                    "hideOnlyControl": false
                 },
                 "headerJarvis": {
                     "newLine": "true",
                     "type": "header", 
                     "text": "Jarvis Notification",
-                    "size": 2
+                    "size": 2,
+                    "hidden": "data.msgService !== 'jarvis'",
+                    "hideOnlyControl": false
                 },
                 "instanceJarvis": {
                     "newLine": true,
@@ -378,21 +445,27 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Jarvis Instance",
-                    "help": "Please choose the jarvis instance"
+                    "help": "Please choose the jarvis instance",
+                    "hidden": "data.msgService !== 'jarvis'",
+                    "hideOnlyControl": false
                 },
-                "titleLovelace": {
+                "titleJarvis": {
                     "type": "text",
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
                     "label": "Title (optional)",
-                    "help": "Choose your title for Pushmessage"
+                    "help": "Choose your title for Pushmessage",
+                    "hidden": "data.msgService !== 'jarvis'",
+                    "hideOnlyControl": false
                 },
                 "headerLovelace": {
                     "newLine": "true",
                     "type": "header", 
                     "text": "Lovelace Notification",
-                    "size": 2
+                    "size": 2,
+                    "hidden": "data.msgService !== 'lovelace'",
+                    "hideOnlyControl": false
                 },
                 "instanceLovelace": {
                     "newLine": true,
@@ -404,15 +477,19 @@
                     "md": 4,
                     "lg": 4,
                     "label": "Lovelace Instance",
-                    "help": "Please choose the lovelace instance"
+                    "help": "Please choose the lovelace instance",
+                    "hidden": "data.msgService !== 'lovelace'",
+                    "hideOnlyControl": false
                 },
-                "titleJarvis": {
+                "titleLovelace": {
                     "type": "text",
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
                     "label": "Title (optional)",
-                    "help": "Choose your title for Pushmessage"
+                    "help": "Choose your title for Pushmessage",
+                    "hidden": "data.msgService !== 'lovelace'",
+                    "hideOnlyControl": false
                 }
             } 
         },
@@ -468,13 +545,6 @@
                     "label": "True State",
                     "help": "Use the true state from quality state, otherwise it will be converted in percent value."
                 },
-                "_placeholder": {
-                    "type":"staticText",
-                    "sm": 0,
-                    "md": 0,
-                    "lg": 1,
-                    "placeholder": true
-                },
                 "listOnlyBattery": {
                     "type": "checkbox",
                     "sm": 12,
@@ -482,6 +552,14 @@
                     "lg": 4,
                     "label": "List only devices with battery",
                     "help": "Choose if only devices with battery should be listed or all devices"
+                },
+                "createOwnFolder": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Create own folders for each adapter !!Doesn't work yet!!",
+                    "help": "If you like to have for every Adapter an own folder with own data"
                 },
                 "_headerOfflineTime": {
                     "type": "header", 
@@ -507,7 +585,9 @@
                 "md": 6,
                 "lg": 3,
                 "label": "Alexa2",
-                "help": "in minutes"
+                "help": "in minutes",
+                "hidden": "!data.alexa2Devices",
+                "hideOnlyControl": false
             },
             "bleMaxMinutes": {
                 "type": "number",
@@ -517,7 +597,9 @@
                 "md": 6,
                 "lg": 3,
                 "label": "Ble",
-                "help": "in minutes"
+                "help": "in minutes",
+                "hidden": "!data.bleDevices",
+                "hideOnlyControl": false
             },
             "deconzMaxMinutes": {
                 "type": "number",
@@ -527,7 +609,9 @@
                 "md": 6,
                 "lg": 3,
                 "label": "Deconz",
-                "help": "in minutes"
+                "help": "in minutes",
+                "hidden": "!data.deconzDevices",
+                "hideOnlyControl": false
             },
             "esphomeMaxMinutes": {
                 "type": "number",
@@ -537,7 +621,9 @@
                 "md": 6,
                 "lg": 3,
                 "label": "EspHome",
-                "help": "in minutes"
+                "help": "in minutes",
+                "hidden": "!data.esphomeDevices",
+                "hideOnlyControl": false
             },
             "fritzdectMaxMinutes": {
                 "type": "number",
@@ -547,7 +633,9 @@
                 "md": 6,
                 "lg": 3,
                 "label": "FritzDect",
-                "help": "in minutes"
+                "help": "in minutes",
+                "hidden": "!data.dectDevices",
+                "hideOnlyControl": false
                 },
                 "homematicMaxMinutes": {
                     "type": "number",
@@ -557,7 +645,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Homematic",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.homematicDevices",
+                    "hideOnlyControl": false
                 },
                 "hueMaxMinutes": {
                     "type": "number",
@@ -567,7 +657,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Hue",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.hueDevices",
+                    "hideOnlyControl": false
                 },
                 "hueextMaxMinutes": {
                     "type": "number",
@@ -577,7 +669,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "HueExtended",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.hueExtDevices",
+                    "hideOnlyControl": false
                 },
                 "mihomeMaxMinutes": {
                     "type": "number",
@@ -587,7 +681,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "MiHome",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.mihomeDevices",
+                    "hideOnlyControl": false
                 },
                 "nukiextendMaxMinutes": {
                     "type": "number",
@@ -597,7 +693,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Nuki Extended",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.nukiExtDevices",
+                    "hideOnlyControl": false
                 },
                 "pingMaxMinutes": {
                     "type": "number",
@@ -607,7 +705,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Ping",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.pingDevices",
+                    "hideOnlyControl": false
                 },
                 "shellyMaxMinutes": {
                     "type": "number",
@@ -617,7 +717,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Shelly",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.shellyDevices",
+                    "hideOnlyControl": false
                 },
                 "sonoffMaxMinutes": {
                     "type": "number",
@@ -627,7 +729,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Sonoff",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.sonoffDevices",
+                    "hideOnlyControl": false
                 },
                 "sonosMaxMinutes": {
                     "type": "number",
@@ -637,7 +741,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Sonos",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.sonosDevices",
+                    "hideOnlyControl": false
                 },
                 "switchbotMaxMinutes": {
                     "type": "number",
@@ -647,7 +753,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Switchbot Ble",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.switchbotBleDevices",
+                    "hideOnlyControl": false
                 },
                 "zigbeeMaxMinutes": {
                     "type": "number",
@@ -657,7 +765,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Zigbee",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.zigbeeDevices",
+                    "hideOnlyControl": false
                 },
                 "zwaveMaxMinutes": {
                     "type": "number",
@@ -667,7 +777,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Zwave",
-                    "help": "in minutes"
+                    "help": "in minutes",
+                    "hidden": "!data.zwaveDevices",
+                    "hideOnlyControl": false
                 }
             }
         }
