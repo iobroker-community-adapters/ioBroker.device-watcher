@@ -36,6 +36,17 @@ The adapter has also the option to send notifications if the number of offline d
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+- changed wrong type of datapoint lastCheck
+- added possibility to choose own offline time for each adapter
+- added Whatsapp notification services
+- improved sonoff devices
+- added row with online and offline status in table allDevices
+- added alexa2 and esphome devices
+- Added priority for pushover notifications
+
+
 ### 0.0.8 (2022-07-05)
 
 - added own notes field for blacklist

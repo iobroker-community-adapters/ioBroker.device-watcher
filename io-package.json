@@ -62,6 +62,18 @@
                 "es": "algunas mejoras del código",
                 "pl": "ulepszenia kodu",
                 "zh-cn": "守则的一些改进"
+            },
+            "0.1.0": {
+                "en": "- changed wrong type of datapoint lastCheck\n- added possibility to choose own offline time for each adapter\n- added Whatsapp notification services\n- improved sonoff devices\n- added row with online and offline status in table allDevices\n- added alexa2 and esphome devices\n- Added priority for pushover notifications",
+                "de": "- falsche Art von Datenpunkt zuletzt geändert Überprüfung\n- zusätzliche möglichkeit, eigene offline-zeit für jeden adapter zu wählen\n- hinzugefügt Whatsapp Benachrichtigungsdienste\n- verbesserte sonoff-geräte\n- Zeile mit Online- und Offline-Status in Tabelle alleGeräte hinzugefügt\n- zusätzliche alexa2 und esphome-geräte\n- Priorität für Pushover-Benachrichtigungen hinzugefügt",
+                "ru": "- изменен неправильный тип данных точка последний Проверить\n- добавлена возможность выбрать собственное оффлайн время для каждого адаптера\n- добавлены услуги уведомлений WhatsApp\n- улучшенные устройства sonoff\n- добавлен ряд с онлайн и оффлайн статусом в таблице allDevices\n- добавлены alexa2 и esphome устройства\n- Добавлен приоритет для pushover уведомлений",
+                "pt": "- mudou o tipo errado de datapoint último Verificação\n- possibilidade adicional de escolher o próprio tempo offline para cada adaptador\n- adicionado serviços de notificação Whatsapp\n- dispositivos de sonoff melhorados\n- linha adicionada com status on-line e offline na tabela allDevices\n- adicionado alexa2 e dispositivos esphome\n- Prioridade adicional para notificações pushover",
+                "nl": "- Verschoonde soort datapoint. Check\n- voegde de mogelijkheid om vrije tijd te kiezen voor elke adapter\n- Vertaling:\n- verbeterde sonoff apparatuur\nVertaling:\n- vertaling:\n- Voorrang toegevoegd voor pushover-informatie",
+                "fr": "- le dernier type de datapoint modifié Check\n- possibilité supplémentaire de choisir son temps hors ligne pour chaque adaptateur\n- ajout des services de notification Whatsapp\n- dispositifs améliorés de sonoff\n- rang ajouté avec statut en ligne et hors ligne dans la table tousDevices\n- ajout des appareils alexa2 et esphome\n- Ajout de la priorité pour les notifications pushover",
+                "it": "- cambiato tipo errato di datapoint ultimo Check\n- possibilità aggiunta di scegliere il proprio tempo offline per ogni adattatore\n- aggiunto servizi di notifica Whatsapp\n- dispositivi sonoff migliorati\n- riga aggiunta con lo stato online e offline nella tabella allDevices\n- aggiunto alexa2 e dispositivi esphome\n- Aggiunta priorità per le notifiche pushover",
+                "es": "- cambio de tipo equivocado de datapoint último Check\n- la posibilidad de elegir el tiempo libre para cada adaptador\n- añadido servicios de notificación de Whatsapp\n- mejores dispositivos de desnivel\n- fila agregada con el estado online y offline en la tabla allDevices\n- añadidos dispositivos alexa2 y esphome\n- Mayor prioridad para las notificaciones de empuje",
+                "pl": "Zmienił błędny typ danych ostatni. Check\n- dodano możliwość wyboru własnego czasu na dopasowanie do każdego adaptera\n- dodano usługi notyfikacyjne\n- ulepszone urządzenia sonoff\n- dodano wiersze z statusem online i offline w tabeli\n- dodano urządzenia alexa2 i esphome\nAdded priorytet dla powiadomień o przesunięciach",
+                "zh-cn": "- 上次改变错误数据点 检查\n- 为每个适应者选择自己的时间\n- 增加通知服务\n- 改善儿子装置\n- 在表格中加上网上和超线地位\n- 增加一台风2和麻风装置\n- 优先移交通知"
             }
         },
         "title": "Device-Watcher",
