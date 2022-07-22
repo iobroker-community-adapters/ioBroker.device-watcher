@@ -911,6 +911,8 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 
+
+
 					// 2c. Count how many devcies are offline
 					this.offlineDevicesCount = this.offlineDevices.length;
 
@@ -1032,7 +1034,7 @@ class DeviceWatcher extends utils.Adapter {
 		} //<---End of main loop
 
 		this.log.debug(`Function finished: ${this.main.name}`);
-	}
+	} //<--End of main function
 
 	async sendNotifications() {
 		/*=============================================
@@ -1187,7 +1189,7 @@ class DeviceWatcher extends utils.Adapter {
 			} catch (e) {
 				this.log.debug(`Getting error at sending offline notification ${e}`);
 			}
-		}
+		}//<--End of offline notification
 
 		/*----------  Low battery Notification ----------*/
 		const now = new Date();
@@ -1283,10 +1285,10 @@ class DeviceWatcher extends utils.Adapter {
 			} catch (e) {
 				this.log.debug(`Getting error at sending battery notification ${e}`);
 			}
-		}
-		/*=====  End of Section notifications ======*/
+		}//<--End of battery notification
 		this.log.debug(`Function finished: ${this.sendNotifications.name}`);
 	}
+	/*=====  End of Section notifications ======*/
 
 	async writeDatapoints() {
 		/*=============================================
@@ -1348,9 +1350,9 @@ class DeviceWatcher extends utils.Adapter {
 		catch (e) {
 			this.log.error(`(05) Error while writing the states ${e}`);
 		}
-		/*=====  End of writing Datapoints ======*/
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	}
+	/*=====  End of writing Datapoints ======*/
 
 
 	onUnload(callback) {
