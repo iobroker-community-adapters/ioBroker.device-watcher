@@ -36,7 +36,7 @@ The adapter has also the option to send notifications if the number of offline d
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.1.0 (2022-07-22)
 
 - changed wrong type of datapoint lastCheck
 - added possibility to choose own offline time for each adapter
@@ -45,7 +45,6 @@ The adapter has also the option to send notifications if the number of offline d
 - added row with online and offline status in table allDevices
 - added alexa2 and esphome devices
 - Added priority for pushover notifications
-
 
 ### 0.0.8 (2022-07-05)
 
