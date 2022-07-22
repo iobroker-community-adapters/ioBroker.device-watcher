@@ -2,7 +2,7 @@
 # ioBroker.device-watcher
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
-![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)
+<!--![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)-->
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
 ![Number of Installations](https://iobroker.live/badges/device-watcher-installed.svg)
 
