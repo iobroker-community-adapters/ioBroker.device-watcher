@@ -7,7 +7,7 @@
 <!--![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)-->
 [![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v0.1.1)
+![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v0.1.2)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 
@@ -74,6 +74,11 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+- improved overview of admin ui
+- added option in admin ui to create own folders for each adapter (!!not working yet!!)
+
 ### 0.1.1 (2022-07-22)
 
 - changed wrong type of datapoint lastCheck

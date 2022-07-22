@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "news": {
+            "0.1.2": {
+                    "en": "- improved overview of admin ui\n- added option in admin ui to create own folders for each adapter (!!not working yet!!)",
+                    "de": "- verbesserte übersicht von admin ui\n- zusätzliche option in admin ui, um eigene ordner für jeden adapter zu erstellen!(noch nicht funktionieren!)",
+                    "ru": "- улучшенный обзор админ ui\n- добавлена опция в админ ui для создания собственных папок для каждого адаптера !( еще не работает!)",
+                    "pt": "- visão geral melhorada de admin ui\n- opção adicionada no admin ui para criar pastas próprias para cada adaptador! (não funciona ainda!)",
+                    "nl": "- verbeterde overzicht van administratie\n- toegevoegd optie in administratie om eigen vouwen te creëren voor elke adapter",
+                    "fr": "- aperçu amélioré de admin ui\n- option ajoutée dans admin ui pour créer ses propres dossiers pour chaque adaptateur !(pas encore!)",
+                    "it": "- una migliore panoramica di admin ui\n- opzione aggiunta in admin ui per creare proprie cartelle per ogni adattatore! (non funziona ancora!)",
+                    "es": "- mejor descripción de admin ui\n- opción agregada en admin ui para crear carpetas propias para cada adaptador !(no funciona todavía!)",
+                    "pl": "admin ui – poprawiony przegląd admin ui\n- dodanie opcji w admin ui w celu stworzenia własnych folderów dla każdego adaptatora ! (nie pracuje jeszcze!)",
+                    "zh-cn": "- 改进对专注的概述\n- 增加专注的备选办法,为每个适应者创造自己的手"
+            },
             "0.1.1": {
                 "en": "- changed wrong type of datapoint lastCheck\n- added possibility to choose own offline time for each adapter\n- added Whatsapp notification services\n- improved sonoff devices\n- added row with online and offline status in table allDevices\n- added alexa2 and esphome devices\n- Added priority for pushover notifications",
                 "de": "- falsche Art von Datenpunkt zuletzt geändert Überprüfung\n- zusätzliche möglichkeit, eigene offline-zeit für jeden adapter zu wählen\n- hinzugefügt Whatsapp Benachrichtigungsdienste\n- verbesserte sonoff-geräte\n- Zeile mit Online- und Offline-Status in Tabelle alleGeräte hinzugefügt\n- zusätzliche alexa2 und esphome-geräte\n- Priorität für Pushover-Benachrichtigungen hinzugefügt",
