@@ -17,11 +17,38 @@
 
 ## Device-Watcher adapter for ioBroker
 
-This is a watchdog for wireless devices. It works currently with the Zigbee, Shelly, Sonoff and Ble adapter (mi flora plant sensor). The adapter looks every sixty minutes for the rssi/link quality and battery states and create JSON lists of them (devices with battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
+This is a watchdog for wireless devices. The adapter looks every fifteen minutes for the rssi/link quality and battery states and create JSON lists of them (devices with battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
 
-The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries. Currently supported notification services are Pushover, Telegram and Jarvis Notification.
+Supported adapters are:
+* Alexa2
+* Ble
+* Deconz
+* FritzDect
+* ESPHome
+* Homematic
+* Hue
+* Hue Extended
+* MiHome
+* Nuki Extended
+* Ping (You have to set the option 'Advanced Information / Erweiterte Information' in the instance settings of ping for each device)
+* Shelly
+* Sonoff
+* Sonos
+* Switchbot Ble
+* Zigbee
+* Zwave
 
- If you found a bug or you have an improvement suggestion, feel free to open an issue.
+The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries. 
+
+Currently supported notification services are: 
+* Telegram (with support of Chat-ID for groupchats)
+* Pushover
+* WhatsApp
+* Email
+* Jarvis
+* Lovelace
+
+If you found a bug or you have an improvement suggestion, feel free to open an issue.
 
 ### Blacklist
 
