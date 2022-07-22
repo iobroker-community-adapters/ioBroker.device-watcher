@@ -2,9 +2,14 @@
 # ioBroker.device-watcher
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
+![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
 ![Number of Installations](https://iobroker.live/badges/device-watcher-installed.svg)
-![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)
+
+[![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
+![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
+![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 
 [![NPM](https://nodei.co/npm/iobroker.device-watcher.png?downloads=true)](https://nodei.co/npm/iobroker.device-watcher/)
 
