@@ -24,6 +24,11 @@ The adapter has also the option to send notifications if the number of offline d
 
 ![add_blacklist.png](admin/images/add_blacklist.png)
 
+### Example images of Pushover notification:
+
+![noti_push.jpeg](admin/images/noti_push.jpeg)
+![noti_push2.jpeg](admin/images/noti_push2.jpeg)
+
 ### Here are some images how the lists look:
 
 ![list1.png](admin/images/list1.png)
