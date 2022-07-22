@@ -74,7 +74,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.1.2 (2022-07-22)
 
 - improved overview of admin ui
 - added option in admin ui to create own folders for each adapter (!!not working yet!!)
