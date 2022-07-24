@@ -5,6 +5,7 @@
 'use strict';
 
 const utils = require('@iobroker/adapter-core');
+const { json } = require('stream/consumers');
 const adapterName = require('./package.json').name.split('.').pop();
 
 class DeviceWatcher extends utils.Adapter {
@@ -282,7 +283,7 @@ class DeviceWatcher extends utils.Adapter {
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': [{Device: '--keine--', Adapter: '', Last_contact: ''}]
+				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Last_contact: ''}])
 			},
 			'native': {}
 		});
@@ -294,7 +295,7 @@ class DeviceWatcher extends utils.Adapter {
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': [{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}]
+				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}])
 			},
 			'native': {}
 		});
@@ -306,7 +307,7 @@ class DeviceWatcher extends utils.Adapter {
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': [{Device: '--keine--', Adapter: '', Link_quality: ''}]
+				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Link_quality: ''}])
 			},
 			'native': {}
 		});
@@ -330,7 +331,7 @@ class DeviceWatcher extends utils.Adapter {
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': [{Device: '--keine--', Adapter: '', Battery: ''}]
+				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Battery: ''}])
 			},
 			'native': {}
 		});
@@ -342,7 +343,7 @@ class DeviceWatcher extends utils.Adapter {
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': [{Device: '--keine--', Adapter: '', Battery: ''}]
+				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Battery: ''}])
 			},
 			'native': {}
 		});
