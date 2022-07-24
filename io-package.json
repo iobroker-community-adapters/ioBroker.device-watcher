@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.1.2",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "- added function to create data of each adapter",
+                "de": "- zusätzliche funktion zur erstellung von daten jedes adapters",
+                "ru": "- добавлена функция для создания данных каждого адаптера",
+                "pt": "- função adicionada para criar dados de cada adaptador",
+                "nl": "- vertaling:",
+                "fr": "- fonction ajoutée pour créer des données de chaque adaptateur",
+                "it": "- funzione aggiunta per creare dati di ogni adattatore",
+                "es": "- función agregada para crear datos de cada adaptador",
+                "pl": "- dodanie funkcji do tworzenia danych każdego adaptera",
+                "zh-cn": "- 创造每一适应者的数据的附加职能"
+            },
             "0.1.2": {
                 "en": "- improved overview of admin ui\n- added option in admin ui to create own folders for each adapter (!!not working yet!!)",
                 "de": "- verbesserte übersicht von admin ui\n- zusätzliche option in admin ui, um eigene ordner für jeden adapter zu erstellen!(noch nicht funktionieren!)",
