@@ -5,7 +5,6 @@
 'use strict';
 
 const utils = require('@iobroker/adapter-core');
-const { json } = require('stream/consumers');
 const adapterName = require('./package.json').name.split('.').pop();
 
 class DeviceWatcher extends utils.Adapter {
