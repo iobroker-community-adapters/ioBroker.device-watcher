@@ -74,5 +74,6 @@
     "Choose your notification services": "Выберите свои службы уведомлений",
     "Create own folders for each adapter !!Doesn't work yet!!": "Создайте свои папки для каждого адаптера !! Пока не работает !!",
     "If you like to have for every Adapter an own folder with own data": "Если вы хотите иметь для каждого адаптера собственную папку с собственными данными",
-    "Please choose": "Пожалуйста, выберите"
+    "Please choose": "Пожалуйста, выберите",
+    "Create own folders for each adapter": "Создайте свои папки для каждого адаптера"
 }

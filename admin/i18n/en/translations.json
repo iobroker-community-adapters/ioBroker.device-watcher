@@ -61,7 +61,7 @@
 	"Notification Service":"Notification Service",
 	"Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.":"Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.",
 	"Choose your notification services":"Choose your notification services",
-	"Create own folders for each adapter !!Doesn't work yet!!":"Create own folders for each adapter !!Doesn't work yet!!",
 	"If you like to have for every Adapter an own folder with own data":"If you like to have for every Adapter an own folder with own data",
-	"Please choose":"Please choose"
+	"Please choose":"Please choose",
+	"Create own folders for each adapter":"Create own folders for each adapter"
 }
