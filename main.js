@@ -407,7 +407,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				//Get ID for Switchbot and ESPHome Devices
 				switch (this.arrDev[i].adapter) {
-					case 'switchbot ble':
+					case 'switchbotBle':
 					case 'esphome':
 						deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 						break;
@@ -827,7 +827,7 @@ class DeviceWatcher extends utils.Adapter {
 									);
 								}
 								break;
-							case 'switchbot ble':
+							case 'switchbotBle':
 								if (this.config.switchbotMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
