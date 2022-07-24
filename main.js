@@ -145,7 +145,7 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			switchbotBle: 	{
 				'Selektor':'switchbot-ble.*.rssi',
-				'adapter':'switchbot ble',
+				'adapter':'switchbotBle',
 				'battery':'.battery',
 				'reach':'none',
 				'isLowBat':'none',
