@@ -43,11 +43,6 @@ class DeviceWatcher extends utils.Adapter {
 
 		// arrays of supported adapters
 		this.arrApart = {
-			//**** This Datapoints are only for the dev ****//
-			test: 		{'Selektor':'0_userdata.*.UNREACH', 'adapter':'homematic', 'rssiState':'.RSSI_DEVICE', 'battery':'.OPERATING_VOLTAGE', 'reach':'.UNREACH', 'isLowBat':'.LOW_BAT'},
-			test2: 		{'Selektor':'0_userdata.*.alive', 'adapter':'test2',  'rssiState': '.Wifi_RSSI', 'battery':'none', 'reach':'.alive', 'isLowBat':'none', 'id':'.name'},
-			test3: 		{'Selektor':'0_userdata.*.link_quality', 'adapter':'test3', 'battery':'.battery', 'reach':'available', 'isLowBat':'none'},
-			//**** End of Dev Datapoints ****//
 			alexa2: 			{
 				'Selektor':'alexa2.*.online',
 				'adapter':'alexa2',
@@ -1094,9 +1089,6 @@ class DeviceWatcher extends utils.Adapter {
 			sonos: 			this.config.sonosDevices,
 			mihome:			this.config.mihomeDevices,
 			mihomeGW:		this.config.mihomeDevices,
-			test: 			false, // Only for Developer
-			test2: 			false, // Only for Developer
-			test3:			false // Only for Developer
 		};
 
 		for(const [id] of Object.entries(this.arrApart)) {
