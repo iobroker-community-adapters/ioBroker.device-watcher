@@ -1361,12 +1361,12 @@ class DeviceWatcher extends utils.Adapter {
 				let infotext = '';
 
 				for (const id of this.batteryLowPowered) {
-					infotext = infotext + '\n' + id['Device'] + ' (' + id['Battery'] + ')'.split(', ');
+					infotext = '\n' + id['Device'] + ' (' + id['Battery'] + ')'.split(', ');
 				}
 
 				if (this.lowBatteryPoweredCount > 0) {
 					this.log.info(`Niedrige Batteriezustände: ${infotext}`);
-					await this.setStateAsync('lastNotification', infotext, true);
+					await this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${infotext}`, true);
 
 					if (this.config.instancePushover) {
 						try {
