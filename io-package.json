@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "news": {
+            "0.2.1": {
+                "en": "- removed test states",
+                "de": "- entfernte testzustände",
+                "ru": "- удаленные состояния тестов",
+                "pt": "- estados de teste removidos",
+                "nl": "verwijderde teststaat",
+                "fr": "- états d ' essai enlevés",
+                "it": "- stati di test rimossi",
+                "es": "- estados de prueba eliminados",
+                "pl": "- zlikwidowane państwa testowe",
+                "zh-cn": "- 取消试验国"
+            },
             "0.2.0": {
                 "en": "- added function to create data of each adapter",
                 "de": "- zusätzliche funktion zur erstellung von daten jedes adapters",
