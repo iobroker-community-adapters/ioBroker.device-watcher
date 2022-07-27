@@ -126,7 +126,7 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			hueExt: 		{
 				'Selektor':'hue-extended.*.reachable',
-				'adapter':'hue extended',
+				'adapter':'hue-extended',
 				'battery':'.config.battery',
 				'reach':'.reachable',
 				'isLowBat':'none'
@@ -169,8 +169,8 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			nukiExt:		{
 				'Selektor':'nuki-extended.*.batteryCritical',
-				'adapter':'nuki_extended',
-				'battery':'none',
+				'adapter':'nuki-extended',
+				'battery':'.batteryCharge',
 				'reach':'none',
 				'isLowBat':'.batteryCritical'
 			}
@@ -257,111 +257,210 @@ class DeviceWatcher extends utils.Adapter {
 
 	//create datapoints for each adapter
 	async createDPsForEachAdapter(adptName) {
+
+		await this.setObjectNotExistsAsync(`${adptName}`, {
+			type: 'channel',
+			common: {
+				name: adptName,
+			},
+			native: {},
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.offlineCount`, {
 			'type': 'state',
 			'common': {
-				'name': 'Quantity devices offline',
+				'name': {
+					'en': 'Number of devices offline',
+					'de': 'Anzahl der Geräte offline',
+					'ru': 'Количество устройств offline',
+					'pt': 'Número de dispositivos offline',
+					'nl': 'Nummer van apparatuur offline',
+					'fr': 'Nombre de dispositifs hors ligne',
+					'it': 'Numero di dispositivi offline',
+					'es': 'Número de dispositivos sin conexión',
+					'pl': 'Ilość urządzeń offline',
+					'zh-cn': '线内装置数量'
+				},
 				'type': 'number',
 				'role': 'value',
 				'read': true,
 				'write': false,
-				'def': 0
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.offlineList`, {
 			'type': 'state',
 			'common': {
-				'name': 'List devices offline',
+				'name': {
+					'en': 'List of offline devices',
+					'de': 'Liste der Offline-Geräte',
+					'ru': 'Список оффлайн устройств',
+					'pt': 'Lista de dispositivos off-line',
+					'nl': 'List van offline apparatuur',
+					'fr': 'Liste des dispositifs hors ligne',
+					'it': 'Elenco dei dispositivi offline',
+					'es': 'Lista de dispositivos sin conexión',
+					'pl': 'Lista urządzeń offline',
+					'zh-cn': '线装置清单'
+				},
 				'type': 'array',
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Last_contact: ''}])
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
 			'type': 'state',
 			'common': {
-				'name': 'List all devices',
+				'name': {
+					'en': 'List of all devices',
+					'de': 'Liste aller Geräte',
+					'ru': 'Список всех устройств',
+					'pt': 'Lista de todos os dispositivos',
+					'nl': 'List van alle apparaten',
+					'fr': 'Liste de tous les dispositifs',
+					'it': 'Elenco di tutti i dispositivi',
+					'es': 'Lista de todos los dispositivos',
+					'pl': 'Lista wszystkich urządzeń',
+					'zh-cn': '所有装置清单'
+				},
 				'type': 'array',
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}])
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.linkQualityList`, {
 			'type': 'state',
 			'common': {
-				'name': 'List devices with qualitiy strength',
+				'name': {
+					'en': 'List of devices with signal strength',
+					'de': 'Liste der Geräte mit Signalstärke',
+					'ru': 'Список устройств с силой сигнала',
+					'pt': 'Lista de dispositivos com força de sinal',
+					'nl': 'List van apparaten met signaalkracht',
+					'fr': 'Liste des dispositifs avec force de signal',
+					'it': 'Elenco dei dispositivi con forza del segnale',
+					'es': 'Lista de dispositivos con fuerza de señal',
+					'pl': 'Lista urządzeń z siłą sygnałową',
+					'zh-cn': '具有信号实力的装置清单'
+				},
 				'type': 'array',
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Link_quality: ''}])
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.countAll`, {
 			'type': 'state',
 			'common': {
-				'name': 'Quantity devices all',
+				'name': {
+					'en': 'Number of all devices',
+					'de': 'Anzahl aller Geräte',
+					'ru': 'Количество всех устройств',
+					'pt': 'Número de todos os dispositivos',
+					'nl': 'Nummer van alle apparaten',
+					'fr': 'Nombre de tous les appareils',
+					'it': 'Numero di tutti i dispositivi',
+					'es': 'Número de todos los dispositivos',
+					'pl': 'Ilość wszystkich urządzeń',
+					'zh-cn': '所有装置的数目'
+				},
 				'type': 'number',
 				'role': 'value',
 				'read': true,
 				'write': false,
-				'def': 0
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.batteryList`, {
 			'type': 'state',
 			'common': {
-				'name': 'List devices with battery state',
+				'name': {
+					'en': 'List of devices with battery state',
+					'de': 'Liste der Geräte mit Batteriezustand',
+					'ru': 'Список устройств с состоянием батареи',
+					'pt': 'Lista de dispositivos com estado da bateria',
+					'nl': 'List van apparaten met batterij staat',
+					'fr': 'Liste des appareils avec état de batterie',
+					'it': 'Elenco dei dispositivi con stato della batteria',
+					'es': 'Lista de dispositivos con estado de batería',
+					'pl': 'Lista urządzeń z baterią stanową',
+					'zh-cn': '电池国装置清单'
+				},
 				'type': 'array',
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Battery: ''}])
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryList`, {
 			'type': 'state',
 			'common': {
-				'name': 'List devices with low battery state',
+				'name': {
+					'en': 'List of devices with low battery state',
+					'de': 'Liste der Geräte mit niedrigem Batteriezustand',
+					'ru': 'Список устройств с низким состоянием батареи',
+					'pt': 'Lista de dispositivos com baixo estado da bateria',
+					'nl': 'List van apparaten met lage batterij staat',
+					'fr': 'Liste des appareils à faible état de batterie',
+					'it': 'Elenco di dispositivi con stato di batteria basso',
+					'es': 'Lista de dispositivos con estado de batería bajo',
+					'pl': 'Lista urządzeń o niskim stanie baterii',
+					'zh-cn': '低电池国家装置清单'
+				},
 				'type': 'array',
 				'role': 'json',
 				'read': true,
 				'write': false,
-				'def': JSON.stringify([{Device: '--keine--', Adapter: '', Battery: ''}])
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryCount`, {
 			'type': 'state',
 			'common': {
-				'name': 'Quantity devices with low battery',
+				'name': {
+					'en': 'Number of devices with low battery',
+					'de': 'Anzahl der Geräte mit niedriger Batterie',
+					'ru': 'Количество устройств c низкой батареей',
+					'pt': 'Número de dispositivos com bateria baixa',
+					'nl': 'Nummer van apparaten met lage batterij',
+					'fr': 'Nombre de dispositifs avec batterie basse',
+					'it': 'Numero di dispositivi con batteria bassa',
+					'es': 'Número de dispositivos con batería baja',
+					'pl': 'Liczba urządzeń z niską baterią',
+					'zh-cn': '低电池的装置数量'
+				},
 				'type': 'number',
 				'role': 'value',
 				'read': true,
 				'write': false,
-				'def': 0
 			},
 			'native': {}
 		});
 		await this.setObjectNotExistsAsync(`${adptName}.batteryCount`, {
 			'type': 'state',
 			'common': {
-				'name': 'Quantity devices with battery',
+				'name': {
+					'en': 'Number of devices with battery',
+					'de': 'Anzahl der Geräte mit Batterie',
+					'ru': 'Количество устройств c батареей',
+					'pt': 'Número de dispositivos com bateria',
+					'nl': 'Nummer van apparaten met batterij',
+					'fr': 'Nombre de dispositifs avec batterie',
+					'it': 'Numero di dispositivi con batteria',
+					'es': 'Número de dispositivos con batería',
+					'pl': 'Liczba urządzeń z baterią',
+					'zh-cn': '电池的装置数量'
+				},
 				'type': 'number',
 				'role': 'value',
 				'read': true,
 				'write': false,
-				'def': 0
 			},
 			'native': {}
 		});
@@ -390,21 +489,22 @@ class DeviceWatcher extends utils.Adapter {
 				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 				let deviceName;
 
-				if (deviceObject && typeof deviceObject === 'object') {
-					deviceName = deviceObject.common.name;
-				}
-
-				if  (shortDeviceObject && typeof shortDeviceObject === 'object') {
-					if (this.arrDev[i].adapter === 'hue extended') {
-						deviceName = shortDeviceObject.common.name;
-					}
-				}
-
-				//Get ID for Switchbot and ESPHome Devices
 				switch (this.arrDev[i].adapter) {
-					case 'switchbotBle':
+					case 'switchbotBle':	//Get ID for Switchbot and ESPHome Devices
 					case 'esphome':
 						deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+						break;
+
+					case 'hue-extended':
+						if  (shortDeviceObject && typeof shortDeviceObject === 'object') {
+							deviceName = shortDeviceObject.common.name;
+						}
+						break;
+
+					default:
+						if (deviceObject && typeof deviceObject === 'object') {
+							deviceName = deviceObject.common.name;
+						}
 						break;
 				}
 
@@ -433,9 +533,9 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					this.linkQualityDevices.push(
 						{
-							Device: deviceName,
-							Adapter: deviceAdapterName,
-							Link_quality: linkQuality
+							'Device': deviceName,
+							'Adapter': deviceAdapterName,
+							'Signal strength': linkQuality
 						}
 					);
 				} else {
@@ -506,9 +606,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -516,9 +616,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -529,9 +629,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -539,9 +639,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -552,9 +652,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -562,9 +662,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -575,9 +675,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -585,9 +685,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -598,9 +698,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -608,9 +708,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -621,9 +721,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -631,9 +731,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -644,9 +744,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -654,22 +754,22 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
 								break;
-							case 'hue extended':
+							case 'hue-extended':
 								if (this.config.hueextMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -677,9 +777,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -690,9 +790,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -700,22 +800,22 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
 								break;
-							case 'nuki_extended':
+							case 'nuki-extended':
 								if (this.config.nukiextendMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -723,9 +823,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -736,9 +836,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -746,9 +846,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -759,9 +859,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -769,9 +869,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -782,9 +882,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -792,9 +892,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -805,9 +905,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -815,9 +915,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -828,9 +928,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -838,9 +938,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -851,9 +951,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -861,9 +961,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -874,9 +974,9 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										this.offlineDevices.push(
 											{
-												Device: deviceName,
-												Adapter: deviceAdapterName,
-												Last_contact: lastContactString
+												'Device': deviceName,
+												'Adapter': deviceAdapterName,
+												'Last contact': lastContactString
 											}
 										);
 									}
@@ -884,9 +984,9 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									this.offlineDevices.push(
 										{
-											Device: deviceName,
-											Adapter: deviceAdapterName,
-											Last_contact: lastContactString
+											'Device': deviceName,
+											'Adapter': deviceAdapterName,
+											'Last contact': lastContactString
 										}
 									);
 								}
@@ -921,20 +1021,20 @@ class DeviceWatcher extends utils.Adapter {
 
 							this.batteryPowered.push(
 								{
-									Device: deviceName,
-									Adapter: deviceAdapterName,
-									Battery: batteryHealth
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Battery': batteryHealth
 								}
 							);
 							break;
-						case 'hue extended':
+						case 'hue-extended':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
 								this.batteryPowered.push(
 									{
-										Device: deviceName,
-										Adapter: deviceAdapterName,
-										Battery: batteryHealth
+										'Device': deviceName,
+										'Adapter': deviceAdapterName,
+										'Battery': batteryHealth
 									}
 								);
 							}
@@ -943,9 +1043,9 @@ class DeviceWatcher extends utils.Adapter {
 							batteryHealth = (deviceBatteryState) + '%';
 							this.batteryPowered.push(
 								{
-									Device: deviceName,
-									Adapter: deviceAdapterName,
-									Battery: batteryHealth
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Battery': batteryHealth
 								}
 							);
 					}
@@ -964,9 +1064,9 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) {
 						this.batteryLowPowered.push(
 							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Battery: batteryHealth
+								'Device': deviceName,
+								'Adapter': deviceAdapterName,
+								'Battery': batteryHealth
 							}
 						);
 					}
@@ -974,9 +1074,9 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceLowBatState || deviceLowBatStateHM) {
 						this.batteryLowPowered.push(
 							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Battery: batteryHealth
+								'Device': deviceName,
+								'Adapter': deviceAdapterName,
+								'Battery': batteryHealth
 							}
 						);
 					}
@@ -990,24 +1090,24 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceBatteryState !== null || shortDeviceBatteryState !== null) {
 						this.listAllDevices.push(
 							{
-								Device: deviceName,
-								Adapter: deviceAdapterName,
-								Battery: batteryHealth,
-								Link_quality: linkQuality,
-								Last_contact: lastContactString,
-								Status: deviceState
+								'Device': deviceName,
+								'Adapter': deviceAdapterName,
+								'Battery': batteryHealth,
+								'Signal strength': linkQuality,
+								'Last contact': lastContactString,
+								'Status': deviceState
 							}
 						);
 					}
 				} else if (!this.config.listOnlyBattery) {
 					this.listAllDevices.push(
 						{
-							Device: deviceName,
-							Adapter: deviceAdapterName,
-							Battery: batteryHealth,
-							Link_quality: linkQuality,
-							Last_contact: lastContactString,
-							Status: deviceState
+							'Device': deviceName,
+							'Adapter': deviceAdapterName,
+							'Battery': batteryHealth,
+							'Signal strength': linkQuality,
+							'Last contact': lastContactString,
+							'Status': deviceState
 						}
 					);
 				}
@@ -1154,7 +1254,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				for (const id of this.offlineDevices) {
-					msg = `${msg} \n ${id['Device']} (${id['Last_contact']})`;
+					msg = `${msg} \n ${id['Device']} (${id['Last contact']})`;
 				}
 				this.log.info(msg);
 				await this.setStateAsync('lastNotification', msg, true);
@@ -1253,7 +1353,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		try {
-
 			//Check if the message for low battery was already sent today
 			const lastBatteryNotifyIndicator = await this.getOwnInitValue('info.lastBatteryNotification');
 
@@ -1342,7 +1441,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, {val: this.lowBatteryPoweredCount, ack: true});
 
 			if (this.deviceCounter == 0) {
-				this.listAllDevices       = [{Device: '--keine--', Adapter: '', Battery: '', Last_contact: '', Link_quality: ''}]; //JSON-Info Gesamtliste mit Info je Gerät
+				this.listAllDevices       = [{'Device': '--none--', 'Adapter': '', 'Battery': '', 'Last contact': '', 'Signal strength': ''}]; //JSON-Info Gesamtliste mit Info je Gerät
 
 				await this.setStateAsync(`${dpSubFolder}listAll`, {val: JSON.stringify(this.listAllDevices), ack: true});
 			} else {
@@ -1350,7 +1449,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.linkQualityCount == 0) {
-				this.linkQualityDevices	= [{Device: '--keine--', Adapter: '', Link_quality: ''}]; //JSON-Info alle mit LinkQuality
+				this.linkQualityDevices	= [{'Device': '--none--', 'Adapter': '', 'Signal strength': ''}]; //JSON-Info alle mit LinkQuality
 
 				await this.setStateAsync(`${dpSubFolder}linkQualityList`, {val: JSON.stringify(this.linkQualityDevices), ack: true});
 			} else {
@@ -1359,7 +1458,7 @@ class DeviceWatcher extends utils.Adapter {
 
 
 			if (this.offlineDevicesCount == 0) {
-				this.offlineDevices	= [{Device: '--keine--', Adapter: '', Last_contact: ''}]; //JSON-Info alle offline-Geräte = 0
+				this.offlineDevices	= [{'Device': '--none--', 'Adapter': '', 'Last contact': ''}]; //JSON-Info alle offline-Geräte = 0
 
 				await this.setStateAsync(`${dpSubFolder}offlineList`, {val: JSON.stringify(this.offlineDevices), ack: true});
 			} else {
@@ -1367,7 +1466,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.batteryPoweredCount == 0) {
-				this.batteryPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+				this.batteryPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}]; //JSON-Info alle batteriebetriebenen Geräte
 
 				await this.setStateAsync(`${dpSubFolder}batteryList`, {val: JSON.stringify(this.batteryPowered), ack: true});
 			} else {
@@ -1375,7 +1474,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.lowBatteryPoweredCount == 0) {
-				this.batteryLowPowered	= [{Device: '--keine--', Adapter: '', Battery: ''}]; //JSON-Info alle batteriebetriebenen Geräte
+				this.batteryLowPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}]; //JSON-Info alle batteriebetriebenen Geräte
 
 				await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {val: JSON.stringify(this.batteryLowPowered), ack: true});
 			} else {
