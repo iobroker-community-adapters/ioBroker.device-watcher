@@ -74,8 +74,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.2.1 (2022-07-27)
 - removed test states
 
 ### 0.2.0 (2022-07-24)
