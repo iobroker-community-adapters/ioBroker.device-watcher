@@ -173,6 +173,11 @@
         "connectionType": "local",
         "dataSource": "poll",
         "materialize": true,
+        "plugins": {
+            "sentry": {
+                "dsn": "https://77c117cb4f6e43059424e03819439c24@o1337119.ingest.sentry.io/6606442"
+            }
+        },
         "adminUI": {
             "config": "json"
         },
@@ -185,12 +190,7 @@
             {
                 "admin": ">=5.1.28"
             }
-        ],
-        "plugins": {
-            "sentry": {
-                "dsn": "https://77c117cb4f6e43059424e03819439c24@o1337119.ingest.sentry.io/6606442"
-            }
-        }
+        ]
     },
     "native": {
         "alexa2Devices": false,
