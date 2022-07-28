@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.2.2",
+        "version": "0.2.3",
         "news": {
+            "0.2.3": {
+                "en": "- small fixes in package",
+                "de": "- kleine reparaturen im paket",
+                "ru": "- небольшие исправления в пакете",
+                "pt": "- pequenas correções em pacote",
+                "nl": "- kleine fixes in pakket",
+                "fr": "- petites corrections dans le paquet",
+                "it": "- piccole correzioni in pacchetto",
+                "es": "- pequeñas fijaciones en paquete",
+                "pl": "small fixes in packages",
+                "zh-cn": "- 包件中的小配件"
+              },
             "0.2.2": {
                 "en": "- fixed translations\n- added sentry\n- added nuki battery state",
                 "de": "- feste übersetzungen\n- zusätzliche sendung\n- hinzugefügt nuki batteriezustand",
