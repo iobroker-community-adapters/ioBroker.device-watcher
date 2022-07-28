@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ciddi89/ioBroker.device-watcher.git"
+    "url": "https://github.com/ciddi89/ioBroker.device-watcher.git"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.6.0"
