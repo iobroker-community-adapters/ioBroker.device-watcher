@@ -182,8 +182,6 @@ class DeviceWatcher extends utils.Adapter {
 
 		try {
 			await this.main();
-			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications();
-			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifications();
 			await this.writeDatapoints();
 			this.log.debug('all done, exiting');
 			this.terminate ? this.terminate('Everything done. Going to terminate till next schedule', 11) : process.exit(0);
@@ -1144,6 +1142,9 @@ class DeviceWatcher extends utils.Adapter {
 			await this.createData(i);
 
 		}
+
+		if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications();
+		if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifications();
 		await this.writeDatapoints();
 
 		this.log.debug(`Function finished: ${this.createDataOfAll.name}`);
@@ -1221,7 +1222,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		/*=============================================
-		=            Start of main loop    		   	  =
+		=            Start of main program   	   	  =
 		=============================================*/
 		try {
 			await this.createDataOfAll();
