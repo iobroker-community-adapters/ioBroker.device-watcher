@@ -74,10 +74,11 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.2.2 (2022-07-28)
 - fixed translations
 - added sentry
 - added nuki battery state
+
 ### 0.2.1 (2022-07-27)
 - removed test states
 
