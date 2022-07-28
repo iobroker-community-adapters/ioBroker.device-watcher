@@ -1057,23 +1057,37 @@ class DeviceWatcher extends utils.Adapter {
 				const deviceLowBatState			= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
 				const deviceLowBatStateHM		= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
+				switch (this.arrDev[i].adapter) {
+					case 'homematic':
+						if (deviceLowBatState || deviceLowBatStateHM) {
+							this.batteryLowPowered.push(
+								{
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Battery': batteryHealth
+								}
+							);
+						}
+						break;
 
-				if (deviceLowBatState || deviceLowBatStateHM) {
-					this.batteryLowPowered.push(
-						{
-							'Device': deviceName,
-							'Adapter': deviceAdapterName,
-							'Battery': batteryHealth
+					default:
+						if (deviceLowBatState) {
+							this.batteryLowPowered.push(
+								{
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Battery': batteryHealth
+								}
+							);
+						} else if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) {
+							this.batteryLowPowered.push(
+								{
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Battery': batteryHealth
+								}
+							);
 						}
-					);
-				} else if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) {
-					this.batteryLowPowered.push(
-						{
-							'Device': deviceName,
-							'Adapter': deviceAdapterName,
-							'Battery': batteryHealth
-						}
-					);
 				}
 
 				// 3d. Count how many devices are with low battery
