@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "news": {
+            "0.2.2": {
+                "en": "- fixed translations\n- added sentry\n- added nuki battery state",
+                "de": "- feste übersetzungen\n- zusätzliche sendung\n- hinzugefügt nuki batteriezustand",
+                "ru": "- фиксированные переводы\n- добавлена отправка\n- добавлено состояние батареи nuki",
+                "pt": "- traduções fixas\n- enviado adicionado\n- adicionado estado da bateria nuki",
+                "nl": "vertaling:\n- vertaling:\n- vertaling:",
+                "fr": "- traductions fixes\n- envoi ajouté\n- l'état de la batterie nuki ajouté",
+                "it": "- traduzioni fisse\n- invio aggiunto\n- stato della batteria nuki aggiunto",
+                "es": "- traducciones fijas\n- centinela agregada\n- estado de batería de nuki añadido",
+                "pl": "- poprawne tłumaczenia\n- dodanie\n- dodanie stanu nuki",
+                "zh-cn": "- 固定翻译\n- 增派送\n- 增加电池国"
+              },
             "0.2.1": {
                 "en": "- removed test states",
                 "de": "- entfernte testzustände",
