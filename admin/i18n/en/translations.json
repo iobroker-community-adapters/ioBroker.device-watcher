@@ -52,16 +52,16 @@
 	"Add own notes, name, etc": "Add own notes, name, etc",
 	"List only devices with battery": "List only devices with battery",
 	"Choose if only devices with battery should be listed or all devices": "Choose if only devices with battery should be listed or all devices",
-	"Use the true state from quality state, otherwise it will be converted in percent value.": "Use the true state from quality state, otherwise it will be converted in percent value.",
 	"Offline Time": "Offline Time",
-	"Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.": "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.",
+	"Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.": "Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.",
 	"Choose the day(s) where you want to get the message of low battery:": "Choose the day(s) where you want to get the message of low battery:",
 	"Offline message":"Offline message",
 	"Battery message":"Battery message",
 	"Notification Service":"Notification Service",
-	"Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.":"Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.",
+	"Here you can choose your notification service, you can use more than one service, but you can also leave all blank, then only the datapoint lastNotification will be filled.": "Here you can choose your notification service, you can use more than one service, but you can also leave all blank, then only the datapoint lastNotification will be filled.",
 	"Choose your notification services":"Choose your notification services",
 	"If you like to have for every Adapter an own folder with own data":"If you like to have for every Adapter an own folder with own data",
 	"Please choose":"Please choose",
-	"Create own folders for each adapter":"Create own folders for each adapter"
+	"Create own folders for each adapter":"Create own folders for each adapter",
+	"Use the true value of the signal strength, or it is converted to %": "Use the true value of the signal strength, Or it is converted to %"
 }

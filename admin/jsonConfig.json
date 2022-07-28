@@ -231,7 +231,7 @@
                 },
                 "msgServiceText": {
                     "type": "staticText",
-                    "text": "Here you can choose your notification service. You can use more than one service. But you can also leave all blank, then only the datapoint lastNotification will be filled.",
+                    "text": "Here you can choose your notification service, you can use more than one service, but you can also leave all blank, then only the datapoint lastNotification will be filled.",
                     "style": {
                         "fontSize": 16,
                         "marginTop": 20
@@ -543,7 +543,7 @@
                     "md": 6,
                     "lg": 4,
                     "label": "True State",
-                    "help": "Use the true state from quality state, otherwise it will be converted in percent value."
+                    "help": "Use the true value of the signal strength, or it is converted to %"
                 },
                 "listOnlyBattery": {
                     "type": "checkbox",
@@ -568,7 +568,7 @@
                 },
                 "textOfflineTime": {
                     "type": "staticText",
-                    "text": "Here you can choose the offline time of devices for each adapter. The device is considered offline after the specified time. If set to '-1', the adapter will use the datapoint available, reachable, alive etc. when the device has one of these.",
+                    "text": "Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.",
                     "sm": 12,
                     "md": 12,
                     "lg": 12,
