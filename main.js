@@ -70,7 +70,7 @@ class DeviceWatcher extends utils.Adapter {
 				'adapter':'zigbee',
 				'battery':'.battery',
 				'reach':'.available',
-				'isLowBat':'none'
+				'isLowBat':'.battery_low'
 			},
 			sonoff: 		{
 				'Selektor':'sonoff.*.Uptime',
@@ -1058,26 +1058,22 @@ class DeviceWatcher extends utils.Adapter {
 				const deviceLowBatStateHM		= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 
-				if (this.arrDev[i].isLowBat === 'none') {
-					if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) {
-						this.batteryLowPowered.push(
-							{
-								'Device': deviceName,
-								'Adapter': deviceAdapterName,
-								'Battery': batteryHealth
-							}
-						);
-					}
-				} else {
-					if (deviceLowBatState || deviceLowBatStateHM) {
-						this.batteryLowPowered.push(
-							{
-								'Device': deviceName,
-								'Adapter': deviceAdapterName,
-								'Battery': batteryHealth
-							}
-						);
-					}
+				if (deviceLowBatState || deviceLowBatStateHM) {
+					this.batteryLowPowered.push(
+						{
+							'Device': deviceName,
+							'Adapter': deviceAdapterName,
+							'Battery': batteryHealth
+						}
+					);
+				} else if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) {
+					this.batteryLowPowered.push(
+						{
+							'Device': deviceName,
+							'Adapter': deviceAdapterName,
+							'Battery': batteryHealth
+						}
+					);
 				}
 
 				// 3d. Count how many devices are with low battery
@@ -1189,7 +1185,7 @@ class DeviceWatcher extends utils.Adapter {
 			switchbotBle: 	this.config.switchbotBleDevices,
 			sonos: 			this.config.sonosDevices,
 			mihome:			this.config.mihomeDevices,
-			mihomeGW:		this.config.mihomeDevices,
+			mihomeGW:		this.config.mihomeDevices
 		};
 
 		for(const [id] of Object.entries(this.arrApart)) {
