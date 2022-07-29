@@ -212,6 +212,13 @@ class DeviceWatcher extends utils.Adapter {
 
 	//Notification services
 	async sendPushover(text) {
+		const pushoverAliveState = await this.getInitValue('system.adapter.' + this.config.instancePushover + '.alive');
+
+		if (!pushoverAliveState) {
+			this.log.warn('Pushover instance is not running. Message could not be sent. Please check your instance configuration.');
+			return;
+		}
+
 		await this.sendToAsync(this.config.instancePushover, 'send', {
 			message: text,
 			title: this.config.titlePushover,
@@ -221,6 +228,12 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async sendTelegram(text) {
+		const telegramAliveState = await this.getInitValue('system.adapter.' + this.config.instanceTelegram + '.alive');
+		if (!telegramAliveState) {
+			this.log.warn('Telegram instance is not running. Message could not be sent. Please check your instance configuration.');
+			return;
+		}
+
 		await this.sendToAsync(this.config.instanceTelegram, 'send', {
 			text: text,
 			user: this.config.deviceTelegram,
@@ -229,6 +242,13 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async sendWhatsapp(text) {
+		const whatsappAliveState = await this.getInitValue('system.adapter.' + this.config.instanceWhatsapp + '.alive');
+
+		if (!whatsappAliveState) {
+			this.log.warn('Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.');
+			return;
+		}
+
 		await this.sendToAsync(this.config.instanceWhatsapp, 'send', {
 			text: text,
 			phone: this.config.phoneWhatsapp
@@ -236,6 +256,13 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async sendEmail(text) {
+		const eMailAliveState = await this.getInitValue('system.adapter.' + this.config.instanceEmail + '.alive');
+
+		if (!eMailAliveState) {
+			this.log.warn('eMail instance is not running. Message could not be sent. Please check your instance configuration.');
+			return;
+		}
+
 		await this.sendToAsync(this.config.instanceEmail, 'send', {
 			sendTo: this.config.sendToEmail,
 			text: text,
@@ -244,11 +271,25 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async sendJarvis(text) {
+		const jarvisAliveState = await this.getInitValue('system.adapter.' + this.config.instanceJarvis + '.alive');
+
+		if (!jarvisAliveState) {
+			this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
+			return;
+		}
+
 		await this.setForeignStateAsync(`${this.config.instanceJarvis}.addNotification`, text);
 
 	}
 
 	async sendLovelace(text) {
+		const lovelaceAliveState = await this.getInitValue('system.adapter.' + this.config.instanceLovelace + '.alive');
+
+		if (!lovelaceAliveState) {
+			this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
+			return;
+		}
+
 		await this.setForeignStateAsync(`${this.config.instanceLovelace}.notifications.add`, text);
 
 	}
