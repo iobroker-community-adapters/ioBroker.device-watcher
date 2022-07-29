@@ -1,5 +1,7 @@
 {
-    "device-watcher adapter settings": "Настройки адаптера для устройства-наблюдателя",
+    "device-watcher adapter settings": "Настройки адаптера для device-watcher",
+    "option1": "Опция 1",
+    "option2": "вариант 2",
     "Choose devices to watch": "Выберите устройства для просмотра",
     "Other Settings": "Другие настройки",
     "True State": "Истинное состояние",

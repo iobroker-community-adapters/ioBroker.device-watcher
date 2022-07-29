@@ -14,7 +14,7 @@
                 "es": "- traducciones fijas\n- centinela agregada\n- estado de batería de nuki añadido",
                 "pl": "- poprawne tłumaczenia\n- dodanie\n- dodanie stanu nuki",
                 "zh-cn": "- 固定翻译\n- 增派送\n- 增加电池国"
-              },
+            },
             "0.2.1": {
                 "en": "- removed test states",
                 "de": "- entfernte testzustände",
@@ -137,25 +137,28 @@
             "zh-cn": "设备观察者"
         },
         "desc": {
-            "en": "Watchdog for wireless devices",
-            "de": "Watchdog für drahtlose Geräte",
-            "ru": "Сторожевой таймер для беспроводных устройств",
-            "pt": "Watchdog para dispositivos sem fio",
-            "nl": "Watchdog voor draadloze apparaten",
-            "fr": "Chien de garde pour les appareils sans fil",
-            "it": "Watchdog per dispositivi wireless",
-            "es": "Watchdog para dispositivos inalámbricos",
-            "pl": "Watchdog dla urządzeń bezprzewodowych",
-            "zh-cn": "无线设备看门狗"
+            "en": "Watchdog for devices",
+            "de": "Watchdog für Geräte",
+            "ru": "Сторожевой таймер для устройств",
+            "pt": "Watchdog para dispositivos",
+            "nl": "Waakhond voor apparaten",
+            "fr": "Chien de garde pour les appareils",
+            "it": "Watchdog per i dispositivi",
+            "es": "Vigilancia de dispositivos",
+            "pl": "Watchdog dla urządzeń",
+            "zh-cn": "设备看门狗"
         },
         "authors": [
             "Christian Behrends <mail@christian-behrends.de>"
         ],
         "keywords": [
-            "watchdog",
-            "devices",
-            "wireless",
-            "watcher"
+            "device",
+            "watcher",
+            "device-watcher",
+            "battery",
+            "rssi",
+            "link-quality",
+            "lists"
         ],
         "license": "MIT",
         "platform": "Javascript/Node.js",

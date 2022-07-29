@@ -1,5 +1,7 @@
 {
-    "device-watcher adapter settings": "Adapterinstellingen voor apparaat-watcher",
+    "device-watcher adapter settings": "Adapterinstellingen voor device-watcher",
+    "option1": "Optie 1",
+    "option2": "Optie 2",
     "Choose devices to watch": "Kies apparaten om naar te kijken",
     "Other Settings": "Andere instellingen",
     "True State": "Ware staat",

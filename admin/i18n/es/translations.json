@@ -1,5 +1,7 @@
 {
-    "device-watcher adapter settings": "Configuración del adaptador para el observador de dispositivos",
+    "device-watcher adapter settings": "Ajustes del adaptador para device-watcher",
+    "option1": "Opción 1",
+    "option2": "opcion 2",
     "Choose devices to watch": "Elige dispositivos para mirar",
     "Other Settings": "Otros ajustes",
     "True State": "Estado verdadero",
@@ -53,7 +55,7 @@
     "List only devices with battery": "Listar solo dispositivos con batería",
     "Choose if only devices with battery should be listed or all devices": "Elija si solo deben aparecer en la lista los dispositivos con batería o todos los dispositivos",
     "Offline Time": "Tiempo fuera de línea",
-    "Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.": "Aquí puede elegir el tiempo fuera de línea de los dispositivos para cada adaptador, el dispositivo se considera fuera de línea después del tiempo especificado, si se establece en '-1', el adaptador utilizará el punto de datos disponible, accesible, activo, etc. cuando el dispositivo tenga uno de estos ",
+    "Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.": "Aquí puede elegir el tiempo fuera de línea de los dispositivos para cada adaptador, el dispositivo se considera fuera de línea después del tiempo especificado, si se establece en '-1', el adaptador utilizará el punto de datos disponible, accesible, vivo, etc. cuando el dispositivo tenga uno de estos ",
     "Choose the day(s) where you want to get the message of low battery:": "Elige el/los día(s) en los que quieres recibir el mensaje de batería baja:",
     "Offline message": "Mensaje fuera de línea",
     "Battery message": "Mensaje de batería",
