@@ -506,6 +506,11 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 				}
 
+				const deviceMainSelector = await this.getForeignStateAsync(id);
+				// 3. Get battery states
+				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+
 				// 1. Get link quality
 				let deviceQualityState;
 				let linkQuality;
@@ -529,13 +534,25 @@ class DeviceWatcher extends utils.Adapter {
 							linkQuality = parseFloat((100/255 * deviceQualityState.val).toFixed(0)) + '%';
 						}
 					}
-					this.linkQualityDevices.push(
-						{
-							'Device': deviceName,
-							'Adapter': deviceAdapterName,
-							'Signal strength': linkQuality
+					if (this.config.listOnlyBattery) {
+						if (deviceBatteryState || shortDeviceBatteryState) {
+							this.linkQualityDevices.push(
+								{
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Signal strength': linkQuality
+								}
+							);
 						}
-					);
+					} else {
+						this.linkQualityDevices.push(
+							{
+								'Device': deviceName,
+								'Adapter': deviceAdapterName,
+								'Signal strength': linkQuality
+							}
+						);
+					}
 				} else {
 				// no linkQuality available for powered devices
 					linkQuality = ' - ';
@@ -546,11 +563,6 @@ class DeviceWatcher extends utils.Adapter {
 
 				// 2. When was the last contact to the device?
 				let lastContactString;
-
-				const deviceMainSelector = await this.getForeignStateAsync(id);
-				// 3. Get battery states
-				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 
 				let deviceState = 'Online';
 				if (deviceMainSelector) {
