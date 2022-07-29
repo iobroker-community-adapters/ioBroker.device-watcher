@@ -548,6 +548,10 @@ class DeviceWatcher extends utils.Adapter {
 				let lastContactString;
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
+				// 3. Get battery states
+				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+
 				let deviceState = 'Online';
 				if (deviceMainSelector) {
 					try {
@@ -819,8 +823,6 @@ class DeviceWatcher extends utils.Adapter {
 				this.offlineDevicesCount = this.offlineDevices.length;
 
 				// 3. Get battery states
-				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 				let batteryHealth;
 
 				if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
