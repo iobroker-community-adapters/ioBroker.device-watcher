@@ -597,7 +597,7 @@ class DeviceWatcher extends utils.Adapter {
 								break;
 						}
 
-						const pushOfflineDevice = () => {
+						const pushOfflineDevice = async () => {
 							if (this.config.listOnlyBattery) {	//if checked, list only battery devices
 								if (deviceBatteryState || shortDeviceBatteryState) {
 									this.offlineDevices.push(
@@ -624,187 +624,187 @@ class DeviceWatcher extends utils.Adapter {
 								if (this.config.alexa2MaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.alexa2MaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'ble':
 								if (this.config.bleMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.bleMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'deconz':
 								if (this.config.deconzMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.deconzMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'esphome':
 								if (this.config.esphomeMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.esphomeMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'fritzDect':
 								if (this.config.fritzdectMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.fritzdectMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'homematic':
 								if (this.config.homematicMaxMinutes === -1) {
 									if (deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.homematicMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'hue':
 								if (this.config.hueMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.hueMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'hue-extended':
 								if (this.config.hueextMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.hueextMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'miHome':
 								if (this.config.mihomeMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.mihomeMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'nuki-extended':
 								if (this.config.nukiextendMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.nukiextendMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'ping':
 								if (this.config.pingMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if ((lastStateChange > this.config.pingMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'shelly':
 								if (this.config.shellyMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.shellyMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'sonoff':
 								if (this.config.sonoffMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.sonoffMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'sonos':
 								if (this.config.sonosMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.sonosMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'switchbotBle':
 								if (this.config.switchbotMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.switchbotMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'zigbee':
 								if (this.config.zigbeeMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.zigbeeMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 							case 'zwave':
 								if (this.config.zwaveMaxMinutes === -1) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										pushOfflineDevice();
+										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.zwaveMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
-									pushOfflineDevice();
+									await pushOfflineDevice();
 								}
 								break;
 						}
