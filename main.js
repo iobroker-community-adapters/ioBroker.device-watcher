@@ -236,14 +236,6 @@ class DeviceWatcher extends utils.Adapter {
 				return; // cancel run if no adapter is selected
 			}
 
-			// creating counts and lists of all selected adapter
-			try {
-				await this.createDataOfAllAdapter();
-				this.log.debug(`Created and filled data for all adapters`);
-			} catch (error) {
-				this.errorReporting('[main - create data of all adapter]', error);
-			}
-
 			//create and fill datapoints for each adapter if selected
 			try {
 				for(const [id] of Object.entries(this.arrApart)) {
@@ -260,6 +252,15 @@ class DeviceWatcher extends utils.Adapter {
 			} catch (error) {
 				this.errorReporting('[main - create and fill datapoints for each adapter]', error);
 			}
+
+			// creating counts and lists of all selected adapter
+			try {
+				await this.createDataOfAllAdapter();
+				this.log.debug(`Created and filled data for all adapters`);
+			} catch (error) {
+				this.errorReporting('[main - create data of all adapter]', error);
+			}
+
 		} catch (error) {
 			this.errorReporting('[main]', error);
 		}
