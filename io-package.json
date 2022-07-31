@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.2.3",
+        "version": "0.2.4",
         "news": {
+            "0.2.4": {
+                "en": "many changes of code, comments and error handling",
+                "de": "viele änderungen von code, kommentaren und fehlerbehandlung",
+                "ru": "много изменений кода, комментариев и обработки ошибок",
+                "pt": "muitas mudanças de código, comentários e manipulação de erros",
+                "nl": "veel veranderingen van code, commentaar en fouten",
+                "fr": "de nombreux changements de code, de commentaires et de traitement des erreurs",
+                "it": "molte modifiche di codice, commenti e gestione degli errori",
+                "es": "muchos cambios de código, comentarios y manejo de errores",
+                "pl": "wiele zmian kodu, komentarzy i obsługi błędów",
+                "zh-cn": "守则、评论和错误处理的许多变化"
+            },
             "0.2.3": {
                 "en": "many changes of code, comments and error handling",
                 "de": "viele änderungen von code, kommentaren und fehlerbehandlung",
