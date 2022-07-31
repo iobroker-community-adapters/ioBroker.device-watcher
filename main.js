@@ -7,6 +7,9 @@
 const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 
+// Sentry error reporting, disable when testing code!
+const enableSendSentry = false;
+
 class DeviceWatcher extends utils.Adapter {
 
 	constructor(options) {
@@ -39,7 +42,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPoweredCount 		= 0;
 		this.lowBatteryPoweredCount		= 0;
 
-		this.deviceReachable	= '';
+		this.deviceReachable		= '';
 
 		// arrays of supported adapters
 		this.arrApart = {
@@ -185,116 +188,117 @@ class DeviceWatcher extends utils.Adapter {
 			await this.writeDatapoints();
 			this.log.debug('all done, exiting');
 			this.terminate ? this.terminate('Everything done. Going to terminate till next schedule', 11) : process.exit(0);
-		} catch (e) {
-			this.log.error(`Error while running Device-Watcher. Error Message: ${e}`);
+		} catch (error) {
+			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
 	}
 
-	//Helpfunctions
+
+	async main() {
+		this.log.debug(`Function started: ${this.main.name}`);
+
+		try {
+			this.supAdapter = {
+				alexa2:			this.config.alexa2Devices,
+				esphome:		this.config.esphomeDevices,
+				zigbee: 		this.config.zigbeeDevices,
+				ble: 			this.config.bleDevices,
+				sonoff: 		this.config.sonoffDevices,
+				shelly: 		this.config.shellyDevices,
+				homematic: 		this.config.homematicDevices,
+				deconz:			this.config.deconzDevices,
+				zwave: 			this.config.zwaveDevices,
+				dect: 			this.config.dectDevices,
+				hue: 			this.config.hueDevices,
+				hueExt: 		this.config.hueExtDevices,
+				nukiExt: 		this.config.nukiExtDevices,
+				ping: 			this.config.pingDevices,
+				switchbotBle: 	this.config.switchbotBleDevices,
+				sonos: 			this.config.sonosDevices,
+				mihome:			this.config.mihomeDevices,
+				mihomeGW:		this.config.mihomeDevices
+			};
+
+			for(const [id] of Object.entries(this.arrApart)) {
+				if (this.supAdapter[id]) {
+					this.arrDev.push(this.arrApart[id]);
+					this.adapterSelected.push(await this.capitalize(id));
+					this.log.debug(JSON.stringify(this.arrDev));
+				}
+			}
+
+			//Check if an Adapter is selected.
+			if (this.adapterSelected.length >= 1) {
+				this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${(this.adapterSelected).join(', ')} ...`);
+			} else {
+				this.log.warn(`No adapter selected. Please check the instance configuration!`);
+				return; // cancel run if no adapter is selected
+			}
+
+			// creating counts and lists of all selected adapter
+			try {
+				await this.createDataOfAllAdapter();
+				this.log.debug(`Created and filled data for all adapters`);
+			} catch (error) {
+				this.errorReporting('[main - create data of all adapter]', error);
+			}
+
+			//create and fill datapoints for each adapter if selected
+			try {
+				for(const [id] of Object.entries(this.arrApart)) {
+					if (this.supAdapter[id]) {
+
+						if (this.config.createOwnFolder) {
+							await this.createDPsForEachAdapter(id);
+							this.log.debug(`Created datapoints for ${await this.capitalize(id)}`);
+							await this.createDataForEachAdapter(id);
+							this.log.debug(`Created and filled data for each adapter`);
+						}
+					}
+				}
+			} catch (error) {
+				this.errorReporting('[main - create and fill datapoints for each adapter]', error);
+			}
+		} catch (error) {
+			this.errorReporting('[main]', error);
+		}
+
+		this.log.debug(`Function finished: ${this.main.name}`);
+	} //<--End of main function
+
+
+	/**
+     * @param {string} [sentence] - Word which should be capitalize
+     **/
 	async capitalize(sentence)
 	{
 		//make the first letter uppercase
 		return sentence && sentence[0].toUpperCase() + sentence.slice(1);
 	}
 
+	/**
+     * @param {object} [obj] - State of datapoint
+     **/
 	async getInitValue(obj) {
 		//state can be null or undefinded
 		const foreignState = await this.getForeignStateAsync(obj);
 		if (foreignState) return foreignState.val;
 	}
 
+	/**
+     * @param {object} [obj] - State of own datapoint
+     **/
 	async getOwnInitValue(obj) {
 		//state can be null or undefinded for own states
 		const stateVal = await this.getStateAsync(obj);
 		if (stateVal) return stateVal.val;
 	}
 
-	//Notification services
-	async sendPushover(text) {
-		const pushoverAliveState = await this.getInitValue('system.adapter.' + this.config.instancePushover + '.alive');
-
-		if (!pushoverAliveState) {
-			this.log.warn('Pushover instance is not running. Message could not be sent. Please check your instance configuration.');
-			return;
-		}
-
-		await this.sendToAsync(this.config.instancePushover, 'send', {
-			message: text,
-			title: this.config.titlePushover,
-			device: this.config.devicePushover,
-			priority: this.config.prioPushover
-		});
-	}
-
-	async sendTelegram(text) {
-		const telegramAliveState = await this.getInitValue('system.adapter.' + this.config.instanceTelegram + '.alive');
-		if (!telegramAliveState) {
-			this.log.warn('Telegram instance is not running. Message could not be sent. Please check your instance configuration.');
-			return;
-		}
-
-		await this.sendToAsync(this.config.instanceTelegram, 'send', {
-			text: text,
-			user: this.config.deviceTelegram,
-			chatId: this.config.chatIdTelegram
-		});
-	}
-
-	async sendWhatsapp(text) {
-		const whatsappAliveState = await this.getInitValue('system.adapter.' + this.config.instanceWhatsapp + '.alive');
-
-		if (!whatsappAliveState) {
-			this.log.warn('Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.');
-			return;
-		}
-
-		await this.sendToAsync(this.config.instanceWhatsapp, 'send', {
-			text: text,
-			phone: this.config.phoneWhatsapp
-		});
-	}
-
-	async sendEmail(text) {
-		const eMailAliveState = await this.getInitValue('system.adapter.' + this.config.instanceEmail + '.alive');
-
-		if (!eMailAliveState) {
-			this.log.warn('eMail instance is not running. Message could not be sent. Please check your instance configuration.');
-			return;
-		}
-
-		await this.sendToAsync(this.config.instanceEmail, 'send', {
-			sendTo: this.config.sendToEmail,
-			text: text,
-			subject: this.config.subjectEmail
-		});
-	}
-
-	async sendJarvis(text) {
-		const jarvisAliveState = await this.getInitValue('system.adapter.' + this.config.instanceJarvis + '.alive');
-
-		if (!jarvisAliveState) {
-			this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
-			return;
-		}
-
-		await this.setForeignStateAsync(`${this.config.instanceJarvis}.addNotification`, text);
-
-	}
-
-	async sendLovelace(text) {
-		const lovelaceAliveState = await this.getInitValue('system.adapter.' + this.config.instanceLovelace + '.alive');
-
-		if (!lovelaceAliveState) {
-			this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
-			return;
-		}
-
-		await this.setForeignStateAsync(`${this.config.instanceLovelace}.notifications.add`, text);
-
-	}
-
 	//create datapoints for each adapter
+	/**
+     * @param {object} [adptName] - Adaptername of devices
+     **/
 	async createDPsForEachAdapter(adptName) {
 
 		await this.setObjectNotExistsAsync(`${adptName}`, {
@@ -505,6 +509,9 @@ class DeviceWatcher extends utils.Adapter {
 		});
 	}
 
+	/**
+     * @param {object} [i] - Device Object
+     **/
 	async createData(i) {
 		const devices 			= await this.getForeignStatesAsync(this.arrDev[i].Selektor);
 		const deviceAdapterName = await this.capitalize(this.arrDev[i].adapter);
@@ -520,18 +527,18 @@ class DeviceWatcher extends utils.Adapter {
 		for(const [id] of Object.entries(devices)) {
 			if (!this.blacklistArr.includes(id)) {
 
-				const currDeviceString    	= id.slice(0, (id.lastIndexOf('.') + 1) - 1);
-				const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
+				this.currDeviceString    	= id.slice(0, (id.lastIndexOf('.') + 1) - 1);
+				this.shortCurrDeviceString 	= this.currDeviceString.slice(0, (this.currDeviceString.lastIndexOf('.') + 1) - 1);
 
 				//Get device name
-				const deviceObject = await this.getForeignObjectAsync(currDeviceString);
-				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
+				const deviceObject = await this.getForeignObjectAsync(this.currDeviceString);
+				const shortDeviceObject = await this.getForeignObjectAsync(this.shortCurrDeviceString);
 				let deviceName;
 
 				switch (this.arrDev[i].adapter) {
 					case 'switchbotBle':	//Get ID for Switchbot and ESPHome Devices
 					case 'esphome':
-						deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+						deviceName = await this.getInitValue(this.currDeviceString + this.arrDev[i].id);
 						break;
 
 					case 'hue-extended':
@@ -549,8 +556,8 @@ class DeviceWatcher extends utils.Adapter {
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
 				// 3. Get battery states
-				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+				const deviceBatteryState		= await this.getInitValue(this.currDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState	= await this.getInitValue(this.shortCurrDeviceString + this.arrDev[i].battery);
 
 				// 1. Get link quality
 				let deviceQualityState;
@@ -559,7 +566,7 @@ class DeviceWatcher extends utils.Adapter {
 				switch (this.arrDev[i].adapter) {
 					case 'homematic':
 					case 'sonoff':
-						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(this.currDeviceString + this.arrDev[i].rssiState);
 						break;
 					default:
 						deviceQualityState = await this.getForeignStateAsync(id);
@@ -611,7 +618,7 @@ class DeviceWatcher extends utils.Adapter {
 						const time = new Date();
 						const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
 						const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
-						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
+						const deviceUnreachState = await this.getInitValue(this.currDeviceString + this.arrDev[i].reach);
 
 
 						const getLastContact = async () => {
@@ -638,7 +645,6 @@ class DeviceWatcher extends utils.Adapter {
 
 						// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 						//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
-						//lastContactString = Math.round(lastContact) + ' Minuten';
 						switch (this.arrDev[i].adapter) {
 							case 'ping':
 								//State changed
@@ -865,8 +871,8 @@ class DeviceWatcher extends utils.Adapter {
 								}
 								break;
 						}
-					} catch (e) {
-						this.log.error(`(03) Error while getting timestate ${e}`);
+					} catch (error) {
+						this.errorReporting('[getLastContact]', error);
 					}
 				}
 
@@ -927,8 +933,8 @@ class DeviceWatcher extends utils.Adapter {
 
 				// 3c. Count how many devices are with low battery
 				const batteryWarningMin 		= this.config.minWarnBatterie;
-				const deviceLowBatState			= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
-				const deviceLowBatStateHM		= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
+				const deviceLowBatState			= await this.getInitValue(this.currDeviceString + this.arrDev[i].isLowBat);
+				const deviceLowBatStateHM		= await this.getInitValue(this.currDeviceString + this.arrDev[i].isLowBat2);
 
 				switch (this.arrDev[i].adapter) {
 					case 'homematic':
@@ -996,132 +1002,182 @@ class DeviceWatcher extends utils.Adapter {
 				// 4a. Count how many devices are exists
 				this.deviceCounter = this.listAllDevices.length;
 			}
-		} //<--End of second loop
-	}
+		} // <-- end of loop
+	} // <-- end of createData
 
-	async createDataForEachAdpt(adptName) {
-		this.log.debug(`Function started: ${this.createDataForEachAdpt.name}`);
-		await this.resetVars();
 
-		for (let i = 0; i < this.arrDev.length; i++) {
+	/**
+     * @param {string} [adptName] - Adapter name
+     */
+	async createDataForEachAdapter(adptName) {
+		// create Data for each Adapter in own lists
+		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
 
-			if (this.arrDev[i].adapter.includes(adptName)) {
-				await this.createData(i);
-			}
+		try {
+			await this.resetVars(); // reset the arrays and counts
 
-		}
-		await this.writeDatapoints(adptName);
+			for (let i = 0; i < this.arrDev.length; i++) {
 
-		this.log.debug(`Function finished: ${this.createDataForEachAdpt.name}`);
-	}
-
-	async createDataOfAll() {
-		this.log.debug(`Function started: ${this.createDataOfAll.name}`);
-		await this.resetVars();
-
-		for (let i = 0; i < this.arrDev.length; i++) {
-
-			await this.createData(i);
-
-		}
-
-		if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications();
-		if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifications();
-		await this.writeDatapoints();
-
-		this.log.debug(`Function finished: ${this.createDataOfAll.name}`);
-	}
-
-	async resetVars() {
-		// arrays
-		this.offlineDevices 		= [],
-		this.linkQualityDevices 	= [];
-		this.batteryPowered 		= [];
-		this.batteryLowPowered 		= [];
-		this.listAllDevices 		= [];
-
-		// counts
-		this.offlineDevicesCount		= 0;
-		this.deviceCounter				= 0;
-		this.linkQualityCount			= 0;
-		this.batteryPoweredCount 		= 0;
-		this.lowBatteryPoweredCount		= 0;
-
-		this.deviceReachable	= '';
-	}
-
-	async main() {
-		this.log.debug(`Function started: ${this.main.name}`);
-
-		this.supAdapter = {
-			alexa2:			this.config.alexa2Devices,
-			esphome:		this.config.esphomeDevices,
-			zigbee: 		this.config.zigbeeDevices,
-			ble: 			this.config.bleDevices,
-			sonoff: 		this.config.sonoffDevices,
-			shelly: 		this.config.shellyDevices,
-			homematic: 		this.config.homematicDevices,
-			deconz:			this.config.deconzDevices,
-			zwave: 			this.config.zwaveDevices,
-			dect: 			this.config.dectDevices,
-			hue: 			this.config.hueDevices,
-			hueExt: 		this.config.hueExtDevices,
-			nukiExt: 		this.config.nukiExtDevices,
-			ping: 			this.config.pingDevices,
-			switchbotBle: 	this.config.switchbotBleDevices,
-			sonos: 			this.config.sonosDevices,
-			mihome:			this.config.mihomeDevices,
-			mihomeGW:		this.config.mihomeDevices
-		};
-
-		for(const [id] of Object.entries(this.arrApart)) {
-			if (this.supAdapter[id]) {
-				this.arrDev.push(this.arrApart[id]);
-				this.adapterSelected.push(await this.capitalize(id));
-				this.log.debug(JSON.stringify(this.arrDev));
-
-				//create and fill datapoints for each adapter if selected
-				if (this.config.createOwnFolder) {
-					try {
-						await this.createDPsForEachAdapter(id);
-						this.log.debug(`Created datapoints for ${await this.capitalize(id)}`);
-						await this.createDataForEachAdpt(id);
-						this.log.debug(`Created and filled data for each adapter`);
-					} catch (e) {
-						this.log.warn(`Error at creating/filling datapoints for each adapter: ${e}`);
-						return;
-					}
+				if (this.arrDev[i].adapter.includes(adptName)) { // list device only if selected adapter matched with device
+					await this.createData(i);
 				}
 			}
+			await this.writeDatapoints(adptName); // fill the datapoints
+		} catch (error) {
+			this.errorReporting('[createDataForEachAdapter]', error);
 		}
 
-		//Check if an Adapter is selected.
-		if (this.adapterSelected.length >= 1) {
-			this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${(this.adapterSelected).join(', ')} ...`);
-		} else {
-			this.log.warn(`No adapter selected. Please check the instance configuration!`);
-			return;
-		}
+		this.log.debug(`Function finished: ${this.createDataForEachAdapter.name}`);
+	} // <-- end of createDataForEachAdapter
 
-		/*=============================================
-		=            Start of main program   	   	  =
-		=============================================*/
+	async createDataOfAllAdapter() {
+		// create Data of all selected adapter in one list
+		this.log.debug(`Function started: ${this.createDataOfAllAdapter.name}`);
+
 		try {
-			await this.createDataOfAll();
-			this.log.debug(`Created and filled data for all adapters`);
-		} catch (e) {
-			this.log.warn(`Error at creating/filling datapoints for all adapters: ${e}`);
-			return;
+			await this.resetVars(); // reset the arrays and counts
+
+			for (let i = 0; i < this.arrDev.length; i++) {
+
+				await this.createData(i);
+
+			}
+
+			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications(); // send message if new devices are offline
+			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifications(); // send message for low battery devices
+			await this.writeDatapoints(); // fill the datapoints
+		} catch (error) {
+			this.errorReporting('[createDataOfAllAdapter]', error);
 		}
 
-		this.log.debug(`Function finished: ${this.main.name}`);
-	} //<--End of main function
+		this.log.debug(`Function finished: ${this.createDataOfAllAdapter.name}`);
+	} // <-- end of createDataOfAllAdapter
+
+
+	/**
+	 * Notification service
+     * @param {string} [text] - Text which should be send
+     **/
+	async sendNotification(text) {
+
+		// Pushover
+		try {
+			if (this.config.instancePushover) {
+				//first check if instance is living
+				const pushoverAliveState = await this.getInitValue('system.adapter.' + this.config.instancePushover + '.alive');
+
+				if (!pushoverAliveState) {
+					this.log.warn('Pushover instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					await this.sendToAsync(this.config.instancePushover, 'send', {
+						message: text,
+						title: this.config.titlePushover,
+						device: this.config.devicePushover,
+						priority: this.config.prioPushover
+					});
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Pushover]', error);
+		}
+
+		// Telegram
+		try {
+			if (this.config.instanceTelegram) {
+				//first check if instance is living
+				const telegramAliveState = await this.getInitValue('system.adapter.' + this.config.instanceTelegram + '.alive');
+
+				if (!telegramAliveState) {
+					this.log.warn('Telegram instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					await this.sendToAsync(this.config.instanceTelegram, 'send', {
+						text: text,
+						user: this.config.deviceTelegram,
+						chatId: this.config.chatIdTelegram
+					});
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Telegram]', error);
+		}
+
+		// Whatsapp
+		try {
+			if (this.config.instanceWhatsapp) {
+				//first check if instance is living
+				const whatsappAliveState = await this.getInitValue('system.adapter.' + this.config.instanceWhatsapp + '.alive');
+
+				if (!whatsappAliveState) {
+					this.log.warn('Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					await this.sendToAsync(this.config.instanceWhatsapp, 'send', {
+						text: text,
+						phone: this.config.phoneWhatsapp
+					});
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Whatsapp]', error);
+		}
+
+		// Email
+		try {
+			if (this.config.instanceEmail) {
+				//first check if instance is living
+				const eMailAliveState = await this.getInitValue('system.adapter.' + this.config.instanceEmail + '.alive');
+
+				if (!eMailAliveState) {
+					this.log.warn('eMail instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					await this.sendToAsync(this.config.instanceEmail, 'send', {
+						sendTo: this.config.sendToEmail,
+						text: text,
+						subject: this.config.subjectEmail
+					});
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification eMail]', error);
+		}
+
+		// Jarvis Notification
+		try {
+			if (this.config.instanceJarvis) {
+				//first check if instance is living
+				const jarvisAliveState = await this.getInitValue('system.adapter.' + this.config.instanceJarvis + '.alive');
+
+				if (!jarvisAliveState) {
+					this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					const jsonText = JSON.stringify(text);
+					await this.setForeignStateAsync(`${this.config.instanceJarvis}.addNotification`, '{"title":"'+ this.config.titleJarvis +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message": ' + jsonText + ',"display": "drawer"}');
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Jarvis]', error);
+		}
+
+		// Lovelace Notification
+		try {
+			if (this.config.instanceLovelace) {
+				//first check if instance is living
+				const lovelaceAliveState = await this.getInitValue('system.adapter.' + this.config.instanceLovelace + '.alive');
+
+				if (!lovelaceAliveState) {
+					this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					const jsonText = JSON.stringify(text);
+					await this.setForeignStateAsync(`${this.config.instanceLovelace}.notifications.add`, '{"message":' + jsonText + ', "title":"'+ this.config.titleLovelace +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Lovelace]', error);
+		}
+	} // <-- End of sendNotification function
 
 
 	async sendOfflineNotifications() {
-		/*=============================================
-		=        	send offline notification		  =
-		=============================================*/
+		// send message if an device is offline
 
 		this.log.debug(`Start the function: ${this.sendOfflineNotifications.name}`);
 
@@ -1141,179 +1197,118 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.info(msg);
 				await this.setStateAsync('lastNotification', msg, true);
-				if (this.config.instancePushover) {
-					try {
-						await this.sendPushover(msg);
-					} catch (e) {
-						this.log.warn (`Getting error at sending pushover notification ${e}`);
-					}
-				}
-				if (this.config.instanceTelegram) {
-					try {
-						await this.sendTelegram(msg);
-					} catch (e) {
-						this.log.warn (`Getting error at sending telegram notification ${e}`);
-					}
-				}
-				if (this.config.instanceWhatsapp) {
-					try {
-						await this.sendWhatsapp(msg);
-					} catch (e) {
-						this.log.warn (`Getting error at sending whatsapp notification ${e}`);
-					}
-				}
-				if (this.config.instanceEmail) {
-					try {
-						await this.sendEmail(msg);
-					} catch (e) {
-						this.log.warn (`Getting error at sending email notification ${e}`);
-					}
-				}
-				if (this.config.instanceJarvis) {
-					try {
-						await this.sendJarvis('{"title":"'+ this.config.titleJarvis +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar","display": "drawer"}');
-					} catch (e) {
-						this.log.warn (`Getting error at sending jarvis notification ${e}`);
-					}
-				}
-				if (this.config.instanceLovelace) {
-					try {
-						await this.sendLovelace('{"message":" ' + this.offlineDevicesCount + ' Geräte sind nicht erreichbar", "title":"'+ this.config.titleLovelace +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
-					} catch (e) {
-						this.log.warn (`Getting error at sending lovelace notification ${e}`);
-					}
-				}
+				await this.sendNotification(msg);
 			}
-		} catch (e) {
-			this.log.debug(`Getting error at sending offline notification ${e}`);
+		} catch (error) {
+			this.errorReporting('[sendOfflineMessage]', error);
 		}
 		this.log.debug(`Finished the function: ${this.sendOfflineNotifications.name}`);
 	}//<--End of offline notification
 
 
 	async sendBatteryNotifications() {
-		/*=============================================
-		=        send low battery notification		  =
-		=============================================*/
+		// send message for low battery devices
 
 		this.log.debug(`Start the function: ${this.sendBatteryNotifications.name}`);
-		const now = new Date();
-		const today = now.getDay();
-		const checkDays = [];
-		let checkToday;
-
-		const choosedDays = {
-			monday: this.config.checkMonday,
-			tuesday: this.config.checkTuesday,
-			wednesday: this.config.checkWednesday,
-			thursday: this.config.checkThursday,
-			friday: this.config.checkFriday,
-			saturday: this.config.checkSaturday,
-			sunday: this.config.checkSunday,
-		};
-
-		if (choosedDays.monday) checkDays.push(1);
-		if (choosedDays.tuesday) checkDays.push(2);
-		if (choosedDays.wednesday) checkDays.push(3);
-		if (choosedDays.thursday) checkDays.push(4);
-		if (choosedDays.friday) checkDays.push(5);
-		if (choosedDays.saturday) checkDays.push(6);
-		if (choosedDays.sunday) checkDays.push(0);
-
-		//Check if the message should be send today
-		checkDays.forEach(object => {
-			if((object >= 0) && today == object){
-				checkToday = true;
-			}
-		});
-
-		//Check first if a day is selected
-		if (checkDays.length >= 1) {
-			this.log.debug(`Number of selected days: ${checkDays.length}. Send Message on: ${(checkDays).join(', ')} ...`);
-		} else {
-			this.log.warn(`No days selected. Please check the instance configuration!`);
-			return;
-		}
 
 		try {
-			//Check if the message for low battery was already sent today
+
+			const now = new Date(); // get date
+			const today = now.getDay();
+			const checkDays = []; // list of selected days
+			let checkToday; // indicator if selected day is today
+
+			// push the selected days in list
+			if (this.config.checkMonday) checkDays.push(1);
+			if (this.config.checkTuesday) checkDays.push(2);
+			if (this.config.checkWednesday) checkDays.push(3);
+			if (this.config.checkThursday) checkDays.push(4);
+			if (this.config.checkFriday) checkDays.push(5);
+			if (this.config.checkSaturday) checkDays.push(6);
+			if (this.config.checkSunday) checkDays.push(0);
+
+			//Check if the message should be send today
+			checkDays.forEach(object => {
+				if((object >= 0) && today == object){
+					checkToday = true;
+				}
+			});
+
+			if (checkDays.length >= 1) { // check if an day is selected
+				this.log.debug(`Number of selected days: ${checkDays.length}. Send Message on: ${(checkDays).join(', ')} ...`);
+			} else {
+				this.log.warn(`No days selected. Please check the instance configuration!`);
+				return; // break off function if no day is selected
+			}
+
+			// Check if the message for low battery was already sent today
 			const lastBatteryNotifyIndicator = await this.getOwnInitValue('info.lastBatteryNotification');
 
-			if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);} //set indicator for send message first to 'false' later after sending to 'true'
+			// set indicator for send message first to 'false', after sending to 'true'
+			if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);}
+
+			// if time is > 11 (12:00 pm create message for low battery devices)
 			if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)){
-				let infotext = '';
+				let msg = '';
 
 				for (const id of this.batteryLowPowered) {
-					infotext = '\n' + id['Device'] + ' (' + id['Battery'] + ')'.split(', ');
+					msg = '\n' + id['Device'] + ' (' + id['Battery'] + ')'.split(', ');
 				}
 
 				if (this.lowBatteryPoweredCount > 0) {
-					this.log.info(`Niedrige Batteriezustände: ${infotext}`);
-					await this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${infotext}`, true);
+					this.log.info(`Niedrige Batteriezustände: ${msg}`);
+					await this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${msg}`, true);
 
-					if (this.config.instancePushover) {
-						try {
-							await this.sendPushover(`Niedrige Batteriezustände: ${infotext}`);
-						} catch (e) {
-							this.log.warn (`Getting error at sending pushover notification ${e}`);
-						}
-					}
-					if (this.config.instanceTelegram) {
-						try {
-							await this.sendTelegram(`Niedrige Batteriezustände: ${infotext}`);
-						} catch (e) {
-							this.log.warn (`Getting error at sending telegram notification ${e}`);
-						}
-					}
-					if (this.config.instanceWhatsapp) {
-						try {
-							await this.sendWhatsapp(`Niedrige Batteriezustände: ${infotext}`);
-						} catch (e) {
-							this.log.warn (`Getting error at sending whatsapp notification ${e}`);
-						}
-					}
-					if (this.config.instanceEmail) {
-						try {
-							await this.sendEmail(`Niedrige Batteriezustände: ${infotext}`);
-						} catch (e) {
-							this.log.warn (`Getting error at sending email notification ${e}`);
-						}
-					}
-					if (this.config.instanceJarvis) {
-						try {
-							await this.sendJarvis('{"title":"'+ this.config.titleJarvis +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message":" ' + this.lowBatteryPoweredCount + ' Geräte mit schwacher Batterie","display": "drawer"}');
-						} catch (e) {
-							this.log.warn (`Getting error at sending jarvis notification ${e}`);
-						}
-					}
-					if (this.config.instanceLovelace) {
-						try {
-							await this.sendLovelace('{"message":" ' + this.lowBatteryPoweredCount + ' Geräte mit schwacher Batterie", "title":"'+ this.config.titleLovelace +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
-						} catch (e) {
-							this.log.warn (`Getting error at sending lovelace notification ${e}`);
-						}
-					}
+					await this.sendNotification(msg);
 
 					await this.setStateAsync('info.lastBatteryNotification', true, true);
 				}
 			}
-		} catch (e) {
-			this.log.debug(`Getting error at sending battery notification ${e}`);
+		} catch (error) {
+			this.errorReporting('[sendOfflineMessage]', error);
 		}
+
 		this.log.debug(`Finished the function: ${this.sendBatteryNotifications.name}`);
 	}//<--End of battery notification
 
+
+	async resetVars() {
+		//Reset all arrays and counts
+		this.log.debug(`Function started: ${this.resetVars.name}`);
+
+		// arrays
+		this.offlineDevices 		= [],
+		this.linkQualityDevices 	= [];
+		this.batteryPowered 		= [];
+		this.batteryLowPowered 		= [];
+		this.listAllDevices 		= [];
+
+		// counts
+		this.offlineDevicesCount		= 0;
+		this.deviceCounter				= 0;
+		this.linkQualityCount			= 0;
+		this.batteryPoweredCount 		= 0;
+		this.lowBatteryPoweredCount		= 0;
+
+		this.deviceReachable	= '';
+
+		this.log.debug(`Function finished: ${this.resetVars.name}`);
+	} // <-- end of resetVars
+
+
+	/**
+     * @param {string} [adptName] - Adaptername
+     */
 	async writeDatapoints(adptName) {
-		/*=============================================
-		=            	Write Datapoints 		      =
-		=============================================*/
+		// fill the datapoints
 
 		this.log.debug(`Start the function: ${this.writeDatapoints.name}`);
 
 		try {
 
 			let dpSubFolder;
-			if (adptName) { //write the datapoints in subfolders with the adaptername otherwise write the dP's in the root folder
+			//write the datapoints in subfolders with the adaptername otherwise write the dP's in the root folder
+			if (adptName) {
 				dpSubFolder = adptName + '.';
 			} else {
 				dpSubFolder = '';}
@@ -1324,7 +1319,8 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, {val: this.lowBatteryPoweredCount, ack: true});
 
 			if (this.deviceCounter == 0) {
-				this.listAllDevices       = [{'Device': '--none--', 'Adapter': '', 'Battery': '', 'Last contact': '', 'Signal strength': ''}]; //JSON-Info Gesamtliste mit Info je Gerät
+				// if no device is count, write the JSON List with default value
+				this.listAllDevices       = [{'Device': '--none--', 'Adapter': '', 'Battery': '', 'Last contact': '', 'Signal strength': ''}];
 
 				await this.setStateAsync(`${dpSubFolder}listAll`, {val: JSON.stringify(this.listAllDevices), ack: true});
 			} else {
@@ -1332,7 +1328,8 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.linkQualityCount == 0) {
-				this.linkQualityDevices	= [{'Device': '--none--', 'Adapter': '', 'Signal strength': ''}]; //JSON-Info alle mit LinkQuality
+				// if no device is count, write the JSON List with default value
+				this.linkQualityDevices	= [{'Device': '--none--', 'Adapter': '', 'Signal strength': ''}];
 
 				await this.setStateAsync(`${dpSubFolder}linkQualityList`, {val: JSON.stringify(this.linkQualityDevices), ack: true});
 			} else {
@@ -1341,7 +1338,8 @@ class DeviceWatcher extends utils.Adapter {
 
 
 			if (this.offlineDevicesCount == 0) {
-				this.offlineDevices	= [{'Device': '--none--', 'Adapter': '', 'Last contact': ''}]; //JSON-Info alle offline-Geräte = 0
+				// if no device is count, write the JSON List with default value
+				this.offlineDevices	= [{'Device': '--none--', 'Adapter': '', 'Last contact': ''}];
 
 				await this.setStateAsync(`${dpSubFolder}offlineList`, {val: JSON.stringify(this.offlineDevices), ack: true});
 			} else {
@@ -1349,7 +1347,8 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.batteryPoweredCount == 0) {
-				this.batteryPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}]; //JSON-Info alle batteriebetriebenen Geräte
+				// if no device is count, write the JSON List with default value
+				this.batteryPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}];
 
 				await this.setStateAsync(`${dpSubFolder}batteryList`, {val: JSON.stringify(this.batteryPowered), ack: true});
 			} else {
@@ -1357,23 +1356,42 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.lowBatteryPoweredCount == 0) {
-				this.batteryLowPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}]; //JSON-Info alle batteriebetriebenen Geräte
+				// if no device is count, write the JSON List with default value
+				this.batteryLowPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}];
 
 				await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {val: JSON.stringify(this.batteryLowPowered), ack: true});
 			} else {
 				await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {val: JSON.stringify(this.batteryLowPowered), ack: true});
 			}
 
-			//Zeitstempel wann die Datenpunkte zuletzt gecheckt wurden
+			// create timestamp of last run
 			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
 			await this.setStateAsync('lastCheck', lastCheck, true);
 		}
-		catch (e) {
-			this.log.error(`(05) Error while writing the states ${e}`);
+		catch (error) {
+			this.errorReporting('[writeDatapoints]', error);
 		}
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	}//<--End  of writing Datapoints
 
+	/**
+     * @param {string} [codePart] - Message Prefix
+     * @param {object} [error] - Sentry message
+     */
+	errorReporting(codePart, error) {
+		const msg = `[${codePart}] error: ${error.message}`;
+		if (enableSendSentry) {
+			if (this.supportsFeature && this.supportsFeature('PLUGINS')) {
+				const sentryInstance = this.getPluginInstance('sentry');
+				if (sentryInstance) {
+					this.log.warn(`Error catched and sent to Sentry, error: ${msg}`);
+					sentryInstance.getSentryObject().captureException(msg);
+				}
+			}
+		} else {
+			this.log.error(`Sentry disabled, error catched : ${msg}`);
+		}
+	} // <-- end of errorReporting
 
 
 	onUnload(callback) {
