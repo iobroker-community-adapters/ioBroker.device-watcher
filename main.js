@@ -8,7 +8,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 
 // Sentry error reporting, disable when testing code!
-const enableSendSentry = false;
+const enableSendSentry = true;
 
 class DeviceWatcher extends utils.Adapter {
 
