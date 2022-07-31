@@ -527,18 +527,18 @@ class DeviceWatcher extends utils.Adapter {
 		for(const [id] of Object.entries(devices)) {
 			if (!this.blacklistArr.includes(id)) {
 
-				this.currDeviceString    	= id.slice(0, (id.lastIndexOf('.') + 1) - 1);
-				this.shortCurrDeviceString 	= this.currDeviceString.slice(0, (this.currDeviceString.lastIndexOf('.') + 1) - 1);
+				const currDeviceString    	= id.slice(0, (id.lastIndexOf('.') + 1) - 1);
+				const shortCurrDeviceString 	= currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
 
 				//Get device name
-				const deviceObject = await this.getForeignObjectAsync(this.currDeviceString);
-				const shortDeviceObject = await this.getForeignObjectAsync(this.shortCurrDeviceString);
+				const deviceObject = await this.getForeignObjectAsync(currDeviceString);
+				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 				let deviceName;
 
 				switch (this.arrDev[i].adapter) {
 					case 'switchbotBle':	//Get ID for Switchbot and ESPHome Devices
 					case 'esphome':
-						deviceName = await this.getInitValue(this.currDeviceString + this.arrDev[i].id);
+						deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 						break;
 
 					case 'hue-extended':
@@ -556,8 +556,8 @@ class DeviceWatcher extends utils.Adapter {
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
 				// 3. Get battery states
-				const deviceBatteryState		= await this.getInitValue(this.currDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState	= await this.getInitValue(this.shortCurrDeviceString + this.arrDev[i].battery);
+				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 
 				// 1. Get link quality
 				let deviceQualityState;
@@ -566,7 +566,7 @@ class DeviceWatcher extends utils.Adapter {
 				switch (this.arrDev[i].adapter) {
 					case 'homematic':
 					case 'sonoff':
-						deviceQualityState = await this.getForeignStateAsync(this.currDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 						break;
 					default:
 						deviceQualityState = await this.getForeignStateAsync(id);
@@ -618,7 +618,7 @@ class DeviceWatcher extends utils.Adapter {
 						const time = new Date();
 						const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
 						const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
-						const deviceUnreachState = await this.getInitValue(this.currDeviceString + this.arrDev[i].reach);
+						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 
 
 						const getLastContact = async () => {
@@ -933,8 +933,8 @@ class DeviceWatcher extends utils.Adapter {
 
 				// 3c. Count how many devices are with low battery
 				const batteryWarningMin 		= this.config.minWarnBatterie;
-				const deviceLowBatState			= await this.getInitValue(this.currDeviceString + this.arrDev[i].isLowBat);
-				const deviceLowBatStateHM		= await this.getInitValue(this.currDeviceString + this.arrDev[i].isLowBat2);
+				const deviceLowBatState			= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+				const deviceLowBatStateHM		= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 				switch (this.arrDev[i].adapter) {
 					case 'homematic':
