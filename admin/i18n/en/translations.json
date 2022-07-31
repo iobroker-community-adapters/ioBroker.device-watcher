@@ -53,7 +53,7 @@
 	"List only devices with battery": "List only devices with battery",
 	"Choose if only devices with battery should be listed or all devices": "Choose if only devices with battery should be listed or all devices",
 	"Offline Time": "Offline Time",
-	"Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.": "Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.",
+	"Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.":"Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.",
 	"Choose the day(s) where you want to get the message of low battery:": "Choose the day(s) where you want to get the message of low battery:",
 	"Offline message":"Offline message",
 	"Battery message":"Battery message",

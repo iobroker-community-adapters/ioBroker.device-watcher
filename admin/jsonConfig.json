@@ -568,7 +568,7 @@
                 },
                 "textOfflineTime": {
                     "type": "staticText",
-                    "text": "Here you can choose the offline time of devices for each adapter, the device is considered offline after the specified time, if set to '-1', the adapter will use the datapoint available, reachable, alive etc when the device has one of these.",
+                    "text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.",
                     "sm": 12,
                     "md": 12,
                     "lg": 12,

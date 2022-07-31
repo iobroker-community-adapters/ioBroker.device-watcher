@@ -65,5 +65,6 @@
     "If you like to have for every Adapter an own folder with own data": "Jeśli chcesz mieć dla każdego adaptera własny folder z własnymi danymi",
     "Please choose": "Proszę wybrać",
     "Create own folders for each adapter": "Utwórz własne foldery dla każdego adaptera",
-    "Use the true value of the signal strength, or it is converted to %": "Użyj prawdziwej wartości siły sygnału lub jest konwertowane na %"
+    "Use the true value of the signal strength, or it is converted to %": "Użyj prawdziwej wartości siły sygnału lub jest konwertowane na %",
+    "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.": "Tutaj możesz zdefiniować czasy offline każdego adaptera. "
 }

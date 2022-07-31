@@ -65,5 +65,6 @@
     "If you like to have for every Adapter an own folder with own data": "Als je voor elke Adapter een eigen map met eigen gegevens wilt hebben",
     "Please choose": "Gelieve te kiezen",
     "Create own folders for each adapter": "Maak eigen mappen voor elke adapter",
-    "Use the true value of the signal strength, or it is converted to %": "Gebruik de werkelijke waarde van de signaalsterkte, of het wordt geconverteerd naar %"
+    "Use the true value of the signal strength, or it is converted to %": "Gebruik de werkelijke waarde van de signaalsterkte, of het wordt geconverteerd naar %",
+    "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.": "Hier kunt u de offline tijden van elke adapter definiëren. "
 }
