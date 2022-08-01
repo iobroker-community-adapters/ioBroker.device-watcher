@@ -230,7 +230,7 @@
         "homematicDevices": false,
         "deconzDevices": false,
         "zwaveDevices": false,
-        "dectDevices": false,
+        "fritzdectDevices": false,
         "hueDevices": false,
         "hueExtDevices": false,
         "nukiExtDevices": false,

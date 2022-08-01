@@ -60,6 +60,13 @@ class DeviceWatcher extends utils.Adapter {
 				'reach':'none',
 				'isLowBat':'none'
 			},
+			deconz: 		{
+				'Selektor':'deconz.*.reachable',
+				'adapter':'deconz',
+				'battery':'.battery',
+				'reach':'.reachable',
+				'isLowBat':'none'
+			},
 			enocean: {
 				'Selektor':'enocean.*.rssi',
 				'adapter':'enocean',
@@ -75,27 +82,12 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat':'none',
 				'id':'.name'
 			},
-			zigbee: 		{
-				'Selektor':'zigbee.*.link_quality',
-				'adapter':'zigbee',
+			fritzdect: 			{
+				'Selektor':'fritzdect.*.present',
+				'adapter':'fritzDect',
 				'battery':'.battery',
-				'reach':'.available',
-				'isLowBat':'.battery_low'
-			},
-			sonoff: 		{
-				'Selektor':'sonoff.*.Uptime',
-				'adapter':'sonoff',
-				'rssiState': '.Wifi_RSSI',
-				'battery':'.battery',
-				'reach':'.alive',
-				'isLowBat':'none'
-			},
-			shelly: 		{
-				'Selektor':'shelly.*.rssi',
-				'adapter':'shelly',
-				'battery':'.sensor.battery',
-				'reach':'.online',
-				'isLowBat':'none'
+				'reach':'.present',
+				'isLowBat':'.batterylow'
 			},
 			homematic: 		{
 				'Selektor':'hm-rpc.*.UNREACH',
@@ -105,27 +97,6 @@ class DeviceWatcher extends utils.Adapter {
 				'reach':'.UNREACH',
 				'isLowBat':'.LOW_BAT',
 				'isLowBat2':'.LOWBAT'
-			},
-			deconz: 		{
-				'Selektor':'deconz.*.reachable',
-				'adapter':'deconz',
-				'battery':'.battery',
-				'reach':'.reachable',
-				'isLowBat':'none'
-			},
-			zwave: 			{
-				'Selektor':'zwave2.*.ready',
-				'adapter':'zwave',
-				'battery':'.Battery.level',
-				'reach':'.ready',
-				'isLowBat':'.Battery.isLow'
-			},
-			dect: 			{
-				'Selektor':'fritzdect.*.present',
-				'adapter':'fritzDect',
-				'battery':'.battery',
-				'reach':'.present',
-				'isLowBat':'.batterylow'
 			},
 			hue: 			{
 				'Selektor':'hue.*.reachable',
@@ -139,28 +110,6 @@ class DeviceWatcher extends utils.Adapter {
 				'adapter':'hue-extended',
 				'battery':'.config.battery',
 				'reach':'.reachable',
-				'isLowBat':'none'
-			},
-			ping: 			{
-				'Selektor':'ping.*.alive',
-				'adapter':'ping',
-				'battery':'none',
-				'reach':'.alive',
-				'isLowBat':'none'
-			},
-			switchbotBle: 	{
-				'Selektor':'switchbot-ble.*.rssi',
-				'adapter':'switchbotBle',
-				'battery':'.battery',
-				'reach':'none',
-				'isLowBat':'none',
-				'id':'.id'
-			},
-			sonos: 			{
-				'Selektor':'sonos.*.alive',
-				'adapter':'sonos',
-				'battery':'none',
-				'reach':'.alive',
 				'isLowBat':'none'
 			},
 			mihome: 		{
@@ -183,7 +132,58 @@ class DeviceWatcher extends utils.Adapter {
 				'battery':'.batteryCharge',
 				'reach':'none',
 				'isLowBat':'.batteryCritical'
-			}
+			},
+			ping: 			{
+				'Selektor':'ping.*.alive',
+				'adapter':'ping',
+				'battery':'none',
+				'reach':'.alive',
+				'isLowBat':'none'
+			},
+			shelly: 		{
+				'Selektor':'shelly.*.rssi',
+				'adapter':'shelly',
+				'battery':'.sensor.battery',
+				'reach':'.online',
+				'isLowBat':'none'
+			},
+			sonoff: 		{
+				'Selektor':'sonoff.*.Uptime',
+				'adapter':'sonoff',
+				'rssiState': '.Wifi_RSSI',
+				'battery':'.battery',
+				'reach':'.alive',
+				'isLowBat':'none'
+			},
+			sonos: 			{
+				'Selektor':'sonos.*.alive',
+				'adapter':'sonos',
+				'battery':'none',
+				'reach':'.alive',
+				'isLowBat':'none'
+			},
+			switchbotBle: 	{
+				'Selektor':'switchbot-ble.*.rssi',
+				'adapter':'switchbotBle',
+				'battery':'.battery',
+				'reach':'none',
+				'isLowBat':'none',
+				'id':'.id'
+			},
+			zigbee: 		{
+				'Selektor':'zigbee.*.link_quality',
+				'adapter':'zigbee',
+				'battery':'.battery',
+				'reach':'.available',
+				'isLowBat':'.battery_low'
+			},
+			zwave: 			{
+				'Selektor':'zwave2.*.ready',
+				'adapter':'zwave',
+				'battery':'.Battery.level',
+				'reach':'.ready',
+				'isLowBat':'.Battery.isLow'
+			},
 		};
 	}
 
@@ -217,7 +217,7 @@ class DeviceWatcher extends utils.Adapter {
 				homematic: 		this.config.homematicDevices,
 				deconz:			this.config.deconzDevices,
 				zwave: 			this.config.zwaveDevices,
-				dect: 			this.config.dectDevices,
+				fritzdect: 		this.config.fritzdectDevices,
 				hue: 			this.config.hueDevices,
 				hueExt: 		this.config.hueExtDevices,
 				nukiExt: 		this.config.nukiExtDevices,
