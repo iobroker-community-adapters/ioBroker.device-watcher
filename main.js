@@ -208,24 +208,24 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			this.supAdapter = {
 				alexa2:			this.config.alexa2Devices,
-				esphome:		this.config.esphomeDevices,
-				enocean:		this.config.enoceanDevices,
-				zigbee: 		this.config.zigbeeDevices,
 				ble: 			this.config.bleDevices,
-				sonoff: 		this.config.sonoffDevices,
-				shelly: 		this.config.shellyDevices,
-				homematic: 		this.config.homematicDevices,
 				deconz:			this.config.deconzDevices,
-				zwave: 			this.config.zwaveDevices,
+				enocean:		this.config.enoceanDevices,
+				esphome:		this.config.esphomeDevices,
 				fritzdect: 		this.config.fritzdectDevices,
+				homematic: 		this.config.homematicDevices,
 				hue: 			this.config.hueDevices,
 				hueExt: 		this.config.hueExtDevices,
+				mihome:			this.config.mihomeDevices,
+				mihomeGW:		this.config.mihomeDevices,
 				nukiExt: 		this.config.nukiExtDevices,
 				ping: 			this.config.pingDevices,
-				switchbotBle: 	this.config.switchbotBleDevices,
+				shelly: 		this.config.shellyDevices,
+				sonoff: 		this.config.sonoffDevices,
 				sonos: 			this.config.sonosDevices,
-				mihome:			this.config.mihomeDevices,
-				mihomeGW:		this.config.mihomeDevices
+				switchbotBle: 	this.config.switchbotBleDevices,
+				zigbee: 		this.config.zigbeeDevices,
+				zwave: 			this.config.zwaveDevices
 			};
 
 			for(const [id] of Object.entries(this.arrApart)) {
