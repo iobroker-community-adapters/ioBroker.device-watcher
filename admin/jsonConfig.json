@@ -39,6 +39,13 @@
                     "lg": 3,
                     "label": "FritzDect"
                 },
+                "enoceanDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Enocean"
+                },
                 "esphomeDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -611,6 +618,18 @@
                 "label": "Deconz",
                 "help": "in minutes",
                 "hidden": "!data.deconzDevices",
+                "hideOnlyControl": false
+            },
+            "enoceanMaxMinutes": {
+                "type": "number",
+                "min": 0,
+                "max": 100000,
+                "sm": 6,
+                "md": 6,
+                "lg": 3,
+                "label": "Enocean",
+                "help": "in minutes",
+                "hidden": "!data.enoceanDevices",
                 "hideOnlyControl": false
             },
             "esphomeMaxMinutes": {

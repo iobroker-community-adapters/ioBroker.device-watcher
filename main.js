@@ -60,6 +60,13 @@ class DeviceWatcher extends utils.Adapter {
 				'reach':'none',
 				'isLowBat':'none'
 			},
+			enocean: {
+				'Selektor':'enocean.*.rssi',
+				'adapter':'enocean',
+				'battery':'.BS',
+				'reach':'none',
+				'isLowBat':'none'
+			},
 			esphome: 			{
 				'Selektor':'esphome.*._online',
 				'adapter':'esphome',
@@ -202,6 +209,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.supAdapter = {
 				alexa2:			this.config.alexa2Devices,
 				esphome:		this.config.esphomeDevices,
+				enocean:		this.config.enoceanDevices,
 				zigbee: 		this.config.zigbeeDevices,
 				ble: 			this.config.bleDevices,
 				sonoff: 		this.config.sonoffDevices,
@@ -713,6 +721,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.deconzMaxMinutes) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'enocean':
+								if (this.config.enoceanMaxMinutes === -1) {
+									if (!deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if (lastContact > this.config.enoceanMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}

@@ -222,6 +222,7 @@
     "native": {
         "alexa2Devices": false,
         "esphomeDevices": false,
+        "enoceanDevices": false,
         "zigbeeDevices": false,
         "bleDevices": false,
         "sonoffDevices": false,
@@ -271,6 +272,7 @@
         "bleMaxMinutes": 300,
         "deconzMaxMinutes": -1,
         "esphomeMaxMinutes": -1,
+        "enoceanMaxMinutes": 300,
         "fritzdectMaxMinutes": -1,
         "homematicMaxMinutes": -1,
         "hueMaxMinutes": -1,
