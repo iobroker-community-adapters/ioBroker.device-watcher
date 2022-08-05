@@ -126,6 +126,14 @@ class DeviceWatcher extends utils.Adapter {
 				'reach':'.connected',
 				'isLowBat':'none'
 			},
+			mihomeVacuum:		{
+				'Selektor':'mihome-vacuum.*.wifi_signal',
+				'adapter':'mihomeVacuum',
+				'battery':'.info.battery',
+				'battery2':'.control.battary_life',
+				'reach':'.connection',
+				'isLowBat':'none'
+			},
 			nukiExt:		{
 				'Selektor':'nuki-extended.*.batteryCritical',
 				'adapter':'nuki-extended',
@@ -218,6 +226,7 @@ class DeviceWatcher extends utils.Adapter {
 				hueExt: 		this.config.hueExtDevices,
 				mihome:			this.config.mihomeDevices,
 				mihomeGW:		this.config.mihomeDevices,
+				mihomeVacuum:	this.config.mihomeVacuumDevices,
 				nukiExt: 		this.config.nukiExtDevices,
 				ping: 			this.config.pingDevices,
 				shelly: 		this.config.shellyDevices,
@@ -799,6 +808,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.mihomeMaxMinutes) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'mihomeVacuum':
+								if (this.config.mihomeVacuumMaxMinutes === -1) {
+									if (!deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if (lastContact > this.config.mihomeVacuumMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
