@@ -32,6 +32,7 @@ Supported adapters are:
 * Hue
 * Hue Extended
 * MiHome
+* MiHome Vacuum
 * Nuki Extended
 * Ping (You have to set the option 'Advanced Information / Erweiterte Information' in the instance settings of ping for     each device)
 * Shelly
