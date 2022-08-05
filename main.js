@@ -150,7 +150,7 @@ class DeviceWatcher extends utils.Adapter {
 			sonoff: 		{
 				'Selektor':'sonoff.*.Uptime',
 				'adapter':'sonoff',
-				'rssiState': '.Wifi_RSSI',
+				'rssiState': '.Wifi_Signal',
 				'battery':'.battery',
 				'reach':'.alive',
 				'isLowBat':'none'
@@ -564,6 +564,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
+
 				// 3. Get battery states
 				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
 				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
