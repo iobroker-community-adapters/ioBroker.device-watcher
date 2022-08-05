@@ -1325,7 +1325,7 @@ class DeviceWatcher extends utils.Adapter {
 					this.log.info(`Niedrige Batteriezustände: ${msg}`);
 					await this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${msg}`, true);
 
-					await this.sendNotification(msg);
+					await this.sendNotification(`Niedriege Batteriezustände: ${msg}`);
 
 					await this.setStateAsync('info.lastBatteryNotification', true, true);
 				}
