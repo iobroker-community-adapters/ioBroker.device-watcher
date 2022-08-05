@@ -129,6 +129,7 @@ class DeviceWatcher extends utils.Adapter {
 			mihomeVacuum:		{
 				'Selektor':'mihome-vacuum.*.wifi_signal',
 				'adapter':'mihomeVacuum',
+				'rssiState': '.wifi_signal',
 				'battery':'.info.battery',
 				'battery2':'.control.battary_life',
 				'reach':'.connection',
@@ -560,6 +561,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case 'hue-extended':
+					case 'mihomeVacuum':
 						if  (shortDeviceObject && typeof shortDeviceObject === 'object') {
 							deviceName = shortDeviceObject.common.name;
 						}
@@ -577,6 +579,7 @@ class DeviceWatcher extends utils.Adapter {
 				// 3. Get battery states
 				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
 				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState2	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
 
 				// 1. Get link quality
 				let deviceQualityState;
@@ -585,6 +588,7 @@ class DeviceWatcher extends utils.Adapter {
 				switch (this.arrDev[i].adapter) {
 					case 'homematic':
 					case 'sonoff':
+					case 'mihomeVacuum':
 						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 						break;
 					default:
@@ -948,6 +952,19 @@ class DeviceWatcher extends utils.Adapter {
 						case 'hue-extended':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
+								this.batteryPowered.push(
+									{
+										'Device': deviceName,
+										'Adapter': deviceAdapterName,
+										'Battery': batteryHealth
+									}
+								);
+							}
+							break;
+						case 'mihomeVacuum':
+							if (shortDeviceBatteryState || shortDeviceBatteryState2) {
+								batteryHealth = shortDeviceBatteryState + '%';
+								batteryHealth = shortDeviceBatteryState2 + '%';
 								this.batteryPowered.push(
 									{
 										'Device': deviceName,
