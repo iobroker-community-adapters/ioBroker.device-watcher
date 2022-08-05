@@ -962,8 +962,16 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 						case 'mihomeVacuum':
-							if (shortDeviceBatteryState || shortDeviceBatteryState2) {
+							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
+								this.batteryPowered.push(
+									{
+										'Device': deviceName,
+										'Adapter': deviceAdapterName,
+										'Battery': batteryHealth
+									}
+								);
+							} else if (shortDeviceBatteryState2) {
 								batteryHealth = shortDeviceBatteryState2 + '%';
 								this.batteryPowered.push(
 									{
