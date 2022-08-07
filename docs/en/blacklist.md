@@ -3,6 +3,8 @@
 
 ## Blacklist
 
+![addBlacklist](img/add_blacklist.png)
+
 It is possible to specify devices to be excluded in the enumeration and notification. Since the adapter uses one main data point per adapter to get the information, it is important to choose the right data point for the blacklist to work properly. 
 
 

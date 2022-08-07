@@ -3,6 +3,8 @@
 
 ## Blacklist
 
+![addBlacklist](img/add_blacklist.png)
+
 Es ist möglich Geräte anzugeben, die in der Aufzählung und Benachrichtigung ausgeschlossen werden sollen. Da der Adapter ein Hauptdatenpunkt je Adapter nutzt um die Information zu bekommen, ist es wichtig den richtigen Datenpunkt für die Blacklist zu wählen damit diese richtig funktioniert. 
 
 
