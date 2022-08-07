@@ -4,3 +4,4 @@
 ## Inhaltsverzeichnis
 
 - [Blacklist](blacklist.md)
+- [Wie JSON Tabelle in Grafana anzeigen](grafana.md)
