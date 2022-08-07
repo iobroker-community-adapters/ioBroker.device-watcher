@@ -18,7 +18,7 @@
 **This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Documentation
-🇬🇧 [Documentation](/docs/en/README.md)
+🇬🇧 [Documentation](/docs/en/README.md)</br>
 🇩🇪 [Dokumentation](/docs/de/README.md)
 
 ## Device-Watcher adapter for ioBroker
