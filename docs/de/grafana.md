@@ -13,17 +13,17 @@ Um Json Listen in Grafana korrekt und ohne Plugin anzeigen lassen zu können, m�
 
 ![grafanaTable](img/grafanaTable.png)
 
-3. In den Query Einstellungen wählt man als Data source `InfluxDB` aus. Bei `From` nimmt man sein gewünschten Datenpunkt, `Select Feld` entfernt man das voreingestellte `mean()` und bei `Group by` müssen `time($_interval)` und `fill(null)` entfernt werden. (Draufklicken und auf remove)
+3. In den Query Einstellungen wählt man als Data source `InfluxDB` aus. Bei `From` nimmt man sein gewünschten Datenpunkt, bei `Select` entfernt man das voreingestellte `mean()` und bei `Group by` müssen `time($_interval)` und `fill(null)` entfernt werden. (Draufklicken und auf remove)
 
 ![grafanaQuerySettings](img/grafanaQuerySettings.png)
 
-4. Danach geht man auf den Reiter `Transform`
+4. Danach geht man auf den Reiter Transform.
 
 ![grafanaReiterTransform](img/grafanaReiterTransform.png)
 
-5. Hier muss man nun vier Transformationen wählen
+5. Hier muss man nun drei Transformationen wählen:
 
-- Als erstes nimmt man `Extract fields`. Wählt als Source den Datenpunkt aus, Format ist `JSON` und die Checkbox Replace all fields wird ausgewählt.
+- Als erstes nimmt man `Extract fields`. Wählt als Source den Datenpunkt aus, Format ist `JSON` und die Checkbox `Replace all fields` wird ausgewählt.
 
 ![grafanaTransformOne](img/grafanaTransformOne.png)
 
@@ -31,7 +31,7 @@ Um Json Listen in Grafana korrekt und ohne Plugin anzeigen lassen zu können, m�
 
 ![grafanaTransformTwo](img/grafanaTransformTwo.png)
 
-- Zu guter letzt fügt man die Transformation `Extract fields` noch mal hinzu. Wählt als Source den `Last` Wert aus, diesmal nimmt man das Format `Key+value pairs` und wählt wieder die CHeckbox `Replace all fields` aus. 
+- Zu guter letzt fügt man die Transformation `Extract fields` noch mal hinzu. Wählt als Source den `Last` Wert aus, diesmal nimmt man das Format `Key+value pairs` und wählt wieder die Checkbox `Replace all fields` aus. 
 
 ![grafanaTransformThree](img/grafanaTransformThree.png)
 
