@@ -1545,7 +1545,7 @@ class DeviceWatcher extends utils.Adapter {
 		</tr>`;
 
 		for (const device of devices) {
-			html += `</tr>
+			html += `<tr>
 			<td><font>${device.Device}</font></td>
 			<td align=center><font>${device.Adapter}</font></td>
 			<td align=right><font>${device['Signal strength']}</font></td>
@@ -1573,7 +1573,7 @@ class DeviceWatcher extends utils.Adapter {
 		</tr>`;
 
 		for (const device of devices) {
-			html += `</tr>
+			html += `<tr>
 			<td><font>${device.Device}</font></td>
 			<td align=center><font>${device.Adapter}</font></td>
 			<td align=center><font color=orange>${device['Last contact']}</font></td>
@@ -1601,7 +1601,7 @@ class DeviceWatcher extends utils.Adapter {
 		</tr>`;
 
 		for (const device of devices) {
-			html += `</tr>
+			html += `<tr>
 			<td><font>${device.Device}</font></td>
 			<td align=center><font>${device.Adapter}</font></td>`;
 
