@@ -338,6 +338,29 @@
             "native": {}
         },
         {
+            "_id": "offlineListHTML",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "List of offline devices",
+                    "de": "Liste der Offline-Geräte",
+                    "ru": "Список оффлайн устройств",
+                    "pt": "Lista de dispositivos off-line",
+                    "nl": "List van offline apparatuur",
+                    "fr": "Liste des dispositifs hors ligne",
+                    "it": "Elenco dei dispositivi offline",
+                    "es": "Lista de dispositivos sin conexión",
+                    "pl": "Lista urządzeń offline",
+                    "zh-cn": "线装置清单"
+                },
+                "type": "string",
+                "role": "value",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        },
+        {
             "_id": "listAll",
             "type": "state",
             "common": {
@@ -378,6 +401,29 @@
                 },
                 "type": "array",
                 "role": "json",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "linkQualityListHTML",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "List of devices with signal strength",
+                    "de": "Liste der Geräte mit Signalstärke",
+                    "ru": "Список устройств с силой сигнала",
+                    "pt": "Lista de dispositivos com força de sinal",
+                    "nl": "List van apparaten met signaalkracht",
+                    "fr": "Liste des dispositifs avec force de signal",
+                    "it": "Elenco dei dispositivi con forza del segnale",
+                    "es": "Lista de dispositivos con fuerza de señal",
+                    "pl": "Lista urządzeń z siłą sygnałową",
+                    "zh-cn": "具有信号实力的装置清单"
+                },
+                "type": "string",
+                "role": "value",
                 "read": true,
                 "write": false
             },
@@ -430,6 +476,29 @@
             "native": {}
         },
         {
+            "_id": "batteryListHTML",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "List of devices with battery state",
+                    "de": "Liste der Geräte mit Batteriezustand",
+                    "ru": "Список устройств с состоянием батареи",
+                    "pt": "Lista de dispositivos com estado da bateria",
+                    "nl": "List van apparaten met batterij staat",
+                    "fr": "Liste des appareils avec état de batterie",
+                    "it": "Elenco dei dispositivi con stato della batteria",
+                    "es": "Lista de dispositivos con estado de batería",
+                    "pl": "Lista urządzeń z baterią stanową",
+                    "zh-cn": "电池国装置清单"
+                },
+                "type": "string",
+                "role": "value",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        },
+        {
             "_id": "lowBatteryList",
             "type": "state",
             "common": {
@@ -447,6 +516,29 @@
                 },
                 "type": "array",
                 "role": "json",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "lowBatteryListHTML",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "List of devices with low battery state",
+                    "de": "Liste der Geräte mit niedrigem Batteriezustand",
+                    "ru": "Список устройств с низким состоянием батареи",
+                    "pt": "Lista de dispositivos com baixo estado da bateria",
+                    "nl": "List van apparaten met lage batterij staat",
+                    "fr": "Liste des appareils à faible état de batterie",
+                    "it": "Elenco di dispositivi con stato di batteria basso",
+                    "es": "Lista de dispositivos con estado de batería bajo",
+                    "pl": "Lista urządzeń o niskim stanie baterii",
+                    "zh-cn": "低电池国家装置清单"
+                },
+                "type": "string",
+                "role": "value",
                 "read": true,
                 "write": false
             },
