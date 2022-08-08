@@ -26,172 +26,172 @@ class DeviceWatcher extends utils.Adapter {
 		this.on('unload', this.onUnload.bind(this));
 
 		// arrays
-		this.offlineDevices 		= [],
-		this.linkQualityDevices 	= [];
-		this.batteryPowered 		= [];
-		this.batteryLowPowered 		= [];
-		this.listAllDevices 		= [];
-		this.blacklistArr			= [];
-		this.arrDev					= [];
-		this.adapterSelected		= [];
+		this.offlineDevices = [];
+		this.linkQualityDevices = [];
+		this.batteryPowered = [];
+		this.batteryLowPowered = [];
+		this.listAllDevices = [];
+		this.blacklistArr = [];
+		this.arrDev = [];
+		this.adapterSelected = [];
 
 		// counts
-		this.offlineDevicesCount		= 0;
-		this.deviceCounter				= 0;
-		this.linkQualityCount			= 0;
-		this.batteryPoweredCount 		= 0;
-		this.lowBatteryPoweredCount		= 0;
+		this.offlineDevicesCount = 0;
+		this.deviceCounter = 0;
+		this.linkQualityCount = 0;
+		this.batteryPoweredCount = 0;
+		this.lowBatteryPoweredCount = 0;
 
-		this.deviceReachable		= '';
+		this.deviceReachable = '';
 
 		// arrays of supported adapters
 		this.arrApart = {
-			alexa2: 			{
-				'Selektor':'alexa2.*.online',
-				'adapter':'alexa2',
-				'battery':'none',
-				'reach':'.online',
-				'isLowBat':'none'
+			alexa2: {
+				'Selektor': 'alexa2.*.online',
+				'adapter': 'alexa2',
+				'battery': 'none',
+				'reach': '.online',
+				'isLowBat': 'none'
 			},
-			ble: 			{
-				'Selektor':'ble.*.rssi',
-				'adapter':'ble',
-				'battery':'.battery',
-				'reach':'none',
-				'isLowBat':'none'
+			ble: {
+				'Selektor': 'ble.*.rssi',
+				'adapter': 'ble',
+				'battery': '.battery',
+				'reach': 'none',
+				'isLowBat': 'none'
 			},
-			deconz: 		{
-				'Selektor':'deconz.*.reachable',
-				'adapter':'deconz',
-				'battery':'.battery',
-				'reach':'.reachable',
-				'isLowBat':'none'
+			deconz: {
+				'Selektor': 'deconz.*.reachable',
+				'adapter': 'deconz',
+				'battery': '.battery',
+				'reach': '.reachable',
+				'isLowBat': 'none'
 			},
 			enocean: {
-				'Selektor':'enocean.*.rssi',
-				'adapter':'enocean',
-				'battery':'.BS',
-				'reach':'none',
-				'isLowBat':'none'
+				'Selektor': 'enocean.*.rssi',
+				'adapter': 'enocean',
+				'battery': '.BS',
+				'reach': 'none',
+				'isLowBat': 'none'
 			},
-			esphome: 			{
-				'Selektor':'esphome.*._online',
-				'adapter':'esphome',
-				'battery':'none',
-				'reach':'._online',
-				'isLowBat':'none',
-				'id':'.name'
+			esphome: {
+				'Selektor': 'esphome.*._online',
+				'adapter': 'esphome',
+				'battery': 'none',
+				'reach': '._online',
+				'isLowBat': 'none',
+				'id': '.name'
 			},
-			fritzdect: 			{
-				'Selektor':'fritzdect.*.present',
-				'adapter':'fritzDect',
-				'battery':'.battery',
-				'reach':'.present',
-				'isLowBat':'.batterylow'
+			fritzdect: {
+				'Selektor': 'fritzdect.*.present',
+				'adapter': 'fritzDect',
+				'battery': '.battery',
+				'reach': '.present',
+				'isLowBat': '.batterylow'
 			},
-			homematic: 		{
-				'Selektor':'hm-rpc.*.UNREACH',
-				'adapter':'homematic',
-				'rssiState':'.RSSI_DEVICE',
-				'battery':'.OPERATING_VOLTAGE',
-				'reach':'.UNREACH',
-				'isLowBat':'.LOW_BAT',
-				'isLowBat2':'.LOWBAT'
+			homematic: {
+				'Selektor': 'hm-rpc.*.UNREACH',
+				'adapter': 'homematic',
+				'rssiState': '.RSSI_DEVICE',
+				'battery': '.OPERATING_VOLTAGE',
+				'reach': '.UNREACH',
+				'isLowBat': '.LOW_BAT',
+				'isLowBat2': '.LOWBAT'
 			},
-			hue: 			{
-				'Selektor':'hue.*.reachable',
-				'adapter':'hue',
-				'battery':'.battery',
-				'reach':'.reachable',
-				'isLowBat':'none'
+			hue: {
+				'Selektor': 'hue.*.reachable',
+				'adapter': 'hue',
+				'battery': '.battery',
+				'reach': '.reachable',
+				'isLowBat': 'none'
 			},
-			hueExt: 		{
-				'Selektor':'hue-extended.*.reachable',
-				'adapter':'hue-extended',
-				'battery':'.config.battery',
-				'reach':'.reachable',
-				'isLowBat':'none'
+			hueExt: {
+				'Selektor': 'hue-extended.*.reachable',
+				'adapter': 'hue-extended',
+				'battery': '.config.battery',
+				'reach': '.reachable',
+				'isLowBat': 'none'
 			},
-			mihome: 		{
-				'Selektor':'mihome.*.percent',
-				'adapter':'miHome',
-				'battery':'.percent',
-				'reach':'none',
-				'isLowBat':'none'
+			mihome: {
+				'Selektor': 'mihome.*.percent',
+				'adapter': 'miHome',
+				'battery': '.percent',
+				'reach': 'none',
+				'isLowBat': 'none'
 			},
-			mihomeGW:		{
-				'Selektor':'mihome.*.connected',
-				'adapter':'miHome',
-				'battery':'none',
-				'reach':'.connected',
-				'isLowBat':'none'
+			mihomeGW: {
+				'Selektor': 'mihome.*.connected',
+				'adapter': 'miHome',
+				'battery': 'none',
+				'reach': '.connected',
+				'isLowBat': 'none'
 			},
-			mihomeVacuum:		{
-				'Selektor':'mihome-vacuum.*.wifi_signal',
-				'adapter':'mihomeVacuum',
+			mihomeVacuum: {
+				'Selektor': 'mihome-vacuum.*.wifi_signal',
+				'adapter': 'mihomeVacuum',
 				'rssiState': '.wifi_signal',
-				'battery':'.info.battery',
-				'battery2':'.control.battary_life',
-				'reach':'.connection',
-				'isLowBat':'none'
+				'battery': '.info.battery',
+				'battery2': '.control.battary_life',
+				'reach': '.connection',
+				'isLowBat': 'none'
 			},
-			nukiExt:		{
-				'Selektor':'nuki-extended.*.batteryCritical',
-				'adapter':'nuki-extended',
-				'battery':'.batteryCharge',
-				'reach':'none',
-				'isLowBat':'.batteryCritical'
+			nukiExt: {
+				'Selektor': 'nuki-extended.*.batteryCritical',
+				'adapter': 'nuki-extended',
+				'battery': '.batteryCharge',
+				'reach': 'none',
+				'isLowBat': '.batteryCritical'
 			},
-			ping: 			{
-				'Selektor':'ping.*.alive',
-				'adapter':'ping',
-				'battery':'none',
-				'reach':'.alive',
-				'isLowBat':'none'
+			ping: {
+				'Selektor': 'ping.*.alive',
+				'adapter': 'ping',
+				'battery': 'none',
+				'reach': '.alive',
+				'isLowBat': 'none'
 			},
-			shelly: 		{
-				'Selektor':'shelly.*.rssi',
-				'adapter':'shelly',
-				'battery':'.sensor.battery',
-				'reach':'.online',
-				'isLowBat':'none'
+			shelly: {
+				'Selektor': 'shelly.*.rssi',
+				'adapter': 'shelly',
+				'battery': '.sensor.battery',
+				'reach': '.online',
+				'isLowBat': 'none'
 			},
-			sonoff: 		{
-				'Selektor':'sonoff.*.Uptime',
-				'adapter':'sonoff',
+			sonoff: {
+				'Selektor': 'sonoff.*.Uptime',
+				'adapter': 'sonoff',
 				'rssiState': '.Wifi_Signal',
-				'battery':'.battery',
-				'reach':'.alive',
-				'isLowBat':'none'
+				'battery': '.battery',
+				'reach': '.alive',
+				'isLowBat': 'none'
 			},
-			sonos: 			{
-				'Selektor':'sonos.*.alive',
-				'adapter':'sonos',
-				'battery':'none',
-				'reach':'.alive',
-				'isLowBat':'none'
+			sonos: {
+				'Selektor': 'sonos.*.alive',
+				'adapter': 'sonos',
+				'battery': 'none',
+				'reach': '.alive',
+				'isLowBat': 'none'
 			},
-			switchbotBle: 	{
-				'Selektor':'switchbot-ble.*.rssi',
-				'adapter':'switchbotBle',
-				'battery':'.battery',
-				'reach':'none',
-				'isLowBat':'none',
-				'id':'.id'
+			switchbotBle: {
+				'Selektor': 'switchbot-ble.*.rssi',
+				'adapter': 'switchbotBle',
+				'battery': '.battery',
+				'reach': 'none',
+				'isLowBat': 'none',
+				'id': '.id'
 			},
-			zigbee: 		{
-				'Selektor':'zigbee.*.link_quality',
-				'adapter':'zigbee',
-				'battery':'.battery',
-				'reach':'.available',
-				'isLowBat':'.battery_low'
+			zigbee: {
+				'Selektor': 'zigbee.*.link_quality',
+				'adapter': 'zigbee',
+				'battery': '.battery',
+				'reach': '.available',
+				'isLowBat': '.battery_low'
 			},
-			zwave: 			{
-				'Selektor':'zwave2.*.ready',
-				'adapter':'zwave',
-				'battery':'.Battery.level',
-				'reach':'.ready',
-				'isLowBat':'.Battery.isLow'
+			zwave: {
+				'Selektor': 'zwave2.*.ready',
+				'adapter': 'zwave',
+				'battery': '.Battery.level',
+				'reach': '.ready',
+				'isLowBat': '.Battery.isLow'
 			},
 		};
 	}
@@ -216,29 +216,29 @@ class DeviceWatcher extends utils.Adapter {
 
 		try {
 			this.supAdapter = {
-				alexa2:			this.config.alexa2Devices,
-				ble: 			this.config.bleDevices,
-				deconz:			this.config.deconzDevices,
-				enocean:		this.config.enoceanDevices,
-				esphome:		this.config.esphomeDevices,
-				fritzdect: 		this.config.fritzdectDevices,
-				homematic: 		this.config.homematicDevices,
-				hue: 			this.config.hueDevices,
-				hueExt: 		this.config.hueExtDevices,
-				mihome:			this.config.mihomeDevices,
-				mihomeGW:		this.config.mihomeDevices,
-				mihomeVacuum:	this.config.mihomeVacuumDevices,
-				nukiExt: 		this.config.nukiExtDevices,
-				ping: 			this.config.pingDevices,
-				shelly: 		this.config.shellyDevices,
-				sonoff: 		this.config.sonoffDevices,
-				sonos: 			this.config.sonosDevices,
-				switchbotBle: 	this.config.switchbotBleDevices,
-				zigbee: 		this.config.zigbeeDevices,
-				zwave: 			this.config.zwaveDevices
+				alexa2: this.config.alexa2Devices,
+				ble: this.config.bleDevices,
+				deconz: this.config.deconzDevices,
+				enocean: this.config.enoceanDevices,
+				esphome: this.config.esphomeDevices,
+				fritzdect: this.config.fritzdectDevices,
+				homematic: this.config.homematicDevices,
+				hue: this.config.hueDevices,
+				hueExt: this.config.hueExtDevices,
+				mihome: this.config.mihomeDevices,
+				mihomeGW: this.config.mihomeDevices,
+				mihomeVacuum: this.config.mihomeVacuumDevices,
+				nukiExt: this.config.nukiExtDevices,
+				ping: this.config.pingDevices,
+				shelly: this.config.shellyDevices,
+				sonoff: this.config.sonoffDevices,
+				sonos: this.config.sonosDevices,
+				switchbotBle: this.config.switchbotBleDevices,
+				zigbee: this.config.zigbeeDevices,
+				zwave: this.config.zwaveDevices
 			};
 
-			for(const [id] of Object.entries(this.arrApart)) {
+			for (const [id] of Object.entries(this.arrApart)) {
 				if (this.supAdapter[id]) {
 					this.arrDev.push(this.arrApart[id]);
 					this.adapterSelected.push(await this.capitalize(id));
@@ -256,7 +256,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			//create and fill datapoints for each adapter if selected
 			try {
-				for(const [id] of Object.entries(this.arrApart)) {
+				for (const [id] of Object.entries(this.arrApart)) {
 					if (this.supAdapter[id]) {
 
 						if (this.config.createOwnFolder) {
@@ -288,17 +288,16 @@ class DeviceWatcher extends utils.Adapter {
 
 
 	/**
-     * @param {string} [sentence] - Word which should be capitalize
-     **/
-	async capitalize(sentence)
-	{
+	 * @param {string} [sentence] - Word which should be capitalize
+	 **/
+	async capitalize(sentence) {
 		//make the first letter uppercase
 		return sentence && sentence[0].toUpperCase() + sentence.slice(1);
 	}
 
 	/**
-     * @param {object} [obj] - State of datapoint
-     **/
+	 * @param {object} [obj] - State of datapoint
+	 **/
 	async getInitValue(obj) {
 		//state can be null or undefinded
 		const foreignState = await this.getForeignStateAsync(obj);
@@ -306,8 +305,8 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-     * @param {object} [obj] - State of own datapoint
-     **/
+	 * @param {object} [obj] - State of own datapoint
+	 **/
 	async getOwnInitValue(obj) {
 		//state can be null or undefinded for own states
 		const stateVal = await this.getStateAsync(obj);
@@ -316,8 +315,8 @@ class DeviceWatcher extends utils.Adapter {
 
 	//create datapoints for each adapter
 	/**
-     * @param {object} [adptName] - Adaptername of devices
-     **/
+	 * @param {object} [adptName] - Adaptername of devices
+	 **/
 	async createDPsForEachAdapter(adptName) {
 
 		await this.setObjectNotExistsAsync(`${adptName}`, {
@@ -350,6 +349,7 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.offlineList`, {
 			'type': 'state',
 			'common': {
@@ -372,6 +372,30 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
+		await this.setObjectNotExistsAsync(`${adptName}.offlineListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of offline devices',
+					'de': 'Liste der Offline-Geräte',
+					'ru': 'Список оффлайн устройств',
+					'pt': 'Lista de dispositivos off-line',
+					'nl': 'List van offline apparatuur',
+					'fr': 'Liste des dispositifs hors ligne',
+					'it': 'Elenco dei dispositivi offline',
+					'es': 'Lista de dispositivos sin conexión',
+					'pl': 'Lista urządzeń offline',
+					'zh-cn': '线装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
 			'type': 'state',
 			'common': {
@@ -394,6 +418,7 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.linkQualityList`, {
 			'type': 'state',
 			'common': {
@@ -416,6 +441,30 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
+		await this.setObjectNotExistsAsync(`${adptName}.linkQualityListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of devices with signal strength',
+					'de': 'Liste der Geräte mit Signalstärke',
+					'ru': 'Список устройств с силой сигнала',
+					'pt': 'Lista de dispositivos com força de sinal',
+					'nl': 'List van apparaten met signaalkracht',
+					'fr': 'Liste des dispositifs avec force de signal',
+					'it': 'Elenco dei dispositivi con forza del segnale',
+					'es': 'Lista de dispositivos con fuerza de señal',
+					'pl': 'Lista urządzeń z siłą sygnałową',
+					'zh-cn': '具有信号实力的装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.countAll`, {
 			'type': 'state',
 			'common': {
@@ -438,6 +487,7 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.batteryList`, {
 			'type': 'state',
 			'common': {
@@ -460,6 +510,30 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
+		await this.setObjectNotExistsAsync(`${adptName}.batteryListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of devices with battery state',
+					'de': 'Liste der Geräte mit Batteriezustand',
+					'ru': 'Список устройств с состоянием батареи',
+					'pt': 'Lista de dispositivos com estado da bateria',
+					'nl': 'List van apparaten met batterij staat',
+					'fr': 'Liste des appareils avec état de batterie',
+					'it': 'Elenco dei dispositivi con stato della batteria',
+					'es': 'Lista de dispositivos con estado de batería',
+					'pl': 'Lista urządzeń z baterią stanową',
+					'zh-cn': '电池国装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryList`, {
 			'type': 'state',
 			'common': {
@@ -482,6 +556,30 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
+		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of devices with low battery state',
+					'de': 'Liste der Geräte mit niedrigem Batteriezustand',
+					'ru': 'Список устройств с низким состоянием батареи',
+					'pt': 'Lista de dispositivos com baixo estado da bateria',
+					'nl': 'List van apparaten met lage batterij staat',
+					'fr': 'Liste des appareils à faible état de batterie',
+					'it': 'Elenco di dispositivi con stato di batteria basso',
+					'es': 'Lista de dispositivos con estado de batería bajo',
+					'pl': 'Lista urządzeń o niskim stanie baterii',
+					'zh-cn': '低电池国家装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryCount`, {
 			'type': 'state',
 			'common': {
@@ -504,6 +602,7 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			'native': {}
 		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.batteryCount`, {
 			'type': 'state',
 			'common': {
@@ -529,25 +628,25 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-     * @param {object} [i] - Device Object
-     **/
+	 * @param {object} [i] - Device Object
+	 **/
 	async createData(i) {
-		const devices 			= await this.getForeignStatesAsync(this.arrDev[i].Selektor);
+		const devices = await this.getForeignStatesAsync(this.arrDev[i].Selektor);
 		const deviceAdapterName = await this.capitalize(this.arrDev[i].adapter);
-		const myBlacklist 		= this.config.tableBlacklist;
+		const myBlacklist = this.config.tableBlacklist;
 
 		/*----------  Loop for blacklist ----------*/
-		for(const i in myBlacklist){
+		for (const i in myBlacklist) {
 			this.blacklistArr.push(myBlacklist[i].device);
 			this.log.debug(`Found items on the blacklist: ${this.blacklistArr}`);
 		}
 
 		/*----------  Start of second main loop  ----------*/
-		for(const [id] of Object.entries(devices)) {
+		for (const [id] of Object.entries(devices)) {
 			if (!this.blacklistArr.includes(id)) {
 
-				const currDeviceString    	= id.slice(0, (id.lastIndexOf('.') + 1) - 1);
-				const shortCurrDeviceString 	= currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
+				const currDeviceString = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
+				const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
 
 				//Get device name
 				const deviceObject = await this.getForeignObjectAsync(currDeviceString);
@@ -562,7 +661,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					case 'hue-extended':
 					case 'mihomeVacuum':
-						if  (shortDeviceObject && typeof shortDeviceObject === 'object') {
+						if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 							deviceName = shortDeviceObject.common.name;
 						}
 						break;
@@ -577,9 +676,9 @@ class DeviceWatcher extends utils.Adapter {
 				const deviceMainSelector = await this.getForeignStateAsync(id);
 
 				// 3. Get battery states
-				const deviceBatteryState		= await this.getInitValue(currDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState2	= await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
 
 				// 1. Get link quality
 				let deviceQualityState;
@@ -595,14 +694,14 @@ class DeviceWatcher extends utils.Adapter {
 						deviceQualityState = await this.getForeignStateAsync(id);
 				}
 
-				if ((deviceQualityState) && (typeof deviceQualityState.val === 'number')){
+				if ((deviceQualityState) && (typeof deviceQualityState.val === 'number')) {
 					if (this.config.trueState) {
 						linkQuality = deviceQualityState.val;
 					} else {
 						if (deviceQualityState.val < 0) {
 							linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
 						} else if ((deviceQualityState.val) >= 0) {
-							linkQuality = parseFloat((100/255 * deviceQualityState.val).toFixed(0)) + '%';
+							linkQuality = parseFloat((100 / 255 * deviceQualityState.val).toFixed(0)) + '%';
 						}
 					}
 					if (this.config.listOnlyBattery) {
@@ -625,7 +724,7 @@ class DeviceWatcher extends utils.Adapter {
 						);
 					}
 				} else {
-				// no linkQuality available for powered devices
+					// no linkQuality available for powered devices
 					linkQuality = ' - ';
 				}
 
@@ -647,10 +746,10 @@ class DeviceWatcher extends utils.Adapter {
 						const getLastContact = async () => {
 							lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
 							if (Math.round(lastContact) > 100) {
-								lastContactString = Math.round(lastContact/60) + ' Stunden';
+								lastContactString = Math.round(lastContact / 60) + ' Stunden';
 							}
-							if (Math.round(lastContact/60) > 48) {
-								lastContactString = Math.round(lastContact/60/24) + ' Tagen';
+							if (Math.round(lastContact / 60) > 48) {
+								lastContactString = Math.round(lastContact / 60 / 24) + ' Tagen';
 							}
 							return lastContactString;
 						};
@@ -658,10 +757,10 @@ class DeviceWatcher extends utils.Adapter {
 						const getLastStateChange = async () => {
 							lastContactString = this.formatDate(new Date((deviceMainSelector.lc)), 'hh:mm') + ' Uhr';
 							if (Math.round(lastStateChange) > 100) {
-								lastContactString = Math.round(lastStateChange/60) + ' Stunden';
+								lastContactString = Math.round(lastStateChange / 60) + ' Stunden';
 							}
-							if (Math.round(lastStateChange/60) > 48) {
-								lastContactString = Math.round(lastStateChange/60/24) + ' Tagen';
+							if (Math.round(lastStateChange / 60) > 48) {
+								lastContactString = Math.round(lastStateChange / 60 / 24) + ' Tagen';
 							}
 							return lastContactString;
 						};
@@ -998,9 +1097,9 @@ class DeviceWatcher extends utils.Adapter {
 				this.batteryPoweredCount = this.batteryPowered.length;
 
 				// 3c. Count how many devices are with low battery
-				const batteryWarningMin 		= this.config.minWarnBatterie;
-				const deviceLowBatState			= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
-				const deviceLowBatStateHM		= await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
+				const batteryWarningMin = this.config.minWarnBatterie;
+				const deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+				const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 				switch (this.arrDev[i].adapter) {
 					case 'homematic':
@@ -1073,8 +1172,8 @@ class DeviceWatcher extends utils.Adapter {
 
 
 	/**
-     * @param {string} [adptName] - Adapter name
-     */
+	 * @param {string} [adptName] - Adapter name
+	 */
 	async createDataForEachAdapter(adptName) {
 		// create Data for each Adapter in own lists
 		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
@@ -1122,8 +1221,8 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Notification service
-     * @param {string} [text] - Text which should be send
-     **/
+	 * @param {string} [text] - Text which should be send
+	 **/
 	async sendNotification(text) {
 
 		// Pushover
@@ -1216,7 +1315,7 @@ class DeviceWatcher extends utils.Adapter {
 					this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
 				} else {
 					const jsonText = JSON.stringify(text);
-					await this.setForeignStateAsync(`${this.config.instanceJarvis}.addNotification`, '{"title":"'+ this.config.titleJarvis +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message": ' + jsonText + ',"display": "drawer"}');
+					await this.setForeignStateAsync(`${this.config.instanceJarvis}.addNotification`, '{"title":"' + this.config.titleJarvis + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message": ' + jsonText + ',"display": "drawer"}');
 				}
 			}
 		} catch (error) {
@@ -1233,7 +1332,7 @@ class DeviceWatcher extends utils.Adapter {
 					this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
 				} else {
 					const jsonText = JSON.stringify(text);
-					await this.setForeignStateAsync(`${this.config.instanceLovelace}.notifications.add`, '{"message":' + jsonText + ', "title":"'+ this.config.titleLovelace +' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+					await this.setForeignStateAsync(`${this.config.instanceLovelace}.notifications.add`, '{"message":' + jsonText + ', "title":"' + this.config.titleLovelace + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
 				}
 			}
 		} catch (error) {
@@ -1295,7 +1394,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			//Check if the message should be send today
 			checkDays.forEach(object => {
-				if((object >= 0) && today == object){
+				if ((object >= 0) && today == object) {
 					checkToday = true;
 				}
 			});
@@ -1311,10 +1410,10 @@ class DeviceWatcher extends utils.Adapter {
 			const lastBatteryNotifyIndicator = await this.getOwnInitValue('info.lastBatteryNotification');
 
 			// set indicator for send message first to 'false', after sending to 'true'
-			if (now.getHours() < 11) {await this.setStateAsync('info.lastBatteryNotification', false, true);}
+			if (now.getHours() < 11) { await this.setStateAsync('info.lastBatteryNotification', false, true); }
 
 			// if time is > 11 (12:00 pm create message for low battery devices)
-			if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)){
+			if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)) {
 				let msg = '';
 
 				for (const id of this.batteryLowPowered) {
@@ -1343,28 +1442,28 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.resetVars.name}`);
 
 		// arrays
-		this.offlineDevices 		= [],
-		this.linkQualityDevices 	= [];
-		this.batteryPowered 		= [];
-		this.batteryLowPowered 		= [];
-		this.listAllDevices 		= [];
+		this.offlineDevices = [],
+			this.linkQualityDevices = [];
+		this.batteryPowered = [];
+		this.batteryLowPowered = [];
+		this.listAllDevices = [];
 
 		// counts
-		this.offlineDevicesCount		= 0;
-		this.deviceCounter				= 0;
-		this.linkQualityCount			= 0;
-		this.batteryPoweredCount 		= 0;
-		this.lowBatteryPoweredCount		= 0;
+		this.offlineDevicesCount = 0;
+		this.deviceCounter = 0;
+		this.linkQualityCount = 0;
+		this.batteryPoweredCount = 0;
+		this.lowBatteryPoweredCount = 0;
 
-		this.deviceReachable	= '';
+		this.deviceReachable = '';
 
 		this.log.debug(`Function finished: ${this.resetVars.name}`);
 	} // <-- end of resetVars
 
 
 	/**
-     * @param {string} [adptName] - Adaptername
-     */
+	 * @param {string} [adptName] - Adaptername
+	 */
 	async writeDatapoints(adptName) {
 		// fill the datapoints
 
@@ -1377,58 +1476,47 @@ class DeviceWatcher extends utils.Adapter {
 			if (adptName) {
 				dpSubFolder = adptName + '.';
 			} else {
-				dpSubFolder = '';}
+				dpSubFolder = '';
+			}
 
-			await this.setStateAsync(`${dpSubFolder}offlineCount`, {val: this.offlineDevicesCount, ack: true});
-			await this.setStateAsync(`${dpSubFolder}countAll`, {val: this.deviceCounter, ack: true});
-			await this.setStateAsync(`${dpSubFolder}batteryCount`, {val: this.batteryPoweredCount, ack: true});
-			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, {val: this.lowBatteryPoweredCount, ack: true});
+			await this.setStateAsync(`${dpSubFolder}offlineCount`, { val: this.offlineDevicesCount, ack: true });
+			await this.setStateAsync(`${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
+			await this.setStateAsync(`${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
+			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
 
 			if (this.deviceCounter == 0) {
 				// if no device is count, write the JSON List with default value
-				this.listAllDevices       = [{'Device': '--none--', 'Adapter': '', 'Battery': '', 'Last contact': '', 'Signal strength': ''}];
-
-				await this.setStateAsync(`${dpSubFolder}listAll`, {val: JSON.stringify(this.listAllDevices), ack: true});
-			} else {
-				await this.setStateAsync(`${dpSubFolder}listAll`, {val: JSON.stringify(this.listAllDevices), ack: true});
+				this.listAllDevices = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '', 'Last contact': '', 'Signal strength': '' }];
 			}
+			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
 
 			if (this.linkQualityCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.linkQualityDevices	= [{'Device': '--none--', 'Adapter': '', 'Signal strength': ''}];
-
-				await this.setStateAsync(`${dpSubFolder}linkQualityList`, {val: JSON.stringify(this.linkQualityDevices), ack: true});
-			} else {
-				await this.setStateAsync(`${dpSubFolder}linkQualityList`, {val: JSON.stringify(this.linkQualityDevices), ack: true});
+				this.linkQualityDevices = [{ 'Device': '--none--', 'Adapter': '', 'Signal strength': '' }];
 			}
-
+			await this.setStateAsync(`${dpSubFolder}linkQualityList`, { val: JSON.stringify(this.linkQualityDevices), ack: true });
+			await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, { val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount), ack: true });
 
 			if (this.offlineDevicesCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.offlineDevices	= [{'Device': '--none--', 'Adapter': '', 'Last contact': ''}];
-
-				await this.setStateAsync(`${dpSubFolder}offlineList`, {val: JSON.stringify(this.offlineDevices), ack: true});
-			} else {
-				await this.setStateAsync(`${dpSubFolder}offlineList`, {val: JSON.stringify(this.offlineDevices), ack: true});
+				this.offlineDevices = [{ 'Device': '--none--', 'Adapter': '', 'Last contact': '' }];
 			}
+			await this.setStateAsync(`${dpSubFolder}offlineList`, { val: JSON.stringify(this.offlineDevices), ack: true });
+			await this.setStateAsync(`${dpSubFolder}offlineListHTML`, { val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount), ack: true });
 
 			if (this.batteryPoweredCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}];
-
-				await this.setStateAsync(`${dpSubFolder}batteryList`, {val: JSON.stringify(this.batteryPowered), ack: true});
-			} else {
-				await this.setStateAsync(`${dpSubFolder}batteryList`, {val: JSON.stringify(this.batteryPowered), ack: true});
+				this.batteryPowered = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '' }];
 			}
+			await this.setStateAsync(`${dpSubFolder}batteryList`, { val: JSON.stringify(this.batteryPowered), ack: true });
+			await this.setStateAsync(`${dpSubFolder}batteryListHTML`, { val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false), ack: true });
 
 			if (this.lowBatteryPoweredCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryLowPowered	= [{'Device': '--none--', 'Adapter': '', 'Battery': ''}];
-
-				await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {val: JSON.stringify(this.batteryLowPowered), ack: true});
-			} else {
-				await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {val: JSON.stringify(this.batteryLowPowered), ack: true});
+				this.batteryLowPowered = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '' }];
 			}
+			await this.setStateAsync(`${dpSubFolder}lowBatteryList`, { val: JSON.stringify(this.batteryLowPowered), ack: true });
+			await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, { val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true), ack: true });
 
 			// create timestamp of last run
 			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
@@ -1440,10 +1528,100 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	}//<--End  of writing Datapoints
 
+	async creatLinkQualityListHTML(devices, deviceCount) {
+		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
+		let html = `<center>
+		<b>Link Quality Devices:<font> ${deviceCount}</b><small></small></font>
+		<p></p>
+		</center>   
+		<table width=100%>
+		<tr>
+		<th align=left>Device</th>
+		<th align=center width=120>Adapter</th>
+		<th align=right>Link Quality</th>
+		</tr>
+		<tr>
+		<td colspan="5"><hr></td>
+		</tr>`;
+
+		for (const device of devices) {
+			html += `<tr>
+			<td><font>${device.Device}</font></td>
+			<td align=center><font>${device.Adapter}</font></td>
+			<td align=right><font>${device['Signal strength']}</font></td>
+			</tr>`;
+		}
+
+		html += '</table>';
+		return html;
+	}
+
+	async createOfflineListHTML(devices, deviceCount) {
+		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
+		let html = `<center>
+		<b>Offline Devices: <font color=${deviceCount == 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
+		<p></p>
+		</center>   
+		<table width=100%>
+		<tr>
+		<th align=left>Device</th>
+		<th align=center width=120>Adapter</th>
+		<th align=center>Letzter Kontakt</th>
+		</tr>
+		<tr>
+		<td colspan="5"><hr></td>
+		</tr>`;
+
+		for (const device of devices) {
+			html += `<tr>
+			<td><font>${device.Device}</font></td>
+			<td align=center><font>${device.Adapter}</font></td>
+			<td align=center><font color=orange>${device['Last contact']}</font></td>
+			</tr>`;
+		}
+
+		html += '</table>';
+		return html;
+	}
+
+	async createBatteryListHTML(devices, deviceCount, isLowBatteryList) {
+		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
+		let html = `<center>
+		<b>${isLowBatteryList == true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList == true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
+		<p></p>
+		</center>   
+		<table width=100%>
+		<tr>
+		<th align=left>Device</th>
+		<th align=center width=120>Adapter</th>
+		<th align=${isLowBatteryList ? 'center' : 'right'}>Batterie</th>
+		</tr>
+		<tr>
+		<td colspan="5"><hr></td>
+		</tr>`;
+
+		for (const device of devices) {
+			html += `<tr>
+			<td><font>${device.Device}</font></td>
+			<td align=center><font>${device.Adapter}</font></td>`;
+
+			if (isLowBatteryList) {
+				html += `<td align=center><font color=orange>${device.Battery == ' - ' ? 'schwach' : device.Battery}</font></td>`;
+			} else {
+				html += `<td align=right><font color=#3bcf0e>${device.Battery == ' - ' ? 'ok' : device.Battery}</font></td>`;
+			}
+
+			html += `</tr>`;
+		}
+
+		html += '</table>';
+		return html;
+	}
+
 	/**
-     * @param {string} [codePart] - Message Prefix
-     * @param {object} [error] - Sentry message
-     */
+	 * @param {string} [codePart] - Message Prefix
+	 * @param {object} [error] - Sentry message
+	 */
 	errorReporting(codePart, error) {
 		const msg = `[${codePart}] error: ${error.message}`;
 		if (enableSendSentry) {
