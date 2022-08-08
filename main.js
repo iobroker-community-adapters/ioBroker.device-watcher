@@ -389,7 +389,7 @@ class DeviceWatcher extends utils.Adapter {
 					'zh-cn': '线装置清单'
 				},
 				'type': 'string',
-				'role': 'value',
+				'role': 'html',
 				'read': true,
 				'write': false,
 			},
@@ -458,7 +458,7 @@ class DeviceWatcher extends utils.Adapter {
 					'zh-cn': '具有信号实力的装置清单'
 				},
 				'type': 'string',
-				'role': 'value',
+				'role': 'html',
 				'read': true,
 				'write': false,
 			},
@@ -527,7 +527,7 @@ class DeviceWatcher extends utils.Adapter {
 					'zh-cn': '电池国装置清单'
 				},
 				'type': 'string',
-				'role': 'value',
+				'role': 'html',
 				'read': true,
 				'write': false,
 			},
@@ -573,7 +573,7 @@ class DeviceWatcher extends utils.Adapter {
 					'zh-cn': '低电池国家装置清单'
 				},
 				'type': 'string',
-				'role': 'value',
+				'role': 'html',
 				'read': true,
 				'write': false,
 			},
