@@ -419,6 +419,29 @@ class DeviceWatcher extends utils.Adapter {
 			'native': {}
 		});
 
+		await this.setObjectNotExistsAsync(`${adptName}.listAllHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of all devices',
+					'de': 'Liste aller Geräte',
+					'ru': 'Список всех устройств',
+					'pt': 'Lista de todos os dispositivos',
+					'nl': 'List van alle apparaten',
+					'fr': 'Liste de tous les dispositifs',
+					'it': 'Elenco di tutti i dispositivi',
+					'es': 'Lista de todos los dispositivos',
+					'pl': 'Lista wszystkich urządzeń',
+					'zh-cn': '所有装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.linkQualityList`, {
 			'type': 'state',
 			'common': {
@@ -1443,7 +1466,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// arrays
 		this.offlineDevices = [],
-			this.linkQualityDevices = [];
+		this.linkQualityDevices = [];
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
@@ -1489,6 +1512,8 @@ class DeviceWatcher extends utils.Adapter {
 				this.listAllDevices = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '', 'Last contact': '', 'Signal strength': '' }];
 			}
 			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
+			await this.setStateAsync(`${dpSubFolder}listAllHTML`, { val: await this.creatAllDevicesListHTML(this.listAllDevices, this.deviceCounter), ack: true });
+
 
 			if (this.linkQualityCount == 0) {
 				// if no device is count, write the JSON List with default value
@@ -1527,6 +1552,43 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	}//<--End  of writing Datapoints
+
+	async creatAllDevicesListHTML(devices, deviceCount, isLowBatteryList) {
+		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
+		let html = `<center>
+		<b>All Devices:<font> ${deviceCount}</b><small></small></font>
+		<p></p>
+		</center>   
+		<table width=100%>
+		<tr>
+		<th align=left>Device</th>
+		<th align=center width=120>Adapter</th>
+		<th align=${isLowBatteryList ? 'center' : 'center width=80'}>Batterie</th>
+		<th align=center>Link Quality</th>
+		<th align=center>Last contact</th>
+		</tr>
+		<tr>
+		<td colspan="5"><hr></td>
+		</tr>`;
+
+		for (const device of devices) {
+			html += `<tr>
+			<td><font>${device.Device}</font></td>
+			<td align=center><font>${device.Adapter}</font></td>`;
+
+			if (isLowBatteryList) {
+				html += `<td align=center><font color=orange>${device.Battery == ' - ' ? 'schwach' : device.Battery}</font></td>`;
+			} else {
+				html += `<td align=center><font color=#3bcf0e>${device.Battery == ' - ' ? 'ok' : device.Battery}</font></td>`;
+			}
+			`<td align=center><font>${device['Signal strength']}</font></td>
+			<td align=center><font color=orange>${device['Last contact']}</font></td>`;
+			html += `</tr>`;
+		}
+
+		html += '</table>';
+		return html;
+	}
 
 	async creatLinkQualityListHTML(devices, deviceCount) {
 		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });

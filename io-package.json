@@ -384,6 +384,29 @@
             "native": {}
         },
         {
+            "_id": "listAllHTML",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "List of all devices",
+                    "de": "Liste aller Geräte",
+                    "ru": "Список всех устройств",
+                    "pt": "Lista de todos os dispositivos",
+                    "nl": "List van alle apparaten",
+                    "fr": "Liste de tous les dispositifs",
+                    "it": "Elenco di tutti i dispositivi",
+                    "es": "Lista de todos los dispositivos",
+                    "pl": "Lista wszystkich urządzeń",
+                    "zh-cn": "所有装置清单"
+                },
+                "type": "string",
+                "role": "html",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        },
+        {
             "_id": "linkQualityList",
             "type": "state",
             "common": {
