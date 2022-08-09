@@ -1594,7 +1594,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * @param {object} [devices] - Device
-	 * @param {number} [deviceCount] - Counted devices
+	 * @param {object} [deviceCount] - Counted devices
 	 * @param {object} [isLowBatteryList] - list Low Battery Devices
 	 */
 	async createBatteryListHTML(devices, deviceCount, isLowBatteryList) {
