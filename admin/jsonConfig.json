@@ -575,6 +575,14 @@
                     "label": "Create own folders for each adapter",
                     "help": "If you like to have for every Adapter an own folder with own data"
                 },
+                "createHtmlList": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 6,
+                    "lg": 4,
+                    "label": "Create additionally HTML lists",
+                    "help": "Create the lists also in HTML"
+                },
                 "_headerOfflineTime": {
                     "type": "header", 
                     "text": "Offline Time",

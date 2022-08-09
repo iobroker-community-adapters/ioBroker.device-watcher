@@ -261,6 +261,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (this.config.createOwnFolder) {
 							await this.createDPsForEachAdapter(id);
+							if (this.config.createHtmlList) await this.createHtmlListDatapoints(id);
 							this.log.debug(`Created datapoints for ${await this.capitalize(id)}`);
 							await this.createDataForEachAdapter(id);
 							this.log.debug(`Created and filled data for each adapter`);
@@ -273,6 +274,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			// creating counts and lists of all selected adapter
 			try {
+				if (this.config.createHtmlList) await this.createHtmlListDatapoints();
 				await this.createDataOfAllAdapter();
 				this.log.debug(`Created and filled data for all adapters`);
 			} catch (error) {
@@ -373,29 +375,6 @@ class DeviceWatcher extends utils.Adapter {
 			'native': {}
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.offlineListHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of offline devices',
-					'de': 'Liste der Offline-Geräte',
-					'ru': 'Список оффлайн устройств',
-					'pt': 'Lista de dispositivos off-line',
-					'nl': 'List van offline apparatuur',
-					'fr': 'Liste des dispositifs hors ligne',
-					'it': 'Elenco dei dispositivi offline',
-					'es': 'Lista de dispositivos sin conexión',
-					'pl': 'Lista urządzeń offline',
-					'zh-cn': '线装置清单'
-				},
-				'type': 'string',
-				'role': 'html',
-				'read': true,
-				'write': false,
-			},
-			'native': {}
-		});
-
 		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
 			'type': 'state',
 			'common': {
@@ -413,29 +392,6 @@ class DeviceWatcher extends utils.Adapter {
 				},
 				'type': 'array',
 				'role': 'json',
-				'read': true,
-				'write': false,
-			},
-			'native': {}
-		});
-
-		await this.setObjectNotExistsAsync(`${adptName}.listAllHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of all devices',
-					'de': 'Liste aller Geräte',
-					'ru': 'Список всех устройств',
-					'pt': 'Lista de todos os dispositivos',
-					'nl': 'List van alle apparaten',
-					'fr': 'Liste de tous les dispositifs',
-					'it': 'Elenco di tutti i dispositivi',
-					'es': 'Lista de todos los dispositivos',
-					'pl': 'Lista wszystkich urządzeń',
-					'zh-cn': '所有装置清单'
-				},
-				'type': 'string',
-				'role': 'html',
 				'read': true,
 				'write': false,
 			},
@@ -511,29 +467,6 @@ class DeviceWatcher extends utils.Adapter {
 			'native': {}
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.batteryListHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of devices with battery state',
-					'de': 'Liste der Geräte mit Batteriezustand',
-					'ru': 'Список устройств с состоянием батареи',
-					'pt': 'Lista de dispositivos com estado da bateria',
-					'nl': 'List van apparaten met batterij staat',
-					'fr': 'Liste des appareils avec état de batterie',
-					'it': 'Elenco dei dispositivi con stato della batteria',
-					'es': 'Lista de dispositivos con estado de batería',
-					'pl': 'Lista urządzeń z baterią stanową',
-					'zh-cn': '电池国装置清单'
-				},
-				'type': 'string',
-				'role': 'html',
-				'read': true,
-				'write': false,
-			},
-			'native': {}
-		});
-
 		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryList`, {
 			'type': 'state',
 			'common': {
@@ -551,29 +484,6 @@ class DeviceWatcher extends utils.Adapter {
 				},
 				'type': 'array',
 				'role': 'json',
-				'read': true,
-				'write': false,
-			},
-			'native': {}
-		});
-
-		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryListHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of devices with low battery state',
-					'de': 'Liste der Geräte mit niedrigem Batteriezustand',
-					'ru': 'Список устройств с низким состоянием батареи',
-					'pt': 'Lista de dispositivos com baixo estado da bateria',
-					'nl': 'List van apparaten met lage batterij staat',
-					'fr': 'Liste des appareils à faible état de batterie',
-					'it': 'Elenco di dispositivi con stato di batteria basso',
-					'es': 'Lista de dispositivos con estado de batería bajo',
-					'pl': 'Lista urządzeń o niskim stanie baterii',
-					'zh-cn': '低电池国家装置清单'
-				},
-				'type': 'string',
-				'role': 'html',
 				'read': true,
 				'write': false,
 			},
@@ -620,6 +530,112 @@ class DeviceWatcher extends utils.Adapter {
 				},
 				'type': 'number',
 				'role': 'value',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+	}
+
+	/**
+	 * @param {object} [adptName] - Adaptername of devices
+	 **/
+	async createHtmlListDatapoints(adptName) {
+
+		let dpSubFolder;
+		//write the datapoints in subfolders with the adaptername otherwise write the dP's in the root folder
+		if (adptName) {
+			dpSubFolder = `${adptName}.`;
+		} else {
+			dpSubFolder = '';
+		}
+
+		await this.setObjectNotExistsAsync(`${dpSubFolder}offlineListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of offline devices',
+					'de': 'Liste der Offline-Geräte',
+					'ru': 'Список оффлайн устройств',
+					'pt': 'Lista de dispositivos off-line',
+					'nl': 'List van offline apparatuur',
+					'fr': 'Liste des dispositifs hors ligne',
+					'it': 'Elenco dei dispositivi offline',
+					'es': 'Lista de dispositivos sin conexión',
+					'pl': 'Lista urządzeń offline',
+					'zh-cn': '线装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
+		await this.setObjectNotExistsAsync(`${dpSubFolder}linkQualityListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of devices with signal strength',
+					'de': 'Liste der Geräte mit Signalstärke',
+					'ru': 'Список устройств с силой сигнала',
+					'pt': 'Lista de dispositivos com força de sinal',
+					'nl': 'List van apparaten met signaalkracht',
+					'fr': 'Liste des dispositifs avec force de signal',
+					'it': 'Elenco dei dispositivi con forza del segnale',
+					'es': 'Lista de dispositivos con fuerza de señal',
+					'pl': 'Lista urządzeń z siłą sygnałową',
+					'zh-cn': '具有信号实力的装置清单'
+				},
+				'type': 'string',
+				'role': 'value',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
+		await this.setObjectNotExistsAsync(`${dpSubFolder}batteryListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of devices with battery state',
+					'de': 'Liste der Geräte mit Batteriezustand',
+					'ru': 'Список устройств с состоянием батареи',
+					'pt': 'Lista de dispositivos com estado da bateria',
+					'nl': 'List van apparaten met batterij staat',
+					'fr': 'Liste des appareils avec état de batterie',
+					'it': 'Elenco dei dispositivi con stato della batteria',
+					'es': 'Lista de dispositivos con estado de batería',
+					'pl': 'Lista urządzeń z baterią stanową',
+					'zh-cn': '电池国装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
+				'read': true,
+				'write': false,
+			},
+			'native': {}
+		});
+
+		await this.setObjectNotExistsAsync(`${dpSubFolder}lowBatteryListHTML`, {
+			'type': 'state',
+			'common': {
+				'name': {
+					'en': 'List of devices with low battery state',
+					'de': 'Liste der Geräte mit niedrigem Batteriezustand',
+					'ru': 'Список устройств с низким состоянием батареи',
+					'pt': 'Lista de dispositivos com baixo estado da bateria',
+					'nl': 'List van apparaten met lage batterij staat',
+					'fr': 'Liste des appareils à faible état de batterie',
+					'it': 'Elenco di dispositivi con stato di batteria basso',
+					'es': 'Lista de dispositivos con estado de batería bajo',
+					'pl': 'Lista urządzeń o niskim stanie baterii',
+					'zh-cn': '低电池国家装置清单'
+				},
+				'type': 'string',
+				'role': 'html',
 				'read': true,
 				'write': false,
 			},
@@ -1494,29 +1510,37 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.linkQualityDevices = [{ 'Device': '--none--', 'Adapter': '', 'Signal strength': '' }];
 			}
+			//write JSON list
 			await this.setStateAsync(`${dpSubFolder}linkQualityList`, { val: JSON.stringify(this.linkQualityDevices), ack: true });
-			await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, { val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount), ack: true });
+			//write HTML list
+			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, { val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount), ack: true });
 
 			if (this.offlineDevicesCount == 0) {
 				// if no device is count, write the JSON List with default value
 				this.offlineDevices = [{ 'Device': '--none--', 'Adapter': '', 'Last contact': '' }];
 			}
+			//write JSON list
 			await this.setStateAsync(`${dpSubFolder}offlineList`, { val: JSON.stringify(this.offlineDevices), ack: true });
-			await this.setStateAsync(`${dpSubFolder}offlineListHTML`, { val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount), ack: true });
+			//write HTML list
+			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}offlineListHTML`, { val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount), ack: true });
 
 			if (this.batteryPoweredCount == 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryPowered = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '' }];
 			}
+			//write JSON list
 			await this.setStateAsync(`${dpSubFolder}batteryList`, { val: JSON.stringify(this.batteryPowered), ack: true });
-			await this.setStateAsync(`${dpSubFolder}batteryListHTML`, { val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false), ack: true });
+			//write HTML list
+			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}batteryListHTML`, { val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false), ack: true });
 
 			if (this.lowBatteryPoweredCount == 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryLowPowered = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '' }];
 			}
+			//write JSON list
 			await this.setStateAsync(`${dpSubFolder}lowBatteryList`, { val: JSON.stringify(this.batteryLowPowered), ack: true });
-			await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, { val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true), ack: true });
+			//write HTML list
+			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, { val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true), ack: true });
 
 			// create timestamp of last run
 			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
