@@ -758,8 +758,6 @@ class DeviceWatcher extends utils.Adapter {
 						const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
 						const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
-						const shortDeviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].reach);
-
 
 						const getLastContact = async () => {
 							lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
