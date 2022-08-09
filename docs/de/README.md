@@ -5,3 +5,4 @@
 
 - [Blacklist](blacklist.md)
 - [Wie JSON Tabelle in Grafana anzeigen](grafana.md)
+- [Lovelace-UI HTML Tabelle Anzeigen](lovelace.md)

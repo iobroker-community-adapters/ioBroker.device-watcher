@@ -5,3 +5,4 @@
 
 - [Blacklist](blacklist.md)
 - [How to show JSON lists in Grafana](grafana.md)
+- [Lovelace-UI show HTML table](lovelace.md)
