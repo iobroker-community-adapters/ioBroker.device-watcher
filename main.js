@@ -90,13 +90,13 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.batterylow'
 			},
 			homematic: {
-				'Selektor': 'hm-rpc.*.STATE',
+				'Selektor': 'hm-rpc.*.RSSI_DEVICE',
 				'adapter': 'homematic',
-				'rssiState': '.0.RSSI_DEVICE',
-				'battery': '.0.OPERATING_VOLTAGE',
-				'reach': '.0.UNREACH',
-				'isLowBat': '.0.LOW_BAT',
-				'isLowBat2': '.0.LOWBAT'
+				'rssiState': '.RSSI_DEVICE',
+				'battery': '.OPERATING_VOLTAGE',
+				'reach': '.UNREACH',
+				'isLowBat': '.LOW_BAT',
+				'isLowBat2': '.LOWBAT'
 			},
 			hue: {
 				'Selektor': 'hue.*.reachable',
@@ -704,10 +704,8 @@ class DeviceWatcher extends utils.Adapter {
 				switch (this.arrDev[i].adapter) {
 					case 'sonoff':
 					case 'mihomeVacuum':
-						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
-						break;
 					case 'homematic':
-						deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 						break;
 					default:
 						deviceQualityState = await this.getForeignStateAsync(id);
@@ -893,7 +891,7 @@ class DeviceWatcher extends utils.Adapter {
 								break;
 							case 'homematic':
 								if (this.config.homematicMaxMinutes === -1) {
-									if (shortDeviceUnreachState) {
+									if (deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
@@ -1054,10 +1052,10 @@ class DeviceWatcher extends utils.Adapter {
 
 					switch (this.arrDev[i].adapter) {
 						case 'homematic':
-							if (shortDeviceBatteryState === 0) {
+							if (deviceBatteryState === 0) {
 								batteryHealth = ' - ';
 							} else {
-								batteryHealth = shortDeviceBatteryState + 'V';
+								batteryHealth = deviceBatteryState + 'V';
 							}
 
 							this.batteryPowered.push(
