@@ -192,7 +192,7 @@ class DeviceWatcher extends utils.Adapter {
 				'battery': '.Battery.level',
 				'reach': '.ready',
 				'isLowBat': '.Battery.isLow'
-			},
+			}
 		};
 	}
 
@@ -235,7 +235,7 @@ class DeviceWatcher extends utils.Adapter {
 				sonos: this.config.sonosDevices,
 				switchbotBle: this.config.switchbotBleDevices,
 				zigbee: this.config.zigbeeDevices,
-				zwave: this.config.zwaveDevices
+				zwave: this.config.zwaveDevices,
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
@@ -677,6 +677,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					case 'hue-extended':
 					case 'mihomeVacuum':
+					case 'homematic':
 						if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 							deviceName = shortDeviceObject.common.name;
 						}
@@ -701,10 +702,12 @@ class DeviceWatcher extends utils.Adapter {
 				let linkQuality;
 
 				switch (this.arrDev[i].adapter) {
-					case 'homematic':
 					case 'sonoff':
 					case 'mihomeVacuum':
 						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+						break;
+					case 'homematic':
+						deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
 						break;
 					default:
 						deviceQualityState = await this.getForeignStateAsync(id);
@@ -757,6 +760,7 @@ class DeviceWatcher extends utils.Adapter {
 						const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
 						const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
+						const shortDeviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].reach);
 
 
 						const getLastContact = async () => {
@@ -889,7 +893,7 @@ class DeviceWatcher extends utils.Adapter {
 								break;
 							case 'homematic':
 								if (this.config.homematicMaxMinutes === -1) {
-									if (deviceUnreachState) {
+									if (shortDeviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
@@ -1050,10 +1054,10 @@ class DeviceWatcher extends utils.Adapter {
 
 					switch (this.arrDev[i].adapter) {
 						case 'homematic':
-							if (deviceBatteryState === 0) {
+							if (shortDeviceBatteryState === 0) {
 								batteryHealth = ' - ';
 							} else {
-								batteryHealth = deviceBatteryState + 'V';
+								batteryHealth = shortDeviceBatteryState + 'V';
 							}
 
 							this.batteryPowered.push(
