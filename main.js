@@ -1528,6 +1528,10 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	}//<--End  of writing Datapoints
 
+	/**
+	 * @param {object} [devices] - Device
+	 * @param {number} [deviceCount] - Counted devices
+	 */
 	async creatLinkQualityListHTML(devices, deviceCount) {
 		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
 		let html = `<center>
@@ -1556,6 +1560,10 @@ class DeviceWatcher extends utils.Adapter {
 		return html;
 	}
 
+	/**
+	 * @param {object} [devices] - Device
+	 * @param {number} [deviceCount] - Counted devices
+	 */
 	async createOfflineListHTML(devices, deviceCount) {
 		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
 		let html = `<center>
@@ -1584,6 +1592,11 @@ class DeviceWatcher extends utils.Adapter {
 		return html;
 	}
 
+	/**
+	 * @param {object} [devices] - Device
+	 * @param {number} [deviceCount] - Counted devices
+	 * @param {object} [isLowBatteryList] - list Low Battery Devices
+	 */
 	async createBatteryListHTML(devices, deviceCount, isLowBatteryList) {
 		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
 		let html = `<center>
