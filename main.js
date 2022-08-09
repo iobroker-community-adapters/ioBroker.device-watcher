@@ -90,13 +90,13 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.batterylow'
 			},
 			homematic: {
-				'Selektor': 'hm-rpc.*.UNREACH',
+				'Selektor': 'hm-rpc.*.STATE',
 				'adapter': 'homematic',
-				'rssiState': '.RSSI_DEVICE',
-				'battery': '.OPERATING_VOLTAGE',
-				'reach': '.UNREACH',
-				'isLowBat': '.LOW_BAT',
-				'isLowBat2': '.LOWBAT'
+				'rssiState': '.0.RSSI_DEVICE',
+				'battery': '.0.OPERATING_VOLTAGE',
+				'reach': '.0.UNREACH',
+				'isLowBat': '.0.LOW_BAT',
+				'isLowBat2': '.0.LOWBAT'
 			},
 			hue: {
 				'Selektor': 'hue.*.reachable',
