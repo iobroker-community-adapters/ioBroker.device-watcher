@@ -112,6 +112,13 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.reachable',
 				'isLowBat': 'none'
 			},
+			jeelink: {
+				'Selektor': 'jeelink.*.lowBatt',
+				'adapter': 'jeelink',
+				'battery': 'none',
+				'reach': 'none',
+				'isLowBat': '.lowBatt'
+			},
 			mihome: {
 				'Selektor': 'mihome.*.percent',
 				'adapter': 'miHome',
@@ -225,6 +232,7 @@ class DeviceWatcher extends utils.Adapter {
 				homematic: this.config.homematicDevices,
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
+				jeelink: this.config.jeelinkDevices,
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
 				mihomeVacuum: this.config.mihomeVacuumDevices,
@@ -917,6 +925,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.hueextMaxMinutes) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'jeelink':
+								if (this.config.jeelinkMaxMinutes === -1) {
+									if (!deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if (lastContact > this.config.jeelinkMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}

@@ -74,6 +74,13 @@
                     "lg": 3,
                     "label": "Hue Extended"
                 },
+                "jeelinkDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Jeelink"
+                },
                 "mihomeDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -705,6 +712,18 @@
                     "label": "HueExtended",
                     "help": "in minutes",
                     "hidden": "!data.hueExtDevices",
+                    "hideOnlyControl": false
+                },
+                "jeelinkMaxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Jeelink",
+                    "help": "in minutes",
+                    "hidden": "!data.jeelinkDevices",
                     "hideOnlyControl": false
                 },
                 "mihomeMaxMinutes": {
