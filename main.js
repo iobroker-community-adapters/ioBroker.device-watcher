@@ -90,7 +90,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.batterylow'
 			},
 			homematic: {
-				'Selektor': 'hm-rpc.*.RSSI_DEVICE',
+				'Selektor': 'hm-rpc.*.UNREACH',
 				'adapter': 'homematic',
 				'rssiState': '.RSSI_DEVICE',
 				'battery': '.OPERATING_VOLTAGE',
@@ -677,6 +677,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					case 'hue-extended':
 					case 'mihomeVacuum':
+					case 'homematic':
 						if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 							deviceName = shortDeviceObject.common.name;
 						}
