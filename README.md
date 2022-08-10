@@ -83,7 +83,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.3.0 (2022-08-10)
 - removed channelnumber in Homematic devices name
 - added function to create html list
 - added german and english documentation

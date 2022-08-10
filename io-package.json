@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.2.4",
+        "version": "0.3.0",
         "news": {
+            "0.3.0": {
+                "en": "removed channelnumber in Homematic devices name\nadded function to create html list\nadded german and english documentation",
+                "de": "kanalnummer entfernt in Homematic Gerätename\nfunktion hinzugefügt, um html-liste zu erstellen\ndeutsche und englische dokumentation",
+                "ru": "удаленный номер канала в имени Homematic устройств\nдобавлена функция для создания списка html\nдобавлена немецкая и английская документация",
+                "pt": "número de canal removido no nome de dispositivos Homematic\nfunção adicionada para criar lista html\nadicionado alemão e inglês documentação",
+                "nl": "verwijderde kanaal in Homema apparatuur\nvertaling:\nvertaling:",
+                "fr": "le nombre de canaux supprimés dans le nom des dispositifs Homematic\nfonction ajoutée pour créer la liste html\ndocuments allemands et anglais ajoutés",
+                "it": "numero di canale rimosso nel nome dei dispositivi Homematic\nfunzione aggiunta per creare l'elenco html\naggiunta documentazione tedesca e inglese",
+                "es": "número de canal eliminado en el nombre de dispositivos Homemáticos\nfunción agregada para crear la lista html\ndocumentación alemana e inglesa",
+                "pl": "usunąć numer kanałowy w nazwie Homematic\ndodano funkcję do tworzenia listy html\ndodał germanizm i english documentation",
+                "zh-cn": "拆除家庭装置名称的渠道\nd. 增设的编制名单的职能\n增 录"
+            },
             "0.2.4": {
                 "en": "many changes of code, comments and error handling",
                 "de": "viele änderungen von code, kommentaren und fehlerbehandlung",
