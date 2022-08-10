@@ -678,6 +678,7 @@ class DeviceWatcher extends utils.Adapter {
 					case 'hue-extended':
 					case 'mihomeVacuum':
 					case 'homematic':
+					case 'nuki-extended':
 						if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 							deviceName = shortDeviceObject.common.name;
 						}
