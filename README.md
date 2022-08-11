@@ -36,6 +36,7 @@ Supported adapters are:
 * Homematic
 * Hue
 * Hue Extended
+* Jeelink
 * MiHome
 * MiHome Vacuum
 * Nuki Extended
