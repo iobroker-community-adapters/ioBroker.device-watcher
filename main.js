@@ -799,12 +799,20 @@ class DeviceWatcher extends utils.Adapter {
 
 							default:
 								//State changed
-								if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) {
-									await getLastStateChange();
+								if  (this.arrDev[i].adapter == 'homematic') {
+									if (deviceUnreachState) {
+										await getLastStateChange();
+									} else {
+										await getLastContact();
+									}
 								} else {
-									await getLastContact();
+									if ((!deviceUnreachState)) {
+										await getLastStateChange();
+									} else {
+										await getLastContact();
+									}
+									break;
 								}
-								break;
 						}
 
 						const pushOfflineDevice = async () => {
