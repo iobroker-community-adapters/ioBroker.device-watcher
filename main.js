@@ -1067,16 +1067,31 @@ class DeviceWatcher extends utils.Adapter {
 				const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 				if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
-					switch (this.arrDev[i].isLowBat) {
-						case 'none':
-							batteryHealth = ' - ';
-							break;
-						default:
-							if (!deviceLowBatState) {
-								batteryHealth = 'ok';
-							} else {
-								batteryHealth = 'low';
-							}
+					if (deviceLowBatState || deviceLowBatStateHM) {
+						switch (this.arrDev[i].isLowBat) {
+							case 'none':
+								batteryHealth = ' - ';
+								break;
+							default:
+								if (!deviceLowBatState) {
+									batteryHealth = 'ok';
+								} else {
+									batteryHealth = 'low';
+								}
+						}
+						switch (this.arrDev[i].isLowBat2) {
+							case 'none':
+								batteryHealth = ' - ';
+								break;
+							default:
+								if (!deviceLowBatState) {
+									batteryHealth = 'ok';
+								} else {
+									batteryHealth = 'low';
+								}
+						}
+					} else {
+						batteryHealth = ' - ';
 					}
 				} else {
 					switch (this.arrDev[i].adapter) {
