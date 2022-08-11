@@ -794,6 +794,7 @@ class DeviceWatcher extends utils.Adapter {
 						//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
 						switch (this.arrDev[i].adapter) {
 							case 'ping':
+							case 'alexa2':
 								//State changed
 								if (!deviceUnreachState) {
 									await getLastStateChange();
@@ -836,7 +837,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.alexa2MaxMinutes) {
+								} else if ((lastStateChange > this.config.alexa2MaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -1512,7 +1513,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// arrays
 		this.offlineDevices = [],
-			this.linkQualityDevices = [];
+		this.linkQualityDevices = [];
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
