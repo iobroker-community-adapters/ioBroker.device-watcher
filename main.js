@@ -792,19 +792,18 @@ class DeviceWatcher extends utils.Adapter {
 
 						// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
 						//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
-						switch (this.arrDev[i].adapter) {
-							case 'ping':
-							case 'alexa2':
+						switch (this.arrDev[i].reach) {
+							case 'none':
+								await getLastContact();
+								break;
+
+							default:
 								//State changed
 								if (!deviceUnreachState) {
 									await getLastStateChange();
 								} else {
 									await getLastContact();
 								}
-								break;
-
-							default:
-								await getLastContact();
 								break;
 						}
 
@@ -859,7 +858,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.deconzMaxMinutes) {
+								} else if ((lastStateChange > this.config.deconzMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -881,7 +880,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.esphomeMaxMinutes) {
+								} else if ((lastStateChange > this.config.esphomeMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -892,7 +891,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.fritzdectMaxMinutes) {
+								} else if ((lastStateChange > this.config.fritzdectMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -903,7 +902,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.homematicMaxMinutes) {
+								} else if ((lastStateChange > this.config.homematicMaxMinutes) && (deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -914,7 +913,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.hueMaxMinutes) {
+								} else if ((lastStateChange > this.config.hueMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -925,7 +924,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.hueextMaxMinutes) {
+								} else if ((lastStateChange > this.config.hueextMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -947,7 +946,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.mihomeMaxMinutes) {
+								} else if ((lastStateChange > this.config.mihomeMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -958,7 +957,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.mihomeVacuumMaxMinutes) {
+								} else if ((lastStateChange > this.config.mihomeVacuumMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -991,7 +990,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.shellyMaxMinutes) {
+								} else if ((lastStateChange > this.config.shellyMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -1002,7 +1001,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.sonoffMaxMinutes) {
+								} else if ((lastStateChange > this.config.sonoffMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -1013,7 +1012,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.sonosMaxMinutes) {
+								} else if ((lastStateChange > this.config.sonosMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -1035,7 +1034,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.zigbeeMaxMinutes) {
+								} else if ((lastStateChange > this.config.zigbeeMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
@@ -1046,7 +1045,7 @@ class DeviceWatcher extends utils.Adapter {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if (lastContact > this.config.zwaveMaxMinutes) {
+								} else if ((lastStateChange > this.config.zwaveMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
