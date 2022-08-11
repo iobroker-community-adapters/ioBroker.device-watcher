@@ -1078,6 +1078,7 @@ class DeviceWatcher extends utils.Adapter {
 								} else {
 									batteryHealth = 'low';
 								}
+								break;
 						}
 						switch (this.arrDev[i].isLowBat2) {
 							case 'none':
@@ -1089,7 +1090,15 @@ class DeviceWatcher extends utils.Adapter {
 								} else {
 									batteryHealth = 'low';
 								}
+								break;
 						}
+						this.batteryPowered.push(
+							{
+								'Device': deviceName,
+								'Adapter': deviceAdapterName,
+								'Battery': batteryHealth
+							}
+						);
 					} else {
 						batteryHealth = ' - ';
 					}
@@ -1503,7 +1512,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// arrays
 		this.offlineDevices = [],
-		this.linkQualityDevices = [];
+			this.linkQualityDevices = [];
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
@@ -1687,9 +1696,9 @@ class DeviceWatcher extends utils.Adapter {
 			<td align=center><font>${device.Adapter}</font></td>`;
 
 			if (isLowBatteryList) {
-				html += `<td align=center><font color=orange>${device.Battery == ' - ' ? 'schwach' : device.Battery}</font></td>`;
+				html += `<td align=center><font color=orange>${device.Battery}</font></td>`;
 			} else {
-				html += `<td align=right><font color=#3bcf0e>${device.Battery == ' - ' ? 'ok' : device.Battery}</font></td>`;
+				html += `<td align=right><font color=#3bcf0e>${device.Battery}</font></td>`;
 			}
 
 			html += `</tr>`;
