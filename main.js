@@ -145,6 +145,7 @@ class DeviceWatcher extends utils.Adapter {
 			nukiExt: {
 				'Selektor': 'nuki-extended.*.lastDataUpdate',
 				'adapter': 'nuki-extended',
+				'rssiState': 'none',
 				'battery': '.batteryChargeState',
 				'reach': 'none',
 				'isLowBat': '.batteryCritical'
