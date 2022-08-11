@@ -799,7 +799,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							default:
 								//State changed
-								if (!deviceUnreachState) {
+								if ((!deviceUnreachState) && (this.arrDev[i].adapter !== 'homematic')) {
 									await getLastStateChange();
 								} else {
 									await getLastContact();
