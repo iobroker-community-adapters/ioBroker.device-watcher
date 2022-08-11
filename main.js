@@ -1696,9 +1696,9 @@ class DeviceWatcher extends utils.Adapter {
 			<td align=center><font>${device.Adapter}</font></td>`;
 
 			if (isLowBatteryList) {
-				html += `<td align=center><font color=orange>${device.Battery == ' - ' ? 'schwach' : device.Battery}</font></td>`;
+				html += `<td align=center><font color=orange>${device.Battery}</font></td>`;
 			} else {
-				html += `<td align=right><font color=#3bcf0e>${device.Battery == ' - ' ? 'ok' : device.Battery}</font></td>`;
+				html += `<td align=right><font color=#3bcf0e>${device.Battery}</font></td>`;
 			}
 
 			html += `</tr>`;
