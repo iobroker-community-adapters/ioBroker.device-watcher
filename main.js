@@ -1078,13 +1078,6 @@ class DeviceWatcher extends utils.Adapter {
 								} else {
 									batteryHealth = 'low';
 								}
-								this.batteryPowered.push(
-									{
-										'Device': deviceName,
-										'Adapter': deviceAdapterName,
-										'Battery': batteryHealth
-									}
-								);
 								break;
 						}
 						switch (this.arrDev[i].isLowBat2) {
@@ -1097,15 +1090,15 @@ class DeviceWatcher extends utils.Adapter {
 								} else {
 									batteryHealth = 'low';
 								}
-								this.batteryPowered.push(
-									{
-										'Device': deviceName,
-										'Adapter': deviceAdapterName,
-										'Battery': batteryHealth
-									}
-								);
 								break;
 						}
+						this.batteryPowered.push(
+							{
+								'Device': deviceName,
+								'Adapter': deviceAdapterName,
+								'Battery': batteryHealth
+							}
+						);
 					} else {
 						batteryHealth = ' - ';
 					}
