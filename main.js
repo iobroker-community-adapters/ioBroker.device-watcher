@@ -243,7 +243,7 @@ class DeviceWatcher extends utils.Adapter {
 				sonos: this.config.sonosDevices,
 				switchbotBle: this.config.switchbotBleDevices,
 				zigbee: this.config.zigbeeDevices,
-				zwave: this.config.zwaveDevices,
+				zwave: this.config.zwaveDevices
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
@@ -1067,7 +1067,7 @@ class DeviceWatcher extends utils.Adapter {
 				const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 				if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
-					if (deviceLowBatState || deviceLowBatStateHM) {
+					if ((deviceLowBatState !== undefined) || (deviceLowBatStateHM !== undefined)) {
 						switch (this.arrDev[i].isLowBat) {
 							case 'none':
 								batteryHealth = ' - ';
