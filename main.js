@@ -1063,11 +1063,22 @@ class DeviceWatcher extends utils.Adapter {
 
 				// 3. Get battery states
 				let batteryHealth;
+				const deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+				const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 				if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
-					batteryHealth = ' - ';
+					switch (this.arrDev[i].isLowBat) {
+						case 'none':
+							batteryHealth = ' - ';
+							break;
+						default:
+							if (!deviceLowBatState) {
+								batteryHealth = 'ok';
+							} else {
+								batteryHealth = 'low';
+							}
+					}
 				} else {
-
 					switch (this.arrDev[i].adapter) {
 						case 'homematic':
 							if (deviceBatteryState === 0) {
@@ -1134,8 +1145,6 @@ class DeviceWatcher extends utils.Adapter {
 
 				// 3c. Count how many devices are with low battery
 				const batteryWarningMin = this.config.minWarnBatterie;
-				const deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
-				const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
 				switch (this.arrDev[i].adapter) {
 					case 'homematic':
