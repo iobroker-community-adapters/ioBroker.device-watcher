@@ -299,7 +299,7 @@ class DeviceWatcher extends utils.Adapter {
 
 
 	/**
-	 * @param {string} [sentence] - Word which should be capitalize
+	 * @param {string} sentence - Word which should be capitalize
 	 **/
 	async capitalize(sentence) {
 		//make the first letter uppercase
@@ -307,7 +307,7 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * @param {object} [obj] - State of datapoint
+	 * @param {object} obj - State of datapoint
 	 **/
 	async getInitValue(obj) {
 		//state can be null or undefinded
@@ -316,7 +316,7 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * @param {object} [obj] - State of own datapoint
+	 * @param {object} obj - State of own datapoint
 	 **/
 	async getOwnInitValue(obj) {
 		//state can be null or undefinded for own states
@@ -326,7 +326,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	//create datapoints for each adapter
 	/**
-	 * @param {object} [adptName] - Adaptername of devices
+	 * @param {object} adptName - Adaptername of devices
 	 **/
 	async createDPsForEachAdapter(adptName) {
 
@@ -653,7 +653,7 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * @param {object} [i] - Device Object
+	 * @param {object} i - Device Object
 	 **/
 	async createData(i) {
 		const devices = await this.getForeignStatesAsync(this.arrDev[i].Selektor);
@@ -1250,7 +1250,7 @@ class DeviceWatcher extends utils.Adapter {
 
 
 	/**
-	 * @param {string} [adptName] - Adapter name
+	 * @param {string} adptName - Adapter name
 	 */
 	async createDataForEachAdapter(adptName) {
 		// create Data for each Adapter in own lists
@@ -1299,7 +1299,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Notification service
-	 * @param {string} [text] - Text which should be send
+	 * @param {string} text - Text which should be send
 	 **/
 	async sendNotification(text) {
 
@@ -1615,8 +1615,8 @@ class DeviceWatcher extends utils.Adapter {
 	}//<--End  of writing Datapoints
 
 	/**
-	 * @param {object} [devices] - Device
-	 * @param {number} [deviceCount] - Counted devices
+	 * @param {object} devices - Device
+	 * @param {number} deviceCount - Counted devices
 	 */
 	async creatLinkQualityListHTML(devices, deviceCount) {
 		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
@@ -1647,8 +1647,8 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * @param {object} [devices] - Device
-	 * @param {number} [deviceCount] - Counted devices
+	 * @param {object} devices - Device
+	 * @param {number} deviceCount - Counted devices
 	 */
 	async createOfflineListHTML(devices, deviceCount) {
 		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
@@ -1718,8 +1718,8 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * @param {string} [codePart] - Message Prefix
-	 * @param {object} [error] - Sentry message
+	 * @param {string} codePart - Message Prefix
+	 * @param {object} error - Sentry message
 	 */
 	errorReporting(codePart, error) {
 		const msg = `[${codePart}] error: ${error.message}`;
