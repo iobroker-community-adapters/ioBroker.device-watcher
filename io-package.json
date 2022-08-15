@@ -295,7 +295,7 @@
         "jeelinkMaxMinutes": 300,
         "mihomeMaxMinutes": 300,
         "mihomeVacuumMaxMinutes": 300,
-        "nukiextendMaxMinutes": -1,
+        "nukiextendMaxMinutes": 300,
         "pingMaxMinutes": -1,
         "shellyMaxMinutes": -1,
         "sonoffMaxMinutes": -1,
