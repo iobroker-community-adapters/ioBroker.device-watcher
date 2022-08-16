@@ -673,13 +673,13 @@ class DeviceWatcher extends utils.Adapter {
 				const currDeviceString = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
 				const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
 
-				//Get device name
+				// Get device name
 				const deviceObject = await this.getForeignObjectAsync(currDeviceString);
 				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 				let deviceName;
 
 				switch (this.arrDev[i].adapter) {
-					case 'switchbotBle':	//Get ID for Switchbot and ESPHome Devices
+					case 'switchbotBle':	// Get ID for Switchbot and ESPHome Devices
 					case 'esphome':
 						deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 						break;
@@ -702,12 +702,12 @@ class DeviceWatcher extends utils.Adapter {
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
 
-				// 3. Get battery states
+				// Get battery states
 				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
 				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
 
-				// 1. Get link quality
+				// Get link quality
 				let deviceQualityState;
 				let linkQuality;
 
@@ -751,14 +751,13 @@ class DeviceWatcher extends utils.Adapter {
 						);
 					}
 				} else {
-					// no linkQuality available for powered devices
-					linkQuality = ' - ';
+					linkQuality = ' - '; // no linkQuality available for powered devices
 				}
 
-				// 1b. Count how many devices with link Quality
+				// Count how many devices with link Quality
 				this.linkQualityCount = this.linkQualityDevices.length;
 
-				// 2. When was the last contact to the device?
+				// When was the last contact to the device?
 				let lastContactString;
 
 				let deviceState = 'Online';
@@ -791,8 +790,8 @@ class DeviceWatcher extends utils.Adapter {
 							return lastContactString;
 						};
 
-						// 2b. wenn seit X Minuten kein Kontakt mehr besteht, nimm Gerät in Liste auf
-						//Rechne auf Tage um, wenn mehr als 48 Stunden seit letztem Kontakt vergangen sind
+						//  If there is no contact since user sets minutes add device in offline list
+						// calculate to days after 48 hours
 						switch (this.arrDev[i].reach) {
 							case 'none':
 								await getLastContact();
@@ -1067,10 +1066,10 @@ class DeviceWatcher extends utils.Adapter {
 
 
 
-				// 2c. Count how many devcies are offline
+				// Count how many devcies are offline
 				this.offlineDevicesCount = this.offlineDevices.length;
 
-				// 3. Get battery states
+				// Get battery states
 				let batteryHealth;
 				const deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
 				const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
@@ -1173,14 +1172,15 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 
-				// 3b. Count how many devices are with battery
+				// Count how many devices are with battery
 				this.batteryPoweredCount = this.batteryPowered.length;
 
-				// 3c. Count how many devices are with low battery
+				// Count how many devices are with low battery
 				const batteryWarningMin = this.config.minWarnBatterie;
 
+				// fill list with low battery devices
 				switch (this.arrDev[i].adapter) {
-					case 'homematic':
+					case 'homematic': // there are differnt low bat states between hm and hmIp devices
 						if (deviceLowBatState || deviceLowBatStateHM) {
 							this.batteryLowPowered.push(
 								{
@@ -1192,7 +1192,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 
-					default:
+					default: // for all other devices with low bat states
 						if (deviceLowBatState) {
 							this.batteryLowPowered.push(
 								{
@@ -1201,7 +1201,7 @@ class DeviceWatcher extends utils.Adapter {
 									'Battery': batteryHealth
 								}
 							);
-						} else if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) {
+						} else if (deviceBatteryState && (deviceBatteryState < batteryWarningMin)) { // if the battery state is under the set limit
 							this.batteryLowPowered.push(
 								{
 									'Device': deviceName,
