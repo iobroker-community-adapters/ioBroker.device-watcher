@@ -1453,6 +1453,9 @@ class DeviceWatcher extends utils.Adapter {
 				const lastOfflineNotifyIndicator = await this.getOwnInitValue('info.lastOfflineNotification');
 				const now = new Date(); // get date
 
+				// set indicator for send message first to 'false', after sending to 'true'
+				if (now.getHours() < 11) await this.setStateAsync('info.lastOfflineNotification', false, true);
+
 				// if time is > 11 (12:00 pm create message for offline devices devices)
 				if ((now.getHours() > 11) && (!lastOfflineNotifyIndicator)) {
 					let msg = '';
@@ -1517,7 +1520,7 @@ class DeviceWatcher extends utils.Adapter {
 			const lastBatteryNotifyIndicator = await this.getOwnInitValue('info.lastBatteryNotification');
 
 			// set indicator for send message first to 'false', after sending to 'true'
-			if (now.getHours() < 11) { await this.setStateAsync('info.lastBatteryNotification', false, true); }
+			if (now.getHours() < 11) await this.setStateAsync('info.lastBatteryNotification', false, true);
 
 			// if time is > 11 (12:00 pm create message for low battery devices)
 			if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)) {
