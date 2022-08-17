@@ -1287,6 +1287,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications(); // send message if new devices are offline
+			if (this.config.checkSendOfflineMsgDaily) await this.sendDailyOfflineNotifications(); // send daily overview of offline devices
 			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifications(); // send message for low battery devices
 			await this.writeDatapoints(); // fill the datapoints
 		} catch (error) {
@@ -1480,6 +1481,41 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Finished the function: ${this.sendOfflineNotifications.name}`);
 	}//<--End of offline notification
 
+	async sendDailyOfflineNotifications() {
+		// send daily an overview with offline devices
+
+		this.log.debug(`Start the function: ${this.sendDailyOfflineNotifications.name}`);
+
+		try {
+			// Check if the daily message for offline devices was already sent today
+			const lastOfflineNotifyIndicator = await this.getOwnInitValue('info.lastOfflineNotification');
+			const now = new Date(); // get date
+
+			// set indicator for send message first to 'false', after sending to 'true'
+			if (now.getHours() < 11) await this.setStateAsync('info.lastOfflineNotification', false, true);
+
+			// if time is > 11 (12:00 pm create message for offline devices devices)
+			if ((now.getHours() > 11) && (!lastOfflineNotifyIndicator)) {
+				let msg = '';
+
+				for (const id of this.offlineDevices) {
+					msg = `${msg} \n ${id['Device']} (${id['Last contact']})`;
+				}
+
+				if (this.offlineDevicesCount > 0) {
+					this.log.info(`Geräte Offline: ${msg}`);
+					await this.setStateAsync('lastNotification', `Geräte Offline: ${msg}`, true);
+
+					await this.sendNotification(`Geräte Offline: ${msg}`);
+
+					await this.setStateAsync('info.lastOfflineNotification', true, true);
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendDailyOfflineNotifications]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendDailyOfflineNotifications.name}`);
+	}//<--End of daily offline notification
 
 	async sendBatteryNotifications() {
 		// send message for low battery devices
