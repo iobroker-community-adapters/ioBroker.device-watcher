@@ -176,7 +176,9 @@
                     "md": 6,
                     "lg": 3,
                     "label": "Daily overview of offline devices",
-                    "help": "Get daily an overview with all offline devices"
+                    "help": "Get daily an overview with all offline devices",
+                    "hidden": "!data.checkSendOfflineMsg",
+                    "hideOnlyControl": false
                 },
                 "trenner": {
                     "newLine": true,
