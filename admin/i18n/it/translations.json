@@ -68,5 +68,7 @@
     "Use the true value of the signal strength, or it is converted to %": "Usa il vero valore della potenza del segnale, oppure viene convertito in %",
     "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.": "Qui puoi definire i tempi offline di ciascun adattatore. ",
     "Create additionally HTML lists": "Crea elenchi HTML aggiuntivi",
-    "Create the lists also in HTML": "Crea le liste anche in HTML"
+    "Create the lists also in HTML": "Crea le liste anche in HTML",
+    "Daily overview of offline devices": "Panoramica quotidiana dei dispositivi offline",
+    "Get daily an overview with all offline devices": "Ottieni quotidianamente una panoramica di tutti i dispositivi offline"
 }

@@ -257,6 +257,7 @@
         "createOwnFolder": false,
         "createHtmlList": false,
         "checkSendOfflineMsg": false,
+        "checkSendOfflineMsgDaily": false,
         "checkSendBatteryMsg": false,
         "minWarnBatterie": 35,
         "checkMonday": false,
@@ -582,6 +583,30 @@
                     "es": "Indicador si la última notificación de batería fue enviada hoy.",
                     "pl": "Inskrypcjacyjna, jeśli ostatnia powiadomiona baterią została do dzisiaj.",
                     "zh-cn": "如果最后一个电池的通知今天才发出,则不用说。."
+                },
+                "type": "boolean",
+                "role": "indicator",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.lastOfflineNotification",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Indicator if last daily offline notification was send today.",
+                    "de": "Indikator, wenn letzte tägliche Offline-Benachrichtigung wurde heute gesendet.",
+                    "ru": "Индикатор, если последнее ежедневное уведомление оффлайн было отправлено сегодня.",
+                    "pt": "Indicador se última notificação off-line diária foi enviado hoje.",
+                    "nl": "Indicator als de laatste dagelijkse offline-informatie vandaag werd verstuurd.",
+                    "fr": "Indicateur si la dernière notification quotidienne hors ligne a été envoyée aujourd'hui.",
+                    "it": "Indicatore se ultima notifica offline giornaliera è stato inviato oggi.",
+                    "es": "Indicador si la última notificación diaria fuera de línea fue enviada hoy.",
+                    "pl": "Wskazuje się na to, że do dziś wysłano ostatni dzienne powiadomienie.",
+                    "zh-cn": "如果最后一天的无线通知今天才发出。."
                 },
                 "type": "boolean",
                 "role": "indicator",

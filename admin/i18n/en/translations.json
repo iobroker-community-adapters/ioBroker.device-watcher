@@ -65,5 +65,7 @@
 	"Create own folders for each adapter":"Create own folders for each adapter",
 	"Use the true value of the signal strength, or it is converted to %": "Use the true value of the signal strength, Or it is converted to %",
 	"Create additionally HTML lists": "Create additionally HTML lists",
-	"Create the lists also in HTML": "Create the lists also in HTML"
+	"Create the lists also in HTML": "Create the lists also in HTML",
+	"Daily overview of offline devices": "Daily overview of offline devices",
+	"Get daily an overview with all offline devices": "Get daily an overview with all offline devices"
 }

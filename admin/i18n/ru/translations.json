@@ -68,5 +68,7 @@
     "Use the true value of the signal strength, or it is converted to %": "Используйте истинное значение уровня сигнала или преобразуйте его в %",
     "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.": "Здесь вы можете определить время автономной работы каждого адаптера. ",
     "Create additionally HTML lists": "Создание дополнительных HTML-списков",
-    "Create the lists also in HTML": "Создавайте списки также в HTML"
+    "Create the lists also in HTML": "Создавайте списки также в HTML",
+    "Daily overview of offline devices": "Ежедневный обзор автономных устройств",
+    "Get daily an overview with all offline devices": "Получайте ежедневный обзор всех автономных устройств"
 }

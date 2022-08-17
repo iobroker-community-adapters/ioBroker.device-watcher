@@ -68,5 +68,7 @@
     "Use the true value of the signal strength, or it is converted to %": "Gebruik de werkelijke waarde van de signaalsterkte, of het wordt geconverteerd naar %",
     "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.": "Hier kunt u de offline tijden van elke adapter definiëren. ",
     "Create additionally HTML lists": "Extra HTML-lijsten maken",
-    "Create the lists also in HTML": "Maak de lijsten ook in HTML aan"
+    "Create the lists also in HTML": "Maak de lijsten ook in HTML aan",
+    "Daily overview of offline devices": "Dagelijks overzicht van offline apparaten",
+    "Get daily an overview with all offline devices": "Krijg dagelijks een overzicht met alle offline apparaten"
 }

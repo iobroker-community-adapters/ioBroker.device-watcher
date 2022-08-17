@@ -68,5 +68,7 @@
     "Use the true value of the signal strength, or it is converted to %": "使用信号强度的真实值，或者转换为%",
     "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.": "您可以在此处定义每个适配器的离线时间。",
     "Create additionally HTML lists": "额外创建 HTML 列表",
-    "Create the lists also in HTML": "也在 HTML 中创建列表"
+    "Create the lists also in HTML": "也在 HTML 中创建列表",
+    "Daily overview of offline devices": "离线设备的每日概览",
+    "Get daily an overview with all offline devices": "每天获取所有离线设备的概览"
 }
