@@ -302,7 +302,7 @@
         "hueextMaxMinutes": -1,
         "jeelinkMaxMinutes": 300,
         "mihomeMaxMinutes": 300,
-        "mihomeVacuumMaxMinutes": 300,
+        "mihomeVacuumMaxMinutes": -1,
         "nukiextendMaxMinutes": 300,
         "pingMaxMinutes": -1,
         "shellyMaxMinutes": -1,
