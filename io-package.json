@@ -225,7 +225,7 @@
             "de": [
                 "docs/de/README.md"
             ]
-          },
+        },
         "dependencies": [
             {
                 "js-controller": ">=2.0.0"

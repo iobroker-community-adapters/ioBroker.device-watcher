@@ -8,7 +8,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 
 // Sentry error reporting, disable when testing code!
-const enableSendSentry = false;
+const enableSendSentry = true;
 
 class DeviceWatcher extends utils.Adapter {
 
@@ -242,7 +242,7 @@ class DeviceWatcher extends utils.Adapter {
 				switchbotBle: this.config.switchbotBleDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
-				test: true
+				test: false
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
@@ -306,7 +306,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		this.refreshDataTimeout = this.setTimeout(() => {
-			this.log.warn('Updating Data');
+			this.log.debug('Updating Data');
 			this.refreshDataTimeout = null;
 
 			this.main();
