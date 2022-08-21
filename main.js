@@ -8,7 +8,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 
 // Sentry error reporting, disable when testing code!
-const enableSendSentry = true;
+const enableSendSentry = false;
 
 class DeviceWatcher extends utils.Adapter {
 
@@ -20,7 +20,7 @@ class DeviceWatcher extends utils.Adapter {
 		});
 
 		this.on('ready', this.onReady.bind(this));
-		//this.on('stateChange', this.onStateChange.bind(this));
+		this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
 		// this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
@@ -43,6 +43,9 @@ class DeviceWatcher extends utils.Adapter {
 		this.lowBatteryPoweredCount = 0;
 
 		this.deviceReachable = '';
+
+		// Interval timer
+		this.refreshDataTimeout = null;
 
 		// arrays of supported adapters
 		this.arrApart = {
@@ -200,27 +203,21 @@ class DeviceWatcher extends utils.Adapter {
 				'battery': '.Battery.level',
 				'reach': '.ready',
 				'isLowBat': '.Battery.isLow'
+			},
+			test: {
+				'Selektor': '0_userdata.*.UNREACH',
+				'adapter': 'homematic',
+				'rssiState': '.RSSI_DEVICE',
+				'battery': '.OPERATING_VOLTAGE',
+				'reach': '.UNREACH',
+				'isLowBat': '.LOW_BAT',
+				'isLowBat2': '.LOWBAT'
 			}
 		};
 	}
 
 	async onReady() {
 		this.log.debug(`Adapter ${adapterName} was started`);
-
-		try {
-			await this.main();
-			await this.writeDatapoints();
-			this.log.debug('all done, exiting');
-			this.terminate ? this.terminate('Everything done. Going to terminate till next schedule', 11) : process.exit(0);
-		} catch (error) {
-			this.errorReporting('[onReady]', error);
-			this.terminate ? this.terminate(15) : process.exit(15);
-		}
-	}
-
-
-	async main() {
-		this.log.debug(`Function started: ${this.main.name}`);
 
 		try {
 			this.supAdapter = {
@@ -244,7 +241,8 @@ class DeviceWatcher extends utils.Adapter {
 				sonos: this.config.sonosDevices,
 				switchbotBle: this.config.switchbotBleDevices,
 				zigbee: this.config.zigbeeDevices,
-				zwave: this.config.zwaveDevices
+				zwave: this.config.zwaveDevices,
+				test: true
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
@@ -263,10 +261,70 @@ class DeviceWatcher extends utils.Adapter {
 				return; // cancel run if no adapter is selected
 			}
 
+			// update data now
+			await this.main();
+
+			// update data in interval
+			await this.refreshData();
+
+		} catch (error) {
+			this.errorReporting('[onReady]', error);
+			this.terminate ? this.terminate(15) : process.exit(15);
+		}
+	}
+
+	/**
+     * Is called if a subscribed state changes
+     * @param {string} id
+     * @param {ioBroker.State | null | undefined} state
+     */
+	async onStateChange(id, state) {
+		if (state) {
+			// The state was changed
+			this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+		} else {
+			// The state was deleted
+			this.log.warn(`state ${id} deleted`);
+		}
+	}
+
+	/**
+     * Is called as interval
+     * @param {number} ms
+     */
+	async delayTimeout(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	async refreshData() {
+		const refreshTimeout = this.config.updateinterval * 1000;
+
+		// Clear existing timeout
+		if (this.refreshDataTimeout) {
+			this.log.debug('clearing old refresh timeout');
+			this.clearTimeout(this.refreshDataTimeout);
+		}
+
+		this.refreshDataTimeout = this.setTimeout(() => {
+			this.log.warn('Updating Data');
+			this.refreshDataTimeout = null;
+
+			this.main();
+			this.refreshData();
+		}, refreshTimeout);
+		//await this.delayTimeout(refreshTimeout);
+		//await this.main();
+		//await this.refreshData();
+	}
+
+	async main() {
+		this.log.debug(`Function started: ${this.main.name}`);
+
+		try {
 			//create and fill datapoints for each adapter if selected
 			try {
 				for (const [id] of Object.entries(this.arrApart)) {
-					if (this.supAdapter[id]) {
+					if ((this.supAdapter !== undefined) && (this.supAdapter[id])) {
 
 						if (this.config.createOwnFolder) {
 							await this.createDPsForEachAdapter(id);
@@ -1588,7 +1646,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.resetVars.name}`);
 
 		// arrays
-		this.offlineDevices = [],
+		this.offlineDevices = [];
 		this.linkQualityDevices = [];
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
@@ -1805,9 +1863,18 @@ class DeviceWatcher extends utils.Adapter {
 	} // <-- end of errorReporting
 
 
+	/**
+     * @param {() => void} callback
+     */
 	onUnload(callback) {
 		try {
 			this.log.info('cleaned everything up...');
+
+			if (this.refreshDataTimeout) {
+				this.log.debug('clearing refresh timeout');
+				this.clearTimeout(this.refreshDataTimeout);
+			}
+
 			callback();
 		} catch (e) {
 			callback();
@@ -1815,6 +1882,7 @@ class DeviceWatcher extends utils.Adapter {
 	}
 }
 
+// @ts-ignore parent is a valid property on module
 if (require.main !== module) {
 	// Export the constructor in compact mode
 	/**

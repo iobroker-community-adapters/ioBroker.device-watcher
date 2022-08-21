@@ -598,6 +598,32 @@
                     "label": "Create additionally HTML lists",
                     "help": "Create the lists also in HTML"
                 },
+                "_updateInterval": {
+                    "type": "header", 
+                    "text": "Update-Interval",
+                    "size": 2
+                },
+                "textUpdateInterval": {
+                    "type": "staticText",
+                    "text": "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "style": {
+                        "fontSize": 16,
+                        "marginBottom": 10
+                      }
+               },
+               "updateinterval": {
+                "type": "number",
+                "min": 2,
+                "max": 100000,
+                "sm": 6,
+                "md": 6,
+                "lg": 3,
+                "label": "Update-Interval",
+                "help": "in seconds"
+            },
                 "_headerOfflineTime": {
                     "type": "header", 
                     "text": "Offline Time",
@@ -611,7 +637,7 @@
                     "lg": 12,
                     "style": {
                         "fontSize": 16,
-                        "marginBottom": 20
+                        "marginBottom": 10
                       }
                },
                "alexa2MaxMinutes": {
