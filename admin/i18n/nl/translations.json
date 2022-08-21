@@ -70,5 +70,7 @@
     "Create additionally HTML lists": "Extra HTML-lijsten maken",
     "Create the lists also in HTML": "Maak de lijsten ook in HTML aan",
     "Daily overview of offline devices": "Dagelijks overzicht van offline apparaten",
-    "Get daily an overview with all offline devices": "Krijg dagelijks een overzicht met alle offline apparaten"
+    "Get daily an overview with all offline devices": "Krijg dagelijks een overzicht met alle offline apparaten",
+    "Update-Interval": "Bijwerkingsonderbreking",
+    "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Hier kunt u het update-interval van de datapunten/lijsten definiëren. "
 }

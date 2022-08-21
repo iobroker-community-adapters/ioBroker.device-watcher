@@ -70,5 +70,7 @@
     "Create additionally HTML lists": "Crea elenchi HTML aggiuntivi",
     "Create the lists also in HTML": "Crea le liste anche in HTML",
     "Daily overview of offline devices": "Panoramica quotidiana dei dispositivi offline",
-    "Get daily an overview with all offline devices": "Ottieni quotidianamente una panoramica di tutti i dispositivi offline"
+    "Get daily an overview with all offline devices": "Ottieni quotidianamente una panoramica di tutti i dispositivi offline",
+    "Update-Interval": "Intervallo di aggiornamento",
+    "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Qui è possibile definire l'intervallo di aggiornamento dei punti dati/elenchi. "
 }

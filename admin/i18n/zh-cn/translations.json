@@ -70,5 +70,7 @@
     "Create additionally HTML lists": "额外创建 HTML 列表",
     "Create the lists also in HTML": "也在 HTML 中创建列表",
     "Daily overview of offline devices": "离线设备的每日概览",
-    "Get daily an overview with all offline devices": "每天获取所有离线设备的概览"
+    "Get daily an overview with all offline devices": "每天获取所有离线设备的概览",
+    "Update-Interval": "更新间隔",
+    "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "您可以在此处定义数据点/列表的更新间隔。"
 }
