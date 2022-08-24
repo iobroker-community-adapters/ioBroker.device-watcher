@@ -19,12 +19,6 @@ class DeviceWatcher extends utils.Adapter {
 			useFormatDate: true,
 		});
 
-		this.on('ready', this.onReady.bind(this));
-		this.on('stateChange', this.onStateChange.bind(this));
-		// this.on('objectChange', this.onObjectChange.bind(this));
-		// this.on('message', this.onMessage.bind(this));
-		this.on('unload', this.onUnload.bind(this));
-
 		// arrays
 		this.offlineDevices = [];
 		this.linkQualityDevices = [];
@@ -214,6 +208,13 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat2': '.LOWBAT'
 			}
 		};
+
+		this.on('ready', this.onReady.bind(this));
+		//this.on('stateChange', this.onStateChange.bind(this));
+		// this.on('objectChange', this.onObjectChange.bind(this));
+		// this.on('message', this.onMessage.bind(this));
+		this.on('unload', this.onUnload.bind(this));
+
 	}
 
 	async onReady() {
@@ -297,7 +298,9 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	async refreshData() {
-		const refreshTimeout = this.config.updateinterval * 1000;
+		const nextTimeout = this.config.updateinterval * 1000;
+
+		await this.main();
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
@@ -307,14 +310,10 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.refreshDataTimeout = this.setTimeout(() => {
 			this.log.debug('Updating Data');
-			this.refreshDataTimeout = null;
 
-			this.main();
+			this.refreshDataTimeout = null;
 			this.refreshData();
-		}, refreshTimeout);
-		//await this.delayTimeout(refreshTimeout);
-		//await this.main();
-		//await this.refreshData();
+		}, nextTimeout);
 	}
 
 	async main() {
