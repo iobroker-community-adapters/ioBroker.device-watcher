@@ -8,7 +8,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 
 // Sentry error reporting, disable when testing code!
-const enableSendSentry = true;
+const enableSendSentry = false;
 
 class DeviceWatcher extends utils.Adapter {
 
@@ -131,13 +131,14 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none'
 			},
 			mihomeVacuum: {
-				'Selektor': 'mihome-vacuum.*.wifi_signal',
+				'Selektor': 'mihome-vacuum.*.connection',
 				'adapter': 'mihomeVacuum',
-				'rssiState': '.wifi_signal',
+				'rssiState': '.deviceInfo.wifi_signal',
 				'battery': '.info.battery',
 				'battery2': '.control.battary_life',
-				'reach': '.connection',
-				'isLowBat': 'none'
+				'reach': '.info.connection',
+				'isLowBat': 'none',
+				'id': '.deviceInfo.model'
 			},
 			nukiExt: {
 				'Selektor': 'nuki-extended.*.lastDataUpdate',
@@ -198,7 +199,7 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.ready',
 				'isLowBat': '.Battery.isLow'
 			},
-			test: {
+			test: { // Only for Dev
 				'Selektor': '0_userdata.*.UNREACH',
 				'adapter': 'homematic',
 				'rssiState': '.RSSI_DEVICE',
@@ -210,7 +211,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		this.on('ready', this.onReady.bind(this));
-		//this.on('stateChange', this.onStateChange.bind(this));
+		this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
 		// this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
@@ -287,14 +288,6 @@ class DeviceWatcher extends utils.Adapter {
 			// The state was deleted
 			this.log.warn(`state ${id} deleted`);
 		}
-	}
-
-	/**
-     * Is called as interval
-     * @param {number} ms
-     */
-	async delayTimeout(ms) {
-		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
 	async refreshData() {
@@ -742,12 +735,15 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case 'hue-extended':
-					case 'mihomeVacuum':
 					case 'homematic':
 					case 'nuki-extended':
 						if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 							deviceName = shortDeviceObject.common.name;
 						}
+						break;
+
+					case 'mihomeVacuum':
+						deviceName = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
 						break;
 
 					default:
@@ -770,12 +766,17 @@ class DeviceWatcher extends utils.Adapter {
 
 				switch (this.arrDev[i].adapter) {
 					case 'sonoff':
-					case 'mihomeVacuum':
 					case 'homematic':
 						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 						break;
+
+					case 'mihomeVacuum':
+						deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
+						break;
+
 					default:
 						deviceQualityState = await this.getForeignStateAsync(id);
+						break;
 				}
 
 				if ((deviceQualityState) && (typeof deviceQualityState.val === 'number')) {
@@ -824,6 +825,7 @@ class DeviceWatcher extends utils.Adapter {
 						const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
 						const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
+						const shortDeviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].reach);
 
 						const getLastContact = async () => {
 							lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
@@ -1018,11 +1020,11 @@ class DeviceWatcher extends utils.Adapter {
 								break;
 							case 'mihomeVacuum':
 								if (this.config.mihomeVacuumMaxMinutes === -1) {
-									if (!deviceUnreachState) {
+									if (!shortDeviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
-								} else if ((lastStateChange > this.config.mihomeVacuumMaxMinutes) && (!deviceUnreachState)) {
+								} else if ((lastStateChange > this.config.mihomeVacuumMaxMinutes) && (!shortDeviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
