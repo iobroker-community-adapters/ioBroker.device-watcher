@@ -1199,7 +1199,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 						case 'mihomeVacuum':
-							if (shortDeviceBatteryState) {
+							if (typeof shortDeviceBatteryState === 'number') {
 								batteryHealth = shortDeviceBatteryState + '%';
 								this.batteryPowered.push(
 									{
@@ -1208,7 +1208,7 @@ class DeviceWatcher extends utils.Adapter {
 										'Battery': batteryHealth
 									}
 								);
-							} else if (shortDeviceBatteryState2) {
+							} else if (typeof shortDeviceBatteryState2 === 'number') {
 								batteryHealth = shortDeviceBatteryState2 + '%';
 								this.batteryPowered.push(
 									{
