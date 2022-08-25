@@ -1133,8 +1133,8 @@ class DeviceWatcher extends utils.Adapter {
 				const deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
 				const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 
-				if ((!deviceBatteryState) && (!shortDeviceBatteryState)) {
-					if ((deviceLowBatState !== undefined) || (deviceLowBatStateHM !== undefined)) {
+				if ((!deviceBatteryState) && (!shortDeviceBatteryState) && (!shortDeviceBatteryState2)) {
+					if ((deviceLowBatState !== undefined) || (deviceLowBatState !== undefined) || (deviceLowBatStateHM !== undefined)) {
 						switch (this.arrDev[i].isLowBat) {
 							case 'none':
 								batteryHealth = ' - ';
@@ -1199,7 +1199,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 						case 'mihomeVacuum':
-							if (typeof shortDeviceBatteryState === 'number') {
+							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
 								this.batteryPowered.push(
 									{
@@ -1208,7 +1208,7 @@ class DeviceWatcher extends utils.Adapter {
 										'Battery': batteryHealth
 									}
 								);
-							} else if (typeof shortDeviceBatteryState2 === 'number') {
+							} else if (shortDeviceBatteryState2) {
 								batteryHealth = shortDeviceBatteryState2 + '%';
 								this.batteryPowered.push(
 									{
