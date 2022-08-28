@@ -251,16 +251,25 @@ class DeviceWatcher extends utils.Adapter {
 				if (this.supAdapter[id]) {
 					this.arrDev.push(this.arrApart[id]);
 					this.adapterSelected.push(await this.capitalize(id));
-					this.log.debug(JSON.stringify(this.arrDev));
 				}
 			}
 
 			//Check if an Adapter is selected.
 			if (this.adapterSelected.length >= 1) {
+				// show list in debug log
+				this.log.debug(JSON.stringify(this.arrDev));
+
 				this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${(this.adapterSelected).join(', ')} ...`);
 			} else {
 				this.log.warn(`No adapter selected. Please check the instance configuration!`);
 				return; // cancel run if no adapter is selected
+			}
+
+			//create Blacklist
+			try {
+				await this.createBlacklist();
+			} catch (error) {
+				this.errorReporting('[onReady - create blacklist]', error);
 			}
 
 			// update data now
@@ -313,6 +322,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.main.name}`);
 
 		try {
+
 			//create and fill datapoints for each adapter if selected
 			try {
 				for (const [id] of Object.entries(this.arrApart)) {
@@ -702,19 +712,24 @@ class DeviceWatcher extends utils.Adapter {
 		});
 	}
 
+	async createBlacklist() {
+		this.log.debug(`Function started: ${this.createBlacklist.name}`);
+
+		const myBlacklist = this.config.tableBlacklist;
+
+		for (const i in myBlacklist) {
+			this.blacklistArr.push(myBlacklist[i].device);
+		}
+		this.log.warn(`Found items on the blacklist: ${this.blacklistArr}`);
+		this.log.debug(`Function finished: ${this.createBlacklist.name}`);
+	}
+
 	/**
 	 * @param {object} i - Device Object
 	 **/
 	async createData(i) {
 		const devices = await this.getForeignStatesAsync(this.arrDev[i].Selektor);
 		const deviceAdapterName = await this.capitalize(this.arrDev[i].adapter);
-		const myBlacklist = this.config.tableBlacklist;
-
-		/*----------  Loop for blacklist ----------*/
-		for (const i in myBlacklist) {
-			this.blacklistArr.push(myBlacklist[i].device);
-			this.log.debug(`Found items on the blacklist: ${this.blacklistArr}`);
-		}
 
 		/*----------  Start of second main loop  ----------*/
 		for (const [id] of Object.entries(devices)) {
