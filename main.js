@@ -720,7 +720,7 @@ class DeviceWatcher extends utils.Adapter {
 		for (const i in myBlacklist) {
 			this.blacklistArr.push(myBlacklist[i].device);
 		}
-		this.log.warn(`Found items on the blacklist: ${this.blacklistArr}`);
+		this.log.info(`Found items on the blacklist: ${this.blacklistArr}`);
 		this.log.debug(`Function finished: ${this.createBlacklist.name}`);
 	}
 
