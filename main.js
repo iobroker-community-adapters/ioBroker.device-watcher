@@ -912,7 +912,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						};
 
-						this.subscribeForeignStates(currDeviceString + this.arrDev[i].reach);
+						// await this.subscribeForeignStatesAsync(currDeviceString + this.arrDev[i].reach);
 
 						switch (this.arrDev[i].adapter) {
 							case 'alexa2':

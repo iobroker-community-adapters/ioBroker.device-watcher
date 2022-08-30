@@ -290,7 +290,7 @@
         "instanceLovelace": "",
         "titleLovelace": "Device-Watcher",
         "tableBlacklist": [],
-        "updateinterval": 60,
+        "updateinterval": 10,
         "alexa2MaxMinutes": -1,
         "bleMaxMinutes": 300,
         "deconzMaxMinutes": -1,
