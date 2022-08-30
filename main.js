@@ -211,7 +211,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		this.on('ready', this.onReady.bind(this));
-		// this.on('stateChange', this.onStateChange.bind(this));
+		this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
 		// this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
@@ -244,7 +244,7 @@ class DeviceWatcher extends utils.Adapter {
 				switchbotBle: this.config.switchbotBleDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
-				test: false
+				test: true
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
@@ -292,10 +292,11 @@ class DeviceWatcher extends utils.Adapter {
 	async onStateChange(id, state) {
 		if (state) {
 			// The state was changed
-			this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			await this.main();
 		} else {
 			// The state was deleted
-			this.log.warn(`state ${id} deleted`);
+			this.log.debug(`state ${id} deleted`);
 		}
 	}
 
@@ -910,6 +911,8 @@ class DeviceWatcher extends utils.Adapter {
 								);
 							}
 						};
+
+						this.subscribeForeignStates(currDeviceString + this.arrDev[i].reach);
 
 						switch (this.arrDev[i].adapter) {
 							case 'alexa2':
