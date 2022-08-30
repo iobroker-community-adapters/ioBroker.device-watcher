@@ -244,7 +244,7 @@ class DeviceWatcher extends utils.Adapter {
 				switchbotBle: this.config.switchbotBleDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
-				test: true
+				test: false
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
