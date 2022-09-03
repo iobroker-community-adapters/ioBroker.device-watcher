@@ -83,7 +83,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.0.0 (2022-09-03)
  - ** BREAKING CHANGE ** If you update from version <= 0.3.0, remove the old instance first before you update to >= 1.0.0. After that you can create a new instance.
  - changed mode from shedule to daemon, changed mode from shedule to daemon, please take aware from the advice above
  - added Logitech Harmony Hub
@@ -93,8 +93,10 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 - removed channelnumber in Homematic devices name
 - added function to create html list
 - added german and english documentation
+
 ### 0.2.4 (2022-07-31)
 - many changes of code, comments and error handling
+
 ### 0.2.2 (2022-07-28)
 - fixed translations
 - added sentry
