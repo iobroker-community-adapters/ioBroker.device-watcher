@@ -23,7 +23,7 @@
 
 ## Device-Watcher adapter for ioBroker
 
-This is a watchdog for wireless devices. The adapter looks every fifteen minutes for the rssi/link quality and battery states and create JSON lists of them (devices with battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
+This is a watchdog for wireless devices. The adapter looks for the rssi/link quality and battery states and create JSON lists of them (devices with battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
 
 Supported adapters are:
 * Alexa2
