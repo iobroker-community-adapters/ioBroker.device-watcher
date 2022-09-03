@@ -86,6 +86,13 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.present',
 				'isLowBat': '.batterylow'
 			},
+			harmony: {
+				'Selektor': 'harmony.*.hubConnected',
+				'adapter': 'harmony',
+				'battery': 'none',
+				'reach': '.hubConnected',
+				'isLowBat': 'none'
+			},
 			homematic: {
 				'Selektor': 'hm-rpc.*.UNREACH',
 				'adapter': 'homematic',
@@ -229,6 +236,7 @@ class DeviceWatcher extends utils.Adapter {
 				enocean: this.config.enoceanDevices,
 				esphome: this.config.esphomeDevices,
 				fritzdect: this.config.fritzdectDevices,
+				harmony: this.config.harmonyDevices,
 				homematic: this.config.homematicDevices,
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
@@ -244,7 +252,7 @@ class DeviceWatcher extends utils.Adapter {
 				switchbotBle: this.config.switchbotBleDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
-				test: false
+				test: false // Only for Dev
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
@@ -977,6 +985,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if ((lastStateChange > this.config.fritzdectMaxMinutes) && (!deviceUnreachState)) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'harmony':
+								if (this.config.harmonyMaxMinutes === -1) {
+									if (deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if ((lastStateChange > this.config.harmonyMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
