@@ -991,7 +991,7 @@ class DeviceWatcher extends utils.Adapter {
 								break;
 							case 'harmony':
 								if (this.config.harmonyMaxMinutes === -1) {
-									if (deviceUnreachState) {
+									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
