@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "device-watcher",
-        "version": "0.3.0",
+        "version": "1.0.0",
         "news": {
+            "1.0.0": {
+                "en": "** BREAKING CHANGE ** If you update from version <= 0.3.0, remove the old instance first before you update to >= 1.0.0. After that you can create a new instance.\nchanged mode from shedule to daemon, please take aware from the advice above\nadded Logitech Harmony Hub\nsmall bugfixes (own function for blacklist, fix for memory leak etc.)",
+                "de": "** BREAKING CHANGE ** Wenn Sie von der Version <= 0.3.0 aktualisieren, entfernen Sie die alte Instanz zuerst, bevor Sie auf >= 1.0.0 aktualisieren danach können Sie eine neue Instanz erstellen.\ngeänderter modus von shedule nach daemon, bitte beachten sie die oben genannten ratschläge\nlogitech Harmony Hub\nkleine bugfixes (eigene funktion für blacklist, fix für speicherleck etc.)",
+                "ru": "Завтраки изменить Если вы обновляете из версии <= 0.3.0, сначала удалите старый экземпляр, прежде чем обновиться до >= 1.0.0 После этого вы можете создать новый экземпляр.\nизмененный режим от shedule до daemon, пожалуйста, ознакомьтесь с советами выше\nдобавил Logitech Harmony Hub\nнебольшие багфиксы (собственная функция для черного списка, исправить для утечки памяти и т.д.)",
+                "pt": "** REGRAS DE CONCORRÊNCIA Se você atualizar da versão <= 0.3.0, remova a antiga instância primeiro antes de atualizar para >= 1.0.0 Depois disso você pode criar uma nova instância.\nmodo alterado de shedule para daemon, por favor tome conhecimento do conselho acima\nadicionado Logitech Harmony Hub\npequenos bugfixes (função própria para a lista negra, corrigir para vazamento de memória etc.)",
+                "nl": "BREAKING CHANGE Als je updates van de versie 0.3.0, verwijder het oude instance eerst voordat je updates geeft aan 1.0, nadat je een nieuw voorbeeld kan creëren.\nverandering van shedule tot daemon, neem het advies boven\nvoegde Logitech Harmony Hub\nkleine insecten (own functie voor blacklist, herstel voor geheugenlek.)",
+                "fr": "♪ BREAKING CHANGE ♪ Si vous mettez à jour à partir de la version = 0.3.0, retirez l'ancienne instance avant de mettre à jour la version 1.0.0 Après cela, vous pouvez créer une nouvelle instance.\nchangement de mode de shedule à daemon, s'il vous plaît prendre conscience de l'avis ci-dessus\najouté Logitech Harmony Hub\npetits bugfix (fonction unique pour liste noire, correction pour fuite de mémoire etc.)",
+                "it": "# BREAKING CHANG # Se si aggiorna dalla versione <= 0.3.0, rimuovere la vecchia istanza prima di aggiornare a >= 1.0.0 Dopo di che è possibile creare una nuova istanza.\nmodo cambiato da capannone a demone, si prega di prendere coscienza dal consiglio sopra\naggiunto Logitech Harmony Hub\npiccoli bugfixes (funzione propria per blacklist, fix per perdita di memoria ecc.)",
+                "es": "# BREAKING CHANGE # Si se actualiza de la versión 0,3.0, retire la vieja instancia primero antes de actualizar a 0,0 Después de eso puede crear una nueva instancia.\ncambio de modo de shedule a daemon, por favor tome conciencia del consejo anterior\nañadido Logitech Harmony Hub\npequeños bugfixes (función propia para la lista negra, fijar para la fuga de memoria, etc.)",
+                "pl": "BTEAKING CHANGE (ang.). Jeśli uaktualnienie od wersji <= 0.3.0, usunie starego przykładu przed aktualizacją do >= 1.0.0 po tym, jak możesz stworzyć nowy przykład.\nzmienione mody od ul. do daemonu, słyszeć radę powyżej\nlogite Harmony Hub\nmałe błędy (właściwe funkcje czarnej listy, naprawy wyciek pamięci itp.)",
+                "zh-cn": "** BREAKANGE ** 如果你从 <=0.3.0”的版本中更新,那么,在你更新到1.0.0之前,将旧的事例删除。.\n更改从单元到大都市的模式,请从上述咨询意见中了解。\n增额后勤技术\n小型配制(黑名单的主位,用于纪念泄漏等)。"
+              },
             "0.3.0": {
                 "en": "removed channelnumber in Homematic devices name\nadded function to create html list\nadded german and english documentation",
                 "de": "kanalnummer entfernt in Homematic Gerätename\nfunktion hinzugefügt, um html-liste zu erstellen\ndeutsche und englische dokumentation",
