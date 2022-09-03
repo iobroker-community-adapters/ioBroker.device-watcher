@@ -88,6 +88,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
  - changed mode from shedule to daemon, changed mode from shedule to daemon, please take aware from the advice above
  - added Logitech Harmony Hub
  - small bugfixes (own function for blacklist, fix for memory leak etc.)
+ 
 ### 0.3.0 (2022-08-10)
 - removed channelnumber in Homematic devices name
 - added function to create html list
