@@ -144,6 +144,13 @@
                     "lg": 3,
                     "label": "Switchbot Ble"
                 },
+                "wledDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "WLED"
+                },
                 "zigbeeDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -873,6 +880,18 @@
                     "label": "Switchbot Ble",
                     "help": "in minutes",
                     "hidden": "!data.switchbotBleDevices",
+                    "hideOnlyControl": false
+                },
+                "wledMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "WLED",
+                    "help": "in minutes",
+                    "hidden": "!data.wledDevices",
                     "hideOnlyControl": false
                 },
                 "zigbeeMaxMinutes": {

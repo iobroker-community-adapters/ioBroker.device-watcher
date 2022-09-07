@@ -192,6 +192,15 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none',
 				'id': '.id'
 			},
+			wled: {
+				'Selektor': 'wled.*._online',
+				'adapter': 'wled',
+				'rssiState': '.wifi.rssi',
+				'battery': 'none',
+				'reach': '._online',
+				'isLowBat': 'none',
+				'id': 'none'
+			},
 			zigbee: {
 				'Selektor': 'zigbee.*.link_quality',
 				'adapter': 'zigbee',
@@ -207,13 +216,13 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.Battery.isLow'
 			},
 			test: { // Only for Dev
-				'Selektor': '0_userdata.*.UNREACH',
-				'adapter': 'homematic',
-				'rssiState': '.RSSI_DEVICE',
-				'battery': '.OPERATING_VOLTAGE',
-				'reach': '.UNREACH',
-				'isLowBat': '.LOW_BAT',
-				'isLowBat2': '.LOWBAT'
+				'Selektor': '0_userdata.0.wled.*._online',
+				'adapter': 'wled',
+				'rssiState': '.wifi.rssi',
+				'battery': 'none',
+				'reach': '._online',
+				'isLowBat': 'none',
+				'id': 'none'
 			}
 		};
 
@@ -250,6 +259,7 @@ class DeviceWatcher extends utils.Adapter {
 				sonoff: this.config.sonoffDevices,
 				sonos: this.config.sonosDevices,
 				switchbotBle: this.config.switchbotBleDevices,
+				wled: this.config.wledDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
 				test: false // Only for Dev
@@ -761,6 +771,7 @@ class DeviceWatcher extends utils.Adapter {
 					case 'hue-extended':
 					case 'homematic':
 					case 'nuki-extended':
+					case 'wled':
 						if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 							deviceName = shortDeviceObject.common.name;
 						}
@@ -791,6 +802,7 @@ class DeviceWatcher extends utils.Adapter {
 				switch (this.arrDev[i].adapter) {
 					case 'sonoff':
 					case 'homematic':
+					case 'wled':
 						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 						break;
 
@@ -1128,6 +1140,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.switchbotMaxMinutes) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'wled':
+								if (this.config.wledMaxMinutes === -1) {
+									if (!deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if (lastContact > this.config.wledMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
