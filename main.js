@@ -1709,8 +1709,9 @@ class DeviceWatcher extends utils.Adapter {
 			if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)) {
 				let msg = '';
 
+				this.log.warn(JSON.stringify(this.batteryLowPowered));
 				for (const id of this.batteryLowPowered) {
-					msg = '\n' + id['Device'] + ' (' + id['Battery'] + ')'.split(', ');
+					msg = `${msg} \n ${id['Device']} (${id['Battery']})`;
 				}
 
 				if (this.lowBatteryPoweredCount > 0) {
