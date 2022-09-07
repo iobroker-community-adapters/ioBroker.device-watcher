@@ -271,6 +271,7 @@
         "sonosDevices": false,
         "mihomeDevices": false,
         "mihomeVacuumDevices": false,
+        "tradfriDevices": false,
         "wledDevices": false,
         "trueState": false,
         "listOnlyBattery": false,
@@ -324,6 +325,7 @@
         "sonoffMaxMinutes": -1,
         "sonosMaxMinutes": -1,
         "switchbotMaxMinutes": 300,
+        "tradfriMaxMinutes": -1,
         "wledMaxMinutes": -1,
         "zigbeeMaxMinutes": 300,
         "zwaveMaxMinutes": -1

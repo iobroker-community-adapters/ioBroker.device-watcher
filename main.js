@@ -192,6 +192,15 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none',
 				'id': '.id'
 			},
+			tradfri: {
+				'Selektor': 'tradfri.*.lastSeen',
+				'adapter': 'tradfri',
+				'rssiState': 'none',
+				'battery': '.batteryPercentage',
+				'reach': '.alive',
+				'isLowBat': 'none',
+				'id': 'none'
+			},
 			wled: {
 				'Selektor': 'wled.*._online',
 				'adapter': 'wled',
@@ -216,11 +225,11 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.Battery.isLow'
 			},
 			test: { // Only for Dev
-				'Selektor': '0_userdata.0.wled.*._online',
-				'adapter': 'wled',
-				'rssiState': '.wifi.rssi',
-				'battery': 'none',
-				'reach': '._online',
+				'Selektor': '0_userdata.0.tradfri.*.lastSeen',
+				'adapter': 'tradfri',
+				'rssiState': 'none',
+				'battery': '.batteryPercentage',
+				'reach': '.alive',
 				'isLowBat': 'none',
 				'id': 'none'
 			}
@@ -259,6 +268,7 @@ class DeviceWatcher extends utils.Adapter {
 				sonoff: this.config.sonoffDevices,
 				sonos: this.config.sonosDevices,
 				switchbotBle: this.config.switchbotBleDevices,
+				tradfri: this.config.tradfriDevices,
 				wled: this.config.wledDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
@@ -810,6 +820,10 @@ class DeviceWatcher extends utils.Adapter {
 						deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
 						break;
 
+					case 'tradfri':
+						deviceQualityState;
+						break;
+
 					default:
 						deviceQualityState = await this.getForeignStateAsync(id);
 						break;
@@ -1140,6 +1154,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if (lastContact > this.config.switchbotMaxMinutes) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'tradfri':
+								if (this.config.tradfriMaxMinutes === -1) {
+									if (!deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if (lastContact > this.config.tradfriMaxMinutes) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}

@@ -144,6 +144,13 @@
                     "lg": 3,
                     "label": "Switchbot Ble"
                 },
+                "tradfriDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Tradfri"
+                },
                 "wledDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -880,6 +887,18 @@
                     "label": "Switchbot Ble",
                     "help": "in minutes",
                     "hidden": "!data.switchbotBleDevices",
+                    "hideOnlyControl": false
+                },
+                "tradfriMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Tradfri",
+                    "help": "in minutes",
+                    "hidden": "!data.tradfriDevices",
                     "hideOnlyControl": false
                 },
                 "wledMaxMinutes": {
