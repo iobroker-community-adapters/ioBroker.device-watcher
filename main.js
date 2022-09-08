@@ -1583,7 +1583,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				for (const id of this.offlineDevices) {
-					msg = `${msg} \n ${id['Device']} (${id['Last contact']})`;
+					msg = `${msg}\n${id['Device']} (${id['Last contact']})`;
 				}
 
 				this.log.info(msg);
@@ -1646,7 +1646,7 @@ class DeviceWatcher extends utils.Adapter {
 				let msg = '';
 
 				for (const id of this.offlineDevices) {
-					msg = `${msg} \n${id['Device']} (${id['Last contact']})`;
+					msg = `${msg}\n${id['Device']} (${id['Last contact']})`;
 				}
 
 				if (this.offlineDevicesCount > 0) {
@@ -1709,9 +1709,8 @@ class DeviceWatcher extends utils.Adapter {
 			if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)) {
 				let msg = '';
 
-				this.log.warn(JSON.stringify(this.batteryLowPowered));
 				for (const id of this.batteryLowPowered) {
-					msg = `${msg} \n${id['Device']} (${id['Battery']})`;
+					msg = `${msg}\n${id['Device']} (${id['Battery']})`;
 				}
 
 				if (this.lowBatteryPoweredCount > 0) {
