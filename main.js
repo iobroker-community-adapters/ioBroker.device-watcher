@@ -162,6 +162,14 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.alive',
 				'isLowBat': 'none'
 			},
+			roomba: {
+				'Selektor': 'roomba.0.states.signal',
+				'adapter': 'roomba',
+				'battery': '.battery',
+				'reach': '._connected',
+				'isLowBat': 'none',
+				'id': '.device.name'
+			},
 			shelly: {
 				'Selektor': 'shelly.*.rssi',
 				'adapter': 'shelly',
@@ -225,13 +233,12 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.Battery.isLow'
 			},
 			test: { // Only for Dev
-				'Selektor': '0_userdata.0.tradfri.*.lastSeen',
-				'adapter': 'tradfri',
-				'rssiState': 'none',
-				'battery': '.batteryPercentage',
-				'reach': '.alive',
+				'Selektor': '0_userdata.0.roomba.*.signal',
+				'adapter': 'roomba',
+				'battery': '.battery',
+				'reach': '._connected',
 				'isLowBat': 'none',
-				'id': 'none'
+				'id': '.device.name'
 			}
 		};
 
@@ -264,6 +271,7 @@ class DeviceWatcher extends utils.Adapter {
 				mihomeVacuum: this.config.mihomeVacuumDevices,
 				nukiExt: this.config.nukiExtDevices,
 				ping: this.config.pingDevices,
+				roomba: this.config.roombaDevices,
 				shelly: this.config.shellyDevices,
 				sonoff: this.config.sonoffDevices,
 				sonos: this.config.sonosDevices,
@@ -772,12 +780,14 @@ class DeviceWatcher extends utils.Adapter {
 				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 				let deviceName;
 
+				// Get ID with currDeviceString from datapoint
 				switch (this.arrDev[i].adapter) {
 					case 'switchbotBle':	// Get ID for Switchbot and ESPHome Devices
 					case 'esphome':
 						deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 						break;
 
+					// Get ID with short currDeviceString from objectjson
 					case 'hue-extended':
 					case 'homematic':
 					case 'nuki-extended':
@@ -787,10 +797,13 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 
+					// Get ID with short currDeviceString from datapoint
 					case 'mihomeVacuum':
+					case 'roomba':
 						deviceName = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
 						break;
 
+					// Get ID with main selektor from objectjson
 					default:
 						if (deviceObject && typeof deviceObject === 'object') {
 							deviceName = deviceObject.common.name;
@@ -833,11 +846,24 @@ class DeviceWatcher extends utils.Adapter {
 					if (this.config.trueState) {
 						linkQuality = deviceQualityState.val;
 					} else {
-						if (deviceQualityState.val < 0) {
-							linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
-						} else if ((deviceQualityState.val) >= 0) {
-							linkQuality = parseFloat((100 / 255 * deviceQualityState.val).toFixed(0)) + '%';
+						// If Quality State is already an percent value
+						switch (this.arrDev[i].adapter) {
+							case 'roomba':
+								linkQuality = deviceQualityState.val + '%';
+								break;
+
+							default:
+								// If Quality State is an RSSI vaulue calculate in percent:
+								if (deviceQualityState.val < 0) {
+									linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
+
+								// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+								} else if ((deviceQualityState.val) >= 0) {
+									linkQuality = parseFloat((100 / 255 * deviceQualityState.val).toFixed(0)) + '%';
+								}
+								break;
 						}
+
 					}
 					if (this.config.listOnlyBattery) {
 						if (deviceBatteryState || shortDeviceBatteryState) {
@@ -1110,6 +1136,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if ((lastStateChange > this.config.pingMaxMinutes) && (!deviceUnreachState)) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'roomba':
+								if (this.config.roombaMaxMinutes === -1) {
+									if (!deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if ((lastStateChange > this.config.roombaMaxMinutes) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
