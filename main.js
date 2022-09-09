@@ -93,7 +93,7 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.hubConnected',
 				'isLowBat': 'none'
 			},
-			hmip: {
+			hmiP: {
 				'Selektor': 'hmip.*.rssiDeviceValue',
 				'adapter': 'hmiP',
 				'rssiState': '.rssiDeviceValue',
