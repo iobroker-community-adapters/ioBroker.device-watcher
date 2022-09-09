@@ -33,6 +33,7 @@ Supported adapters are:
 * ESPHome
 * FritzDect
 * Harmony
+* HmiP
 * Homematic
 * Hue
 * Hue Extended
@@ -41,10 +42,13 @@ Supported adapters are:
 * MiHome Vacuum
 * Nuki Extended
 * Ping (You have to set the option 'Advanced Information / Erweiterte Information' in the instance settings of ping for     each device)
+* Roomba
 * Shelly
 * Sonoff
 * Sonos
 * Switchbot Ble
+* Tradfri
+* WLED
 * Zigbee
 * Zwave
 
