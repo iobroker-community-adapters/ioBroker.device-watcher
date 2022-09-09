@@ -94,7 +94,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none'
 			},
 			hmip: {
-				'Selektor': 'hm-rpc.*.rssiDeviceValue',
+				'Selektor': 'hmip.*.rssiDeviceValue',
 				'adapter': 'hmiP',
 				'rssiState': '.rssiDeviceValue',
 				'battery': 'none',
@@ -240,14 +240,6 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.ready',
 				'isLowBat': '.Battery.isLow'
 			},
-			test: { // Only for Dev
-				'Selektor': '0_userdata.0.hmip.*.rssiDeviceValue',
-				'adapter': 'hmiP',
-				'rssiState': '.rssiDeviceValue',
-				'battery': 'none',
-				'reach': '.unreach',
-				'isLowBat': '.lowBat',
-			}
 		};
 
 		this.on('ready', this.onReady.bind(this));
@@ -289,7 +281,6 @@ class DeviceWatcher extends utils.Adapter {
 				wled: this.config.wledDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
-				test: false // Only for Dev
 			};
 
 			for (const [id] of Object.entries(this.arrApart)) {
