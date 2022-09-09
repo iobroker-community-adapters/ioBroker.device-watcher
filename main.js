@@ -93,6 +93,14 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.hubConnected',
 				'isLowBat': 'none'
 			},
+			hmip: {
+				'Selektor': 'hm-rpc.*.rssiDeviceValue',
+				'adapter': 'hmiP',
+				'rssiState': '.rssiDeviceValue',
+				'battery': 'none',
+				'reach': '.unreach',
+				'isLowBat': '.lowBat',
+			},
 			homematic: {
 				'Selektor': 'hm-rpc.*.UNREACH',
 				'adapter': 'homematic',
@@ -233,12 +241,12 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.Battery.isLow'
 			},
 			test: { // Only for Dev
-				'Selektor': '0_userdata.0.roomba.*.signal',
-				'adapter': 'roomba',
-				'battery': '.battery',
-				'reach': '._connected',
-				'isLowBat': 'none',
-				'id': '.device.name'
+				'Selektor': '0_userdata.0.hmip.*.rssiDeviceValue',
+				'adapter': 'hmiP',
+				'rssiState': '.rssiDeviceValue',
+				'battery': 'none',
+				'reach': '.unreach',
+				'isLowBat': '.lowBat',
 			}
 		};
 
@@ -262,6 +270,7 @@ class DeviceWatcher extends utils.Adapter {
 				esphome: this.config.esphomeDevices,
 				fritzdect: this.config.fritzdectDevices,
 				harmony: this.config.harmonyDevices,
+				hmiP : this.config.hmiPDevices,
 				homematic: this.config.homematicDevices,
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
@@ -774,10 +783,12 @@ class DeviceWatcher extends utils.Adapter {
 
 				const currDeviceString = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
 				const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
+				const shortshortCurrDeviceString = shortCurrDeviceString.slice(0, (shortCurrDeviceString.lastIndexOf('.') + 1) - 1);
 
 				// Get device name
 				const deviceObject = await this.getForeignObjectAsync(currDeviceString);
 				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
+				const shortshortDeviceObject = await this.getForeignObjectAsync(shortshortCurrDeviceString);
 				let deviceName;
 
 				// Get ID with currDeviceString from datapoint
@@ -797,6 +808,12 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 
+					// Get ID with short short currDeviceString vom objectjson
+					case 'hmiP':
+						if (shortshortDeviceObject && typeof shortshortDeviceObject === 'object') {
+							deviceName = shortshortDeviceObject.common.name;
+						}
+						break;
 					// Get ID with short currDeviceString from datapoint
 					case 'mihomeVacuum':
 					case 'roomba':
@@ -824,6 +841,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				switch (this.arrDev[i].adapter) {
 					case 'sonoff':
+					case 'hmiP':
 					case 'homematic':
 					case 'wled':
 						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
@@ -1048,6 +1066,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 								} else if ((lastStateChange > this.config.harmonyMaxMinutes) && (!deviceUnreachState)) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
+							case 'hmiP':
+								if (this.config.hmiPMaxMinutes === -1) {
+									if (deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if ((lastStateChange > this.config.hmiPMaxMinutes) && (deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									await pushOfflineDevice();
 								}
