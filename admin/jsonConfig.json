@@ -32,13 +32,6 @@
                     "lg": 3,
                     "label": "Deconz"
                 },
-                "fritzdectDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "FritzDect"
-                },
                 "enoceanDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -52,6 +45,13 @@
                     "md": 6,
                     "lg": 3,
                     "label": "EspHome"
+                },
+                "fritzdectDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "FritzDect"
                 },
                 "harmonyDevices": {
                     "type": "checkbox",
