@@ -158,6 +158,13 @@
                     "lg": 3,
                     "label": "Switchbot Ble"
                 },
+                "tadoDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Tado"
+                },
                 "tradfriDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -925,6 +932,18 @@
                     "label": "Switchbot Ble",
                     "help": "in minutes",
                     "hidden": "!data.switchbotBleDevices",
+                    "hideOnlyControl": false
+                },
+                "tadoMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Tado",
+                    "help": "in minutes",
+                    "hidden": "!data.tadoDevices",
                     "hideOnlyControl": false
                 },
                 "tradfriMaxMinutes": {

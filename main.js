@@ -208,6 +208,15 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none',
 				'id': '.id'
 			},
+			tado: {
+				'Selektor': 'tado.*.batteryState',
+				'adapter': 'tado',
+				'rssiState': 'none',
+				'battery': 'none',
+				'reach': '.connectionState.value',
+				'isLowBat': '.batteryState',
+				'id': 'none'
+			},
 			tradfri: {
 				'Selektor': 'tradfri.*.lastSeen',
 				'adapter': 'tradfri',
@@ -277,6 +286,7 @@ class DeviceWatcher extends utils.Adapter {
 				sonoff: this.config.sonoffDevices,
 				sonos: this.config.sonosDevices,
 				switchbotBle: this.config.switchbotBleDevices,
+				tado: this.config.tadoDevices,
 				tradfri: this.config.tradfriDevices,
 				wled: this.config.wledDevices,
 				zigbee: this.config.zigbeeDevices,
@@ -781,7 +791,7 @@ class DeviceWatcher extends utils.Adapter {
 				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 				const shortshortDeviceObject = await this.getForeignObjectAsync(shortshortCurrDeviceString);
 				let deviceName;
-
+				this.log.warn(currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1));
 				// Get ID with currDeviceString from datapoint
 				switch (this.arrDev[i].adapter) {
 					case 'switchbotBle':	// Get ID for Switchbot and ESPHome Devices
@@ -805,10 +815,16 @@ class DeviceWatcher extends utils.Adapter {
 							deviceName = shortshortDeviceObject.common.name;
 						}
 						break;
+
 					// Get ID with short currDeviceString from datapoint
 					case 'mihomeVacuum':
 					case 'roomba':
 						deviceName = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
+						break;
+
+					//Get ID of foldername
+					case 'tado':
+						deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
 						break;
 
 					// Get ID with main selektor from objectjson
@@ -1215,6 +1231,17 @@ class DeviceWatcher extends utils.Adapter {
 									await pushOfflineDevice();
 								}
 								break;
+							case 'tado':
+								if (this.config.tadoMaxMinutes === -1) {
+									if (!deviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+								} else if (lastContact > this.config.tadoMaxMinutes) {
+									deviceState = 'Offline'; //set online state to offline
+									await pushOfflineDevice();
+								}
+								break;
 							case 'tradfri':
 								if (this.config.tradfriMaxMinutes === -1) {
 									if (!deviceUnreachState) {
@@ -1282,7 +1309,7 @@ class DeviceWatcher extends utils.Adapter {
 								batteryHealth = ' - ';
 								break;
 							default:
-								if (!deviceLowBatState) {
+								if ((!deviceLowBatState) || (deviceLowBatState == 'NORMAL')) {
 									batteryHealth = 'ok';
 								} else {
 									batteryHealth = 'low';
@@ -1294,7 +1321,7 @@ class DeviceWatcher extends utils.Adapter {
 								batteryHealth = ' - ';
 								break;
 							default:
-								if (!deviceLowBatState) {
+								if ((!deviceLowBatState) || (deviceLowBatState == 'NORMAL')) {
 									batteryHealth = 'ok';
 								} else {
 									batteryHealth = 'low';
@@ -1383,6 +1410,18 @@ class DeviceWatcher extends utils.Adapter {
 				switch (this.arrDev[i].adapter) {
 					case 'homematic': // there are differnt low bat states between hm and hmIp devices
 						if (deviceLowBatState || deviceLowBatStateHM) {
+							this.batteryLowPowered.push(
+								{
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Battery': batteryHealth
+								}
+							);
+						}
+						break;
+
+					case 'tado': // there is an string as indicator
+						if (deviceLowBatState != 'NORMAL') {
 							this.batteryLowPowered.push(
 								{
 									'Device': deviceName,
