@@ -791,7 +791,7 @@ class DeviceWatcher extends utils.Adapter {
 				const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 				const shortshortDeviceObject = await this.getForeignObjectAsync(shortshortCurrDeviceString);
 				let deviceName;
-				this.log.warn(currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1));
+
 				// Get ID with currDeviceString from datapoint
 				switch (this.arrDev[i].adapter) {
 					case 'switchbotBle':	// Get ID for Switchbot and ESPHome Devices
