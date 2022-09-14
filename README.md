@@ -47,6 +47,7 @@ Supported adapters are:
 * Sonoff
 * Sonos
 * Switchbot Ble
+* Tado
 * Tradfri
 * WLED
 * Zigbee

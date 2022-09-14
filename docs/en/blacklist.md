@@ -8,7 +8,7 @@
 It is possible to specify devices to be excluded in the enumeration and notification. Since the adapter uses one main data point per adapter to get the information, it is important to choose the right data point for the blacklist to work properly. 
 
 
-| Adapter            | Datenpunkt / Datapoint          |
+| Adapter            | Datapoint                       |
 |--------------------|---------------------------------|
 | Alexa2             | alexa2.*.online                 |
 | Ble                | ble.*.rssi                      |
@@ -32,6 +32,7 @@ It is possible to specify devices to be excluded in the enumeration and notifica
 | Sonoff             | sonoff.*.Uptime                 |
 | Sonos              | sonos.*.alive                   |
 | Switchbot Ble      | switchbot-ble.*.rssi            |
+| Tado               | tado.*.batteryState             |
 | Tradfri            | tradfri.*.lastSeen              |
 | WLED               | wled.*._online                  |
 | Zigbee             | zigbee.*.link_quality           |
