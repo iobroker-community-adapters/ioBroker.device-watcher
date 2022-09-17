@@ -562,7 +562,7 @@
                     "zh-cn": "二. 从最后经营期间的时间限制"
                 },
                 "type": "string",
-                "role": "indicator",
+                "role": "text",
                 "read": true,
                 "write": false
             },
@@ -585,7 +585,7 @@
                     "zh-cn": "上次通知"
                 },
                 "type": "string",
-                "role": "indicator",
+                "role": "text",
                 "read": true,
                 "write": false
             },
