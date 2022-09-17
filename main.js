@@ -222,7 +222,7 @@ class DeviceWatcher extends utils.Adapter {
 				'id': 'none'
 			},
 			tradfri: {
-				'Selektor': '0_userdata.0.tradfri.*.lastSeen',
+				'Selektor': 'tradfri.*.lastSeen',
 				'adapter': 'tradfri',
 				'rssiState': 'none',
 				'battery': '.batteryPercentage',
