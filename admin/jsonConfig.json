@@ -179,6 +179,13 @@
                     "lg": 3,
                     "label": "WLED"
                 },
+                "yeelightDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Yeelight-2"
+                },
                 "zigbeeDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -968,6 +975,18 @@
                     "label": "WLED",
                     "help": "in minutes",
                     "hidden": "!data.wledDevices",
+                    "hideOnlyControl": false
+                },
+                "yeelightMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Yeelight-2",
+                    "help": "in minutes",
+                    "hidden": "!data.yeelightDevices",
                     "hideOnlyControl": false
                 },
                 "zigbeeMaxMinutes": {

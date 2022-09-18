@@ -276,6 +276,7 @@
         "mihomeVacuumDevices": false,
         "tradfriDevices": false,
         "wledDevices": false,
+        "yeelightDevices": false,
         "trueState": false,
         "listOnlyBattery": false,
         "createOwnFolder": false,
@@ -333,6 +334,7 @@
         "tadoMaxMinutes": -1,
         "tradfriMaxMinutes": -1,
         "wledMaxMinutes": -1,
+        "yeelightMaxMinutes": -1,
         "zigbeeMaxMinutes": 300,
         "zwaveMaxMinutes": -1
     },

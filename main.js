@@ -239,6 +239,13 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none',
 				'id': 'none'
 			},
+			yeelight: {
+				'Selektor': 'yeelight-2.*.connect',
+				'adapter': 'yeelight-2',
+				'battery': 'none',
+				'reach': '.connect',
+				'isLowBat': 'none'
+			},
 			zigbee: {
 				'Selektor': 'zigbee.*.link_quality',
 				'adapter': 'zigbee',
@@ -252,7 +259,7 @@ class DeviceWatcher extends utils.Adapter {
 				'battery': '.Battery.level',
 				'reach': '.ready',
 				'isLowBat': '.Battery.isLow'
-			},
+			}
 		};
 
 		this.on('ready', this.onReady.bind(this));
@@ -295,6 +302,7 @@ class DeviceWatcher extends utils.Adapter {
 				tado: this.config.tadoDevices,
 				tradfri: this.config.tradfriDevices,
 				wled: this.config.wledDevices,
+				yeelight: this.config.yeelightDevices,
 				zigbee: this.config.zigbeeDevices,
 				zwave: this.config.zwaveDevices,
 			};
@@ -358,7 +366,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
-	}
+	} // <-- onReady end
 
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
@@ -382,7 +390,7 @@ class DeviceWatcher extends utils.Adapter {
 			return; // cancel run if unloaded was called.
 		}
 
-	}
+	} // <-- refreshData end
 
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
@@ -522,6 +530,11 @@ class DeviceWatcher extends utils.Adapter {
 							//Get ID of foldername
 						case 'tado':
 							deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
+							break;
+
+							//Get ID of foldername
+						case 'yeelight-2':
+							deviceName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
 							break;
 
 							// Get ID with main selektor from objectjson
@@ -955,6 +968,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.wledMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'yeelight-2':
+									if (this.config.yeelightMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.yeelightMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
