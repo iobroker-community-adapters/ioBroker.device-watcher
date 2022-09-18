@@ -159,6 +159,15 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none',
 				'id': '.deviceInfo.model'
 			},
+			netatmo: {
+				'Selektor': 'netatmo.*.LastUpdate',
+				'adapter': 'netatmo',
+				'rssiState': '.WifiStatus',
+				'rfState': '.RfStatus',
+				'battery': '.BatteryStatus',
+				'reach': 'none',
+				'isLowBat': 'none'
+			},
 			nukiExt: {
 				'Selektor': 'nuki-extended.*.lastDataUpdate',
 				'adapter': 'nuki-extended',
@@ -292,6 +301,7 @@ class DeviceWatcher extends utils.Adapter {
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
 				mihomeVacuum: this.config.mihomeVacuumDevices,
+				netatmo: this.config.netatmoDevices,
 				nukiExt: this.config.nukiExtDevices,
 				ping: this.config.pingDevices,
 				roomba: this.config.roombaDevices,
@@ -572,6 +582,13 @@ class DeviceWatcher extends utils.Adapter {
 							deviceQualityState;
 							break;
 
+						case 'netatmo':
+							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+							if (!deviceQualityState) {
+								deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rfState);
+							}
+							break;
+
 						default:
 							deviceQualityState = await this.getForeignStateAsync(id);
 							break;
@@ -619,7 +636,31 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							);
 						}
-					} else {
+					} else if ((deviceQualityState) && (typeof deviceQualityState.val === 'string')) {
+						// for Netatmo devices
+						linkQuality = deviceQualityState.val;
+
+						if (this.config.listOnlyBattery) {
+							if (deviceBatteryState || shortDeviceBatteryState) {
+								this.linkQualityDevices.push(
+									{
+										'Device': deviceName,
+										'Adapter': deviceAdapterName,
+										'Signal strength': linkQuality
+									}
+								);
+							}
+						} else {
+							this.linkQualityDevices.push(
+								{
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Signal strength': linkQuality
+								}
+							);
+						}
+					}
+					else {
 						linkQuality = ' - '; // no linkQuality available for powered devices
 					}
 
@@ -858,6 +899,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.mihomeVacuumMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'netatmo':
+									if (this.config.netatmoMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.netatmoMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}

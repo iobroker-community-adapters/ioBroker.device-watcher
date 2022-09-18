@@ -109,6 +109,13 @@
                     "lg": 3,
                     "label": "MiHome Vacuum"
                 },
+                "netatmoDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Netatmo"
+                },
                 "nukiExtDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -855,6 +862,18 @@
                     "label": "Mihome Vacuum",
                     "help": "in minutes",
                     "hidden": "!data.mihomeVacuumDevices",
+                    "hideOnlyControl": false
+                },
+                "netatmoMaxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Netatmo",
+                    "help": "in minutes",
+                    "hidden": "!data.netatmoDevices",
                     "hideOnlyControl": false
                 },
                 "nukiextendMaxMinutes": {
