@@ -40,6 +40,7 @@ Supported adapters are:
 * Jeelink
 * MiHome
 * MiHome Vacuum
+* Netatmo
 * Nuki Extended
 * Ping (You have to set the option 'Advanced Information / Erweiterte Information' in the instance settings of ping for     each device)
 * Roomba
@@ -50,6 +51,7 @@ Supported adapters are:
 * Tado
 * Tradfri
 * WLED
+* Yeelight
 * Zigbee
 * Zwave
 

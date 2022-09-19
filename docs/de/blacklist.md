@@ -25,6 +25,7 @@ Es ist möglich Geräte anzugeben, die in der Aufzählung und Benachrichtigung a
 | miHome             | mihome.*.percent                |
 | miHome Gateways    | mihome.*.connected              |
 | miHome Vacuum      | mihome-vacuum.*.wifi_signal     |
+| Netatmo            | netatmo.*.LastUpdate            |
 | Nuki Extended      | nuki-extended.*.batteryCritical |
 | Ping               | ping.*.alive                    |
 | Roomba             | roomba.0.states.signal          |
@@ -35,5 +36,6 @@ Es ist möglich Geräte anzugeben, die in der Aufzählung und Benachrichtigung a
 | Tado               | tado.*.batteryState             |
 | Tradfri            | tradfri.*.lastSeen              |
 | WLED               | wled.*._online                  |
+| Yeelight           | yeelight-2.*.connect            |
 | Zigbee             | zigbee.*.link_quality           |
 | Zwave              | zwave2.*.ready                  |
