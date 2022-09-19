@@ -184,7 +184,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none'
 			},
 			roomba: {
-				'Selektor': 'roomba.0.states.signal',
+				'Selektor': 'roomba.*.signal',
 				'adapter': 'roomba',
 				'battery': '.battery',
 				'reach': '._connected',
@@ -637,8 +637,15 @@ class DeviceWatcher extends utils.Adapter {
 							);
 						}
 					} else if ((deviceQualityState) && (typeof deviceQualityState.val === 'string')) {
-						// for Netatmo devices
-						linkQuality = deviceQualityState.val;
+						switch (this.arrDev[i].adapter) {
+							case 'netatmo':
+								// for Netatmo devices
+								linkQuality = deviceQualityState.val;
+								break;
+							case 'nuki-extended':
+								linkQuality = ' - ';
+								break;
+						}
 
 						if (this.config.listOnlyBattery) {
 							if (deviceBatteryState || shortDeviceBatteryState) {
