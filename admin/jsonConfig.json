@@ -53,6 +53,13 @@
                     "lg": 3,
                     "label": "FritzDect"
                 },
+                "hamDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Ham"
+                },
                 "harmonyDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -767,6 +774,18 @@
                 "help": "in minutes",
                 "hidden": "!data.fritzdectDevices",
                 "hideOnlyControl": false
+                },
+                "hamMaxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Ham",
+                    "help": "in minutes",
+                    "hidden": "!data.hamDevices",
+                    "hideOnlyControl": false
                 },
                 "harmonyMaxMinutes": {
                     "type": "number",

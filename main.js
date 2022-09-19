@@ -97,6 +97,14 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.hubConnected',
 				'isLowBat': 'none'
 			},
+			ham: {
+				'Selektor': 'ham.*.Battery-Level',
+				'adapter': 'ham',
+				'battery': '.Battery-Level',
+				'reach': 'none',
+				'isLowBat': 'none',
+				'id': '.Name'
+			},
 			hmiP: {
 				'Selektor': 'hmip.*.rssiDeviceValue',
 				'adapter': 'hmiP',
@@ -292,6 +300,7 @@ class DeviceWatcher extends utils.Adapter {
 				enocean: this.config.enoceanDevices,
 				esphome: this.config.esphomeDevices,
 				fritzdect: this.config.fritzdectDevices,
+				ham: this.config.hamDevices,
 				harmony: this.config.harmonyDevices,
 				hmiP : this.config.hmiPDevices,
 				homematic: this.config.homematicDevices,
@@ -579,6 +588,7 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 
 						case 'tradfri':
+						case 'ham':
 							deviceQualityState;
 							break;
 
@@ -829,6 +839,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.harmonyMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'ham':
+									if (this.config.hamMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.hamMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}

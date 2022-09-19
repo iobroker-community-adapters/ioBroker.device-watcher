@@ -32,6 +32,7 @@ Supported adapters are:
 * Enocean
 * ESPHome
 * FritzDect
+* HAM
 * Harmony
 * HmiP
 * Homematic

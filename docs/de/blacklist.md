@@ -16,6 +16,7 @@ Es ist möglich Geräte anzugeben, die in der Aufzählung und Benachrichtigung a
 | Enocean            | enocean.*.rssi                  |
 | ESP Home           | esphome.*._online               |
 | FritzDect          | fritzdect.*.present             |
+| Ham                | ham.*.Battery-Level             |
 | Harmony            | harmony.*.hubConnected          |
 | HMiP               | hmip.*.rssiDeviceValue          |
 | HM-RPC (Homematic) | hm-rpc.*.UNREACH                |

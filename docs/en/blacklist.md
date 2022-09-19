@@ -16,6 +16,7 @@ It is possible to specify devices to be excluded in the enumeration and notifica
 | Enocean            | enocean.*.rssi                  |
 | ESP Home           | esphome.*._online               |
 | FritzDect          | fritzdect.*.present             |
+| Ham                | ham.*.Battery-Level             |
 | Harmony            | harmony.*.hubConnected          |
 | HMiP               | hmip.*.rssiDeviceValue          |
 | HM-RPC (Homematic) | hm-rpc.*.UNREACH                |
