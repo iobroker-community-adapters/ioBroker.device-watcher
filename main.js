@@ -120,7 +120,8 @@ class DeviceWatcher extends utils.Adapter {
 				'battery': '.OPERATING_VOLTAGE',
 				'reach': '.UNREACH',
 				'isLowBat': '.LOW_BAT',
-				'isLowBat2': '.LOWBAT'
+				'isLowBat2': '.LOWBAT',
+				'stateValue': '.1.STATE'
 			},
 			hue: {
 				'Selektor': 'hue.*.reachable',
@@ -565,6 +566,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					const deviceMainSelector = await this.getForeignStateAsync(id);
+					const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for homematic devices
 
 					// Get battery states
 					const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
@@ -616,7 +618,9 @@ class DeviceWatcher extends utils.Adapter {
 
 								default:
 								// If Quality State is an RSSI vaulue calculate in percent:
-									if (deviceQualityState.val < 0) {
+									if (deviceQualityState.val == -255) {
+										linkQuality = ' - ';
+									} else if (deviceQualityState.val < 0) {
 										linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
 
 										// If Quality State is an value between 0-255 (zigbee) calculate in percent:
@@ -696,6 +700,7 @@ class DeviceWatcher extends utils.Adapter {
 							const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 							const shortDeviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].reach);
 
+
 							const getLastContact = async () => {
 								lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
 								if (Math.round(lastContact) > 100) {
@@ -718,6 +723,7 @@ class DeviceWatcher extends utils.Adapter {
 								return lastContactString;
 							};
 
+
 							//  If there is no contact since user sets minutes add device in offline list
 							// calculate to days after 48 hours
 							switch (this.arrDev[i].reach) {
@@ -728,11 +734,29 @@ class DeviceWatcher extends utils.Adapter {
 								default:
 								//State changed
 									if  (this.arrDev[i].adapter == 'homematic') {
-										if (deviceUnreachState) {
-											await getLastStateChange();
+										if (linkQuality != ' - ') {
+											if (deviceUnreachState) {
+												await getLastStateChange();
+											} else {
+												await getLastContact();
+											}
 										} else {
-											await getLastContact();
+											if (deviceStateSelector) { // because old hm devices don't send rssi states
+												const lastContactOfState = Math.round((time.getTime() - deviceStateSelector.ts) / 1000 / 60);
+												const getLastContactOfState = async () => {
+													lastContactString = this.formatDate(new Date((deviceStateSelector.ts)), 'hh:mm') + ' Uhr';
+													if (Math.round(lastContactOfState) > 100) {
+														lastContactString = Math.round(lastContactOfState / 60) + ' Stunden';
+													}
+													if (Math.round(lastContactOfState / 60) > 48) {
+														lastContactString = Math.round(lastContactOfState / 60 / 24) + ' Tagen';
+													}
+													return lastContactString;
+												};
+												await getLastContactOfState();
+											}
 										}
+
 									} else {
 										if ((!deviceUnreachState)) {
 											await getLastStateChange();
