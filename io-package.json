@@ -14,7 +14,7 @@
                 "es": "# BREAKING CHANGE # Si se actualiza de la versión 0,3.0, retire la vieja instancia primero antes de actualizar a 0,0 Después de eso puede crear una nueva instancia.\ncambio de modo de shedule a daemon, por favor tome conciencia del consejo anterior\nañadido Logitech Harmony Hub\npequeños bugfixes (función propia para la lista negra, fijar para la fuga de memoria, etc.)",
                 "pl": "BTEAKING CHANGE (ang.). Jeśli uaktualnienie od wersji <= 0.3.0, usunie starego przykładu przed aktualizacją do >= 1.0.0 po tym, jak możesz stworzyć nowy przykład.\nzmienione mody od ul. do daemonu, słyszeć radę powyżej\nlogite Harmony Hub\nmałe błędy (właściwe funkcje czarnej listy, naprawy wyciek pamięci itp.)",
                 "zh-cn": "** BREAKANGE ** 如果你从 <=0.3.0”的版本中更新,那么,在你更新到1.0.0之前,将旧的事例删除。.\n更改从单元到大都市的模式,请从上述咨询意见中了解。\n增额后勤技术\n小型配制(黑名单的主位,用于纪念泄漏等)。"
-              },
+            },
             "0.3.0": {
                 "en": "removed channelnumber in Homematic devices name\nadded function to create html list\nadded german and english documentation",
                 "de": "kanalnummer entfernt in Homematic Gerätename\nfunktion hinzugefügt, um html-liste zu erstellen\ndeutsche und englische dokumentation",
