@@ -1,6 +1,7 @@
 /* jshint -W097 */
 /* jshint strict: false */
 /* jslint node: true */
+/*hallo*/
 
 'use strict';
 
