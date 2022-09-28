@@ -23,11 +23,13 @@ Es ist möglich Geräte anzugeben, die in der Aufzählung und Benachrichtigung a
 | Hue                | hue.*.reachable                 |
 | Hue Extended       | hue-extended.*.reachable        |
 | Jeelink            | jeelink.*.lowBatt               |
+| Meross             | meross.*.online                 |
 | miHome             | mihome.*.percent                |
 | miHome Gateways    | mihome.*.connected              |
 | miHome Vacuum      | mihome-vacuum.*.wifi_signal     |
 | Netatmo            | netatmo.*.LastUpdate            |
 | Nuki Extended      | nuki-extended.*.batteryCritical |
+| NUT                | nut.*.charge                    |
 | Ping               | ping.*.alive                    |
 | Roomba             | roomba.0.states.signal          |
 | Shelly             | shelly.*.rssi                   |

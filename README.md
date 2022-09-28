@@ -23,7 +23,7 @@
 
 ## Device-Watcher adapter for ioBroker
 
-This is a watchdog for wireless devices. The adapter looks for the rssi/link quality and battery states and create JSON lists of them (devices with battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
+This is a watchdog for devices. The adapter looks for the rssi/link quality and battery states and create JSON & HTML lists of them (devices with battery, devices with low battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
 
 Supported adapters are:
 * Alexa2
@@ -39,10 +39,12 @@ Supported adapters are:
 * Hue
 * Hue Extended
 * Jeelink
+* Meross
 * MiHome
 * MiHome Vacuum
 * Netatmo
 * Nuki Extended
+* NUT
 * Ping (You have to set the option 'Advanced Information / Erweiterte Information' in the instance settings of ping for     each device)
 * Roomba
 * Shelly
@@ -86,18 +88,18 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 ![list2.png](admin/images/list2.png)
 ![list3.png](admin/images/list3.png)
 
-### To-Do
+## To-Do
 - make blacklist more user-friendly
 - clean up the code
 - add support for reaction on state-changes
 
-### Changelog
+## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2 adapters
+- added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Nut and Meross adapters
 - fixed battery message
 - corrected and repaired some issues of last contact time 
 - added support for old HM devices
