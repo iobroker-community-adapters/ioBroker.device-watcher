@@ -1557,38 +1557,6 @@ class DeviceWatcher extends utils.Adapter {
 		} catch (error) {
 			this.errorReporting('[sendOfflineMessage]', error);
 		}
-
-		try {
-			// send daily an overview with offline devices
-			if (this.config.checkSendOfflineMsgDaily) {
-				// Check if the daily message for offline devices was already sent today
-				const lastOfflineNotifyIndicator = await this.getOwnInitValue('info.lastOfflineNotification');
-				const now = new Date(); // get date
-
-				// set indicator for send message first to 'false', after sending to 'true'
-				if (now.getHours() < 11) await this.setStateAsync('info.lastOfflineNotification', false, true);
-
-				// if time is > 11 (12:00 pm create message for offline devices devices)
-				if ((now.getHours() > 11) && (!lastOfflineNotifyIndicator)) {
-					let msg = '';
-
-					for (const id of this.offlineDevices) {
-						msg = `${msg} \n ${id['Device']} (${id['Last contact']})`;
-					}
-
-					if (this.offlineDevicesCount > 0) {
-						this.log.info(`Geräte Offline: ${msg}`);
-						await this.setStateAsync('lastNotification', `Geräte Offline: ${msg}`, true);
-
-						await this.sendNotification(`Geräte Offline: ${msg}`);
-
-						await this.setStateAsync('info.lastOfflineNotification', true, true);
-					}
-				}
-			}
-		} catch (error) {
-			this.errorReporting('[sendOfflineMessage - daily message]', error);
-		}
 		this.log.debug(`Finished the function: ${this.sendOfflineNotifications.name}`);
 	}//<--End of offline notification
 
