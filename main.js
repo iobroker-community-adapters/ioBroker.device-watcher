@@ -144,6 +144,13 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': 'none',
 				'isLowBat': '.lowBatt'
 			},
+			meross: {
+				'Selektor': 'meross.*.online',
+				'adapter': 'meross',
+				'battery': '.battery',
+				'reach': '.online',
+				'isLowBat': 'none'
+			},
 			mihome: {
 				'Selektor': 'mihome.*.percent',
 				'adapter': 'miHome',
@@ -308,6 +315,7 @@ class DeviceWatcher extends utils.Adapter {
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
 				jeelink: this.config.jeelinkDevices,
+				meross: this.config.merossDevices,
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
 				mihomeVacuum: this.config.mihomeVacuumDevices,
@@ -591,6 +599,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						case 'tradfri':
 						case 'ham':
+						case 'meross':
 							deviceQualityState;
 							break;
 
@@ -929,6 +938,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.jeelinkMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'meross':
+									if (this.config.merossMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.merossMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
