@@ -86,12 +86,23 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 ![list2.png](admin/images/list2.png)
 ![list3.png](admin/images/list3.png)
 
+### To-Do
+- make blacklist more user-friendly
+- clean up the code
+- add support for reaction on state-changes
 
 ### Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2 adapters
+- fixed battery message
+- corrected and repaired some issues of last contact time 
+- added support for old HM devices
+- some small refactoring of code
+
 ### 1.0.0 (2022-09-03)
  - ** BREAKING CHANGE ** If you update from version <= 0.3.0, remove the old instance first before you update to >= 1.0.0. After that you can create a new instance.
  - changed mode from shedule to daemon, please take aware from the advice above
