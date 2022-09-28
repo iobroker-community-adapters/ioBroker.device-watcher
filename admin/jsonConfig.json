@@ -137,6 +137,13 @@
                     "lg": 3,
                     "label": "Nuki Extended"
                 },
+                "nutDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Nut"
+                },
                 "pingDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -924,6 +931,18 @@
                     "label": "Nuki Extended",
                     "help": "in minutes",
                     "hidden": "!data.nukiExtDevices",
+                    "hideOnlyControl": false
+                },
+                "nutMaxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Nut",
+                    "help": "in minutes",
+                    "hidden": "!data.nutDevices",
                     "hideOnlyControl": false
                 },
                 "pingMaxMinutes": {

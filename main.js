@@ -192,6 +192,13 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': 'none',
 				'isLowBat': '.batteryCritical'
 			},
+			nut: {
+				'Selektor': 'nut.*.charge',
+				'adapter': 'nut',
+				'battery': '.charge',
+				'reach': 'none',
+				'isLowBat': 'none'
+			},
 			ping: {
 				'Selektor': 'ping.*.alive',
 				'adapter': 'ping',
@@ -321,6 +328,7 @@ class DeviceWatcher extends utils.Adapter {
 				mihomeVacuum: this.config.mihomeVacuumDevices,
 				netatmo: this.config.netatmoDevices,
 				nukiExt: this.config.nukiExtDevices,
+				nut: this.config.nutDevices,
 				ping: this.config.pingDevices,
 				roomba: this.config.roombaDevices,
 				shelly: this.config.shellyDevices,
@@ -600,6 +608,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'tradfri':
 						case 'ham':
 						case 'meross':
+						case 'nut':
 							deviceQualityState;
 							break;
 
@@ -993,6 +1002,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.nukiextendMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'nut':
+									if (this.config.nutMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.nutMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
