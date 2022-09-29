@@ -609,6 +609,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'ham':
 						case 'meross':
 						case 'nut':
+						case 'miHome':
 							deviceQualityState;
 							break;
 
