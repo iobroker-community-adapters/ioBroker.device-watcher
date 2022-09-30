@@ -100,7 +100,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut and Meross adapters
+- added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut and Meross adapter
 - fixed battery message
 - corrected and repaired some issues of last contact time 
 - added support for old HM devices
