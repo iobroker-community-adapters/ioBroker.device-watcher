@@ -53,6 +53,7 @@ Supported adapters are:
 * Switchbot Ble
 * Tado
 * Tradfri
+* Unifi
 * WLED
 * Yeelight
 * Zigbee
@@ -99,11 +100,12 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Nut and Meross adapters
+- added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut and Meross adapters
 - fixed battery message
 - corrected and repaired some issues of last contact time 
 - added support for old HM devices
 - some small refactoring of code
+- changed shelly selector from dp rssi to dp online
 
 ### 1.0.0 (2022-09-03)
  - ** BREAKING CHANGE ** If you update from version <= 0.3.0, remove the old instance first before you update to >= 1.0.0. After that you can create a new instance.
