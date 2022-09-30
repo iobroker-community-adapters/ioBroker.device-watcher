@@ -215,8 +215,9 @@ class DeviceWatcher extends utils.Adapter {
 				'id': '.device.name'
 			},
 			shelly: {
-				'Selektor': 'shelly.*.rssi',
+				'Selektor': 'shelly.*.online',
 				'adapter': 'shelly',
+				'rssiState': '.rssi',
 				'battery': '.sensor.battery',
 				'reach': '.online',
 				'isLowBat': 'none'
@@ -598,6 +599,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'hmiP':
 						case 'homematic':
 						case 'wled':
+						case 'shelly':
 							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 							break;
 
