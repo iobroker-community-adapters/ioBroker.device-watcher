@@ -44,6 +44,15 @@ class DeviceWatcher extends utils.Adapter {
 		this.refreshDataTimeout = null;
 
 		// Information for dev: add ' 0_userdata.0. ' to selector for testing with own datapoints.
+		/*
+		This is the main template:
+				'Selektor': '',
+				'adapter': '',
+				'battery': 'none',
+				'reach': 'none',
+				'isLowBat': 'none',
+				'id': 'none''
+		*/
 
 		// arrays of supported adapters
 		this.arrApart = {
