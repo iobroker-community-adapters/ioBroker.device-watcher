@@ -272,6 +272,14 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': 'none',
 				'id': 'none'
 			},
+			unifi: {
+				'Selektor': 'unifi.*.state',
+				'adapter': 'unifi',
+				'battery': 'none',
+				'reach': '.state',
+				'isLowBat': 'none',
+				'id': 'none'
+			},
 			wled: {
 				'Selektor': 'wled.*._online',
 				'adapter': 'wled',
@@ -347,6 +355,7 @@ class DeviceWatcher extends utils.Adapter {
 				switchbotBle: this.config.switchbotBleDevices,
 				tado: this.config.tadoDevices,
 				tradfri: this.config.tradfriDevices,
+				unifi: this.config.unifiDevices,
 				wled: this.config.wledDevices,
 				yeelight: this.config.yeelightDevices,
 				zigbee: this.config.zigbeeDevices,
@@ -621,6 +630,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'meross':
 						case 'nut':
 						case 'miHome':
+						case 'unifi':
 							deviceQualityState;
 							break;
 
@@ -1113,6 +1123,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.tradfriMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'unifi':
+									if (this.config.unifiMaxMinutes === -1) {
+										if (deviceUnreachState === 0) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.unifiMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}

@@ -200,6 +200,13 @@
                     "lg": 3,
                     "label": "Tradfri"
                 },
+                "unifiDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Unifi"
+                },
                 "wledDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -1039,6 +1046,18 @@
                     "label": "Tradfri",
                     "help": "in minutes",
                     "hidden": "!data.tradfriDevices",
+                    "hideOnlyControl": false
+                },
+                "unifiMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Unifi",
+                    "help": "in minutes",
+                    "hidden": "!data.unifiDevices",
                     "hideOnlyControl": false
                 },
                 "wledMaxMinutes": {
