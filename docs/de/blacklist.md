@@ -32,12 +32,13 @@ Es ist möglich Geräte anzugeben, die in der Aufzählung und Benachrichtigung a
 | NUT                | nut.*.charge                    |
 | Ping               | ping.*.alive                    |
 | Roomba             | roomba.0.states.signal          |
-| Shelly             | shelly.*.rssi                   |
+| Shelly             | shelly.*.online                 |
 | Sonoff             | sonoff.*.Uptime                 |
 | Sonos              | sonos.*.alive                   |
 | Switchbot Ble      | switchbot-ble.*.rssi            |
 | Tado               | tado.*.batteryState             |
 | Tradfri            | tradfri.*.lastSeen              |
+| Unifi              | unifi.*.state                   |
 | WLED               | wled.*._online                  |
 | Yeelight           | yeelight-2.*.connect            |
 | Zigbee             | zigbee.*.link_quality           |
