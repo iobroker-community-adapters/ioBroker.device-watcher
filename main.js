@@ -1179,7 +1179,7 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 									break;
-								case 'zigbee2mqtt':
+								case 'zigbee2MQTT':
 									if (this.config.zigbee2mqttMaxMinutes === -1) {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline

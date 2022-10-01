@@ -263,7 +263,7 @@
     "wledMaxMinutes": -1,
     "yeelightMaxMinutes": -1,
     "zigbeeMaxMinutes": 300,
-    "zigbee2mqttMaxMinutes": 300,
+    "zigbee2mqttMaxMinutes": -1,
     "zwaveMaxMinutes": -1
   },
   "objects": [],
