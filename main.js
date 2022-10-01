@@ -224,7 +224,7 @@ class DeviceWatcher extends utils.Adapter {
 				'id': '.device.name'
 			},
 			shelly: {
-				'Selektor': 'shelly.*.online',
+				'Selektor': 'shelly.*.uptime',
 				'adapter': 'shelly',
 				'rssiState': '.rssi',
 				'battery': '.sensor.battery',
