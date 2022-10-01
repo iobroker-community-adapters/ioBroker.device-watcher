@@ -170,6 +170,7 @@
     "esphomeDevices": false,
     "enoceanDevices": false,
     "zigbeeDevices": false,
+    "zigbee2mqttDevices": false,
     "bleDevices": false,
     "sonoffDevices": false,
     "shellyDevices": false,
@@ -262,6 +263,7 @@
     "wledMaxMinutes": -1,
     "yeelightMaxMinutes": -1,
     "zigbeeMaxMinutes": 300,
+    "zigbee2mqttMaxMinutes": 300,
     "zwaveMaxMinutes": -1
   },
   "objects": [],

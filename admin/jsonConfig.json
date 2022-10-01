@@ -228,6 +228,13 @@
                     "lg": 3,
                     "label": "Zigbee"
                 },
+                "zigbee2mqttDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Zigbee2MQTT"
+                },
                 "zwaveDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -1094,6 +1101,18 @@
                     "label": "Zigbee",
                     "help": "in minutes",
                     "hidden": "!data.zigbeeDevices",
+                    "hideOnlyControl": false
+                },
+                "zigbee2mqttMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Zigbee2MQTT",
+                    "help": "in minutes",
+                    "hidden": "!data.zigbee2mqttDevices",
                     "hideOnlyControl": false
                 },
                 "zwaveMaxMinutes": {

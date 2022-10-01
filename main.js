@@ -303,6 +303,13 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.available',
 				'isLowBat': '.battery_low'
 			},
+			zigbee2mqtt: {
+				'Selektor': 'zigbee2mqtt.*.link_quality',
+				'adapter': 'zigbee2MQTT',
+				'battery': '.battery',
+				'reach': '.available',
+				'isLowBat': '.battery_low'
+			},
 			zwave: {
 				'Selektor': 'zwave2.*.ready',
 				'adapter': 'zwave',
@@ -359,6 +366,7 @@ class DeviceWatcher extends utils.Adapter {
 				wled: this.config.wledDevices,
 				yeelight: this.config.yeelightDevices,
 				zigbee: this.config.zigbeeDevices,
+				zigbee2mqtt: this.config.zigbee2mqttDevices,
 				zwave: this.config.zwaveDevices,
 			};
 
@@ -1167,6 +1175,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.zigbeeMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'zigbee2mqtt':
+									if (this.config.zigbee2mqttMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.zigbee2mqttMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
