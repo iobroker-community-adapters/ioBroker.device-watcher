@@ -8,7 +8,7 @@
 [![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v1.0.1)
+![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v1.1.0)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 
@@ -99,6 +99,11 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- removed indicatoren for daily sent messages
+- changed selector for shelly devices
+- added Zigbee2MQTT adapter
+- added cron function to use own time for daily overview messages
 ### 1.0.1 (2022-09-30)
 - added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut and Meross adapter
 - fixed battery message
