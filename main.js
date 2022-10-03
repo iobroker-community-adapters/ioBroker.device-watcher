@@ -11,6 +11,7 @@ const schedule = require('node-schedule');
 // Sentry error reporting, disable when testing code!
 const enableSendSentry = true;
 
+// indicator if the adapter is running or not (for intervall/shedule)
 let isUnloaded = false;
 
 class DeviceWatcher extends utils.Adapter {
