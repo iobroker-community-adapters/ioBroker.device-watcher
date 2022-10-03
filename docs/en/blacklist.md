@@ -32,8 +32,8 @@ It is possible to specify devices to be excluded in the enumeration and notifica
 | NUT                | nut.*.charge                    |
 | Ping               | ping.*.alive                    |
 | Roomba             | roomba.0.states.signal          |
-| Shelly             | shelly.*.online                 |
-| Sonoff             | sonoff.*.Uptime                 |
+| Shelly             | shelly.*.upime                  |
+| Sonoff             | sonoff.*.alive                  |
 | Sonos              | sonos.*.alive                   |
 | Switchbot Ble      | switchbot-ble.*.rssi            |
 | Tado               | tado.*.batteryState             |

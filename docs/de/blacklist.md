@@ -32,8 +32,8 @@ Es ist möglich Geräte anzugeben, die in der Aufzählung und Benachrichtigung a
 | NUT                | nut.*.charge                    |
 | Ping               | ping.*.alive                    |
 | Roomba             | roomba.0.states.signal          |
-| Shelly             | shelly.*.online                 |
-| Sonoff             | sonoff.*.Uptime                 |
+| Shelly             | shelly.*.upime                  |
+| Sonoff             | sonoff.*.alive                  |
 | Sonos              | sonos.*.alive                   |
 | Switchbot Ble      | switchbot-ble.*.rssi            |
 | Tado               | tado.*.batteryState             |
