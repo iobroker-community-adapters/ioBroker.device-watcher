@@ -72,5 +72,10 @@
     "Daily overview of offline devices": "Visão geral diária de dispositivos offline",
     "Get daily an overview with all offline devices": "Obtenha diariamente uma visão geral com todos os dispositivos offline",
     "Update-Interval": "Intervalo de atualização",
-    "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Aqui você pode definir o intervalo de atualização dos pontos de dados/listas. "
+    "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Aqui você pode definir o intervalo de atualização dos pontos de dados/listas. ",
+    "Overview of offline devices": "Visão geral de dispositivos off-line",
+    "Get an overview with all offline devices": "Obtenha uma visão geral com todos os dispositivos offline",
+    "Choose the day(s) where you want to get the overview of offline devices:": "Escolha o(s) dia(s) em que deseja obter a visão geral dos dispositivos offline:",
+    "Choose the Time:": "Escolha o Horário:",
+    "Get a message with an overview all offline devices": "Receba uma mensagem com uma visão geral de todos os dispositivos offline"
 }

@@ -69,5 +69,9 @@
 	"Daily overview of offline devices": "Daily overview of offline devices",
 	"Get daily an overview with all offline devices": "Get daily an overview with all offline devices",
 	"Update-Interval": "Update-Interval",
-	"Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable."
+	"Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.",
+	"Overview of offline devices": "Overview of offline devices",
+	"Choose the day(s) where you want to get the overview of offline devices:": "Choose the day(s) where you want to get the overview of offline devices:",
+	"Choose the Time:": "Choose the Time:",
+	"Get a message with an overview all offline devices": "Get a message with an overview all offline devices"
 }

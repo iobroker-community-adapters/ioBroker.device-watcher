@@ -72,5 +72,10 @@
     "Daily overview of offline devices": "Ежедневный обзор автономных устройств",
     "Get daily an overview with all offline devices": "Получайте ежедневный обзор всех автономных устройств",
     "Update-Interval": "Интервал обновления",
-    "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Здесь вы можете определить интервал обновления точек данных/списков. "
+    "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.": "Здесь вы можете определить интервал обновления точек данных/списков. ",
+    "Overview of offline devices": "Обзор автономных устройств",
+    "Get an overview with all offline devices": "Получите обзор всех автономных устройств",
+    "Choose the day(s) where you want to get the overview of offline devices:": "Выберите день (дни), когда вы хотите получить обзор автономных устройств:",
+    "Choose the Time:": "Выберите время:",
+    "Get a message with an overview all offline devices": "Получите сообщение с обзором всех автономных устройств"
 }

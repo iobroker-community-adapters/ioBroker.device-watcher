@@ -6,6 +6,7 @@
 
 const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
+const schedule = require('node-schedule');
 
 // Sentry error reporting, disable when testing code!
 const enableSendSentry = true;
@@ -42,6 +43,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Interval timer
 		this.refreshDataTimeout = null;
+
+		this.devices = new Map();
 
 		// Information for dev: add ' 0_userdata.0. ' to selector for testing with own datapoints.
 		/*
@@ -264,7 +267,7 @@ class DeviceWatcher extends utils.Adapter {
 				'id': 'none'
 			},
 			tradfri: {
-				'Selektor': 'tradfri.*.lastSeen',
+				'Selektor': '0_userdata.0.tradfri.*.lastSeen',
 				'adapter': 'tradfri',
 				'rssiState': 'none',
 				'battery': '.batteryPercentage',
@@ -304,7 +307,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.battery_low'
 			},
 			zigbee2mqtt: {
-				'Selektor': 'zigbee2mqtt.*.link_quality',
+				'Selektor': '0_userdata.0.zigbee2mqtt.*.link_quality',
 				'adapter': 'zigbee2MQTT',
 				'battery': '.battery',
 				'reach': '.available',
@@ -320,7 +323,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		this.on('ready', this.onReady.bind(this));
-		// this.on('stateChange', this.onStateChange.bind(this));
+		this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
 		// this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
@@ -425,11 +428,41 @@ class DeviceWatcher extends utils.Adapter {
 			// update data in interval
 			await this.refreshData();
 
+			// send overview for low battery devices
+			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifyShedule();
+
+			// send overview of offline devices
+			if (this.config.checkSendOfflineMsgDaily) await this.sendOfflineNotificationsShedule();
+
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
+
+		/*
+		this.devices.forEach((value, key) => {
+			this.log.warn(`${key}: ${value}`);
+			this.subscribeStates(value);
+			this.onStateChange(key, value);
+		});
+		*/
 	} // <-- onReady end
+
+	/**
+     * Is called if a subscribed state changes
+     * @param {string} id
+     * @param {ioBroker.State | null | undefined} state
+     */
+	async onStateChange(id, state) {
+		if (state) {
+			// The state was changed
+			this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			// await this.main();
+		} else {
+			// The state was deleted
+			this.log.warn(`state ${id} deleted`);
+		}
+	}
 
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
@@ -615,6 +648,14 @@ class DeviceWatcher extends utils.Adapter {
 					const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
 					const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 					const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+
+					this.devices.set(deviceName, currDeviceString + this.arrDev[i].reach);
+					// List all entries
+					//let text = '';
+					//this.devices.forEach (function(value, key) {
+					//	text += key + ' : ' + value;
+					// });
+					// this.log.warn(text);
 
 					// Get link quality
 					let deviceQualityState;
@@ -1446,10 +1487,11 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
-			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications(); // send message if new devices are offline
-			if (this.config.checkSendOfflineMsgDaily) await this.sendDailyOfflineNotifications(); // send daily overview of offline devices
-			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifications(); // send message for low battery devices
-			await this.writeDatapoints(); // fill the datapoints
+			// send message if new devices are offline
+			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications();
+
+			// fill the datapoints
+			await this.writeDatapoints();
 		} catch (error) {
 			this.errorReporting('[createDataOfAllAdapter]', error);
 		}
@@ -1579,6 +1621,53 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- End of sendNotification function
 
+	async sendBatteryNotifyShedule() {
+		// send message for low battery devices
+
+		const time = (this.config.checkSendBatteryTime).split(':');
+
+		const checkDays = []; // list of selected days
+
+		// push the selected days in list
+		if (this.config.checkMonday) checkDays.push(1);
+		if (this.config.checkTuesday) checkDays.push(2);
+		if (this.config.checkWednesday) checkDays.push(3);
+		if (this.config.checkThursday) checkDays.push(4);
+		if (this.config.checkFriday) checkDays.push(5);
+		if (this.config.checkSaturday) checkDays.push(6);
+		if (this.config.checkSunday) checkDays.push(0);
+
+		if (checkDays.length >= 1) { // check if an day is selected
+			this.log.debug(`Number of selected days for daily battery message: ${checkDays.length}. Send Message on: ${(checkDays).join(', ')} ...`);
+		} else {
+			this.log.warn(`No days selected for daily battery message. Please check the instance configuration!`);
+			return; // cancel function if no day is selected
+		}
+
+		if (!isUnloaded) {
+			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+			schedule.scheduleJob(cron, () => {
+				try {
+					let msg = '';
+
+					for (const id of this.batteryLowPowered) {
+						msg = `${msg}\n${id['Device']} (${id['Battery']})`;
+					}
+
+					if (this.lowBatteryPoweredCount > 0) {
+						this.log.info(`Niedrige Batteriezustände: ${msg}`);
+						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${msg}`, true);
+
+						this.sendNotification(`Niedriege Batteriezustände: ${msg}`);
+
+					}
+
+				} catch (error) {
+					this.errorReporting('[sendBatteryNotifyShedule]', error);
+				}
+			});
+		}
+	} //<--End of battery notification
 
 	async sendOfflineNotifications() {
 		// send message if an device is offline
@@ -1612,107 +1701,52 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Finished the function: ${this.sendOfflineNotifications.name}`);
 	}//<--End of offline notification
 
-	async sendDailyOfflineNotifications() {
+	async sendOfflineNotificationsShedule() {
 		// send daily an overview with offline devices
 
-		this.log.debug(`Start the function: ${this.sendDailyOfflineNotifications.name}`);
+		const time = (this.config.checkSendOfflineTime).split(':');
 
-		try {
-			// Check if the daily message for offline devices was already sent today
-			const lastOfflineNotifyIndicator = await this.getOwnInitValue('info.lastOfflineNotification');
-			const now = new Date(); // get date
+		const checkDays = []; // list of selected days
 
-			// set indicator for send message first to 'false', after sending to 'true'
-			if (now.getHours() < 11) await this.setStateAsync('info.lastOfflineNotification', false, true);
+		// push the selected days in list
+		if (this.config.checkOfflineMonday) checkDays.push(1);
+		if (this.config.checkOfflineTuesday) checkDays.push(2);
+		if (this.config.checkOfflineWednesday) checkDays.push(3);
+		if (this.config.checkOfflineThursday) checkDays.push(4);
+		if (this.config.checkOfflineFriday) checkDays.push(5);
+		if (this.config.checkOfflineSaturday) checkDays.push(6);
+		if (this.config.checkOfflineSunday) checkDays.push(0);
 
-			// if time is > 11 (12:00 pm create message for offline devices devices)
-			if ((now.getHours() > 11) && (!lastOfflineNotifyIndicator)) {
-				let msg = '';
-
-				for (const id of this.offlineDevices) {
-					msg = `${msg}\n${id['Device']} (${id['Last contact']})`;
-				}
-
-				if (this.offlineDevicesCount > 0) {
-					this.log.info(`Geräte Offline: ${msg}`);
-					await this.setStateAsync('lastNotification', `Geräte Offline: ${msg}`, true);
-
-					await this.sendNotification(`Geräte Offline: ${msg}`);
-
-					await this.setStateAsync('info.lastOfflineNotification', true, true);
-				}
-			}
-		} catch (error) {
-			this.errorReporting('[sendDailyOfflineNotifications]', error);
+		if (checkDays.length >= 1) { // check if an day is selected
+			this.log.debug(`Number of selected days for daily offline message: ${checkDays.length}. Send Message on: ${(checkDays).join(', ')} ...`);
+		} else {
+			this.log.warn(`No days selected for daily offline message. Please check the instance configuration!`);
+			return; // cancel function if no day is selected
 		}
-		this.log.debug(`Finished the function: ${this.sendDailyOfflineNotifications.name}`);
-	}//<--End of daily offline notification
 
-	async sendBatteryNotifications() {
-		// send message for low battery devices
+		if (!isUnloaded) {
+			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+			schedule.scheduleJob(cron, () => {
+				try {
+					let msg = '';
 
-		this.log.debug(`Start the function: ${this.sendBatteryNotifications.name}`);
+					for (const id of this.offlineDevices) {
+						msg = `${msg}\n${id['Device']} (${id['Last contact']})`;
+					}
 
-		try {
+					if (this.offlineDevicesCount > 0) {
+						this.log.info(`Geräte Offline: ${msg}`);
+						this.setStateAsync('lastNotification', `Geräte Offline: ${msg}`, true);
 
-			const now = new Date(); // get date
-			const today = now.getDay();
-			const checkDays = []; // list of selected days
-			let checkToday; // indicator if selected day is today
+						this.sendNotification(`Geräte Offline: ${msg}`);
+					}
 
-			// push the selected days in list
-			if (this.config.checkMonday) checkDays.push(1);
-			if (this.config.checkTuesday) checkDays.push(2);
-			if (this.config.checkWednesday) checkDays.push(3);
-			if (this.config.checkThursday) checkDays.push(4);
-			if (this.config.checkFriday) checkDays.push(5);
-			if (this.config.checkSaturday) checkDays.push(6);
-			if (this.config.checkSunday) checkDays.push(0);
-
-			//Check if the message should be send today
-			checkDays.forEach(object => {
-				if ((object >= 0) && today == object) {
-					checkToday = true;
+				} catch (error) {
+					this.errorReporting('[sendOfflineNotificationsShedule]', error);
 				}
 			});
-
-			if (checkDays.length >= 1) { // check if an day is selected
-				this.log.debug(`Number of selected days: ${checkDays.length}. Send Message on: ${(checkDays).join(', ')} ...`);
-			} else {
-				this.log.warn(`No days selected. Please check the instance configuration!`);
-				return; // cancel function if no day is selected
-			}
-
-			// Check if the message for low battery was already sent today
-			const lastBatteryNotifyIndicator = await this.getOwnInitValue('info.lastBatteryNotification');
-
-			// set indicator for send message first to 'false', after sending to 'true'
-			if (now.getHours() < 11) await this.setStateAsync('info.lastBatteryNotification', false, true);
-
-			// if time is > 11 (12:00 pm create message for low battery devices)
-			if ((now.getHours() > 11) && (!lastBatteryNotifyIndicator) && (checkToday != undefined)) {
-				let msg = '';
-
-				for (const id of this.batteryLowPowered) {
-					msg = `${msg}\n${id['Device']} (${id['Battery']})`;
-				}
-
-				if (this.lowBatteryPoweredCount > 0) {
-					this.log.info(`Niedrige Batteriezustände: ${msg}`);
-					await this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${msg}`, true);
-
-					await this.sendNotification(`Niedriege Batteriezustände: ${msg}`);
-
-					await this.setStateAsync('info.lastBatteryNotification', true, true);
-				}
-			}
-		} catch (error) {
-			this.errorReporting('[sendOfflineMessage]', error);
 		}
-
-		this.log.debug(`Finished the function: ${this.sendBatteryNotifications.name}`);
-	}//<--End of battery notification
-
+	}//<--End of daily offline notification
 
 	async resetVars() {
 		//Reset all arrays and counts

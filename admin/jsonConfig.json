@@ -266,8 +266,77 @@
                     "sm": 12,
                     "md": 6,
                     "lg": 3,
-                    "label": "Daily overview of offline devices",
-                    "help": "Get daily an overview with all offline devices"
+                    "label": "Overview of offline devices",
+                    "help": "Get a message with an overview all offline devices"
+                },
+                "_sendIntervallOfflineDay": {
+                    "newLine": true,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 6,
+                    "hidden": "!data.checkSendOfflineMsgDaily",
+                    "hideOnlyControl": true,
+                    "items": {
+                        "_textDays": {
+                            "type": "staticText",
+                            "text": "Choose the day(s) where you want to get the overview of offline devices:",
+                            "style": {
+                                "fontSize": 16,
+                                "marginTop": 20
+                            }
+                        },
+                        "checkOfflineMonday": {
+                            "newLine": true,
+                            "type": "checkbox",
+                            "label": "Mon"
+                        },
+                        "checkOfflineTuesday": {
+                            "type": "checkbox",
+                            "label": "Tue"
+                        },
+                        "checkOfflineWednesday": {
+                            "type": "checkbox",
+                            "label": "Wed"
+                        },
+                        "checkOfflineThursday": {
+                            "type": "checkbox",
+                            "label": "Thu"
+                        },
+                        "checkOfflineFriday": {
+                            "type": "checkbox",
+                            "label": "Fri"
+                        },
+                        "checkOfflineSaturday": {
+                            "type": "checkbox",
+                            "label": "Sat"
+                        },
+                        "checkOfflineSunday": {
+                            "type": "checkbox",
+                            "label": "Sun"
+                        }
+                    }
+                },
+                "_sendIntervallOfflineTime": {
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 6,
+                    "hidden": "!data.checkSendOfflineMsgDaily",
+                    "hideOnlyControl": true,
+                    "items": {
+                        "_textTime": {
+                            "type": "staticText",
+                            "text": "Choose the Time:",
+                            "style": {
+                                "fontSize": 16,
+                                "marginTop": 20
+                            }
+                        },
+                        "checkSendOfflineTime": {
+                            "newLine": true,
+                            "type": "text",
+                            "help": "Format hh:mm"
+                        }
+                    }
                 },
                 "trenner": {
                     "newLine": true,
@@ -341,12 +410,34 @@
                         }
                     }
                 },
+                "_checkSendBatteryTime": {
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 6,
+                    "hidden": "!data.checkSendBatteryMsg",
+                    "hideOnlyControl": true,
+                    "items": {
+                        "_textTime": {
+                            "type": "staticText",
+                            "text": "Choose the Time:",
+                            "style": {
+                                "fontSize": 16,
+                                "marginTop": 20
+                            }
+                        },
+                        "checkSendBatteryTime": {
+                            "newLine": true,
+                            "type": "text",
+                            "help": "Format hh:mm"
+                        }
+                    }
+                },
                 "_headerMSGservice": {
                     "newLine": true,
                     "type": "header", 
                     "text": "Notification Service",
                     "size": 2,
-                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsg",
+                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
                     "hideOnlyControl": false
                 },
                 "msgServiceText": {
@@ -356,7 +447,7 @@
                         "fontSize": 16,
                         "marginTop": 20
                     },
-                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsg",
+                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
                     "hideOnlyControl": false
                 },
                 "msgService": {
@@ -371,7 +462,7 @@
                                 {"label":"Jarvis", "value": "jarvis"},
                                 {"label":"Lovelace", "value": "lovelace"}],
                     "default": "none",
-                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsg",
+                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
                     "hideOnlyControl": false
                 },
                 "_headerPushover": {
