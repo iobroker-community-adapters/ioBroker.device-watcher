@@ -267,7 +267,7 @@ class DeviceWatcher extends utils.Adapter {
 				'id': 'none'
 			},
 			tradfri: {
-				'Selektor': '0_userdata.0.tradfri.*.lastSeen',
+				'Selektor': 'tradfri.*.lastSeen',
 				'adapter': 'tradfri',
 				'rssiState': 'none',
 				'battery': '.batteryPercentage',
@@ -307,7 +307,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.battery_low'
 			},
 			zigbee2mqtt: {
-				'Selektor': '0_userdata.0.zigbee2mqtt.*.link_quality',
+				'Selektor': 'zigbee2mqtt.*.link_quality',
 				'adapter': 'zigbee2MQTT',
 				'battery': '.battery',
 				'reach': '.available',
