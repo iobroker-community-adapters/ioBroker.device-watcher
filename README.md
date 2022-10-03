@@ -99,11 +99,12 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.1.0 (2022-10-03)
 - removed indicatoren for daily sent messages
 - changed selector for shelly devices
 - added Zigbee2MQTT adapter
 - added cron function to use own time for daily overview messages
+
 ### 1.0.1 (2022-09-30)
 - added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut and Meross adapter
 - fixed battery message
