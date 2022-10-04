@@ -1035,14 +1035,26 @@ class DeviceWatcher extends utils.Adapter {
 									}
 									break;
 								case 'miHome':
-									if (this.config.mihomeMaxMinutes === -1) {
-										if (!deviceUnreachState) {
+									if (this.arrDev[i].battery === 'none') {
+										if (this.config.mihomeGWMaxMinutes === -1) {
+											if (!deviceUnreachState) {
+												deviceState = 'Offline'; //set online state to offline
+												await pushOfflineDevice();
+											}
+										} else if (lastContact > this.config.mihomeGWMaxMinutes) {
 											deviceState = 'Offline'; //set online state to offline
 											await pushOfflineDevice();
 										}
-									} else if (lastContact > this.config.mihomeMaxMinutes) {
-										deviceState = 'Offline'; //set online state to offline
-										await pushOfflineDevice();
+									} else {
+										if (this.config.mihomeMaxMinutes === -1) {
+											if (!deviceUnreachState) {
+												deviceState = 'Offline'; //set online state to offline
+												await pushOfflineDevice();
+											}
+										} else if (lastContact > this.config.mihomeMaxMinutes) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
 									}
 									break;
 								case 'mihomeVacuum':

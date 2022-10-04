@@ -1002,6 +1002,18 @@
                     "hidden": "!data.mihomeDevices",
                     "hideOnlyControl": false
                 },
+                "mihomeGWMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "MiHome Gateway",
+                    "help": "in minutes",
+                    "hidden": "!data.mihomeDevices",
+                    "hideOnlyControl": false
+                },
                 "mihomeVacuumMaxMinutes": {
                     "type": "number",
                     "min": -1,

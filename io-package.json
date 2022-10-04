@@ -256,6 +256,7 @@
     "jeelinkMaxMinutes": 300,
     "merossMaxMinutes": -1,
     "mihomeMaxMinutes": 300,
+    "mihomeGWMaxMinutes": -1,
     "mihomeVacuumMaxMinutes": -1,
     "netatmoMaxMinutes": 300,
     "nukiextendMaxMinutes": 300,
