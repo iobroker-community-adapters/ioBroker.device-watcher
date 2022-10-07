@@ -45,7 +45,7 @@ class DeviceWatcher extends utils.Adapter {
 		// Interval timer
 		this.refreshDataTimeout = null;
 
-		this.devices = new Map();
+		// this.devices = new Map();
 
 		// Information for dev: add ' 0_userdata.0. ' to selector for testing with own datapoints.
 		/*
@@ -156,6 +156,15 @@ class DeviceWatcher extends utils.Adapter {
 				'battery': 'none',
 				'reach': 'none',
 				'isLowBat': '.lowBatt'
+			},
+			lupusec: {
+				'Selektor': 'lupusec.*.rssi',
+				'adapter': 'lupusec',
+				'battery': 'none',
+				'rssiState': '.rssi',
+				'reach': 'none',
+				'isLowBat': '.battery_ok',
+				'id': 'none'
 			},
 			meross: {
 				'Selektor': 'meross.*.online',
@@ -324,7 +333,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		this.on('ready', this.onReady.bind(this));
-		this.on('stateChange', this.onStateChange.bind(this));
+		// this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
 		// this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
@@ -351,6 +360,7 @@ class DeviceWatcher extends utils.Adapter {
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
 				jeelink: this.config.jeelinkDevices,
+				lupusec: this.config.lupusecDevices,
 				meross: this.config.merossDevices,
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
@@ -650,7 +660,7 @@ class DeviceWatcher extends utils.Adapter {
 					const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 					const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
 
-					this.devices.set(deviceName, currDeviceString + this.arrDev[i].reach);
+					// this.devices.set(deviceName, currDeviceString + this.arrDev[i].reach);
 					// List all entries
 					//let text = '';
 					//this.devices.forEach (function(value, key) {
@@ -704,6 +714,9 @@ class DeviceWatcher extends utils.Adapter {
 							switch (this.arrDev[i].adapter) {
 								case 'roomba':
 									linkQuality = deviceQualityState.val + '%';
+									break;
+								case 'lupusec':
+									linkQuality = deviceQualityState.val;
 									break;
 
 								default:
@@ -1023,6 +1036,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 									break;
+								case 'lupusec':
+									if (this.config.lupusecMaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.lupusecMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
 								case 'meross':
 									if (this.config.merossMaxMinutes === -1) {
 										if (!deviceUnreachState) {
@@ -1278,7 +1302,7 @@ class DeviceWatcher extends utils.Adapter {
 									batteryHealth = ' - ';
 									break;
 								default:
-									if ((!deviceLowBatState) || (deviceLowBatState == 'NORMAL')) {
+									if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState) === 1) {
 										batteryHealth = 'ok';
 									} else {
 										batteryHealth = 'low';
@@ -1290,7 +1314,7 @@ class DeviceWatcher extends utils.Adapter {
 									batteryHealth = ' - ';
 									break;
 								default:
-									if ((!deviceLowBatState) || (deviceLowBatState == 'NORMAL')) {
+									if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState) === 1) {
 										batteryHealth = 'ok';
 									} else {
 										batteryHealth = 'low';
@@ -1324,6 +1348,7 @@ class DeviceWatcher extends utils.Adapter {
 									}
 								);
 								break;
+
 							case 'hue-extended':
 								if (shortDeviceBatteryState) {
 									batteryHealth = shortDeviceBatteryState + '%';
@@ -1402,7 +1427,7 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 
 						default: // for all other devices with low bat states
-							if (deviceLowBatState) {
+							if ((deviceLowBatState === true) || (deviceLowBatState === 0)) {
 								this.batteryLowPowered.push(
 									{
 										'Device': deviceName,

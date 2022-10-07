@@ -102,6 +102,13 @@
                     "lg": 3,
                     "label": "Jeelink"
                 },
+                "lupusecDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Lupusec"
+                },
                 "merossDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -976,6 +983,18 @@
                     "label": "Jeelink",
                     "help": "in minutes",
                     "hidden": "!data.jeelinkDevices",
+                    "hideOnlyControl": false
+                },
+                "lupusecMaxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Lupusec",
+                    "help": "in minutes",
+                    "hidden": "!data.lupusecDevices",
                     "hideOnlyControl": false
                 },
                 "merossMaxMinutes": {
