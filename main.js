@@ -136,6 +136,13 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat2': '.LOWBAT',
 				'stateValue': '.1.STATE'
 			},
+			hs100: {
+				'Selektor': 'hs100.*.last_update',
+				'adapter': 'hs100',
+				'battery': 'none',
+				'reach': 'none',
+				'isLowBat': 'none'
+			},
 			hue: {
 				'Selektor': 'hue.*.reachable',
 				'adapter': 'hue',
@@ -357,6 +364,7 @@ class DeviceWatcher extends utils.Adapter {
 				harmony: this.config.harmonyDevices,
 				hmiP : this.config.hmiPDevices,
 				homematic: this.config.homematicDevices,
+				hs100: this.config.hs100Devices,
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
 				jeelink: this.config.jeelinkDevices,
@@ -691,6 +699,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'nut':
 						case 'miHome':
 						case 'unifi':
+						case 'hs100':
 							deviceQualityState;
 							break;
 
@@ -999,6 +1008,17 @@ class DeviceWatcher extends utils.Adapter {
 											await pushOfflineDevice();
 										}
 									} else if (lastContact > this.config.homematicMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
+								case 'hs100':
+									if (this.config.hs100MaxMinutes === -1) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.hs100MaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}

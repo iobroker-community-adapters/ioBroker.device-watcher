@@ -81,6 +81,13 @@
                     "lg": 3,
                     "label": "Homematic"
                 },
+                "hs100Devices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "hs100"
+                },
                 "hueDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -947,6 +954,18 @@
                     "label": "Homematic",
                     "help": "in minutes",
                     "hidden": "!data.homematicDevices",
+                    "hideOnlyControl": false
+                },
+                "hs100MaxMinutes": {
+                    "type": "number",
+                    "min": 0,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "hs100",
+                    "help": "in minutes",
+                    "hidden": "!data.hs100Devices",
                     "hideOnlyControl": false
                 },
                 "hueMaxMinutes": {
