@@ -45,18 +45,7 @@ class DeviceWatcher extends utils.Adapter {
 		// Interval timer
 		this.refreshDataTimeout = null;
 
-		// this.devices = new Map();
-
-		// Information for dev: add ' 0_userdata.0. ' to selector for testing with own datapoints.
-		/*
-		This is the main template:
-				'Selektor': '',
-				'adapter': '',
-				'battery': 'none',
-				'reach': 'none',
-				'isLowBat': 'none',
-				'id': 'none''
-		*/
+		this.devices = {};
 
 		// arrays of supported adapters
 		this.arrApart = {
@@ -169,7 +158,7 @@ class DeviceWatcher extends utils.Adapter {
 				'adapter': 'lupusec',
 				'battery': 'none',
 				'rssiState': '.rssi',
-				'reach': 'none',
+				'reach': '.cond_ok',
 				'isLowBat': '.battery_ok',
 				'id': 'none'
 			},
@@ -457,14 +446,6 @@ class DeviceWatcher extends utils.Adapter {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
-
-		/*
-		this.devices.forEach((value, key) => {
-			this.log.warn(`${key}: ${value}`);
-			this.subscribeStates(value);
-			this.onStateChange(key, value);
-		});
-		*/
 	} // <-- onReady end
 
 	/**
@@ -476,7 +457,6 @@ class DeviceWatcher extends utils.Adapter {
 		if (state) {
 			// The state was changed
 			this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-			// await this.main();
 		} else {
 			// The state was deleted
 			this.log.warn(`state ${id} deleted`);
@@ -511,7 +491,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.main.name}`);
 
 		try {
-
 			// fill datapoints for each adapter if selected
 			try {
 				for (const [id] of Object.entries(this.arrApart)) {
@@ -667,14 +646,6 @@ class DeviceWatcher extends utils.Adapter {
 					const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
 					const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 					const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
-
-					// this.devices.set(deviceName, currDeviceString + this.arrDev[i].reach);
-					// List all entries
-					//let text = '';
-					//this.devices.forEach (function(value, key) {
-					//	text += key + ' : ' + value;
-					// });
-					// this.log.warn(text);
 
 					// Get link quality
 					let deviceQualityState;

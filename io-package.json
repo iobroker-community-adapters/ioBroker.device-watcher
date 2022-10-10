@@ -257,7 +257,7 @@
     "hueMaxMinutes": -1,
     "hueextMaxMinutes": -1,
     "jeelinkMaxMinutes": 300,
-    "lupusecMaxMinutes": 300,
+    "lupusecMaxMinutes": -1,
     "merossMaxMinutes": -1,
     "mihomeMaxMinutes": 300,
     "mihomeGWMaxMinutes": -1,
