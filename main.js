@@ -154,7 +154,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.lowBatt'
 			},
 			lupusec: {
-				'Selektor': 'lupusec.*.rssi',
+				'Selektor': 'lupusec.*.cond_ok',
 				'adapter': 'lupusec',
 				'battery': 'none',
 				'rssiState': '.rssi',
@@ -246,6 +246,7 @@ class DeviceWatcher extends utils.Adapter {
 				'rssiState': '.Wifi_Signal',
 				'battery': '.battery',
 				'reach': '.alive',
+				'uptime': '.Uptime',
 				'isLowBat': 'none'
 			},
 			sonos: {
@@ -651,12 +652,23 @@ class DeviceWatcher extends utils.Adapter {
 					let deviceQualityState;
 					let linkQuality;
 
+					// ---> TEST
+					/*
+					this.devices[deviceName] = currDeviceString + this.arrDev[i].reach;
+
+					for (const [value] of Object.entries(this.devices)) {
+						// this.log.warn(`${key}: ${value}`);
+						this.subscribeForeignStatesAsync(value);
+					} */
+					// <--- END TEST
+
 					switch (this.arrDev[i].adapter) {
 						case 'sonoff':
 						case 'hmiP':
 						case 'homematic':
 						case 'wled':
 						case 'shelly':
+						case 'lupusec':
 							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 							break;
 
@@ -805,7 +817,6 @@ class DeviceWatcher extends utils.Adapter {
 								}
 								return lastContactString;
 							};
-
 
 							//  If there is no contact since user sets minutes add device in offline list
 							// calculate to days after 48 hours
@@ -1275,8 +1286,6 @@ class DeviceWatcher extends utils.Adapter {
 							this.errorReporting('[getLastContact]', error);
 						}
 					}
-
-
 
 					// Count how many devcies are offline
 					this.offlineDevicesCount = this.offlineDevices.length;
