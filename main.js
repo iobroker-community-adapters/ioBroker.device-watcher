@@ -243,7 +243,7 @@ class DeviceWatcher extends utils.Adapter {
 			sonoff: {
 				'Selektor': 'sonoff.*.alive',
 				'adapter': 'sonoff',
-				'rssiState': '.Wifi_Signal',
+				'rssiState': '.Wifi_RSSI',
 				'battery': '.battery',
 				'reach': '.alive',
 				'uptime': '.Uptime',
@@ -705,6 +705,7 @@ class DeviceWatcher extends utils.Adapter {
 						// If Quality State is already an percent value
 							switch (this.arrDev[i].adapter) {
 								case 'roomba':
+								case 'sonoff':
 									linkQuality = deviceQualityState.val + '%';
 									break;
 								case 'lupusec':
