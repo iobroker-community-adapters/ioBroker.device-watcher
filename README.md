@@ -21,6 +21,10 @@
 🇬🇧 [Documentation](/docs/en/README.md)</br>
 🇩🇪 [Dokumentation](/docs/de/README.md)
 
+## Discussion and Questions
+[ioBroker Forum](https://forum.iobroker.net/topic/55426/test-adapter-device-watcher-v1-x-x-github-latest)</br>
+[ioBroker Discord Channel](https://discord.com/channels/743167951875604501/1030196924944486530)
+
 ## Device-Watcher adapter for ioBroker
 
 This is a watchdog for devices. The adapter looks for the rssi/link quality and battery states and create JSON & HTML lists of them (devices with battery, devices with low battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
@@ -36,9 +40,11 @@ Supported adapters are:
 * Harmony
 * HmiP
 * Homematic
+* HS100
 * Hue
 * Hue Extended
 * Jeelink
+* Lupusec
 * Meross
 * MiHome
 * MiHome Vacuum
@@ -93,12 +99,15 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 - make blacklist more user-friendly
 - clean up the code
 - add support for reaction on state-changes
+- send offline text only from the device that goes offline
 
 ## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- added Lupusec and HS100 adapter
 ### 1.1.0 (2022-10-03)
 - removed indicatoren for daily sent messages
 - changed selector for shelly devices
