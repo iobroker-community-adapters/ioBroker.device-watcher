@@ -783,6 +783,7 @@ class DeviceWatcher extends utils.Adapter {
 					// When was the last contact to the device?
 					let lastContactString;
 					let deviceState = 'Online';
+					let lastDeviceUnreachStateChange;
 
 					const deviceMainSelector = await this.getForeignStateAsync(id);
 					const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for homematic devices
@@ -794,7 +795,7 @@ class DeviceWatcher extends utils.Adapter {
 							const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
 							const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 							const deviceUnreachSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].reach);
-							const lastDeviceUnreachStateChange = Math.round((time.getTime() - deviceUnreachSelector.lc) / 1000 / 60);
+							if (deviceUnreachSelector) {lastDeviceUnreachStateChange = Math.round((time.getTime() - deviceUnreachSelector.lc) / 1000 / 60);}
 							const shortDeviceUnreachState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].reach);
 
 							const getLastContact = async () => {
@@ -820,14 +821,17 @@ class DeviceWatcher extends utils.Adapter {
 							};
 
 							const getLastStateChangeOfUnreachState = async () => {
-								lastContactString = this.formatDate(new Date((deviceUnreachSelector.lc)), 'hh:mm') + ' Uhr';
-								if (Math.round(lastDeviceUnreachStateChange) > 100) {
-									lastContactString = Math.round(lastDeviceUnreachStateChange / 60) + ' Stunden';
+								if (deviceUnreachSelector) {
+									lastContactString = this.formatDate(new Date((deviceUnreachSelector.lc)), 'hh:mm') + ' Uhr';
+									if (Math.round(lastDeviceUnreachStateChange) > 100) {
+										lastContactString = Math.round(lastDeviceUnreachStateChange / 60) + ' Stunden';
+									}
+									if (Math.round(lastDeviceUnreachStateChange / 60) > 48) {
+										lastContactString = Math.round(lastDeviceUnreachStateChange / 60 / 24) + ' Tagen';
+									}
+									return lastContactString;
 								}
-								if (Math.round(lastDeviceUnreachStateChange / 60) > 48) {
-									lastContactString = Math.round(lastDeviceUnreachStateChange / 60 / 24) + ' Tagen';
-								}
-								return lastContactString;
+
 							};
 
 							//  If there is no contact since user sets minutes add device in offline list
