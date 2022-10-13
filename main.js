@@ -640,17 +640,10 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 					}
 
-					const deviceMainSelector = await this.getForeignStateAsync(id);
-					const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for homematic devices
-
 					// Get battery states
 					const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
 					const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 					const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
-
-					// Get link quality
-					let deviceQualityState;
-					let linkQuality;
 
 					// ---> TEST
 					/*
@@ -661,6 +654,10 @@ class DeviceWatcher extends utils.Adapter {
 						this.subscribeForeignStatesAsync(value);
 					} */
 					// <--- END TEST
+
+					// Get link quality
+					let deviceQualityState;
+					let linkQuality;
 
 					switch (this.arrDev[i].adapter) {
 						case 'sonoff':
@@ -702,18 +699,17 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.config.trueState) {
 							linkQuality = deviceQualityState.val;
 						} else {
-						// If Quality State is already an percent value
 							switch (this.arrDev[i].adapter) {
 								case 'roomba':
 								case 'sonoff':
-									linkQuality = deviceQualityState.val + '%';
+									linkQuality = deviceQualityState.val + '%'; // If quality state is already an percent value
 									break;
 								case 'lupusec':
 									linkQuality = deviceQualityState.val;
 									break;
 
 								default:
-								// If Quality State is an RSSI vaulue calculate in percent:
+								// If quality state is an RSSI value calculate in percent:
 									if (deviceQualityState.val == -255) {
 										linkQuality = ' - ';
 									} else if (deviceQualityState.val < 0) {
@@ -786,16 +782,20 @@ class DeviceWatcher extends utils.Adapter {
 
 					// When was the last contact to the device?
 					let lastContactString;
-
 					let deviceState = 'Online';
+
+					const deviceMainSelector = await this.getForeignStateAsync(id);
+					const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for homematic devices
+
 					if (deviceMainSelector) {
 						try {
 							const time = new Date();
 							const lastContact = Math.round((time.getTime() - deviceMainSelector.ts) / 1000 / 60);
 							const lastStateChange = Math.round((time.getTime() - deviceMainSelector.lc) / 1000 / 60);
 							const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
-							const shortDeviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].reach);
-
+							const deviceUnreachSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].reach);
+							const lastDeviceUnreachStateChange = Math.round((time.getTime() - deviceUnreachSelector.lc) / 1000 / 60);
+							const shortDeviceUnreachState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].reach);
 
 							const getLastContact = async () => {
 								lastContactString = this.formatDate(new Date((deviceMainSelector.ts)), 'hh:mm') + ' Uhr';
@@ -815,6 +815,17 @@ class DeviceWatcher extends utils.Adapter {
 								}
 								if (Math.round(lastStateChange / 60) > 48) {
 									lastContactString = Math.round(lastStateChange / 60 / 24) + ' Tagen';
+								}
+								return lastContactString;
+							};
+
+							const getLastStateChangeOfUnreachState = async () => {
+								lastContactString = this.formatDate(new Date((deviceUnreachSelector.lc)), 'hh:mm') + ' Uhr';
+								if (Math.round(lastDeviceUnreachStateChange) > 100) {
+									lastContactString = Math.round(lastDeviceUnreachStateChange / 60) + ' Stunden';
+								}
+								if (Math.round(lastDeviceUnreachStateChange / 60) > 48) {
+									lastContactString = Math.round(lastDeviceUnreachStateChange / 60 / 24) + ' Tagen';
 								}
 								return lastContactString;
 							};
@@ -854,7 +865,7 @@ class DeviceWatcher extends utils.Adapter {
 
 									} else {
 										if ((!deviceUnreachState)) {
-											await getLastStateChange();
+											await getLastStateChangeOfUnreachState();
 										} else {
 											await getLastContact();
 										}
@@ -1156,7 +1167,7 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											await pushOfflineDevice();
 										}
-									} else if (lastContact > this.config.shellyMaxMinutes) {
+									} else if ((!deviceUnreachState) && (lastDeviceUnreachStateChange > this.config.shellyMaxMinutes)) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
@@ -1167,7 +1178,7 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											await pushOfflineDevice();
 										}
-									} else if (lastContact > this.config.sonoffMaxMinutes) {
+									} else if ((!deviceUnreachState) && (lastDeviceUnreachStateChange > this.config.sonoffMaxMinutes)) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
