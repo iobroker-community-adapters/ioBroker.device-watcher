@@ -820,6 +820,7 @@ class DeviceWatcher extends utils.Adapter {
 								return lastContactString;
 							};
 
+							/*
 							const getLastStateChangeOfUnreachState = async () => {
 								if (deviceUnreachSelector) {
 									lastContactString = this.formatDate(new Date((deviceUnreachSelector.lc)), 'hh:mm') + ' Uhr';
@@ -831,8 +832,8 @@ class DeviceWatcher extends utils.Adapter {
 									}
 									return lastContactString;
 								}
+							};*/
 
-							};
 
 							//  If there is no contact since user sets minutes add device in offline list
 							// calculate to days after 48 hours
@@ -869,7 +870,7 @@ class DeviceWatcher extends utils.Adapter {
 
 									} else {
 										if ((!deviceUnreachState)) {
-											await getLastStateChangeOfUnreachState();
+											await getLastStateChange();
 										} else {
 											await getLastContact();
 										}
