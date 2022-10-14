@@ -117,7 +117,7 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			hmrpc: {
 				'Selektor': 'hm-rpc.*.UNREACH',
-				'adapter': 'hm-rpc',
+				'adapter': 'hmrpc',
 				'rssiState': '.RSSI_DEVICE',
 				'battery': '.OPERATING_VOLTAGE',
 				'reach': '.UNREACH',
@@ -601,7 +601,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							// Get ID with short currDeviceString from objectjson
 						case 'hue-extended':
-						case 'hm-rpc':
+						case 'hmrpc':
 						case 'nuki-extended':
 						case 'wled':
 							if (shortDeviceObject && typeof shortDeviceObject === 'object') {
@@ -662,7 +662,7 @@ class DeviceWatcher extends utils.Adapter {
 					switch (this.arrDev[i].adapter) {
 						case 'sonoff':
 						case 'hmiP':
-						case 'hm-rpc':
+						case 'hmrpc':
 						case 'wled':
 						case 'shelly':
 						case 'lupusec':
@@ -844,7 +844,7 @@ class DeviceWatcher extends utils.Adapter {
 
 								default:
 								//State changed
-									if  (this.arrDev[i].adapter === 'hm-rpc') {
+									if  (this.arrDev[i].adapter === 'hmrpc') {
 										if (linkQuality != ' - ') {
 											if (deviceUnreachState) {
 												await getLastStateChange();
@@ -1000,7 +1000,7 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 									break;
-								case 'hm-rpc':
+								case 'hmrpc':
 									if (this.config.hmrpcMaxMinutes === -1) {
 										if (deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
@@ -1319,7 +1319,7 @@ class DeviceWatcher extends utils.Adapter {
 									batteryHealth = ' - ';
 									break;
 								default:
-									if ((deviceLowBatState) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
+									if ((!deviceLowBatState) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
 										batteryHealth = 'ok';
 									} else {
 										batteryHealth = 'low';
@@ -1331,7 +1331,7 @@ class DeviceWatcher extends utils.Adapter {
 									batteryHealth = ' - ';
 									break;
 								default:
-									if ((deviceLowBatState) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
+									if ((!deviceLowBatStateHM) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
 										batteryHealth = 'ok';
 									} else {
 										batteryHealth = 'low';
@@ -1350,7 +1350,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					} else {
 						switch (this.arrDev[i].adapter) {
-							case 'hm-rpc':
+							case 'hmrpc':
 								if (deviceBatteryState === 0) {
 									batteryHealth = ' - ';
 								} else {
@@ -1419,7 +1419,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					// fill list with low battery devices
 					switch (this.arrDev[i].adapter) {
-						case 'hm-rpc': // there are differnt low bat states between hm and hmIp devices
+						case 'hmrpc': // there are differnt low bat states between hm and hmIp devices
 							if (deviceLowBatState || deviceLowBatStateHM) {
 								this.batteryLowPowered.push(
 									{
