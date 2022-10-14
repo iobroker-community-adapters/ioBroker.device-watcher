@@ -108,6 +108,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 -->
 ### **WORK IN PROGRESS**
 - added Lupusec and HS100 adapter
+- changed name of Homematic to HM-RPC
 ### 1.1.0 (2022-10-03)
 - removed indicatoren for daily sent messages
 - changed selector for shelly devices
