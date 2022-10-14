@@ -115,9 +115,9 @@ class DeviceWatcher extends utils.Adapter {
 				'reach': '.unreach',
 				'isLowBat': '.lowBat',
 			},
-			homematic: {
+			hmrpc: {
 				'Selektor': 'hm-rpc.*.UNREACH',
-				'adapter': 'homematic',
+				'adapter': 'hm-rpc',
 				'rssiState': '.RSSI_DEVICE',
 				'battery': '.OPERATING_VOLTAGE',
 				'reach': '.UNREACH',
@@ -353,7 +353,7 @@ class DeviceWatcher extends utils.Adapter {
 				ham: this.config.hamDevices,
 				harmony: this.config.harmonyDevices,
 				hmiP : this.config.hmiPDevices,
-				homematic: this.config.homematicDevices,
+				hmrpc: this.config.hmrpcDevices,
 				hs100: this.config.hs100Devices,
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
@@ -601,7 +601,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							// Get ID with short currDeviceString from objectjson
 						case 'hue-extended':
-						case 'homematic':
+						case 'hm-rpc':
 						case 'nuki-extended':
 						case 'wled':
 							if (shortDeviceObject && typeof shortDeviceObject === 'object') {
@@ -662,7 +662,7 @@ class DeviceWatcher extends utils.Adapter {
 					switch (this.arrDev[i].adapter) {
 						case 'sonoff':
 						case 'hmiP':
-						case 'homematic':
+						case 'hm-rpc':
 						case 'wled':
 						case 'shelly':
 						case 'lupusec':
@@ -786,7 +786,7 @@ class DeviceWatcher extends utils.Adapter {
 					let lastDeviceUnreachStateChange;
 
 					const deviceMainSelector = await this.getForeignStateAsync(id);
-					const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for homematic devices
+					const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for hmrpc devices
 
 					if (deviceMainSelector) {
 						try {
@@ -844,7 +844,7 @@ class DeviceWatcher extends utils.Adapter {
 
 								default:
 								//State changed
-									if  (this.arrDev[i].adapter == 'homematic') {
+									if  (this.arrDev[i].adapter == 'hm-rpc') {
 										if (linkQuality != ' - ') {
 											if (deviceUnreachState) {
 												await getLastStateChange();
@@ -1000,13 +1000,13 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 									break;
-								case 'homematic':
-									if (this.config.homematicMaxMinutes === -1) {
+								case 'hm-rpc':
+									if (this.config.hmrpcMaxMinutes === -1) {
 										if (deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											await pushOfflineDevice();
 										}
-									} else if (lastContact > this.config.homematicMaxMinutes) {
+									} else if (lastContact > this.config.hmrpcMaxMinutes) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
@@ -1350,7 +1350,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					} else {
 						switch (this.arrDev[i].adapter) {
-							case 'homematic':
+							case 'hm-rpc':
 								if (deviceBatteryState === 0) {
 									batteryHealth = ' - ';
 								} else {
@@ -1419,7 +1419,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					// fill list with low battery devices
 					switch (this.arrDev[i].adapter) {
-						case 'homematic': // there are differnt low bat states between hm and hmIp devices
+						case 'hm-rpc': // there are differnt low bat states between hm and hmIp devices
 							if (deviceLowBatState || deviceLowBatStateHM) {
 								this.batteryLowPowered.push(
 									{

@@ -74,12 +74,12 @@
                     "lg": 3,
                     "label": "HmiP"
                 },
-                "homematicDevices": {
+                "hmrpcDevices": {
                     "type": "checkbox",
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Homematic"
+                    "label": "HM-RPC"
                 },
                 "hs100Devices": {
                     "type": "checkbox",
@@ -944,16 +944,16 @@
                     "hidden": "!data.hmiPDevices",
                     "hideOnlyControl": false
                 },
-                "homematicMaxMinutes": {
+                "hmrpcMaxMinutes": {
                     "type": "number",
                     "min": -1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
                     "lg": 3,
-                    "label": "Homematic",
+                    "label": "HM-RPC",
                     "help": "in minutes",
-                    "hidden": "!data.homematicDevices",
+                    "hidden": "!data.hmrpcDevices",
                     "hideOnlyControl": false
                 },
                 "hs100MaxMinutes": {
