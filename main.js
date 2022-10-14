@@ -844,7 +844,7 @@ class DeviceWatcher extends utils.Adapter {
 
 								default:
 								//State changed
-									if  (this.arrDev[i].adapter == 'hm-rpc') {
+									if  (this.arrDev[i].adapter === 'hm-rpc') {
 										if (linkQuality != ' - ') {
 											if (deviceUnreachState) {
 												await getLastStateChange();
@@ -869,7 +869,7 @@ class DeviceWatcher extends utils.Adapter {
 										}
 
 									} else {
-										if ((!deviceUnreachState)) {
+										if (!deviceUnreachState) {
 											await getLastStateChange();
 										} else {
 											await getLastContact();
@@ -1172,7 +1172,7 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											await pushOfflineDevice();
 										}
-									} else if ((!deviceUnreachState) && (lastDeviceUnreachStateChange > this.config.shellyMaxMinutes)) {
+									} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (lastDeviceUnreachStateChange > this.config.shellyMaxMinutes)) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
@@ -1183,7 +1183,7 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											await pushOfflineDevice();
 										}
-									} else if ((!deviceUnreachState) && (lastDeviceUnreachStateChange > this.config.sonoffMaxMinutes)) {
+									} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (lastDeviceUnreachStateChange > this.config.sonoffMaxMinutes)) {
 										deviceState = 'Offline'; //set online state to offline
 										await pushOfflineDevice();
 									}
