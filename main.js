@@ -116,7 +116,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.lowBat',
 			},
 			hmrpc: {
-				'Selektor': 'hm-rpc.*.UNREACH',
+				'Selektor': '0_userdata.0.hm-rpc.*.UNREACH',
 				'adapter': 'hm-rpc',
 				'rssiState': '.RSSI_DEVICE',
 				'battery': '.OPERATING_VOLTAGE',
@@ -1319,7 +1319,7 @@ class DeviceWatcher extends utils.Adapter {
 									batteryHealth = ' - ';
 									break;
 								default:
-									if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState) === 1) {
+									if ((deviceLowBatState) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
 										batteryHealth = 'ok';
 									} else {
 										batteryHealth = 'low';
@@ -1331,7 +1331,7 @@ class DeviceWatcher extends utils.Adapter {
 									batteryHealth = ' - ';
 									break;
 								default:
-									if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState) === 1) {
+									if ((deviceLowBatState) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
 										batteryHealth = 'ok';
 									} else {
 										batteryHealth = 'low';
