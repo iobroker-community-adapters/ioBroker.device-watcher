@@ -119,6 +119,7 @@ class DeviceWatcher extends utils.Adapter {
 				'Selektor': 'hm-rpc.*.UNREACH',
 				'adapter': 'hmrpc',
 				'rssiState': '.RSSI_DEVICE',
+				'rssiPeerState': '.RSSI_PEER',
 				'battery': '.OPERATING_VOLTAGE',
 				'reach': '.UNREACH',
 				'isLowBat': '.LOW_BAT',
@@ -787,6 +788,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					const deviceMainSelector = await this.getForeignStateAsync(id);
 					const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for hmrpc devices
+					const rssiPeerSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiPeerState);
 
 					if (deviceMainSelector) {
 						try {
@@ -856,6 +858,19 @@ class DeviceWatcher extends utils.Adapter {
 												const lastContactOfState = Math.round((time.getTime() - deviceStateSelector.ts) / 1000 / 60);
 												const getLastContactOfState = async () => {
 													lastContactString = this.formatDate(new Date((deviceStateSelector.ts)), 'hh:mm') + ' Uhr';
+													if (Math.round(lastContactOfState) > 100) {
+														lastContactString = Math.round(lastContactOfState / 60) + ' Stunden';
+													}
+													if (Math.round(lastContactOfState / 60) > 48) {
+														lastContactString = Math.round(lastContactOfState / 60 / 24) + ' Tagen';
+													}
+													return lastContactString;
+												};
+												await getLastContactOfState();
+											} else if (rssiPeerSelector) {
+												const lastContactOfState = Math.round((time.getTime() - rssiPeerSelector.ts) / 1000 / 60);
+												const getLastContactOfState = async () => {
+													lastContactString = this.formatDate(new Date((rssiPeerSelector.ts)), 'hh:mm') + ' Uhr';
 													if (Math.round(lastContactOfState) > 100) {
 														lastContactString = Math.round(lastContactOfState / 60) + ' Stunden';
 													}
