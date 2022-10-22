@@ -114,7 +114,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.lowBat',
 			},
 			hmrpc: {
-				'Selektor': '0_userdata.0.hm-rpc.*.UNREACH',
+				'Selektor': 'hm-rpc.*.UNREACH',
 				'adapter': 'hmrpc',
 				'rssiState': '.RSSI_DEVICE',
 				'rssiPeerState': '.RSSI_PEER',
