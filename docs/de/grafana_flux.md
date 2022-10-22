@@ -1,7 +1,7 @@
 ![Logo](../../admin/device-watcher.png)
 # ioBroker.device-watcher
 
-## Wie JSON Tabelle in Grafana mit InfluxQL anzeigen
+## Wie JSON Tabelle in Grafana mit Flux anzeigen
 
 Um Json Listen in Grafana korrekt und ohne Plugin anzeigen lassen zu können, müssen gewisse Einstellungen vorgenommen werden. 
 
@@ -13,9 +13,15 @@ Um Json Listen in Grafana korrekt und ohne Plugin anzeigen lassen zu können, m�
 
 ![grafanaTable](img/grafanaTable.png)
 
-3. In den Query Einstellungen wählt man als Data source eure ioBroker Datenbank aus. Bei `From` nimmt man sein gewünschten Datenpunkt, bei `Select` entfernt man das voreingestellte `mean()` und bei `Group by` müssen `time($_interval)` und `fill(null)` entfernt werden. (Draufklicken und auf remove)
+3. In den Query Einstellungen wählt man als Data source eure ioBroker Datenbank aus. Dann trägt man folgende Syntax ein (der bucket-name und Datenpunktname im measurement Bereich könnte bei euch abweichend sein, daher bitte prüfen und ggf. anpassen.):
+```
+from(bucket: "iobroker")
+    |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+    |> filter(fn: (r) => r["_measurement"] == "device-watcher.0.listAll")
+    |> filter(fn: (r) => r["_field"] == "value")
+```
 
-![grafanaQuerySettings](img/grafanaQuerySettings.png)
+![grafanaQuerySettingsInflux](img/grafanaquerySettingsInflux.png)
 
 4. Danach geht man auf den Reiter Transform.
 
@@ -38,3 +44,19 @@ Um Json Listen in Grafana korrekt und ohne Plugin anzeigen lassen zu können, m�
 Wenn alle Einstellungen getroffen wurden, sollte die Tabelle korrekt angezeigt werden.
 
 ![grafanaTableAll](img/grafanaTableAll.png)
+
+### Zusatzinfo:
+
+Falls ihr die Batterie und Signalanzeige grafisch als Gauges darstellen wollt, müsst ihr die Syntax wie im folgenden Beispiel anpassen und damit die Prozentzeichen entfernen damit der Text vom Typ string auf number geändert wird:
+```
+import "strings"
+from(bucket: "iobroker")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "Device-Status")
+  |> filter(fn: (r) => r["_field"] == "value")
+  |> map(fn: (r) => ({r with _value: strings.replaceAll(v: r._value, t: "%", u: "")}))
+```
+
+Danach kann man wie im Bild die Anzeigen nach seinen Wünschen anpassen.
+
+![grafanaInfluxGauges](img/grafanaInfluxGauges.png)

@@ -45,8 +45,6 @@ class DeviceWatcher extends utils.Adapter {
 		// Interval timer
 		this.refreshDataTimeout = null;
 
-		this.devices = {};
-
 		// arrays of supported adapters
 		this.arrApart = {
 			alexa2: {
@@ -116,7 +114,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.lowBat',
 			},
 			hmrpc: {
-				'Selektor': 'hm-rpc.*.UNREACH',
+				'Selektor': '0_userdata.0.hm-rpc.*.UNREACH',
 				'adapter': 'hmrpc',
 				'rssiState': '.RSSI_DEVICE',
 				'rssiPeerState': '.RSSI_PEER',
@@ -455,7 +453,7 @@ class DeviceWatcher extends utils.Adapter {
      * @param {string} id
      * @param {ioBroker.State | null | undefined} state
      */
-	async onStateChange(id, state) {
+	onStateChange(id, state) {
 		if (state) {
 			// The state was changed
 			this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
@@ -867,7 +865,7 @@ class DeviceWatcher extends utils.Adapter {
 													return lastContactString;
 												};
 												await getLastContactOfState();
-											} else if (rssiPeerSelector) {
+											} else if (rssiPeerSelector) { // because old hm sensors don't send rssi/state values
 												const lastContactOfState = Math.round((time.getTime() - rssiPeerSelector.ts) / 1000 / 60);
 												const getLastContactOfState = async () => {
 													lastContactString = this.formatDate(new Date((rssiPeerSelector.ts)), 'hh:mm') + ' Uhr';
@@ -1506,8 +1504,6 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						);
 					}
-
-
 					// 4a. Count how many devices are exists
 					this.deviceCounter = this.listAllDevices.length;
 				}

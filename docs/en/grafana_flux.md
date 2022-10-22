@@ -1,7 +1,7 @@
 ![Logo](../../admin/device-watcher.png)
 # ioBroker.device-watcher
 
-## How to show JSON lists in Grafana with InfluxQL
+## How to show JSON lists in Grafana with Flux
 
 In order to display json lists correctly in Grafana without a plugin, certain settings have to be made. 
 
@@ -13,9 +13,15 @@ In order to display json lists correctly in Grafana without a plugin, certain se
 
 ![grafanaTable](img/grafanaTable.png)
 
-3. In the query settings select your ioBroker database as data source. At `From` take your desired data point, at `Select` remove the default `mean()` and at `Group by` you have to remove `time($_interval)` and `fill(null)`. (click on it and then on remove)
+3. In the query settings select your ioBroker database as data source. Then enter the following syntax (the bucket name and data point name in the measurement area may be different for you, so please check and adjust if necessary):
+```
+from(bucket: "iobroker")
+    |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+    |> filter(fn: (r) => r["_measurement"] == "device-watcher.0.listAll")
+    |> filter(fn: (r) => r["_field"] == "value")
+```
 
-![grafanaQuerySettings](img/grafanaQuerySettings.png)
+![grafanaQuerySettingsInflux](img/grafanaquerySettingsInflux.png)
 
 4. After that click on the `Transform` tab.
 
@@ -38,3 +44,19 @@ In order to display json lists correctly in Grafana without a plugin, certain se
 When all settings are made, the table should be displayed correctly.
 
 ![grafanaTableAll](img/grafanaTableAll.png)
+
+### Additional information:
+
+If you want to display the battery and signal graphically as gauges, you have to change the syntax like in the following example and remove the percent signs to change the text from type string to number:
+```
+import "strings"
+from(bucket: "iobroker")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "Device-Status")
+  |> filter(fn: (r) => r["_field"] == "value")
+  |> map(fn: (r) => ({r with _value: strings.replaceAll(v: r._value, t: "%", u: "")}))
+```
+
+After that, you can customize the displays according to your wishes, as shown in the picture
+
+![grafanaInfluxGauges](img/grafanaInfluxGauges.png)
