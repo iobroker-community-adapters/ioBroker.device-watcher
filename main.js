@@ -40,8 +40,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPoweredCount = 0;
 		this.lowBatteryPoweredCount = 0;
 
-		this.deviceReachable = '';
-
 		// Interval timer
 		this.refreshDataTimeout = null;
 
@@ -819,21 +817,6 @@ class DeviceWatcher extends utils.Adapter {
 								}
 								return lastContactString;
 							};
-
-							/*
-							const getLastStateChangeOfUnreachState = async () => {
-								if (deviceUnreachSelector) {
-									lastContactString = this.formatDate(new Date((deviceUnreachSelector.lc)), 'hh:mm') + ' Uhr';
-									if (Math.round(lastDeviceUnreachStateChange) > 100) {
-										lastContactString = Math.round(lastDeviceUnreachStateChange / 60) + ' Stunden';
-									}
-									if (Math.round(lastDeviceUnreachStateChange / 60) > 48) {
-										lastContactString = Math.round(lastDeviceUnreachStateChange / 60 / 24) + ' Tagen';
-									}
-									return lastContactString;
-								}
-							};*/
-
 
 							//  If there is no contact since user sets minutes add device in offline list
 							// calculate to days after 48 hours
@@ -1831,8 +1814,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.linkQualityCount = 0;
 		this.batteryPoweredCount = 0;
 		this.lowBatteryPoweredCount = 0;
-
-		this.deviceReachable = '';
 
 		this.log.debug(`Function finished: ${this.resetVars.name}`);
 	} // <-- end of resetVars
