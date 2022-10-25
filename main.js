@@ -1425,6 +1425,17 @@ class DeviceWatcher extends utils.Adapter {
 
 					// fill list with low battery devices
 					switch (this.arrDev[i].adapter) {
+						case 'hmrpc': // there are differnt low bat states between hm and hmIp devices
+							if (deviceLowBatState) {
+								this.batteryLowPowered.push(
+									{
+										'Device': deviceName,
+										'Adapter': deviceAdapterName,
+										'Battery': batteryHealth
+									}
+								);
+							}
+							break;
 						case 'tado': // there is an string as indicator
 							if (deviceLowBatState != 'NORMAL') {
 								this.batteryLowPowered.push(
