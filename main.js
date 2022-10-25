@@ -159,6 +159,13 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.battery_ok',
 				'id': 'none'
 			},
+			maxcube: {
+				'Selektor': 'maxcube.*.link_error',
+				'adapter': 'maxcube',
+				'battery': 'none',
+				'reach': '.link_error',
+				'isLowBat': '.battery_low'
+			},
 			meross: {
 				'Selektor': 'meross.*.online',
 				'adapter': 'meross',
@@ -356,6 +363,7 @@ class DeviceWatcher extends utils.Adapter {
 				hueExt: this.config.hueExtDevices,
 				jeelink: this.config.jeelinkDevices,
 				lupusec: this.config.lupusecDevices,
+				maxcube: this.config.maxcubeDevices,
 				meross: this.config.merossDevices,
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
@@ -677,6 +685,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'miHome':
 						case 'unifi':
 						case 'hs100':
+						case 'maxcube':
 							deviceQualityState;
 							break;
 
@@ -1062,6 +1071,17 @@ class DeviceWatcher extends utils.Adapter {
 										await pushOfflineDevice();
 									}
 									break;
+								case 'maxcube':
+									if (this.config.maxcubeMaxMinutes === -1) {
+										if (deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+											await pushOfflineDevice();
+										}
+									} else if (lastContact > this.config.maxcubeMaxMinutes) {
+										deviceState = 'Offline'; //set online state to offline
+										await pushOfflineDevice();
+									}
+									break;
 								case 'meross':
 									if (this.config.merossMaxMinutes === -1) {
 										if (!deviceUnreachState) {
@@ -1305,29 +1325,19 @@ class DeviceWatcher extends utils.Adapter {
 
 					// Get battery states
 					let batteryHealth;
-					const deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
-					const deviceLowBatStateHM = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
+					let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+					if (deviceLowBatState === undefined) {
+						deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
+					}
 
 					if ((!deviceBatteryState) && (!shortDeviceBatteryState) && (!shortDeviceBatteryState2)) {
-						if ((deviceLowBatState !== undefined) || (deviceLowBatState !== undefined) || (deviceLowBatStateHM !== undefined)) {
-							switch (this.arrDev[i].isLowBat) {
+						if (deviceLowBatState !== undefined) {
+							switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
 								case 'none':
 									batteryHealth = ' - ';
 									break;
 								default:
-									if ((!deviceLowBatState) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
-										batteryHealth = 'ok';
-									} else {
-										batteryHealth = 'low';
-									}
-									break;
-							}
-							switch (this.arrDev[i].isLowBat2) {
-								case 'none':
-									batteryHealth = ' - ';
-									break;
-								default:
-									if ((!deviceLowBatStateHM) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
+									if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
 										batteryHealth = 'ok';
 									} else {
 										batteryHealth = 'low';
@@ -1415,18 +1425,6 @@ class DeviceWatcher extends utils.Adapter {
 
 					// fill list with low battery devices
 					switch (this.arrDev[i].adapter) {
-						case 'hmrpc': // there are differnt low bat states between hm and hmIp devices
-							if (deviceLowBatState || deviceLowBatStateHM) {
-								this.batteryLowPowered.push(
-									{
-										'Device': deviceName,
-										'Adapter': deviceAdapterName,
-										'Battery': batteryHealth
-									}
-								);
-							}
-							break;
-
 						case 'tado': // there is an string as indicator
 							if (deviceLowBatState != 'NORMAL') {
 								this.batteryLowPowered.push(

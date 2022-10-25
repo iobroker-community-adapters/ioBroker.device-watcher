@@ -116,6 +116,13 @@
                     "lg": 3,
                     "label": "Lupusec"
                 },
+                "maxcubeDevices": {
+                    "type": "checkbox",
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Maxcube"
+                },
                 "merossDevices": {
                     "type": "checkbox",
                     "sm": 6,
@@ -1014,6 +1021,18 @@
                     "label": "Lupusec",
                     "help": "in minutes",
                     "hidden": "!data.lupusecDevices",
+                    "hideOnlyControl": false
+                },
+                "maxcubeMaxMinutes": {
+                    "type": "number",
+                    "min": -1,
+                    "max": 100000,
+                    "sm": 6,
+                    "md": 6,
+                    "lg": 3,
+                    "label": "Maxcube",
+                    "help": "in minutes",
+                    "hidden": "!data.maxcubeDevices",
                     "hideOnlyControl": false
                 },
                 "merossMaxMinutes": {
