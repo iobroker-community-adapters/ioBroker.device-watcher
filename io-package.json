@@ -146,6 +146,7 @@
     "adminUI": {
       "config": "json"
     },
+    "messagebox": true,
     "docs": {
       "en": [
         "docs/en/README.md"

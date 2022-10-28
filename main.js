@@ -29,7 +29,9 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
-		this.blacklistArr = [];
+		this.listAllDevicesPath = [];
+		this.blacklistLists = [];
+		this.blacklistNotify = [];
 		this.arrDev = [];
 		this.adapterSelected = [];
 
@@ -112,7 +114,7 @@ class DeviceWatcher extends utils.Adapter {
 				'isLowBat': '.lowBat',
 			},
 			hmrpc: {
-				'Selektor': 'hm-rpc.*.UNREACH',
+				'Selektor': '0_userdata.0.hm-rpc.*.UNREACH',
 				'adapter': 'hmrpc',
 				'rssiState': '.RSSI_DEVICE',
 				'rssiPeerState': '.RSSI_PEER',
@@ -160,7 +162,7 @@ class DeviceWatcher extends utils.Adapter {
 				'id': 'none'
 			},
 			maxcube: {
-				'Selektor': 'maxcube.*.link_error',
+				'Selektor': '0_userdata.0.maxcube.*.link_error',
 				'adapter': 'maxcube',
 				'battery': 'none',
 				'reach': '.link_error',
@@ -336,7 +338,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.on('ready', this.onReady.bind(this));
 		// this.on('stateChange', this.onStateChange.bind(this));
 		// this.on('objectChange', this.onObjectChange.bind(this));
-		// this.on('message', this.onMessage.bind(this));
+		this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 
 	}
@@ -469,6 +471,40 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
+	/**
+      * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+      * Using this method requires "common.messagebox" property to be set to true in io-package.json
+      * @param {ioBroker.Message} obj
+      */
+	onMessage(obj) {
+		const devices = [];
+		let myCount = 0;
+		let result;
+
+		switch (obj.command) {
+			case 'devicesList':
+				if(obj.message){
+					try{
+						result = this.listAllDevicesPath;
+						for(const element in result){
+							const label = result[element].Device + '  - Adapter: ' + result[element].Adapter;
+							const myValueObject = {deviceName: result[element].Device, adapter: result[element].Adapter, path: result[element].Path};
+							devices[myCount] = {label: label,value: JSON.stringify(myValueObject)};
+							myCount ++;
+						}
+						this.sendTo(obj.from, obj.command, devices, obj.callback);
+					}
+					catch(error){
+						this.sendTo(obj.from, obj.command, obj.callback);
+					}
+				}
+				else{
+					this.sendTo(obj.from, obj.command, obj.callback);
+				}
+				break;
+		}
+	}
+
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
 
@@ -562,16 +598,27 @@ class DeviceWatcher extends utils.Adapter {
 	async createBlacklist() {
 		this.log.debug(`Function started: ${this.createBlacklist.name}`);
 
-		const myBlacklist = this.config.tableBlacklist;
+		if (!isUnloaded) {
+			const myBlacklist = this.config.tableBlacklist;
 
-		for (const i in myBlacklist) {
-			if (!isUnloaded) {
-				this.blacklistArr.push(myBlacklist[i].device);
-			} else {
-				return; // cancel run if unloaded was called.
+			for (const i in myBlacklist) {
+				const blacklistParse = JSON.parse(myBlacklist[i].devices);
+				// push devices in list to ignor device in lists
+				if (myBlacklist[i].checkIgnorLists) {
+					this.blacklistLists.push(blacklistParse.deviceName);
+				}
+				// push devices in list to ignor device in notifications
+				if (myBlacklist[i].checkIgnorNotify) {
+					this.blacklistNotify.push(blacklistParse.deviceName);
+				}
 			}
+
+			if (this.blacklistLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistLists}`);
+			if (this.blacklistNotify.length >= 1) this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistNotify}`);
+		} else {
+			return; // cancel run if unloaded was called.
 		}
-		this.log.info(`Found items on the blacklist: ${this.blacklistArr}`);
+
 		this.log.debug(`Function finished: ${this.createBlacklist.name}`);
 	}
 
@@ -585,7 +632,7 @@ class DeviceWatcher extends utils.Adapter {
 		/*----------  Start of second main loop  ----------*/
 		for (const [id] of Object.entries(devices)) {
 			if (!isUnloaded) {
-				if (!this.blacklistArr.includes(id)) {
+				if (!this.blacklistLists.includes(id)) {
 
 					const currDeviceString = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
 					const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
@@ -1483,6 +1530,13 @@ class DeviceWatcher extends utils.Adapter {
 									'Status': deviceState
 								}
 							);
+							this.listAllDevicesPath.push(
+								{
+									'Device': deviceName,
+									'Adapter': deviceAdapterName,
+									'Path': id
+								}
+							);
 						}
 					} else if (!this.config.listOnlyBattery) { // 4. Add all devices
 						this.listAllDevices.push(
@@ -1493,6 +1547,13 @@ class DeviceWatcher extends utils.Adapter {
 								'Signal strength': linkQuality,
 								'Last contact': lastContactString,
 								'Status': deviceState
+							}
+						);
+						this.listAllDevicesPath.push(
+							{
+								'Device': deviceName,
+								'Adapter': deviceAdapterName,
+								'Path': id
 							}
 						);
 					}
@@ -1816,7 +1877,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
-
+		this.listAllDevicesPath = [];
 		// counts
 		this.offlineDevicesCount = 0;
 		this.deviceCounter = 0;
