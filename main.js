@@ -163,7 +163,7 @@ class DeviceWatcher extends utils.Adapter {
 				'Selektor': 'maxcube.*.link_error',
 				'adapter': 'maxcube',
 				'battery': 'none',
-				'reach': '.link_error',
+				'reach': '.error',
 				'isLowBat': '.battery_low'
 			},
 			meross: {
