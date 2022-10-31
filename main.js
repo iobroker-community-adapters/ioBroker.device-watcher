@@ -637,10 +637,16 @@ class DeviceWatcher extends utils.Adapter {
 							deviceName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
 							break;
 
-							// Get ID with main selektor from objectjson
+						// Get ID with main selektor from objectjson
 						default:
 							if (deviceObject && typeof deviceObject === 'object') {
-								deviceName = deviceObject.common.name;
+								if (deviceObject.common.name['de'] != undefined) {
+									deviceName = deviceObject.common.name['de'];
+								} else if (deviceObject.common.name['en'] != undefined) {
+									deviceName = deviceObject.common.name['en'];
+								} else {
+									deviceName = deviceObject.common.name;
+								}
 							}
 							break;
 					}
