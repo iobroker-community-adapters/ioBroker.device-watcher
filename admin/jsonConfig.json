@@ -746,13 +746,13 @@
                             "sort": false,
                             "jsonData": "{\"deviceName\":\"${globalData.deviceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
                             "command": "devicesList",
-                            "max-width": "70%"
+                            "width": "60%"
                         }, 
                         {
                             "type":"checkbox",
                             "title": "Ignor in notifications",
                             "attr": "checkIgnorNotify",
-                            "width": "10%",
+                            "width": "15%",
                             "alsoDependsOn":[
                                 "devices"
                             ]
