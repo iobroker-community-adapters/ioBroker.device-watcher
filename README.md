@@ -8,7 +8,7 @@
 [![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v1.1.0)
+![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.0)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 
@@ -45,6 +45,7 @@ Supported adapters are:
 * Hue Extended
 * Jeelink
 * Lupusec
+* MaxCube
 * Meross
 * MiHome
 * MiHome Vacuum
@@ -63,6 +64,7 @@ Supported adapters are:
 * WLED
 * Yeelight
 * Zigbee
+* Zigbee2MQTT
 * Zwave
 
 The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries. 
@@ -80,7 +82,7 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 
 ### Blacklist
 
- If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it. Please add the "link_quality" or "rssi" object of this device in the blacklist and it won't be listet and count.
+ If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it.
 
 ![add_blacklist.png](admin/images/add_blacklist.png)
 
@@ -107,8 +109,10 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- added Lupusec and HS100 adapter
+- added Lupusec, HS100 adapter, Zigbee2MQTT and MaxCube
 - changed name of Homematic to HM-RPC
+- made a completly makeover of the blacklist
+- clean up the code and shorten some
 ### 1.1.0 (2022-10-03)
 - removed indicatoren for daily sent messages
 - changed selector for shelly devices
