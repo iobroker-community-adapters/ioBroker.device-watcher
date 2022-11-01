@@ -887,7 +887,7 @@ class DeviceWatcher extends utils.Adapter {
 							lowBatIndicator = true;
 						}
 				}
-				if (this.listOnlyBattery) {   // 4. Add only devices with battery in the list
+				if (this.listOnlyBattery) {   // Add only devices with battery in the list
 					if (deviceBatteryState || shortDeviceBatteryState) {
 						this.listAllDevicesRaw.push(
 							{
@@ -902,7 +902,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						);
 					}
-				} else { // 4. Add all devices
+				} else { // Add all devices
 					this.listAllDevicesRaw.push(
 						{
 							'Path': id,
