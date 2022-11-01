@@ -108,11 +108,12 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.0.0 (2022-11-01)
 - added Lupusec, HS100 adapter, Zigbee2MQTT and MaxCube
 - changed name of Homematic to HM-RPC
 - made a completly makeover of the blacklist
 - clean up the code and shorten some
+
 ### 1.1.0 (2022-10-03)
 - removed indicatoren for daily sent messages
 - changed selector for shelly devices
