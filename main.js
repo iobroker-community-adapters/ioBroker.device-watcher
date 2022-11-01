@@ -242,37 +242,31 @@ class DeviceWatcher extends utils.Adapter {
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
 
+		// fill datapoints for each adapter if selected
 		try {
-			// fill datapoints for each adapter if selected
-			try {
-				for (const [id] of Object.entries(arrApart)) {
-					if (!isUnloaded) {
-						if ((this.supAdapter !== undefined) && (this.supAdapter[id])) {
-							if (this.config.createOwnFolder) {
-								await this.createDataForEachAdapter(id);
-								this.log.debug(`Created and filled data for each adapter`);
-							}
+			for (const [id] of Object.entries(arrApart)) {
+				if (!isUnloaded) {
+					if ((this.supAdapter !== undefined) && (this.supAdapter[id])) {
+						if (this.config.createOwnFolder) {
+							await this.createDataForEachAdapter(id);
+							this.log.debug(`Created and filled data for ${await this.capitalize(id)}`);
 						}
-					} else {
-						this.log.warn('broke up');
-						return; // cancel run if unloaded was called.
 					}
+				} else {
+					this.log.warn('broke up');
+					return; // cancel run if unloaded was called.
 				}
-
-			} catch (error) {
-				this.errorReporting('[main - create and fill datapoints for each adapter]', error);
 			}
-
-			// fill counts and lists of all selected adapter
-			try {
-				await this.createDataOfAllAdapter();
-				this.log.debug(`Created and filled data for all adapters`);
-			} catch (error) {
-				this.errorReporting('[main - create data of all adapter]', error);
-			}
-
 		} catch (error) {
-			this.errorReporting('[main]', error);
+			this.errorReporting('[main - create and fill datapoints for each adapter]', error);
+		}
+
+		// fill counts and lists of all selected adapter
+		try {
+			await this.createDataOfAllAdapter();
+			this.log.debug(`Created and filled data for all adapters`);
+		} catch (error) {
+			this.errorReporting('[main - create data of all adapter]', error);
 		}
 
 		this.log.debug(`Function finished: ${this.main.name}`);
@@ -430,7 +424,6 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		}
 		// this.log.warn(JSON.stringify(i['Signal strength']));
-
 	}
 
 	/**
@@ -491,28 +484,8 @@ class DeviceWatcher extends utils.Adapter {
 					let linkQuality;
 
 					switch (this.arrDev[i].adapter) {
-						case 'sonoff':
-						case 'hmiP':
-						case 'hmrpc':
-						case 'wled':
-						case 'shelly':
-						case 'lupusec':
-							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
-							break;
-
 						case 'mihomeVacuum':
 							deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
-							break;
-
-						case 'tradfri':
-						case 'ham':
-						case 'meross':
-						case 'nut':
-						case 'miHome':
-						case 'unifi':
-						case 'hs100':
-						case 'maxcube':
-							deviceQualityState;
 							break;
 
 						case 'netatmo':
@@ -523,11 +496,11 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 
 						default:
-							deviceQualityState = await this.getForeignStateAsync(id);
+							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
 							break;
 					}
 
-					if (deviceQualityState) {
+					if (deviceQualityState != null) {
 						switch (typeof deviceQualityState.val) {
 							case 'number':
 								if (this.config.trueState) {
@@ -568,12 +541,9 @@ class DeviceWatcher extends utils.Adapter {
 										break;
 								}
 								break;
-							case 'undefined':
-								linkQuality = ' - ';
-								break;
-							default:
-								linkQuality = ' - ';
 						}
+					} else {
+						linkQuality = ' - ';
 					}
 
 					// When was the last contact to the device?
@@ -1305,8 +1275,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
 
 		try {
-			await this.resetVars(); // reset the arrays and counts
-
 			for (let i = 0; i < this.arrDev.length; i++) {
 
 				if (this.arrDev[i].adapter.includes(adptName)) { // list device only if selected adapter matched with device
@@ -1314,6 +1282,8 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 			await this.writeDatapoints(adptName); // fill the datapoints
+			await this.resetVars(); // reset the arrays and counts
+
 		} catch (error) {
 			this.errorReporting('[createDataForEachAdapter]', error);
 		}
@@ -1326,8 +1296,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.createDataOfAllAdapter.name}`);
 
 		try {
-			await this.resetVars(); // reset the arrays and counts
-
 			for (let i = 0; i < this.arrDev.length; i++) {
 				if (!isUnloaded) {
 					await this.createData(i);
@@ -1341,6 +1309,10 @@ class DeviceWatcher extends utils.Adapter {
 
 			// fill the datapoints
 			await this.writeDatapoints();
+
+			// reset the arrays and counts
+			await this.resetVars();
+
 		} catch (error) {
 			this.errorReporting('[createDataOfAllAdapter]', error);
 		}
