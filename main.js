@@ -98,7 +98,7 @@ class DeviceWatcher extends utils.Adapter {
 				wled: this.config.wledDevices,
 				yeelight: this.config.yeelightDevices,
 				zigbee: this.config.zigbeeDevices,
-				zigbee2mqtt: this.config.zigbee2mqttDevices,
+				zigbee2MQTT: this.config.zigbee2mqttDevices,
 				zwave: this.config.zwaveDevices,
 			};
 
@@ -138,7 +138,7 @@ class DeviceWatcher extends utils.Adapter {
 				wled: this.config.wledMaxMinutes,
 				yeelight: this.config.yeelightMaxMinutes,
 				zigbee: this.config.zigbeeMaxMinutes,
-				zigbee2mqtt: this.config.zigbee2mqttMaxMinutes,
+				zigbee2MQTT: this.config.zigbee2mqttMaxMinutes,
 				zwave: this.config.zwaveMaxMinutes,
 			};
 
