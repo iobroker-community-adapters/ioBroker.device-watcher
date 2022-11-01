@@ -77,5 +77,7 @@
     "Get an overview with all offline devices": "Obtenha uma visão geral com todos os dispositivos offline",
     "Choose the day(s) where you want to get the overview of offline devices:": "Escolha o(s) dia(s) em que deseja obter a visão geral dos dispositivos offline:",
     "Choose the Time:": "Escolha o Horário:",
-    "Get a message with an overview all offline devices": "Receba uma mensagem com uma visão geral de todos os dispositivos offline"
+    "Get a message with an overview all offline devices": "Receba uma mensagem com uma visão geral de todos os dispositivos offline",
+    "Ignor in notifications": "Ignorar nas notificações",
+    "Ignor in lists": "Ignorar nas listas"
 }

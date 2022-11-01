@@ -77,5 +77,7 @@
     "Get an overview with all offline devices": "了解所有离线设备",
     "Choose the day(s) where you want to get the overview of offline devices:": "选择您想要获取离线设备概览的日期：",
     "Choose the Time:": "选择时间：",
-    "Get a message with an overview all offline devices": "获取包含所有离线设备概览的消息"
+    "Get a message with an overview all offline devices": "获取包含所有离线设备概览的消息",
+    "Ignor in notifications": "忽略通知",
+    "Ignor in lists": "在列表中忽略"
 }

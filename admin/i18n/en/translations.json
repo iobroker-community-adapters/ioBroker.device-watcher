@@ -73,5 +73,7 @@
 	"Overview of offline devices": "Overview of offline devices",
 	"Choose the day(s) where you want to get the overview of offline devices:": "Choose the day(s) where you want to get the overview of offline devices:",
 	"Choose the Time:": "Choose the Time:",
-	"Get a message with an overview all offline devices": "Get a message with an overview all offline devices"
+	"Get a message with an overview all offline devices": "Get a message with an overview all offline devices",
+	"Ignor in notifications": "Ignor in notifications",
+	"Ignor in lists": "Ignor in lists"
 }

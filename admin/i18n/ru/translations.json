@@ -77,5 +77,7 @@
     "Get an overview with all offline devices": "Получите обзор всех автономных устройств",
     "Choose the day(s) where you want to get the overview of offline devices:": "Выберите день (дни), когда вы хотите получить обзор автономных устройств:",
     "Choose the Time:": "Выберите время:",
-    "Get a message with an overview all offline devices": "Получите сообщение с обзором всех автономных устройств"
+    "Get a message with an overview all offline devices": "Получите сообщение с обзором всех автономных устройств",
+    "Ignor in notifications": "Игнорировать в уведомлениях",
+    "Ignor in lists": "Игнорировать в списках"
 }
