@@ -746,7 +746,7 @@
                             "sort": false,
                             "jsonData": "{\"deviceName\":\"${globalData.deviceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
                             "command": "devicesList",
-                            "width": "70%"
+                            "max-width": "70%"
                         }, 
                         {
                             "type":"checkbox",
