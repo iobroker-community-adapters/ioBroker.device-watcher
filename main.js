@@ -102,6 +102,46 @@ class DeviceWatcher extends utils.Adapter {
 				zwave: this.config.zwaveDevices,
 			};
 
+			this.maxMinutes = {
+				alexa2: this.config.alexa2MaxMinutes,
+				ble: this.config.bleMaxMinutes,
+				deconz: this.config.deconzMaxMinutes,
+				enocean: this.config.enoceanMaxMinutes,
+				esphome: this.config.esphomeMaxMinutes,
+				fritzdect: this.config.fritzdectMaxMinutes,
+				ham: this.config.hamMaxMinutes,
+				harmony: this.config.harmonyMaxMinutes,
+				hmiP : this.config.hmiPMaxMinutes,
+				hmrpc: this.config.hmrpcMaxMinutes,
+				hs100: this.config.hs100MaxMinutes,
+				hue: this.config.hueMaxMinutes,
+				hueExt: this.config.hueextMaxMinutes,
+				jeelink: this.config.jeelinkMaxMinutes,
+				lupusec: this.config.lupusecMaxMinutes,
+				maxcube: this.config.maxcubeMaxMinutes,
+				meross: this.config.merossMaxMinutes,
+				mihome: this.config.mihomeMaxMinutes,
+				mihomeGW: this.config.mihomeMaxMinutes,
+				mihomeVacuum: this.config.mihomeVacuumMaxMinutes,
+				netatmo: this.config.netatmoMaxMinutes,
+				nukiExt: this.config.nukiextendMaxMinutes,
+				nut: this.config.nutMaxMinutes,
+				ping: this.config.pingMaxMinutes,
+				roomba: this.config.roombaMaxMinutes,
+				shelly: this.config.shellyMaxMinutes,
+				sonoff: this.config.sonoffMaxMinutes,
+				sonos: this.config.sonosMaxMinutes,
+				switchbotBle: this.config.switchbotMaxMinutes,
+				tado: this.config.tadoMaxMinutes,
+				tradfri: this.config.tradfriMaxMinutes,
+				unifi: this.config.unifiMaxMinutes,
+				wled: this.config.wledMaxMinutes,
+				yeelight: this.config.yeelightMaxMinutes,
+				zigbee: this.config.zigbeeMaxMinutes,
+				zigbee2mqtt: this.config.zigbee2mqttMaxMinutes,
+				zwave: this.config.zwaveMaxMinutes,
+			};
+
 			for (const [id] of Object.entries(arrApart)) {
 				if (!isUnloaded) {
 					if (this.supAdapter[id]) {
@@ -689,413 +729,84 @@ class DeviceWatcher extends utils.Adapter {
 								}
 						}
 
-						switch (this.arrDev[i].adapter) {
-							case 'alexa2':
-								if (this.config.alexa2MaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
+						const adapterID = this.arrDev[i].adapter;
 
-									}
-								} else if (lastContact > this.config.alexa2MaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'ble':
-								if (this.config.bleMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.bleMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'deconz':
-								if (this.config.deconzMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.deconzMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'enocean':
-								if (this.config.enoceanMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.enoceanMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'esphome':
-								if (this.config.esphomeMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.esphomeMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'fritzDect':
-								if (this.config.fritzdectMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.fritzdectMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'harmony':
-								if (this.config.harmonyMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.harmonyMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'ham':
-								if (this.config.hamMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.hamMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'hmiP':
-								if (this.config.hmiPMaxMinutes === -1) {
-									if (deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.hmiPMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
+						switch (adapterID) {
 							case 'hmrpc':
-								if (this.config.hmrpcMaxMinutes === -1) {
-									if (deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.hmrpcMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'hs100':
-								if (this.config.hs100MaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.hs100MaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'hue':
-								if (this.config.hueMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.hueMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'hue-extended':
-								if (this.config.hueextMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.hueextMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'jeelink':
-								if (this.config.jeelinkMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.jeelinkMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'lupusec':
-								if (this.config.lupusecMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.lupusecMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
+							case 'hmiP':
 							case 'maxcube':
-								if (this.config.maxcubeMaxMinutes === -1) {
+								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-
 									}
-								} else if (lastContact > this.config.maxcubeMaxMinutes) {
+								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'meross':
-								if (this.config.merossMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.merossMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'miHome':
-								if (this.arrDev[i].battery === 'none') {
-									if (this.config.mihomeGWMaxMinutes === -1) {
-										if (!deviceUnreachState) {
-											deviceState = 'Offline'; //set online state to offline
-
-										}
-									} else if (lastContact > this.config.mihomeGWMaxMinutes) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else {
-									if (this.config.mihomeMaxMinutes === -1) {
-										if (!deviceUnreachState) {
-											deviceState = 'Offline'; //set online state to offline
-
-										}
-									} else if (lastContact > this.config.mihomeMaxMinutes) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								}
-								break;
-							case 'mihomeVacuum':
-								if (this.config.mihomeVacuumMaxMinutes === -1) {
-									if (!shortDeviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.mihomeVacuumMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'netatmo':
-								if (this.config.netatmoMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.netatmoMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'nuki-extended':
-								if (this.config.nukiextendMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.nukiextendMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'nut':
-								if (this.config.nutMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.nutMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
 								}
 								break;
 							case 'ping':
-								if (this.config.pingMaxMinutes === -1) {
+								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-
 									}
-								} else if ((lastStateChange > this.config.pingMaxMinutes) && (!deviceUnreachState)) {
+								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID]) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
-
 								}
 								break;
-							case 'roomba':
-								if (this.config.roombaMaxMinutes === -1) {
-									if (!deviceUnreachState) {
+							case 'unifi':
+								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
+									if (deviceUnreachState === 0) {
 										deviceState = 'Offline'; //set online state to offline
-
 									}
-								} else if (lastContact > this.config.roombaMaxMinutes) {
+								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
 
 								}
 								break;
 							case 'shelly':
-								if (this.config.shellyMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (lastDeviceUnreachStateChange > this.config.shellyMaxMinutes)) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
 							case 'sonoff':
-								if (this.config.sonoffMaxMinutes === -1) {
+								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-
 									}
-								} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (lastDeviceUnreachStateChange > this.config.sonoffMaxMinutes)) {
+								} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-
 								}
 								break;
-							case 'sonos':
-								if (this.config.sonosMaxMinutes === -1) {
+							case 'mihomeVacuum':
+								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
+									if (!shortDeviceUnreachState) {
+										deviceState = 'Offline'; //set online state to offline
+									}
+								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
+									deviceState = 'Offline'; //set online state to offline
+								}
+								break;
+							case 'miHome':
+								if (this.arrDev[i].battery === 'none') {
+									if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
+										if (!deviceUnreachState) {
+											deviceState = 'Offline'; //set online state to offline
+										}
+									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
+										deviceState = 'Offline'; //set online state to offline
+									}
+								} else {
+									if (this.config.mihomeMaxMinutes === -1) {
+										if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
+											deviceState = 'Offline'; //set online state to offline
+										}
+									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
+										deviceState = 'Offline'; //set online state to offline
+									}
+								}
+								break;
+							default:
+								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
+										deviceState = 'Offline';  //set online state to offline
 									}
-								} else if (lastContact > this.config.sonosMaxMinutes) {
+								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'switchbotBle':
-								if (this.config.switchbotMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.switchbotMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'tado':
-								if (this.config.tadoMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.tadoMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'tradfri':
-								if (this.config.tradfriMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.tradfriMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'unifi':
-								if (this.config.unifiMaxMinutes === -1) {
-									if (deviceUnreachState === 0) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.unifiMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'wled':
-								if (this.config.wledMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.wledMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'yeelight-2':
-								if (this.config.yeelightMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.yeelightMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'zigbee':
-								if (this.config.zigbeeMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.zigbeeMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'zigbee2MQTT':
-								if (this.config.zigbee2mqttMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.zigbee2mqttMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
-								}
-								break;
-							case 'zwave':
-								if (this.config.zwaveMaxMinutes === -1) {
-									if (!deviceUnreachState) {
-										deviceState = 'Offline'; //set online state to offline
-
-									}
-								} else if (lastContact > this.config.zwaveMaxMinutes) {
-									deviceState = 'Offline'; //set online state to offline
-
 								}
 								break;
 						}
