@@ -738,33 +738,33 @@ class DeviceWatcher extends utils.Adapter {
 								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = ' - '; // set linkQuality to nothing
+									linkQuality = '0%'; // set linkQuality to nothing
 								}
 								break;
 							case 'ping':
 								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID]) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = ' - '; // set linkQuality to nothing
+									linkQuality = '0%'; // set linkQuality to nothing
 								}
 								break;
 							case 'unifi':
 								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (deviceUnreachState === 0) {
 										deviceState = 'Offline'; //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = ' - '; // set linkQuality to nothing
+									linkQuality = '0%'; // set linkQuality to nothing
 								}
 								break;
 							case 'shelly':
@@ -772,22 +772,22 @@ class DeviceWatcher extends utils.Adapter {
 								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = ' - '; // set linkQuality to nothing
+									linkQuality = '0%'; // set linkQuality to nothing
 								}
 								break;
 							case 'mihomeVacuum':
 								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (!shortDeviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = ' - '; // set linkQuality to nothing
+									linkQuality = '0%'; // set linkQuality to nothing
 								}
 								break;
 							case 'miHome':
@@ -795,21 +795,21 @@ class DeviceWatcher extends utils.Adapter {
 									if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
-											linkQuality = ' - '; // set linkQuality to nothing
+											linkQuality = '0%'; // set linkQuality to nothing
 										}
 									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 										deviceState = 'Offline'; //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								} else {
 									if (this.config.mihomeMaxMinutes === -1) {
 										if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 											deviceState = 'Offline'; //set online state to offline
-											linkQuality = ' - '; // set linkQuality to nothing
+											linkQuality = '0%'; // set linkQuality to nothing
 										}
 									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 										deviceState = 'Offline'; //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								}
 								break;
@@ -817,11 +817,11 @@ class DeviceWatcher extends utils.Adapter {
 								if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline';  //set online state to offline
-										linkQuality = ' - '; // set linkQuality to nothing
+										linkQuality = '0%'; // set linkQuality to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = ' - '; // set linkQuality to nothing
+									linkQuality = '0%'; // set linkQuality to nothing
 								}
 								break;
 						}
