@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "news": {
+      "2.0.1": {
+        "en": "If the device is offline, set signal strength to '0%'\nIf the device is offline, set battery to ' - '\nrepair some small issues in the lists",
+        "de": "Ist das Gerät offline, setzen Sie Signalstärke auf 0%\nWenn das Gerät offline ist, setzen Sie Batterie auf ' - '\neinige kleine probleme in den listen reparieren",
+        "ru": "Если устройство оффлайн, установите силу сигнала до 0%\nЕсли устройство оффлайн, установите аккумулятор в ' - '\nотремонтировать некоторые небольшие проблемы в списках",
+        "pt": "Se o dispositivo estiver offline, defina a força do sinal para 0%\nSe o dispositivo estiver offline, configure a bateria para ' - '\nreparar alguns pequenos problemas nas listas",
+        "nl": "Als het apparaat offline is, zet een signaalstilstand op 0%\nAls het apparaat offline is, zet dan batterij op '\nrepareer wat kleine kwesties in de lijst",
+        "fr": "Si l'appareil est hors ligne, définir la résistance du signal à 0%\nSi l'appareil est hors ligne, régler la batterie à ' - '\nréparer quelques petits problèmes dans les listes",
+        "it": "Se il dispositivo è offline, impostare la forza del segnale a 0%\nSe il dispositivo è offline, impostare la batteria a ' - '\nriparare alcuni piccoli problemi nelle liste",
+        "es": "Si el dispositivo está fuera de línea, establece la fuerza de señal al 0%\nSi el dispositivo está fuera de línea, establece la batería a ' - '\nreparar algunas pequeñas cuestiones en las listas",
+        "pl": "Jeśli urządzenie jest offline, ustawia siłę sygnału do 0%\nJeśli urządzenie jest wycinane, ustawiono baterię do '- '\nwyremontowano drobne problemy w listach",
+        "uk": "Якщо пристрій вимкнено, встановлюється міцність сигналу на 0%\nЯкщо пристрій вимкнено, встановіть акумулятор до ' - '\nремонт деяких невеликих питань у переліках",
+        "zh-cn": "如果装置落空,信号强度达到0%\n如果装置不线,便将电池到该地。\n在名单中修理一些小型问题"
+      },
       "2.0.0": {
         "en": "added Lupusec, HS100 adapter, Zigbee2MQTT and MaxCube\nchanged name of Homematic to HM-RPC\nmade a completly makeover of the blacklist\nclean up the code and shorten some",
         "de": "lupusec, HS100 Adapter, Zigbee2MQTT und MaxCube\ngeänderter Name von Homematic zu HM-RPC\naus einem kompletten makeover der blacklist\nden code reinigen und einige verkürzen",
@@ -65,18 +78,6 @@
         "zh-cn": "拆除家庭装置名称的渠道\nd. 增设的编制名单的职能\n增 录"
       },
       "0.2.4": {
-        "en": "many changes of code, comments and error handling",
-        "de": "viele änderungen von code, kommentaren und fehlerbehandlung",
-        "ru": "много изменений кода, комментариев и обработки ошибок",
-        "pt": "muitas mudanças de código, comentários e manipulação de erros",
-        "nl": "veel veranderingen van code, commentaar en fouten",
-        "fr": "de nombreux changements de code, de commentaires et de traitement des erreurs",
-        "it": "molte modifiche di codice, commenti e gestione degli errori",
-        "es": "muchos cambios de código, comentarios y manejo de errores",
-        "pl": "wiele zmian kodu, komentarzy i obsługi błędów",
-        "zh-cn": "守则、评论和错误处理的许多变化"
-      },
-      "0.2.3": {
         "en": "many changes of code, comments and error handling",
         "de": "viele änderungen von code, kommentaren und fehlerbehandlung",
         "ru": "много изменений кода, комментариев и обработки ошибок",
