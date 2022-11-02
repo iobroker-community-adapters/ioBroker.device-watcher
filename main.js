@@ -538,39 +538,31 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async createData(i) {
 		const devices = await this.getForeignStatesAsync(this.arrDev[i].Selektor);
-		const deviceAdapterName = await this.capitalize(this.arrDev[i].adapter);
+		const adapterID = this.arrDev[i].adapter;
 
-		/*----------  Start of second main loop  ----------*/
+		/*----------  Start of loop  ----------*/
 		for (const [id] of Object.entries(devices)) {
 			if (!isUnloaded) {
 
-
-
+				/*=============================================
+				=              Get device name		          =
+				=============================================*/
 				const deviceName = await this.getDeviceName(id, i);
 
+
+				/*=============================================
+				=            Get path to datapoints	   	      =
+				=============================================*/
 				const currDeviceString = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
 				const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
 
-				// Get battery states
-				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
-
-
-				//this.devices[deviceName] = currDeviceString + this.arrDev[i].reach;
-
-				/*for (const [value] of Object.entries(this.devices)) {
-						this.log.warn(`${value}`);
-						this.subscribeForeignStatesAsync(value);
-					}*/
-				//this.subscribeForeignStatesAsync(currDeviceString + this.arrDev[i].reach);
-				// <--- END TEST
-
-				// Get link quality
+				/*=============================================
+				=            Get signal strength              =
+				=============================================*/
 				let deviceQualityState;
 				let linkQuality;
 
-				switch (this.arrDev[i].adapter) {
+				switch (adapterID) {
 					case 'mihomeVacuum':
 						deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
 						break;
@@ -593,7 +585,7 @@ class DeviceWatcher extends utils.Adapter {
 							if (this.config.trueState) {
 								linkQuality = deviceQualityState.val;
 							} else {
-								switch (this.arrDev[i].adapter) {
+								switch (adapterID) {
 									case 'roomba':
 									case 'sonoff':
 										linkQuality = deviceQualityState.val + '%'; // If quality state is already an percent value
@@ -618,7 +610,7 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 
 						case 'string':
-							switch (this.arrDev[i].adapter) {
+							switch (adapterID) {
 								case 'netatmo':
 									// for Netatmo devices
 									linkQuality = deviceQualityState.val;
@@ -633,10 +625,96 @@ class DeviceWatcher extends utils.Adapter {
 					linkQuality = ' - ';
 				}
 
-				// When was the last contact to the device?
+				/*=============================================
+				=         	    Get battery data       	      =
+				=============================================*/
+				let batteryHealth;
+				let lowBatIndicator;
+
+				// Get battery states
+				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+
+				// Get low bat states
+				let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+				if (deviceLowBatState === undefined) {
+					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
+				}
+
+				if ((!deviceBatteryState) && (!shortDeviceBatteryState) && (!shortDeviceBatteryState2)) {
+					if (deviceLowBatState !== undefined) {
+						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
+							case 'none':
+								batteryHealth = ' - ';
+								break;
+							default:
+								if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
+									batteryHealth = 'ok';
+								} else {
+									batteryHealth = 'low';
+								}
+								break;
+						}
+					} else {
+						batteryHealth = ' - ';
+					}
+				} else {
+					switch (adapterID) {
+						case 'hmrpc':
+							if (deviceBatteryState === 0) {
+								batteryHealth = ' - ';
+							} else {
+								batteryHealth = deviceBatteryState + 'V';
+							}
+							break;
+
+						case 'hue-extended':
+							if (shortDeviceBatteryState) {
+								batteryHealth = shortDeviceBatteryState + '%';
+							}
+							break;
+						case 'mihomeVacuum':
+							if (shortDeviceBatteryState) {
+								batteryHealth = shortDeviceBatteryState + '%';
+							} else if (shortDeviceBatteryState2) {
+								batteryHealth = shortDeviceBatteryState2 + '%';
+							}
+							break;
+						default:
+							batteryHealth = (deviceBatteryState) + '%';
+					}
+				}
+
+				/*=============================================
+				=            Set Lowbat indicator             =
+				=============================================*/
+				switch (adapterID) {
+					case 'hmrpc': // there are differnt low bat states between hm and hmIp devices
+						if (deviceLowBatState) {
+							lowBatIndicator = true;
+						}
+						break;
+					case 'tado': // there is an string as indicator
+						if (deviceLowBatState != 'NORMAL') {
+							lowBatIndicator = true;
+						}
+						break;
+
+					default: // for all other devices with low bat states
+						if ((deviceLowBatState === true) || (deviceLowBatState === 0)) {
+							lowBatIndicator = true;
+						} else if (deviceBatteryState && (deviceBatteryState < this.config.minWarnBatterie)) { // if the battery state is under the set limit
+							lowBatIndicator = true;
+						}
+				}
+
+				/*=============================================
+				=          Get last contact of device         =
+				=============================================*/
 				let lastContactString;
-				let deviceState = 'Online';
 				let lastDeviceUnreachStateChange;
+				let deviceState = 'Online';
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
 				const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for hmrpc devices
@@ -682,7 +760,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							default:
 								//State changed
-								if  (this.arrDev[i].adapter === 'hmrpc') {
+								if  (adapterID === 'hmrpc') {
 									if (linkQuality != ' - ') {
 										if (deviceUnreachState) {
 											await getLastStateChange();
@@ -718,7 +796,6 @@ class DeviceWatcher extends utils.Adapter {
 											await getLastContactOfState();
 										}
 									}
-
 								} else {
 									if (!deviceUnreachState) {
 										await getLastStateChange();
@@ -729,8 +806,9 @@ class DeviceWatcher extends utils.Adapter {
 								}
 						}
 
-						const adapterID = this.arrDev[i].adapter;
-
+						/*=============================================
+						=            Set Online Status             =
+						=============================================*/
 						switch (adapterID) {
 							case 'hmrpc':
 							case 'hmiP':
@@ -739,10 +817,12 @@ class DeviceWatcher extends utils.Adapter {
 									if (deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
 									linkQuality = '0%'; // set linkQuality to nothing
+									batteryHealth = ' - '; // set batteryhelth to nothing
 								}
 								break;
 							case 'ping':
@@ -750,10 +830,12 @@ class DeviceWatcher extends utils.Adapter {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID]) && (!deviceUnreachState)) {
 									deviceState = 'Offline'; //set online state to offline
 									linkQuality = '0%'; // set linkQuality to nothing
+									batteryHealth = ' - '; // set batteryhelth to nothing
 								}
 								break;
 							case 'unifi':
@@ -761,10 +843,12 @@ class DeviceWatcher extends utils.Adapter {
 									if (deviceUnreachState === 0) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
 									linkQuality = '0%'; // set linkQuality to nothing
+									batteryHealth = ' - '; // set batteryhelth to nothing
 								}
 								break;
 							case 'shelly':
@@ -773,10 +857,12 @@ class DeviceWatcher extends utils.Adapter {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
 									linkQuality = '0%'; // set linkQuality to nothing
+									batteryHealth = ' - '; // set batteryhelth to nothing
 								}
 								break;
 							case 'mihomeVacuum':
@@ -784,10 +870,12 @@ class DeviceWatcher extends utils.Adapter {
 									if (!shortDeviceUnreachState) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
 									linkQuality = '0%'; // set linkQuality to nothing
+									batteryHealth = ' - '; // set batteryhelth to nothing
 								}
 								break;
 							case 'miHome':
@@ -796,20 +884,24 @@ class DeviceWatcher extends utils.Adapter {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
+											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								} else {
 									if (this.config.mihomeMaxMinutes === -1) {
 										if ((this.maxMinutes !== undefined) && (this.maxMinutes[adapterID] === -1)) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
+											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								}
 								break;
@@ -818,10 +910,12 @@ class DeviceWatcher extends utils.Adapter {
 									if (!deviceUnreachState) {
 										deviceState = 'Offline';  //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
+										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 								} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 									deviceState = 'Offline'; //set online state to offline
 									linkQuality = '0%'; // set linkQuality to nothing
+									batteryHealth = ' - '; // set batteryhelth to nothing
 								}
 								break;
 						}
@@ -830,85 +924,18 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 
-				// Get battery states
-				let batteryHealth;
-				let lowBatIndicator;
-				let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
-				if (deviceLowBatState === undefined) {
-					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
-				}
+				/*=============================================
+				=          		  Fill Raw Lists          	  =
+				=============================================*/
 
-				if ((!deviceBatteryState) && (!shortDeviceBatteryState) && (!shortDeviceBatteryState2)) {
-					if (deviceLowBatState !== undefined) {
-						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
-							case 'none':
-								batteryHealth = ' - ';
-								break;
-							default:
-								if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
-									batteryHealth = 'ok';
-								} else {
-									batteryHealth = 'low';
-								}
-								break;
-						}
-					} else {
-						batteryHealth = ' - ';
-					}
-				} else {
-					switch (this.arrDev[i].adapter) {
-						case 'hmrpc':
-							if (deviceBatteryState === 0) {
-								batteryHealth = ' - ';
-							} else {
-								batteryHealth = deviceBatteryState + 'V';
-							}
-							break;
-
-						case 'hue-extended':
-							if (shortDeviceBatteryState) {
-								batteryHealth = shortDeviceBatteryState + '%';
-							}
-							break;
-						case 'mihomeVacuum':
-							if (shortDeviceBatteryState) {
-								batteryHealth = shortDeviceBatteryState + '%';
-							} else if (shortDeviceBatteryState2) {
-								batteryHealth = shortDeviceBatteryState2 + '%';
-							}
-							break;
-						default:
-							batteryHealth = (deviceBatteryState) + '%';
-					}
-				}
-
-				// fill list with low battery devices
-				switch (this.arrDev[i].adapter) {
-					case 'hmrpc': // there are differnt low bat states between hm and hmIp devices
-						if (deviceLowBatState) {
-							lowBatIndicator = true;
-						}
-						break;
-					case 'tado': // there is an string as indicator
-						if (deviceLowBatState != 'NORMAL') {
-							lowBatIndicator = true;
-						}
-						break;
-
-					default: // for all other devices with low bat states
-						if ((deviceLowBatState === true) || (deviceLowBatState === 0)) {
-							lowBatIndicator = true;
-						} else if (deviceBatteryState && (deviceBatteryState < this.config.minWarnBatterie)) { // if the battery state is under the set limit
-							lowBatIndicator = true;
-						}
-				}
-				if (this.listOnlyBattery) {   // Add only devices with battery in the list
+				/* Add only devices with battery in the rawlist */
+				if (this.listOnlyBattery) {
 					if (deviceBatteryState || shortDeviceBatteryState) {
 						this.listAllDevicesRaw.push(
 							{
 								'Path': id,
 								'Device': deviceName,
-								'Adapter': deviceAdapterName,
+								'Adapter': await this.capitalize(adapterID),
 								'Battery': batteryHealth,
 								'LowBat': lowBatIndicator,
 								'Signal strength': linkQuality,
@@ -917,12 +944,13 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						);
 					}
-				} else { // Add all devices
+				} else {
+					/* Add all devices */
 					this.listAllDevicesRaw.push(
 						{
 							'Path': id,
 							'Device': deviceName,
-							'Adapter': deviceAdapterName,
+							'Adapter': await this.capitalize(adapterID),
 							'Battery': batteryHealth,
 							'LowBat': lowBatIndicator,
 							'Signal strength': linkQuality,
@@ -932,7 +960,8 @@ class DeviceWatcher extends utils.Adapter {
 					);
 				}
 			} else {
-				return; // cancel run if unloaded was called.
+				/* cancel run if unloaded was called. */
+				return;
 			}
 		} // <-- end of loop
 		await this.createLists();
@@ -956,8 +985,8 @@ class DeviceWatcher extends utils.Adapter {
 					await this.createData(i);
 				}
 			}
+
 			await this.writeDatapoints(adptName); // fill the datapoints
-			await this.resetVars(); // reset the arrays and counts
 
 		} catch (error) {
 			this.errorReporting('[createDataForEachAdapter]', error);
