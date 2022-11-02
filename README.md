@@ -8,7 +8,7 @@
 [![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.0)
+![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.1)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 
@@ -98,7 +98,6 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 ![list3.png](admin/images/list3.png)
 
 ## To-Do
-- make blacklist more user-friendly
 - clean up the code
 - add support for reaction on state-changes
 - send offline text only from the device that goes offline
@@ -110,6 +109,8 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 -->
 ### **WORK IN PROGRESS**
 - If the device is offline, set signal strength to '0%'
+- If the device is offline, set battery to ' - '
+- repair some small issues in the lists
 ### 2.0.0 (2022-11-01)
 - added Lupusec, HS100 adapter, Zigbee2MQTT and MaxCube
 - changed name of Homematic to HM-RPC
