@@ -947,6 +947,8 @@ class DeviceWatcher extends utils.Adapter {
 		// create Data for each Adapter in own lists
 		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
 
+		await this.resetVars(); // reset the arrays and counts
+
 		try {
 			for (let i = 0; i < this.arrDev.length; i++) {
 
