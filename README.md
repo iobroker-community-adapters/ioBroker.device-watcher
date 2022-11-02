@@ -108,6 +108,8 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- If the device is offline, set signal strength to ' - '
 ### 2.0.0 (2022-11-01)
 - added Lupusec, HS100 adapter, Zigbee2MQTT and MaxCube
 - changed name of Homematic to HM-RPC
