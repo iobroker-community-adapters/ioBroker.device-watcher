@@ -107,6 +107,9 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- added status to battery list
+- Battery devices which are offline are now included in the battery list
 ### 2.0.1 (2022-11-02)
 - If the device is offline, set signal strength to '0%'
 - If the device is offline, set battery to ' - '
