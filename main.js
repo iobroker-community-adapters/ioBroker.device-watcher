@@ -479,12 +479,13 @@ class DeviceWatcher extends utils.Adapter {
 					);
 				}
 				// Battery lists
-				if (device['Battery'] != ' - ') {
+				if (device['isBatteryDevice']) {
 					this.batteryPowered.push(
 						{
 							'Device': device['Device'],
 							'Adapter': device['Adapter'],
-							'Battery': device['Battery']
+							'Battery': device['Battery'],
+							'Status': device['Status']
 						}
 					);
 				}
@@ -630,6 +631,7 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				let batteryHealth;
 				let lowBatIndicator;
+				let isBatteryDevice;
 
 				// Get battery states
 				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
@@ -651,8 +653,10 @@ class DeviceWatcher extends utils.Adapter {
 							default:
 								if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
 									batteryHealth = 'ok';
+									isBatteryDevice = true;
 								} else {
 									batteryHealth = 'low';
+									isBatteryDevice = true;
 								}
 								break;
 						}
@@ -666,23 +670,28 @@ class DeviceWatcher extends utils.Adapter {
 								batteryHealth = ' - ';
 							} else {
 								batteryHealth = deviceBatteryState + 'V';
+								isBatteryDevice = true;
 							}
 							break;
 
 						case 'hue-extended':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
+								isBatteryDevice = true;
 							}
 							break;
 						case 'mihomeVacuum':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
+								isBatteryDevice = true;
 							} else if (shortDeviceBatteryState2) {
 								batteryHealth = shortDeviceBatteryState2 + '%';
+								isBatteryDevice = true;
 							}
 							break;
 						default:
 							batteryHealth = (deviceBatteryState) + '%';
+							isBatteryDevice = true;
 					}
 				}
 
@@ -936,6 +945,7 @@ class DeviceWatcher extends utils.Adapter {
 								'Path': id,
 								'Device': deviceName,
 								'Adapter': await this.capitalize(adapterID),
+								'isBatteryDevice': isBatteryDevice,
 								'Battery': batteryHealth,
 								'LowBat': lowBatIndicator,
 								'Signal strength': linkQuality,
@@ -951,6 +961,7 @@ class DeviceWatcher extends utils.Adapter {
 							'Path': id,
 							'Device': deviceName,
 							'Adapter': await this.capitalize(adapterID),
+							'isBatteryDevice': isBatteryDevice,
 							'Battery': batteryHealth,
 							'LowBat': lowBatIndicator,
 							'Signal strength': linkQuality,
