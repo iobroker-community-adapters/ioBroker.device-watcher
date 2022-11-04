@@ -729,10 +729,14 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 
-					default: // for all other devices with boolean
+					case 'boolean':
 						if (deviceLowBatState) {
 							lowBatIndicator = true;
-						} else if (deviceBatteryState && (deviceBatteryState < this.config.minWarnBatterie)) { // if the battery state is under the set limit
+						}
+						break;
+
+					default: // if the battery state is under the set limit
+						if (deviceBatteryState && (deviceBatteryState < this.config.minWarnBatterie)) {
 							lowBatIndicator = true;
 						}
 						break;
