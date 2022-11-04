@@ -619,7 +619,7 @@ class DeviceWatcher extends utils.Adapter {
 											linkQuality = ' - ';
 										} else if (deviceQualityState.val < 0) {
 											linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
-											// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+										// If Quality State is an value between 0-255 (zigbee) calculate in percent:
 										} else if ((deviceQualityState.val) >= 0) {
 											linkQuality = parseFloat((100 / 255 * deviceQualityState.val).toFixed(0)) + '%';
 										}
