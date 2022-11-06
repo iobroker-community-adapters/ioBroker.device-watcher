@@ -374,7 +374,7 @@
                 },
                 "minWarnBatterie": {
                     "type": "number",
-                    "min": 0,
+                    "min": -1,
                     "max": 100,
                     "sm": 12,
                     "md": 12,
@@ -794,8 +794,8 @@
                     "sm": 12,
                     "md": 6,
                     "lg": 4,
-                    "label": "List only devices with battery",
-                    "help": "Choose if only devices with battery should be listed or all devices"
+                    "label": "List only devices with batteries",
+                    "help": "Choose if only devices with batteries should be listed or all devices"
                 },
                 "createOwnFolder": {
                     "type": "checkbox",
@@ -846,7 +846,7 @@
                 },
                 "textOfflineTime": {
                     "type": "staticText",
-                    "text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter '-1'.",
+                    "text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
                     "sm": 12,
                     "md": 12,
                     "lg": 12,
@@ -869,7 +869,7 @@
             },
             "bleMaxMinutes": {
                 "type": "number",
-                "min": 0,
+                "min": 1,
                 "max": 100000,
                 "sm": 6,
                 "md": 6,
@@ -893,7 +893,7 @@
             },
             "enoceanMaxMinutes": {
                 "type": "number",
-                "min": 0,
+                "min": 1,
                 "max": 100000,
                 "sm": 6,
                 "md": 6,
@@ -929,7 +929,7 @@
                 },
                 "hamMaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
@@ -977,7 +977,7 @@
                 },
                 "hs100MaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
@@ -1013,7 +1013,7 @@
                 },
                 "jeelinkMaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
@@ -1061,7 +1061,7 @@
                 },
                 "mihomeMaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
@@ -1097,7 +1097,7 @@
                 },
                 "netatmoMaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
@@ -1109,7 +1109,7 @@
                 },
                 "nukiextendMaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
@@ -1121,7 +1121,7 @@
                 },
                 "nutMaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,
@@ -1193,7 +1193,7 @@
                 },
                 "switchbotMaxMinutes": {
                     "type": "number",
-                    "min": 0,
+                    "min": 1,
                     "max": 100000,
                     "sm": 6,
                     "md": 6,

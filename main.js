@@ -383,67 +383,65 @@ class DeviceWatcher extends utils.Adapter {
 		const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
 		const shortshortCurrDeviceString = shortCurrDeviceString.slice(0, (shortCurrDeviceString.lastIndexOf('.') + 1) - 1);
 
-		// Get device name
-		const deviceObject = await this.getForeignObjectAsync(currDeviceString);
-		const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
-		const shortshortDeviceObject = await this.getForeignObjectAsync(shortshortCurrDeviceString);
-		let deviceName;
+		try {
+			// Get device name
+			const deviceObject = await this.getForeignObjectAsync(currDeviceString);
+			const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
+			const shortshortDeviceObject = await this.getForeignObjectAsync(shortshortCurrDeviceString);
+			let deviceName;
 
-		// Get ID with currDeviceString from datapoint
-		switch (this.arrDev[i].adapter) {
+			// Get ID with currDeviceString from datapoint
+			switch (this.arrDev[i].adapterID) {
 			// Get ID for Switchbot and ESPHome Devices
-			case 'switchbotBle':
-			case 'esphome':
-				deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
-				break;
+				case 'switchbotBle':
+				case 'esphome':
+					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+					break;
 
-			// Get ID with short currDeviceString from objectjson
-			case 'hue-extended':
-			case 'hmrpc':
-			case 'nuki-extended':
-			case 'wled':
-				if (shortDeviceObject && typeof shortDeviceObject === 'object') {
-					deviceName = shortDeviceObject.common.name;
-				}
-				break;
+					// Get ID with short currDeviceString from objectjson
+				case 'hueExt':
+				case 'hmrpc':
+				case 'nukiExt':
+				case 'wled':
+					if (shortDeviceObject && typeof shortDeviceObject === 'object') {
+						deviceName = shortDeviceObject.common.name;
+					}
+					break;
 
-			// Get ID with short short currDeviceString from objectjson (HMiP Devices)
-			case 'hmiP':
-				if (shortshortDeviceObject && typeof shortshortDeviceObject === 'object') {
-					deviceName = shortshortDeviceObject.common.name;
-				}
-				break;
+					// Get ID with short short currDeviceString from objectjson (HMiP Devices)
+				case 'hmiP':
+					if (shortshortDeviceObject && typeof shortshortDeviceObject === 'object') {
+						deviceName = shortshortDeviceObject.common.name;
+					}
+					break;
 
-			// Get ID with short currDeviceString from datapoint
-			case 'mihomeVacuum':
-			case 'roomba':
-				deviceName = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
-				break;
+					// Get ID with short currDeviceString from datapoint
+				case 'mihomeVacuum':
+				case 'roomba':
+					deviceName = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
+					break;
 
-			//Get ID of foldername
-			case 'tado':
-				deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
-				break;
+					//Get ID of foldername
+				case 'tado':
+					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
+					break;
 
-			//Get ID of foldername
-			case 'yeelight-2':
-				deviceName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
-				break;
+					//Get ID of foldername
+				case 'yeelight':
+					deviceName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
+					break;
 
-			// Get ID with main selektor from objectjson
-			default:
-				if (deviceObject && typeof deviceObject === 'object') {
-					if (deviceObject.common.name['de'] != undefined) {
-						deviceName = deviceObject.common.name['de'];
-					} else if (deviceObject.common.name['en'] != undefined) {
-						deviceName = deviceObject.common.name['en'];
-					} else {
+					// Get ID with main selektor from objectjson
+				default:
+					if (deviceObject && typeof deviceObject === 'object') {
 						deviceName = deviceObject.common.name;
 					}
-				}
-				break;
+					break;
+			}
+			return deviceName;
+		} catch (error) {
+			this.errorReporting('[getDeviceName]', error);
 		}
-		return deviceName;
 	}
 
 	/**
@@ -557,7 +555,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async createData(i) {
 		const devices = await this.getForeignStatesAsync(this.arrDev[i].Selektor);
-		const adapterID = this.arrDev[i].adapter;
+		const adapterID = this.arrDev[i].adapterID;
 
 		/*----------  Start of loop  ----------*/
 		for (const [id] of Object.entries(devices)) {
@@ -567,6 +565,11 @@ class DeviceWatcher extends utils.Adapter {
 				=              Get device name		          =
 				=============================================*/
 				const deviceName = await this.getDeviceName(id, i);
+
+				/*=============================================
+				=              Get adapter name		          =
+				=============================================*/
+				const adapter = this.arrDev[i].adapter;
 
 
 				/*=============================================
@@ -634,7 +637,7 @@ class DeviceWatcher extends utils.Adapter {
 									// for Netatmo devices
 									linkQuality = deviceQualityState.val;
 									break;
-								case 'nuki-extended':
+								case 'nukiExt':
 									linkQuality = ' - ';
 									break;
 							}
@@ -692,7 +695,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 
-						case 'hue-extended':
+						case 'hueExt':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
 								isBatteryDevice = true;
@@ -746,10 +749,10 @@ class DeviceWatcher extends utils.Adapter {
 				=          Get last contact of device         =
 				=============================================*/
 				let lastContactString;
-				let lastDeviceUnreachStateChange;
 				let deviceState = 'Online';
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
+				const deviceUnreachSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].reach);
 				const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for hmrpc devices
 				const rssiPeerSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiPeerState);
 
@@ -757,8 +760,7 @@ class DeviceWatcher extends utils.Adapter {
 					try {
 						const lastContact = await this.getTimestamp(deviceMainSelector.ts);
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
-						const deviceUnreachSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].reach);
-						if (deviceUnreachSelector) {lastDeviceUnreachStateChange = await this.getTimestamp(deviceUnreachSelector.lc);}
+						const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(deviceMainSelector.ts);
 						const shortDeviceUnreachState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].reach);
 
 						//  If there is no contact since user sets minutes add device in offline list
@@ -802,33 +804,34 @@ class DeviceWatcher extends utils.Adapter {
 								case 'hmrpc':
 								case 'hmiP':
 								case 'maxcube':
-									if (this.maxMinutes[adapterID] === -1) {
+									if (this.maxMinutes[adapterID] <= 0) {
 										if (deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
-									} else if (lastContact > this.maxMinutes[adapterID]) {
+									} else if ((lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) && (deviceUnreachState)) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'ping':
-									if (this.maxMinutes[adapterID] === -1) {
+								case 'deconz':
+									if (this.maxMinutes[adapterID] <= 0) {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
-									} else if ((lastContact > this.maxMinutes[adapterID]) && (!deviceUnreachState)) {
+									} else if ((lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) && (!deviceUnreachState)) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'unifi':
-									if (this.maxMinutes[adapterID] === -1) {
+									if (this.maxMinutes[adapterID] <= 0) {
 										if (deviceUnreachState === 0) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
@@ -842,20 +845,20 @@ class DeviceWatcher extends utils.Adapter {
 									break;
 								case 'shelly':
 								case 'sonoff':
-									if (this.maxMinutes[adapterID] === -1) {
+									if (this.maxMinutes[adapterID] <= 0) {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
-									} else if ((!deviceUnreachState) && (typeof lastDeviceUnreachStateChange !== 'undefined') && (lastContact > this.maxMinutes[adapterID])) {
+									} else if ((!deviceUnreachState) && (lastDeviceUnreachStateChange > this.maxMinutes[adapterID])) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'mihomeVacuum':
-									if (this.maxMinutes[adapterID] === -1) {
+									if (this.maxMinutes[adapterID] <= 0) {
 										if (!shortDeviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
@@ -867,9 +870,9 @@ class DeviceWatcher extends utils.Adapter {
 										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
-								case 'miHome':
+								case 'mihome':
 									if (this.arrDev[i].battery === 'none') {
-										if  (this.maxMinutes[adapterID] === -1) {
+										if  (this.maxMinutes[adapterID] <= 0) {
 											if (!deviceUnreachState) {
 												deviceState = 'Offline'; //set online state to offline
 												linkQuality = '0%'; // set linkQuality to nothing
@@ -881,8 +884,8 @@ class DeviceWatcher extends utils.Adapter {
 											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else {
-										if (this.config.mihomeMaxMinutes === -1) {
-											if  (this.maxMinutes[adapterID] === -1) {
+										if (this.config.mihomeMaxMinutes <= 0) {
+											if  (this.maxMinutes[adapterID] <= 0) {
 												deviceState = 'Offline'; //set online state to offline
 												linkQuality = '0%'; // set linkQuality to nothing
 												batteryHealth = ' - '; // set batteryhelth to nothing
@@ -895,7 +898,7 @@ class DeviceWatcher extends utils.Adapter {
 									}
 									break;
 								default:
-									if (this.maxMinutes[adapterID] === -1) {
+									if (this.maxMinutes[adapterID] <= 0) {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline';  //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
@@ -925,7 +928,7 @@ class DeviceWatcher extends utils.Adapter {
 							{
 								'Path': id,
 								'Device': deviceName,
-								'Adapter': await this.capitalize(adapterID),
+								'Adapter': adapter,
 								'isBatteryDevice': isBatteryDevice,
 								'Battery': batteryHealth,
 								'LowBat': lowBatIndicator,
@@ -941,7 +944,7 @@ class DeviceWatcher extends utils.Adapter {
 						{
 							'Path': id,
 							'Device': deviceName,
-							'Adapter': await this.capitalize(adapterID),
+							'Adapter': adapter,
 							'isBatteryDevice': isBatteryDevice,
 							'Battery': batteryHealth,
 							'LowBat': lowBatIndicator,
@@ -973,7 +976,7 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			for (let i = 0; i < this.arrDev.length; i++) {
 
-				if (this.arrDev[i].adapter.includes(adptName)) { // list device only if selected adapter matched with device
+				if (this.arrDev[i].adapterID.includes(adptName)) { // list device only if selected adapter matched with device
 					await this.createData(i);
 				}
 			}

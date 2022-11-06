@@ -109,7 +109,10 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 -->
 ### **WORK IN PROGRESS**
 - added status to battery list
-- Battery devices which are offline are now included in the battery list
+- battery devices which are offline are now still included in the battery list
+- small improvements of translations
+- offline time settings: you can use 0 instead of -1 (it will be the new standard)
+- improvements of adaptername
 ### 2.0.1 (2022-11-02)
 - If the device is offline, set signal strength to '0%'
 - If the device is offline, set battery to ' - '
