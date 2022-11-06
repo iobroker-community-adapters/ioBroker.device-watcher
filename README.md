@@ -113,6 +113,8 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 - small improvements of translations
 - offline time settings: you can use 0 instead of -1 (it will be the new standard)
 - improvements of adaptername
+- fixed issues [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)
+- repaired blacklist notifications
 ### 2.0.1 (2022-11-02)
 - If the device is offline, set signal strength to '0%'
 - If the device is offline, set battery to ' - '
