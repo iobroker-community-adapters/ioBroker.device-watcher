@@ -923,7 +923,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				/* Add only devices with battery in the rawlist */
 				if (this.listOnlyBattery) {
-					if (deviceBatteryState || shortDeviceBatteryState) {
+					if (isBatteryDevice) {
 						this.listAllDevicesRaw.push(
 							{
 								'Path': id,
