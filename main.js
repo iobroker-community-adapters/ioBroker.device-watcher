@@ -808,12 +808,10 @@ class DeviceWatcher extends utils.Adapter {
 										if (deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if ((lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) && (deviceUnreachState)) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
-										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'ping':
@@ -822,12 +820,10 @@ class DeviceWatcher extends utils.Adapter {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if ((lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) && (!deviceUnreachState)) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
-										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'unifi':
@@ -835,12 +831,10 @@ class DeviceWatcher extends utils.Adapter {
 										if (deviceUnreachState === 0) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
-										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'shelly':
@@ -849,12 +843,10 @@ class DeviceWatcher extends utils.Adapter {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if ((!deviceUnreachState) && (lastDeviceUnreachStateChange > this.maxMinutes[adapterID])) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
-										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'mihomeVacuum':
@@ -862,12 +854,10 @@ class DeviceWatcher extends utils.Adapter {
 										if (!shortDeviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if (lastContact > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
-										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 								case 'mihome':
@@ -876,24 +866,20 @@ class DeviceWatcher extends utils.Adapter {
 											if (!deviceUnreachState) {
 												deviceState = 'Offline'; //set online state to offline
 												linkQuality = '0%'; // set linkQuality to nothing
-												batteryHealth = ' - '; // set batteryhelth to nothing
 											}
 										} else if (lastContact > this.maxMinutes[adapterID]) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else {
 										if (this.config.mihomeMaxMinutes <= 0) {
 											if  (this.maxMinutes[adapterID] <= 0) {
 												deviceState = 'Offline'; //set online state to offline
 												linkQuality = '0%'; // set linkQuality to nothing
-												batteryHealth = ' - '; // set batteryhelth to nothing
 											}
 										} else if (lastContact > this.maxMinutes[adapterID]) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									}
 									break;
@@ -902,12 +888,10 @@ class DeviceWatcher extends utils.Adapter {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline';  //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
-											batteryHealth = ' - '; // set batteryhelth to nothing
 										}
 									} else if (lastContact > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
-										batteryHealth = ' - '; // set batteryhelth to nothing
 									}
 									break;
 							}
