@@ -30,11 +30,20 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
-		this.listAllDevicesRaw = [];
 		this.blacklistLists = [];
 		this.blacklistNotify = [];
 		this.arrDev = [];
 		this.adapterSelected = [];
+
+		// raw arrays
+		this.listAllDevicesRaw = [];
+		this.batteryLowPoweredRaw = [];
+		this.offlineDevicesRaw = [];
+
+		// raw counts
+		this.offlineDevicesCountRaw = 0;
+		this.offlineDevicesCountRawOld = 0;
+		this.lowBatteryPoweredCountRaw = 0;
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -361,7 +370,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				// push devices in list to ignor device in notifications
 				if (myBlacklist[i].checkIgnorNotify) {
-					this.blacklistNotify.push(blacklistParse.deviceName);
+					this.blacklistNotify.push(blacklistParse.path);
 				}
 			}
 
@@ -471,8 +480,35 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
 		this.offlineDevices = [];
+		this.batteryLowPoweredRaw = [];
+		this.offlineDevicesRaw = [];
 
 		for (const device of this.listAllDevicesRaw) {
+			// fill raw lists
+			// Low Bat lists
+			if ((device['LowBat']) && (device['Status'] !== 'Offline')) {
+				this.batteryLowPoweredRaw.push(
+					{
+						'Path': device['Path'],
+						'Device': device['Device'],
+						'Adapter': device['Adapter'],
+						'Battery': device['Battery']
+					}
+				);
+			}
+
+			if (device['Status'] === 'Offline') {
+				this.offlineDevicesRaw.push(
+					{
+						'Path': device['Path'],
+						'Device': device['Device'],
+						'Adapter': device['Adapter'],
+						'Last contact': device['Last contact']
+					}
+				);
+			}
+
+			// fill user lists
 			if (!this.blacklistLists.includes(device['Path'])) {
 				this.listAllDevices.push(
 					{
@@ -548,6 +584,11 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Count how many devices are exists
 		this.deviceCounter = this.listAllDevices.length;
+
+		// raws
+
+		// Count how many devcies are offline
+		this.offlineDevicesCountRaw = this.offlineDevicesRaw.length;
 	}
 
 	/**
@@ -1152,13 +1193,13 @@ class DeviceWatcher extends utils.Adapter {
 				try {
 					let deviceList = '';
 
-					for (const id of this.batteryLowPowered) {
-						if (!this.blacklistNotify.includes(id['Device'])) {
+					for (const id of this.batteryLowPoweredRaw) {
+						if (!this.blacklistNotify.includes(id['Path'])) {
 							deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
 						}
 					}
 
-					if ((this.lowBatteryPoweredCount > 0) && (deviceList.length > 0)) {
+					if ((this.lowBatteryPoweredCountRaw > 0) && (deviceList.length > 0)) {
 						this.log.info(`Niedrige Batteriezustände: ${deviceList}`);
 						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${deviceList}`, true);
 
@@ -1181,12 +1222,11 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			let msg = '';
 			let deviceList = '';
-			const offlineDevicesCountOld = await this.getOwnInitValue('offlineCount');
 
-			if ((this.offlineDevicesCount !== offlineDevicesCountOld)) {
+			if ((this.offlineDevicesCountRaw !== this.offlineDevicesCountRawOld)) {
 
-				for (const id of this.offlineDevices) {
-					if (!this.blacklistNotify.includes(id['Device'])) {
+				for (const id of this.offlineDevicesRaw) {
+					if (!this.blacklistNotify.includes(id['Path'])) {
 						deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
 					}
 				}
@@ -1200,6 +1240,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					this.log.info(msg + deviceList);
+					this.offlineDevicesCountRawOld = this.offlineDevicesCountRaw;
 					await this.setStateAsync('lastNotification', msg + deviceList, true);
 					await this.sendNotification(msg + deviceList);
 				}
@@ -1240,8 +1281,8 @@ class DeviceWatcher extends utils.Adapter {
 				try {
 					let deviceList = '';
 
-					for (const id of this.offlineDevices) {
-						if (!this.blacklistNotify.includes(id['Device'])) {
+					for (const id of this.offlineDevicesRaw) {
+						if (!this.blacklistNotify.includes(id['Path'])) {
 							deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
 						}
 					}
@@ -1271,6 +1312,13 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
 		this.listAllDevicesRaw = [];
+
+		// raws
+		this.batteryLowPoweredRaw = [];
+		this.offlineDevicesRaw = [];
+		this.lowBatteryPoweredCountRaw = 0;
+		this.offlineDevicesCountRaw = 0;
+
 		// counts
 		this.offlineDevicesCount = 0;
 		this.deviceCounter = 0;
