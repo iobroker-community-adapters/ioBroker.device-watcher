@@ -42,7 +42,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// raw counts
 		this.offlineDevicesCountRaw = 0;
-		this.offlineDevicesCountRawOld = 0;
+		this.offlineDevicesCountRawOld;
 		this.lowBatteryPoweredCountRaw = 0;
 
 		// counts
