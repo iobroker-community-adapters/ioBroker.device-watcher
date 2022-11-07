@@ -16,7 +16,6 @@ const enableSendSentry = true;
 let isUnloaded = false;
 
 class DeviceWatcher extends utils.Adapter {
-
 	constructor(options) {
 		super({
 			...options,
@@ -42,7 +41,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// raw counts
 		this.offlineDevicesCountRaw = 0;
-		this.offlineDevicesCountRawOld;
+		this.offlineDevicesCountRawOld = 0;
 		this.lowBatteryPoweredCountRaw = 0;
 
 		// counts
@@ -60,7 +59,6 @@ class DeviceWatcher extends utils.Adapter {
 		// this.on('objectChange', this.onObjectChange.bind(this));
 		this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
-
 	}
 
 	async onReady() {
@@ -80,7 +78,7 @@ class DeviceWatcher extends utils.Adapter {
 				fritzdect: this.config.fritzdectDevices,
 				ham: this.config.hamDevices,
 				harmony: this.config.harmonyDevices,
-				hmiP : this.config.hmiPDevices,
+				hmiP: this.config.hmiPDevices,
 				hmrpc: this.config.hmrpcDevices,
 				hs100: this.config.hs100Devices,
 				hue: this.config.hueDevices,
@@ -120,7 +118,7 @@ class DeviceWatcher extends utils.Adapter {
 				fritzdect: this.config.fritzdectMaxMinutes,
 				ham: this.config.hamMaxMinutes,
 				harmony: this.config.harmonyMaxMinutes,
-				hmiP : this.config.hmiPMaxMinutes,
+				hmiP: this.config.hmiPMaxMinutes,
 				hmrpc: this.config.hmrpcMaxMinutes,
 				hs100: this.config.hs100MaxMinutes,
 				hue: this.config.hueMaxMinutes,
@@ -167,7 +165,11 @@ class DeviceWatcher extends utils.Adapter {
 				// show list in debug log
 				this.log.debug(JSON.stringify(this.arrDev));
 
-				this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${(this.adapterSelected).join(', ')} ...`);
+				this.log.info(
+					`Number of selected adapters: ${
+						this.adapterSelected.length
+					}. Loading data from: ${this.adapterSelected.join(', ')} ...`,
+				);
 			} else {
 				this.log.warn(`No adapter selected. Please check the instance configuration!`);
 				return; // cancel run if no adapter is selected
@@ -184,8 +186,7 @@ class DeviceWatcher extends utils.Adapter {
 			try {
 				for (const [id] of Object.entries(arrApart)) {
 					if (!isUnloaded) {
-						if ((this.supAdapter !== undefined) && (this.supAdapter[id])) {
-
+						if (this.supAdapter !== undefined && this.supAdapter[id]) {
 							if (this.config.createOwnFolder) {
 								await this.createDPsForEachAdapter(id);
 								if (this.config.createHtmlList) await this.createHtmlListDatapoints(id);
@@ -211,7 +212,6 @@ class DeviceWatcher extends utils.Adapter {
 
 			// send overview of offline devices
 			if (this.config.checkSendOfflineMsgDaily) await this.sendOfflineNotificationsShedule();
-
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -219,10 +219,10 @@ class DeviceWatcher extends utils.Adapter {
 	} // <-- onReady end
 
 	/**
-     * Is called if a subscribed state changes
-     * @param {string} id
-     * @param {ioBroker.State | null | undefined} state
-     */
+	 * Is called if a subscribed state changes
+	 * @param {string} id
+	 * @param {ioBroker.State | null | undefined} state
+	 */
 	onStateChange(id, state) {
 		if (state) {
 			// The state was changed
@@ -234,8 +234,8 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-     * @param {ioBroker.Message} obj
-     */
+	 * @param {ioBroker.Message} obj
+	 */
 	onMessage(obj) {
 		const devices = [];
 		let myCount = 0;
@@ -243,22 +243,25 @@ class DeviceWatcher extends utils.Adapter {
 
 		switch (obj.command) {
 			case 'devicesList':
-				if(obj.message){
-					try{
+				if (obj.message) {
+					try {
 						result = this.listAllDevicesRaw;
-						for(const element in result){
-							const label = 'Device: ' + result[element].Device + '  - Adapter: ' + result[element].Adapter;
-							const myValueObject = {deviceName: result[element].Device, adapter: result[element].Adapter, path: result[element].Path};
-							devices[myCount] = {label: label,value: JSON.stringify(myValueObject)};
-							myCount ++;
+						for (const element in result) {
+							const label =
+								'Device: ' + result[element].Device + '  - Adapter: ' + result[element].Adapter;
+							const myValueObject = {
+								deviceName: result[element].Device,
+								adapter: result[element].Adapter,
+								path: result[element].Path,
+							};
+							devices[myCount] = { label: label, value: JSON.stringify(myValueObject) };
+							myCount++;
 						}
 						this.sendTo(obj.from, obj.command, devices, obj.callback);
-					}
-					catch(error){
+					} catch (error) {
 						this.sendTo(obj.from, obj.command, obj.callback);
 					}
-				}
-				else{
+				} else {
 					this.sendTo(obj.from, obj.command, obj.callback);
 				}
 				break;
@@ -285,7 +288,6 @@ class DeviceWatcher extends utils.Adapter {
 		} else {
 			return; // cancel run if unloaded was called.
 		}
-
 	} // <-- refreshData end
 
 	async main() {
@@ -295,7 +297,7 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			for (const [id] of Object.entries(arrApart)) {
 				if (!isUnloaded) {
-					if ((this.supAdapter !== undefined) && (this.supAdapter[id])) {
+					if (this.supAdapter !== undefined && this.supAdapter[id]) {
 						if (this.config.createOwnFolder) {
 							await this.createDataForEachAdapter(id);
 							this.log.debug(`Created and filled data for ${await this.capitalize(id)}`);
@@ -321,7 +323,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.main.name}`);
 	} //<--End of main function
 
-
 	/**
 	 * @param {string} sentence - Word which should be capitalize
 	 */
@@ -335,7 +336,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async getTimestamp(dpValue) {
 		const time = new Date();
-		return dpValue = Math.round((time.getTime() - dpValue) / 1000 / 60);
+		return (dpValue = Math.round((time.getTime() - dpValue) / 1000 / 60));
 	}
 
 	/**
@@ -374,8 +375,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
-			if (this.blacklistLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistLists}`);
-			if (this.blacklistNotify.length >= 1) this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistNotify}`);
+			if (this.blacklistLists.length >= 1)
+				this.log.info(`Found items on blacklist for lists: ${this.blacklistLists}`);
+			if (this.blacklistNotify.length >= 1)
+				this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistNotify}`);
 		} else {
 			return; // cancel run if unloaded was called.
 		}
@@ -388,9 +391,12 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} i - each Device
 	 */
 	async getDeviceName(id, i) {
-		const currDeviceString = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
-		const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
-		const shortshortCurrDeviceString = shortCurrDeviceString.slice(0, (shortCurrDeviceString.lastIndexOf('.') + 1) - 1);
+		const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
+		const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
+		const shortshortCurrDeviceString = shortCurrDeviceString.slice(
+			0,
+			shortCurrDeviceString.lastIndexOf('.') + 1 - 1,
+		);
 
 		try {
 			// Get device name
@@ -401,13 +407,13 @@ class DeviceWatcher extends utils.Adapter {
 
 			// Get ID with currDeviceString from datapoint
 			switch (this.arrDev[i].adapterID) {
-			// Get ID for Switchbot and ESPHome Devices
+				// Get ID for Switchbot and ESPHome Devices
 				case 'switchbotBle':
 				case 'esphome':
 					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 					break;
 
-					// Get ID with short currDeviceString from objectjson
+				// Get ID with short currDeviceString from objectjson
 				case 'hueExt':
 				case 'hmrpc':
 				case 'nukiExt':
@@ -417,30 +423,30 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 
-					// Get ID with short short currDeviceString from objectjson (HMiP Devices)
+				// Get ID with short short currDeviceString from objectjson (HMiP Devices)
 				case 'hmiP':
 					if (shortshortDeviceObject && typeof shortshortDeviceObject === 'object') {
 						deviceName = shortshortDeviceObject.common.name;
 					}
 					break;
 
-					// Get ID with short currDeviceString from datapoint
+				// Get ID with short currDeviceString from datapoint
 				case 'mihomeVacuum':
 				case 'roomba':
 					deviceName = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
 					break;
 
-					//Get ID of foldername
+				//Get ID of foldername
 				case 'tado':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
 					break;
 
-					//Get ID of foldername
+				//Get ID of foldername
 				case 'yeelight':
 					deviceName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
 					break;
 
-					// Get ID with main selektor from objectjson
+				// Get ID with main selektor from objectjson
 				default:
 					if (deviceObject && typeof deviceObject === 'object') {
 						deviceName = deviceObject.common.name;
@@ -461,7 +467,7 @@ class DeviceWatcher extends utils.Adapter {
 		const lastContact = await this.getTimestamp(selector);
 		let lastContactString;
 
-		lastContactString = this.formatDate(new Date((selector)), 'hh:mm') + ' Uhr';
+		lastContactString = this.formatDate(new Date(selector), 'hh:mm') + ' Uhr';
 		if (Math.round(lastContact) > 100) {
 			lastContactString = Math.round(lastContact / 60) + ' Stunden';
 		}
@@ -484,83 +490,69 @@ class DeviceWatcher extends utils.Adapter {
 		this.offlineDevicesRaw = [];
 
 		for (const device of this.listAllDevicesRaw) {
-			// fill raw lists
-			// Low Bat lists
-			if ((device['LowBat']) && (device['Status'] !== 'Offline')) {
-				this.batteryLowPoweredRaw.push(
-					{
-						'Path': device['Path'],
-						'Device': device['Device'],
-						'Adapter': device['Adapter'],
-						'Battery': device['Battery']
-					}
-				);
+			/*----------  fill raw lists  ----------*/
+			// low bat list
+			if (device['LowBat'] && device['Status'] !== 'Offline') {
+				this.batteryLowPoweredRaw.push({
+					Path: device['Path'],
+					Device: device['Device'],
+					Adapter: device['Adapter'],
+					Battery: device['Battery'],
+				});
 			}
-
+			// offline raw list
 			if (device['Status'] === 'Offline') {
-				this.offlineDevicesRaw.push(
-					{
-						'Path': device['Path'],
-						'Device': device['Device'],
-						'Adapter': device['Adapter'],
-						'Last contact': device['Last contact']
-					}
-				);
+				this.offlineDevicesRaw.push({
+					Path: device['Path'],
+					Device: device['Device'],
+					Adapter: device['Adapter'],
+					'Last contact': device['Last contact'],
+				});
 			}
 
-			// fill user lists
+			/*----------  fill user lists  ----------*/
 			if (!this.blacklistLists.includes(device['Path'])) {
-				this.listAllDevices.push(
-					{
-						'Device': device['Device'],
-						'Adapter': device['Adapter'],
-						'Battery': device['Battery'],
-						'Signal strength': device['Signal strength'],
-						'Last contact': device['Last contact'],
-						'Status': device['Status']
-					}
-				);
+				this.listAllDevices.push({
+					Device: device['Device'],
+					Adapter: device['Adapter'],
+					Battery: device['Battery'],
+					'Signal strength': device['Signal strength'],
+					'Last contact': device['Last contact'],
+					Status: device['Status'],
+				});
 				// LinkQuality lists
 				if (device['Signal strength'] != ' - ') {
-					this.linkQualityDevices.push(
-						{
-							'Device': device['Device'],
-							'Adapter': device['Adapter'],
-							'Signal strength': device['Signal strength']
-						}
-					);
+					this.linkQualityDevices.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						'Signal strength': device['Signal strength'],
+					});
 				}
 				// Battery lists
 				if (device['isBatteryDevice']) {
-					this.batteryPowered.push(
-						{
-							'Device': device['Device'],
-							'Adapter': device['Adapter'],
-							'Battery': device['Battery'],
-							'Status': device['Status']
-						}
-					);
+					this.batteryPowered.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						Battery: device['Battery'],
+						Status: device['Status'],
+					});
 				}
 				// Low Bat lists
-				if ((device['LowBat']) && (device['Status'] !== 'Offline')) {
-					this.batteryLowPowered.push(
-						{
-							'Device': device['Device'],
-							'Adapter': device['Adapter'],
-							'Battery': device['Battery']
-						}
-					);
+				if (device['LowBat'] && device['Status'] !== 'Offline') {
+					this.batteryLowPowered.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						Battery: device['Battery'],
+					});
 				}
 
 				// Offline List
 				if (device['Status'] === 'Offline') {
-					this.offlineDevices.push(
-						{
-							'Device': device['Device'],
-							'Adapter': device['Adapter'],
-							'Last contact': device['Last contact']
-						}
-					);
+					this.offlineDevices.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						'Last contact': device['Last contact'],
+					});
 				}
 			}
 		}
@@ -601,7 +593,6 @@ class DeviceWatcher extends utils.Adapter {
 		/*----------  Start of loop  ----------*/
 		for (const [id] of Object.entries(devices)) {
 			if (!isUnloaded) {
-
 				/*=============================================
 				=              Get device name		          =
 				=============================================*/
@@ -612,12 +603,11 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				const adapter = this.arrDev[i].adapter;
 
-
 				/*=============================================
 				=            Get path to datapoints	   	      =
 				=============================================*/
-				const currDeviceString = id.slice(0, (id.lastIndexOf('.') + 1) - 1);
-				const shortCurrDeviceString = currDeviceString.slice(0, (currDeviceString.lastIndexOf('.') + 1) - 1);
+				const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
+				const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
 
 				/*=============================================
 				=            Get signal strength              =
@@ -627,18 +617,26 @@ class DeviceWatcher extends utils.Adapter {
 
 				switch (adapterID) {
 					case 'mihomeVacuum':
-						deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(
+							shortCurrDeviceString + this.arrDev[i].rssiState,
+						);
 						break;
 
 					case 'netatmo':
-						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(
+							currDeviceString + this.arrDev[i].rssiState,
+						);
 						if (!deviceQualityState) {
-							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rfState);
+							deviceQualityState = await this.getForeignStateAsync(
+								currDeviceString + this.arrDev[i].rfState,
+							);
 						}
 						break;
 
 					default:
-						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(
+							currDeviceString + this.arrDev[i].rssiState,
+						);
 						break;
 				}
 
@@ -662,10 +660,12 @@ class DeviceWatcher extends utils.Adapter {
 										if (deviceQualityState.val == -255) {
 											linkQuality = ' - ';
 										} else if (deviceQualityState.val < 0) {
-											linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
-										// If Quality State is an value between 0-255 (zigbee) calculate in percent:
-										} else if ((deviceQualityState.val) >= 0) {
-											linkQuality = parseFloat((100 / 255 * deviceQualityState.val).toFixed(0)) + '%';
+											linkQuality =
+												Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
+											// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+										} else if (deviceQualityState.val >= 0) {
+											linkQuality =
+												parseFloat(((100 / 255) * deviceQualityState.val).toFixed(0)) + '%';
 										}
 										break;
 								}
@@ -698,7 +698,9 @@ class DeviceWatcher extends utils.Adapter {
 				// Get battery states
 				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
 				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+				const shortDeviceBatteryState2 = await this.getInitValue(
+					shortCurrDeviceString + this.arrDev[i].battery2,
+				);
 
 				// Get low bat states
 				let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
@@ -706,14 +708,18 @@ class DeviceWatcher extends utils.Adapter {
 					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 				}
 
-				if ((!deviceBatteryState) && (!shortDeviceBatteryState) && (!shortDeviceBatteryState2)) {
+				if (!deviceBatteryState && !shortDeviceBatteryState && !shortDeviceBatteryState2) {
 					if (deviceLowBatState !== undefined) {
 						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
 							case 'none':
 								batteryHealth = ' - ';
 								break;
 							default:
-								if ((deviceLowBatState === false) || (deviceLowBatState === 'NORMAL') || (deviceLowBatState === 1)) {
+								if (
+									deviceLowBatState === false ||
+									deviceLowBatState === 'NORMAL' ||
+									deviceLowBatState === 1
+								) {
 									batteryHealth = 'ok';
 									isBatteryDevice = true;
 								} else {
@@ -752,7 +758,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 						default:
-							batteryHealth = (deviceBatteryState) + '%';
+							batteryHealth = deviceBatteryState + '%';
 							isBatteryDevice = true;
 					}
 				}
@@ -768,7 +774,8 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case 'string':
-						if (deviceLowBatState !== 'NORMAL') { // Tado devices
+						if (deviceLowBatState !== 'NORMAL') {
+							// Tado devices
 							lowBatIndicator = true;
 						}
 						break;
@@ -780,7 +787,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					default: // if the battery state is under the set limit
-						if (deviceBatteryState && (deviceBatteryState < this.config.minWarnBatterie)) {
+						if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
 							lowBatIndicator = true;
 						}
 						break;
@@ -794,15 +801,24 @@ class DeviceWatcher extends utils.Adapter {
 
 				const deviceMainSelector = await this.getForeignStateAsync(id);
 				const deviceUnreachSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].reach);
-				const deviceStateSelector = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].stateValue); // for hmrpc devices
-				const rssiPeerSelector = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiPeerState);
+				const deviceStateSelector = await this.getForeignStateAsync(
+					shortCurrDeviceString + this.arrDev[i].stateValue,
+				); // for hmrpc devices
+				const rssiPeerSelector = await this.getForeignStateAsync(
+					currDeviceString + this.arrDev[i].rssiPeerState,
+				);
 
 				if (deviceMainSelector) {
 					try {
 						const lastContact = await this.getTimestamp(deviceMainSelector.ts);
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
-						const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(deviceMainSelector.ts);
-						const shortDeviceUnreachState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].reach);
+						const lastDeviceUnreachStateChange =
+							deviceUnreachSelector != undefined
+								? await this.getTimestamp(deviceUnreachSelector.lc)
+								: await this.getTimestamp(deviceMainSelector.ts);
+						const shortDeviceUnreachState = await this.getForeignStateAsync(
+							shortCurrDeviceString + this.arrDev[i].reach,
+						);
 
 						//  If there is no contact since user sets minutes add device in offline list
 						// calculate to days after 48 hours
@@ -813,7 +829,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							default:
 								//State changed
-								if  (adapterID === 'hmrpc') {
+								if (adapterID === 'hmrpc') {
 									if (linkQuality !== ' - ') {
 										if (deviceUnreachState) {
 											lastContactString = await this.getLastContact(deviceMainSelector.lc);
@@ -821,9 +837,11 @@ class DeviceWatcher extends utils.Adapter {
 											lastContactString = await this.getLastContact(deviceMainSelector.ts);
 										}
 									} else {
-										if (deviceStateSelector) { // because old hm devices don't send rssi states
+										if (deviceStateSelector) {
+											// because old hm devices don't send rssi states
 											lastContactString = await this.getLastContact(deviceStateSelector.ts);
-										} else if (rssiPeerSelector) { // because old hm sensors don't send rssi/state values
+										} else if (rssiPeerSelector) {
+											// because old hm sensors don't send rssi/state values
 											lastContactString = await this.getLastContact(rssiPeerSelector.ts);
 										}
 									}
@@ -850,7 +868,10 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if ((lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) && (deviceUnreachState)) {
+									} else if (
+										lastDeviceUnreachStateChange > this.maxMinutes[adapterID] &&
+										deviceUnreachState
+									) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -862,7 +883,10 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if ((lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) && (!deviceUnreachState)) {
+									} else if (
+										lastDeviceUnreachStateChange > this.maxMinutes[adapterID] &&
+										!deviceUnreachState
+									) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -873,7 +897,10 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if ((this.maxMinutes !== undefined) && (lastContact > this.maxMinutes[adapterID])) {
+									} else if (
+										this.maxMinutes !== undefined &&
+										lastContact > this.maxMinutes[adapterID]
+									) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -885,7 +912,10 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if ((!deviceUnreachState) && (lastDeviceUnreachStateChange > this.maxMinutes[adapterID])) {
+									} else if (
+										!deviceUnreachState &&
+										lastDeviceUnreachStateChange > this.maxMinutes[adapterID]
+									) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -903,7 +933,7 @@ class DeviceWatcher extends utils.Adapter {
 									break;
 								case 'mihome':
 									if (this.arrDev[i].battery === 'none') {
-										if  (this.maxMinutes[adapterID] <= 0) {
+										if (this.maxMinutes[adapterID] <= 0) {
 											if (!deviceUnreachState) {
 												deviceState = 'Offline'; //set online state to offline
 												linkQuality = '0%'; // set linkQuality to nothing
@@ -914,7 +944,7 @@ class DeviceWatcher extends utils.Adapter {
 										}
 									} else {
 										if (this.config.mihomeMaxMinutes <= 0) {
-											if  (this.maxMinutes[adapterID] <= 0) {
+											if (this.maxMinutes[adapterID] <= 0) {
 												deviceState = 'Offline'; //set online state to offline
 												linkQuality = '0%'; // set linkQuality to nothing
 											}
@@ -927,7 +957,7 @@ class DeviceWatcher extends utils.Adapter {
 								default:
 									if (this.maxMinutes[adapterID] <= 0) {
 										if (!deviceUnreachState) {
-											deviceState = 'Offline';  //set online state to offline
+											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
 									} else if (lastContact > this.maxMinutes[adapterID]) {
@@ -949,35 +979,31 @@ class DeviceWatcher extends utils.Adapter {
 				/* Add only devices with battery in the rawlist */
 				if (this.listOnlyBattery) {
 					if (isBatteryDevice) {
-						this.listAllDevicesRaw.push(
-							{
-								'Path': id,
-								'Device': deviceName,
-								'Adapter': adapter,
-								'isBatteryDevice': isBatteryDevice,
-								'Battery': batteryHealth,
-								'LowBat': lowBatIndicator,
-								'Signal strength': linkQuality,
-								'Last contact': lastContactString,
-								'Status': deviceState
-							}
-						);
+						this.listAllDevicesRaw.push({
+							Path: id,
+							Device: deviceName,
+							Adapter: adapter,
+							isBatteryDevice: isBatteryDevice,
+							Battery: batteryHealth,
+							LowBat: lowBatIndicator,
+							'Signal strength': linkQuality,
+							'Last contact': lastContactString,
+							Status: deviceState,
+						});
 					}
 				} else {
 					/* Add all devices */
-					this.listAllDevicesRaw.push(
-						{
-							'Path': id,
-							'Device': deviceName,
-							'Adapter': adapter,
-							'isBatteryDevice': isBatteryDevice,
-							'Battery': batteryHealth,
-							'LowBat': lowBatIndicator,
-							'Signal strength': linkQuality,
-							'Last contact': lastContactString,
-							'Status': deviceState
-						}
-					);
+					this.listAllDevicesRaw.push({
+						Path: id,
+						Device: deviceName,
+						Adapter: adapter,
+						isBatteryDevice: isBatteryDevice,
+						Battery: batteryHealth,
+						LowBat: lowBatIndicator,
+						'Signal strength': linkQuality,
+						'Last contact': lastContactString,
+						Status: deviceState,
+					});
 				}
 			} else {
 				/* cancel run if unloaded was called. */
@@ -987,7 +1013,6 @@ class DeviceWatcher extends utils.Adapter {
 		await this.createLists();
 		await this.countDevices();
 	} // <-- end of createData
-
 
 	/**
 	 * @param {string} adptName - Adapter name
@@ -1000,14 +1025,13 @@ class DeviceWatcher extends utils.Adapter {
 
 		try {
 			for (let i = 0; i < this.arrDev.length; i++) {
-
-				if (this.arrDev[i].adapterID.includes(adptName)) { // list device only if selected adapter matched with device
+				if (this.arrDev[i].adapterID.includes(adptName)) {
+					// list device only if selected adapter matched with device
 					await this.createData(i);
 				}
 			}
 
 			await this.writeDatapoints(adptName); // fill the datapoints
-
 		} catch (error) {
 			this.errorReporting('[createDataForEachAdapter]', error);
 		}
@@ -1034,7 +1058,6 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications();
 
 			await this.writeDatapoints(); // fill the datapoints
-
 		} catch (error) {
 			this.errorReporting('[createDataOfAllAdapter]', error);
 		}
@@ -1042,27 +1065,29 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.createDataOfAllAdapter.name}`);
 	} // <-- end of createDataOfAllAdapter
 
-
 	/**
 	 * Notification service
 	 * @param {string} text - Text which should be send
 	 */
 	async sendNotification(text) {
-
 		// Pushover
 		try {
 			if (this.config.instancePushover) {
 				//first check if instance is living
-				const pushoverAliveState = await this.getInitValue('system.adapter.' + this.config.instancePushover + '.alive');
+				const pushoverAliveState = await this.getInitValue(
+					'system.adapter.' + this.config.instancePushover + '.alive',
+				);
 
 				if (!pushoverAliveState) {
-					this.log.warn('Pushover instance is not running. Message could not be sent. Please check your instance configuration.');
+					this.log.warn(
+						'Pushover instance is not running. Message could not be sent. Please check your instance configuration.',
+					);
 				} else {
 					await this.sendToAsync(this.config.instancePushover, 'send', {
 						message: text,
 						title: this.config.titlePushover,
 						device: this.config.devicePushover,
-						priority: this.config.prioPushover
+						priority: this.config.prioPushover,
 					});
 				}
 			}
@@ -1074,15 +1099,19 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			if (this.config.instanceTelegram) {
 				//first check if instance is living
-				const telegramAliveState = await this.getInitValue('system.adapter.' + this.config.instanceTelegram + '.alive');
+				const telegramAliveState = await this.getInitValue(
+					'system.adapter.' + this.config.instanceTelegram + '.alive',
+				);
 
 				if (!telegramAliveState) {
-					this.log.warn('Telegram instance is not running. Message could not be sent. Please check your instance configuration.');
+					this.log.warn(
+						'Telegram instance is not running. Message could not be sent. Please check your instance configuration.',
+					);
 				} else {
 					await this.sendToAsync(this.config.instanceTelegram, 'send', {
 						text: text,
 						user: this.config.deviceTelegram,
-						chatId: this.config.chatIdTelegram
+						chatId: this.config.chatIdTelegram,
 					});
 				}
 			}
@@ -1094,14 +1123,18 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			if (this.config.instanceWhatsapp) {
 				//first check if instance is living
-				const whatsappAliveState = await this.getInitValue('system.adapter.' + this.config.instanceWhatsapp + '.alive');
+				const whatsappAliveState = await this.getInitValue(
+					'system.adapter.' + this.config.instanceWhatsapp + '.alive',
+				);
 
 				if (!whatsappAliveState) {
-					this.log.warn('Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.');
+					this.log.warn(
+						'Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.',
+					);
 				} else {
 					await this.sendToAsync(this.config.instanceWhatsapp, 'send', {
 						text: text,
-						phone: this.config.phoneWhatsapp
+						phone: this.config.phoneWhatsapp,
 					});
 				}
 			}
@@ -1113,15 +1146,19 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			if (this.config.instanceEmail) {
 				//first check if instance is living
-				const eMailAliveState = await this.getInitValue('system.adapter.' + this.config.instanceEmail + '.alive');
+				const eMailAliveState = await this.getInitValue(
+					'system.adapter.' + this.config.instanceEmail + '.alive',
+				);
 
 				if (!eMailAliveState) {
-					this.log.warn('eMail instance is not running. Message could not be sent. Please check your instance configuration.');
+					this.log.warn(
+						'eMail instance is not running. Message could not be sent. Please check your instance configuration.',
+					);
 				} else {
 					await this.sendToAsync(this.config.instanceEmail, 'send', {
 						sendTo: this.config.sendToEmail,
 						text: text,
-						subject: this.config.subjectEmail
+						subject: this.config.subjectEmail,
 					});
 				}
 			}
@@ -1133,13 +1170,26 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			if (this.config.instanceJarvis) {
 				//first check if instance is living
-				const jarvisAliveState = await this.getInitValue('system.adapter.' + this.config.instanceJarvis + '.alive');
+				const jarvisAliveState = await this.getInitValue(
+					'system.adapter.' + this.config.instanceJarvis + '.alive',
+				);
 
 				if (!jarvisAliveState) {
-					this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
+					this.log.warn(
+						'Jarvis instance is not running. Message could not be sent. Please check your instance configuration.',
+					);
 				} else {
 					const jsonText = JSON.stringify(text);
-					await this.setForeignStateAsync(`${this.config.instanceJarvis}.addNotification`, '{"title":"' + this.config.titleJarvis + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message": ' + jsonText + ',"display": "drawer"}');
+					await this.setForeignStateAsync(
+						`${this.config.instanceJarvis}.addNotification`,
+						'{"title":"' +
+							this.config.titleJarvis +
+							' (' +
+							this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') +
+							')","message": ' +
+							jsonText +
+							',"display": "drawer"}',
+					);
 				}
 			}
 		} catch (error) {
@@ -1150,13 +1200,26 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			if (this.config.instanceLovelace) {
 				//first check if instance is living
-				const lovelaceAliveState = await this.getInitValue('system.adapter.' + this.config.instanceLovelace + '.alive');
+				const lovelaceAliveState = await this.getInitValue(
+					'system.adapter.' + this.config.instanceLovelace + '.alive',
+				);
 
 				if (!lovelaceAliveState) {
-					this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
+					this.log.warn(
+						'Lovelace instance is not running. Message could not be sent. Please check your instance configuration.',
+					);
 				} else {
 					const jsonText = JSON.stringify(text);
-					await this.setForeignStateAsync(`${this.config.instanceLovelace}.notifications.add`, '{"message":' + jsonText + ', "title":"' + this.config.titleLovelace + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}');
+					await this.setForeignStateAsync(
+						`${this.config.instanceLovelace}.notifications.add`,
+						'{"message":' +
+							jsonText +
+							', "title":"' +
+							this.config.titleLovelace +
+							' (' +
+							this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') +
+							')"}',
+					);
 				}
 			}
 		} catch (error) {
@@ -1167,7 +1230,7 @@ class DeviceWatcher extends utils.Adapter {
 	async sendBatteryNotifyShedule() {
 		// send message for low battery devices
 
-		const time = (this.config.checkSendBatteryTime).split(':');
+		const time = this.config.checkSendBatteryTime.split(':');
 
 		const checkDays = []; // list of selected days
 
@@ -1180,8 +1243,13 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.checkSaturday) checkDays.push(6);
 		if (this.config.checkSunday) checkDays.push(0);
 
-		if (checkDays.length >= 1) { // check if an day is selected
-			this.log.debug(`Number of selected days for daily battery message: ${checkDays.length}. Send Message on: ${(checkDays).join(', ')} ...`);
+		if (checkDays.length >= 1) {
+			// check if an day is selected
+			this.log.debug(
+				`Number of selected days for daily battery message: ${
+					checkDays.length
+				}. Send Message on: ${checkDays.join(', ')} ...`,
+			);
 		} else {
 			this.log.warn(`No days selected for daily battery message. Please check the instance configuration!`);
 			return; // cancel function if no day is selected
@@ -1199,14 +1267,12 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 
-					if ((this.lowBatteryPoweredCountRaw > 0) && (deviceList.length > 0)) {
+					if (this.lowBatteryPoweredCountRaw > 0 && deviceList.length > 0) {
 						this.log.info(`Niedrige Batteriezustände: ${deviceList}`);
 						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${deviceList}`, true);
 
 						this.sendNotification(`Niedriege Batteriezustände: ${deviceList}`);
-
 					}
-
 				} catch (error) {
 					this.errorReporting('[sendBatteryNotifyShedule]', error);
 				}
@@ -1223,8 +1289,7 @@ class DeviceWatcher extends utils.Adapter {
 			let msg = '';
 			let deviceList = '';
 
-			if ((this.offlineDevicesCountRaw !== this.offlineDevicesCountRawOld)) {
-
+			if (this.offlineDevicesCountRaw !== this.offlineDevicesCountRawOld) {
 				for (const id of this.offlineDevicesRaw) {
 					if (!this.blacklistNotify.includes(id['Path'])) {
 						deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
@@ -1233,9 +1298,11 @@ class DeviceWatcher extends utils.Adapter {
 				if (deviceList.length > 0) {
 					if (deviceList.length == 0) {
 						msg = 'Alle Geräte sind Online.';
-					} else if (deviceList.length == 1) {	// make singular if it is only one device
+					} else if (deviceList.length == 1) {
+						// make singular if it is only one device
 						msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-					} else if (deviceList.length >= 2) {		//make plural if it is more than one device
+					} else if (deviceList.length >= 2) {
+						//make plural if it is more than one device
 						msg = `Folgende Geräte sind seit einiger Zeit nicht erreichbar: \n`;
 					}
 
@@ -1244,18 +1311,17 @@ class DeviceWatcher extends utils.Adapter {
 					await this.setStateAsync('lastNotification', msg + deviceList, true);
 					await this.sendNotification(msg + deviceList);
 				}
-
 			}
 		} catch (error) {
 			this.errorReporting('[sendOfflineMessage]', error);
 		}
 		this.log.debug(`Finished the function: ${this.sendOfflineNotifications.name}`);
-	}//<--End of offline notification
+	} //<--End of offline notification
 
 	async sendOfflineNotificationsShedule() {
 		// send daily an overview with offline devices
 
-		const time = (this.config.checkSendOfflineTime).split(':');
+		const time = this.config.checkSendOfflineTime.split(':');
 
 		const checkDays = []; // list of selected days
 
@@ -1268,8 +1334,13 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.checkOfflineSaturday) checkDays.push(6);
 		if (this.config.checkOfflineSunday) checkDays.push(0);
 
-		if (checkDays.length >= 1) { // check if an day is selected
-			this.log.debug(`Number of selected days for daily offline message: ${checkDays.length}. Send Message on: ${(checkDays).join(', ')} ...`);
+		if (checkDays.length >= 1) {
+			// check if an day is selected
+			this.log.debug(
+				`Number of selected days for daily offline message: ${
+					checkDays.length
+				}. Send Message on: ${checkDays.join(', ')} ...`,
+			);
 		} else {
 			this.log.warn(`No days selected for daily offline message. Please check the instance configuration!`);
 			return; // cancel function if no day is selected
@@ -1293,13 +1364,12 @@ class DeviceWatcher extends utils.Adapter {
 
 						this.sendNotification(`Geräte Offline: ${deviceList}`);
 					}
-
 				} catch (error) {
 					this.errorReporting('[sendOfflineNotificationsShedule]', error);
 				}
 			});
 		}
-	}//<--End of daily offline notification
+	} //<--End of daily offline notification
 
 	async resetVars() {
 		//Reset all arrays and counts
@@ -1329,7 +1399,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.resetVars.name}`);
 	} // <-- end of resetVars
 
-
 	/**
 	 * @param {string} [adptName] - Adaptername
 	 */
@@ -1339,7 +1408,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Start the function: ${this.writeDatapoints.name}`);
 
 		try {
-
 			let dpSubFolder;
 			//write the datapoints in subfolders with the adaptername otherwise write the dP's in the root folder
 			if (adptName) {
@@ -1355,62 +1423,94 @@ class DeviceWatcher extends utils.Adapter {
 
 			if (this.deviceCounter == 0) {
 				// if no device is count, write the JSON List with default value
-				this.listAllDevices = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '', 'Last contact': '', 'Signal strength': '' }];
+				this.listAllDevices = [
+					{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' },
+				];
 			}
 			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
 
 			if (this.linkQualityCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.linkQualityDevices = [{ 'Device': '--none--', 'Adapter': '', 'Signal strength': '' }];
+				this.linkQualityDevices = [{ Device: '--none--', Adapter: '', 'Signal strength': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}linkQualityList`, { val: JSON.stringify(this.linkQualityDevices), ack: true });
+			await this.setStateAsync(`${dpSubFolder}linkQualityList`, {
+				val: JSON.stringify(this.linkQualityDevices),
+				ack: true,
+			});
 			//write HTML list
-			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, { val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount), ack: true });
+			if (this.config.createHtmlList)
+				await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, {
+					val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount),
+					ack: true,
+				});
 
 			if (this.offlineDevicesCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.offlineDevices = [{ 'Device': '--none--', 'Adapter': '', 'Last contact': '' }];
+				this.offlineDevices = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}offlineList`, { val: JSON.stringify(this.offlineDevices), ack: true });
+			await this.setStateAsync(`${dpSubFolder}offlineList`, {
+				val: JSON.stringify(this.offlineDevices),
+				ack: true,
+			});
 			//write HTML list
-			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}offlineListHTML`, { val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount), ack: true });
+			if (this.config.createHtmlList)
+				await this.setStateAsync(`${dpSubFolder}offlineListHTML`, {
+					val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount),
+					ack: true,
+				});
 
 			if (this.batteryPoweredCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryPowered = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '' }];
+				this.batteryPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}batteryList`, { val: JSON.stringify(this.batteryPowered), ack: true });
+			await this.setStateAsync(`${dpSubFolder}batteryList`, {
+				val: JSON.stringify(this.batteryPowered),
+				ack: true,
+			});
 			//write HTML list
-			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}batteryListHTML`, { val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false), ack: true });
+			if (this.config.createHtmlList)
+				await this.setStateAsync(`${dpSubFolder}batteryListHTML`, {
+					val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false),
+					ack: true,
+				});
 
 			if (this.lowBatteryPoweredCount == 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryLowPowered = [{ 'Device': '--none--', 'Adapter': '', 'Battery': '' }];
+				this.batteryLowPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}lowBatteryList`, { val: JSON.stringify(this.batteryLowPowered), ack: true });
+			await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {
+				val: JSON.stringify(this.batteryLowPowered),
+				ack: true,
+			});
 			//write HTML list
-			if (this.config.createHtmlList) await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, { val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true), ack: true });
+			if (this.config.createHtmlList)
+				await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, {
+					val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true),
+					ack: true,
+				});
 
 			// create timestamp of last run
-			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
+			const lastCheck =
+				this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
 			await this.setStateAsync('lastCheck', lastCheck, true);
-		}
-		catch (error) {
+		} catch (error) {
 			this.errorReporting('[writeDatapoints]', error);
 		}
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
-	}//<--End  of writing Datapoints
+	} //<--End  of writing Datapoints
 
 	/**
 	 * @param {object} devices - Device
 	 * @param {number} deviceCount - Counted devices
 	 */
 	async creatLinkQualityListHTML(devices, deviceCount) {
-		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
+		devices = devices.sort((a, b) => {
+			return a.Device.localeCompare(b.Device);
+		});
 		let html = `<center>
 		<b>Link Quality Devices:<font> ${deviceCount}</b><small></small></font>
 		<p></p>
@@ -1442,7 +1542,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {number} deviceCount - Counted devices
 	 */
 	async createOfflineListHTML(devices, deviceCount) {
-		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
+		devices = devices.sort((a, b) => {
+			return a.Device.localeCompare(b.Device);
+		});
 		let html = `<center>
 		<b>Offline Devices: <font color=${deviceCount == 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
 		<p></p>
@@ -1475,9 +1577,13 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} [isLowBatteryList] - list Low Battery Devices
 	 */
 	async createBatteryListHTML(devices, deviceCount, isLowBatteryList) {
-		devices = devices.sort((a, b) => { return a.Device.localeCompare(b.Device); });
+		devices = devices.sort((a, b) => {
+			return a.Device.localeCompare(b.Device);
+		});
 		let html = `<center>
-		<b>${isLowBatteryList == true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList == true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
+		<b>${isLowBatteryList == true ? 'Schwache ' : ''}Batterie Devices: <font color=${
+	isLowBatteryList == true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''
+}>${deviceCount}</b></font>
 		<p></p>
 		</center>   
 		<table width=100%>
@@ -1513,7 +1619,6 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} adptName - Adaptername of devices
 	 */
 	async createDPsForEachAdapter(adptName) {
-
 		await this.setObjectNotExistsAsync(`${adptName}`, {
 			type: 'channel',
 			common: {
@@ -1523,210 +1628,210 @@ class DeviceWatcher extends utils.Adapter {
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.offlineCount`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'Number of devices offline',
-					'de': 'Anzahl der Geräte offline',
-					'ru': 'Количество устройств offline',
-					'pt': 'Número de dispositivos offline',
-					'nl': 'Nummer van apparatuur offline',
-					'fr': 'Nombre de dispositifs hors ligne',
-					'it': 'Numero di dispositivi offline',
-					'es': 'Número de dispositivos sin conexión',
-					'pl': 'Ilość urządzeń offline',
-					'zh-cn': '线内装置数量'
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of devices offline',
+					de: 'Anzahl der Geräte offline',
+					ru: 'Количество устройств offline',
+					pt: 'Número de dispositivos offline',
+					nl: 'Nummer van apparatuur offline',
+					fr: 'Nombre de dispositifs hors ligne',
+					it: 'Numero di dispositivi offline',
+					es: 'Número de dispositivos sin conexión',
+					pl: 'Ilość urządzeń offline',
+					'zh-cn': '线内装置数量',
 				},
-				'type': 'number',
-				'role': 'value',
-				'read': true,
-				'write': false,
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.offlineList`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of offline devices',
-					'de': 'Liste der Offline-Geräte',
-					'ru': 'Список оффлайн устройств',
-					'pt': 'Lista de dispositivos off-line',
-					'nl': 'List van offline apparatuur',
-					'fr': 'Liste des dispositifs hors ligne',
-					'it': 'Elenco dei dispositivi offline',
-					'es': 'Lista de dispositivos sin conexión',
-					'pl': 'Lista urządzeń offline',
-					'zh-cn': '线装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'List of offline devices',
+					de: 'Liste der Offline-Geräte',
+					ru: 'Список оффлайн устройств',
+					pt: 'Lista de dispositivos off-line',
+					nl: 'List van offline apparatuur',
+					fr: 'Liste des dispositifs hors ligne',
+					it: 'Elenco dei dispositivi offline',
+					es: 'Lista de dispositivos sin conexión',
+					pl: 'Lista urządzeń offline',
+					'zh-cn': '线装置清单',
 				},
-				'type': 'array',
-				'role': 'json',
-				'read': true,
-				'write': false,
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of all devices',
-					'de': 'Liste aller Geräte',
-					'ru': 'Список всех устройств',
-					'pt': 'Lista de todos os dispositivos',
-					'nl': 'List van alle apparaten',
-					'fr': 'Liste de tous les dispositifs',
-					'it': 'Elenco di tutti i dispositivi',
-					'es': 'Lista de todos los dispositivos',
-					'pl': 'Lista wszystkich urządzeń',
-					'zh-cn': '所有装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'List of all devices',
+					de: 'Liste aller Geräte',
+					ru: 'Список всех устройств',
+					pt: 'Lista de todos os dispositivos',
+					nl: 'List van alle apparaten',
+					fr: 'Liste de tous les dispositifs',
+					it: 'Elenco di tutti i dispositivi',
+					es: 'Lista de todos los dispositivos',
+					pl: 'Lista wszystkich urządzeń',
+					'zh-cn': '所有装置清单',
 				},
-				'type': 'array',
-				'role': 'json',
-				'read': true,
-				'write': false,
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.linkQualityList`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of devices with signal strength',
-					'de': 'Liste der Geräte mit Signalstärke',
-					'ru': 'Список устройств с силой сигнала',
-					'pt': 'Lista de dispositivos com força de sinal',
-					'nl': 'List van apparaten met signaalkracht',
-					'fr': 'Liste des dispositifs avec force de signal',
-					'it': 'Elenco dei dispositivi con forza del segnale',
-					'es': 'Lista de dispositivos con fuerza de señal',
-					'pl': 'Lista urządzeń z siłą sygnałową',
-					'zh-cn': '具有信号实力的装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'List of devices with signal strength',
+					de: 'Liste der Geräte mit Signalstärke',
+					ru: 'Список устройств с силой сигнала',
+					pt: 'Lista de dispositivos com força de sinal',
+					nl: 'List van apparaten met signaalkracht',
+					fr: 'Liste des dispositifs avec force de signal',
+					it: 'Elenco dei dispositivi con forza del segnale',
+					es: 'Lista de dispositivos con fuerza de señal',
+					pl: 'Lista urządzeń z siłą sygnałową',
+					'zh-cn': '具有信号实力的装置清单',
 				},
-				'type': 'array',
-				'role': 'json',
-				'read': true,
-				'write': false,
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.countAll`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'Number of all devices',
-					'de': 'Anzahl aller Geräte',
-					'ru': 'Количество всех устройств',
-					'pt': 'Número de todos os dispositivos',
-					'nl': 'Nummer van alle apparaten',
-					'fr': 'Nombre de tous les appareils',
-					'it': 'Numero di tutti i dispositivi',
-					'es': 'Número de todos los dispositivos',
-					'pl': 'Ilość wszystkich urządzeń',
-					'zh-cn': '所有装置的数目'
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of all devices',
+					de: 'Anzahl aller Geräte',
+					ru: 'Количество всех устройств',
+					pt: 'Número de todos os dispositivos',
+					nl: 'Nummer van alle apparaten',
+					fr: 'Nombre de tous les appareils',
+					it: 'Numero di tutti i dispositivi',
+					es: 'Número de todos los dispositivos',
+					pl: 'Ilość wszystkich urządzeń',
+					'zh-cn': '所有装置的数目',
 				},
-				'type': 'number',
-				'role': 'value',
-				'read': true,
-				'write': false,
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.batteryList`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of devices with battery state',
-					'de': 'Liste der Geräte mit Batteriezustand',
-					'ru': 'Список устройств с состоянием батареи',
-					'pt': 'Lista de dispositivos com estado da bateria',
-					'nl': 'List van apparaten met batterij staat',
-					'fr': 'Liste des appareils avec état de batterie',
-					'it': 'Elenco dei dispositivi con stato della batteria',
-					'es': 'Lista de dispositivos con estado de batería',
-					'pl': 'Lista urządzeń z baterią stanową',
-					'zh-cn': '电池国装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'List of devices with battery state',
+					de: 'Liste der Geräte mit Batteriezustand',
+					ru: 'Список устройств с состоянием батареи',
+					pt: 'Lista de dispositivos com estado da bateria',
+					nl: 'List van apparaten met batterij staat',
+					fr: 'Liste des appareils avec état de batterie',
+					it: 'Elenco dei dispositivi con stato della batteria',
+					es: 'Lista de dispositivos con estado de batería',
+					pl: 'Lista urządzeń z baterią stanową',
+					'zh-cn': '电池国装置清单',
 				},
-				'type': 'array',
-				'role': 'json',
-				'read': true,
-				'write': false,
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryList`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'List of devices with low battery state',
-					'de': 'Liste der Geräte mit niedrigem Batteriezustand',
-					'ru': 'Список устройств с низким состоянием батареи',
-					'pt': 'Lista de dispositivos com baixo estado da bateria',
-					'nl': 'List van apparaten met lage batterij staat',
-					'fr': 'Liste des appareils à faible état de batterie',
-					'it': 'Elenco di dispositivi con stato di batteria basso',
-					'es': 'Lista de dispositivos con estado de batería bajo',
-					'pl': 'Lista urządzeń o niskim stanie baterii',
-					'zh-cn': '低电池国家装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'List of devices with low battery state',
+					de: 'Liste der Geräte mit niedrigem Batteriezustand',
+					ru: 'Список устройств с низким состоянием батареи',
+					pt: 'Lista de dispositivos com baixo estado da bateria',
+					nl: 'List van apparaten met lage batterij staat',
+					fr: 'Liste des appareils à faible état de batterie',
+					it: 'Elenco di dispositivi con stato di batteria basso',
+					es: 'Lista de dispositivos con estado de batería bajo',
+					pl: 'Lista urządzeń o niskim stanie baterii',
+					'zh-cn': '低电池国家装置清单',
 				},
-				'type': 'array',
-				'role': 'json',
-				'read': true,
-				'write': false,
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryCount`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'Number of devices with low battery',
-					'de': 'Anzahl der Geräte mit niedriger Batterie',
-					'ru': 'Количество устройств c низкой батареей',
-					'pt': 'Número de dispositivos com bateria baixa',
-					'nl': 'Nummer van apparaten met lage batterij',
-					'fr': 'Nombre de dispositifs avec batterie basse',
-					'it': 'Numero di dispositivi con batteria bassa',
-					'es': 'Número de dispositivos con batería baja',
-					'pl': 'Liczba urządzeń z niską baterią',
-					'zh-cn': '低电池的装置数量'
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of devices with low battery',
+					de: 'Anzahl der Geräte mit niedriger Batterie',
+					ru: 'Количество устройств c низкой батареей',
+					pt: 'Número de dispositivos com bateria baixa',
+					nl: 'Nummer van apparaten met lage batterij',
+					fr: 'Nombre de dispositifs avec batterie basse',
+					it: 'Numero di dispositivi con batteria bassa',
+					es: 'Número de dispositivos con batería baja',
+					pl: 'Liczba urządzeń z niską baterią',
+					'zh-cn': '低电池的装置数量',
 				},
-				'type': 'number',
-				'role': 'value',
-				'read': true,
-				'write': false,
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${adptName}.batteryCount`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'Number of devices with battery',
-					'de': 'Anzahl der Geräte mit Batterie',
-					'ru': 'Количество устройств c батареей',
-					'pt': 'Número de dispositivos com bateria',
-					'nl': 'Nummer van apparaten met batterij',
-					'fr': 'Nombre de dispositifs avec batterie',
-					'it': 'Numero di dispositivi con batteria',
-					'es': 'Número de dispositivos con batería',
-					'pl': 'Liczba urządzeń z baterią',
-					'zh-cn': '电池的装置数量'
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of devices with battery',
+					de: 'Anzahl der Geräte mit Batterie',
+					ru: 'Количество устройств c батареей',
+					pt: 'Número de dispositivos com bateria',
+					nl: 'Nummer van apparaten met batterij',
+					fr: 'Nombre de dispositifs avec batterie',
+					it: 'Numero di dispositivi con batteria',
+					es: 'Número de dispositivos con batería',
+					pl: 'Liczba urządzeń z baterią',
+					'zh-cn': '电池的装置数量',
 				},
-				'type': 'number',
-				'role': 'value',
-				'read': true,
-				'write': false,
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 	}
 
@@ -1734,7 +1839,6 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} [adptName] - Adaptername of devices
 	 **/
 	async createHtmlListDatapoints(adptName) {
-
 		let dpSubFolder;
 		//write the datapoints in subfolders with the adaptername otherwise write the dP's in the root folder
 		if (adptName) {
@@ -1744,95 +1848,95 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		await this.setObjectNotExistsAsync(`${dpSubFolder}offlineListHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'HTML List of offline devices',
-					'de': 'HTML Liste der Offline-Geräte',
-					'ru': 'HTML Список оффлайн устройств',
-					'pt': 'HTML Lista de dispositivos off-line',
-					'nl': 'HTML List van offline apparatuur',
-					'fr': 'HTML Liste des dispositifs hors ligne',
-					'it': 'HTML Elenco dei dispositivi offline',
-					'es': 'HTML Lista de dispositivos sin conexión',
-					'pl': 'HTML Lista urządzeń offline',
-					'zh-cn': 'HTML 线装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of offline devices',
+					de: 'HTML Liste der Offline-Geräte',
+					ru: 'HTML Список оффлайн устройств',
+					pt: 'HTML Lista de dispositivos off-line',
+					nl: 'HTML List van offline apparatuur',
+					fr: 'HTML Liste des dispositifs hors ligne',
+					it: 'HTML Elenco dei dispositivi offline',
+					es: 'HTML Lista de dispositivos sin conexión',
+					pl: 'HTML Lista urządzeń offline',
+					'zh-cn': 'HTML 线装置清单',
 				},
-				'type': 'string',
-				'role': 'html',
-				'read': true,
-				'write': false,
+				type: 'string',
+				role: 'html',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${dpSubFolder}linkQualityListHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'HTML List of devices with signal strength',
-					'de': 'HTML Liste der Geräte mit Signalstärke',
-					'ru': 'HTML Список устройств с силой сигнала',
-					'pt': 'HTML Lista de dispositivos com força de sinal',
-					'nl': 'HTML List van apparaten met signaalkracht',
-					'fr': 'HTML Liste des dispositifs avec force de signal',
-					'it': 'HTML Elenco dei dispositivi con forza del segnale',
-					'es': 'HTML Lista de dispositivos con fuerza de señal',
-					'pl': 'HTML Lista urządzeń z siłą sygnałową',
-					'zh-cn': 'HTML 具有信号实力的装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of devices with signal strength',
+					de: 'HTML Liste der Geräte mit Signalstärke',
+					ru: 'HTML Список устройств с силой сигнала',
+					pt: 'HTML Lista de dispositivos com força de sinal',
+					nl: 'HTML List van apparaten met signaalkracht',
+					fr: 'HTML Liste des dispositifs avec force de signal',
+					it: 'HTML Elenco dei dispositivi con forza del segnale',
+					es: 'HTML Lista de dispositivos con fuerza de señal',
+					pl: 'HTML Lista urządzeń z siłą sygnałową',
+					'zh-cn': 'HTML 具有信号实力的装置清单',
 				},
-				'type': 'string',
-				'role': 'value',
-				'read': true,
-				'write': false,
+				type: 'string',
+				role: 'value',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${dpSubFolder}batteryListHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'HTML List of devices with battery state',
-					'de': 'HTML Liste der Geräte mit Batteriezustand',
-					'ru': 'HTML Список устройств с состоянием батареи',
-					'pt': 'HTML Lista de dispositivos com estado da bateria',
-					'nl': 'HTML List van apparaten met batterij staat',
-					'fr': 'HTML Liste des appareils avec état de batterie',
-					'it': 'HTML Elenco dei dispositivi con stato della batteria',
-					'es': 'HTML Lista de dispositivos con estado de batería',
-					'pl': 'HTML Lista urządzeń z baterią stanową',
-					'zh-cn': 'HTML 电池国装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of devices with battery state',
+					de: 'HTML Liste der Geräte mit Batteriezustand',
+					ru: 'HTML Список устройств с состоянием батареи',
+					pt: 'HTML Lista de dispositivos com estado da bateria',
+					nl: 'HTML List van apparaten met batterij staat',
+					fr: 'HTML Liste des appareils avec état de batterie',
+					it: 'HTML Elenco dei dispositivi con stato della batteria',
+					es: 'HTML Lista de dispositivos con estado de batería',
+					pl: 'HTML Lista urządzeń z baterią stanową',
+					'zh-cn': 'HTML 电池国装置清单',
 				},
-				'type': 'string',
-				'role': 'html',
-				'read': true,
-				'write': false,
+				type: 'string',
+				role: 'html',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 
 		await this.setObjectNotExistsAsync(`${dpSubFolder}lowBatteryListHTML`, {
-			'type': 'state',
-			'common': {
-				'name': {
-					'en': 'HTML List of devices with low battery state',
-					'de': 'HTML Liste der Geräte mit niedrigem Batteriezustand',
-					'ru': 'HTML Список устройств с низким состоянием батареи',
-					'pt': 'HTML Lista de dispositivos com baixo estado da bateria',
-					'nl': 'HTML List van apparaten met lage batterij staat',
-					'fr': 'HTML Liste des appareils à faible état de batterie',
-					'it': 'HTML Elenco di dispositivi con stato di batteria basso',
-					'es': 'HTML Lista de dispositivos con estado de batería bajo',
-					'pl': 'HTML Lista urządzeń o niskim stanie baterii',
-					'zh-cn': 'HTML 低电池国家装置清单'
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of devices with low battery state',
+					de: 'HTML Liste der Geräte mit niedrigem Batteriezustand',
+					ru: 'HTML Список устройств с низким состоянием батареи',
+					pt: 'HTML Lista de dispositivos com baixo estado da bateria',
+					nl: 'HTML List van apparaten met lage batterij staat',
+					fr: 'HTML Liste des appareils à faible état de batterie',
+					it: 'HTML Elenco di dispositivi con stato di batteria basso',
+					es: 'HTML Lista de dispositivos con estado de batería bajo',
+					pl: 'HTML Lista urządzeń o niskim stanie baterii',
+					'zh-cn': 'HTML 低电池国家装置清单',
 				},
-				'type': 'string',
-				'role': 'html',
-				'read': true,
-				'write': false,
+				type: 'string',
+				role: 'html',
+				read: true,
+				write: false,
 			},
-			'native': {}
+			native: {},
 		});
 	}
 
@@ -1855,10 +1959,9 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- end of errorReporting
 
-
 	/**
-     * @param {() => void} callback
-     */
+	 * @param {() => void} callback
+	 */
 	onUnload(callback) {
 		try {
 			if (this.refreshDataTimeout) {

@@ -1,1305 +1,1302 @@
 {
-    "i18n": true,
-    "type": "tabs",
-    "items": {
-        "_options": {
-            "type": "panel",
-            "label": "Options",
-            "items": {
-                "_headerDevices": {
-                    "type": "header", 
-                    "text": "Choose devices to watch",
-                    "size": 2
-                },
-                "alexa2Devices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Alexa2"
-                },
-                "bleDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Ble"
-                },
-                "deconzDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Deconz"
-                },
-                "enoceanDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Enocean"
-                },
-                "esphomeDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "EspHome"
-                },
-                "fritzdectDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "FritzDect"
-                },
-                "hamDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Ham"
-                },
-                "harmonyDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Harmony"
-                },
-                "hmiPDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "HmiP"
-                },
-                "hmrpcDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "HM-RPC"
-                },
-                "hs100Devices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "hs100"
-                },
-                "hueDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Hue"
-                },
-                "hueExtDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Hue Extended"
-                },
-                "jeelinkDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Jeelink"
-                },
-                "lupusecDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Lupusec"
-                },
-                "maxcubeDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Maxcube"
-                },
-                "merossDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Meross"
-                },
-                "mihomeDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "MiHome"
-                },
-                "mihomeVacuumDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "MiHome Vacuum"
-                },
-                "netatmoDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Netatmo"
-                },
-                "nukiExtDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Nuki Extended"
-                },
-                "nutDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Nut"
-                },
-                "pingDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Ping"
-                },
-                "roombaDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Roomba"
-                },
-                "shellyDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Shelly"
-                },
-                "sonoffDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Sonoff"
-                },
-                "sonosDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Sonos"
-                },
-                "switchbotBleDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Switchbot Ble"
-                },
-                "tadoDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Tado"
-                },
-                "tradfriDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Tradfri"
-                },
-                "unifiDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Unifi"
-                },
-                "wledDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "WLED"
-                },
-                "yeelightDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Yeelight-2"
-                },
-                "zigbeeDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zigbee"
-                },
-                "zigbee2mqttDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zigbee2MQTT"
-                },
-                "zwaveDevices": {
-                    "type": "checkbox",
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zwave"
-                }
-            }
-        },
-        "_notifications": {
-            "type": "panel",
-            "label": "Notifications",
-            "items": {
-                "_headerCommon": {
-                    "type":"header",
-                    "text":"Common Notification Settings",
-                    "size": 2
-                },
-                "checkSendOfflineMsg": {
-                    "type":"checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Offline message",
-                    "help": "Get message if an device is not reachable"
-                },
-                "checkSendOfflineMsgDaily": {
-                    "type":"checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Overview of offline devices",
-                    "help": "Get a message with an overview all offline devices"
-                },
-                "_sendIntervallOfflineDay": {
-                    "newLine": true,
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 6,
-                    "hidden": "!data.checkSendOfflineMsgDaily",
-                    "hideOnlyControl": true,
-                    "items": {
-                        "_textDays": {
-                            "type": "staticText",
-                            "text": "Choose the day(s) where you want to get the overview of offline devices:",
-                            "style": {
-                                "fontSize": 16,
-                                "marginTop": 20
-                            }
-                        },
-                        "checkOfflineMonday": {
-                            "newLine": true,
-                            "type": "checkbox",
-                            "label": "Mon"
-                        },
-                        "checkOfflineTuesday": {
-                            "type": "checkbox",
-                            "label": "Tue"
-                        },
-                        "checkOfflineWednesday": {
-                            "type": "checkbox",
-                            "label": "Wed"
-                        },
-                        "checkOfflineThursday": {
-                            "type": "checkbox",
-                            "label": "Thu"
-                        },
-                        "checkOfflineFriday": {
-                            "type": "checkbox",
-                            "label": "Fri"
-                        },
-                        "checkOfflineSaturday": {
-                            "type": "checkbox",
-                            "label": "Sat"
-                        },
-                        "checkOfflineSunday": {
-                            "type": "checkbox",
-                            "label": "Sun"
-                        }
-                    }
-                },
-                "_sendIntervallOfflineTime": {
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 6,
-                    "hidden": "!data.checkSendOfflineMsgDaily",
-                    "hideOnlyControl": true,
-                    "items": {
-                        "_textTime": {
-                            "type": "staticText",
-                            "text": "Choose the Time:",
-                            "style": {
-                                "fontSize": 16,
-                                "marginTop": 20
-                            }
-                        },
-                        "checkSendOfflineTime": {
-                            "newLine": true,
-                            "type": "text",
-                            "help": "Format hh:mm"
-                        }
-                    }
-                },
-                "trenner": {
-                    "newLine": true,
-                    "type": "divider"
-                },
-                "checkSendBatteryMsg": {
-                    "newLine": "true",
-                    "type":"checkbox",
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 6,
-                    "label": "Battery message",
-                    "help": "Get message if an device has low battery"
-                },
-                "minWarnBatterie": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100,
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 4,
-                    "label": "From how much min % would you get a message",
-                    "help": "in percent",
-                    "hidden": "!data.checkSendBatteryMsg",
-                    "hideOnlyControl": true
-                },
-                "chooseDay": {
-                    "newLine": true,
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 6,
-                    "hidden": "!data.checkSendBatteryMsg",
-                    "hideOnlyControl": true,
-                    "items": {
-                        "_textDays": {
-                            "type": "staticText",
-                            "text": "Choose the day(s) where you want to get the message of low battery:",
-                            "style": {
-                                "fontSize": 16,
-                                "marginTop": 20
-                            }
-                        },
-                        "checkMonday": {
-                            "newLine": true,
-                            "type": "checkbox",
-                            "label": "Mon"
-                        },
-                        "checkTuesday": {
-                            "type": "checkbox",
-                            "label": "Tue"
-                        },
-                        "checkWednesday": {
-                            "type": "checkbox",
-                            "label": "Wed"
-                        },
-                        "checkThursday": {
-                            "type": "checkbox",
-                            "label": "Thu"
-                        },
-                        "checkFriday": {
-                            "type": "checkbox",
-                            "label": "Fri"
-                        },
-                        "checkSaturday": {
-                            "type": "checkbox",
-                            "label": "Sat"
-                        },
-                        "checkSunday": {
-                            "type": "checkbox",
-                            "label": "Sun"
-                        }
-                    }
-                },
-                "_checkSendBatteryTime": {
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 6,
-                    "hidden": "!data.checkSendBatteryMsg",
-                    "hideOnlyControl": true,
-                    "items": {
-                        "_textTime": {
-                            "type": "staticText",
-                            "text": "Choose the Time:",
-                            "style": {
-                                "fontSize": 16,
-                                "marginTop": 20
-                            }
-                        },
-                        "checkSendBatteryTime": {
-                            "newLine": true,
-                            "type": "text",
-                            "help": "Format hh:mm"
-                        }
-                    }
-                },
-                "_headerMSGservice": {
-                    "newLine": true,
-                    "type": "header", 
-                    "text": "Notification Service",
-                    "size": 2,
-                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
-                    "hideOnlyControl": false
-                },
-                "msgServiceText": {
-                    "type": "staticText",
-                    "text": "Here you can choose your notification service, you can use more than one service, but you can also leave all blank, then only the datapoint lastNotification will be filled.",
-                    "style": {
-                        "fontSize": 16,
-                        "marginTop": 20
-                    },
-                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
-                    "hideOnlyControl": false
-                },
-                "msgService": {
-                    "newLine": true,
-                    "type": "select",
-                    "help": "Choose your notification services",
-                    "options": [{"label":"Please choose", "value": "none"},
-                                {"label":"Pushover", "value": "pushover"}, 
-                                {"label":"Telegram", "value": "telegram"},
-                                {"label":"Whatsapp", "value": "whatsapp"},
-                                {"label":"E-Mail", "value": "email"},
-                                {"label":"Jarvis", "value": "jarvis"},
-                                {"label":"Lovelace", "value": "lovelace"}],
-                    "default": "none",
-                    "hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
-                    "hideOnlyControl": false
-                },
-                "_headerPushover": {
-                    "newLine": true,
-                    "type": "header", 
-                    "text": "Pushover",
-                    "size": 2,
-                    "hidden": "data.msgService !== 'pushover'",
-                    "hideOnlyControl": false
-                },
-                "instancePushover": {
-                    "newLine": true,
-                    "type": "instance",
-                    "adapter": "pushover",
-                    "all": false,
-                    "allowDeactivate": true,
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Pushover Instance",
-                    "help": "Please choose the pushover instance",
-                    "hidden": "data.msgService !== 'pushover'",
-                    "hideOnlyControl": false
-                },
-                "devicePushover": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Device-ID (optional)",
-                    "help": "Choose your device",
-                    "hidden": "data.msgService !== 'pushover'",
-                    "hideOnlyControl": false
-                },
-                "prioPushover": {
-                    "type": "select",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "help": "Choose the priority",
-                    "options": [
-                        {"label": "Normal", "value": ""}, 
-                        {"label": "High Priority", "value": 1},
-                        {"label": "Silent", "value": -1},
-                        {"label": "With confirmation", "value": 2}
-                    ],
-                    "hidden": "data.msgService !== 'pushover'",
-                    "hideOnlyControl": false
-                },
-                "titlePushover": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Title (optional)",
-                    "help": "Choose your title for Pushmessage",
-                    "hidden": "data.msgService !== 'pushover'",
-                    "hideOnlyControl": false
-                },
-                "headerTelegram": {
-                    "newLine": "true",
-                    "type": "header", 
-                    "text": "Telegram",
-                    "size": 2,
-                    "hidden": "data.msgService !== 'telegram'",
-                    "hideOnlyControl": false
-                },
-                "instanceTelegram": {
-                    "newLine": true,
-                    "type": "instance",
-                    "adapter": "telegram",
-                    "all": false,
-                    "allowDeactivate": true,
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Telegram Instance",
-                    "help": "Please choose the telegram instance",
-                    "hidden": "data.msgService !== 'telegram'",
-                    "hideOnlyControl": false
-                },
-                "deviceTelegram": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Device-ID (optional)",
-                    "help": "Choose your device",
-                    "hidden": "data.msgService !== 'telegram'",
-                    "hideOnlyControl": false
-                },
-                "chatIdTelegram": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Chat-ID (optional)",
-                    "help": "Choose your Chat-ID",
-                    "hidden": "data.msgService !== 'telegram'",
-                    "hideOnlyControl": false
-                },
-                "headerWhatsapp": {
-                    "newLine": "true",
-                    "type": "header", 
-                    "text": "Whatsapp",
-                    "size": 2,
-                    "hidden": "data.msgService !== 'whatsapp'",
-                    "hideOnlyControl": false
-                },
-                "instanceWhatsapp": {
-                    "newLine": true,
-                    "type": "instance",
-                    "adapter": "whatsapp-cmb",
-                    "all": false,
-                    "allowDeactivate": true,
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Whatsapp Instance",
-                    "help": "Please choose the Whatsapp instance",
-                    "hidden": "data.msgService !== 'whatsapp'",
-                    "hideOnlyControl": false
-                },
-                "phoneWhatapp": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Recipient (optional)",
-                    "help": "Choose your recipient",
-                    "hidden": "data.msgService !== 'whatsapp'",
-                    "hideOnlyControl": false
-                },
-                "_headerEmail": {
-                    "newLine": true,
-                    "type": "header", 
-                    "text": "Email",
-                    "size": 2,
-                    "hidden": "data.msgService !== 'email'",
-                    "hideOnlyControl": false
-                },
-                "instanceEmail": {
-                    "newLine": true,
-                    "type": "instance",
-                    "adapter": "email",
-                    "all": false,
-                    "allowDeactivate": true,
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Email Instance",
-                    "help": "Please choose the email instance",
-                    "hidden": "data.msgService !== 'email'",
-                    "hideOnlyControl": false
-                },
-                "sendToEmail": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Send to (optional)",
-                    "help": "Choose your email address",
-                    "hidden": "data.msgService !== 'email'",
-                    "hideOnlyControl": false
-                },
-                "subjectEmail": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Subject (optional)",
-                    "help": "Choose your subject for the Email",
-                    "hidden": "data.msgService !== 'email'",
-                    "hideOnlyControl": false
-                },
-                "headerJarvis": {
-                    "newLine": "true",
-                    "type": "header", 
-                    "text": "Jarvis Notification",
-                    "size": 2,
-                    "hidden": "data.msgService !== 'jarvis'",
-                    "hideOnlyControl": false
-                },
-                "instanceJarvis": {
-                    "newLine": true,
-                    "type": "instance",
-                    "adapter": "jarvis",
-                    "allowDeactivate": true,
-                    "all": false,
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Jarvis Instance",
-                    "help": "Please choose the jarvis instance",
-                    "hidden": "data.msgService !== 'jarvis'",
-                    "hideOnlyControl": false
-                },
-                "titleJarvis": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Title (optional)",
-                    "help": "Choose your title for Pushmessage",
-                    "hidden": "data.msgService !== 'jarvis'",
-                    "hideOnlyControl": false
-                },
-                "headerLovelace": {
-                    "newLine": "true",
-                    "type": "header", 
-                    "text": "Lovelace Notification",
-                    "size": 2,
-                    "hidden": "data.msgService !== 'lovelace'",
-                    "hideOnlyControl": false
-                },
-                "instanceLovelace": {
-                    "newLine": true,
-                    "type": "instance",
-                    "adapter": "lovelace",
-                    "allowDeactivate": true,
-                    "all": false,
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Lovelace Instance",
-                    "help": "Please choose the lovelace instance",
-                    "hidden": "data.msgService !== 'lovelace'",
-                    "hideOnlyControl": false
-                },
-                "titleLovelace": {
-                    "type": "text",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Title (optional)",
-                    "help": "Choose your title for Pushmessage",
-                    "hidden": "data.msgService !== 'lovelace'",
-                    "hideOnlyControl": false
-                }
-            } 
-        },
-        "_blacklist": {
-            "type": "panel",
-            "label": "Blacklist",
-            "items": {
-                "tableBlacklist": {
-                    "type": "table",
-                    "label": "Blacklist",
-                    "nodelete": true,
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 12,
-                    "items": [
-                        {
-                            "type": "selectSendTo",
-                            "title": "Choose which devices should be excluded",
-                            "attr": "devices",
-                            "filter": false,
-                            "allowAddByFilter": false,
-                            "sort": false,
-                            "jsonData": "{\"deviceName\":\"${globalData.deviceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
-                            "command": "devicesList",
-                            "width": "60%"
-                        }, 
-                        {
-                            "type":"checkbox",
-                            "title": "Ignor in notifications",
-                            "attr": "checkIgnorNotify",
-                            "width": "15%",
-                            "alsoDependsOn":[
-                                "devices"
-                            ]
-                        },
-                        {
-                            "type":"checkbox",
-                            "title": "Ignor in lists",
-                            "attr": "checkIgnorLists",
-                            "width": "10%",
-                            "alsoDependsOn":[
-                                "devices"
-                            ]
-                        }
-
-                    ]
-                }
-            }
-        },
-        "_expertSettings": {
-            "type": "panel",
-            "label": "Expert Settings",
-            "items": {
-                "_headerOtherSettings": {
-                    "type": "header", 
-                    "text": "Other Settings",
-                    "size": 2
-                },
-                "trueState": {
-                    "newLine": true,
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "True State",
-                    "help": "Use the true value of the signal strength, or it is converted to %"
-                },
-                "listOnlyBattery": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "List only devices with batteries",
-                    "help": "Choose if only devices with batteries should be listed or all devices"
-                },
-                "createOwnFolder": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "Create own folders for each adapter",
-                    "help": "If you like to have for every Adapter an own folder with own data"
-                },
-                "createHtmlList": {
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 6,
-                    "lg": 4,
-                    "label": "Create additionally HTML lists",
-                    "help": "Create the lists also in HTML"
-                },
-                "_updateInterval": {
-                    "type": "header", 
-                    "text": "Update-Interval",
-                    "size": 2
-                },
-                "textUpdateInterval": {
-                    "type": "staticText",
-                    "text": "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.",
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 12,
-                    "style": {
-                        "fontSize": 16,
-                        "marginBottom": 10
-                    }
-            },
-            "updateinterval": {
-                "type": "number",
-                "min": 2,
-                "max": 100000,
-                "sm": 6,
-                "md": 6,
-                "lg": 3,
-                "label": "Update-Interval",
-                "help": "in seconds"
-            },
-                "_headerOfflineTime": {
-                    "type": "header", 
-                    "text": "Offline Time",
-                    "size": 2
-                },
-                "textOfflineTime": {
-                    "type": "staticText",
-                    "text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
-                    "sm": 12,
-                    "md": 12,
-                    "lg": 12,
-                    "style": {
-                        "fontSize": 16,
-                        "marginBottom": 10
-                    }
-            },
-            "alexa2MaxMinutes": {
-                "type": "number",
-                "min": -1,
-                "max": 100000,
-                "sm": 6,
-                "md": 6,
-                "lg": 3,
-                "label": "Alexa2",
-                "help": "in minutes",
-                "hidden": "!data.alexa2Devices",
-                "hideOnlyControl": false
-            },
-            "bleMaxMinutes": {
-                "type": "number",
-                "min": 1,
-                "max": 100000,
-                "sm": 6,
-                "md": 6,
-                "lg": 3,
-                "label": "Ble",
-                "help": "in minutes",
-                "hidden": "!data.bleDevices",
-                "hideOnlyControl": false
-            },
-            "deconzMaxMinutes": {
-                "type": "number",
-                "min": -1,
-                "max": 100000,
-                "sm": 6,
-                "md": 6,
-                "lg": 3,
-                "label": "Deconz",
-                "help": "in minutes",
-                "hidden": "!data.deconzDevices",
-                "hideOnlyControl": false
-            },
-            "enoceanMaxMinutes": {
-                "type": "number",
-                "min": 1,
-                "max": 100000,
-                "sm": 6,
-                "md": 6,
-                "lg": 3,
-                "label": "Enocean",
-                "help": "in minutes",
-                "hidden": "!data.enoceanDevices",
-                "hideOnlyControl": false
-            },
-            "esphomeMaxMinutes": {
-                "type": "number",
-                "min": -1,
-                "max": 100000,
-                "sm": 6,
-                "md": 6,
-                "lg": 3,
-                "label": "EspHome",
-                "help": "in minutes",
-                "hidden": "!data.esphomeDevices",
-                "hideOnlyControl": false
-            },
-            "fritzdectMaxMinutes": {
-                "type": "number",
-                "min": -1,
-                "max": 100000,
-                "sm": 6,
-                "md": 6,
-                "lg": 3,
-                "label": "FritzDect",
-                "help": "in minutes",
-                "hidden": "!data.fritzdectDevices",
-                "hideOnlyControl": false
-                },
-                "hamMaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Ham",
-                    "help": "in minutes",
-                    "hidden": "!data.hamDevices",
-                    "hideOnlyControl": false
-                },
-                "harmonyMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Harmony",
-                    "help": "in minutes",
-                    "hidden": "!data.harmonyDevices",
-                    "hideOnlyControl": false
-                },
-                "hmiPMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "HmiP",
-                    "help": "in minutes",
-                    "hidden": "!data.hmiPDevices",
-                    "hideOnlyControl": false
-                },
-                "hmrpcMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "HM-RPC",
-                    "help": "in minutes",
-                    "hidden": "!data.hmrpcDevices",
-                    "hideOnlyControl": false
-                },
-                "hs100MaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "hs100",
-                    "help": "in minutes",
-                    "hidden": "!data.hs100Devices",
-                    "hideOnlyControl": false
-                },
-                "hueMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Hue",
-                    "help": "in minutes",
-                    "hidden": "!data.hueDevices",
-                    "hideOnlyControl": false
-                },
-                "hueextMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "HueExtended",
-                    "help": "in minutes",
-                    "hidden": "!data.hueExtDevices",
-                    "hideOnlyControl": false
-                },
-                "jeelinkMaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Jeelink",
-                    "help": "in minutes",
-                    "hidden": "!data.jeelinkDevices",
-                    "hideOnlyControl": false
-                },
-                "lupusecMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Lupusec",
-                    "help": "in minutes",
-                    "hidden": "!data.lupusecDevices",
-                    "hideOnlyControl": false
-                },
-                "maxcubeMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Maxcube",
-                    "help": "in minutes",
-                    "hidden": "!data.maxcubeDevices",
-                    "hideOnlyControl": false
-                },
-                "merossMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Meross",
-                    "help": "in minutes",
-                    "hidden": "!data.merossDevices",
-                    "hideOnlyControl": false
-                },
-                "mihomeMaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "MiHome",
-                    "help": "in minutes",
-                    "hidden": "!data.mihomeDevices",
-                    "hideOnlyControl": false
-                },
-                "mihomeGWMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "MiHome Gateway",
-                    "help": "in minutes",
-                    "hidden": "!data.mihomeDevices",
-                    "hideOnlyControl": false
-                },
-                "mihomeVacuumMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Mihome Vacuum",
-                    "help": "in minutes",
-                    "hidden": "!data.mihomeVacuumDevices",
-                    "hideOnlyControl": false
-                },
-                "netatmoMaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Netatmo",
-                    "help": "in minutes",
-                    "hidden": "!data.netatmoDevices",
-                    "hideOnlyControl": false
-                },
-                "nukiextendMaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Nuki Extended",
-                    "help": "in minutes",
-                    "hidden": "!data.nukiExtDevices",
-                    "hideOnlyControl": false
-                },
-                "nutMaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Nut",
-                    "help": "in minutes",
-                    "hidden": "!data.nutDevices",
-                    "hideOnlyControl": false
-                },
-                "pingMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Ping",
-                    "help": "in minutes",
-                    "hidden": "!data.pingDevices",
-                    "hideOnlyControl": false
-                },
-                "roombaMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Roomba",
-                    "help": "in minutes",
-                    "hidden": "!data.roombaDevices",
-                    "hideOnlyControl": false
-                },
-                "shellyMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Shelly",
-                    "help": "in minutes",
-                    "hidden": "!data.shellyDevices",
-                    "hideOnlyControl": false
-                },
-                "sonoffMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Sonoff",
-                    "help": "in minutes",
-                    "hidden": "!data.sonoffDevices",
-                    "hideOnlyControl": false
-                },
-                "sonosMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Sonos",
-                    "help": "in minutes",
-                    "hidden": "!data.sonosDevices",
-                    "hideOnlyControl": false
-                },
-                "switchbotMaxMinutes": {
-                    "type": "number",
-                    "min": 1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Switchbot Ble",
-                    "help": "in minutes",
-                    "hidden": "!data.switchbotBleDevices",
-                    "hideOnlyControl": false
-                },
-                "tadoMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Tado",
-                    "help": "in minutes",
-                    "hidden": "!data.tadoDevices",
-                    "hideOnlyControl": false
-                },
-                "tradfriMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Tradfri",
-                    "help": "in minutes",
-                    "hidden": "!data.tradfriDevices",
-                    "hideOnlyControl": false
-                },
-                "unifiMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Unifi",
-                    "help": "in minutes",
-                    "hidden": "!data.unifiDevices",
-                    "hideOnlyControl": false
-                },
-                "wledMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "WLED",
-                    "help": "in minutes",
-                    "hidden": "!data.wledDevices",
-                    "hideOnlyControl": false
-                },
-                "yeelightMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Yeelight-2",
-                    "help": "in minutes",
-                    "hidden": "!data.yeelightDevices",
-                    "hideOnlyControl": false
-                },
-                "zigbeeMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zigbee",
-                    "help": "in minutes",
-                    "hidden": "!data.zigbeeDevices",
-                    "hideOnlyControl": false
-                },
-                "zigbee2mqttMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zigbee2MQTT",
-                    "help": "in minutes",
-                    "hidden": "!data.zigbee2mqttDevices",
-                    "hideOnlyControl": false
-                },
-                "zwaveMaxMinutes": {
-                    "type": "number",
-                    "min": -1,
-                    "max": 100000,
-                    "sm": 6,
-                    "md": 6,
-                    "lg": 3,
-                    "label": "Zwave",
-                    "help": "in minutes",
-                    "hidden": "!data.zwaveDevices",
-                    "hideOnlyControl": false
-                }
-            }
-        }
-    }
+	"i18n": true,
+	"type": "tabs",
+	"items": {
+		"_options": {
+			"type": "panel",
+			"label": "Options",
+			"items": {
+				"_headerDevices": {
+					"type": "header",
+					"text": "Choose devices to watch",
+					"size": 2
+				},
+				"alexa2Devices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Alexa2"
+				},
+				"bleDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Ble"
+				},
+				"deconzDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Deconz"
+				},
+				"enoceanDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Enocean"
+				},
+				"esphomeDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "EspHome"
+				},
+				"fritzdectDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "FritzDect"
+				},
+				"hamDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Ham"
+				},
+				"harmonyDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Harmony"
+				},
+				"hmiPDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "HmiP"
+				},
+				"hmrpcDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "HM-RPC"
+				},
+				"hs100Devices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "hs100"
+				},
+				"hueDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Hue"
+				},
+				"hueExtDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Hue Extended"
+				},
+				"jeelinkDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Jeelink"
+				},
+				"lupusecDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Lupusec"
+				},
+				"maxcubeDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Maxcube"
+				},
+				"merossDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Meross"
+				},
+				"mihomeDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MiHome"
+				},
+				"mihomeVacuumDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MiHome Vacuum"
+				},
+				"netatmoDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Netatmo"
+				},
+				"nukiExtDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Nuki Extended"
+				},
+				"nutDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Nut"
+				},
+				"pingDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Ping"
+				},
+				"roombaDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Roomba"
+				},
+				"shellyDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Shelly"
+				},
+				"sonoffDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Sonoff"
+				},
+				"sonosDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Sonos"
+				},
+				"switchbotBleDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Switchbot Ble"
+				},
+				"tadoDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tado"
+				},
+				"tradfriDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tradfri"
+				},
+				"unifiDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Unifi"
+				},
+				"wledDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "WLED"
+				},
+				"yeelightDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Yeelight-2"
+				},
+				"zigbeeDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Zigbee"
+				},
+				"zigbee2mqttDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Zigbee2MQTT"
+				},
+				"zwaveDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Zwave"
+				}
+			}
+		},
+		"_notifications": {
+			"type": "panel",
+			"label": "Notifications",
+			"items": {
+				"_headerCommon": {
+					"type": "header",
+					"text": "Common Notification Settings",
+					"size": 2
+				},
+				"checkSendOfflineMsg": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 3,
+					"label": "Offline message",
+					"help": "Get message if an device is not reachable"
+				},
+				"checkSendOfflineMsgDaily": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 3,
+					"label": "Overview of offline devices",
+					"help": "Get a message with an overview all offline devices"
+				},
+				"_sendIntervallOfflineDay": {
+					"newLine": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendOfflineMsgDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textDays": {
+							"type": "staticText",
+							"text": "Choose the day(s) where you want to get the overview of offline devices:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkOfflineMonday": {
+							"newLine": true,
+							"type": "checkbox",
+							"label": "Mon"
+						},
+						"checkOfflineTuesday": {
+							"type": "checkbox",
+							"label": "Tue"
+						},
+						"checkOfflineWednesday": {
+							"type": "checkbox",
+							"label": "Wed"
+						},
+						"checkOfflineThursday": {
+							"type": "checkbox",
+							"label": "Thu"
+						},
+						"checkOfflineFriday": {
+							"type": "checkbox",
+							"label": "Fri"
+						},
+						"checkOfflineSaturday": {
+							"type": "checkbox",
+							"label": "Sat"
+						},
+						"checkOfflineSunday": {
+							"type": "checkbox",
+							"label": "Sun"
+						}
+					}
+				},
+				"_sendIntervallOfflineTime": {
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendOfflineMsgDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textTime": {
+							"type": "staticText",
+							"text": "Choose the Time:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkSendOfflineTime": {
+							"newLine": true,
+							"type": "text",
+							"help": "Format hh:mm"
+						}
+					}
+				},
+				"trenner": {
+					"newLine": true,
+					"type": "divider"
+				},
+				"checkSendBatteryMsg": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Battery message",
+					"help": "Get message if an device has low battery"
+				},
+				"minWarnBatterie": {
+					"type": "number",
+					"min": -1,
+					"max": 100,
+					"sm": 12,
+					"md": 12,
+					"lg": 4,
+					"label": "From how much min % would you get a message",
+					"help": "in percent",
+					"hidden": "!data.checkSendBatteryMsg",
+					"hideOnlyControl": true
+				},
+				"chooseDay": {
+					"newLine": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendBatteryMsg",
+					"hideOnlyControl": true,
+					"items": {
+						"_textDays": {
+							"type": "staticText",
+							"text": "Choose the day(s) where you want to get the message of low battery:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkMonday": {
+							"newLine": true,
+							"type": "checkbox",
+							"label": "Mon"
+						},
+						"checkTuesday": {
+							"type": "checkbox",
+							"label": "Tue"
+						},
+						"checkWednesday": {
+							"type": "checkbox",
+							"label": "Wed"
+						},
+						"checkThursday": {
+							"type": "checkbox",
+							"label": "Thu"
+						},
+						"checkFriday": {
+							"type": "checkbox",
+							"label": "Fri"
+						},
+						"checkSaturday": {
+							"type": "checkbox",
+							"label": "Sat"
+						},
+						"checkSunday": {
+							"type": "checkbox",
+							"label": "Sun"
+						}
+					}
+				},
+				"_checkSendBatteryTime": {
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendBatteryMsg",
+					"hideOnlyControl": true,
+					"items": {
+						"_textTime": {
+							"type": "staticText",
+							"text": "Choose the Time:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkSendBatteryTime": {
+							"newLine": true,
+							"type": "text",
+							"help": "Format hh:mm"
+						}
+					}
+				},
+				"_headerMSGservice": {
+					"newLine": true,
+					"type": "header",
+					"text": "Notification Service",
+					"size": 2,
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hideOnlyControl": false
+				},
+				"msgServiceText": {
+					"type": "staticText",
+					"text": "Here you can choose your notification service, you can use more than one service, but you can also leave all blank, then only the datapoint lastNotification will be filled.",
+					"style": {
+						"fontSize": 16,
+						"marginTop": 20
+					},
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hideOnlyControl": false
+				},
+				"msgService": {
+					"newLine": true,
+					"type": "select",
+					"help": "Choose your notification services",
+					"options": [
+						{ "label": "Please choose", "value": "none" },
+						{ "label": "Pushover", "value": "pushover" },
+						{ "label": "Telegram", "value": "telegram" },
+						{ "label": "Whatsapp", "value": "whatsapp" },
+						{ "label": "E-Mail", "value": "email" },
+						{ "label": "Jarvis", "value": "jarvis" },
+						{ "label": "Lovelace", "value": "lovelace" }
+					],
+					"default": "none",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hideOnlyControl": false
+				},
+				"_headerPushover": {
+					"newLine": true,
+					"type": "header",
+					"text": "Pushover",
+					"size": 2,
+					"hidden": "data.msgService !== 'pushover'",
+					"hideOnlyControl": false
+				},
+				"instancePushover": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "pushover",
+					"all": false,
+					"allowDeactivate": true,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Pushover Instance",
+					"help": "Please choose the pushover instance",
+					"hidden": "data.msgService !== 'pushover'",
+					"hideOnlyControl": false
+				},
+				"devicePushover": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Device-ID (optional)",
+					"help": "Choose your device",
+					"hidden": "data.msgService !== 'pushover'",
+					"hideOnlyControl": false
+				},
+				"prioPushover": {
+					"type": "select",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"help": "Choose the priority",
+					"options": [
+						{ "label": "Normal", "value": "" },
+						{ "label": "High Priority", "value": 1 },
+						{ "label": "Silent", "value": -1 },
+						{ "label": "With confirmation", "value": 2 }
+					],
+					"hidden": "data.msgService !== 'pushover'",
+					"hideOnlyControl": false
+				},
+				"titlePushover": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Title (optional)",
+					"help": "Choose your title for Pushmessage",
+					"hidden": "data.msgService !== 'pushover'",
+					"hideOnlyControl": false
+				},
+				"headerTelegram": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Telegram",
+					"size": 2,
+					"hidden": "data.msgService !== 'telegram'",
+					"hideOnlyControl": false
+				},
+				"instanceTelegram": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "telegram",
+					"all": false,
+					"allowDeactivate": true,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Telegram Instance",
+					"help": "Please choose the telegram instance",
+					"hidden": "data.msgService !== 'telegram'",
+					"hideOnlyControl": false
+				},
+				"deviceTelegram": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Device-ID (optional)",
+					"help": "Choose your device",
+					"hidden": "data.msgService !== 'telegram'",
+					"hideOnlyControl": false
+				},
+				"chatIdTelegram": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Chat-ID (optional)",
+					"help": "Choose your Chat-ID",
+					"hidden": "data.msgService !== 'telegram'",
+					"hideOnlyControl": false
+				},
+				"headerWhatsapp": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Whatsapp",
+					"size": 2,
+					"hidden": "data.msgService !== 'whatsapp'",
+					"hideOnlyControl": false
+				},
+				"instanceWhatsapp": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "whatsapp-cmb",
+					"all": false,
+					"allowDeactivate": true,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Whatsapp Instance",
+					"help": "Please choose the Whatsapp instance",
+					"hidden": "data.msgService !== 'whatsapp'",
+					"hideOnlyControl": false
+				},
+				"phoneWhatapp": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Recipient (optional)",
+					"help": "Choose your recipient",
+					"hidden": "data.msgService !== 'whatsapp'",
+					"hideOnlyControl": false
+				},
+				"_headerEmail": {
+					"newLine": true,
+					"type": "header",
+					"text": "Email",
+					"size": 2,
+					"hidden": "data.msgService !== 'email'",
+					"hideOnlyControl": false
+				},
+				"instanceEmail": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "email",
+					"all": false,
+					"allowDeactivate": true,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Email Instance",
+					"help": "Please choose the email instance",
+					"hidden": "data.msgService !== 'email'",
+					"hideOnlyControl": false
+				},
+				"sendToEmail": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Send to (optional)",
+					"help": "Choose your email address",
+					"hidden": "data.msgService !== 'email'",
+					"hideOnlyControl": false
+				},
+				"subjectEmail": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Subject (optional)",
+					"help": "Choose your subject for the Email",
+					"hidden": "data.msgService !== 'email'",
+					"hideOnlyControl": false
+				},
+				"headerJarvis": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Jarvis Notification",
+					"size": 2,
+					"hidden": "data.msgService !== 'jarvis'",
+					"hideOnlyControl": false
+				},
+				"instanceJarvis": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "jarvis",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Jarvis Instance",
+					"help": "Please choose the jarvis instance",
+					"hidden": "data.msgService !== 'jarvis'",
+					"hideOnlyControl": false
+				},
+				"titleJarvis": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Title (optional)",
+					"help": "Choose your title for Pushmessage",
+					"hidden": "data.msgService !== 'jarvis'",
+					"hideOnlyControl": false
+				},
+				"headerLovelace": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Lovelace Notification",
+					"size": 2,
+					"hidden": "data.msgService !== 'lovelace'",
+					"hideOnlyControl": false
+				},
+				"instanceLovelace": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "lovelace",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Lovelace Instance",
+					"help": "Please choose the lovelace instance",
+					"hidden": "data.msgService !== 'lovelace'",
+					"hideOnlyControl": false
+				},
+				"titleLovelace": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Title (optional)",
+					"help": "Choose your title for Pushmessage",
+					"hidden": "data.msgService !== 'lovelace'",
+					"hideOnlyControl": false
+				}
+			}
+		},
+		"_blacklist": {
+			"type": "panel",
+			"label": "Blacklist",
+			"items": {
+				"tableBlacklist": {
+					"type": "table",
+					"label": "Blacklist",
+					"nodelete": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"items": [
+						{
+							"type": "selectSendTo",
+							"title": "Choose which devices should be excluded",
+							"attr": "devices",
+							"filter": false,
+							"allowAddByFilter": false,
+							"sort": false,
+							"jsonData": "{\"deviceName\":\"${globalData.deviceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
+							"command": "devicesList",
+							"width": "60%"
+						},
+						{
+							"type": "checkbox",
+							"title": "Ignor in notifications",
+							"attr": "checkIgnorNotify",
+							"width": "15%",
+							"alsoDependsOn": ["devices"]
+						},
+						{
+							"type": "checkbox",
+							"title": "Ignor in lists",
+							"attr": "checkIgnorLists",
+							"width": "10%",
+							"alsoDependsOn": ["devices"]
+						}
+					]
+				}
+			}
+		},
+		"_expertSettings": {
+			"type": "panel",
+			"label": "Expert Settings",
+			"items": {
+				"_headerOtherSettings": {
+					"type": "header",
+					"text": "Other Settings",
+					"size": 2
+				},
+				"trueState": {
+					"newLine": true,
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 4,
+					"label": "True State",
+					"help": "Use the true value of the signal strength, or it is converted to %"
+				},
+				"listOnlyBattery": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 4,
+					"label": "List only devices with batteries",
+					"help": "Choose if only devices with batteries should be listed or all devices"
+				},
+				"createOwnFolder": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 4,
+					"label": "Create own folders for each adapter",
+					"help": "If you like to have for every Adapter an own folder with own data"
+				},
+				"createHtmlList": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 4,
+					"label": "Create additionally HTML lists",
+					"help": "Create the lists also in HTML"
+				},
+				"_updateInterval": {
+					"type": "header",
+					"text": "Update-Interval",
+					"size": 2
+				},
+				"textUpdateInterval": {
+					"type": "staticText",
+					"text": "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.",
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"style": {
+						"fontSize": 16,
+						"marginBottom": 10
+					}
+				},
+				"updateinterval": {
+					"type": "number",
+					"min": 2,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Update-Interval",
+					"help": "in seconds"
+				},
+				"_headerOfflineTime": {
+					"type": "header",
+					"text": "Offline Time",
+					"size": 2
+				},
+				"textOfflineTime": {
+					"type": "staticText",
+					"text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"style": {
+						"fontSize": 16,
+						"marginBottom": 10
+					}
+				},
+				"alexa2MaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Alexa2",
+					"help": "in minutes",
+					"hidden": "!data.alexa2Devices",
+					"hideOnlyControl": false
+				},
+				"bleMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Ble",
+					"help": "in minutes",
+					"hidden": "!data.bleDevices",
+					"hideOnlyControl": false
+				},
+				"deconzMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Deconz",
+					"help": "in minutes",
+					"hidden": "!data.deconzDevices",
+					"hideOnlyControl": false
+				},
+				"enoceanMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Enocean",
+					"help": "in minutes",
+					"hidden": "!data.enoceanDevices",
+					"hideOnlyControl": false
+				},
+				"esphomeMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "EspHome",
+					"help": "in minutes",
+					"hidden": "!data.esphomeDevices",
+					"hideOnlyControl": false
+				},
+				"fritzdectMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "FritzDect",
+					"help": "in minutes",
+					"hidden": "!data.fritzdectDevices",
+					"hideOnlyControl": false
+				},
+				"hamMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Ham",
+					"help": "in minutes",
+					"hidden": "!data.hamDevices",
+					"hideOnlyControl": false
+				},
+				"harmonyMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Harmony",
+					"help": "in minutes",
+					"hidden": "!data.harmonyDevices",
+					"hideOnlyControl": false
+				},
+				"hmiPMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "HmiP",
+					"help": "in minutes",
+					"hidden": "!data.hmiPDevices",
+					"hideOnlyControl": false
+				},
+				"hmrpcMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "HM-RPC",
+					"help": "in minutes",
+					"hidden": "!data.hmrpcDevices",
+					"hideOnlyControl": false
+				},
+				"hs100MaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "hs100",
+					"help": "in minutes",
+					"hidden": "!data.hs100Devices",
+					"hideOnlyControl": false
+				},
+				"hueMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Hue",
+					"help": "in minutes",
+					"hidden": "!data.hueDevices",
+					"hideOnlyControl": false
+				},
+				"hueextMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "HueExtended",
+					"help": "in minutes",
+					"hidden": "!data.hueExtDevices",
+					"hideOnlyControl": false
+				},
+				"jeelinkMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Jeelink",
+					"help": "in minutes",
+					"hidden": "!data.jeelinkDevices",
+					"hideOnlyControl": false
+				},
+				"lupusecMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Lupusec",
+					"help": "in minutes",
+					"hidden": "!data.lupusecDevices",
+					"hideOnlyControl": false
+				},
+				"maxcubeMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Maxcube",
+					"help": "in minutes",
+					"hidden": "!data.maxcubeDevices",
+					"hideOnlyControl": false
+				},
+				"merossMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Meross",
+					"help": "in minutes",
+					"hidden": "!data.merossDevices",
+					"hideOnlyControl": false
+				},
+				"mihomeMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MiHome",
+					"help": "in minutes",
+					"hidden": "!data.mihomeDevices",
+					"hideOnlyControl": false
+				},
+				"mihomeGWMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MiHome Gateway",
+					"help": "in minutes",
+					"hidden": "!data.mihomeDevices",
+					"hideOnlyControl": false
+				},
+				"mihomeVacuumMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Mihome Vacuum",
+					"help": "in minutes",
+					"hidden": "!data.mihomeVacuumDevices",
+					"hideOnlyControl": false
+				},
+				"netatmoMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Netatmo",
+					"help": "in minutes",
+					"hidden": "!data.netatmoDevices",
+					"hideOnlyControl": false
+				},
+				"nukiextendMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Nuki Extended",
+					"help": "in minutes",
+					"hidden": "!data.nukiExtDevices",
+					"hideOnlyControl": false
+				},
+				"nutMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Nut",
+					"help": "in minutes",
+					"hidden": "!data.nutDevices",
+					"hideOnlyControl": false
+				},
+				"pingMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Ping",
+					"help": "in minutes",
+					"hidden": "!data.pingDevices",
+					"hideOnlyControl": false
+				},
+				"roombaMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Roomba",
+					"help": "in minutes",
+					"hidden": "!data.roombaDevices",
+					"hideOnlyControl": false
+				},
+				"shellyMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Shelly",
+					"help": "in minutes",
+					"hidden": "!data.shellyDevices",
+					"hideOnlyControl": false
+				},
+				"sonoffMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Sonoff",
+					"help": "in minutes",
+					"hidden": "!data.sonoffDevices",
+					"hideOnlyControl": false
+				},
+				"sonosMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Sonos",
+					"help": "in minutes",
+					"hidden": "!data.sonosDevices",
+					"hideOnlyControl": false
+				},
+				"switchbotMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Switchbot Ble",
+					"help": "in minutes",
+					"hidden": "!data.switchbotBleDevices",
+					"hideOnlyControl": false
+				},
+				"tadoMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tado",
+					"help": "in minutes",
+					"hidden": "!data.tadoDevices",
+					"hideOnlyControl": false
+				},
+				"tradfriMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tradfri",
+					"help": "in minutes",
+					"hidden": "!data.tradfriDevices",
+					"hideOnlyControl": false
+				},
+				"unifiMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Unifi",
+					"help": "in minutes",
+					"hidden": "!data.unifiDevices",
+					"hideOnlyControl": false
+				},
+				"wledMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "WLED",
+					"help": "in minutes",
+					"hidden": "!data.wledDevices",
+					"hideOnlyControl": false
+				},
+				"yeelightMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Yeelight-2",
+					"help": "in minutes",
+					"hidden": "!data.yeelightDevices",
+					"hideOnlyControl": false
+				},
+				"zigbeeMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Zigbee",
+					"help": "in minutes",
+					"hidden": "!data.zigbeeDevices",
+					"hideOnlyControl": false
+				},
+				"zigbee2mqttMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Zigbee2MQTT",
+					"help": "in minutes",
+					"hidden": "!data.zigbee2mqttDevices",
+					"hideOnlyControl": false
+				},
+				"zwaveMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Zwave",
+					"help": "in minutes",
+					"hidden": "!data.zwaveDevices",
+					"hideOnlyControl": false
+				}
+			}
+		}
+	}
 }
