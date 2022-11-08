@@ -782,8 +782,7 @@ class DeviceWatcher extends utils.Adapter {
 					try {
 						const lastContact = await this.getTimestamp(deviceMainSelector.ts);
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
-						const lastDeviceUnreachStateChange =
-							deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(deviceMainSelector.ts);
+						const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(deviceMainSelector.ts);
 						const shortDeviceUnreachState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].reach);
 
 						//  If there is no contact since user sets minutes add device in offline list
@@ -1116,13 +1115,7 @@ class DeviceWatcher extends utils.Adapter {
 					const jsonText = JSON.stringify(text);
 					await this.setForeignStateAsync(
 						`${this.config.instanceJarvis}.addNotification`,
-						'{"title":"' +
-							this.config.titleJarvis +
-							' (' +
-							this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') +
-							')","message": ' +
-							jsonText +
-							',"display": "drawer"}',
+						'{"title":"' + this.config.titleJarvis + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message": ' + jsonText + ',"display": "drawer"}',
 					);
 				}
 			}
@@ -1215,7 +1208,7 @@ class DeviceWatcher extends utils.Adapter {
 						deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
 					}
 				}
-				if (deviceList.length > 0) {
+				if (deviceList.length >= 0) {
 					if (deviceList.length == 0) {
 						msg = 'Alle Geräte sind Online.';
 					} else if (deviceList.length == 1) {
