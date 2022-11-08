@@ -61,6 +61,9 @@ class DeviceWatcher extends utils.Adapter {
 		this.on('unload', this.onUnload.bind(this));
 	}
 
+	/**
+	 * onReady
+	 */
 	async onReady() {
 		this.log.debug(`Adapter ${adapterName} was started`);
 
@@ -263,6 +266,9 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
+	/**
+	 * refresh data with interval
+	 */
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
 
@@ -285,6 +291,9 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- refreshData end
 
+	/**
+	 * main function
+	 */
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
 
@@ -352,6 +361,9 @@ class DeviceWatcher extends utils.Adapter {
 		if (stateVal) return stateVal.val;
 	}
 
+	/**
+	 * create blacklist
+	 */
 	async createBlacklist() {
 		this.log.debug(`Function started: ${this.createBlacklist.name}`);
 
@@ -992,8 +1004,10 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.createDataForEachAdapter.name}`);
 	} // <-- end of createDataForEachAdapter
 
+	/**
+	 * create Data of all selected adapter in one list
+	 */
 	async createDataOfAllAdapter() {
-		// create Data of all selected adapter in one list
 		this.log.debug(`Function started: ${this.createDataOfAllAdapter.name}`);
 
 		try {
@@ -1144,9 +1158,10 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- End of sendNotification function
 
+	/**
+	 * send shedule message for low battery devices
+	 */
 	async sendBatteryNotifyShedule() {
-		// send message for low battery devices
-
 		const time = this.config.checkSendBatteryTime.split(':');
 
 		const checkDays = []; // list of selected days
@@ -1193,9 +1208,10 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} //<--End of battery notification
 
+	/**
+	 * send message if an device is offline
+	 */
 	async sendOfflineNotifications() {
-		// send message if an device is offline
-
 		this.log.debug(`Start the function: ${this.sendOfflineNotifications.name}`);
 
 		try {
@@ -1231,9 +1247,10 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Finished the function: ${this.sendOfflineNotifications.name}`);
 	} //<--End of offline notification
 
+	/**
+	 * send shedule message with offline devices
+	 */
 	async sendOfflineNotificationsShedule() {
-		// send daily an overview with offline devices
-
 		const time = this.config.checkSendOfflineTime.split(':');
 
 		const checkDays = []; // list of selected days
@@ -1280,6 +1297,9 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} //<--End of daily offline notification
 
+	/**
+	 * reset arrays and counts
+	 */
 	async resetVars() {
 		//Reset all arrays and counts
 		this.log.debug(`Function started: ${this.resetVars.name}`);
