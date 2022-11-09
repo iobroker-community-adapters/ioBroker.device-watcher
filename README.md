@@ -105,7 +105,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 
 ## To-Do
 
--   [x] clean up the code
+-   [ ] clean up the code
 -   [ ] add support for reaction on state-changes
 -   [ ] send offline text only from the device that goes offline
 
