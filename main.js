@@ -1218,13 +1218,12 @@ class DeviceWatcher extends utils.Adapter {
 			let msg = '';
 			let deviceList = '';
 
-			if (this.offlineDevicesCountRaw !== this.offlineDevicesCountRawOld) {
-				for (const id of this.offlineDevicesRaw) {
-					if (!this.blacklistNotify.includes(id['Path'])) {
-						deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
-					}
+			for (const id of this.offlineDevicesRaw) {
+				if (!this.blacklistNotify.includes(id['Path'])) {
+					deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
 				}
-
+			}
+			if (deviceList.length !== this.offlineDevicesCountRawOld) {
 				if (deviceList.length == 0) {
 					msg = 'Alle Geräte sind Online.';
 				} else if (deviceList.length == 1) {
@@ -1236,7 +1235,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				this.log.info(msg + deviceList);
-				this.offlineDevicesCountRawOld = this.offlineDevicesCountRaw;
+				this.offlineDevicesCountRawOld = deviceList.length;
 				await this.setStateAsync('lastNotification', msg + deviceList, true);
 				await this.sendNotification(msg + deviceList);
 			}
