@@ -1224,22 +1224,21 @@ class DeviceWatcher extends utils.Adapter {
 						deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
 					}
 				}
-				if (deviceList.length >= 0) {
-					if (deviceList.length == 0) {
-						msg = 'Alle Geräte sind Online.';
-					} else if (deviceList.length == 1) {
-						// make singular if it is only one device
-						msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
-					} else if (deviceList.length >= 2) {
-						//make plural if it is more than one device
-						msg = `Folgende Geräte sind seit einiger Zeit nicht erreichbar: \n`;
-					}
 
-					this.log.info(msg + deviceList);
-					this.offlineDevicesCountRawOld = this.offlineDevicesCountRaw;
-					await this.setStateAsync('lastNotification', msg + deviceList, true);
-					await this.sendNotification(msg + deviceList);
+				if (deviceList.length == 0) {
+					msg = 'Alle Geräte sind Online.';
+				} else if (deviceList.length == 1) {
+					// make singular if it is only one device
+					msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
+				} else if (deviceList.length >= 2) {
+					//make plural if it is more than one device
+					msg = `Folgende Geräte sind seit einiger Zeit nicht erreichbar: \n`;
 				}
+
+				this.log.info(msg + deviceList);
+				this.offlineDevicesCountRawOld = this.offlineDevicesCountRaw;
+				await this.setStateAsync('lastNotification', msg + deviceList, true);
+				await this.sendNotification(msg + deviceList);
 			}
 		} catch (error) {
 			this.errorReporting('[sendOfflineMessage]', error);
