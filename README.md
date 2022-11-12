@@ -115,8 +115,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.0.2 (2022-11-12)
 
 -   added status to battery list
 -   batt devices which are offline are now still included in the battery list
