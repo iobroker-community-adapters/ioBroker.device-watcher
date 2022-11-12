@@ -328,11 +328,11 @@ class DeviceWatcher extends utils.Adapter {
 	} //<--End of main function
 
 	/**
-	 * @param {string} sentence - Word which should be capitalize
+	 * @param {string} id - id which should be capitalize
 	 */
-	async capitalize(sentence) {
+	capitalize(id) {
 		//make the first letter uppercase
-		return sentence && sentence[0].toUpperCase() + sentence.slice(1);
+		return id && id[0].toUpperCase() + id.slice(1);
 	}
 
 	/**
@@ -362,6 +362,16 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
+	 * @param {object} data - object
+	 */
+	async parseData(data) {
+		if (!data) return {};
+		if (typeof data === 'object') return data;
+		if (typeof data === 'string') return JSON.parse(data);
+		return {};
+	}
+
+	/**
 	 * create blacklist
 	 */
 	async createBlacklist() {
@@ -371,14 +381,18 @@ class DeviceWatcher extends utils.Adapter {
 			const myBlacklist = this.config.tableBlacklist;
 
 			for (const i in myBlacklist) {
-				const blacklistParse = JSON.parse(myBlacklist[i].devices);
-				// push devices in list to ignor device in lists
-				if (myBlacklist[i].checkIgnorLists) {
-					this.blacklistLists.push(blacklistParse.path);
-				}
-				// push devices in list to ignor device in notifications
-				if (myBlacklist[i].checkIgnorNotify) {
-					this.blacklistNotify.push(blacklistParse.path);
+				try {
+					const blacklistParse = await this.parseData(myBlacklist[i].devices);
+					// push devices in list to ignor device in lists
+					if (myBlacklist[i].checkIgnorLists) {
+						this.blacklistLists.push(blacklistParse.path);
+					}
+					// push devices in list to ignor device in notifications
+					if (myBlacklist[i].checkIgnorNotify) {
+						this.blacklistNotify.push(blacklistParse.path);
+					}
+				} catch (error) {
+					this.errorReporting('[createBlacklist]', error);
 				}
 			}
 
