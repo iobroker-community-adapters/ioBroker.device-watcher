@@ -9,7 +9,7 @@
 [![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.1)
+![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.2)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 
@@ -119,12 +119,13 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 ### **WORK IN PROGRESS**
 
 -   added status to battery list
--   battery devices which are offline are now still included in the battery list
+-   batt devices which are offline are now still included in the battery list
 -   small improvements of translations
 -   offline time settings: you can use 0 instead of -1 (it will be the new standard)
 -   improvements of adaptername
 -   fixed issues [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)
 -   repaired blacklist notifications
+-   added handling for blacklist object
 
 ### 2.0.1 (2022-11-02)
 
