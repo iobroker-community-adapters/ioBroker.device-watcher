@@ -214,6 +214,13 @@
 					"lg": 3,
 					"label": "Tado"
 				},
+				"tapoDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tapo"
+				},
 				"tradfriDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1210,6 +1217,18 @@
 					"label": "Tado",
 					"help": "in minutes",
 					"hidden": "!data.tadoDevices",
+					"hideOnlyControl": false
+				},
+				"tapoMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tapo",
+					"help": "in minutes",
+					"hidden": "!data.tapoDevices",
 					"hideOnlyControl": false
 				},
 				"tradfriMaxMinutes": {
