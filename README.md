@@ -2,20 +2,23 @@
 
 # ioBroker.device-watcher
 
-[![NPM version](https://img.shields.io/npm/v/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
-![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
-![Number of Installations](https://iobroker.live/badges/device-watcher-installed.svg)
 [![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
-![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
+![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)</br>
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
 ![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.2)
-![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
+![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)</br>
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
-
+</br>
+**Version:** </br>
+[![NPM version](https://img.shields.io/npm/v/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
+![Current version in stable repository](https://iobroker.live/badges/device-watcher-stable.svg)
+![Number of Installations](https://iobroker.live/badges/device-watcher-installed.svg)
+</br>
 **Tests:** </br>
 ![Test and Release](https://github.com/ciddi89/ioBroker.device-watcher/workflows/Test%20and%20Release/badge.svg)
 [![CodeQL](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml/badge.svg)](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml)
+![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/ciddi89/ioBroker.device-watcher)
 
 ## Sentry
 
@@ -117,6 +120,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
 ### 2.0.2 (2022-11-12)
 
 -   added status to battery list
