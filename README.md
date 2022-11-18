@@ -7,7 +7,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)</br>
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
 ![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.2)
-![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)</br>
+![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 </br>
 **Version:** </br>
