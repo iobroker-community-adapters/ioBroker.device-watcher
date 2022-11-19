@@ -1449,7 +1449,9 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async creatLinkQualityListHTML(devices, deviceCount) {
 		devices = devices.sort((a, b) => {
-			return a.Device.localeCompare(b.Device);
+			a = a.Device || '';
+			b = b.Device || '';
+			return a.localeCompare(b);
 		});
 		let html = `<center>
 		<b>Link Quality Devices:<font> ${deviceCount}</b><small></small></font>
@@ -1483,7 +1485,9 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async createOfflineListHTML(devices, deviceCount) {
 		devices = devices.sort((a, b) => {
-			return a.Device.localeCompare(b.Device);
+			a = a.Device || '';
+			b = b.Device || '';
+			return a.localeCompare(b);
 		});
 		let html = `<center>
 		<b>Offline Devices: <font color=${deviceCount == 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
@@ -1518,7 +1522,9 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async createBatteryListHTML(devices, deviceCount, isLowBatteryList) {
 		devices = devices.sort((a, b) => {
-			return a.Device.localeCompare(b.Device);
+			a = a.Device || '';
+			b = b.Device || '';
+			return a.localeCompare(b);
 		});
 		let html = `<center>
 		<b>${isLowBatteryList == true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList == true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
