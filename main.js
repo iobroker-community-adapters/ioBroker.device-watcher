@@ -101,6 +101,7 @@ class DeviceWatcher extends utils.Adapter {
 				shelly: this.config.shellyDevices,
 				sonoff: this.config.sonoffDevices,
 				sonos: this.config.sonosDevices,
+				sureflap: this.config.sureflapDevices,
 				switchbotBle: this.config.switchbotBleDevices,
 				tado: this.config.tadoDevices,
 				tapo: this.config.tapoDevices,
@@ -142,6 +143,7 @@ class DeviceWatcher extends utils.Adapter {
 				shelly: this.config.shellyMaxMinutes,
 				sonoff: this.config.sonoffMaxMinutes,
 				sonos: this.config.sonosMaxMinutes,
+				sureflap: this.config.sureflapMaxMinutes,
 				switchbotBle: this.config.switchbotMaxMinutes,
 				tado: this.config.tadoMaxMinutes,
 				tapo: this.config.tapoMaxMinutes,
@@ -457,6 +459,13 @@ class DeviceWatcher extends utils.Adapter {
 				//Get ID of foldername
 				case 'tado':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
+					break;
+
+				// Format Device name
+				case 'sureflap':
+					if (deviceObject && typeof deviceObject === 'object') {
+						deviceName = deviceObject.common.name.replace(/'/g, '').replace(/\(\d+\)/g, '').trim().replace('Hub', 'Hub -').replace('Device', 'Device -');
+					}
 					break;
 
 				//Get ID of foldername

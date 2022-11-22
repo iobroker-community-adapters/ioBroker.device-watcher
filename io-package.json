@@ -231,6 +231,8 @@
         "sonoffMaxMinutes": 0,
         "sonosDevices": false,
         "sonosMaxMinutes": 0,
+        "sureflapDevices": false,
+        "sureflapMaxMinutes": 0,
         "switchbotBleDevices": false,
         "switchbotMaxMinutes": 300,
         "tadoDevices": false,

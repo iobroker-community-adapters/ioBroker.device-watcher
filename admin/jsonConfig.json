@@ -200,6 +200,13 @@
 					"lg": 3,
 					"label": "Sonos"
 				},
+				"sureflapDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Sure Flap"
+				},				
 				"switchbotBleDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1193,6 +1200,18 @@
 					"label": "Sonos",
 					"help": "in minutes",
 					"hidden": "!data.sonosDevices",
+					"hideOnlyControl": false
+				},
+				"sureflapMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Sure Flap",
+					"help": "in minutes",
+					"hidden": "!data.sureflapDevices",
 					"hideOnlyControl": false
 				},
 				"switchbotMaxMinutes": {
