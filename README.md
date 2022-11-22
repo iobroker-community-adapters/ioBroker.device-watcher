@@ -95,6 +95,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 -   added tapo
 -   (Scrounger) added fullyBrowser adapter
 -   (Scrounger) added Sure Flap adapter
+-   fixed low bat messages
 
 ### 2.0.2 (2022-11-12)
 

@@ -721,7 +721,11 @@ class DeviceWatcher extends utils.Adapter {
 				let isBatteryDevice;
 
 				// Get battery states
-				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				let deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				if (deviceBatteryState === undefined) {
+					deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery2);
+				}
+
 				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
 				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
 
