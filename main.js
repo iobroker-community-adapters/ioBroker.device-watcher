@@ -467,7 +467,12 @@ class DeviceWatcher extends utils.Adapter {
 				// Format Device name
 				case 'sureflap':
 					if (deviceObject && typeof deviceObject === 'object') {
-						deviceName = deviceObject.common.name.replace(/'/g, '').replace(/\(\d+\)/g, '').trim().replace('Hub', 'Hub -').replace('Device', 'Device -');
+						deviceName = deviceObject.common.name
+							.replace(/'/g, '')
+							.replace(/\(\d+\)/g, '')
+							.trim()
+							.replace('Hub', 'Hub -')
+							.replace('Device', 'Device -');
 					}
 					break;
 
@@ -1222,8 +1227,7 @@ class DeviceWatcher extends utils.Adapter {
 							deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
 						}
 					}
-
-					if (this.lowBatteryPoweredCountRaw > 0 && deviceList.length > 0) {
+					if (deviceList.length > 0) {
 						this.log.info(`Niedrige Batteriezustände: ${deviceList}`);
 						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${deviceList}`, true);
 
