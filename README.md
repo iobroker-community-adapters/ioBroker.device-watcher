@@ -93,6 +93,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 
 -   fixed issue with localCompare
 -   added tapo
+-   (Scrounger) added Sure Flap adapter
 
 ### 2.0.2 (2022-11-12)
 
