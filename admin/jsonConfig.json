@@ -53,6 +53,13 @@
 					"lg": 3,
 					"label": "FritzDect"
 				},
+				"fullybrowserDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "fullyBrowser"
+				},
 				"hamDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -936,6 +943,18 @@
 					"label": "FritzDect",
 					"help": "in minutes",
 					"hidden": "!data.fritzdectDevices",
+					"hideOnlyControl": false
+				},
+				"fullybrowserMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "fullyBrowser",
+					"help": "in minutes",
+					"hidden": "!data.fullybrowserDevices",
 					"hideOnlyControl": false
 				},
 				"hamMaxMinutes": {
