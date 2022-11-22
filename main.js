@@ -79,6 +79,7 @@ class DeviceWatcher extends utils.Adapter {
 				enocean: this.config.enoceanDevices,
 				esphome: this.config.esphomeDevices,
 				fritzdect: this.config.fritzdectDevices,
+				fullybrowser: this.config.fullybrowserDevices,
 				ham: this.config.hamDevices,
 				harmony: this.config.harmonyDevices,
 				hmiP: this.config.hmiPDevices,
@@ -120,6 +121,7 @@ class DeviceWatcher extends utils.Adapter {
 				enocean: this.config.enoceanMaxMinutes,
 				esphome: this.config.esphomeMaxMinutes,
 				fritzdect: this.config.fritzdectMaxMinutes,
+				fullybrowser: this.config.fullybrowserMaxMinutes,
 				ham: this.config.hamMaxMinutes,
 				harmony: this.config.harmonyMaxMinutes,
 				hmiP: this.config.hmiPMaxMinutes,
@@ -428,6 +430,11 @@ class DeviceWatcher extends utils.Adapter {
 				// Get ID for Switchbot and ESPHome Devices
 				case 'switchbotBle':
 				case 'esphome':
+					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+					break;
+
+				// Get Id
+				case 'fullybrowser':
 					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 					break;
 
