@@ -726,8 +726,11 @@ class DeviceWatcher extends utils.Adapter {
 					deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery2);
 				}
 
-				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+				// Get battery states with short path
+				let shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+				if (shortDeviceBatteryState === undefined) {
+					shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+				}
 
 				// Get low bat states
 				let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
@@ -735,7 +738,7 @@ class DeviceWatcher extends utils.Adapter {
 					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 				}
 
-				if (!deviceBatteryState && !shortDeviceBatteryState && !shortDeviceBatteryState2) {
+				if (!deviceBatteryState && !shortDeviceBatteryState) {
 					if (deviceLowBatState !== undefined) {
 						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
 							case 'none':
@@ -766,20 +769,13 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 
 						case 'hueExt':
-							if (shortDeviceBatteryState) {
-								batteryHealth = shortDeviceBatteryState + '%';
-								isBatteryDevice = true;
-							}
-							break;
 						case 'mihomeVacuum':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
 								isBatteryDevice = true;
-							} else if (shortDeviceBatteryState2) {
-								batteryHealth = shortDeviceBatteryState2 + '%';
-								isBatteryDevice = true;
 							}
 							break;
+
 						default:
 							batteryHealth = deviceBatteryState + '%';
 							isBatteryDevice = true;
