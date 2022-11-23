@@ -760,7 +760,7 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					switch (adapterID) {
 						case 'hmrpc':
-							if (deviceBatteryState === 0) {
+							if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
 								batteryHealth = ' - ';
 							} else {
 								batteryHealth = deviceBatteryState + 'V';
