@@ -468,7 +468,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'sureflap':
 					if (deviceObject && typeof deviceObject === 'object') {
 						deviceName = deviceObject.common.name
-							// @ts-ignore
+							// @ts-ignore FIXME: fix syntax error
 							.replace(/'/g, '')
 							.replace(/\(\d+\)/g, '')
 							.trim()
