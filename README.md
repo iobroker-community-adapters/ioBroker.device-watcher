@@ -88,8 +88,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.0.3 (2022-11-26)
 
 -   fixed issue with localCompare
 -   added tapo
