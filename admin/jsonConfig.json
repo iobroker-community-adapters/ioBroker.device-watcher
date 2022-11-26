@@ -213,7 +213,7 @@
 					"md": 6,
 					"lg": 3,
 					"label": "Sure Flap"
-				},				
+				},
 				"switchbotBleDevices": {
 					"type": "checkbox",
 					"sm": 6,
