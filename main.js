@@ -1249,9 +1249,9 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 			if (deviceList.length !== this.offlineDevicesCountRawOld) {
-				if (deviceList.length == 0) {
+				if (deviceList.length === 0) {
 					msg = 'Alle Geräte sind Online.';
-				} else if (deviceList.length == 1) {
+				} else if (deviceList.length === 1) {
 					// make singular if it is only one device
 					msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
 				} else if (deviceList.length >= 2) {
@@ -1373,13 +1373,13 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync(`${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
 			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
 
-			if (this.deviceCounter == 0) {
+			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' }];
 			}
 			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
 
-			if (this.linkQualityCount == 0) {
+			if (this.linkQualityCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.linkQualityDevices = [{ Device: '--none--', Adapter: '', 'Signal strength': '' }];
 			}
@@ -1395,7 +1395,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 
-			if (this.offlineDevicesCount == 0) {
+			if (this.offlineDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.offlineDevices = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
 			}
@@ -1411,7 +1411,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 
-			if (this.batteryPoweredCount == 0) {
+			if (this.batteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
@@ -1427,7 +1427,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 
-			if (this.lowBatteryPoweredCount == 0) {
+			if (this.lowBatteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryLowPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
@@ -1499,7 +1499,7 @@ class DeviceWatcher extends utils.Adapter {
 			return a.localeCompare(b);
 		});
 		let html = `<center>
-		<b>Offline Devices: <font color=${deviceCount == 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
+		<b>Offline Devices: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
 		<p></p>
 		</center>   
 		<table width=100%>
@@ -1536,7 +1536,7 @@ class DeviceWatcher extends utils.Adapter {
 			return a.localeCompare(b);
 		});
 		let html = `<center>
-		<b>${isLowBatteryList == true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList == true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
+		<b>${isLowBatteryList === true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
 		<p></p>
 		</center>   
 		<table width=100%>

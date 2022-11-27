@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)</br>
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.3)
+![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 </br>
