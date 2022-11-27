@@ -19,6 +19,7 @@
 ![Test and Release](https://github.com/ciddi89/ioBroker.device-watcher/workflows/Test%20and%20Release/badge.svg)
 [![CodeQL](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml/badge.svg)](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml)
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/ciddi89/ioBroker.device-watcher)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/31cdbfba5f8641ff8a1719b6b082c3f7)](https://www.codacy.com/gh/ciddi89/ioBroker.device-watcher/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ciddi89/ioBroker.device-watcher&utm_campaign=Badge_Grade)
 
 ## Sentry
 
