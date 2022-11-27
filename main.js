@@ -886,12 +886,16 @@ class DeviceWatcher extends utils.Adapter {
 									break;
 								case 'ping':
 								case 'deconz':
+								case 'shelly':
+								case 'sonoff':
+								case 'zigbee':
+								case 'zigbee2MQTT':
 									if (this.maxMinutes[adapterID] <= 0) {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if (lastDeviceUnreachStateChange > this.maxMinutes[adapterID] && !deviceUnreachState) {
+									} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -902,19 +906,7 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if (this.maxMinutes !== undefined && lastContact > this.maxMinutes[adapterID]) {
-										deviceState = 'Offline'; //set online state to offline
-										linkQuality = '0%'; // set linkQuality to nothing
-									}
-									break;
-								case 'shelly':
-								case 'sonoff':
-									if (this.maxMinutes[adapterID] <= 0) {
-										if (!deviceUnreachState) {
-											deviceState = 'Offline'; //set online state to offline
-											linkQuality = '0%'; // set linkQuality to nothing
-										}
-									} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
+									} else if (lastContact > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
