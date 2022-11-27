@@ -884,6 +884,8 @@ class DeviceWatcher extends utils.Adapter {
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
 									break;
+								case 'hue':
+								case 'hueExt':
 								case 'ping':
 								case 'deconz':
 								case 'shelly':
