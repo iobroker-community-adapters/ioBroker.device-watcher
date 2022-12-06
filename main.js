@@ -94,6 +94,8 @@ class DeviceWatcher extends utils.Adapter {
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
 				mihomeVacuum: this.config.mihomeVacuumDevices,
+				mqttZigbee2Mqtt: this.config.mqttZigbee2MqttDevices,
+				mqttNuki: this.config.mqttNukiDevices,
 				netatmo: this.config.netatmoDevices,
 				nukiExt: this.config.nukiExtDevices,
 				nut: this.config.nutDevices,
@@ -137,6 +139,8 @@ class DeviceWatcher extends utils.Adapter {
 				mihome: this.config.mihomeMaxMinutes,
 				mihomeGW: this.config.mihomeMaxMinutes,
 				mihomeVacuum: this.config.mihomeVacuumMaxMinutes,
+				mqttZigbee2Mqtt: this.config.mqttZigbee2MqttMaxMinutes,
+				mqttNuki: this.config.mqttNukiMaxMinutes,
 				netatmo: this.config.netatmoMaxMinutes,
 				nukiExt: this.config.nukiextendMaxMinutes,
 				nut: this.config.nutMaxMinutes,
@@ -771,6 +775,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						case 'hueExt':
 						case 'mihomeVacuum':
+						case 'mqttNuki':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
 								isBatteryDevice = true;

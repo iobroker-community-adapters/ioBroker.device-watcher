@@ -1,558 +1,548 @@
 {
-  "common": {
-    "name": "device-watcher",
-    "version": "2.0.3",
-    "news": {
-      "2.0.3": {
-        "en": "fixed issue with localCompare\nadded tapo\nadded fullyBrowser adapter\nadded Sure Flap adapter\nfixed low bat messages",
-        "de": "problem mit lokalen Vergleich\nzusatz tapo\nvollständig Browser Adapter\nhinzugefügt Sure Flap Adapter\nfeste low bat-nachrichten",
-        "ru": "фиксированная проблема с местным Сравнить\nдобавлено tapo\nдобавлено полностью Браузерный адаптер\nдобавил Sure Flap адаптер\nфиксированные низкие bat сообщения",
-        "pt": "problema fixo com local Comparar\nadicionado tapo\nadicionado totalmente Adaptador de navegador\nadicionado adaptador de Flap claro\nmensagens de taco baixas fixas",
-        "nl": "_ Compare\nvertaling:\nvolledig toegevoegd Browser adapter\nvoegde Sure Flap adapter toe\nvertaling:",
-        "fr": "problème fixe avec Comparer\ntapo ajouté\nentièrement ajouté Adaptateur de navigateur\nadaptateur Sure Flap\nmessages de chauve-souris fixes",
-        "it": "problema fisso con locale Confronta\nrubinetto aggiunto\naggiunto completamente Adattatore del browser\nadattatore Sure Flap\nmessaggi di battuta bassi fissi",
-        "es": "problema fijo con el local Compare\nañadido tapo\nañadido plenamente Adaptador de navegador\nagregado adaptador de Flap\nmensajes de bate fijos",
-        "pl": "bieżący problem z lokalną sprawą W porównaniu z innymi\ndodać\ndodać adapter\nadapter do Sure Flap\nniskojęzyczna wiadomość",
-        "uk": "фіксована проблема з місцевими Порівняти\nдодано тапо\nдодано повністю Адаптери\nдоданий Sure Flap адаптер\nфіксовані низькі повідомлення bat",
-        "zh-cn": "固定问题 比较\n增 录\n增 编 增 编\n增 编\n固定的低巴特信息"
-      },
-      "2.0.2": {
-        "en": "added status to battery list\nbatt devices which are offline are now still included in the battery list\nsmall improvements of translations\noffline time settings: you can use 0 instead of -1 (it will be the new standard)\nimprovements of adaptername\nfixed issues [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nrepaired blacklist notifications\nadded handling for blacklist object",
-        "de": "status zur batterieliste hinzugefügt\nbatt-geräte, die offline sind, sind jetzt noch in der batterieliste enthalten\nkleine verbesserungen der übersetzungen\noffline-zeiteinstellungen: sie können 0 anstelle -1 verwenden (es wird der neue standard sein)\nverbesserungen des adapternamens\n[#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nreparierte blacklist-benachrichtigungen\nzusätzliche handhabung für blacklist-objekt",
-        "ru": "добавлен статус в список батарей\nbatt устройства, которые являются offline, теперь все еще включены в список батарей\nнебольшие улучшения переводов\nоффлайн настройки времени: вы можете использовать 0 вместо -1 (это будет новый стандарт)\nулучшения логины адаптера\nфиксированные вопросы [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nотремонтированный черный список уведомлений\nдобавлена обработка для объекта blacklist",
-        "pt": "status adicionado à lista de bateria\ndispositivos de batedor que estão offline ainda estão incluídos na lista de baterias\npequenas melhorias de traduções\nconfigurações de tempo off-line: você pode usar 0 em vez de -1 (ele será o novo padrão)\nmelhorias do nome do adaptador\n(http://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotificações de lista negra reparadas\nmanipulação adicionada para objeto de lista negra",
-        "nl": "vertaling:\nbatt apparatuur die offline zijn nog steeds in de batterijlijst\nvertaling:\noffline time settings: je kunt 0 gebruiken in plaats van -1 (het zal de nieuwe standaard zijn)\nverbeteringen van adapternaam\nquality over Quantity (QoQ) Releases Vertaling:\nvertaling:\nvertaling:",
-        "fr": "statut ajouté à la liste de piles\nles dispositifs de chauves-souris qui sont hors ligne sont maintenant toujours inclus dans la liste de batterie\npetites améliorations des traductions\nparamètres de temps hors ligne: vous pouvez utiliser 0 au lieu de -1 (il sera la nouvelle norme)\naméliorations du nom d'adaptateur\n(https://github.com/ciddi89/ioBroker.device-watcher/issues/66) \" [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotifications de listes noires réparées\nmanipulation supplémentaire pour objet blacklist",
-        "it": "stato aggiunto alla lista della batteria\nbatt dispositivi che sono offline sono ora ancora inclusi nella lista della batteria\npiccoli miglioramenti delle traduzioni\nimpostazioni di tempo offline: è possibile utilizzare 0 invece di -1 (è il nuovo standard)\nmiglioramenti del nome dell'adattatore\n(https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotifiche di blacklist riparate\ngestione aggiuntiva per oggetto blacklist",
-        "es": "estado añadido a la lista de baterías\ndispositivos de batta que están fuera de línea ahora están incluidos en la lista de baterías\npequeñas mejoras de las traducciones\najustes del tiempo fuera de línea: puede utilizar 0 en lugar de -1 (será el nuevo estándar)\nmejoras en el nombre de adaptador\ncuestiones fijas [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotificaciones de lista negra reparadas\nmanejo añadido para objeto de lista negra",
-        "pl": "dodany status baterii\nurządzenia z baterią, które są offline, są obecnie włączone do listy baterii\nmałe poprawki tłumaczenia\nwspółczynnikowy: możesz użyć 0 zamiast -1 (jak będzie nowy standard)\nulepszenia adaptername\nnumery stałe (#66(https:/github.com/ciddi89/ioBroker.device-watcher/issues/66) & #67(https:/github.com/ciddi89/ioBroker.device-watcher/67)\nulepszenia czarnej listy\nobsługa blacklist object",
-        "uk": "додано статус до списку акумуляторів\nпристрої для баттів, які в автономному режимі, все ще включені в список акумуляторів\nневеликі поліпшення перекладів\nв автономному режимі настройки часу: ви можете використовувати 0 замість -1 (це буде новий стандарт)\nполіпшення імені адаптера\n[#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nвідремонтовані повідомлення blacklist\nдодана обробка для об'єкта blacklist",
-        "zh-cn": "电池清单的附加地位\nb 现仍在列入电池清单的浮动装置\n翻译的小改进\n时限:你可以使用0.而不是1-1(即新标准)\nb. 改进适应人员名\n固定问题[第66](http://github.com/ciddi89/ioBroker.device-watcher/issues/66)和[#67](http://github.com/ciddi89/Broker.device-watcher/issues/67)\n修理黑名单通知\n黑名单目标的新增处理"
-      },
-      "2.0.1": {
-        "en": "If the device is offline, set signal strength to '0%'\nIf the device is offline, set battery to ' - '\nrepair some small issues in the lists",
-        "de": "Ist das Gerät offline, setzen Sie Signalstärke auf 0%\nWenn das Gerät offline ist, setzen Sie Batterie auf ' - '\neinige kleine probleme in den listen reparieren",
-        "ru": "Если устройство оффлайн, установите силу сигнала до 0%\nЕсли устройство оффлайн, установите аккумулятор в ' - '\nотремонтировать некоторые небольшие проблемы в списках",
-        "pt": "Se o dispositivo estiver offline, defina a força do sinal para 0%\nSe o dispositivo estiver offline, configure a bateria para ' - '\nreparar alguns pequenos problemas nas listas",
-        "nl": "Als het apparaat offline is, zet een signaalstilstand op 0%\nAls het apparaat offline is, zet dan batterij op '\nrepareer wat kleine kwesties in de lijst",
-        "fr": "Si l'appareil est hors ligne, définir la résistance du signal à 0%\nSi l'appareil est hors ligne, régler la batterie à ' - '\nréparer quelques petits problèmes dans les listes",
-        "it": "Se il dispositivo è offline, impostare la forza del segnale a 0%\nSe il dispositivo è offline, impostare la batteria a ' - '\nriparare alcuni piccoli problemi nelle liste",
-        "es": "Si el dispositivo está fuera de línea, establece la fuerza de señal al 0%\nSi el dispositivo está fuera de línea, establece la batería a ' - '\nreparar algunas pequeñas cuestiones en las listas",
-        "pl": "Jeśli urządzenie jest offline, ustawia siłę sygnału do 0%\nJeśli urządzenie jest wycinane, ustawiono baterię do '- '\nwyremontowano drobne problemy w listach",
-        "uk": "Якщо пристрій вимкнено, встановлюється міцність сигналу на 0%\nЯкщо пристрій вимкнено, встановіть акумулятор до ' - '\nремонт деяких невеликих питань у переліках",
-        "zh-cn": "如果装置落空,信号强度达到0%\n如果装置不线,便将电池到该地。\n在名单中修理一些小型问题"
-      },
-      "2.0.0": {
-        "en": "added Lupusec, HS100 adapter, Zigbee2MQTT and MaxCube\nchanged name of Homematic to HM-RPC\nmade a completly makeover of the blacklist\nclean up the code and shorten some",
-        "de": "lupusec, HS100 Adapter, Zigbee2MQTT und MaxCube\ngeänderter Name von Homematic zu HM-RPC\naus einem kompletten makeover der blacklist\nden code reinigen und einige verkürzen",
-        "ru": "добавлено Lupusec, HS100 адаптер, Zigbee2MQTT и MaxCube\nизменено имя Homematic в HM-RPC\nсделал полный макияж черного списка\nочистить код и сократить некоторые",
-        "pt": "adicionado Lupusec, adaptador HS100, Zigbee2MQTT e MaxCube\nnome alterado de Homematic para HM-RPC\nfez uma reforma completa da lista negra\nlimpar o código e encurtar alguns",
-        "nl": "voegde Lupusec toe, HS100 adapter, Zigbee2MQT en MaxCube\nveranderde naam van Homema aan HM-RPC\n_\nruim de code op en verklein wat",
-        "fr": "lupusec, adaptateur HS100, Zigbee2MQTT et MaxCube\nchangement de nom de Homematic à HM-RPC\nfait un complet de la liste noire\nnettoyer le code et raccourcir certains",
-        "it": "aggiunto Lupusec, adattatore HS100, Zigbee2MQTT e MaxCube\ncambiato nome di Homematic a HM-RPC\nreso completo della lista nera\npulire il codice e accorciare alcuni",
-        "es": "añadido Lupusec, adaptador HS100, Zigbee2MQTT y MaxCube\ncambio de nombre de Homematic a HM-RPC\nhizo un cambio completly de la lista negra\nlimpiar el código y acortar algunos",
-        "pl": "lupusec, adapter HS100, Zigbee2MQTT i MaxCube\nzmienił nazwę Homematic na HM-RPC\nudało się to zrobić zupełnienie czarnej listy\nczyścił kod i skrócił niektóre z nich",
-        "uk": "додано Lupusec, HS100 адаптер, Zigbee2MQTT і MaxCube\nзмінено назву Homematic до HM-RPC\nвиготовлений комплетально макіяж чорного списку\nочистити код і скорочувати деякі",
-        "zh-cn": "加上Lupusec,HS100适应者,Zigbee2MQTT和MaxCube\n家庭名称改为HM-RPC\n填写黑名单\na. 守则的清理和缩短某些人"
-      },
-      "1.1.0": {
-        "en": "removed indicatoren for daily sent messages\nchanged selector for shelly devices\nadded Zigbee2MQTT adapter\nadded cron function to use own time for daily overview messages",
-        "de": "entfernte anzeige für täglich gesendete nachrichten\ngeänderter selektor für shelly-geräte\nzigbee2MQTT Adapter hinzugefügt\nzusätzliche cron-funktion, um eigene zeit für tägliche übersichtsnachrichten zu verwenden",
-        "ru": "удаленный индикатор для ежедневных отправленных сообщений\nизменен селектор для оболочки устройств\nдобавлен адаптер Zigbee2MQTT\nдобавлена функция cron для использования собственного времени для ежедневного обзора сообщений",
-        "pt": "indicador removido para mensagens enviadas diárias\nseletor alterado para dispositivos shelly\nadicionado adaptador Zigbee2MQTT\nfunção cron adicionada para usar o próprio tempo para mensagens de visão geral diária",
-        "nl": "verwijderde indicatoren voor dagelijks verzonden berichten\nverschoonde selector voor shelly apparaten\nvoegde Zigbee2MQT adapter toe\nvoegde kroonfunctie toe om dagelijks overzicht te gebruiken",
-        "fr": "indicateur supprimé pour les messages envoyés quotidiennement\nsélecteur modifié pour les dispositifs shelly\nadaptateur Zigbee2MQTT\nfonction cron ajoutée pour utiliser son propre temps pour les messages d'aperçu quotidien",
-        "it": "indicatore rimosso per messaggi inviati giornalieri\nselettore modificato per dispositivi shelly\naggiunto adattatore Zigbee2MQTT\nfunzione di cron aggiunto per utilizzare il proprio tempo per i messaggi di visione quotidiana",
-        "es": "indicador eliminado para mensajes enviados diariamente\nselector cambiado para dispositivos de vaina\nadaptador Zigbee2MQTT\nfunción cron agregada para utilizar tiempo propio para mensajes de visión general diaria",
-        "pl": "usunąć wskaźniki do codziennego przesyłania wiadomości\nzmieniono wybór dla urządzeń ostrzałowych\nadapter Zigbee2MQTT\ndodała funkcję krona do codziennego użytku",
-        "zh-cn": "d. 每天发出的讯息的清除指标\n炮火装置的选择\n增加Zigbee2MQTT适应人员\nb. 利用自己的时间进行日常概览信息",
-        "uk": "видалено індикатор щоденних відправлених повідомлень\nзмінено селектор для пристроїв shelly\nдодано адаптер Zigbee2MQTT\nдодано функцію cron для використання власного часу для щоденних оглядових повідомлень"
-      },
-      "1.0.1": {
-        "en": "added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut and Meross adapter\nfixed battery message\ncorrected and repaired some issues of last contact time \nadded support for old HM devices\nsome small refactoring of code\nchanged shelly selector from dp rssi to dp online",
-        "de": "wLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut und Meross Adapter\nfeste batterienachricht\neinige probleme der letzten kontaktzeit korrigiert und repariert\nunterstützung für alte HM-Geräte\neinige kleine refactoring von code\ngewechselt shelly selector von dp rssi nach dp online",
-        "ru": "добавлено WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut и Meross адаптер\nфиксированное сообщение батареи\nисправлены и отремонтированы некоторые вопросы последнего контактного времени\nдобавлена поддержка старых устройств HM\nнекоторое небольшое рефакторинг кода\nизмененный селектор оболочки от dp rssi до dp онлайн",
-        "pt": "adicionado WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Adaptador Unifi, Nut e Meross\nmensagem de bateria fixa\ncorrigido e reparado algumas questões de última hora de contato\nsuporte adicionado para dispositivos HM antigos\nalguma pequena refatoração de código\nmudou seletor shelly de dp rssi para dp online",
-        "nl": "wLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut en Meross adapter\nvertaling:\nvertaling:\nvoegde steun toe voor oude HM apparaten\neen kleine refactor van code\nverschoonde shelly selector van dprssi naar dp online",
-        "fr": "wLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut et Meross adaptateur\nmessage de batterie fixe\ncorrigé et réparé certains problèmes du dernier temps de contact\nsupport ajouté pour les anciens appareils HM\nun petit refactoring de code\nsélecteur shelly modifié de dp rssi à dp en ligne",
-        "it": "aggiunto WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut e Meross adattatore\nmessaggio della batteria fisso\ncorretto e riparato alcuni problemi dell'ultimo tempo di contatto\nsupporto aggiunto per vecchi dispositivi HM\nalcuni piccoli refactoring del codice\ncambiato shelly selettore da dp rssi a dp online",
-        "es": "añadido WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Adaptador Unifi, Nut y Meross\nmensaje de batería fijo\ncorregido y reparado algunos problemas del último tiempo de contacto\nsoporte añadido para dispositivos HM antiguos\nuna pequeña refactorización del código\ncambiado selector de jalea de dp rssi a dp en línea",
-        "pl": "dodał WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut i Meross\nbaterie\npoprawiono i naprawiło pewne problemy z ostatnim kontaktem\nwspierać stare urządzenia HM\nniewielki refaktor\nzmienił selekcjonera z dp rssi na dp online",
-        "zh-cn": "新增的WLED, Ikea Tradfri,会议室巴,HmIp, Tado,Netatmo, Yeecent-2, Unifi, Nut and Meross适应er\n固定电池信息\n纠正并修复了最后接触时间的一些问题\n对旧的HM装置的更多支持\n守则略有修改\n弹壳从手西改为在线",
-        "uk": "додано адаптер WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut і Meross\nповідомлення про розряд батареї\nвиправлено та усунено деякі проблеми часу останнього контакту\nдодана підтримка старих пристроїв HM\nдеякий невеликий рефакторинг коду\nзмінено селектор shelly з dp rssi на dp online"
-      },
-      "1.0.0": {
-        "en": "** BREAKING CHANGE ** If you update from version <= 0.3.0, remove the old instance first before you update to >= 1.0.0. After that you can create a new instance.\nchanged mode from shedule to daemon, please take aware from the advice above\nadded Logitech Harmony Hub\nsmall bugfixes (own function for blacklist, fix for memory leak etc.)",
-        "de": "** BREAKING CHANGE ** Wenn Sie von der Version <= 0.3.0 aktualisieren, entfernen Sie die alte Instanz zuerst, bevor Sie auf >= 1.0.0 aktualisieren danach können Sie eine neue Instanz erstellen.\ngeänderter modus von shedule nach daemon, bitte beachten sie die oben genannten ratschläge\nlogitech Harmony Hub\nkleine bugfixes (eigene funktion für blacklist, fix für speicherleck etc.)",
-        "ru": "Завтраки изменить Если вы обновляете из версии <= 0.3.0, сначала удалите старый экземпляр, прежде чем обновиться до >= 1.0.0 После этого вы можете создать новый экземпляр.\nизмененный режим от shedule до daemon, пожалуйста, ознакомьтесь с советами выше\nдобавил Logitech Harmony Hub\nнебольшие багфиксы (собственная функция для черного списка, исправить для утечки памяти и т.д.)",
-        "pt": "** REGRAS DE CONCORRÊNCIA Se você atualizar da versão <= 0.3.0, remova a antiga instância primeiro antes de atualizar para >= 1.0.0 Depois disso você pode criar uma nova instância.\nmodo alterado de shedule para daemon, por favor tome conhecimento do conselho acima\nadicionado Logitech Harmony Hub\npequenos bugfixes (função própria para a lista negra, corrigir para vazamento de memória etc.)",
-        "nl": "BREAKING CHANGE Als je updates van de versie 0.3.0, verwijder het oude instance eerst voordat je updates geeft aan 1.0, nadat je een nieuw voorbeeld kan creëren.\nverandering van shedule tot daemon, neem het advies boven\nvoegde Logitech Harmony Hub\nkleine insecten (own functie voor blacklist, herstel voor geheugenlek.)",
-        "fr": "♪ BREAKING CHANGE ♪ Si vous mettez à jour à partir de la version = 0.3.0, retirez l'ancienne instance avant de mettre à jour la version 1.0.0 Après cela, vous pouvez créer une nouvelle instance.\nchangement de mode de shedule à daemon, s'il vous plaît prendre conscience de l'avis ci-dessus\najouté Logitech Harmony Hub\npetits bugfix (fonction unique pour liste noire, correction pour fuite de mémoire etc.)",
-        "it": "# BREAKING CHANG # Se si aggiorna dalla versione <= 0.3.0, rimuovere la vecchia istanza prima di aggiornare a >= 1.0.0 Dopo di che è possibile creare una nuova istanza.\nmodo cambiato da capannone a demone, si prega di prendere coscienza dal consiglio sopra\naggiunto Logitech Harmony Hub\npiccoli bugfixes (funzione propria per blacklist, fix per perdita di memoria ecc.)",
-        "es": "# BREAKING CHANGE # Si se actualiza de la versión 0,3.0, retire la vieja instancia primero antes de actualizar a 0,0 Después de eso puede crear una nueva instancia.\ncambio de modo de shedule a daemon, por favor tome conciencia del consejo anterior\nañadido Logitech Harmony Hub\npequeños bugfixes (función propia para la lista negra, fijar para la fuga de memoria, etc.)",
-        "pl": "BTEAKING CHANGE (ang.). Jeśli uaktualnienie od wersji <= 0.3.0, usunie starego przykładu przed aktualizacją do >= 1.0.0 po tym, jak możesz stworzyć nowy przykład.\nzmienione mody od ul. do daemonu, słyszeć radę powyżej\nlogite Harmony Hub\nmałe błędy (właściwe funkcje czarnej listy, naprawy wyciek pamięci itp.)",
-        "zh-cn": "** BREAKANGE ** 如果你从 <=0.3.0”的版本中更新,那么,在你更新到1.0.0之前,将旧的事例删除。.\n更改从单元到大都市的模式,请从上述咨询意见中了解。\n增额后勤技术\n小型配制(黑名单的主位,用于纪念泄漏等)。",
-        "uk": "** ГОЛОВНА ЗМІНА ** Якщо ви оновлюєтеся з версії <= 0.3.0, спершу видаліть старий екземпляр перед оновленням до >= 1.0.0. Після цього ви можете створити новий екземпляр.\nзмінено режим із shedule на daemon, зверніть увагу на наведену вище пораду\nдодано Logitech Harmony Hub\nневеликі виправлення помилок (власна функція для чорного списку, виправлення витоку пам’яті тощо)"
-      }
-    },
-    "titleLang": {
-      "en": "Device-Watcher",
-      "de": "Device-Watcher",
-      "ru": "Устройство-наблюдатель",
-      "pt": "Dispositivo-Observador",
-      "nl": "Device-Watcher",
-      "fr": "Device-Watcher",
-      "it": "Dispositivo di osservazione",
-      "es": "Vigilante de dispositivos",
-      "pl": "Obserwator urządzeń",
-      "zh-cn": "设备观察者",
-      "uk": "Device-Watcher"
-    },
-    "desc": {
-      "en": "Watchdog for devices",
-      "de": "Watchdog für Geräte",
-      "ru": "Сторожевой таймер для устройств",
-      "pt": "Watchdog para dispositivos",
-      "nl": "Waakhond voor apparaten",
-      "fr": "Chien de garde pour les appareils",
-      "it": "Watchdog per i dispositivi",
-      "es": "Vigilancia de dispositivos",
-      "pl": "Watchdog dla urządzeń",
-      "zh-cn": "设备看门狗",
-      "uk": "Сторожовий пес для пристроїв"
-    },
-    "authors": [
-      "Christian Behrends <mail@christian-behrends.de>"
-    ],
-    "keywords": [
-      "device",
-      "watcher",
-      "device-watcher",
-      "battery",
-      "rssi",
-      "link-quality",
-      "lists"
-    ],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "main": "main.js",
-    "icon": "device-watcher.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/ciddi89/ioBroker.device-watcher/main/admin/device-watcher.png",
-    "readme": "https://github.com/ciddi89/ioBroker.device-watcher/blob/main/README.md",
-    "loglevel": "info",
-    "mode": "daemon",
-    "type": "misc-data",
-    "compact": true,
-    "connectionType": "local",
-    "dataSource": "poll",
-    "materialize": true,
-    "plugins": {
-      "sentry": {
-        "dsn": "https://77c117cb4f6e43059424e03819439c24@o1337119.ingest.sentry.io/6606442"
-      }
-    },
-    "adminUI": {
-      "config": "json"
-    },
-    "messagebox": true,
-    "docs": {
-      "en": [
-        "docs/en/README.md"
-      ],
-      "de": [
-        "docs/de/README.md"
-      ]
-    },
-    "dependencies": [
-      {
-        "js-controller": ">=2.0.0"
-      }
-    ],
-    "globalDependencies": [
-      {
-        "admin": ">=5.1.28"
-      }
-    ]
-  },
-  "native": {
-    "alexa2Devices": false,
-    "alexa2MaxMinutes": 0,
-    "bleDevices": false,
-    "bleMaxMinutes": 300,
-    "deconzDevices": false,
-    "deconzMaxMinutes": 0,
-    "enoceanDevices": false,
-    "enoceanMaxMinutes": 300,
-    "esphomeDevices": false,
-    "esphomeMaxMinutes": 0,
-    "fritzdectDevices": false,
-    "fritzdectMaxMinutes": 0,
-    "fullybrowserDevices": false,
-    "fullybrowserMaxMinutes": 0,
-    "hamDevices": false,
-    "hamMaxMinutes": 300,
-    "harmonyDevices": false,
-    "harmonyMaxMinutes": 0,
-    "hmiPDevices": false,
-    "hmiPMaxMinutes": 0,
-    "hmrpcDevices": false,
-    "hmrpcMaxMinutes": 0,
-    "hs100Devices": false,
-    "hs100MaxMinutes": 300,
-    "hueDevices": false,
-    "hueMaxMinutes": 0,
-    "hueExtDevices": false,
-    "hueextMaxMinutes": 0,
-    "jeelinkDevices": false,
-    "jeelinkMaxMinutes": 300,
-    "lupusecDevices": false,
-    "lupusecMaxMinutes": 0,
-    "maxcubeDevices": false,
-    "maxcubeMaxMinutes": 0,
-    "merossDevices": false,
-    "merossMaxMinutes": 0,
-    "mihomeDevices": false,
-    "mihomeMaxMinutes": 300,
-    "mihomeGWMaxMinutes": 0,
-    "mihomeVacuumDevices": false,
-    "mihomeVacuumMaxMinutes": 0,
-    "netatmoDevices": false,
-    "netatmoMaxMinutes": 300,
-    "nukiExtDevices": false,
-    "nukiextendMaxMinutes": 300,
-    "nutDevices": false,
-    "nutMaxMinutes": 300,
-    "pingDevices": false,
-    "pingMaxMinutes": 0,
-    "roombaDevices": false,
-    "roombaMaxMinutes": 0,
-    "shellyDevices": false,
-    "shellyMaxMinutes": 0,
-    "sonoffDevices": false,
-    "sonoffMaxMinutes": 0,
-    "sonosDevices": false,
-    "sonosMaxMinutes": 0,
-    "sureflapDevices": false,
-    "sureflapMaxMinutes": 0,
-    "switchbotBleDevices": false,
-    "switchbotMaxMinutes": 300,
-    "tadoDevices": false,
-    "tadoMaxMinutes": 0,
-    "tapoDevices": false,
-    "tapoMaxMinutes": 300,
-    "tradfriDevices": false,
-    "tradfriMaxMinutes": 0,
-    "unifiDevices": false,
-    "unifiMaxMinutes": 0,
-    "wledDevices": false,
-    "wledMaxMinutes": 0,
-    "yeelightDevices": false,
-    "yeelightMaxMinutes": 0,
-    "zigbeeDevices": false,
-    "zigbeeMaxMinutes": 300,
-    "zigbee2mqttDevices": false,
-    "zigbee2mqttMaxMinutes": 0,
-    "zwaveDevices": false,
-    "zwaveMaxMinutes": 0,
-    "trueState": false,
-    "listOnlyBattery": false,
-    "createOwnFolder": false,
-    "createHtmlList": false,
-    "checkSendOfflineMsg": false,
-    "checkSendOfflineMsgDaily": false,
-    "checkOfflineMonday": false,
-    "checkOfflineTuesday": false,
-    "checkOfflineWednesday": false,
-    "checkOfflineThursday": false,
-    "checkOfflineFriday": false,
-    "checkOfflineSaturday": false,
-    "checkOfflineSunday": false,
-    "checkSendBatteryMsg": false,
-    "checkSendBatteryTime": "12:00",
-    "checkSendOfflineTime": "12:05",
-    "minWarnBatterie": 35,
-    "checkMonday": false,
-    "checkTuesday": false,
-    "checkWednesday": false,
-    "checkThursday": false,
-    "checkFriday": false,
-    "checkSaturday": false,
-    "checkSunday": false,
-    "instancePushover": "",
-    "titlePushover": "",
-    "devicePushover": "",
-    "prioPushover": "",
-    "instanceEmail": "",
-    "subjectEmail": "",
-    "sendToEmail": "",
-    "instanceTelegram": "",
-    "deviceTelegram": "",
-    "chatIdTelegram": "",
-    "instanceWhatsapp": "",
-    "phoneWhatsapp": "",
-    "instanceJarvis": "",
-    "titleJarvis": "Device-Watcher",
-    "instanceLovelace": "",
-    "titleLovelace": "Device-Watcher",
-    "tableBlacklist": [],
-    "updateinterval": 10,
-    "ownDataEditor": []
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "offlineCount",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of devices offline",
-          "de": "Anzahl der Geräte offline",
-          "ru": "Количество устройств offline",
-          "pt": "Número de dispositivos offline",
-          "nl": "Nummer van apparatuur offline",
-          "fr": "Nombre de dispositifs hors ligne",
-          "it": "Numero di dispositivi offline",
-          "es": "Número de dispositivos sin conexión",
-          "pl": "Ilość urządzeń offline",
-          "zh-cn": "线内装置数量"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "offlineList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of offline devices",
-          "de": "JSON Liste der Offline-Geräte",
-          "ru": "JSON Список оффлайн устройств",
-          "pt": "JSON Lista de dispositivos off-line",
-          "nl": "JSON List van offline apparatuur",
-          "fr": "JSON Liste des dispositifs hors ligne",
-          "it": "JSON Elenco dei dispositivi offline",
-          "es": "JSON Lista de dispositivos sin conexión",
-          "pl": "JSON Lista urządzeń offline",
-          "zh-cn": "JSON 线装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "listAll",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of all devices",
-          "de": "JSON Liste aller Geräte",
-          "ru": "JSON Список всех устройств",
-          "pt": "JSON Lista de todos os dispositivos",
-          "nl": "JSON List van alle apparaten",
-          "fr": "JSON Liste de tous les dispositifs",
-          "it": "JSON Elenco di tutti i dispositivi",
-          "es": "JSON Lista de todos los dispositivos",
-          "pl": "JSON Lista wszystkich urządzeń",
-          "zh-cn": "JSON 所有装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "linkQualityList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of devices with signal strength",
-          "de": "JSON Liste der Geräte mit Signalstärke",
-          "ru": "JSON Список устройств с силой сигнала",
-          "pt": "JSON Lista de dispositivos com força de sinal",
-          "nl": "JSON List van apparaten met signaalkracht",
-          "fr": "JSON Liste des dispositifs avec force de signal",
-          "it": "JSON Elenco dei dispositivi con forza del segnale",
-          "es": "JSON Lista de dispositivos con fuerza de señal",
-          "pl": "JSON Lista urządzeń z siłą sygnałową",
-          "zh-cn": "JSON 具有信号实力的装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "countAll",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of all devices",
-          "de": "Anzahl aller Geräte",
-          "ru": "Количество всех устройств",
-          "pt": "Número de todos os dispositivos",
-          "nl": "Nummer van alle apparaten",
-          "fr": "Nombre de tous les appareils",
-          "it": "Numero di tutti i dispositivi",
-          "es": "Número de todos los dispositivos",
-          "pl": "Ilość wszystkich urządzeń",
-          "zh-cn": "所有装置的数目"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "batteryList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of devices with battery state",
-          "de": "JSON Liste der Geräte mit Batteriezustand",
-          "ru": "JSON Список устройств с состоянием батареи",
-          "pt": "JSON Lista de dispositivos com estado da bateria",
-          "nl": "JSON List van apparaten met batterij staat",
-          "fr": "JSON Liste des appareils avec état de batterie",
-          "it": "JSON Elenco dei dispositivi con stato della batteria",
-          "es": "JSON Lista de dispositivos con estado de batería",
-          "pl": "JSON Lista urządzeń z baterią stanową",
-          "zh-cn": "JSON 电池国装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "lowBatteryList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of devices with low battery state",
-          "de": "JSON Liste der Geräte mit niedrigem Batteriezustand",
-          "ru": "JSON Список устройств с низким состоянием батареи",
-          "pt": "JSON Lista de dispositivos com baixo estado da bateria",
-          "nl": "JSON List van apparaten met lage batterij staat",
-          "fr": "JSON Liste des appareils à faible état de batterie",
-          "it": "JSON Elenco di dispositivi con stato di batteria basso",
-          "es": "JSON Lista de dispositivos con estado de batería bajo",
-          "pl": "JSON Lista urządzeń o niskim stanie baterii",
-          "zh-cn": "JSON 低电池国家装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "lowBatteryCount",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of devices with low battery",
-          "de": "Anzahl der Geräte mit niedriger Batterie",
-          "ru": "Количество устройств c низкой батареей",
-          "pt": "Número de dispositivos com bateria baixa",
-          "nl": "Nummer van apparaten met lage batterij",
-          "fr": "Nombre de dispositifs avec batterie basse",
-          "it": "Numero di dispositivi con batteria bassa",
-          "es": "Número de dispositivos con batería baja",
-          "pl": "Liczba urządzeń z niską baterią",
-          "zh-cn": "低电池的装置数量"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "batteryCount",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of devices with battery",
-          "de": "Anzahl der Geräte mit Batterie",
-          "ru": "Количество устройств c батареей",
-          "pt": "Número de dispositivos com bateria",
-          "nl": "Nummer van apparaten met batterij",
-          "fr": "Nombre de dispositifs avec batterie",
-          "it": "Numero di dispositivi con batteria",
-          "es": "Número de dispositivos con batería",
-          "pl": "Liczba urządzeń z baterią",
-          "zh-cn": "电池的装置数量"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "lastCheck",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Timestamp from last run",
-          "de": "Zeitstempel der letzten Ausführung",
-          "ru": "Timestamp от последнего запуска",
-          "pt": "Vampiro da última corrida",
-          "nl": "Timestamp",
-          "fr": "Timestamp de la dernière course",
-          "it": "Timestamp dall'ultima corsa",
-          "es": "Timestamp de la última carrera",
-          "pl": "Timestamp",
-          "zh-cn": "二. 从最后经营期间的时间限制"
-        },
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "lastNotification",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Last notification",
-          "de": "Letzte Meldung",
-          "ru": "Последнее уведомление",
-          "pt": "Última notificação",
-          "nl": "Laatste bericht",
-          "fr": "Dernière notification",
-          "it": "Ultimo avviso",
-          "es": "Última notificación",
-          "pl": "Oświadczenie",
-          "zh-cn": "上次通知"
-        },
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    }
-  ]
+	"common": {
+		"name": "device-watcher",
+		"version": "2.0.3",
+		"news": {
+			"2.0.3": {
+				"en": "fixed issue with localCompare\nadded tapo\nadded fullyBrowser adapter\nadded Sure Flap adapter\nfixed low bat messages",
+				"de": "problem mit lokalen Vergleich\nzusatz tapo\nvollständig Browser Adapter\nhinzugefügt Sure Flap Adapter\nfeste low bat-nachrichten",
+				"ru": "фиксированная проблема с местным Сравнить\nдобавлено tapo\nдобавлено полностью Браузерный адаптер\nдобавил Sure Flap адаптер\nфиксированные низкие bat сообщения",
+				"pt": "problema fixo com local Comparar\nadicionado tapo\nadicionado totalmente Adaptador de navegador\nadicionado adaptador de Flap claro\nmensagens de taco baixas fixas",
+				"nl": "_ Compare\nvertaling:\nvolledig toegevoegd Browser adapter\nvoegde Sure Flap adapter toe\nvertaling:",
+				"fr": "problème fixe avec Comparer\ntapo ajouté\nentièrement ajouté Adaptateur de navigateur\nadaptateur Sure Flap\nmessages de chauve-souris fixes",
+				"it": "problema fisso con locale Confronta\nrubinetto aggiunto\naggiunto completamente Adattatore del browser\nadattatore Sure Flap\nmessaggi di battuta bassi fissi",
+				"es": "problema fijo con el local Compare\nañadido tapo\nañadido plenamente Adaptador de navegador\nagregado adaptador de Flap\nmensajes de bate fijos",
+				"pl": "bieżący problem z lokalną sprawą W porównaniu z innymi\ndodać\ndodać adapter\nadapter do Sure Flap\nniskojęzyczna wiadomość",
+				"uk": "фіксована проблема з місцевими Порівняти\nдодано тапо\nдодано повністю Адаптери\nдоданий Sure Flap адаптер\nфіксовані низькі повідомлення bat",
+				"zh-cn": "固定问题 比较\n增 录\n增 编 增 编\n增 编\n固定的低巴特信息"
+			},
+			"2.0.2": {
+				"en": "added status to battery list\nbatt devices which are offline are now still included in the battery list\nsmall improvements of translations\noffline time settings: you can use 0 instead of -1 (it will be the new standard)\nimprovements of adaptername\nfixed issues [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nrepaired blacklist notifications\nadded handling for blacklist object",
+				"de": "status zur batterieliste hinzugefügt\nbatt-geräte, die offline sind, sind jetzt noch in der batterieliste enthalten\nkleine verbesserungen der übersetzungen\noffline-zeiteinstellungen: sie können 0 anstelle -1 verwenden (es wird der neue standard sein)\nverbesserungen des adapternamens\n[#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nreparierte blacklist-benachrichtigungen\nzusätzliche handhabung für blacklist-objekt",
+				"ru": "добавлен статус в список батарей\nbatt устройства, которые являются offline, теперь все еще включены в список батарей\nнебольшие улучшения переводов\nоффлайн настройки времени: вы можете использовать 0 вместо -1 (это будет новый стандарт)\nулучшения логины адаптера\nфиксированные вопросы [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nотремонтированный черный список уведомлений\nдобавлена обработка для объекта blacklist",
+				"pt": "status adicionado à lista de bateria\ndispositivos de batedor que estão offline ainda estão incluídos na lista de baterias\npequenas melhorias de traduções\nconfigurações de tempo off-line: você pode usar 0 em vez de -1 (ele será o novo padrão)\nmelhorias do nome do adaptador\n(http://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotificações de lista negra reparadas\nmanipulação adicionada para objeto de lista negra",
+				"nl": "vertaling:\nbatt apparatuur die offline zijn nog steeds in de batterijlijst\nvertaling:\noffline time settings: je kunt 0 gebruiken in plaats van -1 (het zal de nieuwe standaard zijn)\nverbeteringen van adapternaam\nquality over Quantity (QoQ) Releases Vertaling:\nvertaling:\nvertaling:",
+				"fr": "statut ajouté à la liste de piles\nles dispositifs de chauves-souris qui sont hors ligne sont maintenant toujours inclus dans la liste de batterie\npetites améliorations des traductions\nparamètres de temps hors ligne: vous pouvez utiliser 0 au lieu de -1 (il sera la nouvelle norme)\naméliorations du nom d'adaptateur\n(https://github.com/ciddi89/ioBroker.device-watcher/issues/66) \" [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotifications de listes noires réparées\nmanipulation supplémentaire pour objet blacklist",
+				"it": "stato aggiunto alla lista della batteria\nbatt dispositivi che sono offline sono ora ancora inclusi nella lista della batteria\npiccoli miglioramenti delle traduzioni\nimpostazioni di tempo offline: è possibile utilizzare 0 invece di -1 (è il nuovo standard)\nmiglioramenti del nome dell'adattatore\n(https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotifiche di blacklist riparate\ngestione aggiuntiva per oggetto blacklist",
+				"es": "estado añadido a la lista de baterías\ndispositivos de batta que están fuera de línea ahora están incluidos en la lista de baterías\npequeñas mejoras de las traducciones\najustes del tiempo fuera de línea: puede utilizar 0 en lugar de -1 (será el nuevo estándar)\nmejoras en el nombre de adaptador\ncuestiones fijas [#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nnotificaciones de lista negra reparadas\nmanejo añadido para objeto de lista negra",
+				"pl": "dodany status baterii\nurządzenia z baterią, które są offline, są obecnie włączone do listy baterii\nmałe poprawki tłumaczenia\nwspółczynnikowy: możesz użyć 0 zamiast -1 (jak będzie nowy standard)\nulepszenia adaptername\nnumery stałe (#66(https:/github.com/ciddi89/ioBroker.device-watcher/issues/66) & #67(https:/github.com/ciddi89/ioBroker.device-watcher/67)\nulepszenia czarnej listy\nobsługa blacklist object",
+				"uk": "додано статус до списку акумуляторів\nпристрої для баттів, які в автономному режимі, все ще включені в список акумуляторів\nневеликі поліпшення перекладів\nв автономному режимі настройки часу: ви можете використовувати 0 замість -1 (це буде новий стандарт)\nполіпшення імені адаптера\n[#66](https://github.com/ciddi89/ioBroker.device-watcher/issues/66) & [#67](https://github.com/ciddi89/ioBroker.device-watcher/issues/67)\nвідремонтовані повідомлення blacklist\nдодана обробка для об'єкта blacklist",
+				"zh-cn": "电池清单的附加地位\nb 现仍在列入电池清单的浮动装置\n翻译的小改进\n时限:你可以使用0.而不是1-1(即新标准)\nb. 改进适应人员名\n固定问题[第66](http://github.com/ciddi89/ioBroker.device-watcher/issues/66)和[#67](http://github.com/ciddi89/Broker.device-watcher/issues/67)\n修理黑名单通知\n黑名单目标的新增处理"
+			},
+			"2.0.1": {
+				"en": "If the device is offline, set signal strength to '0%'\nIf the device is offline, set battery to ' - '\nrepair some small issues in the lists",
+				"de": "Ist das Gerät offline, setzen Sie Signalstärke auf 0%\nWenn das Gerät offline ist, setzen Sie Batterie auf ' - '\neinige kleine probleme in den listen reparieren",
+				"ru": "Если устройство оффлайн, установите силу сигнала до 0%\nЕсли устройство оффлайн, установите аккумулятор в ' - '\nотремонтировать некоторые небольшие проблемы в списках",
+				"pt": "Se o dispositivo estiver offline, defina a força do sinal para 0%\nSe o dispositivo estiver offline, configure a bateria para ' - '\nreparar alguns pequenos problemas nas listas",
+				"nl": "Als het apparaat offline is, zet een signaalstilstand op 0%\nAls het apparaat offline is, zet dan batterij op '\nrepareer wat kleine kwesties in de lijst",
+				"fr": "Si l'appareil est hors ligne, définir la résistance du signal à 0%\nSi l'appareil est hors ligne, régler la batterie à ' - '\nréparer quelques petits problèmes dans les listes",
+				"it": "Se il dispositivo è offline, impostare la forza del segnale a 0%\nSe il dispositivo è offline, impostare la batteria a ' - '\nriparare alcuni piccoli problemi nelle liste",
+				"es": "Si el dispositivo está fuera de línea, establece la fuerza de señal al 0%\nSi el dispositivo está fuera de línea, establece la batería a ' - '\nreparar algunas pequeñas cuestiones en las listas",
+				"pl": "Jeśli urządzenie jest offline, ustawia siłę sygnału do 0%\nJeśli urządzenie jest wycinane, ustawiono baterię do '- '\nwyremontowano drobne problemy w listach",
+				"uk": "Якщо пристрій вимкнено, встановлюється міцність сигналу на 0%\nЯкщо пристрій вимкнено, встановіть акумулятор до ' - '\nремонт деяких невеликих питань у переліках",
+				"zh-cn": "如果装置落空,信号强度达到0%\n如果装置不线,便将电池到该地。\n在名单中修理一些小型问题"
+			},
+			"2.0.0": {
+				"en": "added Lupusec, HS100 adapter, Zigbee2MQTT and MaxCube\nchanged name of Homematic to HM-RPC\nmade a completly makeover of the blacklist\nclean up the code and shorten some",
+				"de": "lupusec, HS100 Adapter, Zigbee2MQTT und MaxCube\ngeänderter Name von Homematic zu HM-RPC\naus einem kompletten makeover der blacklist\nden code reinigen und einige verkürzen",
+				"ru": "добавлено Lupusec, HS100 адаптер, Zigbee2MQTT и MaxCube\nизменено имя Homematic в HM-RPC\nсделал полный макияж черного списка\nочистить код и сократить некоторые",
+				"pt": "adicionado Lupusec, adaptador HS100, Zigbee2MQTT e MaxCube\nnome alterado de Homematic para HM-RPC\nfez uma reforma completa da lista negra\nlimpar o código e encurtar alguns",
+				"nl": "voegde Lupusec toe, HS100 adapter, Zigbee2MQT en MaxCube\nveranderde naam van Homema aan HM-RPC\n_\nruim de code op en verklein wat",
+				"fr": "lupusec, adaptateur HS100, Zigbee2MQTT et MaxCube\nchangement de nom de Homematic à HM-RPC\nfait un complet de la liste noire\nnettoyer le code et raccourcir certains",
+				"it": "aggiunto Lupusec, adattatore HS100, Zigbee2MQTT e MaxCube\ncambiato nome di Homematic a HM-RPC\nreso completo della lista nera\npulire il codice e accorciare alcuni",
+				"es": "añadido Lupusec, adaptador HS100, Zigbee2MQTT y MaxCube\ncambio de nombre de Homematic a HM-RPC\nhizo un cambio completly de la lista negra\nlimpiar el código y acortar algunos",
+				"pl": "lupusec, adapter HS100, Zigbee2MQTT i MaxCube\nzmienił nazwę Homematic na HM-RPC\nudało się to zrobić zupełnienie czarnej listy\nczyścił kod i skrócił niektóre z nich",
+				"uk": "додано Lupusec, HS100 адаптер, Zigbee2MQTT і MaxCube\nзмінено назву Homematic до HM-RPC\nвиготовлений комплетально макіяж чорного списку\nочистити код і скорочувати деякі",
+				"zh-cn": "加上Lupusec,HS100适应者,Zigbee2MQTT和MaxCube\n家庭名称改为HM-RPC\n填写黑名单\na. 守则的清理和缩短某些人"
+			},
+			"1.1.0": {
+				"en": "removed indicatoren for daily sent messages\nchanged selector for shelly devices\nadded Zigbee2MQTT adapter\nadded cron function to use own time for daily overview messages",
+				"de": "entfernte anzeige für täglich gesendete nachrichten\ngeänderter selektor für shelly-geräte\nzigbee2MQTT Adapter hinzugefügt\nzusätzliche cron-funktion, um eigene zeit für tägliche übersichtsnachrichten zu verwenden",
+				"ru": "удаленный индикатор для ежедневных отправленных сообщений\nизменен селектор для оболочки устройств\nдобавлен адаптер Zigbee2MQTT\nдобавлена функция cron для использования собственного времени для ежедневного обзора сообщений",
+				"pt": "indicador removido para mensagens enviadas diárias\nseletor alterado para dispositivos shelly\nadicionado adaptador Zigbee2MQTT\nfunção cron adicionada para usar o próprio tempo para mensagens de visão geral diária",
+				"nl": "verwijderde indicatoren voor dagelijks verzonden berichten\nverschoonde selector voor shelly apparaten\nvoegde Zigbee2MQT adapter toe\nvoegde kroonfunctie toe om dagelijks overzicht te gebruiken",
+				"fr": "indicateur supprimé pour les messages envoyés quotidiennement\nsélecteur modifié pour les dispositifs shelly\nadaptateur Zigbee2MQTT\nfonction cron ajoutée pour utiliser son propre temps pour les messages d'aperçu quotidien",
+				"it": "indicatore rimosso per messaggi inviati giornalieri\nselettore modificato per dispositivi shelly\naggiunto adattatore Zigbee2MQTT\nfunzione di cron aggiunto per utilizzare il proprio tempo per i messaggi di visione quotidiana",
+				"es": "indicador eliminado para mensajes enviados diariamente\nselector cambiado para dispositivos de vaina\nadaptador Zigbee2MQTT\nfunción cron agregada para utilizar tiempo propio para mensajes de visión general diaria",
+				"pl": "usunąć wskaźniki do codziennego przesyłania wiadomości\nzmieniono wybór dla urządzeń ostrzałowych\nadapter Zigbee2MQTT\ndodała funkcję krona do codziennego użytku",
+				"zh-cn": "d. 每天发出的讯息的清除指标\n炮火装置的选择\n增加Zigbee2MQTT适应人员\nb. 利用自己的时间进行日常概览信息",
+				"uk": "видалено індикатор щоденних відправлених повідомлень\nзмінено селектор для пристроїв shelly\nдодано адаптер Zigbee2MQTT\nдодано функцію cron для використання власного часу для щоденних оглядових повідомлень"
+			},
+			"1.0.1": {
+				"en": "added WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut and Meross adapter\nfixed battery message\ncorrected and repaired some issues of last contact time \nadded support for old HM devices\nsome small refactoring of code\nchanged shelly selector from dp rssi to dp online",
+				"de": "wLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut und Meross Adapter\nfeste batterienachricht\neinige probleme der letzten kontaktzeit korrigiert und repariert\nunterstützung für alte HM-Geräte\neinige kleine refactoring von code\ngewechselt shelly selector von dp rssi nach dp online",
+				"ru": "добавлено WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut и Meross адаптер\nфиксированное сообщение батареи\nисправлены и отремонтированы некоторые вопросы последнего контактного времени\nдобавлена поддержка старых устройств HM\nнекоторое небольшое рефакторинг кода\nизмененный селектор оболочки от dp rssi до dp онлайн",
+				"pt": "adicionado WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Adaptador Unifi, Nut e Meross\nmensagem de bateria fixa\ncorrigido e reparado algumas questões de última hora de contato\nsuporte adicionado para dispositivos HM antigos\nalguma pequena refatoração de código\nmudou seletor shelly de dp rssi para dp online",
+				"nl": "wLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut en Meross adapter\nvertaling:\nvertaling:\nvoegde steun toe voor oude HM apparaten\neen kleine refactor van code\nverschoonde shelly selector van dprssi naar dp online",
+				"fr": "wLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut et Meross adaptateur\nmessage de batterie fixe\ncorrigé et réparé certains problèmes du dernier temps de contact\nsupport ajouté pour les anciens appareils HM\nun petit refactoring de code\nsélecteur shelly modifié de dp rssi à dp en ligne",
+				"it": "aggiunto WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut e Meross adattatore\nmessaggio della batteria fisso\ncorretto e riparato alcuni problemi dell'ultimo tempo di contatto\nsupporto aggiunto per vecchi dispositivi HM\nalcuni piccoli refactoring del codice\ncambiato shelly selettore da dp rssi a dp online",
+				"es": "añadido WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Adaptador Unifi, Nut y Meross\nmensaje de batería fijo\ncorregido y reparado algunos problemas del último tiempo de contacto\nsoporte añadido para dispositivos HM antiguos\nuna pequeña refactorización del código\ncambiado selector de jalea de dp rssi a dp en línea",
+				"pl": "dodał WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut i Meross\nbaterie\npoprawiono i naprawiło pewne problemy z ostatnim kontaktem\nwspierać stare urządzenia HM\nniewielki refaktor\nzmienił selekcjonera z dp rssi na dp online",
+				"zh-cn": "新增的WLED, Ikea Tradfri,会议室巴,HmIp, Tado,Netatmo, Yeecent-2, Unifi, Nut and Meross适应er\n固定电池信息\n纠正并修复了最后接触时间的一些问题\n对旧的HM装置的更多支持\n守则略有修改\n弹壳从手西改为在线",
+				"uk": "додано адаптер WLED, Ikea Tradfri, Roomba, HmIp, Tado, Netatmo, Yeelight-2, Unifi, Nut і Meross\nповідомлення про розряд батареї\nвиправлено та усунено деякі проблеми часу останнього контакту\nдодана підтримка старих пристроїв HM\nдеякий невеликий рефакторинг коду\nзмінено селектор shelly з dp rssi на dp online"
+			},
+			"1.0.0": {
+				"en": "** BREAKING CHANGE ** If you update from version <= 0.3.0, remove the old instance first before you update to >= 1.0.0. After that you can create a new instance.\nchanged mode from shedule to daemon, please take aware from the advice above\nadded Logitech Harmony Hub\nsmall bugfixes (own function for blacklist, fix for memory leak etc.)",
+				"de": "** BREAKING CHANGE ** Wenn Sie von der Version <= 0.3.0 aktualisieren, entfernen Sie die alte Instanz zuerst, bevor Sie auf >= 1.0.0 aktualisieren danach können Sie eine neue Instanz erstellen.\ngeänderter modus von shedule nach daemon, bitte beachten sie die oben genannten ratschläge\nlogitech Harmony Hub\nkleine bugfixes (eigene funktion für blacklist, fix für speicherleck etc.)",
+				"ru": "Завтраки изменить Если вы обновляете из версии <= 0.3.0, сначала удалите старый экземпляр, прежде чем обновиться до >= 1.0.0 После этого вы можете создать новый экземпляр.\nизмененный режим от shedule до daemon, пожалуйста, ознакомьтесь с советами выше\nдобавил Logitech Harmony Hub\nнебольшие багфиксы (собственная функция для черного списка, исправить для утечки памяти и т.д.)",
+				"pt": "** REGRAS DE CONCORRÊNCIA Se você atualizar da versão <= 0.3.0, remova a antiga instância primeiro antes de atualizar para >= 1.0.0 Depois disso você pode criar uma nova instância.\nmodo alterado de shedule para daemon, por favor tome conhecimento do conselho acima\nadicionado Logitech Harmony Hub\npequenos bugfixes (função própria para a lista negra, corrigir para vazamento de memória etc.)",
+				"nl": "BREAKING CHANGE Als je updates van de versie 0.3.0, verwijder het oude instance eerst voordat je updates geeft aan 1.0, nadat je een nieuw voorbeeld kan creëren.\nverandering van shedule tot daemon, neem het advies boven\nvoegde Logitech Harmony Hub\nkleine insecten (own functie voor blacklist, herstel voor geheugenlek.)",
+				"fr": "♪ BREAKING CHANGE ♪ Si vous mettez à jour à partir de la version = 0.3.0, retirez l'ancienne instance avant de mettre à jour la version 1.0.0 Après cela, vous pouvez créer une nouvelle instance.\nchangement de mode de shedule à daemon, s'il vous plaît prendre conscience de l'avis ci-dessus\najouté Logitech Harmony Hub\npetits bugfix (fonction unique pour liste noire, correction pour fuite de mémoire etc.)",
+				"it": "# BREAKING CHANG # Se si aggiorna dalla versione <= 0.3.0, rimuovere la vecchia istanza prima di aggiornare a >= 1.0.0 Dopo di che è possibile creare una nuova istanza.\nmodo cambiato da capannone a demone, si prega di prendere coscienza dal consiglio sopra\naggiunto Logitech Harmony Hub\npiccoli bugfixes (funzione propria per blacklist, fix per perdita di memoria ecc.)",
+				"es": "# BREAKING CHANGE # Si se actualiza de la versión 0,3.0, retire la vieja instancia primero antes de actualizar a 0,0 Después de eso puede crear una nueva instancia.\ncambio de modo de shedule a daemon, por favor tome conciencia del consejo anterior\nañadido Logitech Harmony Hub\npequeños bugfixes (función propia para la lista negra, fijar para la fuga de memoria, etc.)",
+				"pl": "BTEAKING CHANGE (ang.). Jeśli uaktualnienie od wersji <= 0.3.0, usunie starego przykładu przed aktualizacją do >= 1.0.0 po tym, jak możesz stworzyć nowy przykład.\nzmienione mody od ul. do daemonu, słyszeć radę powyżej\nlogite Harmony Hub\nmałe błędy (właściwe funkcje czarnej listy, naprawy wyciek pamięci itp.)",
+				"zh-cn": "** BREAKANGE ** 如果你从 <=0.3.0”的版本中更新,那么,在你更新到1.0.0之前,将旧的事例删除。.\n更改从单元到大都市的模式,请从上述咨询意见中了解。\n增额后勤技术\n小型配制(黑名单的主位,用于纪念泄漏等)。",
+				"uk": "** ГОЛОВНА ЗМІНА ** Якщо ви оновлюєтеся з версії <= 0.3.0, спершу видаліть старий екземпляр перед оновленням до >= 1.0.0. Після цього ви можете створити новий екземпляр.\nзмінено режим із shedule на daemon, зверніть увагу на наведену вище пораду\nдодано Logitech Harmony Hub\nневеликі виправлення помилок (власна функція для чорного списку, виправлення витоку пам’яті тощо)"
+			}
+		},
+		"titleLang": {
+			"en": "Device-Watcher",
+			"de": "Device-Watcher",
+			"ru": "Устройство-наблюдатель",
+			"pt": "Dispositivo-Observador",
+			"nl": "Device-Watcher",
+			"fr": "Device-Watcher",
+			"it": "Dispositivo di osservazione",
+			"es": "Vigilante de dispositivos",
+			"pl": "Obserwator urządzeń",
+			"zh-cn": "设备观察者",
+			"uk": "Device-Watcher"
+		},
+		"desc": {
+			"en": "Watchdog for devices",
+			"de": "Watchdog für Geräte",
+			"ru": "Сторожевой таймер для устройств",
+			"pt": "Watchdog para dispositivos",
+			"nl": "Waakhond voor apparaten",
+			"fr": "Chien de garde pour les appareils",
+			"it": "Watchdog per i dispositivi",
+			"es": "Vigilancia de dispositivos",
+			"pl": "Watchdog dla urządzeń",
+			"zh-cn": "设备看门狗",
+			"uk": "Сторожовий пес для пристроїв"
+		},
+		"authors": ["Christian Behrends <mail@christian-behrends.de>"],
+		"keywords": ["device", "watcher", "device-watcher", "battery", "rssi", "link-quality", "lists"],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "device-watcher.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/ciddi89/ioBroker.device-watcher/main/admin/device-watcher.png",
+		"readme": "https://github.com/ciddi89/ioBroker.device-watcher/blob/main/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "misc-data",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "poll",
+		"materialize": true,
+		"plugins": {
+			"sentry": {
+				"dsn": "https://77c117cb4f6e43059424e03819439c24@o1337119.ingest.sentry.io/6606442"
+			}
+		},
+		"adminUI": {
+			"config": "json"
+		},
+		"messagebox": true,
+		"docs": {
+			"en": ["docs/en/README.md"],
+			"de": ["docs/de/README.md"]
+		},
+		"dependencies": [
+			{
+				"js-controller": ">=2.0.0"
+			}
+		],
+		"globalDependencies": [
+			{
+				"admin": ">=5.1.28"
+			}
+		]
+	},
+	"native": {
+		"alexa2Devices": false,
+		"alexa2MaxMinutes": 0,
+		"bleDevices": false,
+		"bleMaxMinutes": 300,
+		"deconzDevices": false,
+		"deconzMaxMinutes": 0,
+		"enoceanDevices": false,
+		"enoceanMaxMinutes": 300,
+		"esphomeDevices": false,
+		"esphomeMaxMinutes": 0,
+		"fritzdectDevices": false,
+		"fritzdectMaxMinutes": 0,
+		"fullybrowserDevices": false,
+		"fullybrowserMaxMinutes": 0,
+		"hamDevices": false,
+		"hamMaxMinutes": 300,
+		"harmonyDevices": false,
+		"harmonyMaxMinutes": 0,
+		"hmiPDevices": false,
+		"hmiPMaxMinutes": 0,
+		"hmrpcDevices": false,
+		"hmrpcMaxMinutes": 0,
+		"hs100Devices": false,
+		"hs100MaxMinutes": 300,
+		"hueDevices": false,
+		"hueMaxMinutes": 0,
+		"hueExtDevices": false,
+		"hueextMaxMinutes": 0,
+		"jeelinkDevices": false,
+		"jeelinkMaxMinutes": 300,
+		"lupusecDevices": false,
+		"lupusecMaxMinutes": 0,
+		"maxcubeDevices": false,
+		"maxcubeMaxMinutes": 0,
+		"merossDevices": false,
+		"merossMaxMinutes": 0,
+		"mihomeDevices": false,
+		"mihomeMaxMinutes": 300,
+		"mihomeGWMaxMinutes": 0,
+		"mihomeVacuumDevices": false,
+		"mihomeVacuumMaxMinutes": 0,
+		"mqttZigbee2MqttDevices": false,
+		"mqttZigbee2MqttMaxMinutes": 0,
+		"mqttNukiDevices": false,
+		"mqttNukiMaxMinutes": 300,
+		"netatmoDevices": false,
+		"netatmoMaxMinutes": 300,
+		"nukiExtDevices": false,
+		"nukiextendMaxMinutes": 300,
+		"nutDevices": false,
+		"nutMaxMinutes": 300,
+		"pingDevices": false,
+		"pingMaxMinutes": 0,
+		"roombaDevices": false,
+		"roombaMaxMinutes": 0,
+		"shellyDevices": false,
+		"shellyMaxMinutes": 0,
+		"sonoffDevices": false,
+		"sonoffMaxMinutes": 0,
+		"sonosDevices": false,
+		"sonosMaxMinutes": 0,
+		"sureflapDevices": false,
+		"sureflapMaxMinutes": 0,
+		"switchbotBleDevices": false,
+		"switchbotMaxMinutes": 300,
+		"tadoDevices": false,
+		"tadoMaxMinutes": 0,
+		"tapoDevices": false,
+		"tapoMaxMinutes": 300,
+		"tradfriDevices": false,
+		"tradfriMaxMinutes": 0,
+		"unifiDevices": false,
+		"unifiMaxMinutes": 0,
+		"wledDevices": false,
+		"wledMaxMinutes": 0,
+		"yeelightDevices": false,
+		"yeelightMaxMinutes": 0,
+		"zigbeeDevices": false,
+		"zigbeeMaxMinutes": 300,
+		"zigbee2mqttDevices": false,
+		"zigbee2mqttMaxMinutes": 0,
+		"zwaveDevices": false,
+		"zwaveMaxMinutes": 0,
+		"trueState": false,
+		"listOnlyBattery": false,
+		"createOwnFolder": false,
+		"createHtmlList": false,
+		"checkSendOfflineMsg": false,
+		"checkSendOfflineMsgDaily": false,
+		"checkOfflineMonday": false,
+		"checkOfflineTuesday": false,
+		"checkOfflineWednesday": false,
+		"checkOfflineThursday": false,
+		"checkOfflineFriday": false,
+		"checkOfflineSaturday": false,
+		"checkOfflineSunday": false,
+		"checkSendBatteryMsg": false,
+		"checkSendBatteryTime": "12:00",
+		"checkSendOfflineTime": "12:05",
+		"minWarnBatterie": 35,
+		"checkMonday": false,
+		"checkTuesday": false,
+		"checkWednesday": false,
+		"checkThursday": false,
+		"checkFriday": false,
+		"checkSaturday": false,
+		"checkSunday": false,
+		"instancePushover": "",
+		"titlePushover": "",
+		"devicePushover": "",
+		"prioPushover": "",
+		"instanceEmail": "",
+		"subjectEmail": "",
+		"sendToEmail": "",
+		"instanceTelegram": "",
+		"deviceTelegram": "",
+		"chatIdTelegram": "",
+		"instanceWhatsapp": "",
+		"phoneWhatsapp": "",
+		"instanceJarvis": "",
+		"titleJarvis": "Device-Watcher",
+		"instanceLovelace": "",
+		"titleLovelace": "Device-Watcher",
+		"tableBlacklist": [],
+		"updateinterval": 10,
+		"ownDataEditor": []
+	},
+	"objects": [],
+	"instanceObjects": [
+		{
+			"_id": "offlineCount",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of devices offline",
+					"de": "Anzahl der Geräte offline",
+					"ru": "Количество устройств offline",
+					"pt": "Número de dispositivos offline",
+					"nl": "Nummer van apparatuur offline",
+					"fr": "Nombre de dispositifs hors ligne",
+					"it": "Numero di dispositivi offline",
+					"es": "Número de dispositivos sin conexión",
+					"pl": "Ilość urządzeń offline",
+					"zh-cn": "线内装置数量"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "offlineList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of offline devices",
+					"de": "JSON Liste der Offline-Geräte",
+					"ru": "JSON Список оффлайн устройств",
+					"pt": "JSON Lista de dispositivos off-line",
+					"nl": "JSON List van offline apparatuur",
+					"fr": "JSON Liste des dispositifs hors ligne",
+					"it": "JSON Elenco dei dispositivi offline",
+					"es": "JSON Lista de dispositivos sin conexión",
+					"pl": "JSON Lista urządzeń offline",
+					"zh-cn": "JSON 线装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "listAll",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of all devices",
+					"de": "JSON Liste aller Geräte",
+					"ru": "JSON Список всех устройств",
+					"pt": "JSON Lista de todos os dispositivos",
+					"nl": "JSON List van alle apparaten",
+					"fr": "JSON Liste de tous les dispositifs",
+					"it": "JSON Elenco di tutti i dispositivi",
+					"es": "JSON Lista de todos los dispositivos",
+					"pl": "JSON Lista wszystkich urządzeń",
+					"zh-cn": "JSON 所有装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "linkQualityList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of devices with signal strength",
+					"de": "JSON Liste der Geräte mit Signalstärke",
+					"ru": "JSON Список устройств с силой сигнала",
+					"pt": "JSON Lista de dispositivos com força de sinal",
+					"nl": "JSON List van apparaten met signaalkracht",
+					"fr": "JSON Liste des dispositifs avec force de signal",
+					"it": "JSON Elenco dei dispositivi con forza del segnale",
+					"es": "JSON Lista de dispositivos con fuerza de señal",
+					"pl": "JSON Lista urządzeń z siłą sygnałową",
+					"zh-cn": "JSON 具有信号实力的装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "countAll",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of all devices",
+					"de": "Anzahl aller Geräte",
+					"ru": "Количество всех устройств",
+					"pt": "Número de todos os dispositivos",
+					"nl": "Nummer van alle apparaten",
+					"fr": "Nombre de tous les appareils",
+					"it": "Numero di tutti i dispositivi",
+					"es": "Número de todos los dispositivos",
+					"pl": "Ilość wszystkich urządzeń",
+					"zh-cn": "所有装置的数目"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "batteryList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of devices with battery state",
+					"de": "JSON Liste der Geräte mit Batteriezustand",
+					"ru": "JSON Список устройств с состоянием батареи",
+					"pt": "JSON Lista de dispositivos com estado da bateria",
+					"nl": "JSON List van apparaten met batterij staat",
+					"fr": "JSON Liste des appareils avec état de batterie",
+					"it": "JSON Elenco dei dispositivi con stato della batteria",
+					"es": "JSON Lista de dispositivos con estado de batería",
+					"pl": "JSON Lista urządzeń z baterią stanową",
+					"zh-cn": "JSON 电池国装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "lowBatteryList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of devices with low battery state",
+					"de": "JSON Liste der Geräte mit niedrigem Batteriezustand",
+					"ru": "JSON Список устройств с низким состоянием батареи",
+					"pt": "JSON Lista de dispositivos com baixo estado da bateria",
+					"nl": "JSON List van apparaten met lage batterij staat",
+					"fr": "JSON Liste des appareils à faible état de batterie",
+					"it": "JSON Elenco di dispositivi con stato di batteria basso",
+					"es": "JSON Lista de dispositivos con estado de batería bajo",
+					"pl": "JSON Lista urządzeń o niskim stanie baterii",
+					"zh-cn": "JSON 低电池国家装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "lowBatteryCount",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of devices with low battery",
+					"de": "Anzahl der Geräte mit niedriger Batterie",
+					"ru": "Количество устройств c низкой батареей",
+					"pt": "Número de dispositivos com bateria baixa",
+					"nl": "Nummer van apparaten met lage batterij",
+					"fr": "Nombre de dispositifs avec batterie basse",
+					"it": "Numero di dispositivi con batteria bassa",
+					"es": "Número de dispositivos con batería baja",
+					"pl": "Liczba urządzeń z niską baterią",
+					"zh-cn": "低电池的装置数量"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "batteryCount",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of devices with battery",
+					"de": "Anzahl der Geräte mit Batterie",
+					"ru": "Количество устройств c батареей",
+					"pt": "Número de dispositivos com bateria",
+					"nl": "Nummer van apparaten met batterij",
+					"fr": "Nombre de dispositifs avec batterie",
+					"it": "Numero di dispositivi con batteria",
+					"es": "Número de dispositivos con batería",
+					"pl": "Liczba urządzeń z baterią",
+					"zh-cn": "电池的装置数量"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "lastCheck",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Timestamp from last run",
+					"de": "Zeitstempel der letzten Ausführung",
+					"ru": "Timestamp от последнего запуска",
+					"pt": "Vampiro da última corrida",
+					"nl": "Timestamp",
+					"fr": "Timestamp de la dernière course",
+					"it": "Timestamp dall'ultima corsa",
+					"es": "Timestamp de la última carrera",
+					"pl": "Timestamp",
+					"zh-cn": "二. 从最后经营期间的时间限制"
+				},
+				"type": "string",
+				"role": "text",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "lastNotification",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Last notification",
+					"de": "Letzte Meldung",
+					"ru": "Последнее уведомление",
+					"pt": "Última notificação",
+					"nl": "Laatste bericht",
+					"fr": "Dernière notification",
+					"it": "Ultimo avviso",
+					"es": "Última notificación",
+					"pl": "Oświadczenie",
+					"zh-cn": "上次通知"
+				},
+				"type": "string",
+				"role": "text",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		}
+	]
 }
