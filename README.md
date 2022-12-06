@@ -6,7 +6,7 @@
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)</br>
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
-![GitHub commits since tagged version (branch)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/v2.0.2)
+![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
 ![GitHub issues](https://img.shields.io/github/issues/ciddi89/ioBroker.device-watcher)
 </br>
@@ -19,6 +19,7 @@
 ![Test and Release](https://github.com/ciddi89/ioBroker.device-watcher/workflows/Test%20and%20Release/badge.svg)
 [![CodeQL](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml/badge.svg)](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml)
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/ciddi89/ioBroker.device-watcher)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/31cdbfba5f8641ff8a1719b6b082c3f7)](https://www.codacy.com/gh/ciddi89/ioBroker.device-watcher/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ciddi89/ioBroker.device-watcher&utm_campaign=Badge_Grade)
 
 ## Sentry
 
@@ -89,10 +90,13 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     ### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 2.0.3 (2022-11-26)
 
 -   fixed issue with localCompare
 -   added tapo
+-   (Scrounger) added fullyBrowser adapter
+-   (Scrounger) added Sure Flap adapter
+-   fixed low bat messages
 
 ### 2.0.2 (2022-11-12)
 

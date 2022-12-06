@@ -79,6 +79,7 @@ class DeviceWatcher extends utils.Adapter {
 				enocean: this.config.enoceanDevices,
 				esphome: this.config.esphomeDevices,
 				fritzdect: this.config.fritzdectDevices,
+				fullybrowser: this.config.fullybrowserDevices,
 				ham: this.config.hamDevices,
 				harmony: this.config.harmonyDevices,
 				hmiP: this.config.hmiPDevices,
@@ -101,6 +102,7 @@ class DeviceWatcher extends utils.Adapter {
 				shelly: this.config.shellyDevices,
 				sonoff: this.config.sonoffDevices,
 				sonos: this.config.sonosDevices,
+				sureflap: this.config.sureflapDevices,
 				switchbotBle: this.config.switchbotBleDevices,
 				tado: this.config.tadoDevices,
 				tapo: this.config.tapoDevices,
@@ -120,6 +122,7 @@ class DeviceWatcher extends utils.Adapter {
 				enocean: this.config.enoceanMaxMinutes,
 				esphome: this.config.esphomeMaxMinutes,
 				fritzdect: this.config.fritzdectMaxMinutes,
+				fullybrowser: this.config.fullybrowserMaxMinutes,
 				ham: this.config.hamMaxMinutes,
 				harmony: this.config.harmonyMaxMinutes,
 				hmiP: this.config.hmiPMaxMinutes,
@@ -142,6 +145,7 @@ class DeviceWatcher extends utils.Adapter {
 				shelly: this.config.shellyMaxMinutes,
 				sonoff: this.config.sonoffMaxMinutes,
 				sonos: this.config.sonosMaxMinutes,
+				sureflap: this.config.sureflapMaxMinutes,
 				switchbotBle: this.config.switchbotMaxMinutes,
 				tado: this.config.tadoMaxMinutes,
 				tapo: this.config.tapoMaxMinutes,
@@ -428,6 +432,7 @@ class DeviceWatcher extends utils.Adapter {
 				// Get ID for Switchbot and ESPHome Devices
 				case 'switchbotBle':
 				case 'esphome':
+				case 'fullybrowser':
 					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 					break;
 
@@ -457,6 +462,19 @@ class DeviceWatcher extends utils.Adapter {
 				//Get ID of foldername
 				case 'tado':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
+					break;
+
+				// Format Device name
+				case 'sureflap':
+					if (deviceObject && typeof deviceObject === 'object') {
+						deviceName = deviceObject.common.name
+							// @ts-ignore FIXME: fix syntax error
+							.replace(/'/g, '')
+							.replace(/\(\d+\)/g, '')
+							.trim()
+							.replace('Hub', 'Hub -')
+							.replace('Device', 'Device -');
+					}
 					break;
 
 				//Get ID of foldername
@@ -704,9 +722,16 @@ class DeviceWatcher extends utils.Adapter {
 				let isBatteryDevice;
 
 				// Get battery states
-				const deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
-				const shortDeviceBatteryState2 = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+				let deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
+				if (deviceBatteryState === undefined) {
+					deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery2);
+				}
+
+				// Get battery states with short path
+				let shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
+				if (shortDeviceBatteryState === undefined) {
+					shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+				}
 
 				// Get low bat states
 				let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
@@ -714,7 +739,7 @@ class DeviceWatcher extends utils.Adapter {
 					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 				}
 
-				if (!deviceBatteryState && !shortDeviceBatteryState && !shortDeviceBatteryState2) {
+				if (!deviceBatteryState && !shortDeviceBatteryState) {
 					if (deviceLowBatState !== undefined) {
 						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
 							case 'none':
@@ -736,7 +761,7 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					switch (adapterID) {
 						case 'hmrpc':
-							if (deviceBatteryState === 0) {
+							if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
 								batteryHealth = ' - ';
 							} else {
 								batteryHealth = deviceBatteryState + 'V';
@@ -745,20 +770,13 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 
 						case 'hueExt':
-							if (shortDeviceBatteryState) {
-								batteryHealth = shortDeviceBatteryState + '%';
-								isBatteryDevice = true;
-							}
-							break;
 						case 'mihomeVacuum':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
 								isBatteryDevice = true;
-							} else if (shortDeviceBatteryState2) {
-								batteryHealth = shortDeviceBatteryState2 + '%';
-								isBatteryDevice = true;
 							}
 							break;
+
 						default:
 							batteryHealth = deviceBatteryState + '%';
 							isBatteryDevice = true;
@@ -866,14 +884,20 @@ class DeviceWatcher extends utils.Adapter {
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
 									break;
+								case 'hue':
+								case 'hueExt':
 								case 'ping':
 								case 'deconz':
+								case 'shelly':
+								case 'sonoff':
+								case 'zigbee':
+								case 'zigbee2MQTT':
 									if (this.maxMinutes[adapterID] <= 0) {
 										if (!deviceUnreachState) {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if (lastDeviceUnreachStateChange > this.maxMinutes[adapterID] && !deviceUnreachState) {
+									} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -884,19 +908,7 @@ class DeviceWatcher extends utils.Adapter {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if (this.maxMinutes !== undefined && lastContact > this.maxMinutes[adapterID]) {
-										deviceState = 'Offline'; //set online state to offline
-										linkQuality = '0%'; // set linkQuality to nothing
-									}
-									break;
-								case 'shelly':
-								case 'sonoff':
-									if (this.maxMinutes[adapterID] <= 0) {
-										if (!deviceUnreachState) {
-											deviceState = 'Offline'; //set online state to offline
-											linkQuality = '0%'; // set linkQuality to nothing
-										}
-									} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
+									} else if (lastContact > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -1210,8 +1222,7 @@ class DeviceWatcher extends utils.Adapter {
 							deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
 						}
 					}
-
-					if (this.lowBatteryPoweredCountRaw > 0 && deviceList.length > 0) {
+					if (deviceList.length > 0) {
 						this.log.info(`Niedrige Batteriezustände: ${deviceList}`);
 						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${deviceList}`, true);
 
@@ -1240,9 +1251,9 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 			if (deviceList.length !== this.offlineDevicesCountRawOld) {
-				if (deviceList.length == 0) {
+				if (deviceList.length === 0) {
 					msg = 'Alle Geräte sind Online.';
-				} else if (deviceList.length == 1) {
+				} else if (deviceList.length === 1) {
 					// make singular if it is only one device
 					msg = 'Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n';
 				} else if (deviceList.length >= 2) {
@@ -1364,13 +1375,13 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync(`${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
 			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
 
-			if (this.deviceCounter == 0) {
+			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' }];
 			}
 			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
 
-			if (this.linkQualityCount == 0) {
+			if (this.linkQualityCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.linkQualityDevices = [{ Device: '--none--', Adapter: '', 'Signal strength': '' }];
 			}
@@ -1386,7 +1397,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 
-			if (this.offlineDevicesCount == 0) {
+			if (this.offlineDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.offlineDevices = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
 			}
@@ -1402,7 +1413,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 
-			if (this.batteryPoweredCount == 0) {
+			if (this.batteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
@@ -1418,7 +1429,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 
-			if (this.lowBatteryPoweredCount == 0) {
+			if (this.lowBatteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryLowPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
@@ -1490,7 +1501,7 @@ class DeviceWatcher extends utils.Adapter {
 			return a.localeCompare(b);
 		});
 		let html = `<center>
-		<b>Offline Devices: <font color=${deviceCount == 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
+		<b>Offline Devices: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
 		<p></p>
 		</center>   
 		<table width=100%>
@@ -1527,7 +1538,7 @@ class DeviceWatcher extends utils.Adapter {
 			return a.localeCompare(b);
 		});
 		let html = `<center>
-		<b>${isLowBatteryList == true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList == true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
+		<b>${isLowBatteryList === true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
 		<p></p>
 		</center>   
 		<table width=100%>
