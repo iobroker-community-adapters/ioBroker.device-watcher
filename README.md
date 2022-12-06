@@ -90,6 +90,10 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     ### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+-   (Scrounger) optionally show adapter name in notification
+
 ### 2.0.3 (2022-11-26)
 
 -   fixed issue with localCompare

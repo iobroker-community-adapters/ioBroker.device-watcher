@@ -78,5 +78,6 @@
     "in minutes": "в минутах",
     "in percent": "в процентах",
     "option1": "Опция 1",
-    "option2": "вариант 2"
+    "option2": "вариант 2",
+    "show adapter name in notification": "показать имя адаптера в уведомлении"
 }

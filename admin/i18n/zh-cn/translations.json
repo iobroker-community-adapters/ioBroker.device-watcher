@@ -78,5 +78,6 @@
     "in minutes": "在几分钟内",
     "in percent": "百分比",
     "option1": "选项1",
-    "option2": "选项2"
+    "option2": "选项2",
+    "show adapter name in notification": "在通知中显示适配器名称"
 }

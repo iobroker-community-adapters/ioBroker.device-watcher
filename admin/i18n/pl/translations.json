@@ -78,5 +78,6 @@
     "in minutes": "w minutach",
     "in percent": "w procentach",
     "option1": "opcja 1",
-    "option2": "Opcja 2"
+    "option2": "Opcja 2",
+    "show adapter name in notification": "pokaż nazwę adaptera w powiadomieniu"
 }

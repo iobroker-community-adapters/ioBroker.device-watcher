@@ -489,6 +489,11 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 			}
+
+			if (this.config.showAdapterNameinMsg) {
+				deviceName = `${this.arrDev[i].adapter}: ${deviceName}`;
+			}
+
 			return deviceName;
 		} catch (error) {
 			this.errorReporting('[getDeviceName]', error);

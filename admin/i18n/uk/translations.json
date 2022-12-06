@@ -77,6 +77,7 @@
     "device-watcher adapter settings": "Налаштування адаптера для пристрою-watcher",
     "in minutes": "за хвилини",
     "in percent": "у відсотках",
-    "option1": "",
-    "option2": ""
+    "option1": "варіант1",
+    "option2": "варіант2",
+    "show adapter name in notification": "показати назву адаптера в сповіщенні"
 }
