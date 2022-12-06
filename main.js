@@ -493,6 +493,12 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 			}
+			
+			// Add adaptername if checkbox is checked true in options by user
+			if (this.config.showAdapterNameinMsg) {
+				deviceName = `${this.arrDev[i].adapter}: ${deviceName}`;
+			}
+
 			return deviceName;
 		} catch (error) {
 			this.errorReporting('[getDeviceName]', error);
