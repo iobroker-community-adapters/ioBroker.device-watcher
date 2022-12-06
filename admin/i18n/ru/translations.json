@@ -79,5 +79,7 @@
     "in percent": "в процентах",
     "option1": "Опция 1",
     "option2": "вариант 2",
-    "show adapter name in notification": "показать имя адаптера в уведомлении"
+    "show adapter name in notification": "показать имя адаптера в уведомлении",
+    "Add adapter name in notifcations": "Добавить имя адаптера в уведомления",
+    "Will add the adaptername from the device": "Добавит имя адаптера с устройства"
 }

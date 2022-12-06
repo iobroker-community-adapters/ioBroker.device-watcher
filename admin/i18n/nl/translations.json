@@ -79,5 +79,7 @@
     "in percent": "in procenten",
     "option1": "Optie 1",
     "option2": "Optie 2",
-    "show adapter name in notification": "toon adapternaam in melding"
+    "show adapter name in notification": "toon adapternaam in melding",
+    "Add adapter name in notifcations": "Adapternaam toevoegen in meldingen",
+    "Will add the adaptername from the device": "Zal de adapternaam van het apparaat toevoegen"
 }

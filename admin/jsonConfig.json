@@ -213,7 +213,7 @@
 					"md": 6,
 					"lg": 3,
 					"label": "Sure Flap"
-				},				
+				},
 				"switchbotBleDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -473,6 +473,19 @@
 							"help": "Format hh:mm"
 						}
 					}
+				},
+				"trennerZwei": {
+					"newLine": true,
+					"type": "divider"
+				},
+				"showAdapterNameinMsg": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 3,
+					"label": "Add adapter name in notifcations",
+					"help": "Will add the adaptername from the device",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
 				},
 				"_headerMSGservice": {
 					"newLine": true,
@@ -745,14 +758,6 @@
 					"help": "Choose your title for Pushmessage",
 					"hidden": "data.msgService !== 'lovelace'",
 					"hideOnlyControl": false
-				},
-				"showAdapterNameinMsg": {
-					"type": "checkbox",
-					"sm": 12,
-					"md": 6,
-					"lg": 3,
-					"label": "show adapter name in notification",
-					"hidden": "data.msgService === 'none'"
 				}
 			}
 		},

@@ -79,5 +79,7 @@
     "in percent": "in percentuale",
     "option1": "opzione 1",
     "option2": "opzione 2",
-    "show adapter name in notification": "mostra il nome dell'adattatore nella notifica"
+    "show adapter name in notification": "mostra il nome dell'adattatore nella notifica",
+    "Add adapter name in notifcations": "Aggiungi il nome dell'adattatore nelle notifiche",
+    "Will add the adaptername from the device": "Aggiungerà il nome dell'adattatore dal dispositivo"
 }
