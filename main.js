@@ -493,12 +493,6 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 			}
-
-			// Add adaptername if checkbox is checked true in options by user
-			if (this.config.showAdapterNameinMsg) {
-				deviceName = `${this.arrDev[i].adapter}: ${deviceName}`;
-			}
-
 			return deviceName;
 		} catch (error) {
 			this.errorReporting('[getDeviceName]', error);
@@ -1230,7 +1224,12 @@ class DeviceWatcher extends utils.Adapter {
 
 					for (const id of this.batteryLowPoweredRaw) {
 						if (!this.blacklistNotify.includes(id['Path'])) {
-							deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
+							if (!this.config.showAdapterNameinMsg) {
+								deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
+							} else {
+								// Add adaptername if checkbox is checked true in options by user
+								deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['Battery']})`;
+							}
 						}
 					}
 					if (deviceList.length > 0) {
@@ -1258,7 +1257,11 @@ class DeviceWatcher extends utils.Adapter {
 
 			for (const id of this.offlineDevicesRaw) {
 				if (!this.blacklistNotify.includes(id['Path'])) {
-					deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+					if (!this.config.showAdapterNameinMsg) {
+						deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+					} else {
+						deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['Last contact']})`;
+					}
 				}
 			}
 			if (deviceList.length !== this.offlineDevicesCountRawOld) {
@@ -1316,7 +1319,11 @@ class DeviceWatcher extends utils.Adapter {
 
 					for (const id of this.offlineDevicesRaw) {
 						if (!this.blacklistNotify.includes(id['Path'])) {
-							deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+							if (!this.config.showAdapterNameinMsg) {
+								deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+							} else {
+								deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['Last contact']})`;
+							}
 						}
 					}
 
