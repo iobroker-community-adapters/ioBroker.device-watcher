@@ -749,7 +749,7 @@ class DeviceWatcher extends utils.Adapter {
 					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 				}
 
-				if (!deviceBatteryState && !shortDeviceBatteryState) {
+				if (deviceBatteryState === undefined && shortDeviceBatteryState === undefined) {
 					if (deviceLowBatState !== undefined) {
 						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
 							case 'none':
