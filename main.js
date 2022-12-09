@@ -654,6 +654,7 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				let deviceQualityState;
 				let linkQuality;
+				let mqttNukiValue;
 
 				switch (adapterID) {
 					case 'mihomeVacuum':
@@ -711,6 +712,15 @@ class DeviceWatcher extends utils.Adapter {
 								case 'nukiExt':
 									linkQuality = ' - ';
 									break;
+								case 'mqttNuki':
+									linkQuality = deviceQualityState.val;
+									mqttNukiValue = parseInt(linkQuality);
+									if (this.config.trueState) {
+										linkQuality = deviceQualityState.val;
+									} else if (mqttNukiValue < 0) {
+										linkQuality = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100) + '%';
+										// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+									}
 							}
 							break;
 					}

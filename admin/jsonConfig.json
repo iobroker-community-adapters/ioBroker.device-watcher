@@ -151,6 +151,13 @@
 					"lg": 3,
 					"label": "MiHome Vacuum"
 				},
+				"mqttNukiDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT: Nuki Hub"
+				},
 				"netatmoDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1136,6 +1143,18 @@
 					"label": "Mihome Vacuum",
 					"help": "in minutes",
 					"hidden": "!data.mihomeVacuumDevices",
+					"hideOnlyControl": false
+				},
+				"mqttNukiMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT: Nuki Hub",
+					"help": "in minutes",
+					"hidden": "!data.mqttNukiDevices",
 					"hideOnlyControl": false
 				},
 				"netatmoMaxMinutes": {
