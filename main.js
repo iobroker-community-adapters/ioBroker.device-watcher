@@ -1237,7 +1237,7 @@ class DeviceWatcher extends utils.Adapter {
 						this.log.info(`Niedrige Batteriezustände: ${deviceList}`);
 						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${deviceList}`, true);
 
-						this.sendNotification(`Niedriege Batteriezustände: ${deviceList}`);
+						this.sendNotification(`Niedrige Batteriezustände: ${deviceList}`);
 					}
 				} catch (error) {
 					this.errorReporting('[sendBatteryNotifyShedule]', error);
