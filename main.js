@@ -94,7 +94,7 @@ class DeviceWatcher extends utils.Adapter {
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
 				mihomeVacuum: this.config.mihomeVacuumDevices,
-				mqttZigbee2Mqtt: this.config.mqttZigbee2MqttDevices,
+				mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttDevices,
 				mqttNuki: this.config.mqttNukiDevices,
 				netatmo: this.config.netatmoDevices,
 				nukiExt: this.config.nukiExtDevices,
@@ -139,7 +139,7 @@ class DeviceWatcher extends utils.Adapter {
 				mihome: this.config.mihomeMaxMinutes,
 				mihomeGW: this.config.mihomeMaxMinutes,
 				mihomeVacuum: this.config.mihomeVacuumMaxMinutes,
-				mqttZigbee2Mqtt: this.config.mqttZigbee2MqttMaxMinutes,
+				mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttMaxMinutes,
 				mqttNuki: this.config.mqttNukiMaxMinutes,
 				netatmo: this.config.netatmoMaxMinutes,
 				nukiExt: this.config.nukiextendMaxMinutes,
@@ -845,7 +845,6 @@ class DeviceWatcher extends utils.Adapter {
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 						const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(deviceMainSelector.ts);
 						const shortDeviceUnreachState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].reach);
-
 						//  If there is no contact since user sets minutes add device in offline list
 						// calculate to days after 48 hours
 						switch (this.arrDev[i].reach) {
@@ -913,6 +912,17 @@ class DeviceWatcher extends utils.Adapter {
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
 									} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
+										deviceState = 'Offline'; //set online state to offline
+										linkQuality = '0%'; // set linkQuality to nothing
+									}
+									break;
+								case 'mqttClientZigbee2Mqtt':
+									if (this.maxMinutes[adapterID] <= 0) {
+										if (deviceUnreachState !== 'online') {
+											deviceState = 'Offline'; //set online state to offline
+											linkQuality = '0%'; // set linkQuality to nothing
+										}
+									} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}

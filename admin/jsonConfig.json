@@ -151,6 +151,13 @@
 					"lg": 3,
 					"label": "MiHome Vacuum"
 				},
+				"mqttClientZigbee2MqttDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT Client: Zigbee2MQTT"
+				},
 				"mqttNukiDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1143,6 +1150,18 @@
 					"label": "Mihome Vacuum",
 					"help": "in minutes",
 					"hidden": "!data.mihomeVacuumDevices",
+					"hideOnlyControl": false
+				},
+				"mqttClientZigbee2MqttMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT Client: Zigbee2MQTT",
+					"help": "in minutes",
+					"hidden": "!data.mqttClientZigbee2MqttDevices",
 					"hideOnlyControl": false
 				},
 				"mqttNukiMaxMinutes": {
