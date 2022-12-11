@@ -530,7 +530,8 @@
 						{ "label": "Whatsapp", "value": "whatsapp" },
 						{ "label": "E-Mail", "value": "email" },
 						{ "label": "Jarvis", "value": "jarvis" },
-						{ "label": "Lovelace", "value": "lovelace" }
+						{ "label": "Lovelace", "value": "lovelace" },
+						{ "label": "Synochat", "value": "synochat" }
 					],
 					"default": "none",
 					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
@@ -771,6 +772,30 @@
 					"label": "Title (optional)",
 					"help": "Choose your title for Pushmessage",
 					"hidden": "data.msgService !== 'lovelace'",
+					"hideOnlyControl": false
+				},
+				"instanceSynochat": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "synochat",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Synochat Instance",
+					"help": "Please choose the Synochat instance",
+					"hidden": "data.msgService !== 'synochat'",
+					"hideOnlyControl": false
+				},
+				"channelSynochat": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Channel",
+					"help": "Enter the channelname for Synochat",
+					"hidden": "data.msgService !== 'synochat'",
 					"hideOnlyControl": false
 				}
 			}

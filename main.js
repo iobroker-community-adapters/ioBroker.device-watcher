@@ -1209,6 +1209,26 @@ class DeviceWatcher extends utils.Adapter {
 		} catch (error) {
 			this.errorReporting('[sendNotification Lovelace]', error);
 		}
+
+		// Synochat Notification
+		try {
+			if (this.config.instanceSynochat) {
+				//first check if instance is living
+				const synochatAliveState = await this.getInitValue('system.adapter.' + this.config.instanceSynochat + '.alive');
+
+				if (!synochatAliveState) {
+					this.log.warn('Synochat instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					if (this.config.channelSynochat !== undefined) {
+						await this.setForeignStateAsync(`${this.config.instanceSynochat}.${this.config.channelSynochat}.message`, text);
+					} else {
+						this.log.warn('Synochat channel is not set. Message could not be sent. Please check your instance configuration.');
+					}
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Synochat]', error);
+		}
 	} // <-- End of sendNotification function
 
 	/**

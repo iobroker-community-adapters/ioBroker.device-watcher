@@ -81,5 +81,8 @@
     "option2": "选项2",
     "show adapter name in notification": "在通知中显示适配器名称",
     "Add adapter name in notifcations": "在通知中添加适配器名称",
-    "Will add the adaptername from the device": "将从设备添加适配器名称"
+    "Will add the adaptername from the device": "将从设备添加适配器名称",
+    "Please choose the Synochat instance": "请选择同步聊天实例",
+    "Synochat Instance": "同步聊天实例",
+    "Enter the channelname for Synochat": "输入 Synochat 的频道名称"
 }

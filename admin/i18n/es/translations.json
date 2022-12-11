@@ -81,5 +81,8 @@
     "option2": "opcion 2",
     "show adapter name in notification": "mostrar el nombre del adaptador en la notificación",
     "Add adapter name in notifcations": "Agregue el nombre del adaptador en las notificaciones",
-    "Will add the adaptername from the device": "Agregará el nombre del adaptador del dispositivo"
+    "Will add the adaptername from the device": "Agregará el nombre del adaptador del dispositivo",
+    "Please choose the Synochat instance": "Elija la instancia de Synochat",
+    "Synochat Instance": "Instancia de Synochat",
+    "Enter the channelname for Synochat": "Ingrese el nombre del canal para Synochat"
 }

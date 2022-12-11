@@ -55,6 +55,10 @@
 	"Please choose the lovelace instance": "Please choose the lovelace instance",
 	"Please choose the pushover instance": "Please choose the pushover instance",
 	"Please choose the telegram instance": "Please choose the telegram instance",
+	"Please choose the Synochat instance": "Please choose the Synochat instance",
+	"Synochat Instance": "Synochat Instance",
+	"Enter the channelname for Synochat": "Enter the channelname for Synochat",
+
 	"Pushover Instance": "Pushover Instance",
 	"Recipient (optional)": "Recipient (optional)",
 	"Sat": "Sat",

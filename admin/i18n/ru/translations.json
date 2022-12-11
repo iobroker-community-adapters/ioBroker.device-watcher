@@ -81,5 +81,8 @@
     "option2": "вариант 2",
     "show adapter name in notification": "показать имя адаптера в уведомлении",
     "Add adapter name in notifcations": "Добавить имя адаптера в уведомления",
-    "Will add the adaptername from the device": "Добавит имя адаптера с устройства"
+    "Will add the adaptername from the device": "Добавит имя адаптера с устройства",
+    "Please choose the Synochat instance": "Пожалуйста, выберите экземпляр Synochat",
+    "Synochat Instance": "Синочат Экземпляр",
+    "Enter the channelname for Synochat": "Введите название канала для Synochat"
 }
