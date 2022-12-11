@@ -74,6 +74,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			this.supAdapter = {
 				alexa2: this.config.alexa2Devices,
+				apcups: this.config.apcupsDevices,
 				ble: this.config.bleDevices,
 				deconz: this.config.deconzDevices,
 				enocean: this.config.enoceanDevices,
@@ -119,6 +120,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			this.maxMinutes = {
 				alexa2: this.config.alexa2MaxMinutes,
+				apcups: this.config.apcupsMaxMinutes,
 				ble: this.config.bleMaxMinutes,
 				deconz: this.config.deconzMaxMinutes,
 				enocean: this.config.enoceanMaxMinutes,
@@ -437,6 +439,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'switchbotBle':
 				case 'esphome':
 				case 'fullybrowser':
+				case 'apcups':
 					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 					break;
 
@@ -923,6 +926,17 @@ class DeviceWatcher extends utils.Adapter {
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
 									} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
+										deviceState = 'Offline'; //set online state to offline
+										linkQuality = '0%'; // set linkQuality to nothing
+									}
+									break;
+								case 'apcups':
+									if (this.maxMinutes[adapterID] <= 0) {
+										if (deviceUnreachState !== 'ONLINE') {
+											deviceState = 'Offline'; //set online state to offline
+											linkQuality = '0%'; // set linkQuality to nothing
+										}
+									} else if (deviceUnreachState !== 'ONLINE' && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
