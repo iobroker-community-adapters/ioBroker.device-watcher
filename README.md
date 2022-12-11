@@ -56,6 +56,7 @@ Currently supported notification services are:
 -   Email
 -   Jarvis
 -   Lovelace
+-   SynoChat
 -   and also an datapoint with the last notification, so you can use it for other services which aren't supported.
 
 If you found a bug or you have an improvement suggestion, feel free to open an issue.
@@ -94,6 +95,8 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 
 -   (Scrounger) optionally show adapter name in notification
 -   fixed devices are not reported in case battery is 0% [#86](https://github.com/ciddi89/ioBroker.device-watcher/issues/86)
+-   added SynoChat [#85](https://github.com/ciddi89/ioBroker.device-watcher/issues/85)
+-   added MQTT NukiHub, MQTT-Clien Zigbee2MQTT ([#82](https://github.com/ciddi89/ioBroker.device-watcher/issues/82))
 
 ### 2.0.3 (2022-11-26)
 
