@@ -84,5 +84,7 @@
     "Will add the adaptername from the device": "Agregará el nombre del adaptador del dispositivo",
     "Please choose the Synochat instance": "Elija la instancia de Synochat",
     "Synochat Instance": "Instancia de Synochat",
-    "Enter the channelname for Synochat": "Ingrese el nombre del canal para Synochat"
+    "Enter the channelname for Synochat": "Ingrese el nombre del canal para Synochat",
+    "Adapter update message": "Mensaje de actualización del adaptador",
+    "Receive a message when an update for an adapter is available": "Reciba un mensaje cuando haya una actualización disponible para un adaptador"
 }

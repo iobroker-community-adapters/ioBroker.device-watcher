@@ -218,6 +218,11 @@ class DeviceWatcher extends utils.Adapter {
 			// update data in interval
 			await this.refreshData();
 
+			// trigger update notification on state change
+			if (this.config.checkSendAdapterUpdateNotify) {
+				this.subscribeForeignStatesAsync(`admin.*.info.updatesJson`);
+			}
+
 			// send overview for low battery devices
 			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifyShedule();
 
@@ -235,12 +240,10 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {ioBroker.State | null | undefined} state
 	 */
 	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-		} else {
-			// The state was deleted
-			this.log.warn(`state ${id} deleted`);
+		// Admin JSON for Adapter updates
+		if (id && state) {
+			this.log.debug(`State changed: ${id} changed ${state.val}`);
+			this.sendAdapterUpdatesNotification(id, state);
 		}
 	}
 
@@ -381,6 +384,37 @@ class DeviceWatcher extends utils.Adapter {
 		if (typeof data === 'object') return data;
 		if (typeof data === 'string') return JSON.parse(data);
 		return {};
+	}
+
+	/**
+	 * check if adapter updates are available and send notification
+	 * @param {string} id
+	 * @param {ioBroker.State | null | undefined} state
+	 */
+	async sendAdapterUpdatesNotification(id, state) {
+		this.log.debug(`Start the function: ${this.sendAdapterUpdatesNotification.name}`);
+
+		try {
+			if (state && state !== undefined) {
+				const list = await this.parseData(state.val);
+				let msg = '';
+				let adapterList = '';
+
+				for (const [id] of Object.entries(list)) {
+					adapterList = `${adapterList}\n${this.capitalize(id)} - Version: ${list[id].availableVersion}`;
+				}
+				if (adapterList.length !== 0) {
+					msg = `Neue Adapter Updates vorhanden: \n`;
+
+					this.log.info(msg + adapterList);
+					await this.setStateAsync('lastNotification', msg + adapterList, true);
+					await this.sendNotification(msg + adapterList);
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendAdapterUpdatesNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
 	}
 
 	/**

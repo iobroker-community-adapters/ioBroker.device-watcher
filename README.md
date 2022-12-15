@@ -94,6 +94,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 ### **WORK IN PROGRESS**
 
 -   (Scrounger) optionally show adapter name in notification
+-   optionally receive a message when an update for an adapter is available [#87](https://github.com/ciddi89/ioBroker.device-watcher/issues/87)
 -   fixed devices are not reported in case battery is 0% [#86](https://github.com/ciddi89/ioBroker.device-watcher/issues/86)
 -   added SynoChat [#85](https://github.com/ciddi89/ioBroker.device-watcher/issues/85)
 -   added MQTT NukiHub, MQTT-Clien Zigbee2MQTT ([#82](https://github.com/ciddi89/ioBroker.device-watcher/issues/82))

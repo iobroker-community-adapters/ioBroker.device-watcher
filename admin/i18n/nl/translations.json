@@ -84,5 +84,7 @@
     "Will add the adaptername from the device": "Zal de adapternaam van het apparaat toevoegen",
     "Please choose the Synochat instance": "Kies de Synochat-instantie",
     "Synochat Instance": "Synochat-instantie",
-    "Enter the channelname for Synochat": "Voer de kanaalnaam voor Synochat in"
+    "Enter the channelname for Synochat": "Voer de kanaalnaam voor Synochat in",
+    "Adapter update message": "Bericht over adapterupdate",
+    "Receive a message when an update for an adapter is available": "Ontvang een bericht wanneer er een update voor een adapter beschikbaar is"
 }

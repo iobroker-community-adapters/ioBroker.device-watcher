@@ -508,12 +508,30 @@
 					"help": "Will add the adaptername from the device",
 					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
 				},
+				"trennerDrei": {
+					"newLine": true,
+					"type": "divider",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
+				},
+				"checkSendAdapterUpdateNotify": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Adapter update message",
+					"help": "Receive a message when an update for an adapter is available"
+				},
+				"trennerVier": {
+					"newLine": true,
+					"type": "divider"
+				},
 				"_headerMSGservice": {
 					"newLine": true,
 					"type": "header",
 					"text": "Notification Service",
 					"size": 2,
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
 					"hideOnlyControl": false
 				},
 				"msgServiceText": {
@@ -523,7 +541,7 @@
 						"fontSize": 16,
 						"marginTop": 20
 					},
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
 					"hideOnlyControl": false
 				},
 				"msgService": {
@@ -541,7 +559,7 @@
 						{ "label": "Synochat", "value": "synochat" }
 					],
 					"default": "none",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
 					"hideOnlyControl": false
 				},
 				"_headerPushover": {

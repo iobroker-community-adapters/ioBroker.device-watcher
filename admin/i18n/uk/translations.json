@@ -84,5 +84,7 @@
     "Will add the adaptername from the device": "Додасть назву адаптера з пристрою",
     "Please choose the Synochat instance": "Виберіть екземпляр Synochat",
     "Synochat Instance": "Примірник Synochat",
-    "Enter the channelname for Synochat": "Введіть назву каналу для Synochat"
+    "Enter the channelname for Synochat": "Введіть назву каналу для Synochat",
+    "Adapter update message": "Повідомлення про оновлення адаптера",
+    "Receive a message when an update for an adapter is available": "Отримувати повідомлення, коли доступне оновлення для адаптера"
 }
