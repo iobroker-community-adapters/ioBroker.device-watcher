@@ -18,6 +18,13 @@
 					"lg": 3,
 					"label": "Alexa2"
 				},
+				"apcupsDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Apc UPS"
+				},
 				"bleDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -150,6 +157,20 @@
 					"md": 6,
 					"lg": 3,
 					"label": "MiHome Vacuum"
+				},
+				"mqttClientZigbee2MqttDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT Client: Zigbee2MQTT"
+				},
+				"mqttNukiDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT: Nuki Hub"
 				},
 				"netatmoDevices": {
 					"type": "checkbox",
@@ -474,12 +495,43 @@
 						}
 					}
 				},
+				"trennerZwei": {
+					"newLine": true,
+					"type": "divider"
+				},
+				"showAdapterNameinMsg": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 3,
+					"label": "Add adapter name in notifcations",
+					"help": "Will add the adaptername from the device",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
+				},
+				"trennerDrei": {
+					"newLine": true,
+					"type": "divider",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
+				},
+				"checkSendAdapterUpdateNotify": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Adapter update message",
+					"help": "Receive a message when an update for an adapter is available"
+				},
+				"trennerVier": {
+					"newLine": true,
+					"type": "divider"
+				},
 				"_headerMSGservice": {
 					"newLine": true,
 					"type": "header",
 					"text": "Notification Service",
 					"size": 2,
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
 					"hideOnlyControl": false
 				},
 				"msgServiceText": {
@@ -489,7 +541,7 @@
 						"fontSize": 16,
 						"marginTop": 20
 					},
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
 					"hideOnlyControl": false
 				},
 				"msgService": {
@@ -503,10 +555,11 @@
 						{ "label": "Whatsapp", "value": "whatsapp" },
 						{ "label": "E-Mail", "value": "email" },
 						{ "label": "Jarvis", "value": "jarvis" },
-						{ "label": "Lovelace", "value": "lovelace" }
+						{ "label": "Lovelace", "value": "lovelace" },
+						{ "label": "Synochat", "value": "synochat" }
 					],
 					"default": "none",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
 					"hideOnlyControl": false
 				},
 				"_headerPushover": {
@@ -745,6 +798,30 @@
 					"help": "Choose your title for Pushmessage",
 					"hidden": "data.msgService !== 'lovelace'",
 					"hideOnlyControl": false
+				},
+				"instanceSynochat": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "synochat",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Synochat Instance",
+					"help": "Please choose the Synochat instance",
+					"hidden": "data.msgService !== 'synochat'",
+					"hideOnlyControl": false
+				},
+				"channelSynochat": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Channel",
+					"help": "Enter the channelname for Synochat",
+					"hidden": "data.msgService !== 'synochat'",
+					"hideOnlyControl": false
 				}
 			}
 		},
@@ -883,6 +960,18 @@
 					"label": "Alexa2",
 					"help": "in minutes",
 					"hidden": "!data.alexa2Devices",
+					"hideOnlyControl": false
+				},
+				"apcupsMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Apc UPS",
+					"help": "in minutes",
+					"hidden": "!data.apcupsDevices",
 					"hideOnlyControl": false
 				},
 				"bleMaxMinutes": {
@@ -1123,6 +1212,30 @@
 					"label": "Mihome Vacuum",
 					"help": "in minutes",
 					"hidden": "!data.mihomeVacuumDevices",
+					"hideOnlyControl": false
+				},
+				"mqttClientZigbee2MqttMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT Client: Zigbee2MQTT",
+					"help": "in minutes",
+					"hidden": "!data.mqttClientZigbee2MqttDevices",
+					"hideOnlyControl": false
+				},
+				"mqttNukiMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MQTT: Nuki Hub",
+					"help": "in minutes",
+					"hidden": "!data.mqttNukiDevices",
 					"hideOnlyControl": false
 				},
 				"netatmoMaxMinutes": {

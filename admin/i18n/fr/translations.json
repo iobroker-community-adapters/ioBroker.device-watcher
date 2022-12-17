@@ -78,5 +78,13 @@
     "in minutes": "en minutes",
     "in percent": "en pourcentage",
     "option1": "Option 1",
-    "option2": "Option 2"
+    "option2": "Option 2",
+    "show adapter name in notification": "afficher le nom de l'adaptateur dans la notification",
+    "Add adapter name in notifcations": "Ajouter le nom de l'adaptateur dans les notifications",
+    "Will add the adaptername from the device": "Ajoutera le nom de l'adaptateur de l'appareil",
+    "Please choose the Synochat instance": "Veuillez choisir l'instance Synochat",
+    "Synochat Instance": "Instance Synochat",
+    "Enter the channelname for Synochat": "Entrez le nom du canal pour Synochat",
+    "Adapter update message": "Message de mise à jour de l'adaptateur",
+    "Receive a message when an update for an adapter is available": "Recevoir un message lorsqu'une mise à jour pour un adaptateur est disponible"
 }

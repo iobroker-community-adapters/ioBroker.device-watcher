@@ -74,6 +74,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			this.supAdapter = {
 				alexa2: this.config.alexa2Devices,
+				apcups: this.config.apcupsDevices,
 				ble: this.config.bleDevices,
 				deconz: this.config.deconzDevices,
 				enocean: this.config.enoceanDevices,
@@ -94,6 +95,8 @@ class DeviceWatcher extends utils.Adapter {
 				mihome: this.config.mihomeDevices,
 				mihomeGW: this.config.mihomeDevices,
 				mihomeVacuum: this.config.mihomeVacuumDevices,
+				mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttDevices,
+				mqttNuki: this.config.mqttNukiDevices,
 				netatmo: this.config.netatmoDevices,
 				nukiExt: this.config.nukiExtDevices,
 				nut: this.config.nutDevices,
@@ -117,6 +120,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			this.maxMinutes = {
 				alexa2: this.config.alexa2MaxMinutes,
+				apcups: this.config.apcupsMaxMinutes,
 				ble: this.config.bleMaxMinutes,
 				deconz: this.config.deconzMaxMinutes,
 				enocean: this.config.enoceanMaxMinutes,
@@ -137,6 +141,8 @@ class DeviceWatcher extends utils.Adapter {
 				mihome: this.config.mihomeMaxMinutes,
 				mihomeGW: this.config.mihomeMaxMinutes,
 				mihomeVacuum: this.config.mihomeVacuumMaxMinutes,
+				mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttMaxMinutes,
+				mqttNuki: this.config.mqttNukiMaxMinutes,
 				netatmo: this.config.netatmoMaxMinutes,
 				nukiExt: this.config.nukiextendMaxMinutes,
 				nut: this.config.nutMaxMinutes,
@@ -212,6 +218,11 @@ class DeviceWatcher extends utils.Adapter {
 			// update data in interval
 			await this.refreshData();
 
+			// trigger update notification on state change
+			if (this.config.checkSendAdapterUpdateNotify) {
+				this.subscribeForeignStatesAsync(`admin.*.info.updatesJson`);
+			}
+
 			// send overview for low battery devices
 			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifyShedule();
 
@@ -229,12 +240,10 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {ioBroker.State | null | undefined} state
 	 */
 	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.warn(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-		} else {
-			// The state was deleted
-			this.log.warn(`state ${id} deleted`);
+		// Admin JSON for Adapter updates
+		if (id && state) {
+			this.log.debug(`State changed: ${id} changed ${state.val}`);
+			this.sendAdapterUpdatesNotification(id, state);
 		}
 	}
 
@@ -378,6 +387,37 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
+	 * check if adapter updates are available and send notification
+	 * @param {string} id
+	 * @param {ioBroker.State | null | undefined} state
+	 */
+	async sendAdapterUpdatesNotification(id, state) {
+		this.log.debug(`Start the function: ${this.sendAdapterUpdatesNotification.name}`);
+
+		try {
+			if (state && state !== undefined) {
+				const list = await this.parseData(state.val);
+				let msg = '';
+				let adapterList = '';
+
+				for (const [id] of Object.entries(list)) {
+					adapterList = `${adapterList}\n${this.capitalize(id)} - Version: ${list[id].availableVersion}`;
+				}
+				if (adapterList.length !== 0) {
+					msg = `Neue Adapter Updates vorhanden: \n`;
+
+					this.log.info(msg + adapterList);
+					await this.setStateAsync('lastNotification', msg + adapterList, true);
+					await this.sendNotification(msg + adapterList);
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendAdapterUpdatesNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
+	}
+
+	/**
 	 * create blacklist
 	 */
 	async createBlacklist() {
@@ -433,6 +473,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'switchbotBle':
 				case 'esphome':
 				case 'fullybrowser':
+				case 'apcups':
 					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
 					break;
 
@@ -650,6 +691,7 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				let deviceQualityState;
 				let linkQuality;
+				let mqttNukiValue;
 
 				switch (adapterID) {
 					case 'mihomeVacuum':
@@ -707,6 +749,15 @@ class DeviceWatcher extends utils.Adapter {
 								case 'nukiExt':
 									linkQuality = ' - ';
 									break;
+								case 'mqttNuki':
+									linkQuality = deviceQualityState.val;
+									mqttNukiValue = parseInt(linkQuality);
+									if (this.config.trueState) {
+										linkQuality = deviceQualityState.val;
+									} else if (mqttNukiValue < 0) {
+										linkQuality = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100) + '%';
+										// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+									}
 							}
 							break;
 					}
@@ -739,7 +790,7 @@ class DeviceWatcher extends utils.Adapter {
 					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 				}
 
-				if (!deviceBatteryState && !shortDeviceBatteryState) {
+				if (deviceBatteryState === undefined && shortDeviceBatteryState === undefined) {
 					if (deviceLowBatState !== undefined) {
 						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
 							case 'none':
@@ -771,6 +822,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						case 'hueExt':
 						case 'mihomeVacuum':
+						case 'mqttNuki':
 							if (shortDeviceBatteryState) {
 								batteryHealth = shortDeviceBatteryState + '%';
 								isBatteryDevice = true;
@@ -830,7 +882,6 @@ class DeviceWatcher extends utils.Adapter {
 						const deviceUnreachState = await this.getInitValue(currDeviceString + this.arrDev[i].reach);
 						const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(deviceMainSelector.ts);
 						const shortDeviceUnreachState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].reach);
-
 						//  If there is no contact since user sets minutes add device in offline list
 						// calculate to days after 48 hours
 						switch (this.arrDev[i].reach) {
@@ -884,12 +935,14 @@ class DeviceWatcher extends utils.Adapter {
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
 									break;
+								case 'apcups':
 								case 'hue':
 								case 'hueExt':
 								case 'ping':
 								case 'deconz':
 								case 'shelly':
 								case 'sonoff':
+								case 'unifi':
 								case 'zigbee':
 								case 'zigbee2MQTT':
 									if (this.maxMinutes[adapterID] <= 0) {
@@ -902,13 +955,13 @@ class DeviceWatcher extends utils.Adapter {
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
 									break;
-								case 'unifi':
+								case 'mqttClientZigbee2Mqtt':
 									if (this.maxMinutes[adapterID] <= 0) {
-										if (deviceUnreachState === 0) {
+										if (deviceUnreachState !== 'online') {
 											deviceState = 'Offline'; //set online state to offline
 											linkQuality = '0%'; // set linkQuality to nothing
 										}
-									} else if (lastContact > this.maxMinutes[adapterID]) {
+									} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.maxMinutes[adapterID]) {
 										deviceState = 'Offline'; //set online state to offline
 										linkQuality = '0%'; // set linkQuality to nothing
 									}
@@ -1184,6 +1237,26 @@ class DeviceWatcher extends utils.Adapter {
 		} catch (error) {
 			this.errorReporting('[sendNotification Lovelace]', error);
 		}
+
+		// Synochat Notification
+		try {
+			if (this.config.instanceSynochat) {
+				//first check if instance is living
+				const synochatAliveState = await this.getInitValue('system.adapter.' + this.config.instanceSynochat + '.alive');
+
+				if (!synochatAliveState) {
+					this.log.warn('Synochat instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					if (this.config.channelSynochat !== undefined) {
+						await this.setForeignStateAsync(`${this.config.instanceSynochat}.${this.config.channelSynochat}.message`, text);
+					} else {
+						this.log.warn('Synochat channel is not set. Message could not be sent. Please check your instance configuration.');
+					}
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Synochat]', error);
+		}
 	} // <-- End of sendNotification function
 
 	/**
@@ -1219,14 +1292,19 @@ class DeviceWatcher extends utils.Adapter {
 
 					for (const id of this.batteryLowPoweredRaw) {
 						if (!this.blacklistNotify.includes(id['Path'])) {
-							deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
+							if (!this.config.showAdapterNameinMsg) {
+								deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
+							} else {
+								// Add adaptername if checkbox is checked true in options by user
+								deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['Battery']})`;
+							}
 						}
 					}
 					if (deviceList.length > 0) {
 						this.log.info(`Niedrige Batteriezustände: ${deviceList}`);
 						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${deviceList}`, true);
 
-						this.sendNotification(`Niedriege Batteriezustände: ${deviceList}`);
+						this.sendNotification(`Niedrige Batteriezustände: ${deviceList}`);
 					}
 				} catch (error) {
 					this.errorReporting('[sendBatteryNotifyShedule]', error);
@@ -1247,7 +1325,11 @@ class DeviceWatcher extends utils.Adapter {
 
 			for (const id of this.offlineDevicesRaw) {
 				if (!this.blacklistNotify.includes(id['Path'])) {
-					deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+					if (!this.config.showAdapterNameinMsg) {
+						deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+					} else {
+						deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['Last contact']})`;
+					}
 				}
 			}
 			if (deviceList.length !== this.offlineDevicesCountRawOld) {
@@ -1305,7 +1387,11 @@ class DeviceWatcher extends utils.Adapter {
 
 					for (const id of this.offlineDevicesRaw) {
 						if (!this.blacklistNotify.includes(id['Path'])) {
-							deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+							if (!this.config.showAdapterNameinMsg) {
+								deviceList = `${deviceList}\n${id['Device']} (${id['Last contact']})`;
+							} else {
+								deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['Last contact']})`;
+							}
 						}
 					}
 

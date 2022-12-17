@@ -77,6 +77,14 @@
     "device-watcher adapter settings": "Налаштування адаптера для пристрою-watcher",
     "in minutes": "за хвилини",
     "in percent": "у відсотках",
-    "option1": "",
-    "option2": ""
+    "option1": "варіант1",
+    "option2": "варіант2",
+    "show adapter name in notification": "показати назву адаптера в сповіщенні",
+    "Add adapter name in notifcations": "Додайте назву адаптера в сповіщення",
+    "Will add the adaptername from the device": "Додасть назву адаптера з пристрою",
+    "Please choose the Synochat instance": "Виберіть екземпляр Synochat",
+    "Synochat Instance": "Примірник Synochat",
+    "Enter the channelname for Synochat": "Введіть назву каналу для Synochat",
+    "Adapter update message": "Повідомлення про оновлення адаптера",
+    "Receive a message when an update for an adapter is available": "Отримувати повідомлення, коли доступне оновлення для адаптера"
 }

@@ -78,5 +78,13 @@
     "in minutes": "в минутах",
     "in percent": "в процентах",
     "option1": "Опция 1",
-    "option2": "вариант 2"
+    "option2": "вариант 2",
+    "show adapter name in notification": "показать имя адаптера в уведомлении",
+    "Add adapter name in notifcations": "Добавить имя адаптера в уведомления",
+    "Will add the adaptername from the device": "Добавит имя адаптера с устройства",
+    "Please choose the Synochat instance": "Пожалуйста, выберите экземпляр Synochat",
+    "Synochat Instance": "Синочат Экземпляр",
+    "Enter the channelname for Synochat": "Введите название канала для Synochat",
+    "Adapter update message": "Сообщение об обновлении адаптера",
+    "Receive a message when an update for an adapter is available": "Получение сообщения, когда доступно обновление для адаптера"
 }
