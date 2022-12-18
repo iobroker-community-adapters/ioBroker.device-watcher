@@ -86,5 +86,7 @@
     "Synochat Instance": "Synochat-instantie",
     "Enter the channelname for Synochat": "Voer de kanaalnaam voor Synochat in",
     "Adapter update message": "Bericht over adapterupdate",
-    "Receive a message when an update for an adapter is available": "Ontvang een bericht wanneer er een update voor een adapter beschikbaar is"
+    "Receive a message when an update for an adapter is available": "Ontvang een bericht wanneer er een update voor een adapter beschikbaar is",
+    "Device update message": "Bericht over apparaatupdate",
+    "Receive a message when an update for an device is available": "Ontvang een bericht wanneer er een update voor een apparaat beschikbaar is"
 }

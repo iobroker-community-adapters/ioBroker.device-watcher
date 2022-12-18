@@ -33,6 +33,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.blacklistNotify = [];
 		this.arrDev = [];
 		this.adapterSelected = [];
+		this.upgradableList = [];
 
 		// raw arrays
 		this.listAllDevicesRaw = [];
@@ -43,6 +44,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.offlineDevicesCountRaw = 0;
 		this.offlineDevicesCountRawOld = 0;
 		this.lowBatteryPoweredCountRaw = 0;
+		this.upgradableDevicesCountRawOld = 0;
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -219,9 +221,10 @@ class DeviceWatcher extends utils.Adapter {
 			await this.refreshData();
 
 			// trigger update notification on state change
+			/*
 			if (this.config.checkSendAdapterUpdateNotify) {
 				this.subscribeForeignStatesAsync(`admin.*.info.updatesJson`);
-			}
+			}*/
 
 			// send overview for low battery devices
 			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifyShedule();
@@ -243,7 +246,7 @@ class DeviceWatcher extends utils.Adapter {
 		// Admin JSON for Adapter updates
 		if (id && state) {
 			this.log.debug(`State changed: ${id} changed ${state.val}`);
-			this.sendAdapterUpdatesNotification(id, state);
+			//this.sendAdapterUpdatesNotification(id, state);
 		}
 	}
 
@@ -384,37 +387,6 @@ class DeviceWatcher extends utils.Adapter {
 		if (typeof data === 'object') return data;
 		if (typeof data === 'string') return JSON.parse(data);
 		return {};
-	}
-
-	/**
-	 * check if adapter updates are available and send notification
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
-	async sendAdapterUpdatesNotification(id, state) {
-		this.log.debug(`Start the function: ${this.sendAdapterUpdatesNotification.name}`);
-
-		try {
-			if (state && state !== undefined) {
-				const list = await this.parseData(state.val);
-				let msg = '';
-				let adapterList = '';
-
-				for (const [id] of Object.entries(list)) {
-					adapterList = `${adapterList}\n${this.capitalize(id)} - Version: ${list[id].availableVersion}`;
-				}
-				if (adapterList.length !== 0) {
-					msg = `Neue Adapter Updates vorhanden: \n`;
-
-					this.log.info(msg + adapterList);
-					await this.setStateAsync('lastNotification', msg + adapterList, true);
-					await this.sendNotification(msg + adapterList);
-				}
-			}
-		} catch (error) {
-			this.errorReporting('[sendAdapterUpdatesNotification]', error);
-		}
-		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
 	}
 
 	/**
@@ -565,6 +537,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.offlineDevices = [];
 		this.batteryLowPoweredRaw = [];
 		this.offlineDevicesRaw = [];
+		this.upgradableList = [];
 
 		for (const device of this.listAllDevicesRaw) {
 			/*----------  fill raw lists  ----------*/
@@ -629,6 +602,14 @@ class DeviceWatcher extends utils.Adapter {
 						Device: device['Device'],
 						Adapter: device['Adapter'],
 						'Last contact': device['Last contact'],
+					});
+				}
+
+				// Device update List
+				if (device['Upgradable']) {
+					this.upgradableList.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
 					});
 				}
 			}
@@ -1017,6 +998,20 @@ class DeviceWatcher extends utils.Adapter {
 						this.errorReporting('[getLastContact]', error);
 					}
 				}
+				/*=============================================
+				=            Get update data	              =
+				=============================================*/
+				let deviceUpdateSelector;
+				let isUpgradable;
+
+				if (this.config.checkSendDeviceUpgrade) {
+					deviceUpdateSelector = await this.getInitValue(currDeviceString + this.arrDev[i].upgrade);
+					if (deviceUpdateSelector) {
+						isUpgradable = true;
+					} else {
+						isUpgradable = false;
+					}
+				}
 
 				/*=============================================
 				=          		  Fill Raw Lists          	  =
@@ -1035,6 +1030,7 @@ class DeviceWatcher extends utils.Adapter {
 							'Signal strength': linkQuality,
 							'Last contact': lastContactString,
 							Status: deviceState,
+							Upgradable: isUpgradable,
 						});
 					}
 				} else {
@@ -1049,6 +1045,7 @@ class DeviceWatcher extends utils.Adapter {
 						'Signal strength': linkQuality,
 						'Last contact': lastContactString,
 						Status: deviceState,
+						Upgradable: isUpgradable,
 					});
 				}
 			} else {
@@ -1104,6 +1101,9 @@ class DeviceWatcher extends utils.Adapter {
 
 			// send message if new devices are offline
 			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications();
+
+			// send overview of upgradable devices
+			if (this.config.checkSendDeviceUpgrade) await this.sendDeviceUpdatesNotification();
 
 			await this.writeDatapoints(); // fill the datapoints
 		} catch (error) {
@@ -1407,6 +1407,75 @@ class DeviceWatcher extends utils.Adapter {
 			});
 		}
 	} //<--End of daily offline notification
+
+	/**
+	 * check if adapter updates are available and send notification
+	 * @param {string} id
+	 * @param {ioBroker.State | null | undefined} state
+	 */
+	/*
+	async sendAdapterUpdatesNotification(id, state) {
+		this.log.debug(`Start the function: ${this.sendAdapterUpdatesNotification.name}`);
+
+		try {
+			if (state && state !== undefined) {
+				const list = await this.parseData(state.val);
+				let msg = '';
+				let adapterList = '';
+
+				for (const [id] of Object.entries(list)) {
+					adapterList = `${adapterList}\n${this.capitalize(id)} - Version: ${list[id].availableVersion}`;
+				}
+				if (adapterList.length !== 0) {
+					msg = `Neue Adapter Updates vorhanden: \n`;
+
+					this.log.info(msg + adapterList);
+					await this.setStateAsync('lastNotification', msg + adapterList, true);
+					await this.sendNotification(msg + adapterList);
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendAdapterUpdatesNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
+	}*/
+
+	/**
+	 * check if device updates are available and send notification
+	 **/
+	async sendDeviceUpdatesNotification() {
+		this.log.debug(`Start the function: ${this.sendDeviceUpdatesNotification.name}`);
+
+		try {
+			let msg = '';
+			let deviceList = '';
+
+			for (const id of this.upgradableList) {
+				if (!this.blacklistNotify.includes(id['Path'])) {
+					if (!this.config.showAdapterNameinMsg) {
+						deviceList = `${deviceList}\n${id['Device']}`;
+					} else {
+						deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']}`;
+					}
+				}
+			}
+			if (deviceList.length !== this.upgradableDevicesCountRawOld) {
+				if (deviceList.length >= 1) {
+					msg = `Neue Geräte Updates vorhanden: \n`;
+
+					this.log.info(msg + deviceList);
+					this.upgradableDevicesCountRawOld = deviceList.length;
+					await this.setStateAsync('lastNotification', msg + deviceList, true);
+					await this.sendNotification(msg + deviceList);
+				} else {
+					this.upgradableDevicesCountRawOld = deviceList.length;
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendDeviceUpdatesNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendDeviceUpdatesNotification.name}`);
+	}
 
 	/**
 	 * reset arrays and counts

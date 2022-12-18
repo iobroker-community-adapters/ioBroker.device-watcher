@@ -84,5 +84,7 @@
 	"Add adapter name in notifcations": "Add adapter name in notifcations",
 	"Will add the adaptername from the device": "Will add the adaptername from the device",
 	"Adapter update message": "Adapter update message",
-	"Receive a message when an update for an adapter is available": "Receive a message when an update for an adapter is available"
+	"Receive a message when an update for an adapter is available": "Receive a message when an update for an adapter is available",
+	"Device update message": "Device update message",
+	"Receive a message when an update for an device is available": "Receive a message when an update for an device is available"
 }

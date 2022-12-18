@@ -307,7 +307,8 @@
         "showAdapterNameinMsg": false,
         "tableBlacklist": [],
         "updateinterval": 10,
-        "ownDataEditor": []
+        "ownDataEditor": [],
+        "checkSendDeviceUpgrade": false
     },
     "objects": [],
     "instanceObjects": [
