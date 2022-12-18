@@ -86,5 +86,7 @@
     "Synochat Instance": "Примірник Synochat",
     "Enter the channelname for Synochat": "Введіть назву каналу для Synochat",
     "Adapter update message": "Повідомлення про оновлення адаптера",
-    "Receive a message when an update for an adapter is available": "Отримувати повідомлення, коли доступне оновлення для адаптера"
+    "Receive a message when an update for an adapter is available": "Отримувати повідомлення, коли доступне оновлення для адаптера",
+    "Device update message": "Повідомлення про оновлення пристрою",
+    "Receive a message when an update for an device is available": "Отримувати повідомлення, коли доступне оновлення для пристрою"
 }

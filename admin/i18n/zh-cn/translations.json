@@ -86,5 +86,7 @@
     "Synochat Instance": "同步聊天实例",
     "Enter the channelname for Synochat": "输入 Synochat 的频道名称",
     "Adapter update message": "适配器更新消息",
-    "Receive a message when an update for an adapter is available": "当适配器更新可用时接收消息"
+    "Receive a message when an update for an adapter is available": "当适配器更新可用时接收消息",
+    "Device update message": "设备更新消息",
+    "Receive a message when an update for an device is available": "当设备更新可用时接收消息"
 }

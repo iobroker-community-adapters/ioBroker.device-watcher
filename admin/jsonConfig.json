@@ -513,14 +513,14 @@
 					"type": "divider",
 					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
 				},
-				"checkSendAdapterUpdateNotify": {
+				"checkSendDeviceUpgrade": {
 					"newLine": "true",
 					"type": "checkbox",
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
-					"label": "Adapter update message",
-					"help": "Receive a message when an update for an adapter is available"
+					"label": "Device update message",
+					"help": "Receive a message when an update for an device is available"
 				},
 				"trennerVier": {
 					"newLine": true,

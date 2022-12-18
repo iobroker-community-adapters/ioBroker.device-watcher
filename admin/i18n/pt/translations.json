@@ -86,5 +86,7 @@
     "Synochat Instance": "Instância Synochat",
     "Enter the channelname for Synochat": "Digite o nome do canal para Synochat",
     "Adapter update message": "Mensagem de atualização do adaptador",
-    "Receive a message when an update for an adapter is available": "Receba uma mensagem quando uma atualização para um adaptador estiver disponível"
+    "Receive a message when an update for an adapter is available": "Receba uma mensagem quando uma atualização para um adaptador estiver disponível",
+    "Device update message": "Mensagem de atualização do dispositivo",
+    "Receive a message when an update for an device is available": "Receba uma mensagem quando uma atualização para um dispositivo estiver disponível"
 }
