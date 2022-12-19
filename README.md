@@ -4,7 +4,8 @@
 
 [![GitHub license](https://img.shields.io/github/license/ciddi89/ioBroker.device-watcher)](https://github.com/ciddi89/ioBroker.device-watcher/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.device-watcher.svg)](https://www.npmjs.com/package/iobroker.device-watcher)
-![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)</br>
+![GitHub repo size](https://img.shields.io/github/repo-size/ciddi89/ioBroker.device-watcher)
+[![Translation status](https://weblate.iobroker.net/widgets/adapters/-/device-watcher/svg-badge.svg)](https://weblate.iobroker.net/engage/adapters/?utm_source=widget)</br>
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ciddi89/ioBroker.device-watcher)
 ![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/ciddi89/ioBroker.device-watcher/latest)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ciddi89/ioBroker.device-watcher)
@@ -19,7 +20,6 @@
 ![Test and Release](https://github.com/ciddi89/ioBroker.device-watcher/workflows/Test%20and%20Release/badge.svg)
 [![CodeQL](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml/badge.svg)](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml)
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/ciddi89/ioBroker.device-watcher)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/31cdbfba5f8641ff8a1719b6b082c3f7)](https://www.codacy.com/gh/ciddi89/ioBroker.device-watcher/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ciddi89/ioBroker.device-watcher&utm_campaign=Badge_Grade)
 
 ## Sentry
 
@@ -90,15 +90,16 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.1.0 (2022-12-19)
 
 -   (Scrounger) optionally show adapter name in notification
+-   (ciddi89) optionally receive a message when an update for an device is available [#87](https://github.com/ciddi89/ioBroker.device-watcher/issues/87)
+-   (Scrounger) update message for shelly adapter added
 -   (Scrounger) Yamaha MusicCast adapter added
--   optionally receive a message when an update for an device is available [#87](https://github.com/ciddi89/ioBroker.device-watcher/issues/87)
--   fixed devices are not reported in case battery is 0% [#86](https://github.com/ciddi89/ioBroker.device-watcher/issues/86)
--   added SynoChat [#85](https://github.com/ciddi89/ioBroker.device-watcher/issues/85)
--   added MQTT NukiHub, MQTT-Clien Zigbee2MQTT ([#82](https://github.com/ciddi89/ioBroker.device-watcher/issues/82))
+-   (ciddi89) update message for unifi devices added
+-   (ciddi89) fixed devices are not reported in case battery is 0% [#86](https://github.com/ciddi89/ioBroker.device-watcher/issues/86)
+-   (ciddi89) SynoChat added [#85](https://github.com/ciddi89/ioBroker.device-watcher/issues/85)
+-   (ciddi89) MQTT NukiHub, MQTT-Clien Zigbee2MQTT added ([#82](https://github.com/ciddi89/ioBroker.device-watcher/issues/82))
 
 ### 2.0.3 (2022-11-26)
 
