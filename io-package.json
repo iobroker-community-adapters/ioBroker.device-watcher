@@ -223,6 +223,8 @@
         "mqttClientZigbee2MqttMaxMinutes": 0,
         "mqttNukiDevices": false,
         "mqttNukiMaxMinutes": 300,
+        "musiccastDevices": false,
+        "musiccastMaxMinutes": 0,
         "netatmoDevices": false,
         "netatmoMaxMinutes": 300,
         "nukiExtDevices": false,
