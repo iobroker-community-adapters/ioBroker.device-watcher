@@ -222,11 +222,7 @@ class DeviceWatcher extends utils.Adapter {
 			// update data in interval
 			await this.refreshData();
 
-			// trigger update notification on state change
-			/*
-			if (this.config.checkSendAdapterUpdateNotify) {
-				this.subscribeForeignStatesAsync(`admin.*.info.updatesJson`);
-			}*/
+			this.stateChangesAllDevicesDP();
 
 			// send overview for low battery devices
 			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifyShedule();
@@ -239,16 +235,34 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- onReady end
 
+	stateChangesAllDevicesDP() {
+		for (const i in this.listAllDevicesRaw) {
+			if (this.listAllDevicesRaw[i].UpdateDP) {
+				this.subscribeForeignStatesAsync(this.listAllDevicesRaw[i].UpdateDP);
+			}
+		}
+	}
 	/**
 	 * Is called if a subscribed state changes
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
-	onStateChange(id, state) {
+	async onStateChange(id, state) {
 		// Admin JSON for Adapter updates
 		if (id && state) {
 			this.log.debug(`State changed: ${id} changed ${state.val}`);
-			//this.sendAdapterUpdatesNotification(id, state);
+
+			for (const i of this.listAllDevicesRaw) {
+				// On statechange update available datapoint
+				if (id === i['UpdateDP']) {
+					i['Upgradable'] = state.val;
+					if (state.val) {
+						await this.sendDeviceUpdatesNotification(i['Device'], i['Adapter'], i['Path']);
+					}
+				}
+				await this.writeDatapoints();
+			}
+			// this.log.warn(JSON.stringify(this.listAllDevicesRaw));
 		}
 	}
 
@@ -1005,9 +1019,11 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				let deviceUpdateSelector;
 				let isUpgradable;
+				let deviceUpdateDP;
 
 				if (this.config.checkSendDeviceUpgrade) {
-					deviceUpdateSelector = await this.getInitValue(currDeviceString + this.arrDev[i].upgrade);
+					deviceUpdateDP = currDeviceString + this.arrDev[i].upgrade;
+					deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
 					if (deviceUpdateSelector) {
 						isUpgradable = true;
 					} else {
@@ -1032,6 +1048,7 @@ class DeviceWatcher extends utils.Adapter {
 							'Signal strength': linkQuality,
 							'Last contact': lastContactString,
 							Status: deviceState,
+							UpdateDP: deviceUpdateDP,
 							Upgradable: isUpgradable,
 						});
 					}
@@ -1047,6 +1064,7 @@ class DeviceWatcher extends utils.Adapter {
 						'Signal strength': linkQuality,
 						'Last contact': lastContactString,
 						Status: deviceState,
+						UpdateDP: deviceUpdateDP,
 						Upgradable: isUpgradable,
 					});
 				}
@@ -1105,7 +1123,7 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.config.checkSendOfflineMsg) await this.sendOfflineNotifications();
 
 			// send overview of upgradable devices
-			if (this.config.checkSendDeviceUpgrade) await this.sendDeviceUpdatesNotification();
+			if (this.config.checkSendDeviceUpgrade) await this.sendDeviceUpdatesNotificationList();
 
 			await this.writeDatapoints(); // fill the datapoints
 		} catch (error) {
@@ -1415,38 +1433,12 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
-	/*
-	async sendAdapterUpdatesNotification(id, state) {
-		this.log.debug(`Start the function: ${this.sendAdapterUpdatesNotification.name}`);
-
-		try {
-			if (state && state !== undefined) {
-				const list = await this.parseData(state.val);
-				let msg = '';
-				let adapterList = '';
-
-				for (const [id] of Object.entries(list)) {
-					adapterList = `${adapterList}\n${this.capitalize(id)} - Version: ${list[id].availableVersion}`;
-				}
-				if (adapterList.length !== 0) {
-					msg = `Neue Adapter Updates vorhanden: \n`;
-
-					this.log.info(msg + adapterList);
-					await this.setStateAsync('lastNotification', msg + adapterList, true);
-					await this.sendNotification(msg + adapterList);
-				}
-			}
-		} catch (error) {
-			this.errorReporting('[sendAdapterUpdatesNotification]', error);
-		}
-		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
-	}*/
 
 	/**
 	 * check if device updates are available and send notification
 	 **/
-	async sendDeviceUpdatesNotification() {
-		this.log.debug(`Start the function: ${this.sendDeviceUpdatesNotification.name}`);
+	async sendDeviceUpdatesNotificationList() {
+		this.log.debug(`Start the function: ${this.sendDeviceUpdatesNotificationList.name}`);
 
 		try {
 			let msg = '';
@@ -1473,6 +1465,37 @@ class DeviceWatcher extends utils.Adapter {
 					this.upgradableDevicesCountRawOld = deviceList.length;
 				}
 			}
+		} catch (error) {
+			this.errorReporting('[sendDeviceUpdatesNotificationList]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendDeviceUpdatesNotificationList.name}`);
+	}
+
+	/**
+	 * check if device updates are available and send notification
+	 * @param {string} deviceName
+	 * @param {string} adapter
+	 * @param {string} devicePath
+	 **/
+	async sendDeviceUpdatesNotification(deviceName, adapter, devicePath) {
+		this.log.debug(`Start the function: ${this.sendDeviceUpdatesNotification.name}`);
+
+		try {
+			let msg = '';
+			let deviceList = '';
+
+			if (!this.blacklistNotify.includes(devicePath)) {
+				if (!this.config.showAdapterNameinMsg) {
+					deviceList = `${deviceList}\n${deviceName}`;
+				} else {
+					deviceList = `${deviceList}\n${adapter}: ${deviceName}`;
+				}
+			}
+			msg = `Neue Geräte Updates vorhanden: \n`;
+
+			this.log.info(msg + deviceList);
+			await this.setStateAsync('lastNotification', msg + deviceList, true);
+			await this.sendNotification(msg + deviceList);
 		} catch (error) {
 			this.errorReporting('[sendDeviceUpdatesNotification]', error);
 		}
