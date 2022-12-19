@@ -90,11 +90,16 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+    
+-   (Scrounger) Yamaha MusicCast adapter added
+    
 ### 2.1.0 (2022-12-19)
 
 -   (Scrounger) optionally show adapter name in notification
 -   (ciddi89) optionally receive a message when an update for an device is available [#87](https://github.com/ciddi89/ioBroker.device-watcher/issues/87)
 -   (Scrounger) update message for shelly adapter added
+-   (Scrounger) Yamaha MusicCast adapter added
 -   (ciddi89) update message for unifi devices added
 -   (ciddi89) fixed devices are not reported in case battery is 0% [#86](https://github.com/ciddi89/ioBroker.device-watcher/issues/86)
 -   (ciddi89) SynoChat added [#85](https://github.com/ciddi89/ioBroker.device-watcher/issues/85)

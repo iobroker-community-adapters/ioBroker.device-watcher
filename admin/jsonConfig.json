@@ -172,6 +172,13 @@
 					"lg": 3,
 					"label": "MQTT: Nuki Hub"
 				},
+				"musiccastDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MusicCast"
+				},				
 				"netatmoDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1233,6 +1240,18 @@
 					"label": "MQTT: Nuki Hub",
 					"help": "in minutes",
 					"hidden": "!data.mqttNukiDevices",
+					"hideOnlyControl": false
+				},
+				"musiccastMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "MusicCast",
+					"help": "in minutes",
+					"hidden": "!data.musiccastDevices",
 					"hideOnlyControl": false
 				},
 				"netatmoMaxMinutes": {
