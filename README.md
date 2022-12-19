@@ -94,6 +94,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 ### **WORK IN PROGRESS**
 
 -   (Scrounger) Yamaha MusicCast adapter added
+-   (ciddi89) send update message on state change
 
 ### 2.1.0 (2022-12-19)
 
