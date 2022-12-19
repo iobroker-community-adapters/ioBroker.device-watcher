@@ -90,10 +90,11 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
 ### **WORK IN PROGRESS**
-    
+
 -   (Scrounger) Yamaha MusicCast adapter added
-    
+
 ### 2.1.0 (2022-12-19)
 
 -   (Scrounger) optionally show adapter name in notification

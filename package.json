@@ -53,6 +53,7 @@
   },
   "main": "main.js",
   "files": [
+    "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
     "lib/",
     "www/",
