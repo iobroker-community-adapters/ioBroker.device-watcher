@@ -522,10 +522,6 @@
 					"label": "Device update message",
 					"help": "Receive a message when an update for an device is available"
 				},
-				"trennerVier": {
-					"newLine": true,
-					"type": "divider"
-				},
 				"_headerMSGservice": {
 					"newLine": true,
 					"type": "header",
