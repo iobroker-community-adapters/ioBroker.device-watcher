@@ -52,6 +52,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.linkQualityCount = 0;
 		this.batteryPoweredCount = 0;
 		this.lowBatteryPoweredCount = 0;
+		this.upgradableDevicesCount = 0;
 
 		// Interval timer
 		this.refreshDataTimeout = null;
@@ -650,6 +651,9 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Count how many devices are exists
 		this.deviceCounter = this.listAllDevices.length;
+
+		// Count how many devices has update available
+		this.upgradableDevicesCount = this.upgradableList.length;
 
 		// raws
 
@@ -1529,6 +1533,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.linkQualityCount = 0;
 		this.batteryPoweredCount = 0;
 		this.lowBatteryPoweredCount = 0;
+		this.upgradableDevicesCount = 0;
 
 		this.log.debug(`Function finished: ${this.resetVars.name}`);
 	} // <-- end of resetVars
@@ -1554,6 +1559,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateAsync(`${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
 			await this.setStateAsync(`${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
 			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
+			await this.setStateAsync(`${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
 
 			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
@@ -1592,6 +1598,16 @@ class DeviceWatcher extends utils.Adapter {
 					val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount),
 					ack: true,
 				});
+
+			if (this.upgradableDevicesCount === 0) {
+				// if no device is count, write the JSON List with default value
+				this.upgradableList = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
+			}
+			//write JSON list
+			await this.setStateAsync(`${dpSubFolder}upgradableList`, {
+				val: JSON.stringify(this.upgradableList),
+				ack: true,
+			});
 
 			if (this.batteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
@@ -1961,6 +1977,54 @@ class DeviceWatcher extends utils.Adapter {
 				},
 				type: 'number',
 				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
+		await this.setObjectNotExistsAsync(`${adptName}.upgradableCount`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of devices with available updates ',
+					de: 'Anzahl der Geräte mit verfügbaren Updates',
+					ru: 'Количество устройств с доступными обновлениями',
+					pt: 'Número de dispositivos com atualizações disponíveis',
+					nl: 'Nummer van apparatuur met beschikbare updates',
+					fr: 'Nombre de dispositifs avec mises à jour disponibles',
+					it: 'Numero di dispositivi con aggiornamenti disponibili',
+					es: 'Número de dispositivos con actualizaciones disponibles',
+					pl: 'Liczba urządzeń z dostępną aktualizacją',
+					uk: 'Кількість пристроїв з доступними оновленнями',
+					'zh-cn': '现有更新的装置数目'
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
+		await this.setObjectNotExistsAsync(`${adptName}.upgradableList`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON List of devices with available updates ',
+					de: 'JSON Liste der Geräte mit verfügbaren Updates',
+					ru: 'ДЖСОН Список устройств с доступными обновлениями',
+					pt: 'J. Lista de dispositivos com atualizações disponíveis',
+					nl: 'JSON List van apparatuur met beschikbare updates',
+					fr: 'JSON Liste des appareils avec mises à jour disponibles',
+					it: 'JSON Elenco dei dispositivi con aggiornamenti disponibili',
+					es: 'JSON Lista de dispositivos con actualizaciones disponibles',
+					pl: 'JSON Lista urządzeń korzystających z aktualizacji',
+					uk: 'Сонце Перелік пристроїв з доступними оновленнями',
+					'zh-cn': '附 件 现有最新设备清单'
+				},
+				type: 'array',
+				role: 'json',
 				read: true,
 				write: false,
 			},
