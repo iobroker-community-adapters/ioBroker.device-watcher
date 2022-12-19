@@ -499,20 +499,6 @@
 					"newLine": true,
 					"type": "divider"
 				},
-				"showAdapterNameinMsg": {
-					"type": "checkbox",
-					"sm": 12,
-					"md": 6,
-					"lg": 3,
-					"label": "Add adapter name in notifcations",
-					"help": "Will add the adaptername from the device",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
-				},
-				"trennerDrei": {
-					"newLine": true,
-					"type": "divider",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg"
-				},
 				"checkSendDeviceUpgrade": {
 					"newLine": "true",
 					"type": "checkbox",
@@ -522,12 +508,27 @@
 					"label": "Device update message",
 					"help": "Receive a message when an update for an device is available"
 				},
+				"trennerDrei": {
+					"newLine": true,
+					"type": "divider",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade"
+				},
+				"showAdapterNameinMsg": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 3,
+					"label": "Add adapter name in notifcations",
+					"help": "Will add the adaptername from the device",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade"
+				},
 				"_headerMSGservice": {
 					"newLine": true,
 					"type": "header",
 					"text": "Notification Service",
 					"size": 2,
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade",
 					"hideOnlyControl": false
 				},
 				"msgServiceText": {
@@ -537,7 +538,7 @@
 						"fontSize": 16,
 						"marginTop": 20
 					},
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade",
 					"hideOnlyControl": false
 				},
 				"msgService": {
@@ -555,7 +556,7 @@
 						{ "label": "Synochat", "value": "synochat" }
 					],
 					"default": "none",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendAdapterUpdateNotify",
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade",
 					"hideOnlyControl": false
 				},
 				"_headerPushover": {
