@@ -222,8 +222,6 @@ class DeviceWatcher extends utils.Adapter {
 			// update data in interval
 			await this.refreshData();
 
-			this.stateChangesAllDevicesDP();
-
 			// send overview for low battery devices
 			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifyShedule();
 
@@ -235,13 +233,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- onReady end
 
-	stateChangesAllDevicesDP() {
-		for (const i in this.listAllDevicesRaw) {
-			if (this.listAllDevicesRaw[i].UpdateDP) {
-				this.subscribeForeignStatesAsync(this.listAllDevicesRaw[i].UpdateDP);
-			}
-		}
-	}
 	/**
 	 * Is called if a subscribed state changes
 	 * @param {string} id
@@ -259,10 +250,16 @@ class DeviceWatcher extends utils.Adapter {
 					if (state.val) {
 						await this.sendDeviceUpdatesNotification(i['Device'], i['Adapter'], i['Path']);
 					}
+				} else if (id === i['SignalStrengthDP']) {
+					this.log.warn(i['Signal strength']);
+					i['Signal strength'] = await this.calculateSignalStrength(state, i['adapterID']);
+					this.log.warn(i['Signal strength']);
 				}
-				await this.writeDatapoints();
 			}
-			// this.log.warn(JSON.stringify(this.listAllDevicesRaw));
+			await this.createLists();
+			await this.countDevices();
+			await this.writeDatapoints();
+			this.log.warn(JSON.stringify(this.listAllDevicesRaw));
 		}
 	}
 
@@ -525,6 +522,160 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
+	 * calculate Signalstrength
+	 * @param {object} deviceQualityState - State value
+	 * @param {object} adapterID - adapter name
+	 */
+	async calculateSignalStrength(deviceQualityState, adapterID) {
+		let linkQuality;
+		let mqttNukiValue;
+
+		if (deviceQualityState != null) {
+			switch (typeof deviceQualityState.val) {
+				case 'number':
+					if (this.config.trueState) {
+						linkQuality = deviceQualityState.val;
+					} else {
+						switch (adapterID) {
+							case 'roomba':
+							case 'sonoff':
+								linkQuality = deviceQualityState.val + '%'; // If quality state is already an percent value
+								break;
+							case 'lupusec':
+								linkQuality = deviceQualityState.val;
+								break;
+
+							default:
+								// If quality state is an RSSI value calculate in percent:
+								if (deviceQualityState.val == -255) {
+									linkQuality = ' - ';
+								} else if (deviceQualityState.val < 0) {
+									linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
+									// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+								} else if (deviceQualityState.val >= 0) {
+									linkQuality = parseFloat(((100 / 255) * deviceQualityState.val).toFixed(0)) + '%';
+								}
+								break;
+						}
+					}
+					break;
+
+				case 'string':
+					switch (adapterID) {
+						case 'netatmo':
+							// for Netatmo devices
+							linkQuality = deviceQualityState.val;
+							break;
+						case 'nukiExt':
+							linkQuality = ' - ';
+							break;
+						case 'mqttNuki':
+							linkQuality = deviceQualityState.val;
+							mqttNukiValue = parseInt(linkQuality);
+							if (this.config.trueState) {
+								linkQuality = deviceQualityState.val;
+							} else if (mqttNukiValue < 0) {
+								linkQuality = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100) + '%';
+								// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+							}
+					}
+					break;
+			}
+		} else {
+			linkQuality = ' - ';
+		}
+		return linkQuality;
+	}
+
+	/**
+	 * get battery data
+	 * @param {object} deviceBatteryState - State value
+	 * @param {object} shortDeviceBatteryState - State value
+	 * @param {object} deviceLowBatState - State value
+	 * @param {object} adapterID - adapter name
+	 * @param {object} i - device
+	 */
+	async getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i) {
+		let batteryHealth;
+
+		if (deviceBatteryState === undefined && shortDeviceBatteryState === undefined) {
+			if (deviceLowBatState !== undefined) {
+				switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
+					case 'none':
+						break;
+					default:
+						if (deviceLowBatState === false || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
+							batteryHealth = 'ok';
+						} else {
+							batteryHealth = 'low';
+						}
+						break;
+				}
+			} else {
+				batteryHealth = ' - ';
+			}
+		} else {
+			switch (adapterID) {
+				case 'hmrpc':
+					if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
+						batteryHealth = ' - ';
+					} else {
+						batteryHealth = deviceBatteryState + 'V';
+					}
+					break;
+
+				case 'hueExt':
+				case 'mihomeVacuum':
+				case 'mqttNuki':
+					if (shortDeviceBatteryState) {
+						batteryHealth = shortDeviceBatteryState + '%';
+					}
+					break;
+
+				default:
+					batteryHealth = deviceBatteryState + '%';
+			}
+		}
+		return batteryHealth;
+	}
+
+	/**
+	 * set lowBat state
+	 * @param {object} deviceLowBatState - State value
+	 * @param {object} deviceBatteryState - State value
+	 */
+	async setLowBatState(deviceLowBatState, deviceBatteryState) {
+		let lowBatIndicator;
+		switch (typeof deviceLowBatState) {
+			case 'number':
+				if (deviceLowBatState === 0) {
+					lowBatIndicator = true;
+				}
+				break;
+
+			case 'string':
+				if (deviceLowBatState !== 'NORMAL') {
+					// Tado devices
+					lowBatIndicator = true;
+				}
+				break;
+
+			case 'boolean':
+				if (deviceLowBatState) {
+					lowBatIndicator = true;
+				}
+				break;
+
+			default: // if the battery state is under the set limit
+				if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
+					lowBatIndicator = true;
+				}
+				break;
+		}
+		return lowBatIndicator;
+	}
+
+	/**
 	 * get Last Contact
 	 * @param {object} selector - Selector
 	 */
@@ -686,88 +837,35 @@ class DeviceWatcher extends utils.Adapter {
 				/*=============================================
 				=            Get signal strength              =
 				=============================================*/
+				let deviceQualityDP = currDeviceString + this.arrDev[i].rssiState;
 				let deviceQualityState;
-				let linkQuality;
-				let mqttNukiValue;
 
 				switch (adapterID) {
 					case 'mihomeVacuum':
-						deviceQualityState = await this.getForeignStateAsync(shortCurrDeviceString + this.arrDev[i].rssiState);
+						deviceQualityDP = shortCurrDeviceString + this.arrDev[i].rssiState;
+						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
 						break;
 
 					case 'netatmo':
-						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
 						if (!deviceQualityState) {
-							deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rfState);
+							deviceQualityDP = currDeviceString + this.arrDev[i].rfState;
+							deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
 						}
 						break;
 
 					default:
-						deviceQualityState = await this.getForeignStateAsync(currDeviceString + this.arrDev[i].rssiState);
+						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
 						break;
 				}
+				//subscribe to states
+				this.subscribeForeignStatesAsync(deviceQualityDP);
 
-				if (deviceQualityState != null) {
-					switch (typeof deviceQualityState.val) {
-						case 'number':
-							if (this.config.trueState) {
-								linkQuality = deviceQualityState.val;
-							} else {
-								switch (adapterID) {
-									case 'roomba':
-									case 'sonoff':
-										linkQuality = deviceQualityState.val + '%'; // If quality state is already an percent value
-										break;
-									case 'lupusec':
-										linkQuality = deviceQualityState.val;
-										break;
-
-									default:
-										// If quality state is an RSSI value calculate in percent:
-										if (deviceQualityState.val == -255) {
-											linkQuality = ' - ';
-										} else if (deviceQualityState.val < 0) {
-											linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
-											// If Quality State is an value between 0-255 (zigbee) calculate in percent:
-										} else if (deviceQualityState.val >= 0) {
-											linkQuality = parseFloat(((100 / 255) * deviceQualityState.val).toFixed(0)) + '%';
-										}
-										break;
-								}
-							}
-							break;
-
-						case 'string':
-							switch (adapterID) {
-								case 'netatmo':
-									// for Netatmo devices
-									linkQuality = deviceQualityState.val;
-									break;
-								case 'nukiExt':
-									linkQuality = ' - ';
-									break;
-								case 'mqttNuki':
-									linkQuality = deviceQualityState.val;
-									mqttNukiValue = parseInt(linkQuality);
-									if (this.config.trueState) {
-										linkQuality = deviceQualityState.val;
-									} else if (mqttNukiValue < 0) {
-										linkQuality = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100) + '%';
-										// If Quality State is an value between 0-255 (zigbee) calculate in percent:
-									}
-							}
-							break;
-					}
-				} else {
-					linkQuality = ' - ';
-				}
+				let linkQuality = await this.calculateSignalStrength(deviceQualityState, adapterID);
 
 				/*=============================================
 				=         	    Get battery data       	      =
 				=============================================*/
-				let batteryHealth;
-				let lowBatIndicator;
-				let isBatteryDevice;
 
 				// Get battery states
 				let deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
@@ -787,80 +885,14 @@ class DeviceWatcher extends utils.Adapter {
 					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 				}
 
-				if (deviceBatteryState === undefined && shortDeviceBatteryState === undefined) {
-					if (deviceLowBatState !== undefined) {
-						switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
-							case 'none':
-								batteryHealth = ' - ';
-								break;
-							default:
-								if (deviceLowBatState === false || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
-									batteryHealth = 'ok';
-									isBatteryDevice = true;
-								} else {
-									batteryHealth = 'low';
-									isBatteryDevice = true;
-								}
-								break;
-						}
-					} else {
-						batteryHealth = ' - ';
-					}
-				} else {
-					switch (adapterID) {
-						case 'hmrpc':
-							if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
-								batteryHealth = ' - ';
-							} else {
-								batteryHealth = deviceBatteryState + 'V';
-								isBatteryDevice = true;
-							}
-							break;
-
-						case 'hueExt':
-						case 'mihomeVacuum':
-						case 'mqttNuki':
-							if (shortDeviceBatteryState) {
-								batteryHealth = shortDeviceBatteryState + '%';
-								isBatteryDevice = true;
-							}
-							break;
-
-						default:
-							batteryHealth = deviceBatteryState + '%';
-							isBatteryDevice = true;
-					}
-				}
+				let isBatteryDevice;
+				const batteryHealth = await this.getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i);
+				if (batteryHealth) isBatteryDevice = true;
 
 				/*=============================================
 				=            Set Lowbat indicator             =
 				=============================================*/
-				switch (typeof deviceLowBatState) {
-					case 'number':
-						if (deviceLowBatState === 0) {
-							lowBatIndicator = true;
-						}
-						break;
-
-					case 'string':
-						if (deviceLowBatState !== 'NORMAL') {
-							// Tado devices
-							lowBatIndicator = true;
-						}
-						break;
-
-					case 'boolean':
-						if (deviceLowBatState) {
-							lowBatIndicator = true;
-						}
-						break;
-
-					default: // if the battery state is under the set limit
-						if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
-							lowBatIndicator = true;
-						}
-						break;
-				}
+				const lowBatIndicator = await this.setLowBatState(deviceLowBatState, batteryHealth);
 
 				/*=============================================
 				=          Get last contact of device         =
@@ -1017,18 +1049,19 @@ class DeviceWatcher extends utils.Adapter {
 				/*=============================================
 				=            Get update data	              =
 				=============================================*/
-				let deviceUpdateSelector;
+				const deviceUpdateDP = currDeviceString + this.arrDev[i].upgrade;
 				let isUpgradable;
-				let deviceUpdateDP;
 
 				if (this.config.checkSendDeviceUpgrade) {
-					deviceUpdateDP = currDeviceString + this.arrDev[i].upgrade;
-					deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
+					const deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
+
 					if (deviceUpdateSelector) {
 						isUpgradable = true;
-					} else {
+					} else if (!deviceUpdateSelector) {
 						isUpgradable = false;
 					}
+					// subscribe to states
+					this.subscribeForeignStatesAsync(deviceUpdateDP);
 				}
 
 				/*=============================================
@@ -1041,10 +1074,12 @@ class DeviceWatcher extends utils.Adapter {
 						this.listAllDevicesRaw.push({
 							Path: id,
 							Device: deviceName,
+							adapterID: adapterID,
 							Adapter: adapter,
 							isBatteryDevice: isBatteryDevice,
 							Battery: batteryHealth,
 							LowBat: lowBatIndicator,
+							SignalStrengthDP: deviceQualityDP,
 							'Signal strength': linkQuality,
 							'Last contact': lastContactString,
 							Status: deviceState,
@@ -1057,10 +1092,12 @@ class DeviceWatcher extends utils.Adapter {
 					this.listAllDevicesRaw.push({
 						Path: id,
 						Device: deviceName,
+						adapterID: adapterID,
 						Adapter: adapter,
 						isBatteryDevice: isBatteryDevice,
 						Battery: batteryHealth,
 						LowBat: lowBatIndicator,
+						SignalStrengthDP: deviceQualityDP,
 						'Signal strength': linkQuality,
 						'Last contact': lastContactString,
 						Status: deviceState,
