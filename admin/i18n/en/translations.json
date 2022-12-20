@@ -86,5 +86,8 @@
 	"Adapter update message": "Adapter update message",
 	"Receive a message when an update for an adapter is available": "Receive a message when an update for an adapter is available",
 	"Device update message": "Device update message",
-	"Receive a message when an update for an device is available": "Receive a message when an update for an device is available"
+	"Receive a message when an update for an device is available": "Receive a message when an update for an device is available",
+	"Overview of devices with update": "Overview of devices with update",
+	"Get a message with an overview all devices with update": "Get a message with an overview all devices with update",
+	"Choose the day(s) where you want to get the overview of update devices:": "Choose the day(s) where you want to get the overview of update devices:"
 }

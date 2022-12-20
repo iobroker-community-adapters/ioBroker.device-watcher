@@ -88,5 +88,8 @@
     "Adapter update message": "适配器更新消息",
     "Receive a message when an update for an adapter is available": "当适配器更新可用时接收消息",
     "Device update message": "设备更新消息",
-    "Receive a message when an update for an device is available": "当设备更新可用时接收消息"
+    "Receive a message when an update for an device is available": "当设备更新可用时接收消息",
+    "Overview of devices with update": "有更新的设备概览",
+    "Get a message with an overview all devices with update": "获取包含更新的所有设备概览的消息",
+    "Choose the day(s) where you want to get the overview of update devices:": "选择您想要获取更新设备概览的日期："
 }

@@ -88,5 +88,8 @@
     "Adapter update message": "Сообщение об обновлении адаптера",
     "Receive a message when an update for an adapter is available": "Получение сообщения, когда доступно обновление для адаптера",
     "Device update message": "Сообщение об обновлении устройства",
-    "Receive a message when an update for an device is available": "Получение сообщения, когда доступно обновление для устройства"
+    "Receive a message when an update for an device is available": "Получение сообщения, когда доступно обновление для устройства",
+    "Overview of devices with update": "Обзор устройств с обновлением",
+    "Get a message with an overview all devices with update": "Получить сообщение с обзором всех устройств с обновлением",
+    "Choose the day(s) where you want to get the overview of update devices:": "Выберите день (дни), когда вы хотите получить обзор обновленных устройств:"
 }
