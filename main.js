@@ -654,7 +654,8 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} deviceBatteryState - State value
 	 */
 	async setLowBatState(deviceLowBatState, deviceBatteryState) {
-		let lowBatIndicator = false;
+		let lowBatIndicator;
+		if (deviceLowBatState !== undefined) lowBatIndicator = false;
 		switch (typeof deviceLowBatState) {
 			case 'number':
 				if (deviceLowBatState === 0) {
@@ -903,12 +904,12 @@ class DeviceWatcher extends utils.Adapter {
 
 				let isBatteryDevice;
 				const batteryHealth = await this.getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i);
-				if (batteryHealth) isBatteryDevice = true;
-
+				if (batteryHealth !== ' - ') isBatteryDevice = true;
 				/*=============================================
 				=            Set Lowbat indicator             =
 				=============================================*/
 				const lowBatIndicator = await this.setLowBatState(deviceLowBatState, batteryHealth);
+				if (lowBatIndicator !== undefined) isBatteryDevice = true;
 
 				/*=============================================
 				=          Get last contact of device         =
