@@ -249,13 +249,21 @@ class DeviceWatcher extends utils.Adapter {
 
 			for (const i of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
-				if (id === i['UpdateDP']) {
-					i['Upgradable'] = state.val;
-					if (state.val) {
-						await this.sendDeviceUpdatesNotification(i['Device'], i['Adapter'], i['Path']);
-					}
-				} else if (id === i['SignalStrengthDP']) {
-					i['Signal strength'] = await this.calculateSignalStrength(state, i['adapterID']);
+				switch (id) {
+					case i['UpdateDP']:
+						if (state.val) {
+							await this.sendDeviceUpdatesNotification(i['Device'], i['Adapter'], i['Path']);
+						}
+						break;
+					case i['SignalStrengthDP']:
+						i['Signal strength'] = await this.calculateSignalStrength(state, i['adapterID']);
+						break;
+					case i['LowBatDP']:
+						i['LowBat'] = await this.setLowBatState(state.val, i['Battery']);
+						if (i['LowBat']) {
+							await this.sendLowBatNoticiation(i['Device'], i['Adapter'], i['Battery'], i['Path']);
+						}
+						break;
 				}
 			}
 			await this.createLists();
@@ -598,6 +606,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i) {
 		let batteryHealth;
+		this.log.warn(i);
 
 		if (deviceBatteryState === undefined && shortDeviceBatteryState === undefined) {
 			if (deviceLowBatState !== undefined) {
@@ -646,7 +655,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} deviceBatteryState - State value
 	 */
 	async setLowBatState(deviceLowBatState, deviceBatteryState) {
-		let lowBatIndicator;
+		let lowBatIndicator = false;
 		switch (typeof deviceLowBatState) {
 			case 'number':
 				if (deviceLowBatState === 0) {
@@ -1379,6 +1388,38 @@ class DeviceWatcher extends utils.Adapter {
 			});
 		}
 	} //<--End of battery notification
+
+	/**
+	 * check if device updates are available and send notification
+	 * @param {string} deviceName
+	 * @param {string} adapter
+	 * @param {string} battery
+	 * @param {string} devicePath
+	 **/
+	async sendLowBatNoticiation(deviceName, adapter, battery, devicePath) {
+		this.log.debug(`Start the function: ${this.sendLowBatNoticiation.name}`);
+
+		try {
+			let msg = '';
+			let deviceList = '';
+
+			if (!this.blacklistNotify.includes(devicePath)) {
+				if (!this.config.showAdapterNameinMsg) {
+					deviceList = `${deviceList}\n${deviceName} (${battery})`;
+				} else {
+					deviceList = `${deviceList}\n${adapter}: ${deviceName} (${battery})`;
+				}
+			}
+			msg = `Gerät mit geringer Batterie erkannt: \n`;
+
+			this.log.info(msg + deviceList);
+			await this.setStateAsync('lastNotification', msg + deviceList, true);
+			await this.sendNotification(msg + deviceList);
+		} catch (error) {
+			this.errorReporting('[sendLowBatNoticiation]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendLowBatNoticiation.name}`);
+	}
 
 	/**
 	 * send message if an device is offline
