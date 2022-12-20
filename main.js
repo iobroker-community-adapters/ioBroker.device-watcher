@@ -606,7 +606,6 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i) {
 		let batteryHealth;
-		this.log.warn(i);
 
 		if (deviceBatteryState === undefined && shortDeviceBatteryState === undefined) {
 			if (deviceLowBatState !== undefined) {
