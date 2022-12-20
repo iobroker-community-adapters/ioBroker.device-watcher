@@ -231,7 +231,6 @@ class DeviceWatcher extends utils.Adapter {
 
 			// send overview of upgradeable devices
 			if (this.config.checkSendUpgradeMsgDaily) await this.sendUpgradeNotificationsShedule();
-
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -256,15 +255,12 @@ class DeviceWatcher extends utils.Adapter {
 						await this.sendDeviceUpdatesNotification(i['Device'], i['Adapter'], i['Path']);
 					}
 				} else if (id === i['SignalStrengthDP']) {
-					this.log.warn(i['Signal strength']);
 					i['Signal strength'] = await this.calculateSignalStrength(state, i['adapterID']);
-					this.log.warn(i['Signal strength']);
 				}
 			}
 			await this.createLists();
 			await this.countDevices();
 			await this.writeDatapoints();
-			this.log.warn(JSON.stringify(this.listAllDevicesRaw));
 		}
 	}
 
@@ -888,10 +884,14 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				// Get low bat states
+				let isLowBatDP = currDeviceString + this.arrDev[i].isLowBat;
 				let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
 				if (deviceLowBatState === undefined) {
 					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
+					isLowBatDP = currDeviceString + this.arrDev[i].isLowBat2;
 				}
+				//subscribe to states
+				this.subscribeForeignStatesAsync(isLowBatDP);
 
 				let isBatteryDevice;
 				const batteryHealth = await this.getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i);
@@ -1087,6 +1087,7 @@ class DeviceWatcher extends utils.Adapter {
 							isBatteryDevice: isBatteryDevice,
 							Battery: batteryHealth,
 							LowBat: lowBatIndicator,
+							LowBatDP: isLowBatDP,
 							SignalStrengthDP: deviceQualityDP,
 							'Signal strength': linkQuality,
 							'Last contact': lastContactString,
@@ -1105,6 +1106,7 @@ class DeviceWatcher extends utils.Adapter {
 						isBatteryDevice: isBatteryDevice,
 						Battery: batteryHealth,
 						LowBat: lowBatIndicator,
+						LowBatDP: isLowBatDP,
 						SignalStrengthDP: deviceQualityDP,
 						'Signal strength': linkQuality,
 						'Last contact': lastContactString,
@@ -2092,7 +2094,7 @@ class DeviceWatcher extends utils.Adapter {
 					es: 'Número de dispositivos con actualizaciones disponibles',
 					pl: 'Liczba urządzeń z dostępną aktualizacją',
 					uk: 'Кількість пристроїв з доступними оновленнями',
-					'zh-cn': '现有更新的装置数目'
+					'zh-cn': '现有更新的装置数目',
 				},
 				type: 'number',
 				role: 'value',
@@ -2116,7 +2118,7 @@ class DeviceWatcher extends utils.Adapter {
 					es: 'JSON Lista de dispositivos con actualizaciones disponibles',
 					pl: 'JSON Lista urządzeń korzystających z aktualizacji',
 					uk: 'Сонце Перелік пристроїв з доступними оновленнями',
-					'zh-cn': '附 件 现有最新设备清单'
+					'zh-cn': '附 件 现有最新设备清单',
 				},
 				type: 'array',
 				role: 'json',
