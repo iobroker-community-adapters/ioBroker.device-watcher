@@ -90,5 +90,8 @@
 	"Overview of devices with update": "Overview of devices with update",
 	"Get a message with an overview all devices with update": "Get a message with an overview all devices with update",
 	"Choose the day(s) where you want to get the overview of update devices:": "Choose the day(s) where you want to get the overview of update devices:",
-	"Other Notification Settings": "Other Notification Settings"
+	"Other Notification Settings": "Other Notification Settings",
+	"Update datapoints directly": "Update datapoints directly",
+	"Update lists & counts which each statechange of devices": "Update lists & counts which each statechange of devices",
+	"Update lists & counts directly with each statechange of devices": "Update lists & counts directly with each statechange of devices"
 }

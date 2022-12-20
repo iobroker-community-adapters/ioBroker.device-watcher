@@ -92,5 +92,9 @@
     "Overview of devices with update": "Overzicht apparaten met update",
     "Get a message with an overview all devices with update": "Ontvang een bericht met een overzicht van alle apparaten met update",
     "Choose the day(s) where you want to get the overview of update devices:": "Kies de dag(en) waarop je het overzicht van update-apparaten wilt zien:",
-    "Other Notification Settings": "Andere meldingsinstellingen"
+    "Other Notification Settings": "Andere meldingsinstellingen",
+    "Update the datapoints directly": "Werk de datapunten direct bij",
+    "Update lists & counts which each statechange of devices": "Update lijsten & tellingen die elke statusverandering van apparaten",
+    "Update datapoints directly": "Update datapunten direct",
+    "Update lists & counts directly with each statechange of devices": "Update lijsten en tellingen direct bij elke statusverandering van apparaten"
 }

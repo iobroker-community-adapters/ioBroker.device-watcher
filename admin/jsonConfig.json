@@ -1006,6 +1006,14 @@
 						"marginBottom": 10
 					}
 				},
+				"updateDPsDirectly": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 4,
+					"label": "Update datapoints directly",
+					"help": "Update lists & counts directly with each statechange of devices"
+				},
 				"updateinterval": {
 					"type": "number",
 					"min": 2,
@@ -1014,7 +1022,9 @@
 					"md": 6,
 					"lg": 3,
 					"label": "Update-Interval",
-					"help": "in seconds"
+					"help": "in seconds",
+					"hidden": "data.updateDPsDirectly",
+					"hideOnlyControl": false
 				},
 				"_headerOfflineTime": {
 					"type": "header",

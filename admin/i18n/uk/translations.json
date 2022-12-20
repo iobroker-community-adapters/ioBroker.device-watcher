@@ -92,5 +92,9 @@
     "Overview of devices with update": "Огляд пристроїв з оновленням",
     "Get a message with an overview all devices with update": "Отримайте повідомлення з оглядом усіх пристроїв з оновленням",
     "Choose the day(s) where you want to get the overview of update devices:": "Виберіть день (дні), коли ви хочете отримати огляд оновлених пристроїв:",
-    "Other Notification Settings": "Інші налаштування сповіщень"
+    "Other Notification Settings": "Інші налаштування сповіщень",
+    "Update the datapoints directly": "Оновіть точки даних безпосередньо",
+    "Update lists & counts which each statechange of devices": "Оновлення списків і підрахунок кожної зміни стану пристроїв",
+    "Update datapoints directly": "Оновіть точки даних безпосередньо",
+    "Update lists & counts directly with each statechange of devices": "Оновлюйте списки та підрахунки безпосередньо з кожною зміною стану пристроїв"
 }

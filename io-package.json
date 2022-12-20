@@ -318,7 +318,8 @@
         "checkUpgradeFriday": false,
         "checkUpgradeSaturday": false,
         "checkUpgradeSunday": false,
-        "checkSendUpgradeTime": "12:10"
+        "checkSendUpgradeTime": "12:10",
+        "updateDPsDirectly": false
     },
     "objects": [],
     "instanceObjects": [

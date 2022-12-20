@@ -92,5 +92,9 @@
     "Overview of devices with update": "Aperçu des appareils avec mise à jour",
     "Get a message with an overview all devices with update": "Recevez un message avec un aperçu de tous les appareils avec mise à jour",
     "Choose the day(s) where you want to get the overview of update devices:": "Choisissez le(s) jour(s) où vous souhaitez obtenir l'aperçu des appareils mis à jour :",
-    "Other Notification Settings": "Autres paramètres de notification"
+    "Other Notification Settings": "Autres paramètres de notification",
+    "Update the datapoints directly": "Mettre à jour les points de données directement",
+    "Update lists & counts which each statechange of devices": "Mettre à jour les listes et compter chaque changement d'état des appareils",
+    "Update datapoints directly": "Mettre à jour directement les points de données",
+    "Update lists & counts directly with each statechange of devices": "Mettre à jour les listes et les décomptes directement à chaque changement d'état des appareils"
 }

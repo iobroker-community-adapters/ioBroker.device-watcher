@@ -92,5 +92,9 @@
     "Overview of devices with update": "有更新的设备概览",
     "Get a message with an overview all devices with update": "获取包含更新的所有设备概览的消息",
     "Choose the day(s) where you want to get the overview of update devices:": "选择您想要获取更新设备概览的日期：",
-    "Other Notification Settings": "其他通知设置"
+    "Other Notification Settings": "其他通知设置",
+    "Update the datapoints directly": "直接更新数据点",
+    "Update lists & counts which each statechange of devices": "更新设备每次状态变化的列表和计数",
+    "Update datapoints directly": "直接更新数据点",
+    "Update lists & counts directly with each statechange of devices": "每次设备状态变化时直接更新列表和计数"
 }
