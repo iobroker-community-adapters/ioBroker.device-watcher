@@ -220,6 +220,9 @@ class DeviceWatcher extends utils.Adapter {
 			// create HTML list
 			if (this.config.createHtmlList) await this.createHtmlListDatapoints();
 
+			//read data first at start
+			await this.main();
+
 			// update data in interval
 			await this.refreshData();
 
@@ -315,7 +318,7 @@ class DeviceWatcher extends utils.Adapter {
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
 
-		await this.main();
+		// await this.main();
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
