@@ -272,9 +272,11 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 				}
 			}
+			/*
 			await this.createLists();
 			await this.countDevices();
 			await this.writeDatapoints();
+			*/
 		}
 	}
 
@@ -319,6 +321,9 @@ class DeviceWatcher extends utils.Adapter {
 		const nextTimeout = this.config.updateinterval * 1000;
 
 		// await this.main();
+		await this.createLists();
+		await this.countDevices();
+		await this.writeDatapoints();
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
