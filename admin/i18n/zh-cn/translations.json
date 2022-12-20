@@ -91,5 +91,6 @@
     "Receive a message when an update for an device is available": "当设备更新可用时接收消息",
     "Overview of devices with update": "有更新的设备概览",
     "Get a message with an overview all devices with update": "获取包含更新的所有设备概览的消息",
-    "Choose the day(s) where you want to get the overview of update devices:": "选择您想要获取更新设备概览的日期："
+    "Choose the day(s) where you want to get the overview of update devices:": "选择您想要获取更新设备概览的日期：",
+    "Other Notification Settings": "其他通知设置"
 }

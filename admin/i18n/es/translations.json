@@ -91,5 +91,6 @@
     "Receive a message when an update for an device is available": "Reciba un mensaje cuando haya una actualización disponible para un dispositivo",
     "Overview of devices with update": "Resumen de dispositivos con actualización",
     "Get a message with an overview all devices with update": "Reciba un mensaje con una descripción general de todos los dispositivos con actualización",
-    "Choose the day(s) where you want to get the overview of update devices:": "Elija los días en los que desea obtener la descripción general de los dispositivos de actualización:"
+    "Choose the day(s) where you want to get the overview of update devices:": "Elija los días en los que desea obtener la descripción general de los dispositivos de actualización:",
+    "Other Notification Settings": "Otras configuraciones de notificación"
 }

@@ -592,10 +592,11 @@
 						}
 					}
 				},
-				"trennerDrei": {
-					"newLine": true,
-					"type": "divider",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade"
+				"_headerOtherSettings": {
+					"type": "header",
+					"text": "Other Notification Settings",
+					"size": 2,
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade && !data.checkSendUpgradeMsgDaily"
 				},
 				"showAdapterNameinMsg": {
 					"newLine": "true",
@@ -605,7 +606,7 @@
 					"lg": 3,
 					"label": "Add adapter name in notifcations",
 					"help": "Will add the adaptername from the device",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade"
+					"hidden": "!data.checkSendBatteryMsg && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade && !data.checkSendUpgradeMsgDaily"
 				},
 				"_headerMSGservice": {
 					"newLine": true,
