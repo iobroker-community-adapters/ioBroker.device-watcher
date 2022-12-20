@@ -515,6 +515,83 @@
 					"label": "Device update message",
 					"help": "Receive a message when an update for an device is available"
 				},
+				"checkSendUpgradeMsgDaily": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 3,
+					"label": "Overview of Upgrade devices",
+					"help": "Get a message with an overview all Upgrade devices"
+				},
+				"_sendIntervallUpgradeDay": {
+					"newLine": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendUpgradeMsgDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textDays": {
+							"type": "staticText",
+							"text": "Choose the day(s) where you want to get the overview of Upgrade devices:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkUpgradeMonday": {
+							"newLine": true,
+							"type": "checkbox",
+							"label": "Mon"
+						},
+						"checkUpgradeTuesday": {
+							"type": "checkbox",
+							"label": "Tue"
+						},
+						"checkUpgradeWednesday": {
+							"type": "checkbox",
+							"label": "Wed"
+						},
+						"checkUpgradeThursday": {
+							"type": "checkbox",
+							"label": "Thu"
+						},
+						"checkUpgradeFriday": {
+							"type": "checkbox",
+							"label": "Fri"
+						},
+						"checkUpgradeSaturday": {
+							"type": "checkbox",
+							"label": "Sat"
+						},
+						"checkUpgradeSunday": {
+							"type": "checkbox",
+							"label": "Sun"
+						}
+					}
+				},
+				"_sendIntervallUpgradeTime": {
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendUpgradeMsgDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textTime": {
+							"type": "staticText",
+							"text": "Choose the Time:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkSendUpgradeTime": {
+							"newLine": true,
+							"type": "text",
+							"help": "Format hh:mm"
+						}
+					}
+				},				
 				"trennerDrei": {
 					"newLine": true,
 					"type": "divider",
