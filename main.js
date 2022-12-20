@@ -258,6 +258,9 @@ class DeviceWatcher extends utils.Adapter {
 					case i['SignalStrengthDP']:
 						i['Signal strength'] = await this.calculateSignalStrength(state, i['adapterID']);
 						break;
+					case i['batteryDP']:
+						i['Battery'] = await this.getBatteryData(state.val, i['LowBat'], i['Adapter']);
+						break;
 					case i['LowBatDP']:
 						i['LowBat'] = await this.setLowBatState(state.val, i['Battery']);
 						if (i['LowBat']) {
@@ -599,17 +602,15 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * get battery data
 	 * @param {object} deviceBatteryState - State value
-	 * @param {object} shortDeviceBatteryState - State value
 	 * @param {object} deviceLowBatState - State value
 	 * @param {object} adapterID - adapter name
-	 * @param {object} i - device
 	 */
-	async getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i) {
+	async getBatteryData(deviceBatteryState, deviceLowBatState, adapterID) {
 		let batteryHealth;
 
-		if (deviceBatteryState === undefined && shortDeviceBatteryState === undefined) {
+		if (deviceBatteryState === undefined) {
 			if (deviceLowBatState !== undefined) {
-				switch (this.arrDev[i].isLowBat || this.arrDev[i].isLowBat2) {
+				switch (deviceLowBatState) {
 					case 'none':
 						break;
 					default:
@@ -632,17 +633,9 @@ class DeviceWatcher extends utils.Adapter {
 						batteryHealth = deviceBatteryState + 'V';
 					}
 					break;
-
-				case 'hueExt':
-				case 'mihomeVacuum':
-				case 'mqttNuki':
-					if (shortDeviceBatteryState) {
-						batteryHealth = shortDeviceBatteryState + '%';
-					}
-					break;
-
 				default:
 					batteryHealth = deviceBatteryState + '%';
+					break;
 			}
 		}
 		return batteryHealth;
@@ -879,31 +872,43 @@ class DeviceWatcher extends utils.Adapter {
 				/*=============================================
 				=         	    Get battery data       	      =
 				=============================================*/
-
+				let deviceBatteryStateDP;
+				let deviceBatteryState;
 				// Get battery states
-				let deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery);
-				if (deviceBatteryState === undefined) {
-					deviceBatteryState = await this.getInitValue(currDeviceString + this.arrDev[i].battery2);
-				}
-
-				// Get battery states with short path
-				let shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery);
-				if (shortDeviceBatteryState === undefined) {
-					shortDeviceBatteryState = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].battery2);
+				switch (adapterID) {
+					case 'hueExt':
+					case 'mihomeVacuum':
+					case 'mqttNuki':
+						deviceBatteryStateDP = shortCurrDeviceString + this.arrDev[i].battery;
+						deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+						if (deviceBatteryState === undefined) {
+							deviceBatteryStateDP = shortCurrDeviceString + this.arrDev[i].battery2;
+							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+						}
+						break;
+					default:
+						deviceBatteryStateDP = currDeviceString + this.arrDev[i].battery;
+						deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+						if (deviceBatteryState === undefined) {
+							deviceBatteryStateDP = currDeviceString + this.arrDev[i].battery2;
+							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+						}
+						break;
 				}
 
 				// Get low bat states
 				let isLowBatDP = currDeviceString + this.arrDev[i].isLowBat;
-				let deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat);
+				let deviceLowBatState = await this.getInitValue(isLowBatDP);
 				if (deviceLowBatState === undefined) {
-					deviceLowBatState = await this.getInitValue(currDeviceString + this.arrDev[i].isLowBat2);
 					isLowBatDP = currDeviceString + this.arrDev[i].isLowBat2;
+					deviceLowBatState = await this.getInitValue(isLowBatDP);
 				}
 				//subscribe to states
+				this.subscribeForeignStatesAsync(deviceBatteryStateDP);
 				this.subscribeForeignStatesAsync(isLowBatDP);
 
 				let isBatteryDevice;
-				const batteryHealth = await this.getBatteryData(deviceBatteryState, shortDeviceBatteryState, deviceLowBatState, adapterID, i);
+				const batteryHealth = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
 				if (batteryHealth !== ' - ') isBatteryDevice = true;
 				/*=============================================
 				=            Set Lowbat indicator             =
@@ -1095,6 +1100,7 @@ class DeviceWatcher extends utils.Adapter {
 							Adapter: adapter,
 							isBatteryDevice: isBatteryDevice,
 							Battery: batteryHealth,
+							batteryDP: deviceBatteryStateDP,
 							LowBat: lowBatIndicator,
 							LowBatDP: isLowBatDP,
 							SignalStrengthDP: deviceQualityDP,
@@ -1114,6 +1120,7 @@ class DeviceWatcher extends utils.Adapter {
 						Adapter: adapter,
 						isBatteryDevice: isBatteryDevice,
 						Battery: batteryHealth,
+						batteryDP: deviceBatteryStateDP,
 						LowBat: lowBatIndicator,
 						LowBatDP: isLowBatDP,
 						SignalStrengthDP: deviceQualityDP,
