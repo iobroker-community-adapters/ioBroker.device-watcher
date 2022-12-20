@@ -294,7 +294,17 @@
 		"tableBlacklist": [],
 		"updateinterval": 10,
 		"ownDataEditor": [],
-		"checkSendDeviceUpgrade": false
+		"checkSendDeviceUpgrade": false,
+        "checkSendUpgradeMsg": false,
+		"checkSendUpgradeMsgDaily": false,
+		"checkUpgradeMonday": false,
+		"checkUpgradeTuesday": false,
+		"checkUpgradeWednesday": false,
+		"checkUpgradeThursday": false,
+		"checkUpgradeFriday": false,
+		"checkUpgradeSaturday": false,
+		"checkUpgradeSunday": false,
+        "checkSendUpgradeTime": "12:10"
 	},
 	"objects": [],
 	"instanceObjects": [
@@ -550,6 +560,54 @@
 				"write": false
 			},
 			"native": {}
-		}
+		},
+        {
+            "_id": "upgradableList",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "JSON List of devices with available updates ",
+                    "de": "JSON Liste der Geräte mit verfügbaren Updates",
+                    "ru": "ДЖСОН Список устройств с доступными обновлениями",
+                    "pt": "J. Lista de dispositivos com atualizações disponíveis",
+                    "nl": "JSON List van apparatuur met beschikbare updates",
+                    "fr": "JSON Liste des appareils avec mises à jour disponibles",
+                    "it": "JSON Elenco dei dispositivi con aggiornamenti disponibili",
+                    "es": "JSON Lista de dispositivos con actualizaciones disponibles",
+                    "pl": "JSON Lista urządzeń korzystających z aktualizacji",
+                    "uk": "Сонце Перелік пристроїв з доступними оновленнями",
+                    "zh-cn": "附 件 现有最新设备清单"
+                },
+                "type": "array",
+                "role": "json",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        },
+        {
+            "_id": "upgradableCount",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Number of devices with available updates ",
+                    "de": "Anzahl der Geräte mit verfügbaren Updates",
+                    "ru": "Количество устройств с доступными обновлениями",
+                    "pt": "Número de dispositivos com atualizações disponíveis",
+                    "nl": "Nummer van apparatuur met beschikbare updates",
+                    "fr": "Nombre de dispositifs avec mises à jour disponibles",
+                    "it": "Numero di dispositivi con aggiornamenti disponibili",
+                    "es": "Número de dispositivos con actualizaciones disponibles",
+                    "pl": "Liczba urządzeń z dostępną aktualizacją",
+                    "uk": "Кількість пристроїв з доступними оновленнями",
+                    "zh-cn": "现有更新的装置数目"
+                },
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        }
 	]
 }
