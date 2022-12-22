@@ -481,9 +481,12 @@ class DeviceWatcher extends utils.Adapter {
 				// Get ID for Switchbot and ESPHome Devices
 				case 'switchbotBle':
 				case 'esphome':
-				case 'fullybrowser':
 				case 'apcups':
 					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+					break;
+
+				case 'fullybrowser':
+					deviceName = (await this.getInitValue(currDeviceString + this.arrDev[i].id)) + ' ' + (await this.getInitValue(currDeviceString + this.arrDev[i].id2));
 					break;
 
 				// Get ID with short currDeviceString from objectjson
