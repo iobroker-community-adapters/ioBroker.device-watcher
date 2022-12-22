@@ -227,7 +227,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.refreshData();
 
 			// send overview for low battery devices
-			if (this.config.checkSendBatteryMsg) await this.sendBatteryNotifyShedule();
+			if (this.config.checkSendBatteryMsgDaily) await this.sendBatteryNotifyShedule();
 
 			// send overview of offline devices
 			if (this.config.checkSendOfflineMsgDaily) await this.sendOfflineNotificationsShedule();
@@ -473,6 +473,8 @@ class DeviceWatcher extends utils.Adapter {
 			const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
 			const shortshortDeviceObject = await this.getForeignObjectAsync(shortshortCurrDeviceString);
 			let deviceName;
+			let folderName;
+			let deviceID;
 
 			// Get ID with currDeviceString from datapoint
 			switch (this.arrDev[i].adapterID) {
@@ -504,7 +506,9 @@ class DeviceWatcher extends utils.Adapter {
 				// Get ID with short currDeviceString from datapoint
 				case 'mihomeVacuum':
 				case 'roomba':
-					deviceName = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
+					folderName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
+					deviceID = await this.getInitValue(shortCurrDeviceString + this.arrDev[i].id);
+					deviceName = `I${folderName} ${deviceID}`;
 					break;
 
 				//Get ID of foldername
@@ -704,124 +708,6 @@ class DeviceWatcher extends utils.Adapter {
 			lastContactString = Math.round(lastContact / 60 / 24) + ' Tagen';
 		}
 		return lastContactString;
-	}
-
-	/**
-	 * Create Lists
-	 */
-	async createLists() {
-		this.linkQualityDevices = [];
-		this.batteryPowered = [];
-		this.batteryLowPowered = [];
-		this.listAllDevices = [];
-		this.offlineDevices = [];
-		this.batteryLowPoweredRaw = [];
-		this.offlineDevicesRaw = [];
-		this.upgradableList = [];
-
-		for (const device of this.listAllDevicesRaw) {
-			/*----------  fill raw lists  ----------*/
-			// low bat list
-			if (device['LowBat'] && device['Status'] !== 'Offline') {
-				this.batteryLowPoweredRaw.push({
-					Path: device['Path'],
-					Device: device['Device'],
-					Adapter: device['Adapter'],
-					Battery: device['Battery'],
-				});
-			}
-			// offline raw list
-			if (device['Status'] === 'Offline') {
-				this.offlineDevicesRaw.push({
-					Path: device['Path'],
-					Device: device['Device'],
-					Adapter: device['Adapter'],
-					'Last contact': device['Last contact'],
-				});
-			}
-
-			/*----------  fill user lists  ----------*/
-			if (!this.blacklistLists.includes(device['Path'])) {
-				this.listAllDevices.push({
-					Device: device['Device'],
-					Adapter: device['Adapter'],
-					Battery: device['Battery'],
-					'Signal strength': device['Signal strength'],
-					'Last contact': device['Last contact'],
-					Status: device['Status'],
-				});
-				// LinkQuality lists
-				if (device['Signal strength'] != ' - ') {
-					this.linkQualityDevices.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						'Signal strength': device['Signal strength'],
-					});
-				}
-				// Battery lists
-				if (device['isBatteryDevice']) {
-					this.batteryPowered.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						Battery: device['Battery'],
-						Status: device['Status'],
-					});
-				}
-				// Low Bat lists
-				if (device['LowBat'] && device['Status'] !== 'Offline') {
-					this.batteryLowPowered.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						Battery: device['Battery'],
-					});
-				}
-
-				// Offline List
-				if (device['Status'] === 'Offline') {
-					this.offlineDevices.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						'Last contact': device['Last contact'],
-					});
-				}
-
-				// Device update List
-				if (device['Upgradable']) {
-					this.upgradableList.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-					});
-				}
-			}
-		}
-	}
-
-	/**
-	 * Count devices for each type
-	 */
-	async countDevices() {
-		// Count how many devices with link Quality
-		this.linkQualityCount = this.linkQualityDevices.length;
-
-		// Count how many devcies are offline
-		this.offlineDevicesCount = this.offlineDevices.length;
-
-		// Count how many devices are with battery
-		this.batteryPoweredCount = this.batteryPowered.length;
-
-		// 3d. Count how many devices are with low battery
-		this.lowBatteryPoweredCount = this.batteryLowPowered.length;
-
-		// Count how many devices are exists
-		this.deviceCounter = this.listAllDevices.length;
-
-		// Count how many devices has update available
-		this.upgradableDevicesCount = this.upgradableList.length;
-
-		// raws
-
-		// Count how many devcies are offline
-		this.offlineDevicesCountRaw = this.offlineDevicesRaw.length;
 	}
 
 	/**
@@ -1149,6 +1035,124 @@ class DeviceWatcher extends utils.Adapter {
 		await this.createLists();
 		await this.countDevices();
 	} // <-- end of createData
+
+	/**
+	 * Create Lists
+	 */
+	async createLists() {
+		this.linkQualityDevices = [];
+		this.batteryPowered = [];
+		this.batteryLowPowered = [];
+		this.listAllDevices = [];
+		this.offlineDevices = [];
+		this.batteryLowPoweredRaw = [];
+		this.offlineDevicesRaw = [];
+		this.upgradableList = [];
+
+		for (const device of this.listAllDevicesRaw) {
+			/*----------  fill raw lists  ----------*/
+			// low bat list
+			if (device['LowBat'] && device['Status'] !== 'Offline') {
+				this.batteryLowPoweredRaw.push({
+					Path: device['Path'],
+					Device: device['Device'],
+					Adapter: device['Adapter'],
+					Battery: device['Battery'],
+				});
+			}
+			// offline raw list
+			if (device['Status'] === 'Offline') {
+				this.offlineDevicesRaw.push({
+					Path: device['Path'],
+					Device: device['Device'],
+					Adapter: device['Adapter'],
+					'Last contact': device['Last contact'],
+				});
+			}
+
+			/*----------  fill user lists  ----------*/
+			if (!this.blacklistLists.includes(device['Path'])) {
+				this.listAllDevices.push({
+					Device: device['Device'],
+					Adapter: device['Adapter'],
+					Battery: device['Battery'],
+					'Signal strength': device['Signal strength'],
+					'Last contact': device['Last contact'],
+					Status: device['Status'],
+				});
+				// LinkQuality lists
+				if (device['Signal strength'] != ' - ') {
+					this.linkQualityDevices.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						'Signal strength': device['Signal strength'],
+					});
+				}
+				// Battery lists
+				if (device['isBatteryDevice']) {
+					this.batteryPowered.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						Battery: device['Battery'],
+						Status: device['Status'],
+					});
+				}
+				// Low Bat lists
+				if (device['LowBat'] && device['Status'] !== 'Offline') {
+					this.batteryLowPowered.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						Battery: device['Battery'],
+					});
+				}
+
+				// Offline List
+				if (device['Status'] === 'Offline') {
+					this.offlineDevices.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+						'Last contact': device['Last contact'],
+					});
+				}
+
+				// Device update List
+				if (device['Upgradable']) {
+					this.upgradableList.push({
+						Device: device['Device'],
+						Adapter: device['Adapter'],
+					});
+				}
+			}
+		}
+	}
+
+	/**
+	 * Count devices for each type
+	 */
+	async countDevices() {
+		// Count how many devices with link Quality
+		this.linkQualityCount = this.linkQualityDevices.length;
+
+		// Count how many devcies are offline
+		this.offlineDevicesCount = this.offlineDevices.length;
+
+		// Count how many devices are with battery
+		this.batteryPoweredCount = this.batteryPowered.length;
+
+		// 3d. Count how many devices are with low battery
+		this.lowBatteryPoweredCount = this.batteryLowPowered.length;
+
+		// Count how many devices are exists
+		this.deviceCounter = this.listAllDevices.length;
+
+		// Count how many devices has update available
+		this.upgradableDevicesCount = this.upgradableList.length;
+
+		// raws
+
+		// Count how many devcies are offline
+		this.offlineDevicesCountRaw = this.offlineDevicesRaw.length;
+	}
 
 	/**
 	 * @param {string} adptName - Adapter name
