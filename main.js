@@ -650,7 +650,6 @@ class DeviceWatcher extends utils.Adapter {
 			if (deviceLowBatState !== undefined) {
 				switch (deviceLowBatState) {
 					case 'none':
-						batteryHealth = ' - ';
 						break;
 					default:
 						if (deviceLowBatState === false || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
@@ -698,31 +697,30 @@ class DeviceWatcher extends utils.Adapter {
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
-		if (deviceBatteryState !== undefined) {
-			switch (typeof deviceLowBatState) {
-				case 'number':
-					if (deviceLowBatState === 0) {
-						lowBatIndicator = true;
-					}
-					break;
+		switch (typeof deviceLowBatState) {
+			case 'number':
+				if (deviceLowBatState === 0) {
+					lowBatIndicator = true;
+				}
+				break;
 
-				case 'string':
-					if (deviceLowBatState !== 'NORMAL') {
-						// Tado devices
-						lowBatIndicator = true;
-					}
-					break;
+			case 'string':
+				if (deviceLowBatState !== 'NORMAL') {
+					// Tado devices
+					lowBatIndicator = true;
+				}
+				break;
 
-				case 'boolean':
-					if (deviceLowBatState) {
-						lowBatIndicator = true;
-					}
-					break;
-				default:
-					if (deviceBatteryState < this.config.minWarnBatterie) {
-						lowBatIndicator = true;
-					}
-			}
+			case 'boolean':
+				if (deviceLowBatState) {
+					lowBatIndicator = true;
+				}
+				break;
+			default:
+				if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
+					lowBatIndicator = true;
+				}
+				break;
 		}
 		return lowBatIndicator;
 	}
