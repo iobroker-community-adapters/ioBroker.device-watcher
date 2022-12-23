@@ -693,11 +693,12 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 
 	async setLowbatIndicator(deviceBatteryState, deviceLowBatState) {
-		let lowBatIndicator = false;
+		let lowBatIndicator;
+		if (deviceLowBatState !== undefined) lowBatIndicator = false;
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
-		if (deviceBatteryState !== undefined || deviceLowBatState !== undefined) {
+		if (deviceBatteryState !== undefined) {
 			switch (typeof deviceLowBatState) {
 				case 'number':
 					if (deviceLowBatState === 0) {
