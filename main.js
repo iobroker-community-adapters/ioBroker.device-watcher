@@ -10,7 +10,7 @@ const schedule = require('node-schedule');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
 
 // Sentry error reporting, disable when testing code!
-const enableSendSentry = true;
+const enableSendSentry = false;
 
 // indicator if the adapter is running or not (for intervall/shedule)
 let isUnloaded = false;
@@ -249,6 +249,8 @@ class DeviceWatcher extends utils.Adapter {
 		// Admin JSON for Adapter updates
 		if (id && state) {
 			this.log.debug(`State changed: ${id} changed ${state.val}`);
+			let batteryData;
+			let oldLowBatState;
 
 			for (const i of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
@@ -258,15 +260,32 @@ class DeviceWatcher extends utils.Adapter {
 							await this.sendDeviceUpdatesNotification(i['Device'], i['Adapter'], i['Path']);
 						}
 						break;
+
 					case i['SignalStrengthDP']:
 						i['Signal strength'] = await this.calculateSignalStrength(state, i['adapterID']);
 						break;
+
 					case i['batteryDP']:
-						i['Battery'] = await this.getBatteryData(state.val, i['LowBat'], i['Adapter']);
+						oldLowBatState = i['LowBat'];
+						batteryData = await this.getBatteryData(state.val, i['LowBat'], i['adapterID']);
+
+						i['Battery'] = batteryData[0];
+						i['BatteryRaw'] = batteryData[2];
+						i['LowBat'] = await this.setLowbatIndicator(state.val, null);
+
+						if (i['LowBat'] && oldLowBatState !== i['LowBat'] && this.config.checkSendBatteryMsg) {
+							await this.sendLowBatNoticiation(i['Device'], i['Adapter'], i['Battery'], i['Path']);
+						}
 						break;
+
 					case i['LowBatDP']:
-						i['LowBat'] = await this.setLowBatState(state.val, i['Battery']);
-						if (i['LowBat']) {
+						oldLowBatState = i['LowBat'];
+						batteryData = await this.getBatteryData(state.val, i['LowBat'], i['adapterID']);
+
+						i['BatteryRaw'] = batteryData[2];
+						i['LowBat'] = await this.setLowbatIndicator(i['BatteryRaw'], state.val);
+
+						if (i['LowBat'] === true && oldLowBatState !== i['LowBat'] && this.config.checkSendBatteryMsg) {
 							await this.sendLowBatNoticiation(i['Device'], i['Adapter'], i['Battery'], i['Path']);
 						}
 						break;
@@ -623,18 +642,23 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} adapterID - adapter name
 	 */
 	async getBatteryData(deviceBatteryState, deviceLowBatState, adapterID) {
+		let batteryHealthRaw;
 		let batteryHealth;
+		let isBatteryDevice;
 
 		if (deviceBatteryState === undefined) {
 			if (deviceLowBatState !== undefined) {
 				switch (deviceLowBatState) {
 					case 'none':
+						batteryHealth = ' - ';
 						break;
 					default:
 						if (deviceLowBatState === false || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
 							batteryHealth = 'ok';
+							isBatteryDevice = true;
 						} else {
 							batteryHealth = 'low';
+							isBatteryDevice = true;
 						}
 						break;
 				}
@@ -648,49 +672,59 @@ class DeviceWatcher extends utils.Adapter {
 						batteryHealth = ' - ';
 					} else {
 						batteryHealth = deviceBatteryState + 'V';
+						batteryHealthRaw = deviceBatteryState;
+						isBatteryDevice = true;
 					}
 					break;
 				default:
 					batteryHealth = deviceBatteryState + '%';
+					batteryHealthRaw = deviceBatteryState;
+					isBatteryDevice = true;
 					break;
 			}
 		}
-		return batteryHealth;
+		return [batteryHealth, isBatteryDevice, batteryHealthRaw];
 	}
 
 	/**
-	 * set lowBat state
-	 * @param {object} deviceLowBatState - State value
-	 * @param {object} deviceBatteryState - State value
+	 *set low bat indicator
+	 * @param {object} deviceBatteryState
+	 * @param {object} deviceLowBatState
 	 */
-	async setLowBatState(deviceLowBatState, deviceBatteryState) {
-		let lowBatIndicator;
-		if (deviceLowBatState !== undefined) lowBatIndicator = false;
-		switch (typeof deviceLowBatState) {
-			case 'number':
-				if (deviceLowBatState === 0) {
-					lowBatIndicator = true;
-				}
-				break;
 
-			case 'string':
-				if (deviceLowBatState !== 'NORMAL') {
-					// Tado devices
-					lowBatIndicator = true;
-				}
-				break;
+	async setLowbatIndicator(deviceBatteryState, deviceLowBatState) {
+		let lowBatIndicator = false;
+		/*=============================================
+		=            Set Lowbat indicator             =
+		=============================================*/
+		if (deviceBatteryState !== undefined || deviceLowBatState !== undefined) {
+			switch (typeof deviceLowBatState) {
+				case 'number':
+					if (deviceLowBatState === 0) {
+						lowBatIndicator = true;
+					}
+					if (deviceBatteryState < this.config.minWarnBatterie) {
+						lowBatIndicator = true;
+					}
+					break;
 
-			case 'boolean':
-				if (deviceLowBatState) {
-					lowBatIndicator = true;
-				}
-				break;
+				case 'string':
+					if (deviceLowBatState !== 'NORMAL') {
+						// Tado devices
+						lowBatIndicator = true;
+					}
+					break;
 
-			default: // if the battery state is under the set limit
-				if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
-					lowBatIndicator = true;
-				}
-				break;
+				case 'boolean':
+					if (deviceLowBatState) {
+						lowBatIndicator = true;
+					}
+					break;
+				default:
+					if (deviceBatteryState < this.config.minWarnBatterie) {
+						lowBatIndicator = true;
+					}
+			}
 		}
 		return lowBatIndicator;
 	}
@@ -806,14 +840,15 @@ class DeviceWatcher extends utils.Adapter {
 				this.subscribeForeignStatesAsync(deviceBatteryStateDP);
 				this.subscribeForeignStatesAsync(isLowBatDP);
 
-				let isBatteryDevice;
-				const batteryHealth = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
-				if (batteryHealth !== ' - ') isBatteryDevice = true;
-				/*=============================================
-				=            Set Lowbat indicator             =
-				=============================================*/
-				const lowBatIndicator = await this.setLowBatState(deviceLowBatState, batteryHealth);
-				if (lowBatIndicator !== undefined) isBatteryDevice = true;
+				const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
+				const batteryHealth = batteryData[0];
+				const batteryHealthRaw = batteryData[2];
+				const isBatteryDevice = batteryData[1];
+				let lowBatIndicator;
+
+				if (isBatteryDevice) {
+					lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState);
+				}
 
 				/*=============================================
 				=          Get last contact of device         =
@@ -999,6 +1034,7 @@ class DeviceWatcher extends utils.Adapter {
 							Adapter: adapter,
 							isBatteryDevice: isBatteryDevice,
 							Battery: batteryHealth,
+							BatteryRaw: batteryHealthRaw,
 							batteryDP: deviceBatteryStateDP,
 							LowBat: lowBatIndicator,
 							LowBatDP: isLowBatDP,
@@ -1019,6 +1055,7 @@ class DeviceWatcher extends utils.Adapter {
 						Adapter: adapter,
 						isBatteryDevice: isBatteryDevice,
 						Battery: batteryHealth,
+						BatteryRaw: batteryHealthRaw,
 						batteryDP: deviceBatteryStateDP,
 						LowBat: lowBatIndicator,
 						LowBatDP: isLowBatDP,
