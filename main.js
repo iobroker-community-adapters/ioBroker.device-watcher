@@ -704,9 +704,6 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceLowBatState === 0) {
 						lowBatIndicator = true;
 					}
-					if (deviceBatteryState < this.config.minWarnBatterie) {
-						lowBatIndicator = true;
-					}
 					break;
 
 				case 'string':
