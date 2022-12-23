@@ -267,7 +267,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					case i['batteryDP']:
 						oldLowBatState = i['LowBat'];
-						batteryData = await this.getBatteryData(state.val, i['LowBat'], i['adapterID']);
+						batteryData = await this.getBatteryData(state.val, oldLowBatState, i['adapterID']);
 
 						i['Battery'] = batteryData[0];
 						i['BatteryRaw'] = batteryData[2];
@@ -682,6 +682,7 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 			}
 		}
+
 		return [batteryHealth, isBatteryDevice, batteryHealthRaw];
 	}
 
@@ -697,31 +698,34 @@ class DeviceWatcher extends utils.Adapter {
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
-		switch (typeof deviceLowBatState) {
-			case 'number':
-				if (deviceLowBatState === 0) {
-					lowBatIndicator = true;
-				}
-				break;
+		if (deviceLowBatState !== null) {
+			switch (typeof deviceLowBatState) {
+				case 'number':
+					if (deviceLowBatState === 0) {
+						lowBatIndicator = true;
+					}
+					break;
 
-			case 'string':
-				if (deviceLowBatState !== 'NORMAL') {
-					// Tado devices
-					lowBatIndicator = true;
-				}
-				break;
+				case 'string':
+					if (deviceLowBatState !== 'NORMAL') {
+						// Tado devices
+						lowBatIndicator = true;
+					}
+					break;
 
-			case 'boolean':
-				if (deviceLowBatState) {
-					lowBatIndicator = true;
-				}
-				break;
-			default:
-				if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
-					lowBatIndicator = true;
-				}
-				break;
+				case 'boolean':
+					if (deviceLowBatState) {
+						lowBatIndicator = true;
+					}
+					break;
+				default:
+					if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
+						lowBatIndicator = true;
+					}
+					break;
+			}
 		}
+
 		return lowBatIndicator;
 	}
 
