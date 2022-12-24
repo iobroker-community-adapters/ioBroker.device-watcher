@@ -292,7 +292,7 @@
 		"channelSynochat": "",
 		"showAdapterNameinMsg": false,
 		"tableBlacklist": [],
-		"updateinterval": 10,
+		"updateinterval": 60,
 		"ownDataEditor": [],
 		"checkSendDeviceUpgrade": false,
 		"checkSendUpgradeMsg": false,
@@ -305,7 +305,6 @@
 		"checkUpgradeSaturday": false,
 		"checkUpgradeSunday": false,
 		"checkSendUpgradeTime": "12:10",
-		"updateDPsDirectly": false,
 		"checkSendBatteryMsgDaily": false
 	},
 	"objects": [],
