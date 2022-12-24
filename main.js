@@ -280,8 +280,8 @@ class DeviceWatcher extends utils.Adapter {
 
 					case i['LowBatDP']:
 						oldLowBatState = i['LowBat'];
-						batteryData = await this.getBatteryData(state.val, i['LowBat'], i['adapterID']);
-
+						batteryData = await this.getBatteryData(i['BatteryRaw'], state.val, i['adapterID']);
+						i['Battery'] = batteryData[0];
 						i['BatteryRaw'] = batteryData[2];
 						i['LowBat'] = await this.setLowbatIndicator(i['BatteryRaw'], state.val);
 
@@ -652,7 +652,7 @@ class DeviceWatcher extends utils.Adapter {
 					case 'none':
 						break;
 					default:
-						if (deviceLowBatState === false || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
+						if (deviceLowBatState !== true || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
 							batteryHealth = 'ok';
 							isBatteryDevice = true;
 						} else {
@@ -682,7 +682,6 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 			}
 		}
-
 		return [batteryHealth, isBatteryDevice, batteryHealthRaw];
 	}
 
