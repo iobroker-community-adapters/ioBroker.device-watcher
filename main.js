@@ -697,6 +697,7 @@ class DeviceWatcher extends utils.Adapter {
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
+		this.log.warn(deviceLowBatState);
 		if (deviceLowBatState !== null) {
 			switch (typeof deviceLowBatState) {
 				case 'number':
@@ -722,6 +723,10 @@ class DeviceWatcher extends utils.Adapter {
 						lowBatIndicator = true;
 					}
 					break;
+			}
+		} else {
+			if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
+				lowBatIndicator = true;
 			}
 		}
 
