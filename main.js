@@ -271,10 +271,19 @@ class DeviceWatcher extends utils.Adapter {
 
 						i['Battery'] = batteryData[0];
 						i['BatteryRaw'] = batteryData[2];
-						i['LowBat'] = await this.setLowbatIndicator(state.val, null);
+						i['LowBat'] = await this.setLowbatIndicator(state.val, undefined, i['LowBatDP']);
 
-						if (i['LowBat'] && oldLowBatState !== i['LowBat'] && this.config.checkSendBatteryMsg) {
-							await this.sendLowBatNoticiation(i['Device'], i['Adapter'], i['Battery'], i['Path']);
+						if (i['LowBat'] && oldLowBatState !== i['LowBat']) {
+							await this.createLists();
+							await this.countDevices();
+							await this.writeDatapoints();
+							if (this.config.checkSendBatteryMsg) {
+								await this.sendLowBatNoticiation(i['Device'], i['Adapter'], i['Battery'], i['Path']);
+							}
+						} else if (!i['LowBat'] && oldLowBatState !== i['LowBat']) {
+							await this.createLists();
+							await this.countDevices();
+							await this.writeDatapoints();
 						}
 						break;
 
@@ -283,10 +292,19 @@ class DeviceWatcher extends utils.Adapter {
 						batteryData = await this.getBatteryData(i['BatteryRaw'], state.val, i['adapterID']);
 						i['Battery'] = batteryData[0];
 						i['BatteryRaw'] = batteryData[2];
-						i['LowBat'] = await this.setLowbatIndicator(i['BatteryRaw'], state.val);
+						i['LowBat'] = await this.setLowbatIndicator(i['BatteryRaw'], state.val, i['LowBatDP']);
 
-						if (i['LowBat'] === true && oldLowBatState !== i['LowBat'] && this.config.checkSendBatteryMsg) {
-							await this.sendLowBatNoticiation(i['Device'], i['Adapter'], i['Battery'], i['Path']);
+						if (i['LowBat'] && oldLowBatState !== i['LowBat']) {
+							await this.createLists();
+							await this.countDevices();
+							await this.writeDatapoints();
+							if (this.config.checkSendBatteryMsg) {
+								await this.sendLowBatNoticiation(i['Device'], i['Adapter'], i['Battery'], i['Path']);
+							}
+						} else if (!i['LowBat'] && oldLowBatState !== i['LowBat']) {
+							await this.createLists();
+							await this.countDevices();
+							await this.writeDatapoints();
 						}
 						break;
 				}
@@ -689,14 +707,15 @@ class DeviceWatcher extends utils.Adapter {
 	 *set low bat indicator
 	 * @param {object} deviceBatteryState
 	 * @param {object} deviceLowBatState
+	 * @param {object} isLowBatDP
 	 */
 
-	async setLowbatIndicator(deviceBatteryState, deviceLowBatState) {
-		let lowBatIndicator;
+	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP) {
+		let lowBatIndicator = false;
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
-		if (deviceLowBatState !== null) {
+		if (deviceLowBatState !== null && isLowBatDP !== 'none') {
 			switch (typeof deviceLowBatState) {
 				case 'number':
 					if (deviceLowBatState === 0) {
@@ -716,11 +735,10 @@ class DeviceWatcher extends utils.Adapter {
 						lowBatIndicator = true;
 					}
 					break;
-				default:
-					if (deviceBatteryState && deviceBatteryState < this.config.minWarnBatterie) {
-						lowBatIndicator = true;
-					}
-					break;
+			}
+		} else {
+			if (deviceBatteryState < this.config.minWarnBatterie) {
+				lowBatIndicator = true;
 			}
 		}
 		return lowBatIndicator;
@@ -833,6 +851,8 @@ class DeviceWatcher extends utils.Adapter {
 					isLowBatDP = currDeviceString + this.arrDev[i].isLowBat2;
 					deviceLowBatState = await this.getInitValue(isLowBatDP);
 				}
+				if (deviceLowBatState === undefined) isLowBatDP = 'none';
+
 				//subscribe to states
 				this.subscribeForeignStatesAsync(deviceBatteryStateDP);
 				this.subscribeForeignStatesAsync(isLowBatDP);
@@ -844,7 +864,7 @@ class DeviceWatcher extends utils.Adapter {
 				let lowBatIndicator;
 
 				if (isBatteryDevice) {
-					lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState);
+					lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP);
 				}
 
 				/*=============================================
