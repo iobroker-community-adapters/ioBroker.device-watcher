@@ -920,19 +920,17 @@ class DeviceWatcher extends utils.Adapter {
 	async checkLastContact() {
 		for (const i of this.listAllDevicesRaw) {
 			const oldContactState = i.Status;
-			if (this.maxMinutes != undefined && this.maxMinutes[i.adapterID] >= 1) {
-				const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-				if (contactData !== undefined) {
-					i.lastContactString = contactData[0];
-					i.Status = contactData[1];
-					i.linkQuality = contactData[2];
-					await this.createLists();
-					await this.countDevices();
-					await this.writeDatapoints();
-				}
-				if (oldContactState !== i.Status) {
-					await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.lastContactString, i.Path);
-				}
+			const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+			if (contactData !== undefined) {
+				i.lastContactString = contactData[0];
+				i.Status = contactData[1];
+				i.linkQuality = contactData[2];
+				await this.createLists();
+				await this.countDevices();
+				await this.writeDatapoints();
+			}
+			if (oldContactState !== i.Status) {
+				await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.lastContactString, i.Path);
 			}
 		}
 	}
