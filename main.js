@@ -40,12 +40,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryLowPoweredRaw = [];
 		this.offlineDevicesRaw = [];
 
-		// raw counts
-		this.offlineDevicesCountRaw = 0;
-		this.offlineDevicesCountRawOld = 0;
-		this.lowBatteryPoweredCountRaw = 0;
-		this.upgradableDevicesCountRawOld = 0;
-
 		// counts
 		this.offlineDevicesCount = 0;
 		this.deviceCounter = 0;
@@ -1174,74 +1168,74 @@ class DeviceWatcher extends utils.Adapter {
 		for (const device of this.listAllDevicesRaw) {
 			/*----------  fill raw lists  ----------*/
 			// low bat list
-			if (device['LowBat'] && device['Status'] !== 'Offline') {
+			if (device.LowBat && device.Status !== 'Offline') {
 				this.batteryLowPoweredRaw.push({
-					Path: device['Path'],
-					Device: device['Device'],
-					Adapter: device['Adapter'],
-					Battery: device['Battery'],
+					Path: device.Path,
+					Device: device.Device,
+					Adapter: device.Adapter,
+					Battery: device.Battery,
 				});
 			}
 			// offline raw list
-			if (device['Status'] === 'Offline') {
+			if (device.Status === 'Offline') {
 				this.offlineDevicesRaw.push({
-					Path: device['Path'],
-					Device: device['Device'],
-					Adapter: device['Adapter'],
-					'Last contact': device['LastContact'],
+					Path: device.Path,
+					Device: device.Device,
+					Adapter: device.Adapter,
+					'Last contact': device.LastContact,
 				});
 			}
 
 			/*----------  fill user lists  ----------*/
-			if (!this.blacklistLists.includes(device['Path'])) {
+			if (!this.blacklistLists.includes(device.Path)) {
 				this.listAllDevices.push({
-					Device: device['Device'],
-					Adapter: device['Adapter'],
-					Battery: device['Battery'],
-					'Signal strength': device['SignalStrength'],
-					'Last contact': device['LastContact'],
-					Status: device['Status'],
+					Device: device.Device,
+					Adapter: device.Adapter,
+					Battery: device.Battery,
+					'Signal strength': device.SignalStrength,
+					'Last contact': device.LastContact,
+					Status: device.Status,
 				});
 				// LinkQuality lists
-				if (device['SignalStrength'] != ' - ') {
+				if (device.SignalStrength != ' - ') {
 					this.linkQualityDevices.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						'Signal strength': device['SignalStrength'],
+						Device: device.Device,
+						Adapter: device.Adapter,
+						'Signal strength': device.SignalStrength,
 					});
 				}
 				// Battery lists
 				if (device['isBatteryDevice']) {
 					this.batteryPowered.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						Battery: device['Battery'],
-						Status: device['Status'],
+						Device: device.Device,
+						Adapter: device.Adapter,
+						Battery: device.Battery,
+						Status: device.Status,
 					});
 				}
 				// Low Bat lists
-				if (device['LowBat'] && device['Status'] !== 'Offline') {
+				if (device.LowBat && device.Status !== 'Offline') {
 					this.batteryLowPowered.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						Battery: device['Battery'],
+						Device: device.Device,
+						Adapter: device.Adapter,
+						Battery: device.Battery,
 					});
 				}
 
 				// Offline List
-				if (device['Status'] === 'Offline') {
+				if (device.Status === 'Offline') {
 					this.offlineDevices.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
-						'Last contact': device['LastContact'],
+						Device: device.Device,
+						Adapter: device.Adapter,
+						'Last contact': device.LastContact,
 					});
 				}
 
 				// Device update List
-				if (device['Upgradable']) {
+				if (device.Upgradable) {
 					this.upgradableList.push({
-						Device: device['Device'],
-						Adapter: device['Adapter'],
+						Device: device.Device,
+						Adapter: device.Adapter,
 					});
 				}
 			}
@@ -1503,12 +1497,12 @@ class DeviceWatcher extends utils.Adapter {
 					let deviceList = '';
 
 					for (const id of this.batteryLowPoweredRaw) {
-						if (!this.blacklistNotify.includes(id['Path'])) {
+						if (!this.blacklistNotify.includes(id.Path)) {
 							if (!this.config.showAdapterNameinMsg) {
-								deviceList = `${deviceList}\n${id['Device']} (${id['Battery']})`;
+								deviceList = `${deviceList}\n${id.Device} (${id.Battery})`;
 							} else {
 								// Add adaptername if checkbox is checked true in options by user
-								deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['Battery']})`;
+								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device} (${id.Battery})`;
 							}
 						}
 					}
@@ -1623,11 +1617,11 @@ class DeviceWatcher extends utils.Adapter {
 					let deviceList = '';
 
 					for (const id of this.offlineDevicesRaw) {
-						if (!this.blacklistNotify.includes(id['Path'])) {
+						if (!this.blacklistNotify.includes(id.Path)) {
 							if (!this.config.showAdapterNameinMsg) {
-								deviceList = `${deviceList}\n${id['Device']} (${id['LastContact']})`;
+								deviceList = `${deviceList}\n${id.Device} (${id.LastContact})`;
 							} else {
-								deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']} (${id['LastContact']})`;
+								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device} (${id.LastContact})`;
 							}
 						}
 					}
@@ -1644,49 +1638,6 @@ class DeviceWatcher extends utils.Adapter {
 			});
 		}
 	} //<--End of daily offline notification
-
-	/**
-	 * check if adapter updates are available and send notification
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
-
-	/**
-	 * check if device updates are available and send notification
-	 **/
-	async sendDeviceUpdatesNotificationList() {
-		this.log.debug(`Start the function: ${this.sendDeviceUpdatesNotificationList.name}`);
-
-		try {
-			let msg = '';
-			let deviceList = '';
-
-			for (const id of this.upgradableList) {
-				if (!this.blacklistNotify.includes(id['Path'])) {
-					if (!this.config.showAdapterNameinMsg) {
-						deviceList = `${deviceList}\n${id['Device']}`;
-					} else {
-						deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']}`;
-					}
-				}
-			}
-			if (deviceList.length !== this.upgradableDevicesCountRawOld) {
-				if (deviceList.length >= 1) {
-					msg = `Neue Geräte Updates vorhanden: \n`;
-
-					this.log.info(msg + deviceList);
-					this.upgradableDevicesCountRawOld = deviceList.length;
-					await this.setStateAsync('lastNotification', msg + deviceList, true);
-					await this.sendNotification(msg + deviceList);
-				} else {
-					this.upgradableDevicesCountRawOld = deviceList.length;
-				}
-			}
-		} catch (error) {
-			this.errorReporting('[sendDeviceUpdatesNotificationList]', error);
-		}
-		this.log.debug(`Finished the function: ${this.sendDeviceUpdatesNotificationList.name}`);
-	}
 
 	/**
 	 * check if device updates are available and send notification
@@ -1751,11 +1702,11 @@ class DeviceWatcher extends utils.Adapter {
 					let deviceList = '';
 
 					for (const id of this.upgradableList) {
-						if (!this.blacklistNotify.includes(id['Path'])) {
+						if (!this.blacklistNotify.includes(id.Path)) {
 							if (!this.config.showAdapterNameinMsg) {
-								deviceList = `${deviceList}\n${id['Device']}`;
+								deviceList = `${deviceList}\n${id.Device}`;
 							} else {
-								deviceList = `${deviceList}\n${id['Adapter']}: ${id['Device']}`;
+								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device}`;
 							}
 						}
 					}
@@ -1791,8 +1742,6 @@ class DeviceWatcher extends utils.Adapter {
 		// raws
 		this.batteryLowPoweredRaw = [];
 		this.offlineDevicesRaw = [];
-		this.lowBatteryPoweredCountRaw = 0;
-		this.offlineDevicesCountRaw = 0;
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -1945,7 +1894,7 @@ class DeviceWatcher extends utils.Adapter {
 			html += `<tr>
 			<td><font>${device.Device}</font></td>
 			<td align=center><font>${device.Adapter}</font></td>
-			<td align=right><font>${device['SignalStrength']}</font></td>
+			<td align=right><font>${device.SignalStrength}</font></td>
 			</tr>`;
 		}
 
@@ -1981,7 +1930,7 @@ class DeviceWatcher extends utils.Adapter {
 			html += `<tr>
 			<td><font>${device.Device}</font></td>
 			<td align=center><font>${device.Adapter}</font></td>
-			<td align=center><font color=orange>${device['LastContact']}</font></td>
+			<td align=center><font color=orange>${device.LastContact}</font></td>
 			</tr>`;
 		}
 
