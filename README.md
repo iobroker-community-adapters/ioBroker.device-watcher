@@ -97,7 +97,8 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 -   (ciddi89) send update message on state change
 -   (Scrounger) datapoints and scheduled notification for updateable devices added
 -   (ciddi89) reaction for state changes of battery datapoints added
--   (ciddi89) send message directly if one device has low battery
+-   (ciddi89) send message and write lists directly if one device has low battery
+-   (ciddi89) send message and write lists directly if on device is going online or offline
 
 ### 2.1.0 (2022-12-19)
 
