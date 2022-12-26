@@ -255,7 +255,7 @@ class DeviceWatcher extends utils.Adapter {
 					case i.UpdateDP:
 						if (state.val) {
 							i.Upgradable = state.val;
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 							if (contactData !== undefined) {
 								i.lastContactString = contactData[0];
 								i.Status = contactData[1];
@@ -272,7 +272,7 @@ class DeviceWatcher extends utils.Adapter {
 						oldSignalStrength = i.SignalStrength;
 						i.SignalStrength = await this.calculateSignalStrength(state, i.adapterID);
 						if (oldSignalStrength !== i.SignalStrength) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 							if (contactData !== undefined) {
 								i.lastContactString = contactData[0];
 								i.Status = contactData[1];
@@ -293,7 +293,7 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(state.val, undefined, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 							if (contactData !== undefined) {
 								i.lastContactString = contactData[0];
 								i.Status = contactData[1];
@@ -306,7 +306,7 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 							if (contactData !== undefined) {
 								i.lastContactString = contactData[0];
 								i.Status = contactData[1];
@@ -326,7 +326,7 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(i.BatteryRaw, state.val, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 							if (contactData !== undefined) {
 								i.lastContactString = contactData[0];
 								i.Status = contactData[1];
@@ -339,7 +339,7 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 							if (contactData !== undefined) {
 								i.lastContactString = contactData[0];
 								i.Status = contactData[1];
@@ -356,7 +356,7 @@ class DeviceWatcher extends utils.Adapter {
 					case i.Path:
 						oldStatus = i.Status;
 						i.UnreachState = await this.getInitValue(i.UnreachDP);
-						contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+						contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 						if (contactData !== undefined) {
 							i.lastContactString = contactData[0];
 							i.Status = contactData[1];
@@ -819,9 +819,8 @@ class DeviceWatcher extends utils.Adapter {
 	 * get online state and time
 	 *
 	 */
-	async getOnlineState(id, adapterID, unreachDP, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP) {
+	async getOnlineState(id, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP) {
 		let lastContactString;
-		let linkQuality;
 		let deviceState = 'Online';
 
 		try {
@@ -963,7 +962,7 @@ class DeviceWatcher extends utils.Adapter {
 		for (const i of this.listAllDevicesRaw) {
 			const oldContactState = i.Status;
 			i.UnreachState = await this.getInitValue(i.UnreachDP);
-			const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+			const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 			if (contactData !== undefined) {
 				i.lastContactString = contactData[0];
 				i.Status = contactData[1];
@@ -1101,7 +1100,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.subscribeForeignStatesAsync(deviceStateSelectorDP);
 				this.subscribeForeignStatesAsync(rssiPeerSelectorDP);
 
-				const onlineState = await this.getOnlineState(id, adapterID, unreachDP, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
+				const onlineState = await this.getOnlineState(id, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
 				let deviceState;
 				let lastContactString;
 
