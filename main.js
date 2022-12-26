@@ -920,6 +920,7 @@ class DeviceWatcher extends utils.Adapter {
 	async checkLastContact() {
 		for (const i of this.listAllDevicesRaw) {
 			const oldContactState = i.Status;
+			i.UnreachState = await this.getInitValue(i.UnreachDP);
 			const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 			if (contactData !== undefined) {
 				i.lastContactString = contactData[0];
