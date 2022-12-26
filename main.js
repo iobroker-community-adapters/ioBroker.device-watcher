@@ -255,12 +255,11 @@ class DeviceWatcher extends utils.Adapter {
 					case i.UpdateDP:
 						if (state.val) {
 							i.Upgradable = state.val;
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
+							contactData = await this.checkLastContact;
+							i.LastContact = contactData[0];
+							i.Status = contactData[1];
+							i.linkQuality = contactData[2];
+
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -272,12 +271,10 @@ class DeviceWatcher extends utils.Adapter {
 						oldSignalStrength = i.SignalStrength;
 						i.SignalStrength = await this.calculateSignalStrength(state, i.adapterID);
 						if (oldSignalStrength !== i.SignalStrength) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
+							contactData = await this.checkLastContact;
+							i.LastContact = contactData[0];
+							i.Status = contactData[1];
+							i.linkQuality = contactData[2];
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -293,12 +290,10 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(state.val, undefined, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
+							contactData = await this.checkLastContact;
+							i.LastContact = contactData[0];
+							i.Status = contactData[1];
+							i.linkQuality = contactData[2];
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -306,12 +301,10 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
+							contactData = await this.checkLastContact;
+							i.LastContact = contactData[0];
+							i.Status = contactData[1];
+							i.linkQuality = contactData[2];
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -326,12 +319,10 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(i.BatteryRaw, state.val, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
+							contactData = await this.checkLastContact;
+							i.LastContact = contactData[0];
+							i.Status = contactData[1];
+							i.linkQuality = contactData[2];
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -339,12 +330,10 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
+							contactData = await this.checkLastContact;
+							i.LastContact = contactData[0];
+							i.Status = contactData[1];
+							i.linkQuality = contactData[2];
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -356,12 +345,10 @@ class DeviceWatcher extends utils.Adapter {
 					case i.Path:
 						oldStatus = i.Status;
 						i.UnreachState = await this.getInitValue(i.UnreachDP);
-						contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-						if (contactData !== undefined) {
-							i.LastContact = contactData[0];
-							i.Status = contactData[1];
-							i.linkQuality = contactData[2];
-						}
+						contactData = await this.checkLastContact;
+						i.LastContact = contactData[0];
+						i.Status = contactData[1];
+						i.linkQuality = contactData[2];
 						if (i.Status && oldStatus !== i.Status && this.config.checkSendOfflineMsg) {
 							await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact, i.Path);
 						}
@@ -411,11 +398,12 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * refresh data with interval
+	 * is neccessary to refresh lastContact data, especially of devices without state changes
 	 */
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
 
-		// await this.checkLastContact();
+		await this.checkLastContact();
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
@@ -958,22 +946,41 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-	async checkLastContact() {
-		for (const i of this.listAllDevicesRaw) {
-			const oldContactState = i.Status;
-			i.UnreachState = await this.getInitValue(i.UnreachDP);
-			const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+	async checkLastContact(device) {
+		if (device === null) {
+			for (const i of this.listAllDevicesRaw) {
+				const oldContactState = i.Status;
+				i.UnreachState = await this.getInitValue(i.UnreachDP);
+				const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+				if (contactData !== undefined) {
+					i.LastContact = contactData[0];
+					i.Status = contactData[1];
+					i.linkQuality = contactData[2];
+					await this.createLists();
+					await this.countDevices();
+					await this.writeDatapoints();
+				}
+				if (oldContactState !== i.Status) {
+					await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact, i.Path);
+				}
+			}
+			return;
+		} else {
+			const contactData = await this.getOnlineState(
+				device.Path,
+				device.adapterID,
+				device.UnreachDP,
+				device.SignalStrength,
+				device.UnreachState,
+				device.DeviceStateSelectorDP,
+				device.rssiPeerSelectorDP,
+			);
 			if (contactData !== undefined) {
-				i.LastContact = contactData[0];
-				i.Status = contactData[1];
-				i.linkQuality = contactData[2];
-				await this.createLists();
-				await this.countDevices();
-				await this.writeDatapoints();
+				device.LastContact = contactData[0];
+				device.Status = contactData[1];
+				device.linkQuality = contactData[2];
 			}
-			if (oldContactState !== i.Status) {
-				await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact, i.Path);
-			}
+			return [device.LastContact, device.Status, device.LinkQuality];
 		}
 	}
 	/**
