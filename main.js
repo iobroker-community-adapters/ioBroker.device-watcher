@@ -247,18 +247,41 @@ class DeviceWatcher extends utils.Adapter {
 			let oldLowBatState;
 			let contactData;
 			let oldStatus;
+			let oldSignalStrength;
 
 			for (const i of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
 				switch (id) {
 					case i.UpdateDP:
 						if (state.val) {
+							i.Upgradable = state.val;
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							if (contactData !== undefined) {
+								i.lastContactString = contactData[0];
+								i.Status = contactData[1];
+								i.linkQuality = contactData[2];
+							}
+							await this.createLists();
+							await this.countDevices();
+							await this.writeDatapoints();
 							await this.sendDeviceUpdatesNotification(i.Device, i.Adapter, i.Path);
 						}
 						break;
 
 					case i.SignalStrengthDP:
-						i.SignalStrengthDP = await this.calculateSignalStrength(state, i.adapterID);
+						oldSignalStrength = i.SignalStrength;
+						i.SignalStrength = await this.calculateSignalStrength(state, i.adapterID);
+						if (oldSignalStrength !== i.SignalStrength) {
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							if (contactData !== undefined) {
+								i.lastContactString = contactData[0];
+								i.Status = contactData[1];
+								i.linkQuality = contactData[2];
+							}
+							await this.createLists();
+							await this.countDevices();
+							await this.writeDatapoints();
+						}
 						break;
 
 					case i.batteryDP:
@@ -270,6 +293,12 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(state.val, undefined, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							if (contactData !== undefined) {
+								i.lastContactString = contactData[0];
+								i.Status = contactData[1];
+								i.linkQuality = contactData[2];
+							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -277,6 +306,12 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							if (contactData !== undefined) {
+								i.lastContactString = contactData[0];
+								i.Status = contactData[1];
+								i.linkQuality = contactData[2];
+							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -291,6 +326,12 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(i.BatteryRaw, state.val, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							if (contactData !== undefined) {
+								i.lastContactString = contactData[0];
+								i.Status = contactData[1];
+								i.linkQuality = contactData[2];
+							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -298,6 +339,12 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
+							contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+							if (contactData !== undefined) {
+								i.lastContactString = contactData[0];
+								i.Status = contactData[1];
+								i.linkQuality = contactData[2];
+							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -314,18 +361,13 @@ class DeviceWatcher extends utils.Adapter {
 							i.lastContactString = contactData[0];
 							i.Status = contactData[1];
 							i.linkQuality = contactData[2];
-							await this.createLists();
-							await this.countDevices();
-							await this.writeDatapoints();
 						}
-						if (i.Status && oldStatus !== i.Status) {
-							await this.createLists();
-							await this.countDevices();
-							await this.writeDatapoints();
-							if (this.config.checkSendOfflineMsg) {
-								await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.lastContactString, i.Path);
-							}
+						if (i.Status && oldStatus !== i.Status && this.config.checkSendOfflineMsg) {
+							await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.lastContactString, i.Path);
 						}
+						await this.createLists();
+						await this.countDevices();
+						await this.writeDatapoints();
 
 						break;
 				}
@@ -373,7 +415,7 @@ class DeviceWatcher extends utils.Adapter {
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
 
-		await this.checkLastContact();
+		// await this.checkLastContact();
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
