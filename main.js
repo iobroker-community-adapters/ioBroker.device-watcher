@@ -193,22 +193,22 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			//create and fill datapoints for each adapter if selected
-			try {
-				for (const [id] of Object.entries(arrApart)) {
-					if (!isUnloaded) {
-						if (this.supAdapter !== undefined && this.supAdapter[id]) {
-							if (this.config.createOwnFolder) {
+			if (this.config.createOwnFolder) {
+				try {
+					for (const [id] of Object.entries(arrApart)) {
+						if (!isUnloaded) {
+							if (this.supAdapter !== undefined && this.supAdapter[id]) {
 								await this.createDPsForEachAdapter(id);
 								if (this.config.createHtmlList) await this.createHtmlListDatapoints(id);
-								this.log.debug(`Created datapoints for ${await this.capitalize(id)}`);
+								this.log.debug(`Created datapoints for ${this.capitalize(id)}`);
 							}
+						} else {
+							return; // cancel run if unloaded was called.
 						}
-					} else {
-						return; // cancel run if unloaded was called.
 					}
+				} catch (error) {
+					this.errorReporting('[onReady - create and fill datapoints for each adapter]', error);
 				}
-			} catch (error) {
-				this.errorReporting('[onReady - create and fill datapoints for each adapter]', error);
 			}
 
 			// create HTML list
@@ -217,7 +217,7 @@ class DeviceWatcher extends utils.Adapter {
 			//read data first at start
 			await this.main();
 
-			// update data in interval
+			// update last contact data in interval
 			await this.refreshData();
 
 			// send overview for low battery devices
@@ -257,7 +257,7 @@ class DeviceWatcher extends utils.Adapter {
 							i.Upgradable = state.val;
 
 							await this.createLists();
-							await this.countDevices();
+
 							await this.writeDatapoints();
 							await this.sendDeviceUpdatesNotification(i.Device, i.Adapter, i.Path);
 						}
@@ -268,7 +268,7 @@ class DeviceWatcher extends utils.Adapter {
 						i.SignalStrength = await this.calculateSignalStrength(state, i.adapterID);
 						if (oldSignalStrength !== i.SignalStrength) {
 							await this.createLists();
-							await this.countDevices();
+
 							await this.writeDatapoints();
 						}
 						break;
@@ -283,14 +283,14 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
 							await this.createLists();
-							await this.countDevices();
+
 							await this.writeDatapoints();
 							if (this.config.checkSendBatteryMsg) {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
 							await this.createLists();
-							await this.countDevices();
+
 							await this.writeDatapoints();
 						}
 						break;
@@ -304,14 +304,14 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
 							await this.createLists();
-							await this.countDevices();
+
 							await this.writeDatapoints();
 							if (this.config.checkSendBatteryMsg) {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
 							await this.createLists();
-							await this.countDevices();
+
 							await this.writeDatapoints();
 						}
 						break;
@@ -325,11 +325,11 @@ class DeviceWatcher extends utils.Adapter {
 						if (contactData !== undefined) {
 							i.LastContact = contactData[0];
 							i.Status = contactData[1];
-							i.linkQuality = contactData[2];
+							i.SignalStrength = contactData[2];
 						}
 						if (i.Status !== oldStatus) {
 							await this.createLists();
-							await this.countDevices();
+
 							await this.writeDatapoints();
 						}
 
@@ -383,7 +383,7 @@ class DeviceWatcher extends utils.Adapter {
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
 
-		await this.checkLastContact(null);
+		await this.checkLastContact();
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
@@ -408,31 +408,26 @@ class DeviceWatcher extends utils.Adapter {
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
 
-		// fill datapoints for each adapter if selected
-		try {
-			for (const [id] of Object.entries(arrApart)) {
-				if (!isUnloaded) {
-					if (this.supAdapter !== undefined && this.supAdapter[id]) {
-						if (this.config.createOwnFolder) {
-							await this.createDataForEachAdapter(id);
-							this.log.debug(`Created and filled data for ${await this.capitalize(id)}`);
-						}
-					}
-				} else {
-					this.log.warn('broke up');
-					return; // cancel run if unloaded was called.
-				}
-			}
-		} catch (error) {
-			this.errorReporting('[main - create and fill datapoints for each adapter]', error);
-		}
-
 		// fill counts and lists of all selected adapter
 		try {
 			await this.createDataOfAllAdapter();
 			this.log.debug(`Created and filled data for all adapters`);
 		} catch (error) {
 			this.errorReporting('[main - create data of all adapter]', error);
+		}
+
+		// fill datapoints for each adapter if selected
+		if (this.config.createOwnFolder) {
+			try {
+				for (const [id] of Object.entries(arrApart)) {
+					if (this.supAdapter !== undefined && this.supAdapter[id]) {
+						await this.createDataForEachAdapter(id);
+						this.log.debug(`Created and filled data for ${this.capitalize(id)}`);
+					}
+				}
+			} catch (error) {
+				this.errorReporting('[main - create and fill datapoints for each adapter]', error);
+			}
 		}
 
 		this.log.debug(`Function finished: ${this.main.name}`);
@@ -926,43 +921,27 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-	async checkLastContact(device) {
-		if (device === null) {
-			for (const i of this.listAllDevicesRaw) {
-				const oldContactState = i.Status;
-				i.UnreachState = await this.getInitValue(i.UnreachDP);
-				const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
-				if (contactData !== undefined) {
-					i.LastContact = contactData[0];
-					i.Status = contactData[1];
-					i.linkQuality = contactData[2];
-					await this.createLists();
-					await this.countDevices();
-					await this.writeDatapoints();
-				}
-				if (oldContactState !== i.Status) {
-					await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact, i.Path);
-				}
-			}
-			return;
-		} else {
-			const contactData = await this.getOnlineState(
-				device.Path,
-				device.adapterID,
-				device.UnreachDP,
-				device.SignalStrength,
-				device.UnreachState,
-				device.DeviceStateSelectorDP,
-				device.rssiPeerSelectorDP,
-			);
+	/**
+	 * when was last contact of device
+	 */
+	async checkLastContact() {
+		for (const i of this.listAllDevicesRaw) {
+			const oldContactState = i.Status;
+			i.UnreachState = await this.getInitValue(i.UnreachDP);
+			const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 			if (contactData !== undefined) {
-				device.LastContact = contactData[0];
-				device.Status = contactData[1];
-				device.linkQuality = contactData[2];
+				i.LastContact = contactData[0];
+				i.Status = contactData[1];
+				i.linkQuality = contactData[2];
 			}
-			return [device.LastContact, device.Status, device.LinkQuality];
+			if (oldContactState !== i.Status) {
+				await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact, i.Path);
+			}
 		}
+		await this.createLists();
+		await this.writeDatapoints();
 	}
+
 	/**
 	 * @param {object} i - Device Object
 	 */
@@ -1120,31 +1099,29 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 
 				/* Add only devices with battery in the rawlist */
-				if (this.listOnlyBattery) {
-					if (isBatteryDevice) {
-						this.listAllDevicesRaw.push({
-							Path: id,
-							Device: deviceName,
-							adapterID: adapterID,
-							Adapter: adapter,
-							isBatteryDevice: isBatteryDevice,
-							Battery: batteryHealth,
-							BatteryRaw: batteryHealthRaw,
-							batteryDP: deviceBatteryStateDP,
-							LowBat: lowBatIndicator,
-							LowBatDP: isLowBatDP,
-							SignalStrengthDP: deviceQualityDP,
-							SignalStrength: linkQuality,
-							UnreachState: deviceUnreachState,
-							UnreachDP: unreachDP,
-							DeviceStateSelectorDP: deviceStateSelectorDP,
-							rssiPeerSelectorDP: rssiPeerSelectorDP,
-							LastContact: lastContactString,
-							Status: deviceState,
-							UpdateDP: deviceUpdateDP,
-							Upgradable: isUpgradable,
-						});
-					}
+				if (this.listOnlyBattery && isBatteryDevice) {
+					this.listAllDevicesRaw.push({
+						Path: id,
+						Device: deviceName,
+						adapterID: adapterID,
+						Adapter: adapter,
+						isBatteryDevice: isBatteryDevice,
+						Battery: batteryHealth,
+						BatteryRaw: batteryHealthRaw,
+						batteryDP: deviceBatteryStateDP,
+						LowBat: lowBatIndicator,
+						LowBatDP: isLowBatDP,
+						SignalStrengthDP: deviceQualityDP,
+						SignalStrength: linkQuality,
+						UnreachState: deviceUnreachState,
+						UnreachDP: unreachDP,
+						DeviceStateSelectorDP: deviceStateSelectorDP,
+						rssiPeerSelectorDP: rssiPeerSelectorDP,
+						LastContact: lastContactString,
+						Status: deviceState,
+						UpdateDP: deviceUpdateDP,
+						Upgradable: isUpgradable,
+					});
 				} else {
 					/* Add all devices */
 					this.listAllDevicesRaw.push({
@@ -1176,7 +1153,6 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		} // <-- end of loop
 		await this.createLists();
-		await this.countDevices();
 	} // <-- end of createData
 
 	/**
@@ -1267,6 +1243,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 		}
+		await this.countDevices();
 	}
 
 	/**
@@ -1307,10 +1284,11 @@ class DeviceWatcher extends utils.Adapter {
 		await this.resetVars(); // reset the arrays and counts
 
 		try {
-			for (let i = 0; i < this.arrDev.length; i++) {
-				if (this.arrDev[i].adapterID.includes(adptName)) {
+			for (const i of this.listAllDevicesRaw) {
+				if (i.adapterID.includes(adptName)) {
 					// list device only if selected adapter matched with device
-					await this.createData(i);
+					await this.createLists();
+					await this.writeDatapoints();
 				}
 			}
 
@@ -1332,11 +1310,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.resetVars(); // reset the arrays and counts
 
 			for (let i = 0; i < this.arrDev.length; i++) {
-				if (!isUnloaded) {
-					await this.createData(i);
-				} else {
-					return; // cancel run if unloaded was called.
-				}
+				await this.createData(i);
 			}
 			await this.writeDatapoints(); // fill the datapoints
 		} catch (error) {
@@ -1764,7 +1738,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
-		this.listAllDevicesRaw = [];
+		//this.listAllDevicesRaw = [];
 
 		// raws
 		this.batteryLowPoweredRaw = [];
@@ -1819,12 +1793,6 @@ class DeviceWatcher extends utils.Adapter {
 				val: JSON.stringify(this.linkQualityDevices),
 				ack: true,
 			});
-			//write HTML list
-			if (this.config.createHtmlList)
-				await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, {
-					val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount),
-					ack: true,
-				});
 
 			if (this.offlineDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
@@ -1835,12 +1803,6 @@ class DeviceWatcher extends utils.Adapter {
 				val: JSON.stringify(this.offlineDevices),
 				ack: true,
 			});
-			//write HTML list
-			if (this.config.createHtmlList)
-				await this.setStateAsync(`${dpSubFolder}offlineListHTML`, {
-					val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount),
-					ack: true,
-				});
 
 			if (this.upgradableDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
@@ -1861,12 +1823,6 @@ class DeviceWatcher extends utils.Adapter {
 				val: JSON.stringify(this.batteryPowered),
 				ack: true,
 			});
-			//write HTML list
-			if (this.config.createHtmlList)
-				await this.setStateAsync(`${dpSubFolder}batteryListHTML`, {
-					val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false),
-					ack: true,
-				});
 
 			if (this.lowBatteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
@@ -1877,12 +1833,26 @@ class DeviceWatcher extends utils.Adapter {
 				val: JSON.stringify(this.batteryLowPowered),
 				ack: true,
 			});
+
 			//write HTML list
-			if (this.config.createHtmlList)
+			if (this.config.createHtmlList) {
+				await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, {
+					val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount),
+					ack: true,
+				});
+				await this.setStateAsync(`${dpSubFolder}offlineListHTML`, {
+					val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount),
+					ack: true,
+				});
+				await this.setStateAsync(`${dpSubFolder}batteryListHTML`, {
+					val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false),
+					ack: true,
+				});
 				await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, {
 					val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true),
 					ack: true,
 				});
+			}
 
 			// create timestamp of last run
 			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
