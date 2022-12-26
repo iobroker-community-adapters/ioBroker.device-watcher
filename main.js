@@ -255,12 +255,6 @@ class DeviceWatcher extends utils.Adapter {
 					case i.UpdateDP:
 						if (state.val) {
 							i.Upgradable = state.val;
-							contactData = await this.checkLastContact(i);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
 
 							await this.createLists();
 							await this.countDevices();
@@ -273,12 +267,6 @@ class DeviceWatcher extends utils.Adapter {
 						oldSignalStrength = i.SignalStrength;
 						i.SignalStrength = await this.calculateSignalStrength(state, i.adapterID);
 						if (oldSignalStrength !== i.SignalStrength) {
-							contactData = await this.checkLastContact(i);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -294,12 +282,6 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(state.val, undefined, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.checkLastContact(i);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -307,12 +289,6 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.checkLastContact(i);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -327,12 +303,6 @@ class DeviceWatcher extends utils.Adapter {
 						i.LowBat = await this.setLowbatIndicator(i.BatteryRaw, state.val, i.LowBatDP);
 
 						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.checkLastContact(i);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -340,12 +310,6 @@ class DeviceWatcher extends utils.Adapter {
 								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
 							}
 						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							contactData = await this.checkLastContact(i);
-							if (contactData !== undefined) {
-								i.LastContact = contactData[0];
-								i.Status = contactData[1];
-								i.linkQuality = contactData[2];
-							}
 							await this.createLists();
 							await this.countDevices();
 							await this.writeDatapoints();
@@ -357,19 +321,21 @@ class DeviceWatcher extends utils.Adapter {
 					case i.Path:
 						oldStatus = i.Status;
 						i.UnreachState = await this.getInitValue(i.UnreachDP);
-						contactData = await this.checkLastContact(i);
+						contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
 						if (contactData !== undefined) {
 							i.LastContact = contactData[0];
 							i.Status = contactData[1];
 							i.linkQuality = contactData[2];
 						}
+						if (i.Status !== oldStatus) {
+							await this.createLists();
+							await this.countDevices();
+							await this.writeDatapoints();
+						}
+
 						if (i.Status && oldStatus !== i.Status && this.config.checkSendOfflineMsg) {
 							await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact, i.Path);
 						}
-						await this.createLists();
-						await this.countDevices();
-						await this.writeDatapoints();
-
 						break;
 				}
 			}
