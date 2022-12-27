@@ -1534,10 +1534,12 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} deviceName
 	 * @param {string} adapter
 	 * @param {string} battery
-	 * @param {string} devicePath
+	 * @param {object} devicePath
 	 **/
 	async sendLowBatNoticiation(deviceName, adapter, battery, devicePath) {
 		this.log.debug(`Start the function: ${this.sendLowBatNoticiation.name}`);
+		this.log.warn(devicePath);
+		this.log.warn(JSON.stringify(this.blacklistNotify));
 
 		try {
 			let msg = '';
@@ -1549,12 +1551,12 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					deviceList = `${deviceList}\n${adapter}: ${deviceName} (${battery})`;
 				}
-			}
-			msg = `Gerät mit geringer Batterie erkannt: \n`;
+				msg = `Gerät mit geringer Batterie erkannt: \n`;
 
-			this.log.info(msg + deviceList);
-			await this.setStateAsync('lastNotification', msg + deviceList, true);
-			await this.sendNotification(msg + deviceList);
+				this.log.info(msg + deviceList);
+				await this.setStateAsync('lastNotification', msg + deviceList, true);
+				await this.sendNotification(msg + deviceList);
+			}
 		} catch (error) {
 			this.errorReporting('[sendLowBatNoticiation]', error);
 		}
@@ -1567,7 +1569,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} adapter
 	 * @param {string} status
 	 * @param {string} lastContact
-	 * @param {string} devicePath
+	 * @param {object} devicePath
 	 */
 	async sendOfflineNotifications(deviceName, adapter, status, lastContact, devicePath) {
 		this.log.debug(`Start the function: ${this.sendOfflineNotifications.name}`);
@@ -1582,18 +1584,19 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					deviceList = `${deviceList}\n${adapter}: ${deviceName} (${lastContact})`;
 				}
-			}
-			if (status === 'Online') {
-				// make singular if it is only one device
-				msg = 'Folgendes Gerät ist wieder erreichbar: \n';
-			} else if (status === 'Offline') {
-				//make plural if it is more than one device
-				msg = `Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n`;
-			}
 
-			this.log.info(msg + deviceList);
-			await this.setStateAsync('lastNotification', msg + deviceList, true);
-			await this.sendNotification(msg + deviceList);
+				if (status === 'Online') {
+					// make singular if it is only one device
+					msg = 'Folgendes Gerät ist wieder erreichbar: \n';
+				} else if (status === 'Offline') {
+					//make plural if it is more than one device
+					msg = `Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n`;
+				}
+
+				this.log.info(msg + deviceList);
+				await this.setStateAsync('lastNotification', msg + deviceList, true);
+				await this.sendNotification(msg + deviceList);
+			}
 		} catch (error) {
 			this.errorReporting('[sendOfflineMessage]', error);
 		}
@@ -1658,7 +1661,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * check if device updates are available and send notification
 	 * @param {string} deviceName
 	 * @param {string} adapter
-	 * @param {string} devicePath
+	 * @param {object} devicePath
 	 **/
 	async sendDeviceUpdatesNotification(deviceName, adapter, devicePath) {
 		this.log.debug(`Start the function: ${this.sendDeviceUpdatesNotification.name}`);
@@ -1673,12 +1676,13 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					deviceList = `${deviceList}\n${adapter}: ${deviceName}`;
 				}
-			}
-			msg = `Neue Geräte Updates vorhanden: \n`;
 
-			this.log.info(msg + deviceList);
-			await this.setStateAsync('lastNotification', msg + deviceList, true);
-			await this.sendNotification(msg + deviceList);
+				msg = `Neue Geräte Updates vorhanden: \n`;
+
+				this.log.info(msg + deviceList);
+				await this.setStateAsync('lastNotification', msg + deviceList, true);
+				await this.sendNotification(msg + deviceList);
+			}
 		} catch (error) {
 			this.errorReporting('[sendDeviceUpdatesNotification]', error);
 		}
