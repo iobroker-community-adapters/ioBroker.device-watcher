@@ -787,7 +787,13 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * get online state and time
-	 *
+	 * @param {object} id - ID
+	 * @param {string} adapterID - ID of Adapter
+	 * @param {string} unreachDP - Datapoint of Unreach
+	 * @param {object} linkQuality - Linkquality Value
+	 * @param {object} deviceUnreachState - State of deviceUnreach datapoint
+	 * @param {string} deviceStateSelectorDP - Selector of device state (like .state)
+	 * @param {string} rssiPeerSelectorDP - HM RSSI Peer Datapoint
 	 */
 	async getOnlineState(id, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP) {
 		let lastContactString;
@@ -1557,6 +1563,11 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * send message if an device is offline
+	 * @param {string} deviceName
+	 * @param {string} adapter
+	 * @param {string} status
+	 * @param {string} lastContact
+	 * @param {string} devicePath
 	 */
 	async sendOfflineNotifications(deviceName, adapter, status, lastContact, devicePath) {
 		this.log.debug(`Start the function: ${this.sendOfflineNotifications.name}`);
