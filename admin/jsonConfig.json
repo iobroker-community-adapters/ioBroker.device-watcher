@@ -116,6 +116,13 @@
 					"lg": 3,
 					"label": "Hue Extended"
 				},
+				"innogyDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Innogy Smarthome"
+				},
 				"jeelinkDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1217,6 +1224,18 @@
 					"label": "HueExtended",
 					"help": "in minutes",
 					"hidden": "!data.hueExtDevices",
+					"hideOnlyControl": false
+				},
+				"innogyMaxMinutes": {
+					"type": "number",
+					"min": 0,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Innogy Smarthome",
+					"help": "in minutes",
+					"hidden": "!data.innogyDevices",
 					"hideOnlyControl": false
 				},
 				"jeelinkMaxMinutes": {

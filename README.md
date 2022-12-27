@@ -90,6 +90,11 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Innogy Smarthome added
+
 ### 2.2.0 (2022-12-27)
 
 -   (Scrounger) Yamaha MusicCast adapter added
