@@ -276,46 +276,51 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case i.batteryDP:
-						oldLowBatState = i.LowBat;
-						batteryData = await this.getBatteryData(state.val, oldLowBatState, i.adapterID);
+						if (i.isBatteryDevice) {
+							oldLowBatState = i.LowBat;
+							batteryData = await this.getBatteryData(state.val, oldLowBatState, i.adapterID);
 
-						i.Battery = batteryData[0];
-						i.BatteryRaw = batteryData[2];
-						i.LowBat = await this.setLowbatIndicator(state.val, undefined, i.LowBatDP);
+							i.Battery = batteryData[0];
+							i.BatteryRaw = batteryData[2];
+							i.LowBat = await this.setLowbatIndicator(state.val, undefined, i.LowBatDP);
 
-						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							await this.createLists();
+							if (i.LowBat && oldLowBatState !== i.LowBat) {
+								await this.createLists();
 
-							await this.writeDatapoints();
-							if (this.config.checkSendBatteryMsg) {
-								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
+								await this.writeDatapoints();
+								if (this.config.checkSendBatteryMsg) {
+									await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
+								}
+							} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
+								await this.createLists();
+
+								await this.writeDatapoints();
 							}
-						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							await this.createLists();
-
-							await this.writeDatapoints();
 						}
 						break;
 
 					case i.LowBatDP:
-						oldLowBatState = i.LowBat;
-						batteryData = await this.getBatteryData(i.BatteryRaw, state.val, i.adapterID);
-						i.Battery = batteryData[0];
-						i.BatteryRaw = batteryData[2];
-						i.LowBat = await this.setLowbatIndicator(i.BatteryRaw, state.val, i.LowBatDP);
+						if (i.isBatteryDevice) {
+							oldLowBatState = i.LowBat;
+							batteryData = await this.getBatteryData(i.BatteryRaw, state.val, i.adapterID);
+							i.Battery = batteryData[0];
+							i.BatteryRaw = batteryData[2];
+							i.LowBat = await this.setLowbatIndicator(i.BatteryRaw, state.val, i.LowBatDP);
 
-						if (i.LowBat && oldLowBatState !== i.LowBat) {
-							await this.createLists();
+							if (i.LowBat && oldLowBatState !== i.LowBat) {
+								await this.createLists();
 
-							await this.writeDatapoints();
-							if (this.config.checkSendBatteryMsg) {
-								await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
+								await this.writeDatapoints();
+								if (this.config.checkSendBatteryMsg) {
+									await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery, i.Path);
+								}
+							} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
+								await this.createLists();
+
+								await this.writeDatapoints();
 							}
-						} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
-							await this.createLists();
-
-							await this.writeDatapoints();
 						}
+
 						break;
 					case i.UnreachDP:
 					case i.DeviceStateSelectorDP:
@@ -1283,8 +1288,6 @@ class DeviceWatcher extends utils.Adapter {
 		// create Data for each Adapter in own lists
 		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
 
-		await this.resetVars(); // reset the arrays and counts
-
 		try {
 			for (const i of this.listAllDevicesRaw) {
 				if (i.adapterID.includes(adptName)) {
@@ -1309,8 +1312,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.createDataOfAllAdapter.name}`);
 
 		try {
-			await this.resetVars(); // reset the arrays and counts
-
 			for (let i = 0; i < this.arrDev.length; i++) {
 				await this.createData(i);
 			}
@@ -1726,36 +1727,6 @@ class DeviceWatcher extends utils.Adapter {
 			});
 		}
 	} //<--End of daily offline notification
-
-	/**
-	 * reset arrays and counts
-	 */
-	async resetVars() {
-		//Reset all arrays and counts
-		this.log.debug(`Function started: ${this.resetVars.name}`);
-
-		// arrays
-		this.offlineDevices = [];
-		this.linkQualityDevices = [];
-		this.batteryPowered = [];
-		this.batteryLowPowered = [];
-		this.listAllDevices = [];
-		//this.listAllDevicesRaw = [];
-
-		// raws
-		this.batteryLowPoweredRaw = [];
-		this.offlineDevicesRaw = [];
-
-		// counts
-		this.offlineDevicesCount = 0;
-		this.deviceCounter = 0;
-		this.linkQualityCount = 0;
-		this.batteryPoweredCount = 0;
-		this.lowBatteryPoweredCount = 0;
-		this.upgradableDevicesCount = 0;
-
-		this.log.debug(`Function finished: ${this.resetVars.name}`);
-	} // <-- end of resetVars
 
 	/**
 	 * @param {string} [adptName] - Adaptername
