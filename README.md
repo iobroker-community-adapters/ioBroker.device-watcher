@@ -94,6 +94,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Innogy Smarthome added
+-   (ciddi89) Lists for each adapter are working again
 
 ### 2.2.0 (2022-12-27)
 
