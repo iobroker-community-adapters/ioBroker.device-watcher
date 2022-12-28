@@ -251,99 +251,107 @@ class DeviceWatcher extends utils.Adapter {
 			let oldStatus;
 			let oldSignalStrength;
 
-			for (const i of this.listAllDevicesRaw) {
+			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
 				switch (id) {
-					case i.UpdateDP:
+					case device.UpdateDP:
 						if (state.val) {
-							i.Upgradable = state.val;
+							device.Upgradable = state.val;
 
 							await this.createLists();
-
 							await this.writeDatapoints();
-							if (!this.blacklistNotify.includes(i.Path)) {
-								await this.sendDeviceUpdatesNotification(i.Device, i.Adapter);
+							if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
+							if (!this.blacklistNotify.includes(device.Path)) {
+								await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
 							}
 						}
 						break;
 
-					case i.SignalStrengthDP:
-						oldSignalStrength = i.SignalStrength;
-						i.SignalStrength = await this.calculateSignalStrength(state, i.adapterID);
-						if (oldSignalStrength !== i.SignalStrength) {
+					case device.SignalStrengthDP:
+						oldSignalStrength = device.SignalStrength;
+						device.SignalStrength = await this.calculateSignalStrength(state, device.adapterID);
+						if (oldSignalStrength !== device.SignalStrength) {
 							await this.createLists();
-
 							await this.writeDatapoints();
+							if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 						}
 						break;
 
-					case i.batteryDP:
-						if (i.isBatteryDevice) {
-							oldLowBatState = i.LowBat;
-							batteryData = await this.getBatteryData(state.val, oldLowBatState, i.adapterID);
+					case device.batteryDP:
+						if (device.isBatteryDevice) {
+							oldLowBatState = device.LowBat;
+							batteryData = await this.getBatteryData(state.val, oldLowBatState, device.adapterID);
 
-							i.Battery = batteryData[0];
-							i.BatteryRaw = batteryData[2];
-							i.LowBat = await this.setLowbatIndicator(state.val, undefined, i.LowBatDP);
+							device.Battery = batteryData[0];
+							device.BatteryRaw = batteryData[2];
+							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.LowBatDP);
 
-							if (i.LowBat && oldLowBatState !== i.LowBat) {
+							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								await this.createLists();
-
 								await this.writeDatapoints();
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(i.Path)) {
-									await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery);
+								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
+								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
 								}
-							} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
+							} else if (!device.LowBat && oldLowBatState !== device.LowBat) {
 								await this.createLists();
-
 								await this.writeDatapoints();
+								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 							}
 						}
 						break;
 
-					case i.LowBatDP:
-						if (i.isBatteryDevice) {
-							oldLowBatState = i.LowBat;
-							batteryData = await this.getBatteryData(i.BatteryRaw, state.val, i.adapterID);
-							i.Battery = batteryData[0];
-							i.BatteryRaw = batteryData[2];
-							i.LowBat = await this.setLowbatIndicator(i.BatteryRaw, state.val, i.LowBatDP);
+					case device.LowBatDP:
+						if (device.isBatteryDevice) {
+							oldLowBatState = device.LowBat;
+							batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
+							device.Battery = batteryData[0];
+							device.BatteryRaw = batteryData[2];
+							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.LowBatDP);
 
-							if (i.LowBat && oldLowBatState !== i.LowBat) {
+							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								await this.createLists();
-
 								await this.writeDatapoints();
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(i.Path)) {
-									await this.sendLowBatNoticiation(i.Device, i.Adapter, i.Battery);
+								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
+								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
 								}
-							} else if (!i.LowBat && oldLowBatState !== i.LowBat) {
+							} else if (!device.LowBat && oldLowBatState !== device.LowBat) {
 								await this.createLists();
-
 								await this.writeDatapoints();
+								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 							}
 						}
 
 						break;
-					case i.UnreachDP:
-					case i.DeviceStateSelectorDP:
-					case i.rssiPeerSelectorDP:
-					case i.Path:
-						oldStatus = i.Status;
-						i.UnreachState = await this.getInitValue(i.UnreachDP);
-						contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+					case device.UnreachDP:
+					case device.DeviceStateSelectorDP:
+					case device.rssiPeerSelectorDP:
+					case device.Path:
+						oldStatus = device.Status;
+						device.UnreachState = await this.getInitValue(device.UnreachDP);
+						contactData = await this.getOnlineState(
+							device.Path,
+							device.adapterID,
+							device.UnreachDP,
+							device.SignalStrength,
+							device.UnreachState,
+							device.DeviceStateSelectorDP,
+							device.rssiPeerSelectorDP,
+						);
 						if (contactData !== undefined) {
-							i.LastContact = contactData[0];
-							i.Status = contactData[1];
-							i.SignalStrength = contactData[2];
+							device.LastContact = contactData[0];
+							device.Status = contactData[1];
+							device.SignalStrength = contactData[2];
 						}
-						if (i.Status !== oldStatus) {
+						if (device.Status !== oldStatus) {
 							await this.createLists();
-
 							await this.writeDatapoints();
+							if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 						}
 
-						if (i.Status && oldStatus !== i.Status && this.config.checkSendOfflineMsg && !this.blacklistNotify.includes(i.Path)) {
-							await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact);
+						if (device.Status && oldStatus !== device.Status && this.config.checkSendOfflineMsg && !this.blacklistNotify.includes(device.Path)) {
+							await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 						}
 						break;
 				}
@@ -940,17 +948,25 @@ class DeviceWatcher extends utils.Adapter {
 	 * when was last contact of device
 	 */
 	async checkLastContact() {
-		for (const i of this.listAllDevicesRaw) {
-			const oldContactState = i.Status;
-			i.UnreachState = await this.getInitValue(i.UnreachDP);
-			const contactData = await this.getOnlineState(i.Path, i.adapterID, i.UnreachDP, i.SignalStrength, i.UnreachState, i.DeviceStateSelectorDP, i.rssiPeerSelectorDP);
+		for (const device of this.listAllDevicesRaw) {
+			const oldContactState = device.Status;
+			device.UnreachState = await this.getInitValue(device.UnreachDP);
+			const contactData = await this.getOnlineState(
+				device.Path,
+				device.adapterID,
+				device.UnreachDP,
+				device.SignalStrength,
+				device.UnreachState,
+				device.DeviceStateSelectorDP,
+				device.rssiPeerSelectorDP,
+			);
 			if (contactData !== undefined) {
-				i.LastContact = contactData[0];
-				i.Status = contactData[1];
-				i.linkQuality = contactData[2];
+				device.LastContact = contactData[0];
+				device.Status = contactData[1];
+				device.linkQuality = contactData[2];
 			}
-			if (this.config.checkSendOfflineMsg && oldContactState !== i.Status && !this.blacklistNotify.includes(i.Path)) {
-				await this.sendOfflineNotifications(i.Device, i.Adapter, i.Status, i.LastContact);
+			if (this.config.checkSendOfflineMsg && oldContactState !== device.Status && !this.blacklistNotify.includes(device.Path)) {
+				await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 			}
 		}
 		await this.createLists();
@@ -1167,13 +1183,12 @@ class DeviceWatcher extends utils.Adapter {
 				return;
 			}
 		} // <-- end of loop
-		await this.createLists();
 	} // <-- end of createData
 
 	/**
 	 * Create Lists
 	 */
-	async createLists() {
+	async createLists(adptName) {
 		this.linkQualityDevices = [];
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
@@ -1183,78 +1198,84 @@ class DeviceWatcher extends utils.Adapter {
 		this.offlineDevicesRaw = [];
 		this.upgradableList = [];
 
+		if (adptName === undefined) {
+			adptName = '';
+		}
+
 		for (const device of this.listAllDevicesRaw) {
-			/*----------  fill raw lists  ----------*/
-			// low bat list
-			if (device.LowBat && device.Status !== 'Offline') {
-				this.batteryLowPoweredRaw.push({
-					Path: device.Path,
-					Device: device.Device,
-					Adapter: device.Adapter,
-					Battery: device.Battery,
-				});
-			}
-			// offline raw list
-			if (device.Status === 'Offline') {
-				this.offlineDevicesRaw.push({
-					Path: device.Path,
-					Device: device.Device,
-					Adapter: device.Adapter,
-					'Last contact': device.LastContact,
-				});
-			}
-
-			/*----------  fill user lists  ----------*/
-			if (!this.blacklistLists.includes(device.Path)) {
-				this.listAllDevices.push({
-					Device: device.Device,
-					Adapter: device.Adapter,
-					Battery: device.Battery,
-					'Signal strength': device.SignalStrength,
-					'Last contact': device.LastContact,
-					Status: device.Status,
-				});
-				// LinkQuality lists
-				if (device.SignalStrength != ' - ') {
-					this.linkQualityDevices.push({
-						Device: device.Device,
-						Adapter: device.Adapter,
-						'Signal strength': device.SignalStrength,
-					});
-				}
-				// Battery lists
-				if (device['isBatteryDevice']) {
-					this.batteryPowered.push({
-						Device: device.Device,
-						Adapter: device.Adapter,
-						Battery: device.Battery,
-						Status: device.Status,
-					});
-				}
-				// Low Bat lists
+			if (device.adapterID.includes(adptName)) {
+				/*----------  fill raw lists  ----------*/
+				// low bat list
 				if (device.LowBat && device.Status !== 'Offline') {
-					this.batteryLowPowered.push({
+					this.batteryLowPoweredRaw.push({
+						Path: device.Path,
 						Device: device.Device,
 						Adapter: device.Adapter,
 						Battery: device.Battery,
 					});
 				}
-
-				// Offline List
+				// offline raw list
 				if (device.Status === 'Offline') {
-					this.offlineDevices.push({
+					this.offlineDevicesRaw.push({
+						Path: device.Path,
 						Device: device.Device,
 						Adapter: device.Adapter,
 						'Last contact': device.LastContact,
 					});
 				}
 
-				// Device update List
-				if (device.Upgradable) {
-					this.upgradableList.push({
+				/*----------  fill user lists  ----------*/
+				if (!this.blacklistLists.includes(device.Path)) {
+					this.listAllDevices.push({
 						Device: device.Device,
 						Adapter: device.Adapter,
+						Battery: device.Battery,
+						'Signal strength': device.SignalStrength,
+						'Last contact': device.LastContact,
+						Status: device.Status,
 					});
+					// LinkQuality lists
+					if (device.SignalStrength != ' - ') {
+						this.linkQualityDevices.push({
+							Device: device.Device,
+							Adapter: device.Adapter,
+							'Signal strength': device.SignalStrength,
+						});
+					}
+					// Battery lists
+					if (device['isBatteryDevice']) {
+						this.batteryPowered.push({
+							Device: device.Device,
+							Adapter: device.Adapter,
+							Battery: device.Battery,
+							Status: device.Status,
+						});
+					}
+					// Low Bat lists
+					if (device.LowBat && device.Status !== 'Offline') {
+						this.batteryLowPowered.push({
+							Device: device.Device,
+							Adapter: device.Adapter,
+							Battery: device.Battery,
+						});
+					}
+
+					// Offline List
+					if (device.Status === 'Offline') {
+						this.offlineDevices.push({
+							Device: device.Device,
+							Adapter: device.Adapter,
+							'Last contact': device.LastContact,
+						});
+					}
+
+					// Device update List
+					if (device.Upgradable) {
+						this.upgradableList.push({
+							Device: device.Device,
+							Adapter: device.Adapter,
+						});
+					}
 				}
 			}
 		}
@@ -1297,11 +1318,11 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
 
 		try {
-			for (const i of this.listAllDevicesRaw) {
-				if (i.adapterID.includes(adptName)) {
+			for (const device of this.listAllDevicesRaw) {
+				if (device.adapterID.includes(adptName)) {
 					// list device only if selected adapter matched with device
-					await this.createLists();
-					await this.writeDatapoints();
+					await this.createLists(adptName);
+					await this.writeDatapoints(adptName);
 				}
 			}
 
@@ -1322,6 +1343,7 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			for (let i = 0; i < this.arrDev.length; i++) {
 				await this.createData(i);
+				await this.createLists();
 			}
 			await this.writeDatapoints(); // fill the datapoints
 		} catch (error) {
