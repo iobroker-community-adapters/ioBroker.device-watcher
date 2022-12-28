@@ -90,8 +90,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.2.1 (2022-12-28)
 
 -   (ciddi89) Innogy Smarthome added
 -   (ciddi89) Lists for each adapter are working again
