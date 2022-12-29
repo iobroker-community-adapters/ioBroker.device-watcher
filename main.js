@@ -249,7 +249,6 @@ class DeviceWatcher extends utils.Adapter {
 			let oldLowBatState;
 			let contactData;
 			let oldStatus;
-			let oldSignalStrength;
 
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
@@ -257,10 +256,6 @@ class DeviceWatcher extends utils.Adapter {
 					case device.UpdateDP:
 						if (state.val) {
 							device.Upgradable = state.val;
-
-							await this.createLists();
-							await this.writeDatapoints();
-							if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 							if (!this.blacklistNotify.includes(device.Path)) {
 								await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
 							}
@@ -268,13 +263,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.SignalStrengthDP:
-						oldSignalStrength = device.SignalStrength;
 						device.SignalStrength = await this.calculateSignalStrength(state, device.adapterID);
-						if (oldSignalStrength !== device.SignalStrength) {
-							await this.createLists();
-							await this.writeDatapoints();
-							if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
-						}
 						break;
 
 					case device.batteryDP:
@@ -287,16 +276,9 @@ class DeviceWatcher extends utils.Adapter {
 							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.LowBatDP);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
-								await this.createLists();
-								await this.writeDatapoints();
-								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
 									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
 								}
-							} else if (!device.LowBat && oldLowBatState !== device.LowBat) {
-								await this.createLists();
-								await this.writeDatapoints();
-								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 							}
 						}
 						break;
@@ -310,16 +292,9 @@ class DeviceWatcher extends utils.Adapter {
 							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.LowBatDP);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
-								await this.createLists();
-								await this.writeDatapoints();
-								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
 									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
 								}
-							} else if (!device.LowBat && oldLowBatState !== device.LowBat) {
-								await this.createLists();
-								await this.writeDatapoints();
-								if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 							}
 						}
 
@@ -343,11 +318,6 @@ class DeviceWatcher extends utils.Adapter {
 							device.LastContact = contactData[0];
 							device.Status = contactData[1];
 							device.SignalStrength = contactData[2];
-						}
-						if (device.Status !== oldStatus) {
-							await this.createLists();
-							await this.writeDatapoints();
-							if (this.config.createOwnFolder) await this.createDataForEachAdapter(device.adapterID);
 						}
 
 						if (device.Status && oldStatus !== device.Status && this.config.checkSendOfflineMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -401,6 +371,18 @@ class DeviceWatcher extends utils.Adapter {
 		const nextTimeout = this.config.updateinterval * 1000;
 
 		await this.checkLastContact();
+		await this.createLists();
+		await this.writeDatapoints();
+
+		if (this.config.createOwnFolder) {
+			for (const [id] of Object.entries(arrApart)) {
+				if (this.supAdapter !== undefined && this.supAdapter[id]) {
+					await this.createLists(id);
+					await this.writeDatapoints(id);
+					this.log.debug(`Created and filled data for ${this.capitalize(id)}`);
+				}
+			}
+		}
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {

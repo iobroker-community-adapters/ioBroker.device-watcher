@@ -96,5 +96,7 @@
     "Update the datapoints directly": "Bezpośrednio aktualizuj punkty danych",
     "Update lists & counts which each statechange of devices": "Aktualizuj listy i liczniki, które powodują każdą zmianę stanu urządzeń",
     "Update datapoints directly": "Aktualizuj punkty danych bezpośrednio",
-    "Update lists & counts directly with each statechange of devices": "Aktualizuj listy i liczniki bezpośrednio przy każdej zmianie stanu urządzeń"
+    "Update lists & counts directly with each statechange of devices": "Aktualizuj listy i liczniki bezpośrednio przy każdej zmianie stanu urządzeń",
+    "Overview of low battery devices": "Przegląd urządzeń o niskim poziomie naładowania baterii",
+    "Get a regular message with an overview all low battery devices": "Otrzymuj regularne wiadomości z przeglądem wszystkich urządzeń o niskim poziomie baterii"
 }
