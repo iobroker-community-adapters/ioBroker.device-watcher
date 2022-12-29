@@ -98,5 +98,6 @@
     "Update datapoints directly": "直接更新数据点",
     "Update lists & counts directly with each statechange of devices": "每次设备状态变化时直接更新列表和计数",
     "Overview of low battery devices": "低电量设备概述",
-    "Get a regular message with an overview all low battery devices": "获取包含所有低电量设备概览的常规消息"
+    "Get a regular message with an overview all low battery devices": "获取包含所有低电量设备概览的常规消息",
+    "From what % battery is considered low": "从什么百分比电池被认为是低"
 }

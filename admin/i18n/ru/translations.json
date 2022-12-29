@@ -98,5 +98,6 @@
     "Update datapoints directly": "Обновляйте точки данных напрямую",
     "Update lists & counts directly with each statechange of devices": "Обновляйте списки и счетчики непосредственно при каждом изменении состояния устройств.",
     "Overview of low battery devices": "Обзор устройств с низким зарядом батареи",
-    "Get a regular message with an overview all low battery devices": "Получайте регулярное сообщение с обзором всех устройств с низким зарядом батареи"
+    "Get a regular message with an overview all low battery devices": "Получайте регулярное сообщение с обзором всех устройств с низким зарядом батареи",
+    "From what % battery is considered low": "С какого % батарея считается разряженной"
 }

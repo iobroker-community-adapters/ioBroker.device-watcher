@@ -98,5 +98,6 @@
     "Update datapoints directly": "Update datapunten direct",
     "Update lists & counts directly with each statechange of devices": "Update lijsten en tellingen direct bij elke statusverandering van apparaten",
     "Overview of low battery devices": "Overzicht apparaten met bijna lege batterij",
-    "Get a regular message with an overview all low battery devices": "Ontvang regelmatig een bericht met een overzicht van alle bijna lege apparaten"
+    "Get a regular message with an overview all low battery devices": "Ontvang regelmatig een bericht met een overzicht van alle bijna lege apparaten",
+    "From what % battery is considered low": "Van welk % batterij als laag wordt beschouwd"
 }

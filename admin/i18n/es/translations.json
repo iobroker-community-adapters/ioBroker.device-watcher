@@ -98,5 +98,6 @@
     "Update datapoints directly": "Actualizar puntos de datos directamente",
     "Update lists & counts directly with each statechange of devices": "Actualice listas y conteos directamente con cada cambio de estado de los dispositivos",
     "Overview of low battery devices": "Descripción general de los dispositivos con batería baja",
-    "Get a regular message with an overview all low battery devices": "Reciba un mensaje regular con una descripción general de todos los dispositivos con batería baja"
+    "Get a regular message with an overview all low battery devices": "Reciba un mensaje regular con una descripción general de todos los dispositivos con batería baja",
+    "From what % battery is considered low": "A partir de qué % de batería se considera bajo"
 }

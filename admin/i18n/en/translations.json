@@ -94,5 +94,6 @@
 	"Update lists & counts which each statechange of devices": "Update lists & counts which each statechange of devices",
 	"Update lists & counts directly with each statechange of devices": "Update lists & counts directly with each statechange of devices",
 	"Overview of low battery devices": "Overview of low battery devices",
-	"Get a regular message with an overview all low battery devices": "Get a regular message with an overview all low battery devices"
+	"Get a regular message with an overview all low battery devices": "Get a regular message with an overview all low battery devices",
+	"From what % battery is considered low": "From what % battery is considered low"
 }
