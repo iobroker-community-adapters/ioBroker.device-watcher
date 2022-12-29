@@ -90,8 +90,7 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.2.2 (2022-12-29)
 
 -   (ciddi89) some translation added
 -   (ciddi89) datapoints will be written in intervall
