@@ -68,6 +68,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		try {
 			this.listOnlyBattery = this.config.listOnlyBattery;
+			this.createOwnFolder = this.config.createOwnFolder;
+			this.createHtmlList = this.config.createHtmlList;
 
 			this.supAdapter = {
 				alexa2: this.config.alexa2Devices,
@@ -195,17 +197,13 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			//create and fill datapoints for each adapter if selected
-			if (this.config.createOwnFolder) {
+			if (this.createOwnFolder) {
 				try {
 					for (const [id] of Object.entries(arrApart)) {
-						if (!isUnloaded) {
-							if (this.supAdapter !== undefined && this.supAdapter[id]) {
-								await this.createDPsForEachAdapter(id);
-								if (this.config.createHtmlList) await this.createHtmlListDatapoints(id);
-								this.log.debug(`Created datapoints for ${this.capitalize(id)}`);
-							}
-						} else {
-							return; // cancel run if unloaded was called.
+						if (this.supAdapter !== undefined && this.supAdapter[id]) {
+							await this.createDPsForEachAdapter(id);
+							if (this.createHtmlList) await this.createHtmlListDatapoints(id);
+							this.log.debug(`Created datapoints for ${this.capitalize(id)}`);
 						}
 					}
 				} catch (error) {
@@ -214,7 +212,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// create HTML list
-			if (this.config.createHtmlList) await this.createHtmlListDatapoints();
+			if (this.createHtmlList) await this.createHtmlListDatapoints();
 
 			//read data first at start
 			await this.main();
@@ -374,7 +372,7 @@ class DeviceWatcher extends utils.Adapter {
 		await this.createLists();
 		await this.writeDatapoints();
 
-		if (this.config.createOwnFolder) {
+		if (this.createOwnFolder) {
 			for (const [id] of Object.entries(arrApart)) {
 				if (this.supAdapter !== undefined && this.supAdapter[id]) {
 					await this.createLists(id);
@@ -416,7 +414,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		// fill datapoints for each adapter if selected
-		if (this.config.createOwnFolder) {
+		if (this.createOwnFolder) {
 			try {
 				for (const [id] of Object.entries(arrApart)) {
 					if (this.supAdapter !== undefined && this.supAdapter[id]) {
@@ -951,8 +949,6 @@ class DeviceWatcher extends utils.Adapter {
 				await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 			}
 		}
-		await this.createLists();
-		await this.writeDatapoints();
 	}
 
 	/**
@@ -1285,11 +1281,6 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Count how many devices has update available
 		this.upgradableDevicesCount = this.upgradableList.length;
-
-		// raws
-
-		// Count how many devcies are offline
-		this.offlineDevicesCountRaw = this.offlineDevicesRaw.length;
 	}
 
 	/**
@@ -1304,10 +1295,8 @@ class DeviceWatcher extends utils.Adapter {
 				if (device.adapterID.includes(adptName)) {
 					// list device only if selected adapter matched with device
 					await this.createLists(adptName);
-					await this.writeDatapoints(adptName);
 				}
 			}
-
 			await this.writeDatapoints(adptName); // fill the datapoints
 		} catch (error) {
 			this.errorReporting('[createDataForEachAdapter]', error);
@@ -1818,7 +1807,7 @@ class DeviceWatcher extends utils.Adapter {
 			});
 
 			//write HTML list
-			if (this.config.createHtmlList) {
+			if (this.createHtmlList) {
 				await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, {
 					val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount),
 					ack: true,
