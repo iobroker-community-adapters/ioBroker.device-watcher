@@ -30,6 +30,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
 		this.blacklistLists = [];
+		this.blacklistAdapterLists = [];
 		this.blacklistNotify = [];
 		this.arrDev = [];
 		this.adapterSelected = [];
@@ -485,10 +486,14 @@ class DeviceWatcher extends utils.Adapter {
 
 			for (const i in myBlacklist) {
 				try {
+					this.log.warn(JSON.stringify(myBlacklist));
 					const blacklistParse = await this.parseData(myBlacklist[i].devices);
 					// push devices in list to ignor device in lists
 					if (myBlacklist[i].checkIgnorLists) {
 						this.blacklistLists.push(blacklistParse.path);
+					}
+					if (myBlacklist[i].checkIgnorAdapterLists) {
+						this.blacklistAdapterLists.push(blacklistParse.path);
 					}
 					// push devices in list to ignor device in notifications
 					if (myBlacklist[i].checkIgnorNotify) {
@@ -500,6 +505,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.blacklistLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistLists}`);
+			if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistAdapterLists}`);
 			if (this.blacklistNotify.length >= 1) this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistNotify}`);
 		} else {
 			return; // cancel run if unloaded was called.
@@ -1181,83 +1187,114 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		for (const device of this.listAllDevicesRaw) {
-			if (device.adapterID.includes(adptName)) {
-				/*----------  fill raw lists  ----------*/
-				// low bat list
-				if (device.LowBat && device.Status !== 'Offline') {
-					this.batteryLowPoweredRaw.push({
-						Path: device.Path,
-						Device: device.Device,
-						Adapter: device.Adapter,
-						Battery: device.Battery,
-					});
-				}
-				// offline raw list
-				if (device.Status === 'Offline') {
-					this.offlineDevicesRaw.push({
-						Path: device.Path,
-						Device: device.Device,
-						Adapter: device.Adapter,
-						'Last contact': device.LastContact,
-					});
-				}
+			/*----------  fill raw lists  ----------*/
+			// low bat list
+			if (device.LowBat && device.Status !== 'Offline') {
+				this.batteryLowPoweredRaw.push({
+					Path: device.Path,
+					Device: device.Device,
+					Adapter: device.Adapter,
+					Battery: device.Battery,
+				});
+			}
+			// offline raw list
+			if (device.Status === 'Offline') {
+				this.offlineDevicesRaw.push({
+					Path: device.Path,
+					Device: device.Device,
+					Adapter: device.Adapter,
+					'Last contact': device.LastContact,
+				});
+			}
 
-				/*----------  fill user lists  ----------*/
-				if (!this.blacklistLists.includes(device.Path)) {
-					this.listAllDevices.push({
-						Device: device.Device,
-						Adapter: device.Adapter,
-						Battery: device.Battery,
-						'Signal strength': device.SignalStrength,
-						'Last contact': device.LastContact,
-						Status: device.Status,
-					});
-					// LinkQuality lists
-					if (device.SignalStrength != ' - ') {
-						this.linkQualityDevices.push({
-							Device: device.Device,
-							Adapter: device.Adapter,
-							'Signal strength': device.SignalStrength,
-						});
-					}
-					// Battery lists
-					if (device['isBatteryDevice']) {
-						this.batteryPowered.push({
-							Device: device.Device,
-							Adapter: device.Adapter,
-							Battery: device.Battery,
-							Status: device.Status,
-						});
-					}
-					// Low Bat lists
-					if (device.LowBat && device.Status !== 'Offline') {
-						this.batteryLowPowered.push({
-							Device: device.Device,
-							Adapter: device.Adapter,
-							Battery: device.Battery,
-						});
-					}
+			if (adptName === '' && !this.blacklistLists.includes(device.Path)) {
+				await this.theLists(device);
+			}
 
-					// Offline List
-					if (device.Status === 'Offline') {
-						this.offlineDevices.push({
-							Device: device.Device,
-							Adapter: device.Adapter,
-							'Last contact': device.LastContact,
-						});
-					}
-
-					// Device update List
-					if (device.Upgradable) {
-						this.upgradableList.push({
-							Device: device.Device,
-							Adapter: device.Adapter,
-						});
+			if (this.config.createOwnFolder && adptName !== '') {
+				if (device.adapterID.includes(adptName)) {
+					/*----------  fill user lists for each adapter  ----------*/
+					if (!this.blacklistAdapterLists.includes(device.Path)) {
+						await this.theLists(device);
 					}
 				}
 			}
 		}
 		await this.countDevices();
+	}
+
+	async theLists(device) {
+		/*----------  fill raw lists  ----------*/
+		// low bat list
+		if (device.LowBat && device.Status !== 'Offline') {
+			this.batteryLowPoweredRaw.push({
+				Path: device.Path,
+				Device: device.Device,
+				Adapter: device.Adapter,
+				Battery: device.Battery,
+			});
+		}
+		// offline raw list
+		if (device.Status === 'Offline') {
+			this.offlineDevicesRaw.push({
+				Path: device.Path,
+				Device: device.Device,
+				Adapter: device.Adapter,
+				'Last contact': device.LastContact,
+			});
+		}
+
+		/*----------  fill user lists  ----------*/
+		this.listAllDevices.push({
+			Device: device.Device,
+			Adapter: device.Adapter,
+			Battery: device.Battery,
+			'Signal strength': device.SignalStrength,
+			'Last contact': device.LastContact,
+			Status: device.Status,
+		});
+		// LinkQuality lists
+		if (device.SignalStrength != ' - ') {
+			this.linkQualityDevices.push({
+				Device: device.Device,
+				Adapter: device.Adapter,
+				'Signal strength': device.SignalStrength,
+			});
+		}
+		// Battery lists
+		if (device['isBatteryDevice']) {
+			this.batteryPowered.push({
+				Device: device.Device,
+				Adapter: device.Adapter,
+				Battery: device.Battery,
+				Status: device.Status,
+			});
+		}
+		// Low Bat lists
+		if (device.LowBat && device.Status !== 'Offline') {
+			this.batteryLowPowered.push({
+				Device: device.Device,
+				Adapter: device.Adapter,
+				Battery: device.Battery,
+			});
+		}
+
+		// Offline List
+		if (device.Status === 'Offline') {
+			this.offlineDevices.push({
+				Device: device.Device,
+				Adapter: device.Adapter,
+				'Last contact': device.LastContact,
+			});
+		}
+
+		// Device update List
+		if (device.Upgradable) {
+			this.upgradableList.push({
+				Device: device.Device,
+				Adapter: device.Adapter,
+			});
+		}
 	}
 
 	/**

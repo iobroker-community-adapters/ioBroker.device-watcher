@@ -99,5 +99,7 @@
     "Update lists & counts directly with each statechange of devices": "Atualiza listas e contagens diretamente com cada mudança de estado dos dispositivos",
     "Overview of low battery devices": "Visão geral de dispositivos com bateria fraca",
     "Get a regular message with an overview all low battery devices": "Receba uma mensagem regular com uma visão geral de todos os dispositivos com bateria fraca",
-    "From what % battery is considered low": "A partir de que % a bateria é considerada fraca"
+    "From what % battery is considered low": "A partir de que % a bateria é considerada fraca",
+    "Ignore in main lists": "Ignorar nas listas principais",
+    "Ignore in Own lists per adapter": "Ignorar nas próprias listas por adaptador"
 }

@@ -99,5 +99,7 @@
     "Update lists & counts directly with each statechange of devices": "Оновлюйте списки та підрахунки безпосередньо з кожною зміною стану пристроїв",
     "Overview of low battery devices": "Огляд розряджених пристроїв",
     "Get a regular message with an overview all low battery devices": "Отримуйте регулярне повідомлення з оглядом усіх пристроїв із розрядженим акумулятором",
-    "From what % battery is considered low": "Від якого % батарея вважається розрядженою"
+    "From what % battery is considered low": "Від якого % батарея вважається розрядженою",
+    "Ignore in main lists": "Ігнорувати в основних списках",
+    "Ignore in Own lists per adapter": "Ігнорувати у власних списках на адаптер"
 }

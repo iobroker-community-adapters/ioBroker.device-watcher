@@ -942,8 +942,15 @@
 						},
 						{
 							"type": "checkbox",
-							"title": "Ignor in lists",
+							"title": "Ignore in main lists",
 							"attr": "checkIgnorLists",
+							"width": "10%",
+							"alsoDependsOn": ["devices"]
+						},
+						{
+							"type": "checkbox",
+							"title": "Ignore in Own lists per adapter",
+							"attr": "checkIgnorAdapterLists",
 							"width": "10%",
 							"alsoDependsOn": ["devices"]
 						}
