@@ -101,5 +101,6 @@
     "Get a regular message with an overview all low battery devices": "Erhalten Sie eine regelmäßige Nachricht mit einer Übersicht aller schwachen Batteriegeräte",
     "From what % battery is considered low": "Ab wie viel % gilt der Akku als schwach",
     "Ignore in main lists": "In Hauptlisten ignorieren",
-    "Ignore in Own lists per adapter": "Ignorieren in Eigene Listen pro Adapter"
+    "Ignore in Own lists per adapter": "Ignorieren in Eigene Listen pro Adapter",
+    "Ignore in lists per adapter": "In Listen pro Adapter ignorieren"
 }

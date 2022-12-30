@@ -97,5 +97,6 @@
 	"Get a regular message with an overview all low battery devices": "Get a regular message with an overview all low battery devices",
 	"From what % battery is considered low": "From what % battery is considered low",
 	"Ignore in main lists": "Ignore in main lists",
-	"Ignore in Own lists per adapter": "Ignore in Own lists per adapter"
+	"Ignore in Own lists per adapter": "Ignore in Own lists per adapter",
+	"Ignore in lists per adapter": "Ignore in lists per adapter"
 }

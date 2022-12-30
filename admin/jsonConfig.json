@@ -949,7 +949,7 @@
 						},
 						{
 							"type": "checkbox",
-							"title": "Ignore in Own lists per adapter",
+							"title": "Ignore in lists per adapter",
 							"attr": "checkIgnorAdapterLists",
 							"width": "10%",
 							"alsoDependsOn": ["devices"]

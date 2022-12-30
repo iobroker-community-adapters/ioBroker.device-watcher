@@ -101,5 +101,6 @@
     "Get a regular message with an overview all low battery devices": "获取包含所有低电量设备概览的常规消息",
     "From what % battery is considered low": "从什么百分比电池被认为是低",
     "Ignore in main lists": "在主列表中忽略",
-    "Ignore in Own lists per adapter": "在每个适配器自己的列表中忽略"
+    "Ignore in Own lists per adapter": "在每个适配器自己的列表中忽略",
+    "Ignore in lists per adapter": "在每个适配器的列表中忽略"
 }

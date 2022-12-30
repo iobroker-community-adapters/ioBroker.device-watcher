@@ -101,5 +101,6 @@
     "Get a regular message with an overview all low battery devices": "Отримуйте регулярне повідомлення з оглядом усіх пристроїв із розрядженим акумулятором",
     "From what % battery is considered low": "Від якого % батарея вважається розрядженою",
     "Ignore in main lists": "Ігнорувати в основних списках",
-    "Ignore in Own lists per adapter": "Ігнорувати у власних списках на адаптер"
+    "Ignore in Own lists per adapter": "Ігнорувати у власних списках на адаптер",
+    "Ignore in lists per adapter": "Ігнорувати в списках на адаптер"
 }

@@ -101,5 +101,6 @@
     "Get a regular message with an overview all low battery devices": "Ontvang regelmatig een bericht met een overzicht van alle bijna lege apparaten",
     "From what % battery is considered low": "Van welk % batterij als laag wordt beschouwd",
     "Ignore in main lists": "Negeren in hoofdlijsten",
-    "Ignore in Own lists per adapter": "Negeren in Eigen lijsten per adapter"
+    "Ignore in Own lists per adapter": "Negeren in Eigen lijsten per adapter",
+    "Ignore in lists per adapter": "Negeren in lijsten per adapter"
 }
