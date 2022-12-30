@@ -1892,7 +1892,7 @@ class DeviceWatcher extends utils.Adapter {
 			html += `<tr>
 			<td><font>${device.Device}</font></td>
 			<td align=center><font>${device.Adapter}</font></td>
-			<td align=right><font>${device['Signal Strength']}</font></td>
+			<td align=right><font>${device['Signal strength']}</font></td>
 			</tr>`;
 		}
 
@@ -1928,7 +1928,7 @@ class DeviceWatcher extends utils.Adapter {
 			html += `<tr>
 			<td><font>${device.Device}</font></td>
 			<td align=center><font>${device.Adapter}</font></td>
-			<td align=center><font color=orange>${device['Last Contact']}</font></td>
+			<td align=center><font color=orange>${device['Last contact']}</font></td>
 			</tr>`;
 		}
 
