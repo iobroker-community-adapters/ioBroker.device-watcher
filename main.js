@@ -342,7 +342,7 @@ class DeviceWatcher extends utils.Adapter {
 					try {
 						result = this.listAllDevicesRaw;
 						for (const element in result) {
-							const label = 'Device: ' + result[element].Device + '  - Adapter: ' + result[element].Adapter;
+							const label = `${result[element].Adapter}: ${result[element].Device}`;
 							const myValueObject = {
 								deviceName: result[element].Device,
 								adapter: result[element].Adapter,
@@ -351,7 +351,13 @@ class DeviceWatcher extends utils.Adapter {
 							devices[myCount] = { label: label, value: JSON.stringify(myValueObject) };
 							myCount++;
 						}
-						this.sendTo(obj.from, obj.command, devices, obj.callback);
+						const sortDevices = devices.slice(0);
+						sortDevices.sort(function (a, b) {
+							const x = a.label;
+							const y = b.label;
+							return x < y ? -1 : x > y ? 1 : 0;
+						});
+						this.sendTo(obj.from, obj.command, sortDevices, obj.callback);
 					} catch (error) {
 						this.sendTo(obj.from, obj.command, obj.callback);
 					}
