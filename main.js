@@ -486,7 +486,6 @@ class DeviceWatcher extends utils.Adapter {
 
 			for (const i in myBlacklist) {
 				try {
-					this.log.warn(JSON.stringify(myBlacklist));
 					const blacklistParse = await this.parseData(myBlacklist[i].devices);
 					// push devices in list to ignor device in lists
 					if (myBlacklist[i].checkIgnorLists) {
