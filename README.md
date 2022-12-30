@@ -78,18 +78,13 @@ If you don't want a specifice device in the list, you can add it in the blacklis
 ![list2.png](admin/images/list2.png)
 ![list3.png](admin/images/list3.png)
 
-## To-Do
-
--   [ ] clean up the code
--   [ ] add support for reaction on state-changes
--   [ ] send offline text only from the device that goes offline
-
 ## Changelog
 
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
 ### 2.2.2 (2022-12-29)
 
 -   (ciddi89) some translation added
