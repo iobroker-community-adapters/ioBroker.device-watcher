@@ -319,7 +319,7 @@ class DeviceWatcher extends utils.Adapter {
 							device.SignalStrength = contactData[2];
 						}
 
-						if (device.Status && oldStatus !== device.Status && this.config.checkSendOfflineMsg && !this.blacklistNotify.includes(device.Path)) {
+						if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
 							await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 						}
 						break;
