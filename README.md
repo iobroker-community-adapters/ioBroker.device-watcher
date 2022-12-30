@@ -85,6 +85,11 @@ If you don't want a specifice device in the list, you can add it in the blacklis
     ### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+-   (ciddi89) sorting for device selection in the blacklist added
+-   (ciddi89) Devices can now also be blacklisted in adapter own list
+
 ### 2.2.2 (2022-12-29)
 
 -   (ciddi89) some translation added
