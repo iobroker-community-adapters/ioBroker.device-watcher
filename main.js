@@ -728,7 +728,7 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 *set low bat indicator
+	 * set low bat indicator
 	 * @param {object} deviceBatteryState
 	 * @param {object} deviceLowBatState
 	 * @param {object} isLowBatDP
@@ -1208,7 +1208,7 @@ class DeviceWatcher extends utils.Adapter {
 					Path: device.Path,
 					Device: device.Device,
 					Adapter: device.Adapter,
-					'Last contact': device.LastContact,
+					LastContact: device.LastContact,
 				});
 			}
 
@@ -1228,28 +1228,12 @@ class DeviceWatcher extends utils.Adapter {
 		await this.countDevices();
 	}
 
+	/**
+	 * fill the lists for user
+	 * @param {object} device
+	 */
 	async theLists(device) {
-		/*----------  fill raw lists  ----------*/
-		// low bat list
-		if (device.LowBat && device.Status !== 'Offline') {
-			this.batteryLowPoweredRaw.push({
-				Path: device.Path,
-				Device: device.Device,
-				Adapter: device.Adapter,
-				Battery: device.Battery,
-			});
-		}
-		// offline raw list
-		if (device.Status === 'Offline') {
-			this.offlineDevicesRaw.push({
-				Path: device.Path,
-				Device: device.Device,
-				Adapter: device.Adapter,
-				'Last contact': device.LastContact,
-			});
-		}
-
-		/*----------  fill user lists  ----------*/
+		// List with all devices
 		this.listAllDevices.push({
 			Device: device.Device,
 			Adapter: device.Adapter,
@@ -1258,6 +1242,7 @@ class DeviceWatcher extends utils.Adapter {
 			'Last contact': device.LastContact,
 			Status: device.Status,
 		});
+
 		// LinkQuality lists
 		if (device.SignalStrength != ' - ') {
 			this.linkQualityDevices.push({
@@ -1266,6 +1251,7 @@ class DeviceWatcher extends utils.Adapter {
 				'Signal strength': device.SignalStrength,
 			});
 		}
+
 		// Battery lists
 		if (device['isBatteryDevice']) {
 			this.batteryPowered.push({
@@ -1275,6 +1261,7 @@ class DeviceWatcher extends utils.Adapter {
 				Status: device.Status,
 			});
 		}
+
 		// Low Bat lists
 		if (device.LowBat && device.Status !== 'Offline') {
 			this.batteryLowPowered.push({
