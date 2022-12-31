@@ -46,12 +46,12 @@ This is a watchdog for devices. The adapter looks for the rssi/link quality and 
 
 **If one adapter is missing, feel free to open an [issue](https://github.com/ciddi89/ioBroker.device-watcher/issues/new/choose) with request to add it.**
 
-### Notifications
+### Notifications:
 
 The adapter has different possibilities to send notifications:
 
--   When a device is reachable or no longer reachable
--   When a device has reached the low battery level or the low bat state is true
+-   A device is no longer reachable or reachable again
+-   A device has reached the low battery level or the low bat state is true
 -   When an update is available for a device (shelly and unifi)
 -   Time based a list of offline devices
 -   Time based a list of low batterie devices
