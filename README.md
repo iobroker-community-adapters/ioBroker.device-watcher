@@ -48,7 +48,7 @@ This is a watchdog for devices. The adapter looks for the rssi/link quality and 
 
 ### Notifications
 
-The adapter has different possibilities to send a notification:
+The adapter has different possibilities to send notifications:
 
 -   When a device is reachable or no longer reachable
 -   When a device has reached the low battery level or the low bat state is true
