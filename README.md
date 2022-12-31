@@ -39,16 +39,25 @@
 
 This is a watchdog for devices. The adapter looks for the rssi/link quality and battery states and create JSON & HTML lists of them (devices with battery, devices with low battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
 
-**Supported adapters:**
+### Supported adapters:
 
 | - Alexa2<br>- Ble<br>- Deconz<br>- Enocean<br>- ESPHome<br>- FritzDect<br>- HAM<br>- Harmony<br>- HmiP<br>- Homematic<br>- HS100<br>- Hue<br>- Hue Extended<br>- Jeelink | - Lupusec<br>- MaxCube<br>- Meross<br>- MiHome<br>- MiHome Vacuum<br>- Netatmo<br>- Nuki Extended<br>- NUT<br>- Ping<br>- Roomba<br>- Shelly<br>- Sonoff<br>- Sonos<br>- Switchbot Ble | - Tado<br>- Tradfri<br>- Unifi<br>- WLED<br>- Yeelight<br>- Zigbee<br>- Zigbee2MQTT<br>- Zwave |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 
 **If one adapter is missing, feel free to open an [issue](https://github.com/ciddi89/ioBroker.device-watcher/issues/new/choose) with request to add it.**
 
-The adapter has also the option to send notifications if the number of offline devices are changed and to send you a notification if devices has a low battery state (e.g. 30%). You can choose the value for the battery notification and on which days you want the notification for low batteries.
+### Notifications
 
-Currently supported notification services are:
+The adapter has different possibilities to send a notification:
+
+-   When a device is reachable or no longer reachable
+-   When a device has reached the low battery level or the low bat state is true
+-   When an update is available for a device (shelly and unifi)
+-   Time based a list of offline devices
+-   Time based a list of low batterie devices
+-   Time based a list of devices which can be updated
+
+### Currently supported notification services are:
 
 -   Telegram (with support of Chat-ID for groupchats)
 -   Pushover
