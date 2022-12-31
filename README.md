@@ -72,7 +72,12 @@ If you found a bug or you have an improvement suggestion, feel free to open an i
 
 ### Blacklist
 
-If you don't want a specifice device in the list, you can add it in the blacklist and the adapter will ignore it.
+If you want to ignore a specifice device, you can add it in the blacklist and the device-watcher will ignore it.
+It's possible to select:
+
+-   Ignore in notifications
+-   Ignore in main list
+-   Ignore in adapter own list
 
 ![add_blacklist.png](admin/images/add_blacklist.png)
 
