@@ -41,8 +41,26 @@ This is a watchdog for devices. The adapter looks for the rssi/link quality and 
 
 ### Supported adapters:
 
-| - Alexa2<br>- Ble<br>- Deconz<br>- Enocean<br>- ESPHome<br>- FritzDect<br>- HAM<br>- Harmony<br>- HmiP<br>- Homematic<br>- HS100<br>- Hue<br>- Hue Extended<br>- Jeelink | - Lupusec<br>- MaxCube<br>- Meross<br>- MiHome<br>- MiHome Vacuum<br>- Netatmo<br>- Nuki Extended<br>- NUT<br>- Ping<br>- Roomba<br>- Shelly<br>- Sonoff<br>- Sonos<br>- Switchbot Ble | - Tado<br>- Tradfri<br>- Unifi<br>- WLED<br>- Yeelight<br>- Zigbee<br>- Zigbee2MQTT<br>- Zwave |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+<table>
+  <tr>
+    <td>Alexa2</td>
+    <td>APC UPS</td> 
+    <td>Ble</td>
+    <td>Deconz</td>
+  </tr>
+    <tr>
+    <td>Enocean</td>
+    <td>ESP Home</td> 
+    <td>FritzDect/td>
+    <td>fullyBrowser</td>
+  </tr>
+    <tr>
+    <td>Harmony</td>
+    <td>Ham</td> 
+    <td>Homematic IP</td>
+    <td>Homematic RPC</td>
+  </tr>
+</table>
 
 **If one adapter is missing, feel free to open an [issue](https://github.com/ciddi89/ioBroker.device-watcher/issues/new/choose) with request to add it.**
 
