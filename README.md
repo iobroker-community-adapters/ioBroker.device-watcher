@@ -37,7 +37,16 @@
 
 ## Device-Watcher adapter for ioBroker
 
-This is a watchdog for devices. The adapter looks for the rssi/link quality and battery states and create JSON & HTML lists of them (devices with battery, devices with low battery, devices with link quality, devices offline and devices all) and count the devices in the same categories. For example you can use the lists and states for Grafana, Jarvis etc.
+This is a watchdog for devices. The adapter looks for the different information about the datapoints and create JSON & HTML lists of them:
+
+-   devices with battery,
+-   devices with low battery,
+-   devices with link quality,
+-   updates for devices,
+-   devices offline and
+-   all devices
+
+It's also counting them in the same categories. You can use the lists and states for Grafana, Jarvis etc for example.
 
 ### Supported adapters:
 
