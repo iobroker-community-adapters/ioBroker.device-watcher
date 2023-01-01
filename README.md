@@ -46,19 +46,76 @@ This is a watchdog for devices. The adapter looks for the rssi/link quality and 
     <td>Alexa2</td>
     <td>APC UPS</td> 
     <td>Ble</td>
-    <td>Deconz</td>
   </tr>
     <tr>
+    <td>Deconz</td>
     <td>Enocean</td>
     <td>ESP Home</td> 
-    <td>FritzDect/td>
-    <td>fullyBrowser</td>
   </tr>
     <tr>
+    <td>FritzDect</td>
+    <td>fullyBrowser</td>
     <td>Harmony</td>
+  </tr>
+  <tr>
     <td>Ham</td> 
     <td>Homematic IP</td>
     <td>Homematic RPC</td>
+    </tr>
+        <tr>
+    <td>HS100</td>
+    <td>Philips Hue</td> 
+    <td>Philips Hue Extended</td>
+  </tr>
+      <tr>
+    <td>Innogy Smarthome</td>
+    <td>Jeelink</td> 
+    <td>Lupusec</td>
+  </tr>
+      <tr>
+    <td>Max! Cube</td>
+    <td>Meross</td> 
+    <td>MiHome</td>
+  </tr>
+      <tr>
+    <td>MiHome Vacuum</td>
+    <td>MQTT Client Zigbee2Mqtt</td> 
+    <td>MQTT Nuki</td>
+  </tr>
+      <tr>
+    <td>MusicCast</td>
+    <td>Netatmo</td> 
+    <td>Nuki Extended</td>
+  </tr>
+      <tr>
+    <td>Nut</td>
+    <td>Ping</td>
+    <td>Roomba</td>
+  </tr>
+      <tr>
+    <td>Shelly</td>
+    <td>Sonoff</td>
+    <td>Sonos</td>
+  </tr>
+      <tr>
+    <td>Sureflap</td> 
+    <td>Switchbot Ble</td>
+    <td>Tado</td>
+  </tr>
+      <tr>
+    <td>Tapo</td>
+    <td>Tradfri</td> 
+    <td>Unifi</td>
+  </tr>
+      <tr>
+    <td>Wled</td>
+    <td>Yeelight</td> 
+    <td>Zigbee</td>
+  </tr>
+      <tr>
+    <td>Zigbee2MQTT</td> 
+    <td>Zwave</td>
+    <td></td>
   </tr>
 </table>
 
