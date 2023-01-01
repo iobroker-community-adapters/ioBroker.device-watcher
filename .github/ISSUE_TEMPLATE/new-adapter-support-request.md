@@ -7,14 +7,16 @@ assignees: ciddi89
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Which adapter should be implement:**
+Please tell me the adapter name and if possible the GitHub link.
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+**The following information is important to add the adapter correctly, if possible add a json or screenshot with the information:**
+- Has the adapter/device a battery state?
+- Has the adapter/device an lowbat state?
+- Has the adapter/device an RSSI or link quality state?
+- Has the adapter/device a connected/reachable state?
+- Has the adapter/device an update/upgrade state?
+- What is the best datapoint, which is refreshing frequently the timestamp?
 
 **Additional context**
-Add any other context or screenshots about the feature request here.
+Add any other context or screenshots about the adapter request here.
