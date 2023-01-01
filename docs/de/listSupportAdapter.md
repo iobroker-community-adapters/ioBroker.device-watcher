@@ -4,7 +4,7 @@
 
 ## Adapterliste
 
-Hier ist eine Liste der unterstützen Adapter mit der Information, was pro Adapter genau unterstützt wird.
+Hier ist eine Liste der unterstützten Adapter mit der Information, was pro Adapter genau unterstützt wird.
 
  <table>
         <tbody>
