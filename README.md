@@ -128,6 +128,7 @@ It's also counting them in the same categories. You can use the lists and states
   </tr>
 </table>
 
+A list with more information about the supported adapters can be found here: [in German](docs/de/listSupportAdapter.md) or [in English](docs/en/listSupportAdapter.md).</br>
 **If one adapter is missing, feel free to open an request [issue](https://github.com/ciddi89/ioBroker.device-watcher/issues/new/choose) to add it.**
 
 ### Notifications:
