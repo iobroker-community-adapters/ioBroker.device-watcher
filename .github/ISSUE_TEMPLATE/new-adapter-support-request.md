@@ -1,8 +1,8 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: New adapter support request
+about: Suggest an request to add an new adapter
 title: ''
-labels: feature request
+labels: new adapter support
 assignees: ciddi89
 
 ---
