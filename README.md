@@ -119,7 +119,7 @@ This is a watchdog for devices. The adapter looks for the rssi/link quality and 
   </tr>
 </table>
 
-**If one adapter is missing, feel free to open an [issue](https://github.com/ciddi89/ioBroker.device-watcher/issues/new/choose) with request to add it.**
+**If one adapter is missing, feel free to open an request [issue](https://github.com/ciddi89/ioBroker.device-watcher/issues/new/choose) to add it.**
 
 ### Notifications:
 
@@ -134,7 +134,7 @@ The adapter has different possibilities to send notifications:
 
 ### Currently supported notification services are:
 
--   Telegram (with support of Chat-ID for groupchats)
+-   Telegram
 -   Pushover
 -   WhatsApp
 -   Email
@@ -143,25 +143,16 @@ The adapter has different possibilities to send notifications:
 -   SynoChat
 -   and also an datapoint with the last notification, so you can use it for other services which aren't supported.
 
-If you found a bug or you have an improvement suggestion, feel free to open an issue.
-
 ### Blacklist
 
-If you want to ignore a specifice device, you can add it in the blacklist and the device-watcher will ignore it.
+Is it neccessary to ignore a specifice device, you can add it in the blacklist and the device-watcher will ignore it.
 It's possible to select:
 
 -   Ignore in notifications
 -   Ignore in main list
 -   Ignore in adapter own list
 
-![add_blacklist.png](admin/images/add_blacklist.png)
-
-### Example images of Pushover notification:
-
-![noti_push.jpeg](admin/images/noti_push.jpeg)
-![noti_push2.jpeg](admin/images/noti_push2.jpeg)
-
-### Here are some images how the lists look:
+### Here are some images how the lists can be look like in Grafana:
 
 ![list1.png](admin/images/list1.png)
 ![list2.png](admin/images/list2.png)
