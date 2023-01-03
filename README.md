@@ -174,8 +174,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.3.0 (2023-01-03)
 
 -   (ciddi89) sorting for device selection in the blacklist added
 -   (ciddi89) Devices can now also be blacklisted in adapter own list
