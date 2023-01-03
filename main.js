@@ -79,6 +79,7 @@ class DeviceWatcher extends utils.Adapter {
 				deconz: this.config.deconzDevices,
 				enocean: this.config.enoceanDevices,
 				esphome: this.config.esphomeDevices,
+				eusec: this.config.eusecDevices,
 				fritzdect: this.config.fritzdectDevices,
 				fullybrowser: this.config.fullybrowserDevices,
 				ham: this.config.hamDevices,
@@ -127,6 +128,7 @@ class DeviceWatcher extends utils.Adapter {
 				deconz: this.config.deconzMaxMinutes,
 				enocean: this.config.enoceanMaxMinutes,
 				esphome: this.config.esphomeMaxMinutes,
+				eusec: this.config.eusecMaxMinutes,
 				fritzdect: this.config.fritzdectMaxMinutes,
 				fullybrowser: this.config.fullybrowserMaxMinutes,
 				ham: this.config.hamMaxMinutes,
@@ -537,13 +539,21 @@ class DeviceWatcher extends utils.Adapter {
 			let folderName;
 			let deviceID;
 
-			// Get ID with currDeviceString from datapoint
 			switch (this.arrDev[i].adapterID) {
-				// Get ID for Switchbot and ESPHome Devices
+				// Get ID with currDeviceString from datapoint
 				case 'switchbotBle':
 				case 'esphome':
 				case 'apcups':
 					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+					break;
+
+				case 'eusec':
+					deviceName = await this.getInitValue(currDeviceString + this.arrDev[i].id);
+					if (deviceName === null || deviceName === undefined) {
+						if (deviceObject && typeof deviceObject === 'object') {
+							deviceName = deviceObject.common.name;
+						}
+					}
 					break;
 
 				case 'fullybrowser':

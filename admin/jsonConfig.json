@@ -53,6 +53,13 @@
 					"lg": 3,
 					"label": "EspHome"
 				},
+				"eusecDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "euSec"
+				},
 				"fritzdectDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1123,6 +1130,18 @@
 					"label": "EspHome",
 					"help": "in minutes",
 					"hidden": "!data.esphomeDevices",
+					"hideOnlyControl": false
+				},
+				"eusecMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "euSec",
+					"help": "in minutes",
+					"hidden": "!data.eusecDevices",
 					"hideOnlyControl": false
 				},
 				"fritzdectMaxMinutes": {
