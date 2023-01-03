@@ -1134,7 +1134,7 @@
 				},
 				"eusecMaxMinutes": {
 					"type": "number",
-					"min": -1,
+					"min": 1,
 					"max": 100000,
 					"sm": 6,
 					"md": 6,
