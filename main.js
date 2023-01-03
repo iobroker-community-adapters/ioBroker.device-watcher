@@ -303,11 +303,11 @@ class DeviceWatcher extends utils.Adapter {
 					case device.UnreachDP:
 					case device.DeviceStateSelectorDP:
 					case device.rssiPeerSelectorDP:
-					case device.Path:
+					case device.timeSelector:
 						oldStatus = device.Status;
 						device.UnreachState = await this.getInitValue(device.UnreachDP);
 						contactData = await this.getOnlineState(
-							device.Path,
+							device.timeSelector,
 							device.adapterID,
 							device.UnreachDP,
 							device.SignalStrength,
@@ -798,7 +798,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * get online state and time
-	 * @param {object} id - ID
+	 * @param {object} timeSelector - device Timeselector
 	 * @param {string} adapterID - ID of Adapter
 	 * @param {string} unreachDP - Datapoint of Unreach
 	 * @param {object} linkQuality - Linkquality Value
@@ -806,23 +806,23 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} deviceStateSelectorDP - Selector of device state (like .state)
 	 * @param {string} rssiPeerSelectorDP - HM RSSI Peer Datapoint
 	 */
-	async getOnlineState(id, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP) {
+	async getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP) {
 		let lastContactString;
 		let deviceState = 'Online';
 
 		try {
-			const deviceMainSelector = await this.getForeignStateAsync(id);
-			if (deviceMainSelector) {
+			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
+			if (deviceTimeSelector) {
 				const deviceUnreachSelector = await this.getForeignStateAsync(unreachDP);
 				const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorDP); // for hmrpc devices
 				const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorDP);
-				const lastContact = await this.getTimestamp(deviceMainSelector.ts);
-				const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(deviceMainSelector.ts);
+				const lastContact = await this.getTimestamp(deviceTimeSelector.ts);
+				const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(timeSelector.ts);
 				//  If there is no contact since user sets minutes add device in offline list
 				// calculate to days after 48 hours
 				switch (unreachDP) {
 					case 'none':
-						lastContactString = await this.getLastContact(deviceMainSelector.ts);
+						lastContactString = await this.getLastContact(deviceTimeSelector.ts);
 						break;
 
 					default:
@@ -830,9 +830,9 @@ class DeviceWatcher extends utils.Adapter {
 						if (adapterID === 'hmrpc') {
 							if (linkQuality !== ' - ') {
 								if (deviceUnreachState) {
-									lastContactString = await this.getLastContact(deviceMainSelector.lc);
+									lastContactString = await this.getLastContact(deviceTimeSelector.lc);
 								} else {
-									lastContactString = await this.getLastContact(deviceMainSelector.ts);
+									lastContactString = await this.getLastContact(deviceTimeSelector.ts);
 								}
 							} else {
 								if (deviceStateSelector) {
@@ -845,9 +845,9 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						} else {
 							if (!deviceUnreachState) {
-								lastContactString = await this.getLastContact(deviceMainSelector.lc);
+								lastContactString = await this.getLastContact(deviceTimeSelector.lc);
 							} else {
-								lastContactString = await this.getLastContact(deviceMainSelector.ts);
+								lastContactString = await this.getLastContact(deviceTimeSelector.ts);
 							}
 							break;
 						}
@@ -953,7 +953,7 @@ class DeviceWatcher extends utils.Adapter {
 			const oldContactState = device.Status;
 			device.UnreachState = await this.getInitValue(device.UnreachDP);
 			const contactData = await this.getOnlineState(
-				device.Path,
+				device.timeSelector,
 				device.adapterID,
 				device.UnreachDP,
 				device.SignalStrength,
@@ -1083,6 +1083,7 @@ class DeviceWatcher extends utils.Adapter {
 				let unreachDP = currDeviceString + this.arrDev[i].reach;
 				const deviceStateSelectorDP = shortCurrDeviceString + this.arrDev[i].stateValue;
 				const rssiPeerSelectorDP = currDeviceString + this.arrDev[i].rssiPeerState;
+				const timeSelector = currDeviceString + this.arrDev[i].timeSelector;
 
 				let deviceUnreachState = await this.getInitValue(unreachDP);
 				if (deviceUnreachState === undefined) {
@@ -1091,12 +1092,12 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				// subscribe to states
-				this.subscribeForeignStatesAsync(id);
+				this.subscribeForeignStatesAsync(timeSelector);
 				this.subscribeForeignStatesAsync(unreachDP);
 				this.subscribeForeignStatesAsync(deviceStateSelectorDP);
 				this.subscribeForeignStatesAsync(rssiPeerSelectorDP);
 
-				const onlineState = await this.getOnlineState(id, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
+				const onlineState = await this.getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
 				let deviceState;
 				let lastContactString;
 
@@ -1135,6 +1136,7 @@ class DeviceWatcher extends utils.Adapter {
 						Device: deviceName,
 						adapterID: adapterID,
 						Adapter: adapter,
+						timeSelector: timeSelector,
 						isBatteryDevice: isBatteryDevice,
 						Battery: batteryHealth,
 						BatteryRaw: batteryHealthRaw,
@@ -1159,6 +1161,7 @@ class DeviceWatcher extends utils.Adapter {
 						Device: deviceName,
 						adapterID: adapterID,
 						Adapter: adapter,
+						timeSelector: timeSelector,
 						isBatteryDevice: isBatteryDevice,
 						Battery: batteryHealth,
 						BatteryRaw: batteryHealthRaw,
