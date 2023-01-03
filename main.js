@@ -1783,18 +1783,21 @@ class DeviceWatcher extends utils.Adapter {
 				dpSubFolder = '';
 			}
 
+			// Write Datapoints for counts
 			await this.setStateAsync(`${dpSubFolder}offlineCount`, { val: this.offlineDevicesCount, ack: true });
 			await this.setStateAsync(`${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
 			await this.setStateAsync(`${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
 			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
 			await this.setStateAsync(`${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
 
+			// List all devices
 			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' }];
 			}
 			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
 
+			// List link quality
 			if (this.linkQualityCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.linkQualityDevices = [{ Device: '--none--', Adapter: '', 'Signal strength': '' }];
@@ -1805,6 +1808,7 @@ class DeviceWatcher extends utils.Adapter {
 				ack: true,
 			});
 
+			// List offline devices
 			if (this.offlineDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.offlineDevices = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
@@ -1815,6 +1819,7 @@ class DeviceWatcher extends utils.Adapter {
 				ack: true,
 			});
 
+			// List updatable
 			if (this.upgradableDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.upgradableList = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
@@ -1825,6 +1830,7 @@ class DeviceWatcher extends utils.Adapter {
 				ack: true,
 			});
 
+			// List battery powered
 			if (this.batteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
@@ -1835,6 +1841,7 @@ class DeviceWatcher extends utils.Adapter {
 				ack: true,
 			});
 
+			// list battery low powered
 			if (this.lowBatteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
 				this.batteryLowPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
@@ -1844,6 +1851,43 @@ class DeviceWatcher extends utils.Adapter {
 				val: JSON.stringify(this.batteryLowPowered),
 				ack: true,
 			});
+
+			// set booleans datapoints
+			if (this.offlineDevicesCount === 0) {
+				await this.setStateAsync(`${dpSubFolder}oneDeviceOffline`, {
+					val: false,
+					ack: true,
+				});
+			} else {
+				await this.setStateAsync(`${dpSubFolder}oneDeviceOffline`, {
+					val: true,
+					ack: true,
+				});
+			}
+
+			if (this.lowBatteryPoweredCount === 0) {
+				await this.setStateAsync(`${dpSubFolder}oneDeviceLowBat`, {
+					val: false,
+					ack: true,
+				});
+			} else {
+				await this.setStateAsync(`${dpSubFolder}oneDeviceLowBat`, {
+					val: true,
+					ack: true,
+				});
+			}
+
+			if (this.upgradableDevicesCount === 0) {
+				await this.setStateAsync(`${dpSubFolder}oneDeviceUpdatable`, {
+					val: false,
+					ack: true,
+				});
+			} else {
+				await this.setStateAsync(`${dpSubFolder}oneDeviceUpdatable`, {
+					val: true,
+					ack: true,
+				});
+			}
 
 			//write HTML list
 			if (this.createHtmlList) {
@@ -2046,6 +2090,31 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
+		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceOffline`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Is one device with offline',
+					de: 'Ist ein Gerät mit Offline',
+					ru: 'Это одно устройство с offline',
+					pt: 'É um dispositivo com offline',
+					nl: 'Is een apparaat met offline',
+					fr: 'Est un appareil avec hors ligne',
+					it: 'È un dispositivo con offline',
+					es: 'Es un dispositivo sin conexión',
+					pl: 'Jest to jeden urządzenie z offlinem',
+					uk: 'Є один пристрій з автономним',
+					'zh-cn': '一处有线装置',
+				},
+				type: 'boolean',
+				role: 'state',
+				read: true,
+				write: false,
+				def: false,
+			},
+			native: {},
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
 			type: 'state',
 			common: {
@@ -2184,6 +2253,31 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
+		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceLowBat`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Is one device with low battery',
+					de: 'Ist ein Gerät mit niedrigem Akku',
+					ru: 'Один прибор с низкой батареей',
+					pt: 'É um dispositivo com bateria baixa',
+					nl: 'Is een apparaat met lage batterijen',
+					fr: 'Est un appareil avec batterie basse',
+					it: 'È un dispositivo con batteria bassa',
+					es: 'Es un dispositivo con batería baja',
+					pl: 'Jest to jeden urządzenie z niską baterią',
+					uk: 'Є одним пристроєм з низьких акумуляторів',
+					'zh-cn': '低电池的装置',
+				},
+				type: 'boolean',
+				role: 'state',
+				read: true,
+				write: false,
+				def: false,
+			},
+			native: {},
+		});
+
 		await this.setObjectNotExistsAsync(`${adptName}.batteryCount`, {
 			type: 'state',
 			common: {
@@ -2251,6 +2345,31 @@ class DeviceWatcher extends utils.Adapter {
 				role: 'json',
 				read: true,
 				write: false,
+			},
+			native: {},
+		});
+
+		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceUpdatable`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Is one device updatable',
+					de: 'Ist ein Gerät aufnehmbar',
+					ru: 'Одно устройство обновляется',
+					pt: 'É um dispositivo updatable',
+					nl: 'Is een apparaat updat',
+					fr: "Est-ce qu'un appareil est indéfectible",
+					it: 'È un dispositivo updatable',
+					es: 'Es un dispositivo actualizado',
+					pl: 'Jest to jedno urządzenie updatable',
+					uk: 'Є одним пристроєм',
+					'zh-cn': '一台装置',
+				},
+				type: 'boolean',
+				role: 'state',
+				read: true,
+				write: false,
+				def: false,
 			},
 			native: {},
 		});
