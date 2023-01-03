@@ -174,11 +174,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
 ### 2.3.0 (2023-01-03)
 
 -   (ciddi89) sorting for device selection in the blacklist added
 -   (ciddi89) Devices can now also be blacklisted in adapter own list
--   (ciddi89) booleans for lowbat, offline and upgradable added
+-   (ciddi89) booleans for lowbat, offline and upgradable added ([#105](https://github.com/ciddi89/ioBroker.device-watcher/issues/105))
 -   (ciddi89) euSec adapter added ([#73](https://github.com/ciddi89/ioBroker.device-watcher/issues/73))
 
 ### 2.2.2 (2022-12-29)
