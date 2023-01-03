@@ -179,6 +179,8 @@ It's possible to select:
 
 -   (ciddi89) sorting for device selection in the blacklist added
 -   (ciddi89) Devices can now also be blacklisted in adapter own list
+-   (ciddi89) booleans for lowbat, offline and upgradable added
+-   (ciddi89) euSec adapter added ([#73](https://github.com/ciddi89/ioBroker.device-watcher/issues/73))
 
 ### 2.2.2 (2022-12-29)
 

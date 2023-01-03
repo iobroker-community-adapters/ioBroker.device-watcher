@@ -360,6 +360,31 @@
 			"native": {}
 		},
 		{
+			"_id": "oneDeviceOffline",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Is one device with offline",
+					"de": "Ist ein Gerät mit Offline",
+					"ru": "Это одно устройство с offline",
+					"pt": "É um dispositivo com offline",
+					"nl": "Is een apparaat met offline",
+					"fr": "Est un appareil avec hors ligne",
+					"it": "È un dispositivo con offline",
+					"es": "Es un dispositivo sin conexión",
+					"pl": "Jest to jeden urządzenie z offlinem",
+					"uk": "Є один пристрій з автономним",
+					"zh-cn": "一处有线装置"
+				},
+				"type": "boolean",
+				"role": "state",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		},
+		{
 			"_id": "listAll",
 			"type": "state",
 			"common": {
@@ -521,6 +546,31 @@
 			"native": {}
 		},
 		{
+			"_id": "oneDeviceLowBat",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Is one device with low battery",
+					"de": "Ist ein Gerät mit niedrigem Akku",
+					"ru": "Один прибор с низкой батареей",
+					"pt": "É um dispositivo com bateria baixa",
+					"nl": "Is een apparaat met lage batterijen",
+					"fr": "Est un appareil avec batterie basse",
+					"it": "È un dispositivo con batteria bassa",
+					"es": "Es un dispositivo con batería baja",
+					"pl": "Jest to jeden urządzenie z niską baterią",
+					"uk": "Є одним пристроєм з низьких акумуляторів",
+					"zh-cn": "低电池的装置"
+				},
+				"type": "boolean",
+				"role": "state",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		},
+		{
 			"_id": "lastCheck",
 			"type": "state",
 			"common": {
@@ -611,6 +661,31 @@
 				"role": "value",
 				"read": true,
 				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "oneDeviceUpdatable",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Is one device updatable",
+					"de": "Ist ein Gerät aufnehmbar",
+					"ru": "Одно устройство обновляется",
+					"pt": "É um dispositivo updatable",
+					"nl": "Is een apparaat updat",
+					"fr": "Est-ce qu'un appareil est indéfectible",
+					"it": "È un dispositivo updatable",
+					"es": "Es un dispositivo actualizado",
+					"pl": "Jest to jedno urządzenie updatable",
+					"uk": "Є одним пристроєм",
+					"zh-cn": "一台装置"
+				},
+				"type": "boolean",
+				"role": "state",
+				"read": true,
+				"write": false,
+				"def": false
 			},
 			"native": {}
 		}
