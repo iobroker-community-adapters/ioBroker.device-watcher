@@ -1032,49 +1032,59 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				let deviceBatteryStateDP;
 				let deviceBatteryState;
-				// Get battery states
-				switch (adapterID) {
-					case 'hueExt':
-					case 'mihomeVacuum':
-					case 'mqttNuki':
-						deviceBatteryStateDP = shortCurrDeviceString + this.arrDev[i].battery;
-						deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						if (deviceBatteryState === undefined) {
-							deviceBatteryStateDP = shortCurrDeviceString + this.arrDev[i].battery2;
-							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						}
-						break;
-					default:
-						deviceBatteryStateDP = currDeviceString + this.arrDev[i].battery;
-						deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						if (deviceBatteryState === undefined) {
-							deviceBatteryStateDP = currDeviceString + this.arrDev[i].battery2;
-							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						}
-						break;
-				}
-
-				// Get low bat states
-				let isLowBatDP = currDeviceString + this.arrDev[i].isLowBat;
-				let deviceLowBatState = await this.getInitValue(isLowBatDP);
-				if (deviceLowBatState === undefined) {
-					isLowBatDP = currDeviceString + this.arrDev[i].isLowBat2;
-					deviceLowBatState = await this.getInitValue(isLowBatDP);
-				}
-				if (deviceLowBatState === undefined) isLowBatDP = 'none';
-
-				//subscribe to states
-				this.subscribeForeignStatesAsync(deviceBatteryStateDP);
-				this.subscribeForeignStatesAsync(isLowBatDP);
-
-				const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
-				const batteryHealth = batteryData[0];
-				const batteryHealthRaw = batteryData[2];
-				const isBatteryDevice = batteryData[1];
+				let batteryHealth;
+				let batteryHealthRaw;
 				let lowBatIndicator;
+				let isBatteryDevice;
+				let isLowBatDP;
 
-				if (isBatteryDevice) {
-					lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP);
+				const deviceChargerStateDP = currDeviceString + this.arrDev[i].charger;
+				const deviceChargerState = await this.getInitValue(deviceChargerStateDP);
+
+				if (deviceChargerState === undefined || deviceChargerState === false) {
+					// Get battery states
+					switch (adapterID) {
+						case 'hueExt':
+						case 'mihomeVacuum':
+						case 'mqttNuki':
+							deviceBatteryStateDP = shortCurrDeviceString + this.arrDev[i].battery;
+							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							if (deviceBatteryState === undefined) {
+								deviceBatteryStateDP = shortCurrDeviceString + this.arrDev[i].battery2;
+								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							}
+							break;
+						default:
+							deviceBatteryStateDP = currDeviceString + this.arrDev[i].battery;
+							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							if (deviceBatteryState === undefined) {
+								deviceBatteryStateDP = currDeviceString + this.arrDev[i].battery2;
+								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							}
+							break;
+					}
+
+					// Get low bat states
+					isLowBatDP = currDeviceString + this.arrDev[i].isLowBat;
+					let deviceLowBatState = await this.getInitValue(isLowBatDP);
+					if (deviceLowBatState === undefined) {
+						isLowBatDP = currDeviceString + this.arrDev[i].isLowBat2;
+						deviceLowBatState = await this.getInitValue(isLowBatDP);
+					}
+					if (deviceLowBatState === undefined) isLowBatDP = 'none';
+
+					//subscribe to states
+					this.subscribeForeignStatesAsync(deviceBatteryStateDP);
+					this.subscribeForeignStatesAsync(isLowBatDP);
+
+					const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
+					batteryHealth = batteryData[0];
+					batteryHealthRaw = batteryData[2];
+					isBatteryDevice = batteryData[1];
+
+					if (isBatteryDevice) {
+						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP);
+					}
 				}
 
 				/*=============================================
