@@ -274,7 +274,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.LowBatDP);
+							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.LowBatDP, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -290,7 +290,7 @@ class DeviceWatcher extends utils.Adapter {
 							batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.LowBatDP);
+							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.LowBatDP, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -698,27 +698,27 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryHealth;
 		let isBatteryDevice;
 
-		if (deviceBatteryState === undefined) {
-			if (deviceLowBatState !== undefined) {
-				switch (deviceLowBatState) {
-					case 'none':
-						break;
-					default:
-						if (deviceLowBatState !== true || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
-							batteryHealth = 'ok';
-							isBatteryDevice = true;
-						} else {
-							batteryHealth = 'low';
-							isBatteryDevice = true;
+		switch (adapterID) {
+			case 'hmrpc':
+				if (deviceBatteryState === undefined) {
+					if (deviceLowBatState !== undefined) {
+						switch (deviceLowBatState) {
+							case 'none':
+								break;
+							default:
+								if (deviceLowBatState !== 1) {
+									batteryHealth = 'ok';
+									isBatteryDevice = true;
+								} else {
+									batteryHealth = 'low';
+									isBatteryDevice = true;
+								}
+								break;
 						}
-						break;
-				}
-			} else {
-				batteryHealth = ' - ';
-			}
-		} else {
-			switch (adapterID) {
-				case 'hmrpc':
+					} else {
+						batteryHealth = ' - ';
+					}
+				} else {
 					if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
 						batteryHealth = ' - ';
 					} else {
@@ -726,14 +726,48 @@ class DeviceWatcher extends utils.Adapter {
 						batteryHealthRaw = deviceBatteryState;
 						isBatteryDevice = true;
 					}
-					break;
-				default:
-					batteryHealth = deviceBatteryState + '%';
-					batteryHealthRaw = deviceBatteryState;
-					isBatteryDevice = true;
-					break;
-			}
+				}
+				break;
+			default:
+				if (deviceBatteryState === undefined) {
+					if (deviceLowBatState !== undefined) {
+						switch (deviceLowBatState) {
+							case 'none':
+								break;
+							default:
+								if (deviceLowBatState !== true || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
+									batteryHealth = 'ok';
+									isBatteryDevice = true;
+								} else {
+									batteryHealth = 'low';
+									isBatteryDevice = true;
+								}
+								break;
+						}
+					} else {
+						batteryHealth = ' - ';
+					}
+				} else {
+					switch (adapterID) {
+						case 'hmrpc':
+							if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
+								batteryHealth = ' - ';
+							} else {
+								batteryHealth = deviceBatteryState + 'V';
+								batteryHealthRaw = deviceBatteryState;
+								isBatteryDevice = true;
+							}
+							break;
+						default:
+							batteryHealth = deviceBatteryState + '%';
+							batteryHealthRaw = deviceBatteryState;
+							isBatteryDevice = true;
+							break;
+					}
+				}
+				break;
 		}
+
 		return [batteryHealth, isBatteryDevice, batteryHealthRaw];
 	}
 
@@ -742,33 +776,42 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} deviceBatteryState
 	 * @param {object} deviceLowBatState
 	 * @param {object} isLowBatDP
+	 * @param {object} adapterID
 	 */
 
-	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP) {
+	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, adapterID) {
 		let lowBatIndicator = false;
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
 		if (deviceLowBatState !== null && isLowBatDP !== 'none') {
-			switch (typeof deviceLowBatState) {
-				case 'number':
-					if (deviceLowBatState === 0) {
+			switch (adapterID) {
+				case 'hmrpc':
+					if (deviceLowBatState === 1) {
 						lowBatIndicator = true;
 					}
 					break;
+				default:
+					switch (typeof deviceLowBatState) {
+						case 'number':
+							if (deviceLowBatState === 0) {
+								lowBatIndicator = true;
+							}
+							break;
 
-				case 'string':
-					if (deviceLowBatState !== 'NORMAL') {
-						// Tado devices
-						lowBatIndicator = true;
-					}
-					break;
+						case 'string':
+							if (deviceLowBatState !== 'NORMAL') {
+								// Tado devices
+								lowBatIndicator = true;
+							}
+							break;
 
-				case 'boolean':
-					if (deviceLowBatState) {
-						lowBatIndicator = true;
+						case 'boolean':
+							if (deviceLowBatState) {
+								lowBatIndicator = true;
+							}
+							break;
 					}
-					break;
 			}
 		} else {
 			if (deviceBatteryState < this.config.minWarnBatterie) {
@@ -1083,7 +1126,7 @@ class DeviceWatcher extends utils.Adapter {
 					isBatteryDevice = batteryData[1];
 
 					if (isBatteryDevice) {
-						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP);
+						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, adapterID);
 					}
 				}
 
