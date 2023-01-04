@@ -175,6 +175,12 @@ It's possible to select:
     ### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+-   (ciddi89) changed HMRPC lowbat to lowbat_alarm
+-   (ciddi89) fixed nuki mqtt selector
+-   (ciddi89) added shelly charge datapoint to identify battery devices better
+
 ### 2.3.0 (2023-01-03)
 
 -   (ciddi89) sorting for device selection in the blacklist added
