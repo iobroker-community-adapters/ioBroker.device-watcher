@@ -180,6 +180,9 @@ It's possible to select:
 -   (ciddi89) changed HMRPC lowbat to lowbat_alarm
 -   (ciddi89) fixed nuki mqtt selector
 -   (ciddi89) added shelly charge datapoint to identify battery devices better
+-   (ciddi89) fixed lowbat issues
+-   (ciddi89) added lowbat support for HMRPC: HM-CC-RT-DN
+-   (ciddi89) added additionally timeSelector for each adapter for better support
 
 ### 2.3.0 (2023-01-03)
 
