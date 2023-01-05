@@ -250,6 +250,7 @@ class DeviceWatcher extends utils.Adapter {
 			let oldLowBatState;
 			let contactData;
 			let oldStatus;
+			let isLowBatValue;
 
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
@@ -274,7 +275,10 @@ class DeviceWatcher extends utils.Adapter {
 
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.faultReport, device.adapterID);
+							if (device.isLowBatDP !== 'none') {
+								isLowBatValue = await this.getInitValue(device.isLowBatDP);
+							}
+							device.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, device.faultReport, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -1005,9 +1009,6 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.config.checkSendOfflineMsg && oldContactState !== device.Status && !this.blacklistNotify.includes(device.Path)) {
 				await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 			}
-			if (device.adapterID.includes('hmrpc')) {
-				this.log.warn(JSON.stringify(this.listAllDevicesRaw));
-			}
 		}
 	}
 
@@ -1282,9 +1283,6 @@ class DeviceWatcher extends utils.Adapter {
 					Adapter: device.Adapter,
 					LastContact: device.LastContact,
 				});
-			}
-			if (device.adapterID.includes('hmrpc')) {
-				this.log.warn(JSON.stringify(this.listAllDevicesRaw));
 			}
 
 			if (adptName === '' && !this.blacklistLists.includes(device.Path)) {
