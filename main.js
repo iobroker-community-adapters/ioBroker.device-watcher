@@ -1005,6 +1005,9 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.config.checkSendOfflineMsg && oldContactState !== device.Status && !this.blacklistNotify.includes(device.Path)) {
 				await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 			}
+			if (device.adapterID.includes('hmrpc')) {
+				this.log.warn(JSON.stringify(this.listAllDevicesRaw));
+			}
 		}
 	}
 
@@ -1279,6 +1282,9 @@ class DeviceWatcher extends utils.Adapter {
 					Adapter: device.Adapter,
 					LastContact: device.LastContact,
 				});
+			}
+			if (device.adapterID.includes('hmrpc')) {
+				this.log.warn(JSON.stringify(this.listAllDevicesRaw));
 			}
 
 			if (adptName === '' && !this.blacklistLists.includes(device.Path)) {
