@@ -274,7 +274,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.LowBatDP, device.adapterID);
+							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.LowBatDP, device.faultReport, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -290,7 +290,7 @@ class DeviceWatcher extends utils.Adapter {
 							batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.LowBatDP, device.adapterID);
+							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.LowBatDP, device.faultReport, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -298,12 +298,26 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							}
 						}
-
 						break;
+
+					case device.faultReportDP:
+						if (device.isBatteryDevice) {
+							oldLowBatState = device.LowBat;
+							batteryData = await this.getBatteryData(device.BatteryRaw, oldLowBatState, device.adapterID);
+
+							device.Battery = batteryData[0];
+							device.BatteryRaw = batteryData[2];
+							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, undefined, device.LowBatDP, state.val, device.adapterID);
+
+							if (device.LowBat && oldLowBatState !== device.LowBat) {
+								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
+								}
+							}
+						}
+						break;
+
 					case device.UnreachDP:
-					case device.DeviceStateSelectorDP:
-					case device.rssiPeerSelectorDP:
-					case device.timeSelector:
 						oldStatus = device.Status;
 						device.UnreachState = await this.getInitValue(device.UnreachDP);
 						contactData = await this.getOnlineState(
@@ -776,18 +790,19 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} deviceBatteryState
 	 * @param {object} deviceLowBatState
 	 * @param {object} isLowBatDP
+	 * @param {object} faultReportState
 	 * @param {object} adapterID
 	 */
 
-	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, adapterID) {
+	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, faultReportState, adapterID) {
 		let lowBatIndicator = false;
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
-		if (deviceLowBatState !== null && isLowBatDP !== 'none') {
+		if ((deviceLowBatState !== null || faultReportState !== null) && isLowBatDP !== 'none') {
 			switch (adapterID) {
 				case 'hmrpc':
-					if (deviceLowBatState === 1) {
+					if (deviceLowBatState === 1 || faultReportState === 6) {
 						lowBatIndicator = true;
 					}
 					break;
@@ -1080,6 +1095,8 @@ class DeviceWatcher extends utils.Adapter {
 				let lowBatIndicator;
 				let isBatteryDevice;
 				let isLowBatDP;
+				let faultReportingDP;
+				let faultReportingState;
 
 				const deviceChargerStateDP = currDeviceString + this.arrDev[i].charger;
 				const deviceChargerState = await this.getInitValue(deviceChargerStateDP);
@@ -1116,9 +1133,13 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					if (deviceLowBatState === undefined) isLowBatDP = 'none';
 
+					faultReportingDP = shortCurrDeviceString + this.arrDev[i].faultReporting;
+					faultReportingState = await this.getInitValue(faultReportingDP);
+
 					//subscribe to states
 					this.subscribeForeignStatesAsync(deviceBatteryStateDP);
 					this.subscribeForeignStatesAsync(isLowBatDP);
+					this.subscribeForeignStatesAsync(faultReportingDP);
 
 					const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
 					batteryHealth = batteryData[0];
@@ -1126,7 +1147,7 @@ class DeviceWatcher extends utils.Adapter {
 					isBatteryDevice = batteryData[1];
 
 					if (isBatteryDevice) {
-						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, adapterID);
+						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, faultReportingState, adapterID);
 					}
 				}
 
@@ -1196,6 +1217,8 @@ class DeviceWatcher extends utils.Adapter {
 						batteryDP: deviceBatteryStateDP,
 						LowBat: lowBatIndicator,
 						LowBatDP: isLowBatDP,
+						faultReport: faultReportingState,
+						faultReportDP: faultReportingDP,
 						SignalStrengthDP: deviceQualityDP,
 						SignalStrength: linkQuality,
 						UnreachState: deviceUnreachState,
@@ -1221,6 +1244,8 @@ class DeviceWatcher extends utils.Adapter {
 						batteryDP: deviceBatteryStateDP,
 						LowBat: lowBatIndicator,
 						LowBatDP: isLowBatDP,
+						faultReport: faultReportingState,
+						faultReportDP: faultReportingDP,
 						SignalStrengthDP: deviceQualityDP,
 						SignalStrength: linkQuality,
 						UnreachState: deviceUnreachState,
