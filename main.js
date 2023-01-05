@@ -744,18 +744,12 @@ class DeviceWatcher extends utils.Adapter {
 			default:
 				if (deviceBatteryState === undefined) {
 					if (deviceLowBatState !== undefined) {
-						switch (deviceLowBatState) {
-							case 'none':
-								break;
-							default:
-								if (deviceLowBatState !== true || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
-									batteryHealth = 'ok';
-								} else {
-									batteryHealth = 'low';
-								}
-								isBatteryDevice = true;
-								break;
+						if (deviceLowBatState !== true || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
+							batteryHealth = 'ok';
+						} else {
+							batteryHealth = 'low';
 						}
+						isBatteryDevice = true;
 					} else {
 						batteryHealth = ' - ';
 					}
@@ -783,7 +777,7 @@ class DeviceWatcher extends utils.Adapter {
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
-		if (deviceLowBatState !== null || faultReportState !== null) {
+		if (deviceLowBatState !== undefined || faultReportState !== undefined) {
 			switch (adapterID) {
 				case 'hmrpc':
 					if (deviceLowBatState === 1 || faultReportState === 6) {
