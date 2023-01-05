@@ -865,7 +865,7 @@ class DeviceWatcher extends utils.Adapter {
 						//State changed
 						if (adapterID === 'hmrpc') {
 							if (linkQuality !== ' - ') {
-								if (deviceUnreachState) {
+								if (deviceUnreachState === 1) {
 									lastContactString = await this.getLastContact(deviceTimeSelector.lc);
 								} else {
 									lastContactString = await this.getLastContact(deviceTimeSelector.ts);
@@ -880,7 +880,7 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							}
 						} else {
-							if (!deviceUnreachState) {
+							if (deviceUnreachState === 0) {
 								lastContactString = await this.getLastContact(deviceTimeSelector.lc);
 							} else {
 								lastContactString = await this.getLastContact(deviceTimeSelector.ts);
@@ -895,6 +895,16 @@ class DeviceWatcher extends utils.Adapter {
 				if (this.maxMinutes !== undefined) {
 					switch (adapterID) {
 						case 'hmrpc':
+							if (this.maxMinutes[adapterID] <= 0) {
+								if (deviceUnreachState === 1) {
+									deviceState = 'Offline'; //set online state to offline
+									linkQuality = '0%'; // set linkQuality to nothing
+								}
+							} else if (lastDeviceUnreachStateChange > this.maxMinutes[adapterID] && deviceUnreachState === 1) {
+								deviceState = 'Offline'; //set online state to offline
+								linkQuality = '0%'; // set linkQuality to nothing
+							}
+							break;
 						case 'hmiP':
 						case 'maxcube':
 							if (this.maxMinutes[adapterID] <= 0) {
