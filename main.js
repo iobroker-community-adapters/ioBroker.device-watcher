@@ -274,7 +274,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.LowBatDP, device.faultReport, device.adapterID);
+							device.LowBat = await this.setLowbatIndicator(state.val, undefined, device.faultReport, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -290,7 +290,7 @@ class DeviceWatcher extends utils.Adapter {
 							batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.LowBatDP, device.faultReport, device.adapterID);
+							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.faultReport, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -307,7 +307,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, undefined, device.LowBatDP, state.val, device.adapterID);
+							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, undefined, state.val, device.adapterID);
 
 							if (device.LowBat && oldLowBatState !== device.LowBat) {
 								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
@@ -716,24 +716,17 @@ class DeviceWatcher extends utils.Adapter {
 			case 'hmrpc':
 				if (deviceBatteryState === undefined) {
 					if (deviceLowBatState !== undefined) {
-						switch (deviceLowBatState) {
-							case 'none':
-								break;
-							default:
-								if (deviceLowBatState !== 1) {
-									batteryHealth = 'ok';
-									isBatteryDevice = true;
-								} else {
-									batteryHealth = 'low';
-									isBatteryDevice = true;
-								}
-								break;
+						if (deviceLowBatState !== 1) {
+							batteryHealth = 'ok';
+						} else {
+							batteryHealth = 'low';
 						}
+						isBatteryDevice = true;
 					} else {
 						batteryHealth = ' - ';
 					}
 				} else {
-					if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
+					if (deviceBatteryState === 0 || deviceBatteryState >= 6) {
 						batteryHealth = ' - ';
 					} else {
 						batteryHealth = deviceBatteryState + 'V';
@@ -751,33 +744,19 @@ class DeviceWatcher extends utils.Adapter {
 							default:
 								if (deviceLowBatState !== true || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
 									batteryHealth = 'ok';
-									isBatteryDevice = true;
 								} else {
 									batteryHealth = 'low';
-									isBatteryDevice = true;
 								}
+								isBatteryDevice = true;
 								break;
 						}
 					} else {
 						batteryHealth = ' - ';
 					}
 				} else {
-					switch (adapterID) {
-						case 'hmrpc':
-							if (deviceBatteryState === 0 || (deviceBatteryState && deviceBatteryState >= 6)) {
-								batteryHealth = ' - ';
-							} else {
-								batteryHealth = deviceBatteryState + 'V';
-								batteryHealthRaw = deviceBatteryState;
-								isBatteryDevice = true;
-							}
-							break;
-						default:
-							batteryHealth = deviceBatteryState + '%';
-							batteryHealthRaw = deviceBatteryState;
-							isBatteryDevice = true;
-							break;
-					}
+					batteryHealth = deviceBatteryState + '%';
+					batteryHealthRaw = deviceBatteryState;
+					isBatteryDevice = true;
 				}
 				break;
 		}
@@ -789,17 +768,16 @@ class DeviceWatcher extends utils.Adapter {
 	 * set low bat indicator
 	 * @param {object} deviceBatteryState
 	 * @param {object} deviceLowBatState
-	 * @param {object} isLowBatDP
 	 * @param {object} faultReportState
 	 * @param {object} adapterID
 	 */
 
-	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, faultReportState, adapterID) {
+	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, faultReportState, adapterID) {
 		let lowBatIndicator = false;
 		/*=============================================
 		=            Set Lowbat indicator             =
 		=============================================*/
-		if ((deviceLowBatState !== null || faultReportState !== null) && isLowBatDP !== 'none') {
+		if (deviceLowBatState !== null || faultReportState !== null) {
 			switch (adapterID) {
 				case 'hmrpc':
 					if (deviceLowBatState === 1 || faultReportState === 6) {
@@ -1147,7 +1125,7 @@ class DeviceWatcher extends utils.Adapter {
 					isBatteryDevice = batteryData[1];
 
 					if (isBatteryDevice) {
-						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, isLowBatDP, faultReportingState, adapterID);
+						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID);
 					}
 				}
 
@@ -1344,7 +1322,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		// Battery lists
-		if (device['isBatteryDevice']) {
+		if (device.isBatteryDevice) {
 			this.batteryPowered.push({
 				Device: device.Device,
 				Adapter: device.Adapter,
