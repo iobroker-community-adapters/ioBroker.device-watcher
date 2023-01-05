@@ -275,8 +275,8 @@ class DeviceWatcher extends utils.Adapter {
 
 							device.Battery = batteryData[0];
 							device.BatteryRaw = batteryData[2];
-							if (device.isLowBatDP !== 'none') {
-								isLowBatValue = await this.getInitValue(device.isLowBatDP);
+							if (device.LowBatDP !== 'none') {
+								isLowBatValue = await this.getInitValue(device.LowBatDP);
 							} else {
 								isLowBatValue = undefined;
 							}
