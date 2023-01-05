@@ -178,6 +178,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) changed HMRPC lowbat to lowbat_alarm
+-   (ciddi89) changed HMRPC unreach to unreach_alarm
 -   (ciddi89) fixed nuki mqtt selector
 -   (ciddi89) added shelly charge datapoint to identify battery devices better
 -   (ciddi89) fixed lowbat issues
