@@ -174,8 +174,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.3.1 (2023-01-05)
 
 -   (ciddi89) changed HMRPC lowbat to lowbat_alarm
 -   (ciddi89) changed HMRPC unreach to unreach_alarm
