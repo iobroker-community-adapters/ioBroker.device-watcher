@@ -585,6 +585,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'hmrpc':
 				case 'nukiExt':
 				case 'wled':
+				case 'mqttNuki':
 					if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 						deviceName = shortDeviceObject.common.name;
 					}
