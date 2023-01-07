@@ -40,6 +40,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.listAllDevicesRaw = [];
 		this.batteryLowPoweredRaw = [];
 		this.offlineDevicesRaw = [];
+		this.upgradableDevicesRaw = [];
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -1265,6 +1266,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.offlineDevices = [];
 		this.batteryLowPoweredRaw = [];
 		this.offlineDevicesRaw = [];
+		this.upgradableDevicesRaw = [];
 		this.upgradableList = [];
 
 		if (adptName === undefined) {
@@ -1289,6 +1291,15 @@ class DeviceWatcher extends utils.Adapter {
 					Device: device.Device,
 					Adapter: device.Adapter,
 					LastContact: device.LastContact,
+				});
+			}
+
+			// upgradable raw list
+			if (device.Upgradable) {
+				this.upgradableDevicesRaw.push({
+					Path: device.Path,
+					Device: device.Device,
+					Adapter: device.Adapter,
 				});
 			}
 
@@ -1813,7 +1824,7 @@ class DeviceWatcher extends utils.Adapter {
 				try {
 					let deviceList = '';
 
-					for (const id of this.upgradableList) {
+					for (const id of this.upgradableDevicesRaw) {
 						if (!this.blacklistNotify.includes(id.Path)) {
 							if (!this.config.showAdapterNameinMsg) {
 								deviceList = `${deviceList}\n${id.Device}`;
@@ -1822,7 +1833,6 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						}
 					}
-
 					if (deviceList.length > 0) {
 						this.log.info(`Geräte Upgrade: ${deviceList}`);
 						this.setStateAsync('lastNotification', `Geräte Upgrade: ${deviceList}`, true);
