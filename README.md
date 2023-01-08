@@ -174,6 +174,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) make onStateChanges only, when device adapter is alive
+-   (ciddi89) Homeconnect Adapter added
+
 ### 2.3.1 (2023-01-05)
 
 -   (ciddi89) changed HMRPC lowbat to lowbat_alarm
