@@ -107,7 +107,7 @@
 					"sm": 6,
 					"md": 6,
 					"lg": 3,
-					"label": "Homeconnect"
+					"label": "Home Connect"
 				},
 				"hs100Devices": {
 					"type": "checkbox",
@@ -1230,7 +1230,7 @@
 					"sm": 6,
 					"md": 6,
 					"lg": 3,
-					"label": "Homeconnect",
+					"label": "Home Connect",
 					"help": "in minutes",
 					"hidden": "!data.homeconnectDevices",
 					"hideOnlyControl": false
