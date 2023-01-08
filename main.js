@@ -248,98 +248,117 @@ class DeviceWatcher extends utils.Adapter {
 			let contactData;
 			let oldStatus;
 			let isLowBatValue;
+			let instanceAlive;
 
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
 				switch (id) {
 					case device.UpdateDP:
-						if (state.val) {
-							device.Upgradable = state.val;
-							if (!this.blacklistNotify.includes(device.Path)) {
-								await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
+						instanceAlive = await this.getInitValue(device.instanceAlivePath);
+						if (instanceAlive) {
+							if (state.val) {
+								device.Upgradable = state.val;
+								if (!this.blacklistNotify.includes(device.Path)) {
+									await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
+								}
 							}
 						}
 						break;
 
 					case device.SignalStrengthDP:
-						device.SignalStrength = await this.calculateSignalStrength(state, device.adapterID);
+						instanceAlive = await this.getInitValue(device.instanceAlivePath);
+						if (instanceAlive) {
+							device.SignalStrength = await this.calculateSignalStrength(state, device.adapterID);
+						}
 						break;
 
 					case device.batteryDP:
-						if (device.isBatteryDevice) {
-							oldLowBatState = device.LowBat;
-							batteryData = await this.getBatteryData(state.val, oldLowBatState, device.adapterID);
+						instanceAlive = await this.getInitValue(device.instanceAlivePath);
+						if (instanceAlive) {
+							if (device.isBatteryDevice) {
+								oldLowBatState = device.LowBat;
+								batteryData = await this.getBatteryData(state.val, oldLowBatState, device.adapterID);
 
-							device.Battery = batteryData[0];
-							device.BatteryRaw = batteryData[2];
-							if (device.LowBatDP !== 'none') {
-								isLowBatValue = await this.getInitValue(device.LowBatDP);
-							} else {
-								isLowBatValue = undefined;
-							}
-							device.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, device.faultReport, device.adapterID);
+								device.Battery = batteryData[0];
+								device.BatteryRaw = batteryData[2];
+								if (device.LowBatDP !== 'none') {
+									isLowBatValue = await this.getInitValue(device.LowBatDP);
+								} else {
+									isLowBatValue = undefined;
+								}
+								device.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, device.faultReport, device.adapterID);
 
-							if (device.LowBat && oldLowBatState !== device.LowBat) {
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
-									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
+								if (device.LowBat && oldLowBatState !== device.LowBat) {
+									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+										await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
+									}
 								}
 							}
 						}
 						break;
 
 					case device.LowBatDP:
-						if (device.isBatteryDevice) {
-							oldLowBatState = device.LowBat;
-							batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
-							device.Battery = batteryData[0];
-							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.faultReport, device.adapterID);
+						instanceAlive = await this.getInitValue(device.instanceAlivePath);
+						if (instanceAlive) {
+							if (device.isBatteryDevice) {
+								oldLowBatState = device.LowBat;
+								batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
+								device.Battery = batteryData[0];
+								device.BatteryRaw = batteryData[2];
+								device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.faultReport, device.adapterID);
 
-							if (device.LowBat && oldLowBatState !== device.LowBat) {
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
-									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
+								if (device.LowBat && oldLowBatState !== device.LowBat) {
+									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+										await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
+									}
 								}
 							}
 						}
 						break;
 
 					case device.faultReportDP:
-						if (device.isBatteryDevice) {
-							oldLowBatState = device.LowBat;
-							batteryData = await this.getBatteryData(device.BatteryRaw, oldLowBatState, device.adapterID);
+						instanceAlive = await this.getInitValue(device.instanceAlivePath);
+						if (instanceAlive) {
+							if (device.isBatteryDevice) {
+								oldLowBatState = device.LowBat;
+								batteryData = await this.getBatteryData(device.BatteryRaw, oldLowBatState, device.adapterID);
 
-							device.Battery = batteryData[0];
-							device.BatteryRaw = batteryData[2];
-							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, undefined, state.val, device.adapterID);
+								device.Battery = batteryData[0];
+								device.BatteryRaw = batteryData[2];
+								device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, undefined, state.val, device.adapterID);
 
-							if (device.LowBat && oldLowBatState !== device.LowBat) {
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
-									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
+								if (device.LowBat && oldLowBatState !== device.LowBat) {
+									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+										await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
+									}
 								}
 							}
 						}
 						break;
 
 					case device.UnreachDP:
-						oldStatus = device.Status;
-						device.UnreachState = await this.getInitValue(device.UnreachDP);
-						contactData = await this.getOnlineState(
-							device.timeSelector,
-							device.adapterID,
-							device.UnreachDP,
-							device.SignalStrength,
-							device.UnreachState,
-							device.DeviceStateSelectorDP,
-							device.rssiPeerSelectorDP,
-						);
-						if (contactData !== undefined) {
-							device.LastContact = contactData[0];
-							device.Status = contactData[1];
-							device.SignalStrength = contactData[2];
-						}
+						instanceAlive = await this.getInitValue(device.instanceAlivePath);
+						if (instanceAlive) {
+							oldStatus = device.Status;
+							device.UnreachState = await this.getInitValue(device.UnreachDP);
+							contactData = await this.getOnlineState(
+								device.timeSelector,
+								device.adapterID,
+								device.UnreachDP,
+								device.SignalStrength,
+								device.UnreachState,
+								device.DeviceStateSelectorDP,
+								device.rssiPeerSelectorDP,
+							);
+							if (contactData !== undefined) {
+								device.LastContact = contactData[0];
+								device.Status = contactData[1];
+								device.SignalStrength = contactData[2];
+							}
 
-						if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
-							await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
+							if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
+								await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
+							}
 						}
 						break;
 				}
@@ -499,6 +518,12 @@ class DeviceWatcher extends utils.Adapter {
 
 		/*----------  Start of loop  ----------*/
 		for (const [id] of Object.entries(devices)) {
+			/*=============================================
+				=              get Instanz		          =
+				=============================================*/
+			const instance = id.slice(0, id.indexOf('.') + 2);
+			const instanceAlivePath = `system.adapter.${instance}.alive`;
+
 			/*=============================================
 				=              Get device name		          =
 				=============================================*/
@@ -666,6 +691,7 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.listOnlyBattery && isBatteryDevice) {
 				this.listAllDevicesRaw.push({
 					Path: id,
+					instanceAlivePath: instanceAlivePath,
 					Device: deviceName,
 					adapterID: adapterID,
 					Adapter: adapter,
@@ -693,6 +719,7 @@ class DeviceWatcher extends utils.Adapter {
 				/* Add all devices */
 				this.listAllDevicesRaw.push({
 					Path: id,
+					instanceAlivePath: instanceAlivePath,
 					Device: deviceName,
 					adapterID: adapterID,
 					Adapter: adapter,
