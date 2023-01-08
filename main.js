@@ -85,6 +85,7 @@ class DeviceWatcher extends utils.Adapter {
 				harmony: this.config.harmonyDevices,
 				hmiP: this.config.hmiPDevices,
 				hmrpc: this.config.hmrpcDevices,
+				homeconnect: this.config.homeconnectDevices,
 				hs100: this.config.hs100Devices,
 				hue: this.config.hueDevices,
 				hueExt: this.config.hueExtDevices,
@@ -134,6 +135,7 @@ class DeviceWatcher extends utils.Adapter {
 				harmony: this.config.harmonyMaxMinutes,
 				hmiP: this.config.hmiPMaxMinutes,
 				hmrpc: this.config.hmrpcMaxMinutes,
+				homeconnect: this.config.homeconnectMaxMinutes,
 				hs100: this.config.hs100MaxMinutes,
 				hue: this.config.hueMaxMinutes,
 				hueExt: this.config.hueextMaxMinutes,
@@ -741,22 +743,6 @@ class DeviceWatcher extends utils.Adapter {
 			let deviceID;
 
 			switch (this.selAdapter[i].adapterID) {
-				// Get ID with currDeviceString from datapoint
-				case 'switchbotBle':
-				case 'esphome':
-				case 'apcups':
-					deviceName = await this.getInitValue(currDeviceString + this.selAdapter[i].id);
-					break;
-
-				case 'eusec':
-					deviceName = await this.getInitValue(currDeviceString + this.selAdapter[i].id);
-					if (deviceName === null || deviceName === undefined) {
-						if (deviceObject && typeof deviceObject === 'object') {
-							deviceName = deviceObject.common.name;
-						}
-					}
-					break;
-
 				case 'fullybrowser':
 					deviceName = (await this.getInitValue(currDeviceString + this.selAdapter[i].id)) + ' ' + (await this.getInitValue(currDeviceString + this.selAdapter[i].id2));
 					break;
@@ -812,8 +798,11 @@ class DeviceWatcher extends utils.Adapter {
 
 				// Get ID with main selektor from objectjson
 				default:
-					if (deviceObject && typeof deviceObject === 'object') {
-						deviceName = deviceObject.common.name;
+					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) deviceName = await this.getInitValue(currDeviceString + this.selAdapter[i].id);
+					if (deviceName === null || deviceName === undefined) {
+						if (deviceObject && typeof deviceObject === 'object') {
+							deviceName = deviceObject.common.name;
+						}
 					}
 					break;
 			}
