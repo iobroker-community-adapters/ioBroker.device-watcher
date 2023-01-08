@@ -106,6 +106,7 @@ class DeviceWatcher extends utils.Adapter {
 				ping: this.config.pingDevices,
 				roomba: this.config.roombaDevices,
 				shelly: this.config.shellyDevices,
+				smartgarden: this.config.smartgardenDevices,
 				sonoff: this.config.sonoffDevices,
 				sonos: this.config.sonosDevices,
 				sureflap: this.config.sureflapDevices,
@@ -156,6 +157,7 @@ class DeviceWatcher extends utils.Adapter {
 				ping: this.config.pingMaxMinutes,
 				roomba: this.config.roombaMaxMinutes,
 				shelly: this.config.shellyMaxMinutes,
+				smartgarden: this.config.smartgardenMaxMinutes,
 				sonoff: this.config.sonoffMaxMinutes,
 				sonos: this.config.sonosMaxMinutes,
 				sureflap: this.config.sureflapMaxMinutes,
@@ -857,6 +859,7 @@ class DeviceWatcher extends utils.Adapter {
 						switch (adapterID) {
 							case 'roomba':
 							case 'sonoff':
+							case 'smartgarden':
 								linkQuality = deviceQualityState.val + '%'; // If quality state is already an percent value
 								break;
 							case 'lupusec':
@@ -1167,6 +1170,17 @@ class DeviceWatcher extends utils.Adapter {
 									deviceState = 'Offline'; //set online state to offline
 									linkQuality = '0%'; // set linkQuality to nothing
 								}
+							}
+							break;
+						case 'smartgarden':
+							if (this.configMaxMinutes[adapterID] <= 0) {
+								if (deviceUnreachState === 'OFFLINE') {
+									deviceState = 'Offline'; //set online state to offline
+									linkQuality = '0%'; // set linkQuality to nothing
+								}
+							} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
+								deviceState = 'Offline'; //set online state to offline
+								linkQuality = '0%'; // set linkQuality to nothing
 							}
 							break;
 						default:

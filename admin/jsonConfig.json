@@ -242,6 +242,13 @@
 					"lg": 3,
 					"label": "Shelly"
 				},
+				"smartgardenDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Smartgarden"
+				},
 				"sonoffDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1473,6 +1480,18 @@
 					"label": "Shelly",
 					"help": "in minutes",
 					"hidden": "!data.shellyDevices",
+					"hideOnlyControl": false
+				},
+				"smartgardenMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Smartgarden",
+					"help": "in minutes",
+					"hidden": "!data.smartgardenDevices",
 					"hideOnlyControl": false
 				},
 				"sonoffMaxMinutes": {

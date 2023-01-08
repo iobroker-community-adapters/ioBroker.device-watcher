@@ -228,6 +228,8 @@
 		"roombaMaxMinutes": 0,
 		"shellyDevices": false,
 		"shellyMaxMinutes": 0,
+		"smartgardenDevices": false,
+		"smartgardenMaxMinutes": 0,
 		"sonoffDevices": false,
 		"sonoffMaxMinutes": 0,
 		"sonosDevices": false,
