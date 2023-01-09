@@ -250,16 +250,18 @@ class DeviceWatcher extends utils.Adapter {
 			let contactData;
 			let oldStatus;
 			let isLowBatValue;
-			let instanceAlive;
 
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
 				switch (id) {
+					case device.instanceAliveDP:
+						device.instanceAlive = state.val;
+						break;
+
 					case device.UpdateDP:
-						instanceAlive = await this.getInitValue(device.instanceAlivePath);
-						if (instanceAlive) {
+						if (device.instanceAlive) {
+							device.Upgradable = state.val;
 							if (state.val) {
-								device.Upgradable = state.val;
 								if (!this.blacklistNotify.includes(device.Path)) {
 									await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
 								}
@@ -268,15 +270,13 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.SignalStrengthDP:
-						instanceAlive = await this.getInitValue(device.instanceAlivePath);
-						if (instanceAlive) {
+						if (device.instanceAlive) {
 							device.SignalStrength = await this.calculateSignalStrength(state, device.adapterID);
 						}
 						break;
 
 					case device.batteryDP:
-						instanceAlive = await this.getInitValue(device.instanceAlivePath);
-						if (instanceAlive) {
+						if (device.instanceAlive) {
 							if (device.isBatteryDevice) {
 								oldLowBatState = device.LowBat;
 								batteryData = await this.getBatteryData(state.val, oldLowBatState, device.adapterID);
@@ -300,8 +300,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.LowBatDP:
-						instanceAlive = await this.getInitValue(device.instanceAlivePath);
-						if (instanceAlive) {
+						if (device.instanceAlive) {
 							if (device.isBatteryDevice) {
 								oldLowBatState = device.LowBat;
 								batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
@@ -319,8 +318,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.faultReportDP:
-						instanceAlive = await this.getInitValue(device.instanceAlivePath);
-						if (instanceAlive) {
+						if (device.instanceAlive) {
 							if (device.isBatteryDevice) {
 								oldLowBatState = device.LowBat;
 								batteryData = await this.getBatteryData(device.BatteryRaw, oldLowBatState, device.adapterID);
@@ -339,8 +337,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.UnreachDP:
-						instanceAlive = await this.getInitValue(device.instanceAlivePath);
-						if (instanceAlive) {
+						if (device.instanceAlive) {
 							oldStatus = device.Status;
 							device.UnreachState = await this.getInitValue(device.UnreachDP);
 							contactData = await this.getOnlineState(
@@ -524,7 +521,9 @@ class DeviceWatcher extends utils.Adapter {
 				=              get Instanz		          =
 				=============================================*/
 			const instance = id.slice(0, id.indexOf('.') + 2);
-			const instanceAlivePath = `system.adapter.${instance}.alive`;
+			const instanceAliveDP = `system.adapter.${instance}.alive`;
+			const instanceAlive = await this.getInitValue(instanceAliveDP);
+			this.subscribeForeignStates(instanceAliveDP);
 
 			/*=============================================
 				=              Get device name		          =
@@ -567,7 +566,7 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 			}
 			//subscribe to states
-			this.subscribeForeignStatesAsync(deviceQualityDP);
+			this.subscribeForeignStates(deviceQualityDP);
 
 			let linkQuality = await this.calculateSignalStrength(deviceQualityState, adapterID);
 
@@ -623,9 +622,9 @@ class DeviceWatcher extends utils.Adapter {
 				faultReportingState = await this.getInitValue(faultReportingDP);
 
 				//subscribe to states
-				this.subscribeForeignStatesAsync(deviceBatteryStateDP);
-				this.subscribeForeignStatesAsync(isLowBatDP);
-				this.subscribeForeignStatesAsync(faultReportingDP);
+				this.subscribeForeignStates(deviceBatteryStateDP);
+				this.subscribeForeignStates(isLowBatDP);
+				this.subscribeForeignStates(faultReportingDP);
 
 				const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
 				batteryHealth = batteryData[0];
@@ -652,10 +651,10 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// subscribe to states
-			this.subscribeForeignStatesAsync(timeSelector);
-			this.subscribeForeignStatesAsync(unreachDP);
-			this.subscribeForeignStatesAsync(deviceStateSelectorDP);
-			this.subscribeForeignStatesAsync(rssiPeerSelectorDP);
+			this.subscribeForeignStates(timeSelector);
+			this.subscribeForeignStates(unreachDP);
+			this.subscribeForeignStates(deviceStateSelectorDP);
+			this.subscribeForeignStates(rssiPeerSelectorDP);
 
 			const onlineState = await this.getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
 			let deviceState;
@@ -682,7 +681,7 @@ class DeviceWatcher extends utils.Adapter {
 					isUpgradable = false;
 				}
 				// subscribe to states
-				this.subscribeForeignStatesAsync(deviceUpdateDP);
+				this.subscribeForeignStates(deviceUpdateDP);
 			}
 
 			/*=============================================
@@ -693,7 +692,8 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.listOnlyBattery && isBatteryDevice) {
 				this.listAllDevicesRaw.push({
 					Path: id,
-					instanceAlivePath: instanceAlivePath,
+					instanceAliveDP: instanceAliveDP,
+					instanceAlive: instanceAlive,
 					Device: deviceName,
 					adapterID: adapterID,
 					Adapter: adapter,
@@ -721,7 +721,8 @@ class DeviceWatcher extends utils.Adapter {
 				/* Add all devices */
 				this.listAllDevicesRaw.push({
 					Path: id,
-					instanceAlivePath: instanceAlivePath,
+					instanceAliveDP: instanceAliveDP,
+					instanceAlive: instanceAlive,
 					Device: deviceName,
 					adapterID: adapterID,
 					Adapter: adapter,
