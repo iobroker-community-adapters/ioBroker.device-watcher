@@ -56,72 +56,77 @@ It's also counting them in the same categories. You can use the lists and states
     <td>APC UPS</td> 
     <td>Ble</td>
   </tr>
-    <tr>
+  <tr>
     <td>Deconz</td>
     <td>Enocean</td>
     <td>ESP Home</td> 
   </tr>
-    <tr>
+  <tr>
+    <td>euSec</td>
     <td>FritzDect</td>
     <td>fullyBrowser</td>
-    <td>Harmony</td>
   </tr>
   <tr>
+    <td>Harmony</td>
     <td>Ham</td> 
+    <td>Home Connect</td>
+  </tr>
+  <tr>
     <td>Homematic IP</td>
     <td>Homematic RPC</td>
-    </tr>
-        <tr>
     <td>HS100</td>
+  </tr>
+  <tr>    
     <td>Philips Hue</td> 
     <td>Philips Hue Extended</td>
-  </tr>
-      <tr>
     <td>Innogy Smarthome</td>
+  </tr>
+  <tr>    
     <td>Jeelink</td> 
     <td>Lupusec</td>
-  </tr>
-      <tr>
     <td>Max! Cube</td>
+  </tr>
+  <tr>    
     <td>Meross</td> 
     <td>MiHome</td>
-  </tr>
-      <tr>
     <td>MiHome Vacuum</td>
+  </tr>
+  <tr> 
     <td>MQTT Client Zigbee2Mqtt</td> 
     <td>MQTT Nuki</td>
-  </tr>
-      <tr>
     <td>MusicCast</td>
+  </tr>
+  <tr>    
     <td>Netatmo</td> 
     <td>Nuki Extended</td>
-  </tr>
-      <tr>
     <td>Nut</td>
+  </tr>
+  <tr>    
     <td>Ping</td>
     <td>Roomba</td>
-  </tr>
-      <tr>
     <td>Shelly</td>
+  </tr>
+  <tr>    
+    <td>Smartgarden</td>
     <td>Sonoff</td>
     <td>Sonos</td>
   </tr>
-      <tr>
+  <tr>    
     <td>Sureflap</td> 
     <td>Switchbot Ble</td>
     <td>Tado</td>
   </tr>
-      <tr>
+  <tr>    
     <td>Tapo</td>
     <td>Tradfri</td> 
     <td>Unifi</td>
   </tr>
-      <tr>
+  <tr>    
     <td>Wled</td>
     <td>Yeelight</td> 
     <td>Zigbee</td>
   </tr>
-      <tr>
+  <tr>    
     <td>Zigbee2MQTT</td> 
     <td>Zwave</td>
     <td></td>
@@ -177,8 +182,8 @@ It's possible to select:
 
 ### **WORK IN PROGRESS**
 
--   (ciddi89) make onStateChanges only, when device adapter is alive
--   (ciddi89) Homeconnect ans Smartgarden Adapter added
+-   (ciddi89) make onStateChanges only, when device instance is alive
+-   (ciddi89) Homeconnect and Smartgarden Adapter added
 
 ### 2.3.1 (2023-01-05)
 

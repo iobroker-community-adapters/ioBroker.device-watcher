@@ -6,7 +6,7 @@
 
 Here is a list of supported adapters with the information what exactly is supported per adapter.
 
- <table>
+  <table>
         <tbody>
           <tr>
             <td class="column0 style0 s">Adapter</td>
@@ -72,6 +72,15 @@ Here is a list of supported adapters with the information what exactly is suppor
             <td class="column6 style0 s">❌</td>
           </tr>
           <tr>
+            <td class="column0 style0 s">euSec</td>
+            <td class="column1 style0 s">✅</td>
+            <td class="column2 style0 s">✅</td>
+            <td class="column3 style0 s">✅</td>
+            <td class="column4 style0 s">✅</td>
+            <td class="column5 style0 s">✅</td>
+            <td class="column6 style0 s">❌</td>
+          </tr>
+          <tr>
             <td class="column0 style0 s">FritzDect</td>
             <td class="column1 style0 s">✅</td>
             <td class="column2 style0 s">❌</td>
@@ -121,6 +130,15 @@ Here is a list of supported adapters with the information what exactly is suppor
             <td class="column1 style0 s">✅</td>
             <td class="column2 style0 s">✅</td>
             <td class="column3 style0 s">✅</td>
+            <td class="column4 style0 s">✅</td>
+            <td class="column5 style0 s">✅</td>
+            <td class="column6 style0 s">❌</td>
+          </tr>
+          <tr>
+            <td class="column0 style0 s">Home Connect</td>
+            <td class="column1 style0 s">❌</td>
+            <td class="column2 style0 s">❌</td>
+            <td class="column3 style0 s">❌</td>
             <td class="column4 style0 s">✅</td>
             <td class="column5 style0 s">✅</td>
             <td class="column6 style0 s">❌</td>
@@ -295,6 +313,15 @@ Here is a list of supported adapters with the information what exactly is suppor
             <td class="column4 style0 s">✅</td>
             <td class="column5 style0 s">✅</td>
             <td class="column6 style0 s">✅</td>
+          </tr>
+          <tr>
+            <td class="column0 style0 s">Smartgarden</td>
+            <td class="column1 style0 s">✅</td>
+            <td class="column2 style0 s">❌</td>
+            <td class="column3 style0 s">✅</td>
+            <td class="column4 style0 s">✅</td>
+            <td class="column5 style0 s">✅</td>
+            <td class="column6 style0 s">❌</td>
           </tr>
           <tr>
             <td class="column0 style0 s">Sonoff</td>
