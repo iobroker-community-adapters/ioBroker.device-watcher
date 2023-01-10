@@ -10,7 +10,7 @@ const schedule = require('node-schedule');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
 
 // Sentry error reporting, disable when testing code!
-const enableSendSentry = false;
+const enableSendSentry = true;
 
 // indicator if the adapter is running or not (for intervall/shedule)
 let isUnloaded = false;
