@@ -254,12 +254,14 @@ class DeviceWatcher extends utils.Adapter {
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
 				switch (id) {
-					case device.instanceAliveDP:
-						device.instanceAlive = state.val;
+					case device.instanceDeviceConnectionDP:
+						if (state.val !== device.instancedeviceConnected) {
+							device.instancedeviceConnected = state.val;
+						}
 						break;
 
 					case device.UpdateDP:
-						if (device.instanceAlive) {
+						if (device.instancedeviceConnected !== false) {
 							if (state.val !== device.Upgradable) {
 								device.Upgradable = state.val;
 								if (state.val) {
@@ -272,13 +274,13 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.SignalStrengthDP:
-						if (device.instanceAlive) {
+						if (device.instancedeviceConnected !== false) {
 							device.SignalStrength = await this.calculateSignalStrength(state, device.adapterID);
 						}
 						break;
 
 					case device.batteryDP:
-						if (device.instanceAlive) {
+						if (device.instancedeviceConnected !== false) {
 							if (device.isBatteryDevice) {
 								oldLowBatState = device.LowBat;
 								batteryData = await this.getBatteryData(state.val, oldLowBatState, device.adapterID);
@@ -302,7 +304,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.LowBatDP:
-						if (device.instanceAlive) {
+						if (device.instancedeviceConnected !== false) {
 							if (device.isBatteryDevice) {
 								oldLowBatState = device.LowBat;
 								batteryData = await this.getBatteryData(device.BatteryRaw, state.val, device.adapterID);
@@ -320,7 +322,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.faultReportDP:
-						if (device.instanceAlive) {
+						if (device.instancedeviceConnected !== false) {
 							if (device.isBatteryDevice) {
 								oldLowBatState = device.LowBat;
 								batteryData = await this.getBatteryData(device.BatteryRaw, oldLowBatState, device.adapterID);
@@ -339,7 +341,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case device.UnreachDP:
-						if (device.instanceAlive) {
+						if (device.instancedeviceConnected !== false) {
 							oldStatus = device.Status;
 							device.UnreachState = await this.getInitValue(device.UnreachDP);
 							contactData = await this.getOnlineState(
@@ -523,9 +525,9 @@ class DeviceWatcher extends utils.Adapter {
 				=              get Instanz		          =
 				=============================================*/
 			const instance = id.slice(0, id.indexOf('.') + 2);
-			const instanceAliveDP = `system.adapter.${instance}.alive`;
-			const instanceAlive = await this.getInitValue(instanceAliveDP);
-			this.subscribeForeignStates(instanceAliveDP);
+			const instanceDeviceConnectionDP = `system.adapter.${instance}.alive`;
+			const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
+			this.subscribeForeignStates(instanceDeviceConnectionDP);
 
 			/*=============================================
 				=              Get device name		          =
@@ -694,8 +696,8 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.listOnlyBattery && isBatteryDevice) {
 				this.listAllDevicesRaw.push({
 					Path: id,
-					instanceAliveDP: instanceAliveDP,
-					instanceAlive: instanceAlive,
+					instanceDeviceConnectionDP: instanceDeviceConnectionDP,
+					instancedeviceConnected: instancedeviceConnected,
 					Device: deviceName,
 					adapterID: adapterID,
 					Adapter: adapter,
@@ -723,8 +725,8 @@ class DeviceWatcher extends utils.Adapter {
 				/* Add all devices */
 				this.listAllDevicesRaw.push({
 					Path: id,
-					instanceAliveDP: instanceAliveDP,
-					instanceAlive: instanceAlive,
+					instanceDeviceConnectionDP: instanceDeviceConnectionDP,
+					instancedeviceConnected: instancedeviceConnected,
 					Device: deviceName,
 					adapterID: adapterID,
 					Adapter: adapter,
@@ -1211,24 +1213,26 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async checkLastContact() {
 		for (const device of this.listAllDevicesRaw) {
-			const oldContactState = device.Status;
-			device.UnreachState = await this.getInitValue(device.UnreachDP);
-			const contactData = await this.getOnlineState(
-				device.timeSelector,
-				device.adapterID,
-				device.UnreachDP,
-				device.SignalStrength,
-				device.UnreachState,
-				device.DeviceStateSelectorDP,
-				device.rssiPeerSelectorDP,
-			);
-			if (contactData !== undefined) {
-				device.LastContact = contactData[0];
-				device.Status = contactData[1];
-				device.linkQuality = contactData[2];
-			}
-			if (this.config.checkSendOfflineMsg && oldContactState !== device.Status && !this.blacklistNotify.includes(device.Path)) {
-				await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
+			if (device.instancedeviceConnected !== false) {
+				const oldContactState = device.Status;
+				device.UnreachState = await this.getInitValue(device.UnreachDP);
+				const contactData = await this.getOnlineState(
+					device.timeSelector,
+					device.adapterID,
+					device.UnreachDP,
+					device.SignalStrength,
+					device.UnreachState,
+					device.DeviceStateSelectorDP,
+					device.rssiPeerSelectorDP,
+				);
+				if (contactData !== undefined) {
+					device.LastContact = contactData[0];
+					device.Status = contactData[1];
+					device.linkQuality = contactData[2];
+				}
+				if (this.config.checkSendOfflineMsg && oldContactState !== device.Status && !this.blacklistNotify.includes(device.Path)) {
+					await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
+				}
 			}
 		}
 	}
