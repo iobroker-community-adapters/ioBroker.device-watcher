@@ -260,10 +260,12 @@ class DeviceWatcher extends utils.Adapter {
 
 					case device.UpdateDP:
 						if (device.instanceAlive) {
-							device.Upgradable = state.val;
-							if (state.val) {
-								if (!this.blacklistNotify.includes(device.Path)) {
-									await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
+							if (state.val !== device.Upgradable) {
+								device.Upgradable = state.val;
+								if (state.val) {
+									if (!this.blacklistNotify.includes(device.Path)) {
+										await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
+									}
 								}
 							}
 						}
