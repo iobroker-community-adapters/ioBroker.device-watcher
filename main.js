@@ -525,7 +525,7 @@ class DeviceWatcher extends utils.Adapter {
 				=              get Instanz		          =
 				=============================================*/
 			const instance = id.slice(0, id.indexOf('.') + 2);
-			const instanceDeviceConnectionDP = `system.adapter.${instance}.connected`;
+			const instanceDeviceConnectionDP = `${instance}.info.connection`;
 			const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
 			this.subscribeForeignStates(instanceDeviceConnectionDP);
 
