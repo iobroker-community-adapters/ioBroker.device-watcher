@@ -693,36 +693,39 @@ class DeviceWatcher extends utils.Adapter {
 			/*=============================================
 				=          		  Fill Raw Lists          	  =
 				=============================================*/
+			this.log.warn(isBatteryDevice);
 
 			/* Add only devices with battery in the rawlist */
-			if (this.listOnlyBattery && isBatteryDevice) {
-				this.listAllDevicesRaw.push({
-					Path: id,
-					instanceDeviceConnectionDP: instanceDeviceConnectionDP,
-					instancedeviceConnected: instancedeviceConnected,
-					Device: deviceName,
-					adapterID: adapterID,
-					Adapter: adapter,
-					timeSelector: timeSelector,
-					isBatteryDevice: isBatteryDevice,
-					Battery: batteryHealth,
-					BatteryRaw: batteryHealthRaw,
-					batteryDP: deviceBatteryStateDP,
-					LowBat: lowBatIndicator,
-					LowBatDP: isLowBatDP,
-					faultReport: faultReportingState,
-					faultReportDP: faultReportingDP,
-					SignalStrengthDP: deviceQualityDP,
-					SignalStrength: linkQuality,
-					UnreachState: deviceUnreachState,
-					UnreachDP: unreachDP,
-					DeviceStateSelectorDP: deviceStateSelectorDP,
-					rssiPeerSelectorDP: rssiPeerSelectorDP,
-					LastContact: lastContactString,
-					Status: deviceState,
-					UpdateDP: deviceUpdateDP,
-					Upgradable: isUpgradable,
-				});
+			if (this.listOnlyBattery) {
+				if (isBatteryDevice) {
+					this.listAllDevicesRaw.push({
+						Path: id,
+						instanceDeviceConnectionDP: instanceDeviceConnectionDP,
+						instancedeviceConnected: instancedeviceConnected,
+						Device: deviceName,
+						adapterID: adapterID,
+						Adapter: adapter,
+						timeSelector: timeSelector,
+						isBatteryDevice: isBatteryDevice,
+						Battery: batteryHealth,
+						BatteryRaw: batteryHealthRaw,
+						batteryDP: deviceBatteryStateDP,
+						LowBat: lowBatIndicator,
+						LowBatDP: isLowBatDP,
+						faultReport: faultReportingState,
+						faultReportDP: faultReportingDP,
+						SignalStrengthDP: deviceQualityDP,
+						SignalStrength: linkQuality,
+						UnreachState: deviceUnreachState,
+						UnreachDP: unreachDP,
+						DeviceStateSelectorDP: deviceStateSelectorDP,
+						rssiPeerSelectorDP: rssiPeerSelectorDP,
+						LastContact: lastContactString,
+						Status: deviceState,
+						UpdateDP: deviceUpdateDP,
+						Upgradable: isUpgradable,
+					});
+				}
 			} else {
 				/* Add all devices */
 				this.listAllDevicesRaw.push({
