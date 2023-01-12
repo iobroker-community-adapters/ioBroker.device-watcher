@@ -693,7 +693,6 @@ class DeviceWatcher extends utils.Adapter {
 			/*=============================================
 				=          		  Fill Raw Lists          	  =
 				=============================================*/
-			this.log.warn(isBatteryDevice);
 
 			/* Add only devices with battery in the rawlist */
 			if (this.listOnlyBattery) {
