@@ -179,6 +179,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) send online and offline notifications only, if the connection to device (zigbee stick etc.) is longer then few seconds. Should prevent multiple messages at a stroke
+-   (ciddi89) fixed issue that all devices was listed even though only batterie devices was selected
+
 ### 2.4.0 (2023-01-10)
 
 -   (ciddi89) make onStateChanges only, when device instance is alive
