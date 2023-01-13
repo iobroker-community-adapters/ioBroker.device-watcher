@@ -250,9 +250,11 @@ class DeviceWatcher extends utils.Adapter {
 			let contactData;
 			let oldStatus;
 			let isLowBatValue;
+			let instanceDeviceConnectionDpTS;
+			const instanceDeviceConnectionDpTSminTime = 5;
 
 			// Wait if the conection to device was lost to avoid multiple messages.
-			const delay = (n) => new Promise((r) => setTimeout(r, n * 100));
+			// const delay = (n) => new Promise((r) => setTimeout(r, n * 100));
 
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
@@ -292,12 +294,9 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							device.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, device.faultReport, device.adapterID);
 
-							delay(5);
-							if (device.instancedeviceConnected !== false) {
-								if (device.LowBat && oldLowBatState !== device.LowBat) {
-									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
-										await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
-									}
+							if (device.LowBat && oldLowBatState !== device.LowBat) {
+								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
 								}
 							}
 						}
@@ -311,12 +310,9 @@ class DeviceWatcher extends utils.Adapter {
 							device.BatteryRaw = batteryData[2];
 							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, state.val, device.faultReport, device.adapterID);
 
-							delay(5);
-							if (device.instancedeviceConnected !== false) {
-								if (device.LowBat && oldLowBatState !== device.LowBat) {
-									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
-										await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
-									}
+							if (device.LowBat && oldLowBatState !== device.LowBat) {
+								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
 								}
 							}
 						}
@@ -331,12 +327,9 @@ class DeviceWatcher extends utils.Adapter {
 							device.BatteryRaw = batteryData[2];
 							device.LowBat = await this.setLowbatIndicator(device.BatteryRaw, undefined, state.val, device.adapterID);
 
-							delay(5);
-							if (device.instancedeviceConnected !== false) {
-								if (device.LowBat && oldLowBatState !== device.LowBat) {
-									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
-										await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
-									}
+							if (device.LowBat && oldLowBatState !== device.LowBat) {
+								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(device.Path)) {
+									await this.sendLowBatNoticiation(device.Device, device.Adapter, device.Battery);
 								}
 							}
 						}
@@ -359,8 +352,14 @@ class DeviceWatcher extends utils.Adapter {
 							device.Status = contactData[1];
 							device.SignalStrength = contactData[2];
 						}
-						delay(5);
-						if (device.instancedeviceConnected !== false) {
+						if (device.instanceDeviceConnectionDP !== undefined) {
+							instanceDeviceConnectionDpTS = await this.getTimestampConnectionDP(device.instanceDeviceConnectionDP);
+							if (device.instancedeviceConnected !== false && instanceDeviceConnectionDpTS && instanceDeviceConnectionDpTS >= instanceDeviceConnectionDpTSminTime) {
+								if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
+									await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
+								}
+							}
+						} else {
 							if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
 								await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 							}
@@ -2575,6 +2574,18 @@ class DeviceWatcher extends utils.Adapter {
 	async getTimestamp(dpValue) {
 		const time = new Date();
 		return (dpValue = Math.round((time.getTime() - dpValue) / 1000 / 60));
+	}
+
+	/**
+	 * @param {string} dp - get Time of this datapoint
+	 */
+	async getTimestampConnectionDP(dp) {
+		const time = new Date();
+		const dpValue = await this.getForeignStateAsync(dp);
+		if (dpValue !== null && dpValue !== undefined) {
+			const dpLastStateChange = Math.round((time.getTime() - dpValue.lc) / 1000);
+			return dpLastStateChange;
+		}
 	}
 
 	/**
