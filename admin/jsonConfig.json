@@ -632,6 +632,20 @@
 					"help": "Will add the adaptername from the device",
 					"hidden": "!data.checkSendBatteryMsg && !data.checkSendBatteryMsgDaily && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade && !data.checkSendUpgradeMsgDaily"
 				},
+				"_headerAdapterInstances": {
+					"type": "header",
+					"text": "Adapter & Instances",
+					"size": 2
+				},
+				"checkSendAdapterUpdateMsg": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 6,
+					"lg": 3,
+					"label": "Adapter update message",
+					"help": "Receive a message when an update for an adapter is available"
+				},
 				"_headerMSGservice": {
 					"newLine": true,
 					"type": "header",

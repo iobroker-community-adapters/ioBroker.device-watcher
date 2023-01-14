@@ -41,6 +41,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryLowPoweredRaw = [];
 		this.offlineDevicesRaw = [];
 		this.upgradableDevicesRaw = [];
+		this.adapterUpdatesJsonRaw = [];
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -222,6 +223,9 @@ class DeviceWatcher extends utils.Adapter {
 			// update last contact data in interval
 			await this.refreshData();
 
+			// trigger update notification on state change
+			if (this.config.checkSendAdapterUpdateMsg) await this.createAdapterData();
+
 			// send overview for low battery devices
 			if (this.config.checkSendBatteryMsgDaily) await this.sendBatteryNotifyShedule();
 
@@ -253,8 +257,12 @@ class DeviceWatcher extends utils.Adapter {
 			let instanceDeviceConnectionDpTS;
 			const instanceDeviceConnectionDpTSminTime = 5;
 
-			// Wait if the conection to device was lost to avoid multiple messages.
-			// const delay = (n) => new Promise((r) => setTimeout(r, n * 100));
+			for (const admin of this.adapterUpdatesJsonRaw) {
+				switch (id) {
+					case admin.Instance:
+						this.sendAdapterUpdatesNotification(id, state);
+				}
+			}
 
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
@@ -1429,6 +1437,16 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.createDataOfAllAdapter.name}`);
 	} // <-- end of createDataOfAllAdapter
 
+	async createAdapterData() {
+		const adapterUpdatesListDP = await this.getForeignStatesAsync(`admin.*.info.updatesJson`);
+		for (const [id] of Object.entries(adapterUpdatesListDP)) {
+			this.subscribeForeignStates(id);
+			this.adapterUpdatesJsonRaw.push({
+				Instance: id,
+			});
+		}
+	}
+
 	/**
 	 * @param {string} [adptName] - Adaptername
 	 */
@@ -1986,6 +2004,37 @@ class DeviceWatcher extends utils.Adapter {
 			});
 		}
 	} //<--End of daily offline notification
+
+	/**
+	 * check if adapter updates are available and send notification
+	 * @param {string} id
+	 * @param {ioBroker.State | null | undefined} state
+	 */
+	async sendAdapterUpdatesNotification(id, state) {
+		this.log.debug(`Start the function: ${this.sendAdapterUpdatesNotification.name}`);
+
+		try {
+			if (state && state !== undefined) {
+				const list = await this.parseData(state.val);
+				let msg = '';
+				let adapterList = '';
+
+				for (const [id] of Object.entries(list)) {
+					adapterList = `${adapterList}\n${this.capitalize(id)} - Version: ${list[id].availableVersion}`;
+				}
+				if (adapterList.length !== 0) {
+					msg = `Neue Adapter Updates vorhanden: \n`;
+
+					this.log.info(msg + adapterList);
+					await this.setStateAsync('lastNotification', msg + adapterList, true);
+					await this.sendNotification(msg + adapterList);
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendAdapterUpdatesNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
+	}
 
 	/*=============================================
 	=       functions to create html lists        =
