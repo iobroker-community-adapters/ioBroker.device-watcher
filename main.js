@@ -35,6 +35,8 @@ class DeviceWatcher extends utils.Adapter {
 		this.selAdapter = [];
 		this.adapterSelected = [];
 		this.upgradableList = [];
+		this.listInstance = [];
+		this.instanceBlacklist = [];
 
 		// raw arrays
 		this.listAllDevicesRaw = [];
@@ -220,6 +222,8 @@ class DeviceWatcher extends utils.Adapter {
 			//read data first at start
 			await this.main();
 
+			await this.getInstance();
+
 			// update last contact data in interval
 			await this.refreshData();
 
@@ -233,7 +237,7 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.config.checkSendOfflineMsgDaily) await this.sendOfflineNotificationsShedule();
 
 			// send overview of upgradeable devices
-			if (this.config.checkSendUpgradeMsgDaily) await this.sendUpgradeNotificationsShedule();
+			if (this.config.checkSendUpgradeMsgDaily) await this.sendDeviceUpdateNotificationsShedule();
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -1599,6 +1603,27 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	} //<--End  of writing Datapoints
 
+	/**
+	 * get Instances
+	 */
+	async getInstance() {
+		try {
+			const instanceAliveDP = await this.getForeignStatesAsync('system.adapter.*.alive');
+			for (const [id] of Object.entries(instanceAliveDP)) {
+				let instance = id;
+				if (!(typeof instance === 'string' && instance.startsWith('system.adapter.'))) continue;
+				instance = instance.slice(15); // remove "system.adapter."
+				instance = instance.slice(0, -6); // remove ".alive"
+				if (this.instanceBlacklist.includes(instance)) continue;
+				this.listInstance.push(instance);
+			}
+			this.log.warn(JSON.stringify(this.listInstance));
+			return this.listInstance;
+		} catch (error) {
+			this.errorReporting('[getInstance]', error);
+		}
+	}
+
 	/*=============================================
 	=       functions to send notifications       =
 	=============================================*/
@@ -1955,7 +1980,7 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * send shedule message with offline devices
 	 */
-	async sendUpgradeNotificationsShedule() {
+	async sendDeviceUpdateNotificationsShedule() {
 		const time = this.config.checkSendUpgradeTime.split(':');
 
 		const checkDays = []; // list of selected days
