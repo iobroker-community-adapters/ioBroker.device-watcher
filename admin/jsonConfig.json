@@ -346,9 +346,190 @@
 			"type": "panel",
 			"label": "Notifications",
 			"items": {
+				"_headerAdapterInstances": {
+					"type": "header",
+					"text": "Adapter & Instances Notification Settings",
+					"size": 2
+				},
+				"checkSendAdapterUpdateMsg": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Adapter update message",
+					"help": "Receive a message when an update for an adapter is available"
+				},
+				"checkSendAdapterUpdateMsgDaily": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Overview of updatable adapter",
+					"help": "Get a message with an overview of all updatable adapter"
+				},
+				"_sendIntervallAdapterUpdateDay": {
+					"newLine": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendAdapterUpdateMsgDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textDays": {
+							"type": "staticText",
+							"text": "Choose the day(s) where you want to get the overview of updatable Adapter:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkAdapterUpdateMonday": {
+							"newLine": true,
+							"type": "checkbox",
+							"label": "Mon"
+						},
+						"checkAdapterUpdateTuesday": {
+							"type": "checkbox",
+							"label": "Tue"
+						},
+						"checkAdapterUpdateWednesday": {
+							"type": "checkbox",
+							"label": "Wed"
+						},
+						"checkAdapterUpdateThursday": {
+							"type": "checkbox",
+							"label": "Thu"
+						},
+						"checkAdapterUpdateFriday": {
+							"type": "checkbox",
+							"label": "Fri"
+						},
+						"checkAdapterUpdateSaturday": {
+							"type": "checkbox",
+							"label": "Sat"
+						},
+						"checkAdapterUpdateSunday": {
+							"type": "checkbox",
+							"label": "Sun"
+						}
+					}
+				},
+				"_sendIntervallAdapterUpdateMsgTime": {
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendAdapterUpdateMsgDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textTime": {
+							"type": "staticText",
+							"text": "Choose the Time:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkSendAdapterUpdateTime": {
+							"newLine": true,
+							"type": "text",
+							"help": "Format hh:mm"
+						}
+					}
+				},
+				"trennerUpdatableAdapter": {
+					"newLine": true,
+					"type": "divider"
+				},
+				"checkSendInstanceFailedMsg": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Instance failed message",
+					"help": "Receive a message when an instance failed"
+				},
+				"checkSendInstanceFailedDaily": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Overview of failed instances",
+					"help": "Get a message with an overview of all failed instances"
+				},
+				"_sendIntervallFailedInstancesDay": {
+					"newLine": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendInstanceFailedDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textDays": {
+							"type": "staticText",
+							"text": "Choose the day(s) where you want to get the overview of failed instances:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkFailedInstancesMonday": {
+							"newLine": true,
+							"type": "checkbox",
+							"label": "Mon"
+						},
+						"checkFailedInstancesTuesday": {
+							"type": "checkbox",
+							"label": "Tue"
+						},
+						"checkFailedInstancesWednesday": {
+							"type": "checkbox",
+							"label": "Wed"
+						},
+						"checkFailedInstancesThursday": {
+							"type": "checkbox",
+							"label": "Thu"
+						},
+						"checkFailedInstancesFriday": {
+							"type": "checkbox",
+							"label": "Fri"
+						},
+						"checkFailedInstancesSaturday": {
+							"type": "checkbox",
+							"label": "Sat"
+						},
+						"checkFailedInstancesSunday": {
+							"type": "checkbox",
+							"label": "Sun"
+						}
+					}
+				},
+				"_sendIntervallInstanceFailedMsgTime": {
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendInstanceFailedDaily",
+					"hideOnlyControl": true,
+					"items": {
+						"_textTime": {
+							"type": "staticText",
+							"text": "Choose the Time:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkSendInstanceFailedTime": {
+							"newLine": true,
+							"type": "text",
+							"help": "Format hh:mm"
+						}
+					}
+				},
 				"_headerCommon": {
 					"type": "header",
-					"text": "Common Notification Settings",
+					"text": "Devices Notification Settings",
 					"size": 2
 				},
 				"checkSendOfflineMsg": {
@@ -631,28 +812,18 @@
 					"label": "Add adapter name in notifcations",
 					"help": "Will add the adaptername from the device",
 					"hidden": "!data.checkSendBatteryMsg && !data.checkSendBatteryMsgDaily && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade && !data.checkSendUpgradeMsgDaily"
-				},
-				"_headerAdapterInstances": {
-					"type": "header",
-					"text": "Adapter & Instances",
-					"size": 2
-				},
-				"checkSendAdapterUpdateMsg": {
-					"newLine": "true",
-					"type": "checkbox",
-					"sm": 12,
-					"md": 6,
-					"lg": 3,
-					"label": "Adapter update message",
-					"help": "Receive a message when an update for an adapter is available"
-				},
+				}
+			}
+		},
+		"_notificationServices": {
+			"type": "panel",
+			"label": "Notification Service",
+			"items": {
 				"_headerMSGservice": {
 					"newLine": true,
 					"type": "header",
 					"text": "Notification Service",
-					"size": 2,
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendBatteryMsgDaily && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade",
-					"hideOnlyControl": false
+					"size": 2
 				},
 				"msgServiceText": {
 					"type": "staticText",
@@ -660,9 +831,7 @@
 					"style": {
 						"fontSize": 16,
 						"marginTop": 20
-					},
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendBatteryMsgDaily && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade",
-					"hideOnlyControl": false
+					}
 				},
 				"msgService": {
 					"newLine": true,
@@ -678,9 +847,7 @@
 						{ "label": "Lovelace", "value": "lovelace" },
 						{ "label": "Synochat", "value": "synochat" }
 					],
-					"default": "none",
-					"hidden": "!data.checkSendBatteryMsg && !data.checkSendBatteryMsgDaily && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade",
-					"hideOnlyControl": false
+					"default": "none"
 				},
 				"_headerPushover": {
 					"newLine": true,
