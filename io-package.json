@@ -314,7 +314,15 @@
 		"checkUpgradeSaturday": false,
 		"checkUpgradeSunday": false,
 		"checkSendUpgradeTime": "12:10",
-		"checkSendBatteryMsgDaily": false
+		"checkSendBatteryMsgDaily": false,
+		"checkSendAdapterUpdateTime": "12:15",
+		"checkAdapterUpdateMonday": false,
+		"checkAdapterUpdateTuesday": false,
+		"checkAdapterUpdateWednesday": false,
+		"checkAdapterUpdateThursday": false,
+		"checkAdapterUpdateFriday": false,
+		"checkAdapterUpdateSaturday": false,
+		"checkAdapterUpdateSunday": false
 	},
 	"objects": [],
 	"instanceObjects": [

@@ -1774,6 +1774,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- End of sendNotification function
 
+	/*----------  Battery notifications ----------*/
 	/**
 	 * send shedule message for low battery devices
 	 */
@@ -1857,6 +1858,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Finished the function: ${this.sendLowBatNoticiation.name}`);
 	}
 
+	/*----------  Offline/Online notifications ----------*/
 	/**
 	 * send message if an device is offline
 	 * @param {string} deviceName
@@ -1948,6 +1950,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} //<--End of daily offline notification
 
+	/*---------- Device Updates notifications ----------*/
 	/**
 	 * check if device updates are available and send notification
 	 * @param {string} deviceName
@@ -2030,6 +2033,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} //<--End of daily offline notification
 
+	/*----------  Adapter Updates notifications ----------*/
 	/**
 	 * check if adapter updates are available and send notification
 	 * @param {string} id
@@ -2060,6 +2064,59 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
 	}
+
+	/**
+	 * send shedule message with  list of updatable adapters
+	 */
+	async sendAdapterUpdatesNotificatioShedule() {
+		const time = this.config.checkSendAdapterUpdateTime.split(':');
+
+		const checkDays = []; // list of selected days
+
+		// push the selected days in list
+		if (this.config.checkAdapterUpdateMonday) checkDays.push(1);
+		if (this.config.checkAdapterUpdateTuesday) checkDays.push(2);
+		if (this.config.checkAdapterUpdateWednesday) checkDays.push(3);
+		if (this.config.checkAdapterUpdateThursday) checkDays.push(4);
+		if (this.config.checkAdapterUpdateFriday) checkDays.push(5);
+		if (this.config.checkAdapterUpdateSaturday) checkDays.push(6);
+		if (this.config.checkAdapterUpdateSunday) checkDays.push(0);
+
+		if (checkDays.length >= 1) {
+			// check if an day is selected
+			this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+		} else {
+			this.log.warn(`No days selected for daily adapter update message. Please check the instance configuration!`);
+			return; // cancel function if no day is selected
+		}
+
+		if (!isUnloaded) {
+			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+			schedule.scheduleJob(cron, () => {
+				try {
+					let deviceList = '';
+
+					for (const id of this.upgradableDevicesRaw) {
+						if (!this.blacklistNotify.includes(id.Path)) {
+							if (!this.config.showAdapterNameinMsg) {
+								deviceList = `${deviceList}\n${id.Device}`;
+							} else {
+								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device}`;
+							}
+						}
+					}
+					if (deviceList.length > 0) {
+						this.log.info(`Geräte Upgrade: ${deviceList}`);
+						this.setStateAsync('lastNotification', `Geräte Upgrade: ${deviceList}`, true);
+
+						this.sendNotification(`Geräte Upgrade:\n${deviceList}`);
+					}
+				} catch (error) {
+					this.errorReporting('[sendUpgradeNotificationsShedule]', error);
+				}
+			});
+		}
+	} //<--End of daily offline notification
 
 	/*=============================================
 	=       functions to create html lists        =

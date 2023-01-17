@@ -6,6 +6,18 @@
 			"type": "panel",
 			"label": "Options",
 			"items": {
+				"_headerAdapter": {
+					"type": "header",
+					"text": "Should instances be watched?",
+					"size": 2
+				},
+				"checkAdapterInstances": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Watch Instances"
+				},
 				"_headerDevices": {
 					"type": "header",
 					"text": "Choose devices to watch",
