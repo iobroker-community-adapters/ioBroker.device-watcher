@@ -1615,9 +1615,12 @@ class DeviceWatcher extends utils.Adapter {
 				instance = instance.slice(15); // remove "system.adapter."
 				instance = instance.slice(0, -6); // remove ".alive"
 				if (this.instanceBlacklist.includes(instance)) continue;
-				this.listInstance.push(instance);
+				this.listInstance.push({
+					InstanceName: instance,
+					isAlive: instanceAliveDP[id].val,
+				});
 			}
-			this.log.warn(JSON.stringify(this.listInstance));
+			this.log.warn(JSON.stringify(JSON.stringify(this.listInstance)));
 			return this.listInstance;
 		} catch (error) {
 			this.errorReporting('[getInstance]', error);
