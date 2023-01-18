@@ -35,7 +35,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.selAdapter = [];
 		this.adapterSelected = [];
 		this.upgradableList = [];
-		this.listInstance = [];
+		this.listInstanceRaw = [];
 		this.instanceBlacklist = [];
 
 		// raw arrays
@@ -222,7 +222,7 @@ class DeviceWatcher extends utils.Adapter {
 			//read data first at start
 			await this.main();
 
-			await this.getInstance();
+			await this.getInstanceData();
 
 			// update last contact data in interval
 			await this.refreshData();
@@ -1469,18 +1469,18 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// Write Datapoints for counts
-			await this.setStateAsync(`${dpSubFolder}offlineCount`, { val: this.offlineDevicesCount, ack: true });
-			await this.setStateAsync(`${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
-			await this.setStateAsync(`${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
-			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
-			await this.setStateAsync(`${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}offlineCount`, { val: this.offlineDevicesCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
 
 			// List all devices
 			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' }];
 			}
-			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
 
 			// List link quality
 			if (this.linkQualityCount === 0) {
@@ -1488,7 +1488,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.linkQualityDevices = [{ Device: '--none--', Adapter: '', 'Signal strength': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}linkQualityList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}linkQualityList`, {
 				val: JSON.stringify(this.linkQualityDevices),
 				ack: true,
 			});
@@ -1499,7 +1499,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.offlineDevices = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}offlineList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}offlineList`, {
 				val: JSON.stringify(this.offlineDevices),
 				ack: true,
 			});
@@ -1510,7 +1510,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.upgradableList = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}upgradableList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}upgradableList`, {
 				val: JSON.stringify(this.upgradableList),
 				ack: true,
 			});
@@ -1521,7 +1521,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.batteryPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}batteryList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}batteryList`, {
 				val: JSON.stringify(this.batteryPowered),
 				ack: true,
 			});
@@ -1532,43 +1532,43 @@ class DeviceWatcher extends utils.Adapter {
 				this.batteryLowPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}lowBatteryList`, {
 				val: JSON.stringify(this.batteryLowPowered),
 				ack: true,
 			});
 
 			// set booleans datapoints
 			if (this.offlineDevicesCount === 0) {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceOffline`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceOffline`, {
 					val: false,
 					ack: true,
 				});
 			} else {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceOffline`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceOffline`, {
 					val: true,
 					ack: true,
 				});
 			}
 
 			if (this.lowBatteryPoweredCount === 0) {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceLowBat`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceLowBat`, {
 					val: false,
 					ack: true,
 				});
 			} else {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceLowBat`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceLowBat`, {
 					val: true,
 					ack: true,
 				});
 			}
 
 			if (this.upgradableDevicesCount === 0) {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceUpdatable`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceUpdatable`, {
 					val: false,
 					ack: true,
 				});
 			} else {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceUpdatable`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceUpdatable`, {
 					val: true,
 					ack: true,
 				});
@@ -1576,19 +1576,19 @@ class DeviceWatcher extends utils.Adapter {
 
 			//write HTML list
 			if (this.createHtmlList) {
-				await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
 					val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount),
 					ack: true,
 				});
-				await this.setStateAsync(`${dpSubFolder}offlineListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}offlineListHTML`, {
 					val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount),
 					ack: true,
 				});
-				await this.setStateAsync(`${dpSubFolder}batteryListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}batteryListHTML`, {
 					val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false),
 					ack: true,
 				});
-				await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}lowBatteryListHTML`, {
 					val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true),
 					ack: true,
 				});
@@ -1606,25 +1606,104 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * get Instances
 	 */
-	async getInstance() {
+	async getInstanceData() {
 		try {
-			const instanceAliveDP = await this.getForeignStatesAsync('system.adapter.*.alive');
+			await this.createDPsForInstances();
+
+			const instanceAliveDP = await this.getForeignStatesAsync(`system.adapter.*.alive`);
 			for (const [id] of Object.entries(instanceAliveDP)) {
-				let instance = id;
-				if (!(typeof instance === 'string' && instance.startsWith('system.adapter.'))) continue;
-				instance = instance.slice(15); // remove "system.adapter."
-				instance = instance.slice(0, -6); // remove ".alive"
-				if (this.instanceBlacklist.includes(instance)) continue;
-				this.listInstance.push({
-					InstanceName: instance,
+				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
+
+				const instanceName = await this.getInstanceName(id);
+				const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
+				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
+				const instanceConnectedDeviceDP = `${instanceName}.info.connected`;
+				let instanceConnectedDeviceVal;
+				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
+					instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
+				} else {
+					instanceConnectedDeviceVal = 'N/A';
+				}
+				//subscribe to statechanges
+				this.subscribeForeignStatesAsync(id);
+				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
+				this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
+
+				if (this.instanceBlacklist.includes(instanceName)) continue;
+				this.listInstanceRaw.push({
+					InstanceName: instanceName,
+					instanceAlivePath: id,
 					isAlive: instanceAliveDP[id].val,
+					connectedHostPath: instanceConnectedHostDP,
+					isConnectedHost: instanceConnectedHostVal,
+					connectedDevicePath: instanceConnectedDeviceDP,
+					isConnectedDevice: instanceConnectedDeviceVal,
 				});
 			}
-			this.log.warn(JSON.stringify(JSON.stringify(this.listInstance)));
-			return this.listInstance;
+			this.log.warn(JSON.stringify(this.listInstanceRaw));
+			return this.listInstanceRaw;
 		} catch (error) {
 			this.errorReporting('[getInstance]', error);
 		}
+	}
+
+	/**
+	 * get Instances
+	 * @param {string} id - Path of alive datapoint
+	 */
+	async getInstanceName(id) {
+		let instance = id;
+		instance = instance.slice(15); // remove "system.adapter."
+		instance = instance.slice(0, instance.lastIndexOf('.') + 1 - 1); // remove ".alive"
+		return instance;
+	}
+
+	/**
+	 * create Datapoints for Instances
+	 */
+	async createDPsForInstances() {
+		await this.setObjectNotExistsAsync(`adapterAndInstances`, {
+			type: 'channel',
+			common: {
+				name: {
+					en: 'Adapter and Instances',
+					de: 'Adapter und Instanzen',
+					ru: 'Адаптер и Instances',
+					pt: 'Adaptador e instâncias',
+					nl: 'Adapter en Instance',
+					fr: 'Adaptateur et instances',
+					it: 'Adattatore e istanze',
+					es: 'Adaptador e instalaciones',
+					pl: 'Adapter and Instances',
+					uk: 'Адаптер та інстанції',
+					'zh-cn': '道歉和案',
+				},
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listAllInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON List of all instances',
+					de: 'JSON Liste aller Instanzen',
+					ru: 'ДЖСОН Список всех инстанций',
+					pt: 'J. Lista de todas as instâncias',
+					nl: 'JSON List van alle instanties',
+					fr: 'JSON Liste de tous les cas',
+					it: 'JSON Elenco di tutte le istanze',
+					es: 'JSON Lista de todos los casos',
+					pl: 'JSON Lista wszystkich instancji',
+					uk: 'Сонце Список всіх екземплярів',
+					'zh-cn': '附 件 所有事例一览表',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
 	}
 
 	/*=============================================
@@ -2246,7 +2325,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} adptName - Adaptername of devices
 	 */
 	async createDPsForEachAdapter(adptName) {
-		await this.setObjectNotExistsAsync(`${adptName}`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}`, {
 			type: 'channel',
 			common: {
 				name: adptName,
@@ -2254,7 +2333,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.offlineCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.offlineCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2277,7 +2356,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.offlineList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.offlineList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2300,7 +2379,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceOffline`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceOffline`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2325,7 +2404,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.listAll`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2348,7 +2427,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.linkQualityList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.linkQualityList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2371,7 +2450,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.countAll`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.countAll`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2394,7 +2473,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.batteryList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.batteryList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2417,7 +2496,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.lowBatteryList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2440,7 +2519,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.lowBatteryCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2463,7 +2542,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceLowBat`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceLowBat`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2488,7 +2567,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.batteryCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.batteryCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2511,7 +2590,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.upgradableCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.upgradableCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2535,7 +2614,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.upgradableList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.upgradableList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2559,7 +2638,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceUpdatable`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceUpdatable`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2597,7 +2676,7 @@ class DeviceWatcher extends utils.Adapter {
 			dpSubFolder = '';
 		}
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}offlineListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}offlineListHTML`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2620,7 +2699,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}linkQualityListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2643,7 +2722,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}batteryListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}batteryListHTML`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2666,7 +2745,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}lowBatteryListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}lowBatteryListHTML`, {
 			type: 'state',
 			common: {
 				name: {
