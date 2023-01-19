@@ -161,6 +161,7 @@
 		]
 	},
 	"native": {
+		"checkAdapterInstances": false,
 		"alexa2Devices": false,
 		"alexa2MaxMinutes": 0,
 		"apcupsDevices": false,

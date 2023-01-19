@@ -23,6 +23,21 @@ class DeviceWatcher extends utils.Adapter {
 			useFormatDate: true,
 		});
 
+		// instances and adapters
+		// raw arrays
+		this.adapterUpdatesJsonRaw = [];
+		this.listInstanceRaw = [];
+
+		// user arrays
+		this.instanceBlacklist = [];
+		this.listAllInstances = [];
+		this.listDeactivatedInstances = [];
+
+		//counts
+		this.countAllInstances = 0;
+		this.countDeactivatedInstances = 0;
+
+		// devices
 		// arrays
 		this.offlineDevices = [];
 		this.linkQualityDevices = [];
@@ -35,16 +50,12 @@ class DeviceWatcher extends utils.Adapter {
 		this.selAdapter = [];
 		this.adapterSelected = [];
 		this.upgradableList = [];
-		this.instanceBlacklist = [];
-		this.listAllInstances = [];
 
 		// raw arrays
 		this.listAllDevicesRaw = [];
 		this.batteryLowPoweredRaw = [];
 		this.offlineDevicesRaw = [];
 		this.upgradableDevicesRaw = [];
-		this.adapterUpdatesJsonRaw = [];
-		this.listInstanceRaw = [];
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -269,6 +280,29 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
+			for (const instance of this.listInstanceRaw) {
+				switch (id) {
+					case instance.instanceAlivePath:
+						if (state.val !== instance.isAlive) {
+							instance.isAlive = state.val;
+							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+						}
+						break;
+					case instance.connectedHostPath:
+						if (state.val !== instance.isConnectedHost) {
+							instance.isConnectedHost = state.val;
+							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+						}
+						break;
+					case instance.connectedDevicePath:
+						if (state.val !== instance.isConnectedDevice) {
+							instance.isConnectedDevice = state.val;
+							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+						}
+						break;
+				}
+			}
+
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
 				switch (id) {
@@ -473,6 +507,11 @@ class DeviceWatcher extends utils.Adapter {
 					this.log.debug(`Created and filled data for ${this.capitalize(id)}`);
 				}
 			}
+		}
+
+		if (this.config.checkAdapterInstances) {
+			await this.createInstanceList();
+			await this.writeInstanceDPs();
 		}
 
 		// Clear existing timeout
@@ -1615,9 +1654,14 @@ class DeviceWatcher extends utils.Adapter {
 			for (const [id] of Object.entries(instanceAliveDP)) {
 				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
 
+				// get instance name
 				const instanceName = await this.getInstanceName(id);
+
+				// get instance connected to host data
 				const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
 				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
+
+				// get instance connected to device data
 				const instanceConnectedDeviceDP = `${instanceName}.info.connected`;
 				let instanceConnectedDeviceVal;
 				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
@@ -1626,17 +1670,30 @@ class DeviceWatcher extends utils.Adapter {
 					instanceConnectedDeviceVal = 'N/A';
 				}
 
+				// get adapter version
+				const instanceObjectPath = `system.adapter.${instanceName}`;
+				let adapterVersion;
+				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
+				if (instanceObjectData) {
+					adapterVersion = instanceObjectData.common.version;
+				}
+
+				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
 				const instanceStatus = await this.setInstanceStatus(instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
 
 				//subscribe to statechanges
 				this.subscribeForeignStatesAsync(id);
 				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
 				this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
+				//this.subscribeForeignObjectsAsync(instanceObjectPath);
 
+				// create raw list
 				if (this.instanceBlacklist.includes(instanceName)) continue;
 				this.listInstanceRaw.push({
 					InstanceName: instanceName,
+					instanceObjectPath: instanceObjectPath,
 					instanceAlivePath: id,
+					adapterVersion: adapterVersion,
 					isAlive: instanceAliveDP[id].val,
 					connectedHostPath: instanceConnectedHostDP,
 					isConnectedHost: instanceConnectedHostVal,
@@ -1645,9 +1702,8 @@ class DeviceWatcher extends utils.Adapter {
 					status: instanceStatus,
 				});
 			}
-			this.log.warn(JSON.stringify(this.listInstanceRaw));
-			this.createInstanceList();
-			return this.listInstanceRaw;
+			await this.createInstanceList();
+			await this.writeInstanceDPs();
 		} catch (error) {
 			this.errorReporting('[getInstance]', error);
 		}
@@ -1693,15 +1749,52 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async createInstanceList() {
 		this.listAllInstances = [];
+		this.listDeactivatedInstances = [];
 
 		for (const instance of this.listInstanceRaw) {
 			this.listAllInstances.push({
 				Instance: instance.InstanceName,
-				Enabled: instance.isAlive,
+				Version: instance.adapterVersion,
 				Status: instance.status,
 			});
+			if (!instance.isAlive) {
+				this.listDeactivatedInstances.push({
+					Instance: instance.InstanceName,
+					Version: instance.adapterVersion,
+					Status: instance.status,
+				});
+			}
 		}
-		this.log.warn(JSON.stringify(this.listAllInstances));
+		await this.countInstances();
+	}
+
+	/**
+	 * count instanceList
+	 */
+	async countInstances() {
+		this.countAllInstances = 0;
+		this.countDeactivatedInstances = 0;
+
+		this.countAllInstances = this.listAllInstances.length;
+		this.countDeactivatedInstances = this.listDeactivatedInstances.length;
+	}
+
+	/**
+	 * write datapoints for instances list and counts
+	 */
+	async writeInstanceDPs() {
+		// Write Datapoints for counts
+		await this.setStateAsync(`adapterAndInstances.countAllInstances`, { val: this.countAllInstances, ack: true });
+		await this.setStateAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
+
+		// List all instances
+		await this.setStateAsync(`adapterAndInstances.listAllInstances`, { val: JSON.stringify(this.listAllInstances), ack: true });
+
+		// list deactivated instances
+		if (this.countDeactivatedInstances === 0) {
+			this.listDeactivatedInstances = [{ Instance: '--none--', Version: '', Status: '' }];
+		}
+		await this.setStateAsync(`adapterAndInstances.listDeactivatedInstances`, { val: JSON.stringify(this.listDeactivatedInstances), ack: true });
 	}
 
 	/**
@@ -1742,6 +1835,75 @@ class DeviceWatcher extends utils.Adapter {
 					pl: 'JSON Lista wszystkich instancji',
 					uk: 'Сонце Список всіх екземплярів',
 					'zh-cn': '附 件 所有事例一览表',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countAllInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of all instances',
+					de: 'Anzahl aller Instanzen',
+					ru: 'Количество всех инстанций',
+					pt: 'Número de todas as instâncias',
+					nl: 'Nummer van alle gevallen',
+					fr: 'Nombre de cas',
+					it: 'Numero di tutte le istanze',
+					es: 'Número de casos',
+					pl: 'Liczba wszystkich instancji',
+					uk: 'Кількість всіх екземплярів',
+					'zh-cn': '各类案件数目',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listDeactivatedInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON List of deactivated instances',
+					de: 'JSON Liste der deaktivierten Instanzen',
+					ru: 'ДЖСОН Список деактивированных инстанций',
+					pt: 'J. Lista de instâncias desativadas',
+					nl: 'JSON List van gedeactiveerde instanties',
+					fr: 'JSON Liste des cas désactivés',
+					it: 'JSON Elenco delle istanze disattivate',
+					es: 'JSON Lista de casos desactivados',
+					pl: 'JSON Lista przypadków deaktywowanych',
+					uk: 'Сонце Перелік деактивованих екземплярів',
+					'zh-cn': '附 件 被动事例清单',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countDeactivatedInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of deactivated instances',
+					de: 'Anzahl deaktivierter Instanzen',
+					ru: 'Количество деактивированных инстанций',
+					pt: 'Número de instâncias desativadas',
+					nl: 'Nummer van gedeactiveerde instanties',
+					fr: 'Nombre de cas désactivés',
+					it: 'Numero di istanze disattivate',
+					es: 'Número de casos desactivados',
+					pl: 'Liczba deaktywowanych instancji',
+					uk: 'Кількість деактивованих екземплярів',
+					'zh-cn': 'A. 递解事件的数目',
 				},
 				type: 'number',
 				role: 'value',
