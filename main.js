@@ -35,8 +35,8 @@ class DeviceWatcher extends utils.Adapter {
 		this.selAdapter = [];
 		this.adapterSelected = [];
 		this.upgradableList = [];
-		this.listInstanceRaw = [];
 		this.instanceBlacklist = [];
+		this.listAllInstances = [];
 
 		// raw arrays
 		this.listAllDevicesRaw = [];
@@ -44,6 +44,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.offlineDevicesRaw = [];
 		this.upgradableDevicesRaw = [];
 		this.adapterUpdatesJsonRaw = [];
+		this.listInstanceRaw = [];
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -1624,6 +1625,9 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					instanceConnectedDeviceVal = 'N/A';
 				}
+
+				const instanceStatus = await this.setInstanceStatus(instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
+
 				//subscribe to statechanges
 				this.subscribeForeignStatesAsync(id);
 				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
@@ -1638,9 +1642,11 @@ class DeviceWatcher extends utils.Adapter {
 					isConnectedHost: instanceConnectedHostVal,
 					connectedDevicePath: instanceConnectedDeviceDP,
 					isConnectedDevice: instanceConnectedDeviceVal,
+					status: instanceStatus,
 				});
 			}
 			this.log.warn(JSON.stringify(this.listInstanceRaw));
+			this.createInstanceList();
 			return this.listInstanceRaw;
 		} catch (error) {
 			this.errorReporting('[getInstance]', error);
@@ -1656,6 +1662,46 @@ class DeviceWatcher extends utils.Adapter {
 		instance = instance.slice(15); // remove "system.adapter."
 		instance = instance.slice(0, instance.lastIndexOf('.') + 1 - 1); // remove ".alive"
 		return instance;
+	}
+
+	/**
+	 * set status for instance
+	 * @param {object} isAliveVal
+	 * @param {object} connectedHostVal
+	 * @param {object} connectedDeviceVal
+	 */
+	async setInstanceStatus(isAliveVal, connectedHostVal, connectedDeviceVal) {
+		let instanceStatus = '🔴';
+		if (isAliveVal) {
+			if (connectedDeviceVal !== undefined) {
+				if (connectedHostVal && connectedHostVal) {
+					instanceStatus = '🟢';
+				} else if (connectedHostVal === true && connectedDeviceVal !== false) {
+					instanceStatus = '🟡';
+				}
+			} else if (connectedHostVal) {
+				instanceStatus = '🟢';
+			}
+		} else {
+			instanceStatus = '⚫️';
+		}
+		return instanceStatus;
+	}
+
+	/**
+	 * create instanceList
+	 */
+	async createInstanceList() {
+		this.listAllInstances = [];
+
+		for (const instance of this.listInstanceRaw) {
+			this.listAllInstances.push({
+				Instance: instance.InstanceName,
+				Enabled: instance.isAlive,
+				Status: instance.status,
+			});
+		}
+		this.log.warn(JSON.stringify(this.listAllInstances));
 	}
 
 	/**
