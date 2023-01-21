@@ -323,7 +323,17 @@
 		"checkAdapterUpdateThursday": false,
 		"checkAdapterUpdateFriday": false,
 		"checkAdapterUpdateSaturday": false,
-		"checkAdapterUpdateSunday": false
+		"checkAdapterUpdateSunday": false,
+		"checkSendInstanceFailedMsg": false,
+		"checkSendInstanceFailedDaily": false,
+		"checkFailedInstancesMonday": false,
+		"checkFailedInstancesTuesday": false,
+		"checkFailedInstancesWednesday": false,
+		"checkFailedInstancesThursday": false,
+		"checkFailedInstancesFriday": false,
+		"checkFailedInstancesSaturday": false,
+		"checkFailedInstancesSunday": false,
+		"checkSendInstanceFailedTime": "12:20"
 	},
 	"objects": [],
 	"instanceObjects": [

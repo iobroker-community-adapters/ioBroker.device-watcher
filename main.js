@@ -254,6 +254,9 @@ class DeviceWatcher extends utils.Adapter {
 
 			// send overview of upgradeable devices
 			if (this.config.checkSendUpgradeMsgDaily) await this.sendDeviceUpdateNotificationsShedule();
+
+			// send overview of instances with error
+			if (this.config.checkSendInstanceFailedDaily) await this.sendInstanceErrorNotificationShedule();
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -297,15 +300,22 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedHostPath:
-						if (state.val !== instance.isConnectedHost) {
+						if (instance.isAlive && state.val !== instance.isConnectedHost) {
 							instance.isConnectedHost = state.val;
 							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+							await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedHost) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							}
 						}
 						break;
 					case instance.connectedDevicePath:
-						if (state.val !== instance.isConnectedDevice) {
+						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
 							instance.isConnectedDevice = state.val;
 							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedDevice) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							}
 						}
 						break;
 				}
@@ -324,7 +334,7 @@ class DeviceWatcher extends utils.Adapter {
 						if (state.val !== device.Upgradable) {
 							device.Upgradable = state.val;
 							if (state.val) {
-								if (!this.blacklistNotify.includes(device.Path)) {
+								if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(device.Path)) {
 									await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
 								}
 							}
@@ -2492,7 +2502,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			});
 		}
-	} //<--End of daily offline notification
+	} //<--End of daily device updates notification
 
 	/*----------  Adapter Updates notifications ----------*/
 	/**
@@ -2578,6 +2588,81 @@ class DeviceWatcher extends utils.Adapter {
 			});
 		}
 	} //<--End of daily offline notification
+
+	/*---------- Instance error notifications ----------*/
+	/**
+	 * check if device updates are available and send notification
+	 * @param {string} instanceName
+	 * @param {string} error
+	 **/
+	async sendInstanceErrorNotification(instanceName, error) {
+		this.log.debug(`Start the function: ${this.sendInstanceErrorNotification.name}`);
+
+		try {
+			let msg = '';
+			let instanceList = '';
+
+			instanceList = `${instanceList}\n${instanceName}: ${error}`;
+
+			msg = `Fehler einer Instanz entdeckt: \n`;
+
+			this.log.info(msg + instanceList);
+			await this.setStateAsync('lastNotification', msg + instanceList, true);
+			await this.sendNotification(msg + instanceList);
+		} catch (error) {
+			this.errorReporting('[sendInstanceErrorNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendInstanceErrorNotification.name}`);
+	}
+
+	/**
+	 * send shedule message with offline devices
+	 */
+	async sendInstanceErrorNotificationShedule() {
+		const time = this.config.checkSendInstanceFailedTime.split(':');
+
+		const checkDays = []; // list of selected days
+
+		// push the selected days in list
+		if (this.config.checkFailedInstancesMonday) checkDays.push(1);
+		if (this.config.checkFailedInstancesTuesday) checkDays.push(2);
+		if (this.config.checkFailedInstancesWednesday) checkDays.push(3);
+		if (this.config.checkFailedInstancesThursday) checkDays.push(4);
+		if (this.config.checkFailedInstancesFriday) checkDays.push(5);
+		if (this.config.checkFailedInstancesSaturday) checkDays.push(6);
+		if (this.config.checkFailedInstancesSunday) checkDays.push(0);
+
+		if (checkDays.length >= 1) {
+			// check if an day is selected
+			this.log.debug(`Number of selected days for daily instance error message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+		} else {
+			this.log.warn(`No days selected for daily instance error message. Please check the instance configuration!`);
+			return; // cancel function if no day is selected
+		}
+
+		if (!isUnloaded) {
+			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+			schedule.scheduleJob(cron, () => {
+				try {
+					let instanceList = '';
+
+					for (const id of this.listErrorInstance) {
+						if (!this.blacklistNotify.includes(id.Path)) {
+							instanceList = `${instanceList}\n${id.Instance}: ${id.Status}`;
+						}
+					}
+					if (instanceList.length > 0) {
+						this.log.info(`Instanz Fehler: ${instanceList}`);
+						this.setStateAsync('lastNotification', `Instanz Fehler: ${instanceList}`, true);
+
+						this.sendNotification(`Instanz Fehler:\n${instanceList}`);
+					}
+				} catch (error) {
+					this.errorReporting('[sendInstanceErrorNotificationShedule]', error);
+				}
+			});
+		}
+	} //<--End of daily device updates notification
 
 	/*=============================================
 	=       functions to create html lists        =
