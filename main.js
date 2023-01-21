@@ -303,9 +303,10 @@ class DeviceWatcher extends utils.Adapter {
 						if (instance.isAlive && state.val !== instance.isConnectedHost) {
 							instance.isConnectedHost = state.val;
 							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
-							await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
-							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedHost) {
-								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							if (instance.instanceMode !== 'schedule') {
+								if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedHost) {
+									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+								}
 							}
 						}
 						break;
@@ -313,8 +314,10 @@ class DeviceWatcher extends utils.Adapter {
 						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
 							instance.isConnectedDevice = state.val;
 							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
-							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedDevice) {
-								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							if (instance.instanceMode !== 'schedule') {
+								if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedDevice) {
+									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+								}
 							}
 						}
 						break;
