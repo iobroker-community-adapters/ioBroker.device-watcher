@@ -1669,9 +1669,11 @@ class DeviceWatcher extends utils.Adapter {
 				// get adapter version
 				const instanceObjectPath = `system.adapter.${instanceName}`;
 				let adapterVersion;
+				let instanceMode;
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
 				if (instanceObjectData) {
 					adapterVersion = instanceObjectData.common.version;
+					instanceMode = instanceObjectData.common.mode;
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
@@ -1689,6 +1691,7 @@ class DeviceWatcher extends utils.Adapter {
 					InstanceName: instanceName,
 					instanceObjectPath: instanceObjectPath,
 					instanceAlivePath: id,
+					instanceMode: instanceMode,
 					adapterVersion: adapterVersion,
 					isAlive: instanceAliveDP[id].val,
 					connectedHostPath: instanceConnectedHostDP,
@@ -1805,12 +1808,14 @@ class DeviceWatcher extends utils.Adapter {
 		for (const instance of this.listInstanceRaw) {
 			this.listAllInstances.push({
 				Instance: instance.InstanceName,
+				Mode: instance.instanceMode,
 				Version: instance.adapterVersion,
 				Status: instance.status,
 			});
 			if (!instance.isAlive) {
 				this.listDeactivatedInstances.push({
 					Instance: instance.InstanceName,
+					Mode: instance.instanceMode,
 					Version: instance.adapterVersion,
 					Status: instance.status,
 				});
@@ -1871,6 +1876,8 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			native: {},
 		});
+
+		// Instances
 		await this.setObjectNotExistsAsync(`adapterAndInstances.listAllInstances`, {
 			type: 'state',
 			common: {
@@ -1963,6 +1970,54 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			native: {},
 		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listInstancesError`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON list of instances with error',
+					de: 'JSON-Liste von Instanzen mit Fehler',
+					ru: 'JSON список инстанций с ошибкой',
+					pt: 'Lista de instâncias JSON com erro',
+					nl: 'JSON lijst met fouten',
+					fr: 'Liste des instances avec erreur',
+					it: 'Elenco JSON delle istanze con errore',
+					es: 'JSON lista de casos con error',
+					pl: 'Lista błędów JSON',
+					uk: 'JSON список екземплярів з помилкою',
+					'zh-cn': '联合工作组办公室错误事件清单',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countInstancesError`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Count of instances with error',
+					de: 'Anzahl der Instanzen mit Fehler',
+					ru: 'Количество инстанций с ошибкой',
+					pt: 'Contagem de instâncias com erro',
+					nl: 'Graaf van instoringen met fouten',
+					fr: 'Nombre de cas avec erreur',
+					it: 'Conteggio di istanze con errore',
+					es: 'Cuenta de casos con error',
+					pl: 'Liczba przykładów w przypadku błędów',
+					uk: 'Кількість екземплярів з помилкою',
+					'zh-cn': '发生错误的情况',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
+		// Adapter
 		await this.setObjectNotExistsAsync(`adapterAndInstances.listAdapterUpdates`, {
 			type: 'state',
 			common: {
