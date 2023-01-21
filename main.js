@@ -32,10 +32,12 @@ class DeviceWatcher extends utils.Adapter {
 		this.instanceBlacklist = [];
 		this.listAllInstances = [];
 		this.listDeactivatedInstances = [];
+		this.listAdapterUpdates = [];
 
 		//counts
 		this.countAllInstances = 0;
 		this.countDeactivatedInstances = 0;
+		this.countAdapterUpdates = 0;
 
 		// devices
 		// arrays
@@ -234,13 +236,13 @@ class DeviceWatcher extends utils.Adapter {
 			//read data first at start
 			await this.main();
 
-			await this.getInstanceData();
+			if (this.config.checkAdapterInstances) {
+				await this.getInstanceData();
+				await this.createAdapterUpdateData();
+			}
 
 			// update last contact data in interval
 			await this.refreshData();
-
-			// trigger update notification on state change
-			if (this.config.checkSendAdapterUpdateMsg) await this.createAdapterData();
 
 			// send overview for low battery devices
 			if (this.config.checkSendBatteryMsgDaily) await this.sendBatteryNotifyShedule();
@@ -271,14 +273,18 @@ class DeviceWatcher extends utils.Adapter {
 			let oldStatus;
 			let isLowBatValue;
 			let instanceDeviceConnectionDpTS;
-			const instanceDeviceConnectionDpTSminTime = 5;
+			const instanceDeviceConnectionDpTSminTime = 10;
 
-			for (const admin of this.adapterUpdatesJsonRaw) {
-				switch (id) {
-					case admin.Instance:
-						this.sendAdapterUpdatesNotification(id, state);
+			/*
+			if (this.config.checkAdapterInstances) {
+				for (const adapter of this.adapterUpdatesJsonRaw) {
+					switch (id) {
+						case adapter.Path:
+
+							this.sendAdapterUpdatesNotification(id, state);
+					}
 				}
-			}
+			}*/
 
 			for (const instance of this.listInstanceRaw) {
 				switch (id) {
@@ -1481,16 +1487,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function finished: ${this.createDataOfAllAdapter.name}`);
 	} // <-- end of createDataOfAllAdapter
 
-	async createAdapterData() {
-		const adapterUpdatesListDP = await this.getForeignStatesAsync(`admin.*.info.updatesJson`);
-		for (const [id] of Object.entries(adapterUpdatesListDP)) {
-			this.subscribeForeignStates(id);
-			this.adapterUpdatesJsonRaw.push({
-				Instance: id,
-			});
-		}
-	}
-
 	/**
 	 * @param {string} [adptName] - Adaptername
 	 */
@@ -1744,6 +1740,61 @@ class DeviceWatcher extends utils.Adapter {
 		return instanceStatus;
 	}
 
+	async createAdapterUpdateData() {
+		const adapterUpdateListDP = `admin.*.info.updatesJson`;
+		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
+
+		// subscribe to datapoint
+		this.subscribeForeignStates(adapterUpdateListDP);
+		let adapterJsonList;
+
+		for (const [id] of Object.entries(adapterUpdatesListVal)) {
+			adapterJsonList = await this.parseData(adapterUpdatesListVal[id].val);
+		}
+
+		for (const [id] of Object.entries(adapterJsonList)) {
+			this.adapterUpdatesJsonRaw.push({
+				Path: adapterUpdateListDP,
+				Adapter: this.capitalize(id),
+				newVersion: adapterJsonList[id].availableVersion,
+				oldVersion: adapterJsonList[id].installedVersion,
+			});
+		}
+		await this.createAdapterUpdateList();
+	}
+
+	/**
+	 * create instanceList
+	 */
+	async createAdapterUpdateList() {
+		this.listAdapterUpdates = [];
+		this.countAdapterUpdates = 0;
+
+		for (const adapter of this.adapterUpdatesJsonRaw) {
+			this.listAdapterUpdates.push({
+				Adapter: adapter.Adapter,
+				'Available Version': adapter.newVersion,
+				'Installed Version': adapter.oldVersion,
+			});
+		}
+		this.countAdapterUpdates = this.listAdapterUpdates.length;
+		await this.writeAdapterUpdatesDPs();
+	}
+
+	/**
+	 * write datapoints for adapter with updates
+	 */
+	async writeAdapterUpdatesDPs() {
+		// Write Datapoints for counts
+		await this.setStateAsync(`adapterAndInstances.countAdapterUpdates`, { val: this.countAdapterUpdates, ack: true });
+
+		// list deactivated instances
+		if (this.countAdapterUpdates === 0) {
+			this.listAdapterUpdates = [{ Adapter: '--none--', 'Available Version': '', 'Installed Version': '' }];
+		}
+		await this.setStateAsync(`adapterAndInstances.listAdapterUpdates`, { val: JSON.stringify(this.listAdapterUpdates), ack: true });
+	}
+
 	/**
 	 * create instanceList
 	 */
@@ -1904,6 +1955,52 @@ class DeviceWatcher extends utils.Adapter {
 					pl: 'Liczba deaktywowanych instancji',
 					uk: 'Кількість деактивованих екземплярів',
 					'zh-cn': 'A. 递解事件的数目',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listAdapterUpdates`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON list of adapters with available updates',
+					de: 'JSON-Liste der Adapter mit verfügbaren Updates',
+					ru: 'JSON список адаптеров с доступными обновлениями',
+					pt: 'Lista de adaptadores JSON com atualizações disponíveis',
+					nl: 'JSON lijst met beschikbare updates',
+					fr: 'Liste JSON des adaptateurs avec mises à jour disponibles',
+					it: 'Elenco di adattatori JSON con aggiornamenti disponibili',
+					es: 'JSON lista de adaptadores con actualizaciones disponibles',
+					pl: 'JSON lista adapterów z dostępnymi aktualizacjami',
+					uk: 'JSON список адаптерів з доступними оновленнями',
+					'zh-cn': '附录A',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countAdapterUpdates`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of adapters with available updates',
+					de: 'Anzahl der Adapter mit verfügbaren Updates',
+					ru: 'Количество адаптеров с доступными обновлениями',
+					pt: 'Número de adaptadores com atualizações disponíveis',
+					nl: 'Nummer van adapters met beschikbare updates',
+					fr: "Nombre d'adaptateurs avec mises à jour disponibles",
+					it: 'Numero di adattatori con aggiornamenti disponibili',
+					es: 'Número de adaptadores con actualizaciones disponibles',
+					pl: 'Liczba adapterów z dostępną aktualizacją',
+					uk: 'Кількість адаптерів з доступними оновленнями',
+					'zh-cn': '更新的适应者人数',
 				},
 				type: 'number',
 				role: 'value',
