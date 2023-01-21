@@ -1833,7 +1833,7 @@ class DeviceWatcher extends utils.Adapter {
 				Version: instance.adapterVersion,
 				Status: instance.status,
 			});
-			if (!instance.isAlive) {
+			if (!instance.isAlive && instance.instanceMode !== schedule) {
 				this.listDeactivatedInstances.push({
 					Instance: instance.InstanceName,
 					Mode: instance.instanceMode,
@@ -1841,7 +1841,7 @@ class DeviceWatcher extends utils.Adapter {
 					Status: instance.status,
 				});
 			}
-			if (instance.instanceMode !== schedule && instance.isAlive && (!instance.isConnectedHost || !instance.isConnectedDevice)) {
+			if (instance.isAlive && (!instance.isConnectedHost || !instance.isConnectedDevice)) {
 				this.listErrorInstance.push({
 					Instance: instance.InstanceName,
 					Mode: instance.instanceMode,
