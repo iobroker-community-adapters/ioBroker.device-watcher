@@ -296,28 +296,25 @@ class DeviceWatcher extends utils.Adapter {
 					case instance.instanceAlivePath:
 						if (state.val !== instance.isAlive) {
 							instance.isAlive = state.val;
-							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
 						}
 						break;
 					case instance.connectedHostPath:
 						if (instance.isAlive && state.val !== instance.isConnectedHost) {
 							instance.isConnectedHost = state.val;
-							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
-							if (instance.instanceMode !== 'schedule') {
-								if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedHost) {
-									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
-								}
+							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+
+							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedHost) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
 						break;
 					case instance.connectedDevicePath:
 						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
 							instance.isConnectedDevice = state.val;
-							instance.status = await this.setInstanceStatus(instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
-							if (instance.instanceMode !== 'schedule') {
-								if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedDevice) {
-									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
-								}
+							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedDevice) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
 						break;
@@ -1692,7 +1689,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-				const instanceStatus = await this.setInstanceStatus(instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
+				const instanceStatus = await this.setInstanceStatus(instanceMode, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
 
 				//subscribe to statechanges
 				this.subscribeForeignStatesAsync(id);
@@ -1736,24 +1733,33 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * set status for instance
+	 * @param {object} instanceMode
 	 * @param {object} isAliveVal
 	 * @param {object} connectedHostVal
 	 * @param {object} connectedDeviceVal
 	 */
-	async setInstanceStatus(isAliveVal, connectedHostVal, connectedDeviceVal) {
+	async setInstanceStatus(instanceMode, isAliveVal, connectedHostVal, connectedDeviceVal) {
 		let instanceStatus = 'not enabled';
-		if (isAliveVal) {
-			if (connectedHostVal) {
+		switch (instanceMode) {
+			case 'schedule':
 				instanceStatus = 'Instance okay';
-				if (!connectedDeviceVal) {
-					instanceStatus = 'not connected to Device';
-				} else {
-					instanceStatus = 'Instance okay';
+				break;
+			case 'daemon':
+				if (isAliveVal) {
+					if (connectedHostVal) {
+						instanceStatus = 'Instance okay';
+						if (!connectedDeviceVal) {
+							instanceStatus = 'not connected to Device';
+						} else {
+							instanceStatus = 'Instance okay';
+						}
+					} else {
+						instanceStatus = 'not connected to host';
+					}
 				}
-			} else {
-				instanceStatus = 'not connected to host';
-			}
+				break;
 		}
+
 		return instanceStatus;
 	}
 
@@ -1835,7 +1841,7 @@ class DeviceWatcher extends utils.Adapter {
 					Status: instance.status,
 				});
 			}
-			if (instance.isAlive && (!instance.isConnectedHost || !instance.isConnectedDevice)) {
+			if (instance.instanceMode !== schedule && instance.isAlive && (!instance.isConnectedHost || !instance.isConnectedDevice)) {
 				this.listErrorInstance.push({
 					Instance: instance.InstanceName,
 					Mode: instance.instanceMode,
