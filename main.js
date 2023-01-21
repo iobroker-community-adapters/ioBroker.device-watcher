@@ -33,11 +33,13 @@ class DeviceWatcher extends utils.Adapter {
 		this.listAllInstances = [];
 		this.listDeactivatedInstances = [];
 		this.listAdapterUpdates = [];
+		this.listErrorInstance = [];
 
 		//counts
 		this.countAllInstances = 0;
 		this.countDeactivatedInstances = 0;
 		this.countAdapterUpdates = 0;
+		this.countErrorInstance = 0;
 
 		// devices
 		// arrays
@@ -1658,7 +1660,7 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
 
 				// get instance connected to device data
-				const instanceConnectedDeviceDP = `${instanceName}.info.connected`;
+				const instanceConnectedDeviceDP = `${instanceName}.info.connection`;
 				let instanceConnectedDeviceVal;
 				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
 					instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
@@ -1726,19 +1728,18 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} connectedDeviceVal
 	 */
 	async setInstanceStatus(isAliveVal, connectedHostVal, connectedDeviceVal) {
-		let instanceStatus = '🔴';
+		let instanceStatus = 'not enabled';
 		if (isAliveVal) {
-			if (connectedDeviceVal !== undefined) {
-				if (connectedHostVal && connectedHostVal) {
-					instanceStatus = '🟢';
-				} else if (connectedHostVal === true && connectedDeviceVal !== false) {
-					instanceStatus = '🟡';
+			if (connectedHostVal) {
+				instanceStatus = 'Instance okay';
+				if (!connectedDeviceVal) {
+					instanceStatus = 'not connected to Device';
+				} else {
+					instanceStatus = 'Instance okay';
 				}
-			} else if (connectedHostVal) {
-				instanceStatus = '🟢';
+			} else {
+				instanceStatus = 'not connected to host';
 			}
-		} else {
-			instanceStatus = '⚫️';
 		}
 		return instanceStatus;
 	}
@@ -1804,6 +1805,7 @@ class DeviceWatcher extends utils.Adapter {
 	async createInstanceList() {
 		this.listAllInstances = [];
 		this.listDeactivatedInstances = [];
+		this.listErrorInstance = [];
 
 		for (const instance of this.listInstanceRaw) {
 			this.listAllInstances.push({
@@ -1820,6 +1822,13 @@ class DeviceWatcher extends utils.Adapter {
 					Status: instance.status,
 				});
 			}
+			if (instance.isAlive && (!instance.isConnectedHost || !instance.isConnectedDevice)) {
+				this.listErrorInstance.push({
+					Instance: instance.InstanceName,
+					Mode: instance.instanceMode,
+					Status: instance.status,
+				});
+			}
 		}
 		await this.countInstances();
 	}
@@ -1830,9 +1839,11 @@ class DeviceWatcher extends utils.Adapter {
 	async countInstances() {
 		this.countAllInstances = 0;
 		this.countDeactivatedInstances = 0;
+		this.countErrorInstance = 0;
 
 		this.countAllInstances = this.listAllInstances.length;
 		this.countDeactivatedInstances = this.listDeactivatedInstances.length;
+		this.countErrorInstance = this.listErrorInstance.length;
 	}
 
 	/**
@@ -1851,6 +1862,14 @@ class DeviceWatcher extends utils.Adapter {
 			this.listDeactivatedInstances = [{ Instance: '--none--', Version: '', Status: '' }];
 		}
 		await this.setStateAsync(`adapterAndInstances.listDeactivatedInstances`, { val: JSON.stringify(this.listDeactivatedInstances), ack: true });
+		await this.setStateAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
+
+		// list error instances
+		if (this.countErrorInstance === 0) {
+			this.listErrorInstance = [{ Instance: '--none--', Mode: '', Status: '' }];
+		}
+		await this.setStateAsync(`adapterAndInstances.listInstancesError`, { val: JSON.stringify(this.listErrorInstance), ack: true });
+		await this.setStateAsync(`adapterAndInstances.countInstancesError`, { val: this.countErrorInstance, ack: true });
 	}
 
 	/**
