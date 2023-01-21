@@ -1833,7 +1833,7 @@ class DeviceWatcher extends utils.Adapter {
 				Version: instance.adapterVersion,
 				Status: instance.status,
 			});
-			if (!instance.isAlive && instance.instanceMode !== schedule) {
+			if (!instance.isAlive && instance.instanceMode !== 'schedule') {
 				this.listDeactivatedInstances.push({
 					Instance: instance.InstanceName,
 					Mode: instance.instanceMode,
