@@ -303,7 +303,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedHostPath:
-						delay(10);
+						delay(15);
 						if (instance.isAlive && state.val !== instance.isConnectedHost) {
 							instance.isConnectedHost = state.val;
 							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
@@ -314,7 +314,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedDevicePath:
-						delay(10);
+						delay(15);
 						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
 							instance.isConnectedDevice = state.val;
 							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
