@@ -291,6 +291,9 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}*/
 
+			// wait
+			const delay = (n) => new Promise((r) => setTimeout(r, n * 100));
+
 			for (const instance of this.listInstanceRaw) {
 				switch (id) {
 					case instance.instanceAlivePath:
@@ -300,6 +303,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedHostPath:
+						delay(5);
 						if (instance.isAlive && state.val !== instance.isConnectedHost) {
 							instance.isConnectedHost = state.val;
 							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
@@ -310,6 +314,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedDevicePath:
+						delay(5);
 						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
 							instance.isConnectedDevice = state.val;
 							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
