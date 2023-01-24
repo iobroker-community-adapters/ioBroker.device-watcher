@@ -1687,10 +1687,15 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceObjectPath = `system.adapter.${instanceName}`;
 				let adapterVersion;
 				let instanceMode;
+				let scheduleTime = 'N/A';
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
 				if (instanceObjectData) {
 					adapterVersion = instanceObjectData.common.version;
 					instanceMode = instanceObjectData.common.mode;
+
+					if (instanceMode === 'schedule') {
+						scheduleTime = instanceObjectData.common.schedule;
+					}
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
@@ -1709,6 +1714,7 @@ class DeviceWatcher extends utils.Adapter {
 					instanceObjectPath: instanceObjectPath,
 					instanceAlivePath: id,
 					instanceMode: instanceMode,
+					schedule: scheduleTime,
 					adapterVersion: adapterVersion,
 					isAlive: instanceAliveDP[id].val,
 					connectedHostPath: instanceConnectedHostDP,
@@ -1835,14 +1841,13 @@ class DeviceWatcher extends utils.Adapter {
 			this.listAllInstances.push({
 				Instance: instance.InstanceName,
 				Mode: instance.instanceMode,
+				Schedule: instance.schedule,
 				Version: instance.adapterVersion,
 				Status: instance.status,
 			});
 			if (!instance.isAlive && instance.instanceMode !== 'schedule') {
 				this.listDeactivatedInstances.push({
 					Instance: instance.InstanceName,
-					Mode: instance.instanceMode,
-					Version: instance.adapterVersion,
 					Status: instance.status,
 				});
 			}
