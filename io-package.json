@@ -158,6 +158,41 @@
 			{
 				"admin": ">=6.0.0"
 			}
+		],
+		"messages": [
+			{
+				"condition": {
+					"operand": "and",
+					"rules": ["oldVersion<2.4.0", "newVersion>=2.4.1"]
+				},
+				"title": {
+					"en": "Important notice!",
+					"de": "Wichtiger Hinweis!",
+					"ru": "Важное замечание!",
+					"pt": "Notícia importante!",
+					"nl": "Belangrijke mededeling!",
+					"fr": "Avis important!",
+					"it": "Avviso IMPORTANTE!",
+					"es": "Noticia importante!",
+					"pl": "Ważna uwaga!",
+					"zh-cn": "重要通知!"
+				},
+				"text": {
+					"en": "The new version 2.5.x has a new structure of list objects. You have to delete the object tree of the instance manually and restart the instance to rebuild the structure!",
+					"de": "Die neue Version 2.5.x hat eine neue Struktur von Listenobjekten. Sie müssen den Objektbaum der Instanz manuell löschen und die Instanz neu starten, um die Struktur neu aufzubauen!",
+					"ru": "Новая версия 2.5.x имеет новую структуру объектов списка. Вы должны удалить дерево объекта экземпляра вручную и перезагрузить экземпляр для восстановления структуры!",
+					"pt": "A nova versão 2.5.x tem uma nova estrutura de objetos de lista. Você tem que excluir a árvore de objetos da instância manualmente e reiniciar a instância para reconstruir a estrutura!",
+					"nl": "De nieuwe versie 2.5.x heeft een nieuwe lijst objecten. Je moet de objectenboom van het instance handmatig verwijderen en het instance herstarten om het gebouw te herbouwen!",
+					"fr": "La nouvelle version 2.5.x a une nouvelle structure d'objets de liste. Vous devez supprimer l'arbre objet de l'instance manuellement et redémarrer l'instance pour reconstruire la structure!",
+					"it": "La nuova versione 2.5.x ha una nuova struttura di oggetti di lista. È necessario eliminare l'albero dell'oggetto dell'istanza manualmente e riavviare l'istanza per ricostruire la struttura!",
+					"es": "La nueva versión 2.5.x tiene una nueva estructura de objetos de lista. Usted tiene que eliminar el árbol objeto de la instancia manualmente y reiniciar la instancia para reconstruir la estructura!",
+					"pl": "Nowa wersja 2.5.x ma nową strukturę obiektów. Musisz usunąć obiektowy drzewo instancji ręcznie i wznowić przykład, aby odbudować konstrukcję!",
+					"uk": "Нова версія 2.5.x має нову структуру об'єктів списку. Ви повинні видалити дерево об'єкта екземпляра вручну і перезавантажити екземпляр для відновлення структури!",
+					"zh-cn": "新版本2.5.x有新的清单目标结构。 你们必须删除这一例子的树,重新树立重建结构的榜样!"
+				},
+				"level": "warn",
+				"buttons": ["agree", "cancel"]
+			}
 		]
 	},
 	"native": {
