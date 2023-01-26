@@ -8,6 +8,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 const schedule = require('node-schedule');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
+const cronParser = require('cron-parser');
 
 // Sentry error reporting, disable when testing code!
 const enableSendSentry = true;
@@ -277,6 +278,7 @@ class DeviceWatcher extends utils.Adapter {
 			let contactData;
 			let oldStatus;
 			let isLowBatValue;
+			let instanceStatusRaw;
 			let instanceDeviceConnectionDpTS;
 			const instanceDeviceConnectionDpTSminTime = 10;
 
@@ -292,21 +294,23 @@ class DeviceWatcher extends utils.Adapter {
 			}*/
 
 			// wait
-			const delay = (n) => new Promise((r) => setTimeout(r, n * 1000));
+			// const delay = (n) => new Promise((r) => setTimeout(r, n * 1000));
 
 			for (const instance of this.listInstanceRaw) {
 				switch (id) {
 					case instance.instanceAlivePath:
 						if (state.val !== instance.isAlive) {
-							instance.isAlive = state.val;
-							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, state.val, instance.isConnectedHost, instance.isConnectedDevice);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
 						}
 						break;
 					case instance.connectedHostPath:
-						delay(3);
 						if (instance.isAlive && state.val !== instance.isConnectedHost) {
 							instance.isConnectedHost = state.val;
-							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, state.val, instance.isConnectedDevice);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
 
 							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedHost) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
@@ -314,10 +318,12 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedDevicePath:
-						delay(3);
 						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
 							instance.isConnectedDevice = state.val;
-							instance.status = await this.setInstanceStatus(instance.instanceMode, instance.isAlive, instance.isConnectedHost, instance.isConnectedDevice);
+							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, instance.isConnectedHost, state.val);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
+
 							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedDevice) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
@@ -1699,7 +1705,9 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-				const instanceStatus = await this.setInstanceStatus(instanceMode, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
+				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
+				const isAlive = instanceStatusRaw[1];
+				const instanceStatus = instanceStatusRaw[0];
 
 				//subscribe to statechanges
 				this.subscribeForeignStatesAsync(id);
@@ -1716,7 +1724,7 @@ class DeviceWatcher extends utils.Adapter {
 					instanceMode: instanceMode,
 					schedule: scheduleTime,
 					adapterVersion: adapterVersion,
-					isAlive: instanceAliveDP[id].val,
+					isAlive: isAlive,
 					connectedHostPath: instanceConnectedHostDP,
 					isConnectedHost: instanceConnectedHostVal,
 					connectedDevicePath: instanceConnectedDeviceDP,
@@ -1745,33 +1753,85 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * set status for instance
 	 * @param {object} instanceMode
+	 * @param {object} scheduleTime
 	 * @param {object} isAliveVal
 	 * @param {object} connectedHostVal
 	 * @param {object} connectedDeviceVal
 	 */
-	async setInstanceStatus(instanceMode, isAliveVal, connectedHostVal, connectedDeviceVal) {
-		let instanceStatus = 'not enabled';
+	async setInstanceStatus(instanceMode, scheduleTime, isAliveVal, connectedHostVal, connectedDeviceVal) {
+		let instanceStatusString = 'not enabled';
+		let lastUpdateSecsAgo;
+		let lastCronRunSecs;
+		let diff;
+		let previousCronRun = null;
+		let isAlive = false;
 		switch (instanceMode) {
 			case 'schedule':
-				instanceStatus = 'Instance okay';
+				// We check for last update
+				lastUpdateSecsAgo = Math.floor((Date.now() - isAliveVal.ts) / 1000); // Last update of state in seconds
+				previousCronRun = await this.getPreviousCronRun(scheduleTime);
+				if (previousCronRun) {
+					lastCronRunSecs = Math.floor(previousCronRun / 1000); // if executed at 10:05, "*/15 * * * *" would return 5minutes in ms
+					diff = lastCronRunSecs - lastUpdateSecsAgo;
+					if (diff > -300) {
+						// We allow 300 seconds (5 minutes) difference
+						isAlive = true;
+						instanceStatusString = 'Instance okay';
+					}
+				}
 				break;
 			case 'daemon':
-				if (isAliveVal) {
-					if (connectedHostVal) {
-						instanceStatus = 'Instance okay';
-						if (!connectedDeviceVal) {
-							instanceStatus = 'not connected to Device';
-						} else {
-							instanceStatus = 'Instance okay';
-						}
+				if (!isAliveVal) return ['Instance deactivated', false]; // if instance is turned off
+
+				// In case of (re)start, connection may take some time. We take 3 attempts.
+				// Attempt 1/3 - immediately
+				if (connectedHostVal && connectedDeviceVal) {
+					isAlive = true;
+					instanceStatusString = 'Instance okay';
+				} else {
+					// Attempt 2/3 - after 10 seconds
+					await this.wait(10000);
+					if (connectedHostVal && connectedDeviceVal) {
+						isAlive = true;
+						instanceStatusString = 'Instance okay';
 					} else {
-						instanceStatus = 'not connected to host';
+						// Attempt 3/3 - after 20 seconds in total
+						await this.wait(10000);
+						if (connectedHostVal && connectedDeviceVal) {
+							isAlive = true;
+							instanceStatusString = 'Instance okay';
+						} else {
+							// Finally, no success
+							isAlive = false; // this line is actually not needed, as already set to false
+							if (!connectedDeviceVal) {
+								instanceStatusString = 'not connected to Device';
+							} else if (!connectedHostVal) {
+								instanceStatusString = 'not connected to host';
+							}
+						}
 					}
 				}
 				break;
 		}
 
-		return instanceStatus;
+		return [instanceStatusString, isAlive];
+	}
+
+	/**
+	 * Get previous run of cron job schedule
+	 * Requires cron-parser!
+	 * Inspired by https://stackoverflow.com/questions/68134104/
+	 * @param {string} lastCronRun
+	 */
+	async getPreviousCronRun(lastCronRun) {
+		try {
+			const interval = cronParser.parseExpression(lastCronRun);
+			const previous = interval.prev();
+			return Math.floor(Date.now() - previous.getTime()); // in ms
+		} catch (error) {
+			this.log.warn(error);
+			return;
+		}
 	}
 
 	async createAdapterUpdateData() {
@@ -3310,6 +3370,15 @@ class DeviceWatcher extends utils.Adapter {
 		if (typeof data === 'object') return data;
 		if (typeof data === 'string') return JSON.parse(data);
 		return {};
+	}
+
+	/**
+	 * @param {number} time
+	 */
+	async wait(time) {
+		return new Promise((resolve) => {
+			setTimeout(resolve, time);
+		});
 	}
 
 	/**
