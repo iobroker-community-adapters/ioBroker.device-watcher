@@ -303,6 +303,7 @@ class DeviceWatcher extends utils.Adapter {
 							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, state.val, instance.isConnectedHost, instance.isConnectedDevice);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
+							instance.isError = instanceStatusRaw[2];
 						}
 						break;
 					case instance.connectedHostPath:
@@ -311,8 +312,9 @@ class DeviceWatcher extends utils.Adapter {
 							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, state.val, instance.isConnectedDevice);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
+							instance.isError = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedHost) {
+							if (this.config.checkSendInstanceFailedMsg && instance.isError) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
@@ -323,8 +325,9 @@ class DeviceWatcher extends utils.Adapter {
 							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, instance.isConnectedHost, state.val);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
+							instance.isError = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && !instance.isConnectedDevice) {
+							if (this.config.checkSendInstanceFailedMsg && instance.isError) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
@@ -1708,6 +1711,7 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
 				const isAlive = instanceStatusRaw[1];
 				const instanceStatus = instanceStatusRaw[0];
+				const isError = instanceStatusRaw[2];
 
 				//subscribe to statechanges
 				this.subscribeForeignStatesAsync(id);
@@ -1725,6 +1729,7 @@ class DeviceWatcher extends utils.Adapter {
 					schedule: scheduleTime,
 					adapterVersion: adapterVersion,
 					isAlive: isAlive,
+					isError: isError,
 					connectedHostPath: instanceConnectedHostDP,
 					isConnectedHost: instanceConnectedHostVal,
 					connectedDevicePath: instanceConnectedDeviceDP,
@@ -1765,6 +1770,7 @@ class DeviceWatcher extends utils.Adapter {
 		let diff;
 		let previousCronRun = null;
 		let isAlive = false;
+		let isError = false;
 		switch (instanceMode) {
 			case 'schedule':
 				// We check for last update
@@ -1805,8 +1811,10 @@ class DeviceWatcher extends utils.Adapter {
 							isAlive = false; // this line is actually not needed, as already set to false
 							if (!connectedDeviceVal) {
 								instanceStatusString = 'not connected to Device';
+								isError = false;
 							} else if (!connectedHostVal) {
 								instanceStatusString = 'not connected to host';
+								isError = false;
 							}
 						}
 					}
@@ -1814,24 +1822,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 		}
 
-		return [instanceStatusString, isAlive];
-	}
-
-	/**
-	 * Get previous run of cron job schedule
-	 * Requires cron-parser!
-	 * Inspired by https://stackoverflow.com/questions/68134104/
-	 * @param {string} lastCronRun
-	 */
-	async getPreviousCronRun(lastCronRun) {
-		try {
-			const interval = cronParser.parseExpression(lastCronRun);
-			const previous = interval.prev();
-			return Math.floor(Date.now() - previous.getTime()); // in ms
-		} catch (error) {
-			this.log.warn(error);
-			return;
-		}
+		return [instanceStatusString, isAlive, isError];
 	}
 
 	async createAdapterUpdateData() {
@@ -1905,13 +1896,13 @@ class DeviceWatcher extends utils.Adapter {
 				Version: instance.adapterVersion,
 				Status: instance.status,
 			});
-			if (!instance.isAlive && instance.instanceMode !== 'schedule') {
+			if (!instance.isAlive) {
 				this.listDeactivatedInstances.push({
 					Instance: instance.InstanceName,
 					Status: instance.status,
 				});
 			}
-			if (instance.isAlive && (!instance.isConnectedHost || !instance.isConnectedDevice)) {
+			if (instance.isError) {
 				this.listErrorInstance.push({
 					Instance: instance.InstanceName,
 					Mode: instance.instanceMode,
@@ -3379,6 +3370,23 @@ class DeviceWatcher extends utils.Adapter {
 		return new Promise((resolve) => {
 			setTimeout(resolve, time);
 		});
+	}
+
+	/**
+	 * Get previous run of cron job schedule
+	 * Requires cron-parser!
+	 * Inspired by https://stackoverflow.com/questions/68134104/
+	 * @param {string} lastCronRun
+	 */
+	async getPreviousCronRun(lastCronRun) {
+		try {
+			const interval = cronParser.parseExpression(lastCronRun);
+			const previous = interval.prev();
+			return Math.floor(Date.now() - previous.getTime()); // in ms
+		} catch (error) {
+			this.log.warn(error);
+			return;
+		}
 	}
 
 	/**
