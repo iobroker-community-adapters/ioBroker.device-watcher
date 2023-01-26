@@ -1798,23 +1798,21 @@ class DeviceWatcher extends utils.Adapter {
 					// Attempt 2/3 - after 10 seconds
 					await this.wait(10000);
 					if (connectedHostVal && connectedDeviceVal) {
-						isAlive = true;
+						isError = false;
 						instanceStatusString = 'Instance okay';
 					} else {
 						// Attempt 3/3 - after 20 seconds in total
 						await this.wait(10000);
 						if (connectedHostVal && connectedDeviceVal) {
-							isAlive = true;
+							isError = false;
 							instanceStatusString = 'Instance okay';
 						} else {
-							// Finally, no success
-							isAlive = false; // this line is actually not needed, as already set to false
 							if (!connectedDeviceVal) {
 								instanceStatusString = 'not connected to Device';
-								isError = false;
+								isError = true;
 							} else if (!connectedHostVal) {
 								instanceStatusString = 'not connected to host';
-								isError = false;
+								isError = true;
 							}
 						}
 					}
