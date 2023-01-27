@@ -300,7 +300,14 @@ class DeviceWatcher extends utils.Adapter {
 				switch (id) {
 					case instance.instanceAlivePath:
 						if (state.val !== instance.isAlive) {
-							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, state.val, instance.isConnectedHost, instance.isConnectedDevice);
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								state.val,
+								instance.isConnectedHost,
+								instance.isConnectedDevice,
+							);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
 							instance.isHealthy = instanceStatusRaw[2];
@@ -309,7 +316,14 @@ class DeviceWatcher extends utils.Adapter {
 					case instance.connectedHostPath:
 						if (instance.isAlive && state.val !== instance.isConnectedHost) {
 							instance.isConnectedHost = state.val;
-							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, state.val, instance.isConnectedDevice);
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								instance.isAlive,
+								state.val,
+								instance.isConnectedDevice,
+							);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
 							instance.isHealthy = instanceStatusRaw[2];
@@ -322,7 +336,14 @@ class DeviceWatcher extends utils.Adapter {
 					case instance.connectedDevicePath:
 						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
 							instance.isConnectedDevice = state.val;
-							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, instance.isConnectedHost, state.val);
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								instance.isAlive,
+								instance.isConnectedHost,
+								state.val,
+							);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
 							instance.isHealthy = instanceStatusRaw[2];
@@ -1708,7 +1729,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
+				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
 				const isAlive = instanceStatusRaw[1];
 				const instanceStatus = instanceStatusRaw[0];
 				const isError = instanceStatusRaw[2];
@@ -1759,11 +1780,12 @@ class DeviceWatcher extends utils.Adapter {
 	 * set status for instance
 	 * @param {object} instanceMode
 	 * @param {object} scheduleTime
+	 * @param {object} instanceAlivePath
 	 * @param {object} isAliveVal
 	 * @param {object} connectedHostVal
 	 * @param {object} connectedDeviceVal
 	 */
-	async setInstanceStatus(instanceMode, scheduleTime, isAliveVal, connectedHostVal, connectedDeviceVal) {
+	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, isAliveVal, connectedHostVal, connectedDeviceVal) {
 		let instanceStatusString = 'not enabled';
 		let lastUpdateSecsAgo;
 		let lastCronRunSecs;
@@ -1771,19 +1793,23 @@ class DeviceWatcher extends utils.Adapter {
 		let previousCronRun = null;
 		let isAlive = false;
 		let isHealthy = false;
+		let dpValue;
 		switch (instanceMode) {
 			case 'schedule':
 				// We check for last update
-				lastUpdateSecsAgo = Math.floor((Date.now() - isAliveVal.ts) / 1000); // Last update of state in seconds
-				previousCronRun = await this.getPreviousCronRun(scheduleTime);
-				if (previousCronRun) {
-					lastCronRunSecs = Math.floor(previousCronRun / 1000); // if executed at 10:05, "*/15 * * * *" would return 5minutes in ms
-					diff = lastCronRunSecs - lastUpdateSecsAgo;
-					if (diff > -300) {
-						// We allow 300 seconds (5 minutes) difference
-						isAlive = true;
-						isHealthy = true;
-						instanceStatusString = 'Instance okay';
+				dpValue = await this.getForeignStateAsync(instanceAlivePath);
+				if (dpValue) {
+					lastUpdateSecsAgo = Math.floor((Date.now() - dpValue.lc) / 1000); // Last update of state in seconds
+					previousCronRun = await this.getPreviousCronRun(scheduleTime);
+					if (previousCronRun) {
+						lastCronRunSecs = Math.floor(previousCronRun / 1000); // if executed at 10:05, "*/15 * * * *" would return 5minutes in ms
+						diff = lastCronRunSecs - lastUpdateSecsAgo;
+						if (diff > -300) {
+							// We allow 300 seconds (5 minutes) difference
+							isAlive = true;
+							isHealthy = true;
+							instanceStatusString = 'Instance okay';
+						}
 					}
 				}
 				break;
