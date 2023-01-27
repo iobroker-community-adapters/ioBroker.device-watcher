@@ -303,7 +303,7 @@ class DeviceWatcher extends utils.Adapter {
 							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, state.val, instance.isConnectedHost, instance.isConnectedDevice);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
-							instance.isError = instanceStatusRaw[2];
+							instance.isHealthy = instanceStatusRaw[2];
 						}
 						break;
 					case instance.connectedHostPath:
@@ -312,9 +312,9 @@ class DeviceWatcher extends utils.Adapter {
 							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, state.val, instance.isConnectedDevice);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
-							instance.isError = instanceStatusRaw[2];
+							instance.isHealthy = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && instance.isError) {
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
@@ -325,9 +325,9 @@ class DeviceWatcher extends utils.Adapter {
 							instanceStatusRaw = await this.setInstanceStatus(instance.instanceMode, instance.schedule, instance.isAlive, instance.isConnectedHost, state.val);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
-							instance.isError = instanceStatusRaw[2];
+							instance.isHealthy = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && instance.isError) {
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
@@ -1769,8 +1769,8 @@ class DeviceWatcher extends utils.Adapter {
 		let lastCronRunSecs;
 		let diff;
 		let previousCronRun = null;
-		let isAlive = false;
-		let isError = false;
+		let isAlive;
+		let isHealthy;
 		switch (instanceMode) {
 			case 'schedule':
 				// We check for last update
@@ -1782,6 +1782,7 @@ class DeviceWatcher extends utils.Adapter {
 					if (diff > -300) {
 						// We allow 300 seconds (5 minutes) difference
 						isAlive = true;
+						isHealthy = true;
 						instanceStatusString = 'Instance okay';
 					}
 				}
@@ -1793,31 +1794,31 @@ class DeviceWatcher extends utils.Adapter {
 				// Attempt 1/3 - immediately
 				if (connectedHostVal && connectedDeviceVal) {
 					isAlive = true;
-					isError = false;
+					isHealthy = true;
 					instanceStatusString = 'Instance okay';
 				} else {
 					// Attempt 2/3 - after 10 seconds
 					await this.wait(10000);
 					if (connectedHostVal && connectedDeviceVal) {
 						isAlive = true;
-						isError = false;
+						isHealthy = true;
 						instanceStatusString = 'Instance okay';
 					} else {
 						// Attempt 3/3 - after 20 seconds in total
 						await this.wait(10000);
 						if (connectedHostVal && connectedDeviceVal) {
 							isAlive = true;
-							isError = false;
+							isHealthy = true;
 							instanceStatusString = 'Instance okay';
 						} else {
 							if (!connectedDeviceVal) {
 								instanceStatusString = 'not connected to Device';
 								isAlive = true;
-								isError = true;
+								isHealthy = false;
 							} else if (!connectedHostVal) {
 								instanceStatusString = 'not connected to host';
 								isAlive = true;
-								isError = true;
+								isHealthy = false;
 							}
 						}
 					}
@@ -1825,7 +1826,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 		}
 
-		return [instanceStatusString, isAlive, isError];
+		return [instanceStatusString, isAlive, isHealthy];
 	}
 
 	async createAdapterUpdateData() {
@@ -1905,7 +1906,7 @@ class DeviceWatcher extends utils.Adapter {
 					Status: instance.status,
 				});
 			}
-			if (instance.isError) {
+			if (instance.isAlive && !instance.isHealthy) {
 				this.listErrorInstance.push({
 					Instance: instance.InstanceName,
 					Mode: instance.instanceMode,
