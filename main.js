@@ -1732,7 +1732,7 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
 				const isAlive = instanceStatusRaw[1];
 				const instanceStatus = instanceStatusRaw[0];
-				const isError = instanceStatusRaw[2];
+				const isHealthy = instanceStatusRaw[2];
 
 				//subscribe to statechanges
 				this.subscribeForeignStatesAsync(id);
@@ -1750,7 +1750,7 @@ class DeviceWatcher extends utils.Adapter {
 					schedule: scheduleTime,
 					adapterVersion: adapterVersion,
 					isAlive: isAlive,
-					isError: isError,
+					isHealthy: isHealthy,
 					connectedHostPath: instanceConnectedHostDP,
 					isConnectedHost: instanceConnectedHostVal,
 					connectedDevicePath: instanceConnectedDeviceDP,
