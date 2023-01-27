@@ -284,16 +284,16 @@ class DeviceWatcher extends utils.Adapter {
 			let instanceDeviceConnectionDpTS;
 			const instanceDeviceConnectionDpTSminTime = 10;
 
-			/*
-			if (this.config.checkAdapterInstances) {
-				for (const adapter of this.adapterUpdatesJsonRaw) {
-					switch (id) {
-						case adapter.Path:
-
+			for (const adapter of this.adapterUpdatesJsonRaw) {
+				switch (id) {
+					case adapter.Path:
+						await this.getAdapterUpdateData(id);
+						await this.createAdapterUpdateList();
+						if (this.config.checkSendAdapterUpdateMsg) {
 							this.sendAdapterUpdatesNotification(id, state);
-					}
+						}
 				}
-			}*/
+			}
 
 			for (const instance of this.listInstanceRaw) {
 				switch (id) {
@@ -1911,27 +1911,45 @@ class DeviceWatcher extends utils.Adapter {
 		return [instanceStatusString, isAlive, isHealthy];
 	}
 
+	/**
+	 * create adapter update data
+	 */
 	async createAdapterUpdateData() {
 		const adapterUpdateListDP = `admin.*.info.updatesJson`;
-		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
 
 		// subscribe to datapoint
 		this.subscribeForeignStates(adapterUpdateListDP);
+
+		await this.getAdapterUpdateData(adapterUpdateListDP);
+
+		await this.createAdapterUpdateList();
+	}
+
+	/**
+	 * create adapter update raw lists
+	 * @param {string} adapterUpdateListDP
+	 */
+	async getAdapterUpdateData(adapterUpdateListDP) {
+		this.adapterUpdatesJsonRaw = [];
+		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
+
 		let adapterJsonList;
+		let adapterUpdatesJsonPath;
 
 		for (const [id] of Object.entries(adapterUpdatesListVal)) {
 			adapterJsonList = await this.parseData(adapterUpdatesListVal[id].val);
+			adapterUpdatesJsonPath = id;
 		}
 
 		for (const [id] of Object.entries(adapterJsonList)) {
 			this.adapterUpdatesJsonRaw.push({
-				Path: adapterUpdateListDP,
+				Path: adapterUpdatesJsonPath,
 				Adapter: this.capitalize(id),
 				newVersion: adapterJsonList[id].availableVersion,
 				oldVersion: adapterJsonList[id].installedVersion,
 			});
 		}
-		await this.createAdapterUpdateList();
+		return this.adapterUpdatesJsonRaw;
 	}
 
 	/**
