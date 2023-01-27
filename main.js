@@ -1775,7 +1775,8 @@ class DeviceWatcher extends utils.Adapter {
 				let scheduleTime = 'N/A';
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
 				if (instanceObjectData) {
-					adapterName = instanceObjectData.common.name;
+					// @ts-ignore
+					adapterName = this.capitalize(instanceObjectData.common.name);
 					adapterVersion = instanceObjectData.common.version;
 					instanceMode = instanceObjectData.common.mode;
 
