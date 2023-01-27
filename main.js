@@ -1799,11 +1799,12 @@ class DeviceWatcher extends utils.Adapter {
 				// We check for last update
 				dpValue = await this.getForeignStateAsync(instanceAlivePath);
 				if (dpValue) {
-					lastUpdateSecsAgo = Math.floor((Date.now() - dpValue.lc) / 1000); // Last update of state in seconds
+					lastUpdateSecsAgo = Math.round((Date.now() - dpValue.lc) / 1000); // Last update of state in seconds
 					previousCronRun = await this.getPreviousCronRun(scheduleTime);
 					if (previousCronRun) {
-						lastCronRunSecs = Math.floor(previousCronRun / 1000); // if executed at 10:05, "*/15 * * * *" would return 5minutes in ms
+						lastCronRunSecs = Math.round(previousCronRun / 1000); // if executed at 10:05, "*/15 * * * *" would return 5minutes in ms
 						diff = lastCronRunSecs - lastUpdateSecsAgo;
+						this.log.warn(diff);
 						if (diff > -300) {
 							// We allow 300 seconds (5 minutes) difference
 							isAlive = true;
