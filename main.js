@@ -28,6 +28,7 @@ class DeviceWatcher extends utils.Adapter {
 		// raw arrays
 		this.adapterUpdatesJsonRaw = [];
 		this.listInstanceRaw = [];
+		this.listErrorInstanceRaw = [];
 
 		// user arrays
 		this.instanceBlacklist = [];
@@ -1918,6 +1919,7 @@ class DeviceWatcher extends utils.Adapter {
 	async createInstanceList() {
 		this.listAllInstances = [];
 		this.listDeactivatedInstances = [];
+		this.listErrorInstanceRaw = [];
 		this.listErrorInstance = [];
 
 		for (const instance of this.listInstanceRaw) {
@@ -1936,6 +1938,17 @@ class DeviceWatcher extends utils.Adapter {
 					Status: instance.status,
 				});
 			}
+			// fill first Raw list
+			if (instance.isAlive && !instance.isHealthy) {
+				this.listErrorInstanceRaw.push({
+					Adapter: instance.Adapter,
+					Instance: instance.InstanceName,
+					Mode: instance.instanceMode,
+					Status: instance.status,
+				});
+			}
+
+			// fill List for User
 			if (instance.isAlive && !instance.isHealthy) {
 				this.listErrorInstance.push({
 					Adapter: instance.Adapter,
@@ -2751,7 +2764,7 @@ class DeviceWatcher extends utils.Adapter {
 				try {
 					let instanceList = '';
 
-					for (const id of this.listErrorInstance) {
+					for (const id of this.listErrorInstanceRaw) {
 						if (!this.blacklistNotify.includes(id.Path)) {
 							instanceList = `${instanceList}\n${id.Instance}: ${id.Status}`;
 						}
