@@ -179,8 +179,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.5.0 (2023-01-27)
 
 -   (ciddi89) Add Feature: Possibility to watch instances
 -   (ciddi89) Change: Folder strukur. Instances and devices have got their own folders because of the overview. Please delete the instance folder and restart the instance.
