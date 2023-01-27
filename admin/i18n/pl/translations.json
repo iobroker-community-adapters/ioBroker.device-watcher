@@ -102,5 +102,21 @@
     "From what % battery is considered low": "Od jakiego % baterii uważa się za niski",
     "Ignore in main lists": "Ignoruj ​​na listach głównych",
     "Ignore in Own lists per adapter": "Ignoruj ​​na własnych listach na adapter",
-    "Ignore in lists per adapter": "Ignoruj ​​na listach według adaptera"
+    "Ignore in lists per adapter": "Ignoruj ​​na listach według adaptera",
+    "Choose which instances should be excluded": "Wybierz instancje, które mają zostać wykluczone",
+    "Ignore in lists": "Ignoruj ​​na listach",
+    "Instances Blacklist": "Czarna lista instancji",
+    "Devices Blacklist": "Czarna lista urządzeń",
+    "Overview of updatable adapter": "Przegląd aktualizowalnego adaptera",
+    "Get a message with an overview of all updatable adapter": "Otrzymaj wiadomość z przeglądem wszystkich adapterów, które można aktualizować",
+    "Instance failed message": "Komunikat o awarii instancji",
+    "Receive a message when an instance failed": "Otrzymuj komunikat, gdy wystąpi awaria",
+    "Overview of failed instances": "Przegląd instancji zakończonych niepowodzeniem",
+    "Get a message with an overview of all failed instances": "Otrzymaj wiadomość z przeglądem wszystkich nieudanych instancji",
+    "Choose the day(s) where you want to get the overview of failed instances:": "Wybierz dni, w których chcesz uzyskać przegląd instancji zakończonych niepowodzeniem:",
+    "Create lists for instances": "Twórz listy dla instancji",
+    "Watch instances": "Obserwuj instancje",
+    "Create lists for devices": "Twórz listy dla urządzeń",
+    "Adapter & Instances Notification Settings": "Ustawienia powiadomień adaptera i instancji",
+    "Devices Notification Settings": "Ustawienia powiadomień urządzeń"
 }

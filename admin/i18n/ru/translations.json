@@ -102,5 +102,21 @@
     "From what % battery is considered low": "С какого % батарея считается разряженной",
     "Ignore in main lists": "Игнорировать в основных списках",
     "Ignore in Own lists per adapter": "Игнорировать в собственных списках на адаптер",
-    "Ignore in lists per adapter": "Игнорировать в списках на адаптер"
+    "Ignore in lists per adapter": "Игнорировать в списках на адаптер",
+    "Choose which instances should be excluded": "Выберите, какие экземпляры следует исключить",
+    "Ignore in lists": "Игнорировать в списках",
+    "Instances Blacklist": "Черный список экземпляров",
+    "Devices Blacklist": "Черный список устройств",
+    "Overview of updatable adapter": "Обзор обновляемого адаптера",
+    "Get a message with an overview of all updatable adapter": "Получите сообщение с обзором всех обновляемых адаптеров",
+    "Instance failed message": "Сообщение об ошибке экземпляра",
+    "Receive a message when an instance failed": "Получение сообщения при сбое экземпляра",
+    "Overview of failed instances": "Обзор неудачных экземпляров",
+    "Get a message with an overview of all failed instances": "Получите сообщение с обзором всех неудачных экземпляров",
+    "Choose the day(s) where you want to get the overview of failed instances:": "Выберите день (дни), когда вы хотите получить обзор неудачных экземпляров:",
+    "Create lists for instances": "Создание списков для экземпляров",
+    "Watch instances": "Смотреть экземпляры",
+    "Create lists for devices": "Создание списков для устройств",
+    "Adapter & Instances Notification Settings": "Настройки уведомлений адаптера и экземпляров",
+    "Devices Notification Settings": "Настройки уведомлений устройств"
 }

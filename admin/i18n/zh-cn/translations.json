@@ -102,5 +102,21 @@
     "From what % battery is considered low": "从什么百分比电池被认为是低",
     "Ignore in main lists": "在主列表中忽略",
     "Ignore in Own lists per adapter": "在每个适配器自己的列表中忽略",
-    "Ignore in lists per adapter": "在每个适配器的列表中忽略"
+    "Ignore in lists per adapter": "在每个适配器的列表中忽略",
+    "Choose which instances should be excluded": "选择应排除哪些实例",
+    "Ignore in lists": "在列表中忽略",
+    "Instances Blacklist": "实例黑名单",
+    "Devices Blacklist": "设备黑名单",
+    "Overview of updatable adapter": "可更新适配器概述",
+    "Get a message with an overview of all updatable adapter": "获取包含所有可更新适配器概览的消息",
+    "Instance failed message": "实例失败消息",
+    "Receive a message when an instance failed": "实例失败时接收消息",
+    "Overview of failed instances": "失败实例概览",
+    "Get a message with an overview of all failed instances": "获取包含所有失败实例概览的消息",
+    "Choose the day(s) where you want to get the overview of failed instances:": "选择您想要获取失败实例概览的日期：",
+    "Create lists for instances": "为实例创建列表",
+    "Watch instances": "观看实例",
+    "Create lists for devices": "为设备创建列表",
+    "Adapter & Instances Notification Settings": "适配器和实例通知设置",
+    "Devices Notification Settings": "设备通知设置"
 }

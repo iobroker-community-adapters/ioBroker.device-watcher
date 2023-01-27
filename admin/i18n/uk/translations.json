@@ -102,5 +102,21 @@
     "From what % battery is considered low": "Від якого % батарея вважається розрядженою",
     "Ignore in main lists": "Ігнорувати в основних списках",
     "Ignore in Own lists per adapter": "Ігнорувати у власних списках на адаптер",
-    "Ignore in lists per adapter": "Ігнорувати в списках на адаптер"
+    "Ignore in lists per adapter": "Ігнорувати в списках на адаптер",
+    "Choose which instances should be excluded": "Виберіть, які екземпляри слід виключити",
+    "Ignore in lists": "Ігнорувати в списках",
+    "Instances Blacklist": "Чорний список екземплярів",
+    "Devices Blacklist": "Чорний список пристроїв",
+    "Overview of updatable adapter": "Огляд оновлюваного адаптера",
+    "Get a message with an overview of all updatable adapter": "Отримайте повідомлення з оглядом усіх оновлюваних адаптерів",
+    "Instance failed message": "Повідомлення про помилку екземпляра",
+    "Receive a message when an instance failed": "Отримувати повідомлення про помилку екземпляра",
+    "Overview of failed instances": "Огляд невдалих екземплярів",
+    "Get a message with an overview of all failed instances": "Отримайте повідомлення з оглядом усіх невдалих екземплярів",
+    "Choose the day(s) where you want to get the overview of failed instances:": "Виберіть день (дні), коли ви хочете отримати огляд невдалих екземплярів:",
+    "Create lists for instances": "Створіть списки для екземплярів",
+    "Watch instances": "Дивитися екземпляри",
+    "Create lists for devices": "Створення списків для пристроїв",
+    "Adapter & Instances Notification Settings": "Налаштування сповіщень адаптера та екземплярів",
+    "Devices Notification Settings": "Налаштування сповіщень пристроїв"
 }

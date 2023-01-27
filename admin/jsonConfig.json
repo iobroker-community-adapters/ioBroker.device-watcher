@@ -8,7 +8,7 @@
 			"items": {
 				"_headerAdapter": {
 					"type": "header",
-					"text": "Should instances be watched?",
+					"text": "Create lists for instances",
 					"size": 2
 				},
 				"checkAdapterInstances": {
@@ -16,11 +16,11 @@
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
-					"label": "Watch Instances"
+					"label": "Watch instances"
 				},
 				"_headerDevices": {
 					"type": "header",
-					"text": "Choose devices to watch",
+					"text": "Create lists for devices",
 					"size": 2
 				},
 				"alexa2Devices": {

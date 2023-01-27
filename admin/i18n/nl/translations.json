@@ -102,5 +102,21 @@
     "From what % battery is considered low": "Van welk % batterij als laag wordt beschouwd",
     "Ignore in main lists": "Negeren in hoofdlijsten",
     "Ignore in Own lists per adapter": "Negeren in Eigen lijsten per adapter",
-    "Ignore in lists per adapter": "Negeren in lijsten per adapter"
+    "Ignore in lists per adapter": "Negeren in lijsten per adapter",
+    "Choose which instances should be excluded": "Kies welke instanties moeten worden uitgesloten",
+    "Ignore in lists": "Negeer in lijsten",
+    "Instances Blacklist": "Instanties op de zwarte lijst",
+    "Devices Blacklist": "Apparaten zwarte lijst",
+    "Overview of updatable adapter": "Overzicht van bij te werken adapter",
+    "Get a message with an overview of all updatable adapter": "Ontvang een bericht met een overzicht van alle bij te werken adapters",
+    "Instance failed message": "Instantie mislukt bericht",
+    "Receive a message when an instance failed": "Ontvang een bericht wanneer een instantie mislukt",
+    "Overview of failed instances": "Overzicht van mislukte instanties",
+    "Get a message with an overview of all failed instances": "Ontvang een bericht met een overzicht van alle mislukte instanties",
+    "Choose the day(s) where you want to get the overview of failed instances:": "Kies de dag(en) waarop u het overzicht van mislukte instanties wilt zien:",
+    "Create lists for instances": "Maak lijsten voor instanties",
+    "Watch instances": "Bekijk instanties",
+    "Create lists for devices": "Maak lijsten voor apparaten",
+    "Adapter & Instances Notification Settings": "Adapter & Instances Meldingsinstellingen",
+    "Devices Notification Settings": "Apparaten Meldingsinstellingen"
 }
