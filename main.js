@@ -313,43 +313,39 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedHostPath:
-						if (instance.isAlive && state.val !== instance.isConnectedHost) {
-							instance.isConnectedHost = state.val;
-							instanceStatusRaw = await this.setInstanceStatus(
-								instance.instanceMode,
-								instance.schedule,
-								instance.instanceAlivePath,
-								instance.isAlive,
-								state.val,
-								instance.isConnectedDevice,
-							);
-							instance.isAlive = instanceStatusRaw[1];
-							instance.status = instanceStatusRaw[0];
-							instance.isHealthy = instanceStatusRaw[2];
+						instance.isConnectedHost = state.val;
+						instanceStatusRaw = await this.setInstanceStatus(
+							instance.instanceMode,
+							instance.schedule,
+							instance.instanceAlivePath,
+							instance.isAlive,
+							instance.isConnectedHost,
+							instance.isConnectedDevice,
+						);
+						instance.isAlive = instanceStatusRaw[1];
+						instance.status = instanceStatusRaw[0];
+						instance.isHealthy = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
-								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
-							}
+						if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+							await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 						}
 						break;
 					case instance.connectedDevicePath:
-						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
-							instance.isConnectedDevice = state.val;
-							instanceStatusRaw = await this.setInstanceStatus(
-								instance.instanceMode,
-								instance.schedule,
-								instance.instanceAlivePath,
-								instance.isAlive,
-								instance.isConnectedHost,
-								state.val,
-							);
-							instance.isAlive = instanceStatusRaw[1];
-							instance.status = instanceStatusRaw[0];
-							instance.isHealthy = instanceStatusRaw[2];
+						instance.isConnectedDevice = state.val;
+						instanceStatusRaw = await this.setInstanceStatus(
+							instance.instanceMode,
+							instance.schedule,
+							instance.instanceAlivePath,
+							instance.isAlive,
+							instance.isConnectedHost,
+							instance.isConnectedDevice,
+						);
+						instance.isAlive = instanceStatusRaw[1];
+						instance.status = instanceStatusRaw[0];
+						instance.isHealthy = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
-								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
-							}
+						if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+							await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 						}
 						break;
 				}
