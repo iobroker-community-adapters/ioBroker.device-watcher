@@ -179,6 +179,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Add Feature: Possibility to watch instances
+-   (ciddi89) Change: Folder strukur. Instances and devices have got their own folders because of the overview. Please delete the instance folder and restart the instance.
+
 ### 2.4.1 (2023-01-14)
 
 -   (ciddi89) send online and offline notifications only, if the connection to device (zigbee stick etc.) is longer then few seconds. Should prevent multiple messages at a stroke
