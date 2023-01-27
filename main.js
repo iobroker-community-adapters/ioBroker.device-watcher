@@ -1715,11 +1715,13 @@ class DeviceWatcher extends utils.Adapter {
 
 				// get adapter version
 				const instanceObjectPath = `system.adapter.${instanceName}`;
+				let adapterName;
 				let adapterVersion;
 				let instanceMode;
 				let scheduleTime = 'N/A';
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
 				if (instanceObjectData) {
+					adapterName = instanceObjectData.common.name;
 					adapterVersion = instanceObjectData.common.version;
 					instanceMode = instanceObjectData.common.mode;
 
@@ -1743,6 +1745,7 @@ class DeviceWatcher extends utils.Adapter {
 				// create raw list
 				if (this.instanceBlacklist.includes(instanceName)) continue;
 				this.listInstanceRaw.push({
+					Adapter: adapterName,
 					InstanceName: instanceName,
 					instanceObjectPath: instanceObjectPath,
 					instanceAlivePath: id,
@@ -1919,6 +1922,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		for (const instance of this.listInstanceRaw) {
 			this.listAllInstances.push({
+				Adapter: instance.Adapter,
 				Instance: instance.InstanceName,
 				Mode: instance.instanceMode,
 				Schedule: instance.schedule,
@@ -1927,12 +1931,14 @@ class DeviceWatcher extends utils.Adapter {
 			});
 			if (!instance.isAlive) {
 				this.listDeactivatedInstances.push({
+					Adapter: instance.Adapter,
 					Instance: instance.InstanceName,
 					Status: instance.status,
 				});
 			}
 			if (instance.isAlive && !instance.isHealthy) {
 				this.listErrorInstance.push({
+					Adapter: instance.Adapter,
 					Instance: instance.InstanceName,
 					Mode: instance.instanceMode,
 					Status: instance.status,
