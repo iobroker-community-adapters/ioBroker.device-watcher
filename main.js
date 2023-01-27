@@ -281,6 +281,8 @@ class DeviceWatcher extends utils.Adapter {
 			let oldStatus;
 			let isLowBatValue;
 			let instanceStatusRaw;
+			let oldInstanceHostState;
+			let oldInstanceDeviceState;
 			let instanceDeviceConnectionDpTS;
 			const instanceDeviceConnectionDpTSminTime = 10;
 
@@ -313,6 +315,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 						break;
 					case instance.connectedHostPath:
+						oldInstanceHostState = instance.isConnectedHost;
 						instance.isConnectedHost = state.val;
 						instanceStatusRaw = await this.setInstanceStatus(
 							instance.instanceMode,
@@ -326,11 +329,15 @@ class DeviceWatcher extends utils.Adapter {
 						instance.status = instanceStatusRaw[0];
 						instance.isHealthy = instanceStatusRaw[2];
 
-						if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
-							await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+						if (oldInstanceHostState !== instance.isConnectedHost) {
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							}
 						}
+
 						break;
 					case instance.connectedDevicePath:
+						oldInstanceDeviceState = instance.isConnectedDevice;
 						instance.isConnectedDevice = state.val;
 						instanceStatusRaw = await this.setInstanceStatus(
 							instance.instanceMode,
@@ -344,9 +351,12 @@ class DeviceWatcher extends utils.Adapter {
 						instance.status = instanceStatusRaw[0];
 						instance.isHealthy = instanceStatusRaw[2];
 
-						if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
-							await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+						if (oldInstanceDeviceState !== instance.isConnectedDevice) {
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							}
 						}
+
 						break;
 				}
 			}
