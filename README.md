@@ -179,6 +179,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: Instance error list and count was not reset
+-   (ciddi89) Fixed: Made notificatiosn for adapter update working
+
 ### 2.5.0 (2023-01-27)
 
 -   (ciddi89) Add Feature: Possibility to watch instances
