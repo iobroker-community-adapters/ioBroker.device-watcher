@@ -31,7 +31,8 @@ class DeviceWatcher extends utils.Adapter {
 		this.listErrorInstanceRaw = [];
 
 		// user arrays
-		this.instanceBlacklist = [];
+		this.blacklistInstancesLists = [];
+		this.blacklistInstancesNotify = [];
 		this.listAllInstances = [];
 		this.listDeactivatedInstances = [];
 		this.listAdapterUpdates = [];
@@ -294,9 +295,6 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}*/
 
-			// wait
-			// const delay = (n) => new Promise((r) => setTimeout(r, n * 1000));
-
 			for (const instance of this.listInstanceRaw) {
 				switch (id) {
 					case instance.instanceAlivePath:
@@ -329,7 +327,7 @@ class DeviceWatcher extends utils.Adapter {
 							instance.status = instanceStatusRaw[0];
 							instance.isHealthy = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy) {
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
@@ -349,7 +347,7 @@ class DeviceWatcher extends utils.Adapter {
 							instance.status = instanceStatusRaw[0];
 							instance.isHealthy = instanceStatusRaw[2];
 
-							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy) {
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
@@ -478,6 +476,9 @@ class DeviceWatcher extends utils.Adapter {
 		const devices = [];
 		let myCount = 0;
 		let result;
+		const instances = [];
+		let myCountInstances = 0;
+		let resultInstances;
 
 		switch (obj.command) {
 			case 'devicesList':
@@ -501,6 +502,35 @@ class DeviceWatcher extends utils.Adapter {
 							return x < y ? -1 : x > y ? 1 : 0;
 						});
 						this.sendTo(obj.from, obj.command, sortDevices, obj.callback);
+					} catch (error) {
+						this.sendTo(obj.from, obj.command, obj.callback);
+					}
+				} else {
+					this.sendTo(obj.from, obj.command, obj.callback);
+				}
+				break;
+
+			case 'instancesList':
+				if (obj.message) {
+					try {
+						resultInstances = this.listInstanceRaw;
+						for (const element in resultInstances) {
+							const label = `${resultInstances[element].Adapter}: ${resultInstances[element].InstanceName}`;
+							const myValueObject = {
+								adapter: resultInstances[element].Adapter,
+								instanceName: resultInstances[element].InstanceName,
+								path: resultInstances[element].instanceAlivePath,
+							};
+							instances[myCountInstances] = { label: label, value: JSON.stringify(myValueObject) };
+							myCountInstances++;
+						}
+						const sortInstances = instances.slice(0);
+						sortInstances.sort(function (a, b) {
+							const x = a.label;
+							const y = b.label;
+							return x < y ? -1 : x > y ? 1 : 0;
+						});
+						this.sendTo(obj.from, obj.command, sortInstances, obj.callback);
 					} catch (error) {
 						this.sendTo(obj.from, obj.command, obj.callback);
 					}
@@ -591,6 +621,7 @@ class DeviceWatcher extends utils.Adapter {
 	async createBlacklist() {
 		this.log.debug(`Function started: ${this.createBlacklist.name}`);
 
+		// DEVICES
 		const myBlacklist = this.config.tableBlacklist;
 
 		for (const i in myBlacklist) {
@@ -615,6 +646,28 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.blacklistLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistLists}`);
 		if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistAdapterLists}`);
 		if (this.blacklistNotify.length >= 1) this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistNotify}`);
+
+		// INSTANCES
+		const myBlacklistInstances = this.config.tableBlacklistInstances;
+
+		for (const i in myBlacklistInstances) {
+			try {
+				const blacklistParse = await this.parseData(myBlacklistInstances[i].instances);
+				// push devices in list to ignor device in lists
+				if (myBlacklistInstances[i].checkIgnorLists) {
+					this.blacklistInstancesLists.push(blacklistParse.path);
+				}
+				// push devices in list to ignor device in notifications
+				if (myBlacklistInstances[i].checkIgnorNotify) {
+					this.blacklistInstancesNotify.push(blacklistParse.path);
+				}
+			} catch (error) {
+				this.errorReporting('[createBlacklist]', error);
+			}
+		}
+
+		if (this.blacklistInstancesLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistInstancesLists}`);
+		if (this.blacklistInstancesNotify.length >= 1) this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistInstancesNotify}`);
 
 		this.log.debug(`Function finished: ${this.createBlacklist.name}`);
 	}
@@ -1744,7 +1797,6 @@ class DeviceWatcher extends utils.Adapter {
 				//this.subscribeForeignObjectsAsync(instanceObjectPath);
 
 				// create raw list
-				if (this.instanceBlacklist.includes(instanceName)) continue;
 				this.listInstanceRaw.push({
 					Adapter: adapterName,
 					InstanceName: instanceName,
@@ -1923,6 +1975,17 @@ class DeviceWatcher extends utils.Adapter {
 		this.listErrorInstance = [];
 
 		for (const instance of this.listInstanceRaw) {
+			// fill raw list
+			if (instance.isAlive && !instance.isHealthy) {
+				this.listErrorInstanceRaw.push({
+					Adapter: instance.Adapter,
+					Instance: instance.InstanceName,
+					Mode: instance.instanceMode,
+					Status: instance.status,
+				});
+			}
+
+			if (this.blacklistInstancesLists.includes(instance.instanceAlivePath)) continue;
 			this.listAllInstances.push({
 				Adapter: instance.Adapter,
 				Instance: instance.InstanceName,
@@ -1935,15 +1998,6 @@ class DeviceWatcher extends utils.Adapter {
 				this.listDeactivatedInstances.push({
 					Adapter: instance.Adapter,
 					Instance: instance.InstanceName,
-					Status: instance.status,
-				});
-			}
-			// fill first Raw list
-			if (instance.isAlive && !instance.isHealthy) {
-				this.listErrorInstanceRaw.push({
-					Adapter: instance.Adapter,
-					Instance: instance.InstanceName,
-					Mode: instance.instanceMode,
 					Status: instance.status,
 				});
 			}
@@ -2765,7 +2819,7 @@ class DeviceWatcher extends utils.Adapter {
 					let instanceList = '';
 
 					for (const id of this.listErrorInstanceRaw) {
-						if (!this.blacklistNotify.includes(id.Path)) {
+						if (!this.blacklistInstancesNotify.includes(id.instanceAlivePath)) {
 							instanceList = `${instanceList}\n${id.Instance}: ${id.Status}`;
 						}
 					}

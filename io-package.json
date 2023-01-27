@@ -337,6 +337,7 @@
 		"showAdapterNameinMsg": false,
 		"checkSendAdapterUpdateMsg": false,
 		"tableBlacklist": [],
+		"tableBlacklistInstances": [],
 		"updateinterval": 10,
 		"ownDataEditor": [],
 		"checkSendDeviceUpgrade": false,
