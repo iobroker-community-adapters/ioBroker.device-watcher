@@ -8,6 +8,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 const schedule = require('node-schedule');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
+const cronParser = require('cron-parser');
 
 // Sentry error reporting, disable when testing code!
 const enableSendSentry = true;
@@ -23,6 +24,27 @@ class DeviceWatcher extends utils.Adapter {
 			useFormatDate: true,
 		});
 
+		// instances and adapters
+		// raw arrays
+		this.adapterUpdatesJsonRaw = [];
+		this.listInstanceRaw = [];
+		this.listErrorInstanceRaw = [];
+
+		// user arrays
+		this.blacklistInstancesLists = [];
+		this.blacklistInstancesNotify = [];
+		this.listAllInstances = [];
+		this.listDeactivatedInstances = [];
+		this.listAdapterUpdates = [];
+		this.listErrorInstance = [];
+
+		//counts
+		this.countAllInstances = 0;
+		this.countDeactivatedInstances = 0;
+		this.countAdapterUpdates = 0;
+		this.countErrorInstance = 0;
+
+		// devices
 		// arrays
 		this.offlineDevices = [];
 		this.linkQualityDevices = [];
@@ -219,6 +241,11 @@ class DeviceWatcher extends utils.Adapter {
 			//read data first at start
 			await this.main();
 
+			if (this.config.checkAdapterInstances) {
+				await this.getInstanceData();
+				await this.createAdapterUpdateData();
+			}
+
 			// update last contact data in interval
 			await this.refreshData();
 
@@ -229,7 +256,10 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.config.checkSendOfflineMsgDaily) await this.sendOfflineNotificationsShedule();
 
 			// send overview of upgradeable devices
-			if (this.config.checkSendUpgradeMsgDaily) await this.sendUpgradeNotificationsShedule();
+			if (this.config.checkSendUpgradeMsgDaily) await this.sendDeviceUpdateNotificationsShedule();
+
+			// send overview of instances with error
+			if (this.config.checkSendInstanceFailedDaily) await this.sendInstanceErrorNotificationShedule();
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -250,11 +280,80 @@ class DeviceWatcher extends utils.Adapter {
 			let contactData;
 			let oldStatus;
 			let isLowBatValue;
+			let instanceStatusRaw;
 			let instanceDeviceConnectionDpTS;
-			const instanceDeviceConnectionDpTSminTime = 5;
+			const instanceDeviceConnectionDpTSminTime = 10;
 
-			// Wait if the conection to device was lost to avoid multiple messages.
-			// const delay = (n) => new Promise((r) => setTimeout(r, n * 100));
+			/*
+			if (this.config.checkAdapterInstances) {
+				for (const adapter of this.adapterUpdatesJsonRaw) {
+					switch (id) {
+						case adapter.Path:
+
+							this.sendAdapterUpdatesNotification(id, state);
+					}
+				}
+			}*/
+
+			for (const instance of this.listInstanceRaw) {
+				switch (id) {
+					case instance.instanceAlivePath:
+						if (state.val !== instance.isAlive) {
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								state.val,
+								instance.isConnectedHost,
+								instance.isConnectedDevice,
+							);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
+							instance.isHealthy = instanceStatusRaw[2];
+						}
+						break;
+					case instance.connectedHostPath:
+						if (instance.isAlive && state.val !== instance.isConnectedHost) {
+							instance.isConnectedHost = state.val;
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								instance.isAlive,
+								state.val,
+								instance.isConnectedDevice,
+							);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
+							instance.isHealthy = instanceStatusRaw[2];
+
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							}
+						}
+						break;
+					case instance.connectedDevicePath:
+						if (instance.isAlive && state.val !== instance.isConnectedDevice) {
+							instance.isConnectedDevice = state.val;
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								instance.isAlive,
+								instance.isConnectedHost,
+								state.val,
+							);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
+							instance.isHealthy = instanceStatusRaw[2];
+
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							}
+						}
+						break;
+				}
+			}
 
 			for (const device of this.listAllDevicesRaw) {
 				// On statechange update available datapoint
@@ -269,7 +368,7 @@ class DeviceWatcher extends utils.Adapter {
 						if (state.val !== device.Upgradable) {
 							device.Upgradable = state.val;
 							if (state.val) {
-								if (!this.blacklistNotify.includes(device.Path)) {
+								if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(device.Path)) {
 									await this.sendDeviceUpdatesNotification(device.Device, device.Adapter);
 								}
 							}
@@ -377,6 +476,9 @@ class DeviceWatcher extends utils.Adapter {
 		const devices = [];
 		let myCount = 0;
 		let result;
+		const instances = [];
+		let myCountInstances = 0;
+		let resultInstances;
 
 		switch (obj.command) {
 			case 'devicesList':
@@ -400,6 +502,35 @@ class DeviceWatcher extends utils.Adapter {
 							return x < y ? -1 : x > y ? 1 : 0;
 						});
 						this.sendTo(obj.from, obj.command, sortDevices, obj.callback);
+					} catch (error) {
+						this.sendTo(obj.from, obj.command, obj.callback);
+					}
+				} else {
+					this.sendTo(obj.from, obj.command, obj.callback);
+				}
+				break;
+
+			case 'instancesList':
+				if (obj.message) {
+					try {
+						resultInstances = this.listInstanceRaw;
+						for (const element in resultInstances) {
+							const label = `${resultInstances[element].Adapter}: ${resultInstances[element].InstanceName}`;
+							const myValueObject = {
+								adapter: resultInstances[element].Adapter,
+								instanceName: resultInstances[element].InstanceName,
+								path: resultInstances[element].instanceAlivePath,
+							};
+							instances[myCountInstances] = { label: label, value: JSON.stringify(myValueObject) };
+							myCountInstances++;
+						}
+						const sortInstances = instances.slice(0);
+						sortInstances.sort(function (a, b) {
+							const x = a.label;
+							const y = b.label;
+							return x < y ? -1 : x > y ? 1 : 0;
+						});
+						this.sendTo(obj.from, obj.command, sortInstances, obj.callback);
 					} catch (error) {
 						this.sendTo(obj.from, obj.command, obj.callback);
 					}
@@ -462,6 +593,11 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		}
 
+		if (this.config.checkAdapterInstances) {
+			await this.createInstanceList();
+			await this.writeInstanceDPs();
+		}
+
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
 			this.log.debug('clearing old refresh timeout');
@@ -485,6 +621,7 @@ class DeviceWatcher extends utils.Adapter {
 	async createBlacklist() {
 		this.log.debug(`Function started: ${this.createBlacklist.name}`);
 
+		// DEVICES
 		const myBlacklist = this.config.tableBlacklist;
 
 		for (const i in myBlacklist) {
@@ -509,6 +646,28 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.blacklistLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistLists}`);
 		if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistAdapterLists}`);
 		if (this.blacklistNotify.length >= 1) this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistNotify}`);
+
+		// INSTANCES
+		const myBlacklistInstances = this.config.tableBlacklistInstances;
+
+		for (const i in myBlacklistInstances) {
+			try {
+				const blacklistParse = await this.parseData(myBlacklistInstances[i].instances);
+				// push devices in list to ignor device in lists
+				if (myBlacklistInstances[i].checkIgnorLists) {
+					this.blacklistInstancesLists.push(blacklistParse.path);
+				}
+				// push devices in list to ignor device in notifications
+				if (myBlacklistInstances[i].checkIgnorNotify) {
+					this.blacklistInstancesNotify.push(blacklistParse.path);
+				}
+			} catch (error) {
+				this.errorReporting('[createBlacklist]', error);
+			}
+		}
+
+		if (this.blacklistInstancesLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistInstancesLists}`);
+		if (this.blacklistInstancesNotify.length >= 1) this.log.info(`Found items on blacklist for notificatioons: ${this.blacklistInstancesNotify}`);
 
 		this.log.debug(`Function finished: ${this.createBlacklist.name}`);
 	}
@@ -1447,18 +1606,18 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// Write Datapoints for counts
-			await this.setStateAsync(`${dpSubFolder}offlineCount`, { val: this.offlineDevicesCount, ack: true });
-			await this.setStateAsync(`${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
-			await this.setStateAsync(`${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
-			await this.setStateAsync(`${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
-			await this.setStateAsync(`${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}offlineCount`, { val: this.offlineDevicesCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
 
 			// List all devices
 			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' }];
 			}
-			await this.setStateAsync(`${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
 
 			// List link quality
 			if (this.linkQualityCount === 0) {
@@ -1466,7 +1625,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.linkQualityDevices = [{ Device: '--none--', Adapter: '', 'Signal strength': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}linkQualityList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}linkQualityList`, {
 				val: JSON.stringify(this.linkQualityDevices),
 				ack: true,
 			});
@@ -1477,7 +1636,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.offlineDevices = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}offlineList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}offlineList`, {
 				val: JSON.stringify(this.offlineDevices),
 				ack: true,
 			});
@@ -1488,7 +1647,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.upgradableList = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}upgradableList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}upgradableList`, {
 				val: JSON.stringify(this.upgradableList),
 				ack: true,
 			});
@@ -1499,7 +1658,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.batteryPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}batteryList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}batteryList`, {
 				val: JSON.stringify(this.batteryPowered),
 				ack: true,
 			});
@@ -1510,43 +1669,43 @@ class DeviceWatcher extends utils.Adapter {
 				this.batteryLowPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
 			}
 			//write JSON list
-			await this.setStateAsync(`${dpSubFolder}lowBatteryList`, {
+			await this.setStateAsync(`devices.${dpSubFolder}lowBatteryList`, {
 				val: JSON.stringify(this.batteryLowPowered),
 				ack: true,
 			});
 
 			// set booleans datapoints
 			if (this.offlineDevicesCount === 0) {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceOffline`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceOffline`, {
 					val: false,
 					ack: true,
 				});
 			} else {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceOffline`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceOffline`, {
 					val: true,
 					ack: true,
 				});
 			}
 
 			if (this.lowBatteryPoweredCount === 0) {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceLowBat`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceLowBat`, {
 					val: false,
 					ack: true,
 				});
 			} else {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceLowBat`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceLowBat`, {
 					val: true,
 					ack: true,
 				});
 			}
 
 			if (this.upgradableDevicesCount === 0) {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceUpdatable`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceUpdatable`, {
 					val: false,
 					ack: true,
 				});
 			} else {
-				await this.setStateAsync(`${dpSubFolder}oneDeviceUpdatable`, {
+				await this.setStateAsync(`devices.${dpSubFolder}oneDeviceUpdatable`, {
 					val: true,
 					ack: true,
 				});
@@ -1554,19 +1713,19 @@ class DeviceWatcher extends utils.Adapter {
 
 			//write HTML list
 			if (this.createHtmlList) {
-				await this.setStateAsync(`${dpSubFolder}linkQualityListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
 					val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount),
 					ack: true,
 				});
-				await this.setStateAsync(`${dpSubFolder}offlineListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}offlineListHTML`, {
 					val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount),
 					ack: true,
 				});
-				await this.setStateAsync(`${dpSubFolder}batteryListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}batteryListHTML`, {
 					val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false),
 					ack: true,
 				});
-				await this.setStateAsync(`${dpSubFolder}lowBatteryListHTML`, {
+				await this.setStateAsync(`devices.${dpSubFolder}lowBatteryListHTML`, {
 					val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true),
 					ack: true,
 				});
@@ -1580,6 +1739,534 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	} //<--End  of writing Datapoints
+
+	/**
+	 * get Instances
+	 */
+	async getInstanceData() {
+		try {
+			await this.createDPsForInstances();
+
+			const instanceAliveDP = await this.getForeignStatesAsync(`system.adapter.*.alive`);
+			for (const [id] of Object.entries(instanceAliveDP)) {
+				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
+
+				// get instance name
+				const instanceName = await this.getInstanceName(id);
+
+				// get instance connected to host data
+				const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
+				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
+
+				// get instance connected to device data
+				const instanceConnectedDeviceDP = `${instanceName}.info.connection`;
+				let instanceConnectedDeviceVal;
+				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
+					instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
+				} else {
+					instanceConnectedDeviceVal = 'N/A';
+				}
+
+				// get adapter version
+				const instanceObjectPath = `system.adapter.${instanceName}`;
+				let adapterName;
+				let adapterVersion;
+				let instanceMode;
+				let scheduleTime = 'N/A';
+				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
+				if (instanceObjectData) {
+					// @ts-ignore
+					adapterName = this.capitalize(instanceObjectData.common.name);
+					adapterVersion = instanceObjectData.common.version;
+					instanceMode = instanceObjectData.common.mode;
+
+					if (instanceMode === 'schedule') {
+						scheduleTime = instanceObjectData.common.schedule;
+					}
+				}
+
+				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
+				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
+				const isAlive = instanceStatusRaw[1];
+				const instanceStatus = instanceStatusRaw[0];
+				const isHealthy = instanceStatusRaw[2];
+
+				//subscribe to statechanges
+				this.subscribeForeignStatesAsync(id);
+				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
+				this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
+				//this.subscribeForeignObjectsAsync(instanceObjectPath);
+
+				// create raw list
+				this.listInstanceRaw.push({
+					Adapter: adapterName,
+					InstanceName: instanceName,
+					instanceObjectPath: instanceObjectPath,
+					instanceAlivePath: id,
+					instanceMode: instanceMode,
+					schedule: scheduleTime,
+					adapterVersion: adapterVersion,
+					isAlive: isAlive,
+					isHealthy: isHealthy,
+					connectedHostPath: instanceConnectedHostDP,
+					isConnectedHost: instanceConnectedHostVal,
+					connectedDevicePath: instanceConnectedDeviceDP,
+					isConnectedDevice: instanceConnectedDeviceVal,
+					status: instanceStatus,
+				});
+			}
+			await this.createInstanceList();
+			await this.writeInstanceDPs();
+		} catch (error) {
+			this.errorReporting('[getInstance]', error);
+		}
+	}
+
+	/**
+	 * get Instances
+	 * @param {string} id - Path of alive datapoint
+	 */
+	async getInstanceName(id) {
+		let instance = id;
+		instance = instance.slice(15); // remove "system.adapter."
+		instance = instance.slice(0, instance.lastIndexOf('.') + 1 - 1); // remove ".alive"
+		return instance;
+	}
+
+	/**
+	 * set status for instance
+	 * @param {object} instanceMode
+	 * @param {object} scheduleTime
+	 * @param {object} instanceAlivePath
+	 * @param {object} isAliveVal
+	 * @param {object} connectedHostVal
+	 * @param {object} connectedDeviceVal
+	 */
+	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, isAliveVal, connectedHostVal, connectedDeviceVal) {
+		let instanceStatusString = 'not enabled';
+		let lastUpdate;
+		let lastCronRun;
+		let diff;
+		let previousCronRun = null;
+		let isAlive = false;
+		let isHealthy = false;
+		let dpValue;
+		switch (instanceMode) {
+			case 'schedule':
+				dpValue = await this.getForeignStateAsync(instanceAlivePath);
+				if (dpValue) {
+					lastUpdate = Math.round((Date.now() - dpValue.lc) / 1000); // Last state change in seconds
+					previousCronRun = await this.getPreviousCronRun(scheduleTime); // When was the last cron run
+					if (previousCronRun) {
+						lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
+						diff = lastCronRun - lastUpdate;
+						if (diff > -300) {
+							// if 5 minutes difference exceeded, instance is not alive
+							isAlive = true;
+							isHealthy = true;
+							instanceStatusString = 'Instance okay';
+						}
+					}
+				}
+				break;
+			case 'daemon':
+				if (!isAliveVal) return ['Instance deactivated', false, null]; // if instance is turned off
+
+				// In case of (re)start, connection may take some time. We take 3 attempts.
+				// Attempt 1/3 - immediately
+				if (connectedHostVal && connectedDeviceVal) {
+					isAlive = true;
+					isHealthy = true;
+					instanceStatusString = 'Instance okay';
+				} else {
+					// Attempt 2/3 - after 10 seconds
+					await this.wait(10000);
+					if (connectedHostVal && connectedDeviceVal) {
+						isAlive = true;
+						isHealthy = true;
+						instanceStatusString = 'Instance okay';
+					} else {
+						// Attempt 3/3 - after 20 seconds in total
+						await this.wait(10000);
+						if (connectedHostVal && connectedDeviceVal) {
+							isAlive = true;
+							isHealthy = true;
+							instanceStatusString = 'Instance okay';
+						} else {
+							if (!connectedDeviceVal) {
+								instanceStatusString = 'not connected to Device';
+								isAlive = true;
+								isHealthy = false;
+							} else if (!connectedHostVal) {
+								instanceStatusString = 'not connected to host';
+								isAlive = true;
+								isHealthy = false;
+							}
+						}
+					}
+				}
+				break;
+		}
+
+		return [instanceStatusString, isAlive, isHealthy];
+	}
+
+	async createAdapterUpdateData() {
+		const adapterUpdateListDP = `admin.*.info.updatesJson`;
+		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
+
+		// subscribe to datapoint
+		this.subscribeForeignStates(adapterUpdateListDP);
+		let adapterJsonList;
+
+		for (const [id] of Object.entries(adapterUpdatesListVal)) {
+			adapterJsonList = await this.parseData(adapterUpdatesListVal[id].val);
+		}
+
+		for (const [id] of Object.entries(adapterJsonList)) {
+			this.adapterUpdatesJsonRaw.push({
+				Path: adapterUpdateListDP,
+				Adapter: this.capitalize(id),
+				newVersion: adapterJsonList[id].availableVersion,
+				oldVersion: adapterJsonList[id].installedVersion,
+			});
+		}
+		await this.createAdapterUpdateList();
+	}
+
+	/**
+	 * create instanceList
+	 */
+	async createAdapterUpdateList() {
+		this.listAdapterUpdates = [];
+		this.countAdapterUpdates = 0;
+
+		for (const adapter of this.adapterUpdatesJsonRaw) {
+			this.listAdapterUpdates.push({
+				Adapter: adapter.Adapter,
+				'Available Version': adapter.newVersion,
+				'Installed Version': adapter.oldVersion,
+			});
+		}
+		this.countAdapterUpdates = this.listAdapterUpdates.length;
+		await this.writeAdapterUpdatesDPs();
+	}
+
+	/**
+	 * write datapoints for adapter with updates
+	 */
+	async writeAdapterUpdatesDPs() {
+		// Write Datapoints for counts
+		await this.setStateAsync(`adapterAndInstances.countAdapterUpdates`, { val: this.countAdapterUpdates, ack: true });
+
+		// list deactivated instances
+		if (this.countAdapterUpdates === 0) {
+			this.listAdapterUpdates = [{ Adapter: '--none--', 'Available Version': '', 'Installed Version': '' }];
+		}
+		await this.setStateAsync(`adapterAndInstances.listAdapterUpdates`, { val: JSON.stringify(this.listAdapterUpdates), ack: true });
+	}
+
+	/**
+	 * create instanceList
+	 */
+	async createInstanceList() {
+		this.listAllInstances = [];
+		this.listDeactivatedInstances = [];
+		this.listErrorInstanceRaw = [];
+		this.listErrorInstance = [];
+
+		for (const instance of this.listInstanceRaw) {
+			// fill raw list
+			if (instance.isAlive && !instance.isHealthy) {
+				this.listErrorInstanceRaw.push({
+					Adapter: instance.Adapter,
+					Instance: instance.InstanceName,
+					Mode: instance.instanceMode,
+					Status: instance.status,
+				});
+			}
+
+			if (this.blacklistInstancesLists.includes(instance.instanceAlivePath)) continue;
+			this.listAllInstances.push({
+				Adapter: instance.Adapter,
+				Instance: instance.InstanceName,
+				Mode: instance.instanceMode,
+				Schedule: instance.schedule,
+				Version: instance.adapterVersion,
+				Status: instance.status,
+			});
+			if (!instance.isAlive) {
+				this.listDeactivatedInstances.push({
+					Adapter: instance.Adapter,
+					Instance: instance.InstanceName,
+					Status: instance.status,
+				});
+			}
+
+			// fill List for User
+			if (instance.isAlive && !instance.isHealthy) {
+				this.listErrorInstance.push({
+					Adapter: instance.Adapter,
+					Instance: instance.InstanceName,
+					Mode: instance.instanceMode,
+					Status: instance.status,
+				});
+			}
+		}
+		await this.countInstances();
+	}
+
+	/**
+	 * count instanceList
+	 */
+	async countInstances() {
+		this.countAllInstances = 0;
+		this.countDeactivatedInstances = 0;
+		this.countErrorInstance = 0;
+
+		this.countAllInstances = this.listAllInstances.length;
+		this.countDeactivatedInstances = this.listDeactivatedInstances.length;
+		this.countErrorInstance = this.listErrorInstance.length;
+	}
+
+	/**
+	 * write datapoints for instances list and counts
+	 */
+	async writeInstanceDPs() {
+		// Write Datapoints for counts
+		await this.setStateAsync(`adapterAndInstances.countAllInstances`, { val: this.countAllInstances, ack: true });
+		await this.setStateAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
+
+		// List all instances
+		await this.setStateAsync(`adapterAndInstances.listAllInstances`, { val: JSON.stringify(this.listAllInstances), ack: true });
+
+		// list deactivated instances
+		if (this.countDeactivatedInstances === 0) {
+			this.listDeactivatedInstances = [{ Instance: '--none--', Version: '', Status: '' }];
+		}
+		await this.setStateAsync(`adapterAndInstances.listDeactivatedInstances`, { val: JSON.stringify(this.listDeactivatedInstances), ack: true });
+		await this.setStateAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
+
+		// list error instances
+		if (this.countErrorInstance === 0) {
+			this.listErrorInstance = [{ Instance: '--none--', Mode: '', Status: '' }];
+		}
+		await this.setStateAsync(`adapterAndInstances.listInstancesError`, { val: JSON.stringify(this.listErrorInstance), ack: true });
+		await this.setStateAsync(`adapterAndInstances.countInstancesError`, { val: this.countErrorInstance, ack: true });
+	}
+
+	/**
+	 * create Datapoints for Instances
+	 */
+	async createDPsForInstances() {
+		await this.setObjectNotExistsAsync(`adapterAndInstances`, {
+			type: 'channel',
+			common: {
+				name: {
+					en: 'Adapter and Instances',
+					de: 'Adapter und Instanzen',
+					ru: 'Адаптер и Instances',
+					pt: 'Adaptador e instâncias',
+					nl: 'Adapter en Instance',
+					fr: 'Adaptateur et instances',
+					it: 'Adattatore e istanze',
+					es: 'Adaptador e instalaciones',
+					pl: 'Adapter and Instances',
+					uk: 'Адаптер та інстанції',
+					'zh-cn': '道歉和案',
+				},
+			},
+			native: {},
+		});
+
+		// Instances
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listAllInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON List of all instances',
+					de: 'JSON Liste aller Instanzen',
+					ru: 'ДЖСОН Список всех инстанций',
+					pt: 'J. Lista de todas as instâncias',
+					nl: 'JSON List van alle instanties',
+					fr: 'JSON Liste de tous les cas',
+					it: 'JSON Elenco di tutte le istanze',
+					es: 'JSON Lista de todos los casos',
+					pl: 'JSON Lista wszystkich instancji',
+					uk: 'Сонце Список всіх екземплярів',
+					'zh-cn': '附 件 所有事例一览表',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countAllInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of all instances',
+					de: 'Anzahl aller Instanzen',
+					ru: 'Количество всех инстанций',
+					pt: 'Número de todas as instâncias',
+					nl: 'Nummer van alle gevallen',
+					fr: 'Nombre de cas',
+					it: 'Numero di tutte le istanze',
+					es: 'Número de casos',
+					pl: 'Liczba wszystkich instancji',
+					uk: 'Кількість всіх екземплярів',
+					'zh-cn': '各类案件数目',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listDeactivatedInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON List of deactivated instances',
+					de: 'JSON Liste der deaktivierten Instanzen',
+					ru: 'ДЖСОН Список деактивированных инстанций',
+					pt: 'J. Lista de instâncias desativadas',
+					nl: 'JSON List van gedeactiveerde instanties',
+					fr: 'JSON Liste des cas désactivés',
+					it: 'JSON Elenco delle istanze disattivate',
+					es: 'JSON Lista de casos desactivados',
+					pl: 'JSON Lista przypadków deaktywowanych',
+					uk: 'Сонце Перелік деактивованих екземплярів',
+					'zh-cn': '附 件 被动事例清单',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countDeactivatedInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of deactivated instances',
+					de: 'Anzahl deaktivierter Instanzen',
+					ru: 'Количество деактивированных инстанций',
+					pt: 'Número de instâncias desativadas',
+					nl: 'Nummer van gedeactiveerde instanties',
+					fr: 'Nombre de cas désactivés',
+					it: 'Numero di istanze disattivate',
+					es: 'Número de casos desactivados',
+					pl: 'Liczba deaktywowanych instancji',
+					uk: 'Кількість деактивованих екземплярів',
+					'zh-cn': 'A. 递解事件的数目',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listInstancesError`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON list of instances with error',
+					de: 'JSON-Liste von Instanzen mit Fehler',
+					ru: 'JSON список инстанций с ошибкой',
+					pt: 'Lista de instâncias JSON com erro',
+					nl: 'JSON lijst met fouten',
+					fr: 'Liste des instances avec erreur',
+					it: 'Elenco JSON delle istanze con errore',
+					es: 'JSON lista de casos con error',
+					pl: 'Lista błędów JSON',
+					uk: 'JSON список екземплярів з помилкою',
+					'zh-cn': '联合工作组办公室错误事件清单',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countInstancesError`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Count of instances with error',
+					de: 'Anzahl der Instanzen mit Fehler',
+					ru: 'Количество инстанций с ошибкой',
+					pt: 'Contagem de instâncias com erro',
+					nl: 'Graaf van instoringen met fouten',
+					fr: 'Nombre de cas avec erreur',
+					it: 'Conteggio di istanze con errore',
+					es: 'Cuenta de casos con error',
+					pl: 'Liczba przykładów w przypadku błędów',
+					uk: 'Кількість екземплярів з помилкою',
+					'zh-cn': '发生错误的情况',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
+		// Adapter
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listAdapterUpdates`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON list of adapters with available updates',
+					de: 'JSON-Liste der Adapter mit verfügbaren Updates',
+					ru: 'JSON список адаптеров с доступными обновлениями',
+					pt: 'Lista de adaptadores JSON com atualizações disponíveis',
+					nl: 'JSON lijst met beschikbare updates',
+					fr: 'Liste JSON des adaptateurs avec mises à jour disponibles',
+					it: 'Elenco di adattatori JSON con aggiornamenti disponibili',
+					es: 'JSON lista de adaptadores con actualizaciones disponibles',
+					pl: 'JSON lista adapterów z dostępnymi aktualizacjami',
+					uk: 'JSON список адаптерів з доступними оновленнями',
+					'zh-cn': '附录A',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countAdapterUpdates`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of adapters with available updates',
+					de: 'Anzahl der Adapter mit verfügbaren Updates',
+					ru: 'Количество адаптеров с доступными обновлениями',
+					pt: 'Número de adaptadores com atualizações disponíveis',
+					nl: 'Nummer van adapters met beschikbare updates',
+					fr: "Nombre d'adaptateurs avec mises à jour disponibles",
+					it: 'Numero di adattatori con aggiornamenti disponibili',
+					es: 'Número de adaptadores con actualizaciones disponibles',
+					pl: 'Liczba adapterów z dostępną aktualizacją',
+					uk: 'Кількість адаптерів з доступними оновленнями',
+					'zh-cn': '更新的适应者人数',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+	}
 
 	/*=============================================
 	=       functions to send notifications       =
@@ -1731,6 +2418,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- End of sendNotification function
 
+	/*----------  Battery notifications ----------*/
 	/**
 	 * send shedule message for low battery devices
 	 */
@@ -1814,6 +2502,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Finished the function: ${this.sendLowBatNoticiation.name}`);
 	}
 
+	/*----------  Offline/Online notifications ----------*/
 	/**
 	 * send message if an device is offline
 	 * @param {string} deviceName
@@ -1905,6 +2594,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} //<--End of daily offline notification
 
+	/*---------- Device Updates notifications ----------*/
 	/**
 	 * check if device updates are available and send notification
 	 * @param {string} deviceName
@@ -1937,7 +2627,7 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * send shedule message with offline devices
 	 */
-	async sendUpgradeNotificationsShedule() {
+	async sendDeviceUpdateNotificationsShedule() {
 		const time = this.config.checkSendUpgradeTime.split(':');
 
 		const checkDays = []; // list of selected days
@@ -1985,7 +2675,167 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			});
 		}
+	} //<--End of daily device updates notification
+
+	/*----------  Adapter Updates notifications ----------*/
+	/**
+	 * check if adapter updates are available and send notification
+	 * @param {string} id
+	 * @param {ioBroker.State | null | undefined} state
+	 */
+	async sendAdapterUpdatesNotification(id, state) {
+		this.log.debug(`Start the function: ${this.sendAdapterUpdatesNotification.name}`);
+
+		try {
+			if (state && state !== undefined) {
+				const list = await this.parseData(state.val);
+				let msg = '';
+				let adapterList = '';
+
+				for (const [id] of Object.entries(list)) {
+					adapterList = `${adapterList}\n${this.capitalize(id)} - Version: ${list[id].availableVersion}`;
+				}
+				if (adapterList.length !== 0) {
+					msg = `Neue Adapter Updates vorhanden: \n`;
+
+					this.log.info(msg + adapterList);
+					await this.setStateAsync('lastNotification', msg + adapterList, true);
+					await this.sendNotification(msg + adapterList);
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendAdapterUpdatesNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
+	}
+
+	/**
+	 * send shedule message with  list of updatable adapters
+	 */
+	async sendAdapterUpdatesNotificatioShedule() {
+		const time = this.config.checkSendAdapterUpdateTime.split(':');
+
+		const checkDays = []; // list of selected days
+
+		// push the selected days in list
+		if (this.config.checkAdapterUpdateMonday) checkDays.push(1);
+		if (this.config.checkAdapterUpdateTuesday) checkDays.push(2);
+		if (this.config.checkAdapterUpdateWednesday) checkDays.push(3);
+		if (this.config.checkAdapterUpdateThursday) checkDays.push(4);
+		if (this.config.checkAdapterUpdateFriday) checkDays.push(5);
+		if (this.config.checkAdapterUpdateSaturday) checkDays.push(6);
+		if (this.config.checkAdapterUpdateSunday) checkDays.push(0);
+
+		if (checkDays.length >= 1) {
+			// check if an day is selected
+			this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+		} else {
+			this.log.warn(`No days selected for daily adapter update message. Please check the instance configuration!`);
+			return; // cancel function if no day is selected
+		}
+
+		if (!isUnloaded) {
+			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+			schedule.scheduleJob(cron, () => {
+				try {
+					let deviceList = '';
+
+					for (const id of this.upgradableDevicesRaw) {
+						if (!this.blacklistNotify.includes(id.Path)) {
+							if (!this.config.showAdapterNameinMsg) {
+								deviceList = `${deviceList}\n${id.Device}`;
+							} else {
+								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device}`;
+							}
+						}
+					}
+					if (deviceList.length > 0) {
+						this.log.info(`Geräte Upgrade: ${deviceList}`);
+						this.setStateAsync('lastNotification', `Geräte Upgrade: ${deviceList}`, true);
+
+						this.sendNotification(`Geräte Upgrade:\n${deviceList}`);
+					}
+				} catch (error) {
+					this.errorReporting('[sendUpgradeNotificationsShedule]', error);
+				}
+			});
+		}
 	} //<--End of daily offline notification
+
+	/*---------- Instance error notifications ----------*/
+	/**
+	 * check if device updates are available and send notification
+	 * @param {string} instanceName
+	 * @param {string} error
+	 **/
+	async sendInstanceErrorNotification(instanceName, error) {
+		this.log.debug(`Start the function: ${this.sendInstanceErrorNotification.name}`);
+
+		try {
+			let msg = '';
+			let instanceList = '';
+
+			instanceList = `${instanceList}\n${instanceName}: ${error}`;
+
+			msg = `Fehler einer Instanz entdeckt: \n`;
+
+			this.log.info(msg + instanceList);
+			await this.setStateAsync('lastNotification', msg + instanceList, true);
+			await this.sendNotification(msg + instanceList);
+		} catch (error) {
+			this.errorReporting('[sendInstanceErrorNotification]', error);
+		}
+		this.log.debug(`Finished the function: ${this.sendInstanceErrorNotification.name}`);
+	}
+
+	/**
+	 * send shedule message with offline devices
+	 */
+	async sendInstanceErrorNotificationShedule() {
+		const time = this.config.checkSendInstanceFailedTime.split(':');
+
+		const checkDays = []; // list of selected days
+
+		// push the selected days in list
+		if (this.config.checkFailedInstancesMonday) checkDays.push(1);
+		if (this.config.checkFailedInstancesTuesday) checkDays.push(2);
+		if (this.config.checkFailedInstancesWednesday) checkDays.push(3);
+		if (this.config.checkFailedInstancesThursday) checkDays.push(4);
+		if (this.config.checkFailedInstancesFriday) checkDays.push(5);
+		if (this.config.checkFailedInstancesSaturday) checkDays.push(6);
+		if (this.config.checkFailedInstancesSunday) checkDays.push(0);
+
+		if (checkDays.length >= 1) {
+			// check if an day is selected
+			this.log.debug(`Number of selected days for daily instance error message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+		} else {
+			this.log.warn(`No days selected for daily instance error message. Please check the instance configuration!`);
+			return; // cancel function if no day is selected
+		}
+
+		if (!isUnloaded) {
+			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+			schedule.scheduleJob(cron, () => {
+				try {
+					let instanceList = '';
+
+					for (const id of this.listErrorInstanceRaw) {
+						if (!this.blacklistInstancesNotify.includes(id.instanceAlivePath)) {
+							instanceList = `${instanceList}\n${id.Instance}: ${id.Status}`;
+						}
+					}
+					if (instanceList.length > 0) {
+						this.log.info(`Instanz Fehler: ${instanceList}`);
+						this.setStateAsync('lastNotification', `Instanz Fehler: ${instanceList}`, true);
+
+						this.sendNotification(`Instanz Fehler:\n${instanceList}`);
+					}
+				} catch (error) {
+					this.errorReporting('[sendInstanceErrorNotificationShedule]', error);
+				}
+			});
+		}
+	} //<--End of daily device updates notification
 
 	/*=============================================
 	=       functions to create html lists        =
@@ -2112,7 +2962,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} adptName - Adaptername of devices
 	 */
 	async createDPsForEachAdapter(adptName) {
-		await this.setObjectNotExistsAsync(`${adptName}`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}`, {
 			type: 'channel',
 			common: {
 				name: adptName,
@@ -2120,7 +2970,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.offlineCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.offlineCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2143,7 +2993,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.offlineList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.offlineList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2166,7 +3016,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceOffline`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceOffline`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2191,7 +3041,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.listAll`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.listAll`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2214,7 +3064,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.linkQualityList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.linkQualityList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2237,7 +3087,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.countAll`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.countAll`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2260,7 +3110,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.batteryList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.batteryList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2283,7 +3133,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.lowBatteryList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2306,7 +3156,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.lowBatteryCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.lowBatteryCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2329,7 +3179,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceLowBat`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceLowBat`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2354,7 +3204,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.batteryCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.batteryCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2377,7 +3227,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.upgradableCount`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.upgradableCount`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2401,7 +3251,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.upgradableList`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.upgradableList`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2425,7 +3275,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${adptName}.oneDeviceUpdatable`, {
+		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceUpdatable`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2463,7 +3313,7 @@ class DeviceWatcher extends utils.Adapter {
 			dpSubFolder = '';
 		}
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}offlineListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}offlineListHTML`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2486,7 +3336,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}linkQualityListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2509,7 +3359,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}batteryListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}batteryListHTML`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2532,7 +3382,7 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
-		await this.setObjectNotExistsAsync(`${dpSubFolder}lowBatteryListHTML`, {
+		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}lowBatteryListHTML`, {
 			type: 'state',
 			common: {
 				name: {
@@ -2614,6 +3464,32 @@ class DeviceWatcher extends utils.Adapter {
 		if (typeof data === 'object') return data;
 		if (typeof data === 'string') return JSON.parse(data);
 		return {};
+	}
+
+	/**
+	 * @param {number} time
+	 */
+	async wait(time) {
+		return new Promise((resolve) => {
+			setTimeout(resolve, time);
+		});
+	}
+
+	/**
+	 * Get previous run of cron job schedule
+	 * Requires cron-parser!
+	 * Inspired by https://stackoverflow.com/questions/68134104/
+	 * @param {string} lastCronRun
+	 */
+	async getPreviousCronRun(lastCronRun) {
+		try {
+			const interval = cronParser.parseExpression(lastCronRun);
+			const previous = interval.prev();
+			return Math.floor(Date.now() - previous.getTime()); // in ms
+		} catch (error) {
+			this.log.warn(error);
+			return;
+		}
 	}
 
 	/**

@@ -98,5 +98,21 @@
 	"From what % battery is considered low": "From what % battery is considered low",
 	"Ignore in main lists": "Ignore in main lists",
 	"Ignore in Own lists per adapter": "Ignore in Own lists per adapter",
-	"Ignore in lists per adapter": "Ignore in lists per adapter"
+	"Ignore in lists per adapter": "Ignore in lists per adapter",
+	"Choose which instances should be excluded": "Choose which instances should be excluded",
+	"Ignore in lists": "Ignore in lists",
+	"Instances Blacklist": "Instances Blacklist",
+	"Devices Blacklist": "Devices Blacklist",
+	"Overview of updatable adapter": "Overview of updatable adapter",
+	"Get a message with an overview of all updatable adapter": "Get a message with an overview of all updatable adapter",
+	"Instance failed message": "Instance failed message",
+	"Receive a message when an instance failed": "Receive a message when an instance failed",
+	"Overview of failed instances": "Overview of failed instances",
+	"Get a message with an overview of all failed instances": "Get a message with an overview of all failed instances",
+	"Choose the day(s) where you want to get the overview of failed instances:": "Choose the day(s) where you want to get the overview of failed instances:",
+	"Create lists for instances": "Create lists for instances",
+	"Watch instances": "Watch instances",
+	"Create lists for devices": "Create lists for devices",
+	"Adapter & Instances Notification Settings": "Adapter & Instances Notification Settings",
+	"Devices Notification Settings": "Devices Notification Settings"
 }
