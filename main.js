@@ -1769,8 +1769,8 @@ class DeviceWatcher extends utils.Adapter {
 		let lastCronRunSecs;
 		let diff;
 		let previousCronRun = null;
-		let isAlive;
-		let isHealthy;
+		let isAlive = false;
+		let isHealthy = false;
 		switch (instanceMode) {
 			case 'schedule':
 				// We check for last update
@@ -1788,7 +1788,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				break;
 			case 'daemon':
-				if (!isAliveVal) return ['Instance deactivated', false]; // if instance is turned off
+				if (!isAliveVal) return ['Instance deactivated', false, null]; // if instance is turned off
 
 				// In case of (re)start, connection may take some time. We take 3 attempts.
 				// Attempt 1/3 - immediately
