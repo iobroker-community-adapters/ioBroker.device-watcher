@@ -298,8 +298,6 @@ class DeviceWatcher extends utils.Adapter {
 			let instanceStatusRaw;
 			let oldInstanceHostState;
 			let oldInstanceDeviceState;
-			let instanceDeviceConnectionDpTS;
-			const instanceDeviceConnectionDpTSminTime = 10;
 
 			for (const adapter of this.adapterUpdatesJsonRaw) {
 				switch (id) {
@@ -472,15 +470,13 @@ class DeviceWatcher extends utils.Adapter {
 							device.Status = contactData[1];
 							device.SignalStrength = contactData[2];
 						}
-						if (device.instanceDeviceConnectionDP !== undefined) {
-							instanceDeviceConnectionDpTS = await this.getTimestampConnectionDP(device.instanceDeviceConnectionDP);
-							if (device.instancedeviceConnected !== false && instanceDeviceConnectionDpTS && instanceDeviceConnectionDpTS >= instanceDeviceConnectionDpTSminTime) {
-								if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
+						if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
+							if (device.instanceDeviceConnectionDP !== undefined) {
+								// check if the generally device connected state is for a while true
+								if (await this.getTimestampConnectionDP(device.instanceDeviceConnectionDP, 20000)) {
 									await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 								}
-							}
-						} else {
-							if (this.config.checkSendOfflineMsg && oldStatus !== device.Status && !this.blacklistNotify.includes(device.Path)) {
+							} else {
 								await this.sendOfflineNotifications(device.Device, device.Adapter, device.Status, device.LastContact);
 							}
 						}
@@ -3522,13 +3518,20 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * @param {string} dp - get Time of this datapoint
+	 * @param {number} ms - milliseconds
 	 */
-	async getTimestampConnectionDP(dp) {
+	async getTimestampConnectionDP(dp, ms) {
 		const time = new Date();
 		const dpValue = await this.getForeignStateAsync(dp);
-		if (dpValue !== null && dpValue !== undefined) {
-			const dpLastStateChange = Math.round((time.getTime() - dpValue.lc) / 1000);
-			return dpLastStateChange;
+		if (dpValue) {
+			if (!dpValue.val) return false;
+
+			const dpLastStateChange = Math.round(time.getTime() - dpValue.lc); // calculate in ms
+			if (dpLastStateChange >= ms) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
