@@ -214,19 +214,23 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			//create Blacklist
-			try {
-				await this.createBlacklist();
-			} catch (error) {
-				this.errorReporting('[onReady - create blacklist]', error);
-			}
+			await this.createBlacklist();
 
 			//create and fill datapoints for each adapter if selected
-			if (this.createOwnFolder) {
+			for (const [id] of Object.entries(arrApart)) {
 				try {
-					for (const [id] of Object.entries(arrApart)) {
+					if (!this.createOwnFolder) {
+						await this.deleteDPsForEachAdapter(id);
+						await this.deleteHtmlListDatapoints(id);
+					} else {
 						if (this.configSetAdapter !== undefined && this.configSetAdapter[id]) {
 							await this.createDPsForEachAdapter(id);
-							if (this.createHtmlList) await this.createHtmlListDatapoints(id);
+							// create HTML list datapoints
+							if (!this.createHtmlList) {
+								await this.deleteHtmlListDatapoints(id);
+							} else {
+								await this.createHtmlListDatapoints(id);
+							}
 							this.log.debug(`Created datapoints for ${this.capitalize(id)}`);
 						}
 					}
@@ -236,13 +240,24 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// create HTML list datapoints
-			if (this.createHtmlList) await this.createHtmlListDatapoints();
+			if (!this.createHtmlList) {
+				await this.deleteHtmlListDatapoints();
+			} else {
+				await this.createHtmlListDatapoints();
+			}
 
-			//read data first at start
+			// read data first at start
+			// devices
 			await this.main();
 
-			if (this.config.checkAdapterInstances) {
+			// instances and adapters
+			if (!this.config.checkAdapterInstances) {
+				await this.deleteDPsForInstances();
+			} else {
+				// instances
+				await this.createDPsForInstances();
 				await this.getInstanceData();
+				// adapter updates
 				await this.createAdapterUpdateData();
 			}
 
@@ -1751,8 +1766,6 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async getInstanceData() {
 		try {
-			await this.createDPsForInstances();
-
 			const instanceAliveDP = await this.getForeignStatesAsync(`system.adapter.*.alive`);
 			for (const [id] of Object.entries(instanceAliveDP)) {
 				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
@@ -2290,6 +2303,21 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			native: {},
 		});
+	}
+
+	/**
+	 * delete Datapoints for Instances
+	 */
+	async deleteDPsForInstances() {
+		await this.delObjectAsync(`adapterAndInstances`);
+		await this.delObjectAsync(`adapterAndInstances.listAllInstances`);
+		await this.delObjectAsync(`adapterAndInstances.countAllInstances`);
+		await this.delObjectAsync(`adapterAndInstances.listDeactivatedInstances`);
+		await this.delObjectAsync(`adapterAndInstances.countDeactivatedInstances`);
+		await this.delObjectAsync(`adapterAndInstances.listInstancesError`);
+		await this.delObjectAsync(`adapterAndInstances.countInstancesError`);
+		await this.delObjectAsync(`adapterAndInstances.listAdapterUpdates`);
+		await this.delObjectAsync(`adapterAndInstances.countAdapterUpdates`);
 	}
 
 	/*=============================================
@@ -3326,6 +3354,29 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
+	 * delete datapoints for each adapter
+	 * @param {object} adptName - Adaptername of devices
+	 */
+	async deleteDPsForEachAdapter(adptName) {
+		await this.delObjectAsync(`devices.${adptName}`);
+		await this.delObjectAsync(`devices.${adptName}.offlineCount`);
+		await this.delObjectAsync(`devices.${adptName}.offlineList`);
+		await this.delObjectAsync(`devices.${adptName}.oneDeviceOffline`);
+		await this.delObjectAsync(`devices.${adptName}.listAll`);
+		await this.delObjectAsync(`devices.${adptName}.linkQualityList`);
+		await this.delObjectAsync(`devices.${adptName}.countAll`);
+		await this.delObjectAsync(`devices.${adptName}.batteryList`);
+		await this.delObjectAsync(`devices.${adptName}.lowBatteryList`);
+		await this.delObjectAsync(`devices.${adptName}.lowBatteryCount`);
+		await this.delObjectAsync(`devices.${adptName}.oneDeviceLowBat`);
+		await this.delObjectAsync(`devices.${adptName}.batteryCount`);
+		await this.delObjectAsync(`devices.${adptName}.upgradableCount`);
+		await this.delObjectAsync(`devices.${adptName}.upgradableList`);
+		await this.delObjectAsync(`devices.${adptName}.oneDeviceUpdatable`);
+	}
+
+	/**
+	 * create HTML list datapoints
 	 * @param {object} [adptName] - Adaptername of devices
 	 **/
 	async createHtmlListDatapoints(adptName) {
@@ -3428,6 +3479,25 @@ class DeviceWatcher extends utils.Adapter {
 			},
 			native: {},
 		});
+	}
+
+	/**
+	 * delete html datapoints
+	 * @param {object} [adptName] - Adaptername of devices
+	 **/
+	async deleteHtmlListDatapoints(adptName) {
+		// delete the datapoints in subfolders with the adaptername otherwise delete the dP's in the root folder
+		let dpSubFolder;
+		if (adptName) {
+			dpSubFolder = `${adptName}.`;
+		} else {
+			dpSubFolder = '';
+		}
+
+		await this.delObjectAsync(`devices.${dpSubFolder}offlineListHTML`);
+		await this.delObjectAsync(`devices.${dpSubFolder}linkQualityListHTML`);
+		await this.delObjectAsync(`devices.${dpSubFolder}batteryListHTML`);
+		await this.delObjectAsync(`devices.${dpSubFolder}lowBatteryListHTML`);
 	}
 
 	/*=============================================

@@ -184,6 +184,7 @@ It's possible to select:
 
 -   (ciddi89) Fixed: Instance error list and count was not reset
 -   (ciddi89) Fixed: Made notificatiosn for adapter update working
+-   (ciddi89) Added: Delete objects automatically if it is not selected in settings.(HTML Lists, Adapter&Instances Folder, Data for each adapter)
 
 ### 2.5.0 (2023-01-27)
 
