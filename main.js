@@ -1853,13 +1853,14 @@ class DeviceWatcher extends utils.Adapter {
 	 * set status for instance
 	 * @param {string} instanceMode
 	 * @param {string} scheduleTime
-	 * @param {string} instanceAlivePath
+	 * @param {object} instanceAlivePath
 	 * @param {string} hostConnectedPath
 	 * @param {string} isDeviceConnctedPath
 	 */
 	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, hostConnectedPath, isDeviceConnctedPath) {
-		const isAlive = await this.getInitValue(instanceAlivePath);
+		const isAliveSchedule = await this.getForeignStateAsync(instanceAlivePath);
 		const isHostConnected = await this.getInitValue(hostConnectedPath);
+		let isAlive = await this.getInitValue(instanceAlivePath);
 		let isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 		let instanceStatusString = 'Instance deactivated';
 		let lastUpdate;
@@ -1867,19 +1868,18 @@ class DeviceWatcher extends utils.Adapter {
 		let diff;
 		let previousCronRun = null;
 		let isHealthy = false;
-		let dpValue;
 
 		switch (instanceMode) {
 			case 'schedule':
-				dpValue = await this.getForeignStateAsync(instanceAlivePath);
-				if (dpValue) {
-					lastUpdate = Math.round((Date.now() - dpValue.lc) / 1000); // Last state change in seconds
+				if (isAliveSchedule) {
+					lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
 					previousCronRun = await this.getPreviousCronRun(scheduleTime); // When was the last cron run
 					if (previousCronRun) {
 						lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
 						diff = lastCronRun - lastUpdate;
 						if (diff > -300) {
 							// if 5 minutes difference exceeded, instance is not alive
+							isAlive = true;
 							isHealthy = true;
 							instanceStatusString = 'Instance okay';
 						}
