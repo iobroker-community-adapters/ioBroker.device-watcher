@@ -334,45 +334,48 @@ class DeviceWatcher extends utils.Adapter {
 					case instance.connectedHostPath:
 						oldInstanceHostState = instance.isConnectedHost;
 						instance.isConnectedHost = state.val;
-						instanceStatusRaw = await this.setInstanceStatus(
-							instance.instanceMode,
-							instance.schedule,
-							instance.instanceAlivePath,
-							instance.connectedHostPath,
-							instance.connectedDevicePath,
-						);
-						instance.isAlive = instanceStatusRaw[1];
-						instance.status = instanceStatusRaw[0];
-						instance.isHealthy = instanceStatusRaw[2];
+						if (oldInstanceHostState !== instance.isConnectedHost) {
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								instance.connectedHostPath,
+								instance.connectedDevicePath,
+							);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
+							instance.isHealthy = instanceStatusRaw[2];
 
-						if (!instance.isAlive) continue;
-						if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
-							if (oldInstanceHostState !== instance.isConnectedHost && !instance.isHealthy) {
-								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							if (!instance.isAlive) continue;
+							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
+								if (!instance.isHealthy) {
+									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+								}
 							}
 						}
 						break;
 					case instance.connectedDevicePath:
 						oldInstanceDeviceState = instance.isConnectedDevice;
 						instance.isConnectedDevice = state.val;
-						instanceStatusRaw = await this.setInstanceStatus(
-							instance.instanceMode,
-							instance.schedule,
-							instance.instanceAlivePath,
-							instance.connectedHostPath,
-							instance.connectedDevicePath,
-						);
-						instance.isAlive = instanceStatusRaw[1];
-						instance.status = instanceStatusRaw[0];
-						instance.isHealthy = instanceStatusRaw[2];
+						if (oldInstanceDeviceState !== instance.isConnectedDevice) {
+							instanceStatusRaw = await this.setInstanceStatus(
+								instance.instanceMode,
+								instance.schedule,
+								instance.instanceAlivePath,
+								instance.connectedHostPath,
+								instance.connectedDevicePath,
+							);
+							instance.isAlive = instanceStatusRaw[1];
+							instance.status = instanceStatusRaw[0];
+							instance.isHealthy = instanceStatusRaw[2];
 
-						if (!instance.isAlive) continue;
-						if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
-							if (oldInstanceDeviceState !== instance.isConnectedDevice && !instance.isHealthy) {
-								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							if (!instance.isAlive) continue;
+							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
+								if (!instance.isHealthy) {
+									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+								}
 							}
 						}
-
 						break;
 				}
 			}
@@ -1861,7 +1864,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, hostConnectedPath, isDeviceConnctedPath) {
 		const isAliveSchedule = await this.getForeignStateAsync(instanceAlivePath);
-		const isHostConnected = await this.getInitValue(hostConnectedPath);
+		let isHostConnected = await this.getInitValue(hostConnectedPath);
 		let isAlive = await this.getInitValue(instanceAlivePath);
 		let isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 		let instanceStatusString = 'Instance deactivated';
@@ -1899,12 +1902,18 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					// Attempt 2/3 - after 10 seconds
 					await this.wait(10000);
+					isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
+					isHostConnected = await this.getInitValue(hostConnectedPath);
+
 					if (isHostConnected && isDeviceConnected) {
 						isHealthy = true;
 						instanceStatusString = 'Instance okay';
 					} else {
 						// Attempt 3/3 - after 20 seconds in total
 						await this.wait(10000);
+						isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
+						isHostConnected = await this.getInitValue(hostConnectedPath);
+
 						if (isHostConnected && isDeviceConnected) {
 							isHealthy = true;
 							instanceStatusString = 'Instance okay';
@@ -3565,8 +3574,8 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * @param {number} time
 	 */
-	async wait(time) {
-		return new Promise((resolve) => {
+	wait(time) {
+		return new Promise(function (resolve) {
 			setTimeout(resolve, time);
 		});
 	}
