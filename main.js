@@ -323,9 +323,8 @@ class DeviceWatcher extends utils.Adapter {
 								instance.instanceMode,
 								instance.schedule,
 								instance.instanceAlivePath,
-								state.val,
-								instance.isConnectedHost,
-								instance.isConnectedDevice,
+								instance.connectedHostPath,
+								instance.connectedDevicePath,
 							);
 							instance.isAlive = instanceStatusRaw[1];
 							instance.status = instanceStatusRaw[0];
@@ -339,9 +338,8 @@ class DeviceWatcher extends utils.Adapter {
 							instance.instanceMode,
 							instance.schedule,
 							instance.instanceAlivePath,
-							instance.isAlive,
-							instance.isConnectedHost,
-							instance.isConnectedDevice,
+							instance.connectedHostPath,
+							instance.connectedDevicePath,
 						);
 						instance.isAlive = instanceStatusRaw[1];
 						instance.status = instanceStatusRaw[0];
@@ -360,16 +358,15 @@ class DeviceWatcher extends utils.Adapter {
 							instance.instanceMode,
 							instance.schedule,
 							instance.instanceAlivePath,
-							instance.isAlive,
-							instance.isConnectedHost,
-							instance.isConnectedDevice,
+							instance.connectedHostPath,
+							instance.connectedDevicePath,
 						);
 						instance.isAlive = instanceStatusRaw[1];
 						instance.status = instanceStatusRaw[0];
 						instance.isHealthy = instanceStatusRaw[2];
 
 						if (oldInstanceDeviceState !== instance.isConnectedDevice) {
-							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
@@ -1805,7 +1802,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceAliveDP[id].val, instanceConnectedHostVal, instanceConnectedDeviceVal);
+				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceConnectedHostDP, instanceConnectedDeviceDP);
 				const isAlive = instanceStatusRaw[1];
 				const instanceStatus = instanceStatusRaw[0];
 				const isHealthy = instanceStatusRaw[2];
@@ -1854,22 +1851,24 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * set status for instance
-	 * @param {object} instanceMode
-	 * @param {object} scheduleTime
-	 * @param {object} instanceAlivePath
-	 * @param {object} isAliveVal
-	 * @param {object} connectedHostVal
-	 * @param {object} connectedDeviceVal
+	 * @param {string} instanceMode
+	 * @param {string} scheduleTime
+	 * @param {string} instanceAlivePath
+	 * @param {string} hostConnectedPath
+	 * @param {string} isDeviceConnctedPath
 	 */
-	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, isAliveVal, connectedHostVal, connectedDeviceVal) {
-		let instanceStatusString = 'not enabled';
+	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, hostConnectedPath, isDeviceConnctedPath) {
+		const isAlive = await this.getInitValue(instanceAlivePath);
+		const isHostConnected = await this.getInitValue(hostConnectedPath);
+		let isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
+		let instanceStatusString = 'Instance deactivated';
 		let lastUpdate;
 		let lastCronRun;
 		let diff;
 		let previousCronRun = null;
-		let isAlive = false;
 		let isHealthy = false;
 		let dpValue;
+
 		switch (instanceMode) {
 			case 'schedule':
 				dpValue = await this.getForeignStateAsync(instanceAlivePath);
@@ -1881,7 +1880,6 @@ class DeviceWatcher extends utils.Adapter {
 						diff = lastCronRun - lastUpdate;
 						if (diff > -300) {
 							// if 5 minutes difference exceeded, instance is not alive
-							isAlive = true;
 							isHealthy = true;
 							instanceStatusString = 'Instance okay';
 						}
@@ -1889,36 +1887,31 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				break;
 			case 'daemon':
-				if (!isAliveVal) return ['Instance deactivated', false, null]; // if instance is turned off
-
+				if (!isAlive) return ['Instance deactivated', false, null]; // if instance is turned off
+				if (isDeviceConnected === undefined) isDeviceConnected = true;
 				// In case of (re)start, connection may take some time. We take 3 attempts.
 				// Attempt 1/3 - immediately
-				if (connectedHostVal && connectedDeviceVal) {
-					isAlive = true;
+				if (isHostConnected && isDeviceConnected) {
 					isHealthy = true;
 					instanceStatusString = 'Instance okay';
 				} else {
 					// Attempt 2/3 - after 10 seconds
 					await this.wait(10000);
-					if (connectedHostVal && connectedDeviceVal) {
-						isAlive = true;
+					if (isHostConnected && isDeviceConnected) {
 						isHealthy = true;
 						instanceStatusString = 'Instance okay';
 					} else {
 						// Attempt 3/3 - after 20 seconds in total
 						await this.wait(10000);
-						if (connectedHostVal && connectedDeviceVal) {
-							isAlive = true;
+						if (isHostConnected && isDeviceConnected) {
 							isHealthy = true;
 							instanceStatusString = 'Instance okay';
 						} else {
-							if (!connectedDeviceVal) {
+							if (!isDeviceConnected) {
 								instanceStatusString = 'not connected to Device';
-								isAlive = true;
 								isHealthy = false;
-							} else if (!connectedHostVal) {
+							} else if (!isHostConnected) {
 								instanceStatusString = 'not connected to host';
-								isAlive = true;
 								isHealthy = false;
 							}
 						}
