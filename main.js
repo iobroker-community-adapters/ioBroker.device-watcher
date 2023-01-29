@@ -345,6 +345,7 @@ class DeviceWatcher extends utils.Adapter {
 						instance.status = instanceStatusRaw[0];
 						instance.isHealthy = instanceStatusRaw[2];
 
+						if (!instance.isAlive) continue;
 						if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
 							if (oldInstanceHostState !== instance.isConnectedHost && !instance.isHealthy) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
@@ -365,8 +366,9 @@ class DeviceWatcher extends utils.Adapter {
 						instance.status = instanceStatusRaw[0];
 						instance.isHealthy = instanceStatusRaw[2];
 
-						if (oldInstanceDeviceState !== instance.isConnectedDevice) {
-							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
+						if (!instance.isAlive) continue;
+						if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
+							if (oldInstanceDeviceState !== instance.isConnectedDevice && !instance.isHealthy) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
