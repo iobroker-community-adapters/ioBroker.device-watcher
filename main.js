@@ -31,8 +31,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.listErrorInstanceRaw = [];
 
 		// user arrays
-		this.blacklistInstancesLists = [];
-		this.blacklistInstancesNotify = [];
 		this.listAllInstances = [];
 		this.listDeactivatedInstances = [];
 		this.listAdapterUpdates = [];
@@ -51,9 +49,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
 		this.listAllDevices = [];
-		this.blacklistLists = [];
-		this.blacklistAdapterLists = [];
-		this.blacklistNotify = [];
 		this.selAdapter = [];
 		this.adapterSelected = [];
 		this.upgradableList = [];
@@ -71,6 +66,16 @@ class DeviceWatcher extends utils.Adapter {
 		this.batteryPoweredCount = 0;
 		this.lowBatteryPoweredCount = 0;
 		this.upgradableDevicesCount = 0;
+
+		// Blacklist
+		// Instances
+		this.blacklistInstancesLists = [];
+		this.blacklistInstancesNotify = [];
+
+		// Devices
+		this.blacklistLists = [];
+		this.blacklistAdapterLists = [];
+		this.blacklistNotify = [];
 
 		// Interval timer
 		this.refreshDataTimeout = null;
@@ -342,12 +347,11 @@ class DeviceWatcher extends utils.Adapter {
 						instance.status = instanceStatusRaw[0];
 						instance.isHealthy = instanceStatusRaw[2];
 
-						if (oldInstanceHostState !== instance.isConnectedHost) {
-							if (this.config.checkSendInstanceFailedMsg && !instance.isHealthy && !this.blacklistNotify.includes(instance.instanceAlivePath)) {
+						if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
+							if (oldInstanceHostState !== instance.isConnectedHost && !instance.isHealthy) {
 								await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
 							}
 						}
-
 						break;
 					case instance.connectedDevicePath:
 						oldInstanceDeviceState = instance.isConnectedDevice;
