@@ -131,6 +131,7 @@ class DeviceWatcher extends utils.Adapter {
 				nukiExt: this.config.nukiExtDevices,
 				nut: this.config.nutDevices,
 				ping: this.config.pingDevices,
+				proxmox: this.config.proxmoxDevices,
 				roomba: this.config.roombaDevices,
 				shelly: this.config.shellyDevices,
 				smartgarden: this.config.smartgardenDevices,
@@ -182,6 +183,7 @@ class DeviceWatcher extends utils.Adapter {
 				nukiExt: this.config.nukiextendMaxMinutes,
 				nut: this.config.nutMaxMinutes,
 				ping: this.config.pingMaxMinutes,
+				proxmox: this.config.proxmoxMaxMinutes,
 				roomba: this.config.roombaMaxMinutes,
 				shelly: this.config.shellyMaxMinutes,
 				smartgarden: this.config.smartgardenMaxMinutes,
@@ -1292,6 +1294,16 @@ class DeviceWatcher extends utils.Adapter {
 									linkQuality = '0%'; // set linkQuality to nothing
 								}
 							} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState === 1) {
+								deviceState = 'Offline'; //set online state to offline
+								linkQuality = '0%'; // set linkQuality to nothing
+							}
+							break;
+						case 'proxmox':
+							if (this.configMaxMinutes[adapterID] <= 0) {
+								if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
+									deviceState = 'Offline'; //set online state to offline
+								}
+							} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 								deviceState = 'Offline'; //set online state to offline
 								linkQuality = '0%'; // set linkQuality to nothing
 							}

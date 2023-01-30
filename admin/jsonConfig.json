@@ -240,6 +240,13 @@
 					"lg": 3,
 					"label": "Ping"
 				},
+				"proxmoxDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Proxmox"
+				},
 				"roombaDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1698,6 +1705,18 @@
 					"label": "Ping",
 					"help": "in minutes",
 					"hidden": "!data.pingDevices",
+					"hideOnlyControl": false
+				},
+				"proxmoxMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Proxmox",
+					"help": "in minutes",
+					"hidden": "!data.proxmoxDevices",
 					"hideOnlyControl": false
 				},
 				"roombaMaxMinutes": {
