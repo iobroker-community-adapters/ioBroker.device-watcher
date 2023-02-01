@@ -42,7 +42,7 @@
     "chai-as-promised": "^7.1.1",
     "cron-parser": "^4.7.1",
     "eslint": "^8.31.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.2.0",
     "node-schedule": "^2.1.0",
