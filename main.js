@@ -27,7 +27,7 @@ class DeviceWatcher extends utils.Adapter {
 		// instances and adapters
 		// raw arrays
 		this.adapterUpdatesJsonRaw = [];
-		this.listInstanceRaw = [];
+		this.listInstanceRaw = new Map();
 		this.listErrorInstanceRaw = [];
 
 		// user arrays
@@ -82,7 +82,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
-		// this.on('objectChange', this.onObjectChange.bind(this));
+		this.on('objectChange', this.onObjectChange.bind(this));
 		this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 	}
@@ -263,7 +263,7 @@ class DeviceWatcher extends utils.Adapter {
 			} else {
 				// instances
 				await this.createDPsForInstances();
-				await this.getInstanceData();
+				await this.getAllInstanceData();
 				// adapter updates
 				await this.createAdapterUpdateData();
 			}
@@ -287,6 +287,29 @@ class DeviceWatcher extends utils.Adapter {
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
 	} // <-- onReady end
+
+	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
+	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
+	//
+	/**
+	 * Is called if a subscribed object changes
+	 * @param {string} id
+	 * @param {ioBroker.Object | null | undefined} obj
+	 */
+	async onObjectChange(id, obj) {
+		if (obj) {
+			// The object was changed
+			this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
+
+			await this.getInstanceData(id);
+		} else {
+			// The object was deleted
+			this.log.debug(`object ${id} deleted`);
+
+			// delete instance data in map
+			this.listInstanceRaw.delete(id);
+		}
+	}
 
 	/**
 	 * Is called if a subscribed state changes
@@ -317,7 +340,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
-			for (const instance of this.listInstanceRaw) {
+			for (const [key, instance] of this.listInstanceRaw) {
 				switch (id) {
 					case instance.instanceAlivePath:
 						if (state.val !== instance.isAlive) {
@@ -1776,83 +1799,93 @@ class DeviceWatcher extends utils.Adapter {
 	} //<--End  of writing Datapoints
 
 	/**
-	 * get Instances
+	 * get all Instances at start
 	 */
-	async getInstanceData() {
+	async getAllInstanceData() {
 		try {
-			const instanceAliveDP = await this.getForeignStatesAsync(`system.adapter.*.alive`);
-			for (const [id] of Object.entries(instanceAliveDP)) {
-				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
-
-				// get instance name
-				const instanceName = await this.getInstanceName(id);
-
-				// get instance connected to host data
-				const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
-				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
-
-				// get instance connected to device data
-				const instanceConnectedDeviceDP = `${instanceName}.info.connection`;
-				let instanceConnectedDeviceVal;
-				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
-					instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
-				} else {
-					instanceConnectedDeviceVal = 'N/A';
-				}
-
-				// get adapter version
-				const instanceObjectPath = `system.adapter.${instanceName}`;
-				let adapterName;
-				let adapterVersion;
-				let instanceMode;
-				let scheduleTime = 'N/A';
-				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
-				if (instanceObjectData) {
-					// @ts-ignore
-					adapterName = this.capitalize(instanceObjectData.common.name);
-					adapterVersion = instanceObjectData.common.version;
-					instanceMode = instanceObjectData.common.mode;
-
-					if (instanceMode === 'schedule') {
-						scheduleTime = instanceObjectData.common.schedule;
-					}
-				}
-
-				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceConnectedHostDP, instanceConnectedDeviceDP);
-				const isAlive = instanceStatusRaw[1];
-				const instanceStatus = instanceStatusRaw[0];
-				const isHealthy = instanceStatusRaw[2];
-
-				//subscribe to statechanges
-				this.subscribeForeignStatesAsync(id);
-				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
-				this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
-				//this.subscribeForeignObjectsAsync(instanceObjectPath);
-
-				// create raw list
-				this.listInstanceRaw.push({
-					Adapter: adapterName,
-					InstanceName: instanceName,
-					instanceObjectPath: instanceObjectPath,
-					instanceAlivePath: id,
-					instanceMode: instanceMode,
-					schedule: scheduleTime,
-					adapterVersion: adapterVersion,
-					isAlive: isAlive,
-					isHealthy: isHealthy,
-					connectedHostPath: instanceConnectedHostDP,
-					isConnectedHost: instanceConnectedHostVal,
-					connectedDevicePath: instanceConnectedDeviceDP,
-					isConnectedDevice: instanceConnectedDeviceVal,
-					status: instanceStatus,
-				});
-			}
-			await this.createInstanceList();
-			await this.writeInstanceDPs();
+			const allInstances = `system.adapter.*`;
+			await this.getInstanceData(allInstances);
 		} catch (error) {
 			this.errorReporting('[getInstance]', error);
 		}
+	}
+
+	/**
+	 * get instance data
+	 *@param {string} instanceObject
+	 */
+	async getInstanceData(instanceObject) {
+		const instanceAliveDP = await this.getForeignStatesAsync(`${instanceObject}.alive`);
+
+		for (const [id] of Object.entries(instanceAliveDP)) {
+			if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
+
+			// get instance name
+			const instanceName = await this.getInstanceName(id);
+
+			// get instance connected to host data
+			const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
+			const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
+
+			// get instance connected to device data
+			const instanceConnectedDeviceDP = `${instanceName}.info.connection`;
+			let instanceConnectedDeviceVal;
+			if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
+				instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
+			} else {
+				instanceConnectedDeviceVal = 'N/A';
+			}
+
+			// get adapter version
+			const instanceObjectPath = `system.adapter.${instanceName}`;
+			let adapterName;
+			let adapterVersion;
+			let instanceMode;
+			let scheduleTime = 'N/A';
+			const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
+			if (instanceObjectData) {
+				// @ts-ignore
+				adapterName = this.capitalize(instanceObjectData.common.name);
+				adapterVersion = instanceObjectData.common.version;
+				instanceMode = instanceObjectData.common.mode;
+
+				if (instanceMode === 'schedule') {
+					scheduleTime = instanceObjectData.common.schedule;
+				}
+			}
+
+			//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
+			const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceConnectedHostDP, instanceConnectedDeviceDP);
+			const isAlive = instanceStatusRaw[1];
+			const instanceStatus = instanceStatusRaw[0];
+			const isHealthy = instanceStatusRaw[2];
+
+			//subscribe to statechanges
+			this.subscribeForeignStatesAsync(id);
+			this.subscribeForeignStatesAsync(instanceConnectedHostDP);
+			this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
+			this.subscribeForeignObjectsAsync(instanceObjectPath);
+
+			// create raw list
+			this.listInstanceRaw.set(instanceObjectPath, {
+				Adapter: adapterName,
+				InstanceName: instanceName,
+				instanceObjectPath: instanceObjectPath,
+				instanceAlivePath: id,
+				instanceMode: instanceMode,
+				schedule: scheduleTime,
+				adapterVersion: adapterVersion,
+				isAlive: isAlive,
+				isHealthy: isHealthy,
+				connectedHostPath: instanceConnectedHostDP,
+				isConnectedHost: instanceConnectedHostVal,
+				connectedDevicePath: instanceConnectedDeviceDP,
+				isConnectedDevice: instanceConnectedDeviceVal,
+				status: instanceStatus,
+			});
+		}
+		await this.createInstanceList();
+		await this.writeInstanceDPs();
 	}
 
 	/**
@@ -2028,7 +2061,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.listErrorInstanceRaw = [];
 		this.listErrorInstance = [];
 
-		for (const instance of this.listInstanceRaw) {
+		for (const [key, instance] of this.listInstanceRaw) {
 			// fill raw list
 			if (instance.isAlive && !instance.isHealthy) {
 				this.listErrorInstanceRaw.push({
