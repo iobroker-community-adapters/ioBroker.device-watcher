@@ -340,64 +340,64 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
-			for (const [key, instance] of this.listInstanceRaw) {
+			for (const instanceData of this.listInstanceRaw.values()) {
 				switch (id) {
-					case instance.instanceAlivePath:
-						if (state.val !== instance.isAlive) {
+					case instanceData.instanceAlivePath:
+						if (state.val !== instanceData.isAlive) {
 							instanceStatusRaw = await this.setInstanceStatus(
-								instance.instanceMode,
-								instance.schedule,
-								instance.instanceAlivePath,
-								instance.connectedHostPath,
-								instance.connectedDevicePath,
+								instanceData.instanceMode,
+								instanceData.schedule,
+								instanceData.instanceAlivePath,
+								instanceData.connectedHostPath,
+								instanceData.connectedDevicePath,
 							);
-							instance.isAlive = instanceStatusRaw[1];
-							instance.status = instanceStatusRaw[0];
-							instance.isHealthy = instanceStatusRaw[2];
+							instanceData.isAlive = instanceStatusRaw[1];
+							instanceData.status = instanceStatusRaw[0];
+							instanceData.isHealthy = instanceStatusRaw[2];
 						}
 						break;
-					case instance.connectedHostPath:
-						oldInstanceHostState = instance.isConnectedHost;
-						instance.isConnectedHost = state.val;
-						if (oldInstanceHostState !== instance.isConnectedHost) {
+					case instanceData.connectedHostPath:
+						oldInstanceHostState = instanceData.isConnectedHost;
+						instanceData.isConnectedHost = state.val;
+						if (oldInstanceHostState !== instanceData.isConnectedHost) {
 							instanceStatusRaw = await this.setInstanceStatus(
-								instance.instanceMode,
-								instance.schedule,
-								instance.instanceAlivePath,
-								instance.connectedHostPath,
-								instance.connectedDevicePath,
+								instanceData.instanceMode,
+								instanceData.schedule,
+								instanceData.instanceAlivePath,
+								instanceData.connectedHostPath,
+								instanceData.connectedDevicePath,
 							);
-							instance.isAlive = instanceStatusRaw[1];
-							instance.status = instanceStatusRaw[0];
-							instance.isHealthy = instanceStatusRaw[2];
+							instanceData.isAlive = instanceStatusRaw[1];
+							instanceData.status = instanceStatusRaw[0];
+							instanceData.isHealthy = instanceStatusRaw[2];
 
-							if (!instance.isAlive) continue;
-							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
-								if (!instance.isHealthy) {
-									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							if (!instanceData.isAlive) continue;
+							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
+								if (!instanceData.isHealthy) {
+									await this.sendInstanceErrorNotification(instanceData.InstanceName, instanceData.status);
 								}
 							}
 						}
 						break;
-					case instance.connectedDevicePath:
-						oldInstanceDeviceState = instance.isConnectedDevice;
-						instance.isConnectedDevice = state.val;
-						if (oldInstanceDeviceState !== instance.isConnectedDevice) {
+					case instanceData.connectedDevicePath:
+						oldInstanceDeviceState = instanceData.isConnectedDevice;
+						instanceData.isConnectedDevice = state.val;
+						if (oldInstanceDeviceState !== instanceData.isConnectedDevice) {
 							instanceStatusRaw = await this.setInstanceStatus(
-								instance.instanceMode,
-								instance.schedule,
-								instance.instanceAlivePath,
-								instance.connectedHostPath,
-								instance.connectedDevicePath,
+								instanceData.instanceMode,
+								instanceData.schedule,
+								instanceData.instanceAlivePath,
+								instanceData.connectedHostPath,
+								instanceData.connectedDevicePath,
 							);
-							instance.isAlive = instanceStatusRaw[1];
-							instance.status = instanceStatusRaw[0];
-							instance.isHealthy = instanceStatusRaw[2];
+							instanceData.isAlive = instanceStatusRaw[1];
+							instanceData.status = instanceStatusRaw[0];
+							instanceData.isHealthy = instanceStatusRaw[2];
 
-							if (!instance.isAlive) continue;
-							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instance.instanceAlivePath)) {
-								if (!instance.isHealthy) {
-									await this.sendInstanceErrorNotification(instance.InstanceName, instance.status);
+							if (!instanceData.isAlive) continue;
+							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
+								if (!instanceData.isHealthy) {
+									await this.sendInstanceErrorNotification(instanceData.InstanceName, instanceData.status);
 								}
 							}
 						}
@@ -405,7 +405,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
-			for (const [deviceID, deviceData] of this.listAllDevicesRaw) {
+			for (const deviceData of this.listAllDevicesRaw.values()) {
 				// On statechange update available datapoint
 				switch (id) {
 					case deviceData.instanceDeviceConnectionDP:
@@ -530,7 +530,7 @@ class DeviceWatcher extends utils.Adapter {
 			case 'devicesList':
 				if (obj.message) {
 					try {
-						for (const [deviceID, deviceData] of this.listAllDevicesRaw) {
+						for (const deviceData of this.listAllDevicesRaw.values()) {
 							const label = `${deviceData.Adapter}: ${deviceData.Device}`;
 							const valueObjectDevices = {
 								deviceName: deviceData.Device,
@@ -558,7 +558,7 @@ class DeviceWatcher extends utils.Adapter {
 			case 'instancesList':
 				if (obj.message) {
 					try {
-						for (const [instanceID, instanceData] of this.listInstanceRaw) {
+						for (const instanceData of this.listInstanceRaw.values()) {
 							const label = `${instanceData.Adapter}: ${instanceData.InstanceName}`;
 							const valueObjectInstances = {
 								adapter: instanceData.Adapter,
@@ -1428,7 +1428,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * when was last contact of device
 	 */
 	async checkLastContact() {
-		for (const [deviceID, deviceData] of this.listAllDevicesRaw) {
+		for (const deviceData of this.listAllDevicesRaw.values()) {
 			if (deviceData.instancedeviceConnected !== false) {
 				const oldContactState = deviceData.Status;
 				deviceData.UnreachState = await this.getInitValue(deviceData.UnreachDP);
@@ -1471,7 +1471,7 @@ class DeviceWatcher extends utils.Adapter {
 			adptName = '';
 		}
 
-		for (const [deviceID, deviceData] of this.listAllDevicesRaw) {
+		for (const deviceData of this.listAllDevicesRaw.values()) {
 			/*----------  fill raw lists  ----------*/
 			// low bat list
 			if (deviceData.LowBat && deviceData.Status !== 'Offline') {
@@ -1609,7 +1609,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
 
 		try {
-			for (const [deviceID, deviceData] of this.listAllDevicesRaw) {
+			for (const deviceData of this.listAllDevicesRaw.values()) {
 				if (deviceData.adapterID.includes(adptName)) {
 					// list device only if selected adapter matched with device
 					await this.createLists(adptName);
@@ -2057,7 +2057,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.listErrorInstanceRaw = [];
 		this.listErrorInstance = [];
 
-		for (const [key, instance] of this.listInstanceRaw) {
+		for (const instance of this.listInstanceRaw.values()) {
 			// fill raw list
 			if (instance.isAlive && !instance.isHealthy) {
 				this.listErrorInstanceRaw.push({
