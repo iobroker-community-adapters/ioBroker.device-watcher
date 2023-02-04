@@ -186,9 +186,9 @@ It's possible to select:
 -   (ciddi89) Fixed: Made notification for adapter update working
 -   (ciddi89) Added: Delete objects automatically if it is not selected in settings.(HTML Lists, Adapter&Instances Folder, Data for each adapter)
 -   (ciddi89) Enhancement: If available Check if general device state is true for more then few seconds to prevent multiple device status messages
--   (ciddi89) Added: Proxmox Adapter
--   (ciddi89) Fixed: Delete/Add data of new or deleted instance without restart
--   (ciddi89) Fixed: Delete/Add data of new or deleted devices without restart
+-   (ciddi89) Added: Proxmox Adapter ([#123](https://github.com/ciddi89/ioBroker.device-watcher/issues/123))
+-   (ciddi89) Fixed: Delete/Add data of new or deleted instance without restart ([#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125))
+-   (ciddi89) Fixed: Delete/Add data of new or deleted devices without restart ([#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125))
 
 ### 2.5.0 (2023-01-27)
 
