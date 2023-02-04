@@ -299,15 +299,22 @@ class DeviceWatcher extends utils.Adapter {
 	async onObjectChange(id, obj) {
 		if (obj) {
 			// The object was changed
-			this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
+			//this.log.warn(`object ${id} changed: ${JSON.stringify(obj)}`);
 
+			//read new instance data and add it to the lists
 			await this.getInstanceData(id);
+
+			//read devices data and renew the lists
+			await this.main();
 		} else {
 			// The object was deleted
-			this.log.debug(`object ${id} deleted`);
+			//this.log.warn(`object ${id} deleted`);
 
 			// delete instance data in map
 			this.listInstanceRaw.delete(id);
+
+			// delete device data in map
+			this.listAllDevicesRaw.delete(id);
 		}
 	}
 
@@ -319,7 +326,7 @@ class DeviceWatcher extends utils.Adapter {
 	async onStateChange(id, state) {
 		// Admin JSON for Adapter updates
 		if (id && state) {
-			this.log.debug(`State changed: ${id} changed ${state.val}`);
+			// this.log.debug(`State changed: ${id} changed ${state.val}`);
 			let batteryData;
 			let oldLowBatState;
 			let contactData;
@@ -732,6 +739,7 @@ class DeviceWatcher extends utils.Adapter {
 			const instanceDeviceConnectionDP = `${instance}.info.connection`;
 			const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
 			this.subscribeForeignStates(instanceDeviceConnectionDP);
+			this.subscribeForeignObjectsAsync(`${this.selAdapter[i].Selektor}`);
 
 			/*=============================================
 				=              Get device name		          =
@@ -748,6 +756,9 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 			const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
 			const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
+
+			// subscribe to object device path
+			this.subscribeForeignObjectsAsync(currDeviceString);
 
 			/*=============================================
 				=            Get signal strength              =
