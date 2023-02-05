@@ -355,6 +355,7 @@
 		"checkUpgradeSunday": false,
 		"checkSendUpgradeTime": "12:10",
 		"checkSendBatteryMsgDaily": false,
+		"checkSendAdapterUpdateMsgDaily": false,
 		"checkSendAdapterUpdateTime": "12:15",
 		"checkAdapterUpdateMonday": false,
 		"checkAdapterUpdateTuesday": false,

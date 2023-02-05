@@ -272,16 +272,19 @@ class DeviceWatcher extends utils.Adapter {
 			await this.refreshData();
 
 			// send overview for low battery devices
-			if (this.config.checkSendBatteryMsgDaily) await this.sendBatteryNotifyShedule();
+			if (this.config.checkSendBatteryMsgDaily) await this.sendScheduleNotifications('lowBatteryDevices');
 
 			// send overview of offline devices
-			if (this.config.checkSendOfflineMsgDaily) await this.sendOfflineNotificationsShedule();
+			if (this.config.checkSendOfflineMsgDaily) await this.sendScheduleNotifications('offlineDevices');
 
 			// send overview of upgradeable devices
-			if (this.config.checkSendUpgradeMsgDaily) await this.sendDeviceUpdateNotificationsShedule();
+			if (this.config.checkSendUpgradeMsgDaily) await this.sendScheduleNotifications('updateDevices');
+
+			// send overview of updatable adapters
+			if (this.config.checkSendAdapterUpdateMsgDaily) await this.sendScheduleNotifications('updateAdapter');
 
 			// send overview of instances with error
-			if (this.config.checkSendInstanceFailedDaily) await this.sendInstanceErrorNotificationShedule();
+			if (this.config.checkSendInstanceFailedDaily) await this.sendScheduleNotifications('errorInstance');
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -2526,60 +2529,198 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	} // <-- End of sendNotification function
 
-	/*----------  Battery notifications ----------*/
+	/*---------- Notifications ----------*/
 	/**
-	 * send shedule message for low battery devices
+	 *
+	 * @param {string} type
 	 */
-	async sendBatteryNotifyShedule() {
-		const time = this.config.checkSendBatteryTime.split(':');
+	async sendScheduleNotifications(type) {
+		if (isUnloaded) return;
 
-		const checkDays = []; // list of selected days
+		let time;
+		let cron;
+		let list = '';
+		let message = '';
+		const checkDays = [];
+		const setMessage = (message) => {
+			this.log.info(`${message}`);
+			this.setStateAsync('lastNotification', `${message}`, true);
+			this.sendNotification(`${message}`);
+		};
 
-		// push the selected days in list
-		if (this.config.checkMonday) checkDays.push(1);
-		if (this.config.checkTuesday) checkDays.push(2);
-		if (this.config.checkWednesday) checkDays.push(3);
-		if (this.config.checkThursday) checkDays.push(4);
-		if (this.config.checkFriday) checkDays.push(5);
-		if (this.config.checkSaturday) checkDays.push(6);
-		if (this.config.checkSunday) checkDays.push(0);
+		switch (type) {
+			case 'lowBatteryDevices':
+				// push the selected days in list
+				if (this.config.checkMonday) checkDays.push(1);
+				if (this.config.checkTuesday) checkDays.push(2);
+				if (this.config.checkWednesday) checkDays.push(3);
+				if (this.config.checkThursday) checkDays.push(4);
+				if (this.config.checkFriday) checkDays.push(5);
+				if (this.config.checkSaturday) checkDays.push(6);
+				if (this.config.checkSunday) checkDays.push(0);
 
-		if (checkDays.length >= 1) {
-			// check if an day is selected
-			this.log.debug(`Number of selected days for daily battery message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
-		} else {
-			this.log.warn(`No days selected for daily battery message. Please check the instance configuration!`);
-			return; // cancel function if no day is selected
-		}
+				time = this.config.checkSendBatteryTime.split(':');
 
-		if (!isUnloaded) {
-			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
-			schedule.scheduleJob(cron, () => {
-				try {
-					let deviceList = '';
+				if (checkDays.length === 0) {
+					this.log.warn(`No days selected for daily low battery devices message. Please check the instance configuration!`);
+					return; // cancel function if no day is selected
+				}
+				this.log.debug(`Number of selected days for daily low battery devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
+				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				schedule.scheduleJob(cron, () => {
+					list = '';
 					for (const id of this.batteryLowPoweredRaw) {
 						if (!this.blacklistNotify.includes(id.Path)) {
 							if (!this.config.showAdapterNameinMsg) {
-								deviceList = `${deviceList}\n${id.Device} (${id.Battery})`;
+								list = `${list}\n${id.Device} (${id.Battery})`;
 							} else {
 								// Add adaptername if checkbox is checked true in options by user
-								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device} (${id.Battery})`;
+								list = `${list}\n${id.Adapter}: ${id.Device} (${id.Battery})`;
 							}
 						}
 					}
-					if (deviceList.length > 0) {
-						this.log.info(`Niedrige Batteriezustände: ${deviceList}`);
-						this.setStateAsync('lastNotification', `Niedrige Batteriezustände: ${deviceList}`, true);
+					if (list.length === 0) return;
+					message = `Tägliche Meldung über Geräte mit niedrigen Batteriezuständen: ${list}`;
+					setMessage(message);
+				});
+				break;
+			case 'offlineDevices':
+				// push the selected days in list
+				if (this.config.checkOfflineMonday) checkDays.push(1);
+				if (this.config.checkOfflineTuesday) checkDays.push(2);
+				if (this.config.checkOfflineWednesday) checkDays.push(3);
+				if (this.config.checkOfflineThursday) checkDays.push(4);
+				if (this.config.checkOfflineFriday) checkDays.push(5);
+				if (this.config.checkOfflineSaturday) checkDays.push(6);
+				if (this.config.checkOfflineSunday) checkDays.push(0);
 
-						this.sendNotification(`Niedrige Batteriezustände: ${deviceList}`);
-					}
-				} catch (error) {
-					this.errorReporting('[sendBatteryNotifyShedule]', error);
+				time = this.config.checkSendOfflineTime.split(':');
+
+				if (checkDays.length === 0) {
+					this.log.warn(`No days selected for daily offline devices message. Please check the instance configuration!`);
+					return; // cancel function if no day is selected
 				}
-			});
+				this.log.debug(`Number of selected days for daily offline devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+
+				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				schedule.scheduleJob(cron, () => {
+					list = '';
+
+					for (const id of this.offlineDevicesRaw) {
+						if (!this.blacklistNotify.includes(id.Path)) {
+							if (!this.config.showAdapterNameinMsg) {
+								list = `${list}\n${id.Device} (${id.LastContact})`;
+							} else {
+								list = `${list}\n${id.Adapter}: ${id.Device} (${id.LastContact})`;
+							}
+						}
+					}
+
+					if (list.length === 0) return;
+					message = `Tägliche Meldung über offline Geräte: ${list}`;
+					setMessage(message);
+				});
+				break;
+			case 'updateDevices':
+				// push the selected days in list
+				if (this.config.checkUpgradeMonday) checkDays.push(1);
+				if (this.config.checkUpgradeTuesday) checkDays.push(2);
+				if (this.config.checkUpgradeWednesday) checkDays.push(3);
+				if (this.config.checkUpgradeThursday) checkDays.push(4);
+				if (this.config.checkUpgradeFriday) checkDays.push(5);
+				if (this.config.checkUpgradeSaturday) checkDays.push(6);
+				if (this.config.checkUpgradeSunday) checkDays.push(0);
+
+				time = this.config.checkSendUpgradeTime.split(':');
+
+				if (checkDays.length === 0) {
+					this.log.warn(`No days selected for daily updatable devices message. Please check the instance configuration!`);
+					return; // cancel function if no day is selected
+				}
+				this.log.debug(`Number of selected days for daily updatable devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+
+				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				schedule.scheduleJob(cron, () => {
+					list = '';
+
+					for (const id of this.upgradableDevicesRaw) {
+						if (!this.blacklistNotify.includes(id.Path)) {
+							if (!this.config.showAdapterNameinMsg) {
+								list = `${list}\n${id.Device}`;
+							} else {
+								list = `${list}\n${id.Adapter}: ${id.Device}`;
+							}
+						}
+					}
+					if (list.length === 0) return;
+					message = `Tägliche Meldung über verfügbare Geräte Updates: ${list}`;
+					setMessage(message);
+				});
+				break;
+			case 'updateAdapter':
+				// push the selected days in list
+				if (this.config.checkAdapterUpdateMonday) checkDays.push(1);
+				if (this.config.checkAdapterUpdateTuesday) checkDays.push(2);
+				if (this.config.checkAdapterUpdateWednesday) checkDays.push(3);
+				if (this.config.checkAdapterUpdateThursday) checkDays.push(4);
+				if (this.config.checkAdapterUpdateFriday) checkDays.push(5);
+				if (this.config.checkAdapterUpdateSaturday) checkDays.push(6);
+				if (this.config.checkAdapterUpdateSunday) checkDays.push(0);
+
+				time = this.config.checkSendAdapterUpdateTime.split(':');
+
+				if (checkDays.length === 0) {
+					this.log.warn(`No days selected for daily adapter update message. Please check the instance configuration!`);
+					return; // cancel function if no day is selected
+				}
+				this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+
+				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				schedule.scheduleJob(cron, () => {
+					list = '';
+
+					for (const id of this.listAdapterUpdates) {
+						list = `${list}\n${id.Adapter}: v${id['Available Version']}`;
+					}
+					if (list.length === 0) return;
+					message = `Tägliche Meldung über verfügbare Adapter Updates: ${list}`;
+					setMessage(message);
+				});
+				break;
+			case 'errorInstance':
+				// push the selected days in list
+				if (this.config.checkFailedInstancesMonday) checkDays.push(1);
+				if (this.config.checkFailedInstancesTuesday) checkDays.push(2);
+				if (this.config.checkFailedInstancesWednesday) checkDays.push(3);
+				if (this.config.checkFailedInstancesThursday) checkDays.push(4);
+				if (this.config.checkFailedInstancesFriday) checkDays.push(5);
+				if (this.config.checkFailedInstancesSaturday) checkDays.push(6);
+				if (this.config.checkFailedInstancesSunday) checkDays.push(0);
+
+				time = this.config.checkSendInstanceFailedTime.split(':');
+
+				if (checkDays.length === 0) {
+					this.log.warn(`No days selected for daily instance error message. Please check the instance configuration!`);
+					return; // cancel function if no day is selected
+				}
+				this.log.debug(`Number of selected days for daily instance error message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				schedule.scheduleJob(cron, () => {
+					list = '';
+
+					for (const id of this.listErrorInstanceRaw) {
+						if (!this.blacklistInstancesNotify.includes(id.instanceAlivePath)) {
+							list = `${list}\n${id.Instance}: ${id.Status}`;
+						}
+					}
+					if (list.length === 0) return;
+					message = `Tägliche Meldung über fehlerhafte Instanzen: ${list}`;
+					setMessage(message);
+				});
+				break;
 		}
-	} //<--End of battery notification
+	}
 
 	/**
 	 * check if device updates are available and send notification
@@ -2648,60 +2789,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Finished the function: ${this.sendOfflineNotifications.name}`);
 	} //<--End of offline notification
 
-	/**
-	 * send shedule message with offline devices
-	 */
-	async sendOfflineNotificationsShedule() {
-		const time = this.config.checkSendOfflineTime.split(':');
-
-		const checkDays = []; // list of selected days
-
-		// push the selected days in list
-		if (this.config.checkOfflineMonday) checkDays.push(1);
-		if (this.config.checkOfflineTuesday) checkDays.push(2);
-		if (this.config.checkOfflineWednesday) checkDays.push(3);
-		if (this.config.checkOfflineThursday) checkDays.push(4);
-		if (this.config.checkOfflineFriday) checkDays.push(5);
-		if (this.config.checkOfflineSaturday) checkDays.push(6);
-		if (this.config.checkOfflineSunday) checkDays.push(0);
-
-		if (checkDays.length >= 1) {
-			// check if an day is selected
-			this.log.debug(`Number of selected days for daily offline message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
-		} else {
-			this.log.warn(`No days selected for daily offline message. Please check the instance configuration!`);
-			return; // cancel function if no day is selected
-		}
-
-		if (!isUnloaded) {
-			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
-			schedule.scheduleJob(cron, () => {
-				try {
-					let deviceList = '';
-
-					for (const id of this.offlineDevicesRaw) {
-						if (!this.blacklistNotify.includes(id.Path)) {
-							if (!this.config.showAdapterNameinMsg) {
-								deviceList = `${deviceList}\n${id.Device} (${id.LastContact})`;
-							} else {
-								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device} (${id.LastContact})`;
-							}
-						}
-					}
-
-					if (deviceList.length > 0) {
-						this.log.info(`Geräte Offline: ${deviceList}`);
-						this.setStateAsync('lastNotification', `Geräte Offline: ${deviceList}`, true);
-
-						this.sendNotification(`Geräte Offline: ${deviceList}`);
-					}
-				} catch (error) {
-					this.errorReporting('[sendOfflineNotificationsShedule]', error);
-				}
-			});
-		}
-	} //<--End of daily offline notification
-
 	/*---------- Device Updates notifications ----------*/
 	/**
 	 * check if device updates are available and send notification
@@ -2731,59 +2818,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		this.log.debug(`Finished the function: ${this.sendDeviceUpdatesNotification.name}`);
 	}
-
-	/**
-	 * send shedule message with offline devices
-	 */
-	async sendDeviceUpdateNotificationsShedule() {
-		const time = this.config.checkSendUpgradeTime.split(':');
-
-		const checkDays = []; // list of selected days
-
-		// push the selected days in list
-		if (this.config.checkUpgradeMonday) checkDays.push(1);
-		if (this.config.checkUpgradeTuesday) checkDays.push(2);
-		if (this.config.checkUpgradeWednesday) checkDays.push(3);
-		if (this.config.checkUpgradeThursday) checkDays.push(4);
-		if (this.config.checkUpgradeFriday) checkDays.push(5);
-		if (this.config.checkUpgradeSaturday) checkDays.push(6);
-		if (this.config.checkUpgradeSunday) checkDays.push(0);
-
-		if (checkDays.length >= 1) {
-			// check if an day is selected
-			this.log.debug(`Number of selected days for daily Upgrade message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
-		} else {
-			this.log.warn(`No days selected for daily Upgrade message. Please check the instance configuration!`);
-			return; // cancel function if no day is selected
-		}
-
-		if (!isUnloaded) {
-			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
-			schedule.scheduleJob(cron, () => {
-				try {
-					let deviceList = '';
-
-					for (const id of this.upgradableDevicesRaw) {
-						if (!this.blacklistNotify.includes(id.Path)) {
-							if (!this.config.showAdapterNameinMsg) {
-								deviceList = `${deviceList}\n${id.Device}`;
-							} else {
-								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device}`;
-							}
-						}
-					}
-					if (deviceList.length > 0) {
-						this.log.info(`Geräte Upgrade: ${deviceList}`);
-						this.setStateAsync('lastNotification', `Geräte Upgrade: ${deviceList}`, true);
-
-						this.sendNotification(`Geräte Upgrade:\n${deviceList}`);
-					}
-				} catch (error) {
-					this.errorReporting('[sendUpgradeNotificationsShedule]', error);
-				}
-			});
-		}
-	} //<--End of daily device updates notification
 
 	/*----------  Adapter Updates notifications ----------*/
 	/**
@@ -2817,59 +2851,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Finished the function: ${this.sendAdapterUpdatesNotification.name}`);
 	}
 
-	/**
-	 * send shedule message with  list of updatable adapters
-	 */
-	async sendAdapterUpdatesNotificatioShedule() {
-		const time = this.config.checkSendAdapterUpdateTime.split(':');
-
-		const checkDays = []; // list of selected days
-
-		// push the selected days in list
-		if (this.config.checkAdapterUpdateMonday) checkDays.push(1);
-		if (this.config.checkAdapterUpdateTuesday) checkDays.push(2);
-		if (this.config.checkAdapterUpdateWednesday) checkDays.push(3);
-		if (this.config.checkAdapterUpdateThursday) checkDays.push(4);
-		if (this.config.checkAdapterUpdateFriday) checkDays.push(5);
-		if (this.config.checkAdapterUpdateSaturday) checkDays.push(6);
-		if (this.config.checkAdapterUpdateSunday) checkDays.push(0);
-
-		if (checkDays.length >= 1) {
-			// check if an day is selected
-			this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
-		} else {
-			this.log.warn(`No days selected for daily adapter update message. Please check the instance configuration!`);
-			return; // cancel function if no day is selected
-		}
-
-		if (!isUnloaded) {
-			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
-			schedule.scheduleJob(cron, () => {
-				try {
-					let deviceList = '';
-
-					for (const id of this.upgradableDevicesRaw) {
-						if (!this.blacklistNotify.includes(id.Path)) {
-							if (!this.config.showAdapterNameinMsg) {
-								deviceList = `${deviceList}\n${id.Device}`;
-							} else {
-								deviceList = `${deviceList}\n${id.Adapter}: ${id.Device}`;
-							}
-						}
-					}
-					if (deviceList.length > 0) {
-						this.log.info(`Geräte Upgrade: ${deviceList}`);
-						this.setStateAsync('lastNotification', `Geräte Upgrade: ${deviceList}`, true);
-
-						this.sendNotification(`Geräte Upgrade:\n${deviceList}`);
-					}
-				} catch (error) {
-					this.errorReporting('[sendUpgradeNotificationsShedule]', error);
-				}
-			});
-		}
-	} //<--End of daily offline notification
-
 	/*---------- Instance error notifications ----------*/
 	/**
 	 * check if device updates are available and send notification
@@ -2895,55 +2876,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		this.log.debug(`Finished the function: ${this.sendInstanceErrorNotification.name}`);
 	}
-
-	/**
-	 * send shedule message with offline devices
-	 */
-	async sendInstanceErrorNotificationShedule() {
-		const time = this.config.checkSendInstanceFailedTime.split(':');
-
-		const checkDays = []; // list of selected days
-
-		// push the selected days in list
-		if (this.config.checkFailedInstancesMonday) checkDays.push(1);
-		if (this.config.checkFailedInstancesTuesday) checkDays.push(2);
-		if (this.config.checkFailedInstancesWednesday) checkDays.push(3);
-		if (this.config.checkFailedInstancesThursday) checkDays.push(4);
-		if (this.config.checkFailedInstancesFriday) checkDays.push(5);
-		if (this.config.checkFailedInstancesSaturday) checkDays.push(6);
-		if (this.config.checkFailedInstancesSunday) checkDays.push(0);
-
-		if (checkDays.length >= 1) {
-			// check if an day is selected
-			this.log.debug(`Number of selected days for daily instance error message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
-		} else {
-			this.log.warn(`No days selected for daily instance error message. Please check the instance configuration!`);
-			return; // cancel function if no day is selected
-		}
-
-		if (!isUnloaded) {
-			const cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
-			schedule.scheduleJob(cron, () => {
-				try {
-					let instanceList = '';
-
-					for (const id of this.listErrorInstanceRaw) {
-						if (!this.blacklistInstancesNotify.includes(id.instanceAlivePath)) {
-							instanceList = `${instanceList}\n${id.Instance}: ${id.Status}`;
-						}
-					}
-					if (instanceList.length > 0) {
-						this.log.info(`Tägliche Instanz Meldung: ${instanceList}`);
-						this.setStateAsync('lastNotification', `Tägliche Instanz Meldung: ${instanceList}`, true);
-
-						this.sendNotification(`Tägliche Instanz Meldung:\n${instanceList}`);
-					}
-				} catch (error) {
-					this.errorReporting('[sendInstanceErrorNotificationShedule]', error);
-				}
-			});
-		}
-	} //<--End of daily device updates notification
 
 	/*=============================================
 	=       functions to create html lists        =
