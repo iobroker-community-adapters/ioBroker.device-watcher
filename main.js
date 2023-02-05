@@ -2542,10 +2542,11 @@ class DeviceWatcher extends utils.Adapter {
 		let list = '';
 		let message = '';
 		const checkDays = [];
-		const setMessage = (message) => {
+		const setMessage = async (message) => {
 			this.log.info(`${message}`);
-			this.setStateAsync('lastNotification', `${message}`, true);
-			this.sendNotification(`${message}`);
+			await this.setStateAsync('lastNotification', `${message}`, true);
+			await this.sendNotification(`${message}`);
+			return (message = '');
 		};
 
 		switch (type) {
@@ -2567,7 +2568,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily low battery devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				cron = '1 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
 				schedule.scheduleJob(cron, () => {
 					list = '';
 					for (const id of this.batteryLowPoweredRaw) {
@@ -2603,7 +2604,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily offline devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				cron = '2 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
 				schedule.scheduleJob(cron, () => {
 					list = '';
 
@@ -2640,7 +2641,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily updatable devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				cron = '3 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
 				schedule.scheduleJob(cron, () => {
 					list = '';
 
@@ -2676,7 +2677,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				cron = '4 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
 				schedule.scheduleJob(cron, () => {
 					list = '';
 
@@ -2705,7 +2706,7 @@ class DeviceWatcher extends utils.Adapter {
 					return; // cancel function if no day is selected
 				}
 				this.log.debug(`Number of selected days for daily instance error message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
-				cron = '10 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				cron = '5 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
 				schedule.scheduleJob(cron, () => {
 					list = '';
 
