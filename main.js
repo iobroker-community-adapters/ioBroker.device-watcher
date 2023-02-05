@@ -2544,7 +2544,6 @@ class DeviceWatcher extends utils.Adapter {
 		let objectData;
 		let list = '';
 		let message = '';
-		this.log.warn(JSON.stringify(objectData));
 		const setMessage = async (message) => {
 			this.log.info(`${message}`);
 			await this.setStateAsync('lastNotification', `${message}`, true);
