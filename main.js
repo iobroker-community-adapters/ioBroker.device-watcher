@@ -318,6 +318,10 @@ class DeviceWatcher extends utils.Adapter {
 
 			// delete device data in map
 			this.listAllDevicesRaw.delete(id);
+
+			//unsubscribe of Objects and states
+			this.unsubscribeForeignObjects(id);
+			this.unsubscribeForeignStates(id);
 		}
 	}
 
