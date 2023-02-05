@@ -1938,19 +1938,19 @@ class DeviceWatcher extends utils.Adapter {
 							// if 5 minutes difference exceeded, instance is not alive
 							isAlive = true;
 							isHealthy = true;
-							instanceStatusString = 'Instance okay';
+							instanceStatusString = 'Instanz okay';
 						}
 					}
 				}
 				break;
 			case 'daemon':
-				if (!isAlive) return ['Instance deactivated', false, null]; // if instance is turned off
+				if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
 				if (isDeviceConnected === undefined) isDeviceConnected = true;
 				// In case of (re)start, connection may take some time. We take 3 attempts.
 				// Attempt 1/3 - immediately
 				if (isHostConnected && isDeviceConnected) {
 					isHealthy = true;
-					instanceStatusString = 'Instance okay';
+					instanceStatusString = 'Instanz okay';
 				} else {
 					// Attempt 2/3 - after 10 seconds
 					await this.wait(10000);
@@ -1959,7 +1959,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					if (isHostConnected && isDeviceConnected) {
 						isHealthy = true;
-						instanceStatusString = 'Instance okay';
+						instanceStatusString = 'Instanz okay';
 					} else {
 						// Attempt 3/3 - after 20 seconds in total
 						await this.wait(10000);
@@ -1968,13 +1968,13 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (isHostConnected && isDeviceConnected) {
 							isHealthy = true;
-							instanceStatusString = 'Instance okay';
+							instanceStatusString = 'Instanz okay';
 						} else {
 							if (!isDeviceConnected) {
-								instanceStatusString = 'not connected to Device';
+								instanceStatusString = 'Nicht verbunden mit Gerät oder Dienst';
 								isHealthy = false;
 							} else if (!isHostConnected) {
-								instanceStatusString = 'not connected to host';
+								instanceStatusString = 'Nicht verbunden mit Host';
 								isHealthy = false;
 							}
 						}
@@ -2885,7 +2885,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			instanceList = `${instanceList}\n${instanceName}: ${error}`;
 
-			msg = `Fehler einer Instanz entdeckt: \n`;
+			msg = `Instanz Watchdog: \n`;
 
 			this.log.info(msg + instanceList);
 			await this.setStateAsync('lastNotification', msg + instanceList, true);
@@ -2933,10 +2933,10 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 					if (instanceList.length > 0) {
-						this.log.info(`Instanz Fehler: ${instanceList}`);
-						this.setStateAsync('lastNotification', `Instanz Fehler: ${instanceList}`, true);
+						this.log.info(`Tägliche Instanz Meldung: ${instanceList}`);
+						this.setStateAsync('lastNotification', `Tägliche Instanz Meldung: ${instanceList}`, true);
 
-						this.sendNotification(`Instanz Fehler:\n${instanceList}`);
+						this.sendNotification(`Tägliche Instanz Meldung:\n${instanceList}`);
 					}
 				} catch (error) {
 					this.errorReporting('[sendInstanceErrorNotificationShedule]', error);
