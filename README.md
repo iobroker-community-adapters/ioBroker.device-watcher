@@ -189,6 +189,7 @@ It's possible to select:
 -   (ciddi89) Added: Proxmox Adapter ([#123](https://github.com/ciddi89/ioBroker.device-watcher/issues/123))
 -   (ciddi89) Fixed: Delete/Add data of new or deleted instance without restart ([#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125))
 -   (ciddi89) Fixed: Delete/Add data of new or deleted devices without restart ([#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125))
+-   (ciddi89) Enhancement: Schedule notifications
 
 ### 2.5.0 (2023-01-27)
 
