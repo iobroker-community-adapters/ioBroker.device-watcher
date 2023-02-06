@@ -223,14 +223,14 @@ class DeviceWatcher extends utils.Adapter {
 			//create Blacklist
 			await this.createBlacklist();
 
-			//create and fill datapoints for each adapter if selected
+			//create datapoints for each adapter if selected
 			for (const [id] of Object.entries(arrApart)) {
 				try {
 					if (!this.createOwnFolder) {
 						await this.deleteDPsForEachAdapter(id);
 						await this.deleteHtmlListDatapoints(id);
 					} else {
-						if (this.configSetAdapter !== undefined && this.configSetAdapter[id]) {
+						if (this.configSetAdapter && this.configSetAdapter[id]) {
 							await this.createDPsForEachAdapter(id);
 							// create HTML list datapoints
 							if (!this.createHtmlList) {
@@ -272,19 +272,19 @@ class DeviceWatcher extends utils.Adapter {
 			await this.refreshData();
 
 			// send overview for low battery devices
-			if (this.config.checkSendBatteryMsgDaily) await this.sendScheduleNotifications('lowBatteryDevices');
+			if (this.config.checkSendBatteryMsgDaily) this.sendScheduleNotifications('lowBatteryDevices');
 
 			// send overview of offline devices
-			if (this.config.checkSendOfflineMsgDaily) await this.sendScheduleNotifications('offlineDevices');
+			if (this.config.checkSendOfflineMsgDaily) this.sendScheduleNotifications('offlineDevices');
 
 			// send overview of upgradeable devices
-			if (this.config.checkSendUpgradeMsgDaily) await this.sendScheduleNotifications('updateDevices');
+			if (this.config.checkSendUpgradeMsgDaily) this.sendScheduleNotifications('updateDevices');
 
 			// send overview of updatable adapters
-			if (this.config.checkSendAdapterUpdateMsgDaily) await this.sendScheduleNotifications('updateAdapter');
+			if (this.config.checkSendAdapterUpdateMsgDaily) this.sendScheduleNotifications('updateAdapter');
 
 			// send overview of instances with error
-			if (this.config.checkSendInstanceFailedDaily) await this.sendScheduleNotifications('errorInstance');
+			if (this.config.checkSendInstanceFailedDaily) this.sendScheduleNotifications('errorInstance');
 		} catch (error) {
 			this.errorReporting('[onReady]', error);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -693,7 +693,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		for (const i in myBlacklist) {
 			try {
-				const blacklistParse = await this.parseData(myBlacklist[i].devices);
+				const blacklistParse = this.parseData(myBlacklist[i].devices);
 				// push devices in list to ignor device in lists
 				if (myBlacklist[i].checkIgnorLists) {
 					this.blacklistLists.push(blacklistParse.path);
@@ -719,7 +719,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		for (const i in myBlacklistInstances) {
 			try {
-				const blacklistParse = await this.parseData(myBlacklistInstances[i].instances);
+				const blacklistParse = this.parseData(myBlacklistInstances[i].instances);
 				// push devices in list to ignor device in lists
 				if (myBlacklistInstances[i].checkIgnorLists) {
 					this.blacklistInstancesLists.push(blacklistParse.path);
@@ -922,40 +922,7 @@ class DeviceWatcher extends utils.Adapter {
 			/*=============================================
 				=          		  Fill Raw Lists          	  =
 				=============================================*/
-
-			/* Add only devices with battery in the rawlist */
-			if (this.listOnlyBattery) {
-				if (isBatteryDevice) {
-					this.listAllDevicesRaw.set(currDeviceString, {
-						Path: id,
-						instanceDeviceConnectionDP: instanceDeviceConnectionDP,
-						instancedeviceConnected: instancedeviceConnected,
-						Device: deviceName,
-						adapterID: adapterID,
-						Adapter: adapter,
-						timeSelector: timeSelector,
-						isBatteryDevice: isBatteryDevice,
-						Battery: batteryHealth,
-						BatteryRaw: batteryHealthRaw,
-						batteryDP: deviceBatteryStateDP,
-						LowBat: lowBatIndicator,
-						LowBatDP: isLowBatDP,
-						faultReport: faultReportingState,
-						faultReportDP: faultReportingDP,
-						SignalStrengthDP: deviceQualityDP,
-						SignalStrength: linkQuality,
-						UnreachState: deviceUnreachState,
-						UnreachDP: unreachDP,
-						DeviceStateSelectorDP: deviceStateSelectorDP,
-						rssiPeerSelectorDP: rssiPeerSelectorDP,
-						LastContact: lastContactString,
-						Status: deviceState,
-						UpdateDP: deviceUpdateDP,
-						Upgradable: isUpgradable,
-					});
-				}
-			} else {
-				/* Add all devices */
+			const setupList = () => {
 				this.listAllDevicesRaw.set(currDeviceString, {
 					Path: id,
 					instanceDeviceConnectionDP: instanceDeviceConnectionDP,
@@ -983,6 +950,15 @@ class DeviceWatcher extends utils.Adapter {
 					UpdateDP: deviceUpdateDP,
 					Upgradable: isUpgradable,
 				});
+			};
+
+			if (!this.listOnlyBattery) {
+				// Add all devices
+				setupList();
+			} else {
+				// Add only devices with battery in the rawlist
+				if (!isBatteryDevice) continue;
+				setupList();
 			}
 		} // <-- end of loop
 	} // <-- end of createData
@@ -1258,7 +1234,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} selector - Selector
 	 */
 	async getLastContact(selector) {
-		const lastContact = await this.getTimestamp(selector);
+		const lastContact = this.getTimestamp(selector);
 		let lastContactString;
 
 		lastContactString = this.formatDate(new Date(selector), 'hh:mm') + ' Uhr';
@@ -1291,8 +1267,8 @@ class DeviceWatcher extends utils.Adapter {
 				const deviceUnreachSelector = await this.getForeignStateAsync(unreachDP);
 				const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorDP); // for hmrpc devices
 				const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorDP);
-				const lastContact = await this.getTimestamp(deviceTimeSelector.ts);
-				const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? await this.getTimestamp(deviceUnreachSelector.lc) : await this.getTimestamp(timeSelector.ts);
+				const lastContact = this.getTimestamp(deviceTimeSelector.ts);
+				const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? this.getTimestamp(deviceUnreachSelector.lc) : this.getTimestamp(timeSelector.ts);
 				//  If there is no contact since user sets minutes add device in offline list
 				// calculate to days after 48 hours
 				switch (unreachDP) {
@@ -1752,19 +1728,19 @@ class DeviceWatcher extends utils.Adapter {
 			//write HTML list
 			if (this.createHtmlList) {
 				await this.setStateAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
-					val: await this.creatLinkQualityListHTML(this.linkQualityDevices, this.linkQualityCount),
+					val: await this.createListHTML('linkQualityList', this.linkQualityDevices, this.linkQualityCount, null),
 					ack: true,
 				});
 				await this.setStateAsync(`devices.${dpSubFolder}offlineListHTML`, {
-					val: await this.createOfflineListHTML(this.offlineDevices, this.offlineDevicesCount),
+					val: await this.createListHTML('offlineList', this.offlineDevices, this.offlineDevicesCount, null),
 					ack: true,
 				});
 				await this.setStateAsync(`devices.${dpSubFolder}batteryListHTML`, {
-					val: await this.createBatteryListHTML(this.batteryPowered, this.batteryPoweredCount, false),
+					val: await this.createListHTML('batteryList', this.batteryPowered, this.batteryPoweredCount, false),
 					ack: true,
 				});
 				await this.setStateAsync(`devices.${dpSubFolder}lowBatteryListHTML`, {
-					val: await this.createBatteryListHTML(this.batteryLowPowered, this.lowBatteryPoweredCount, true),
+					val: await this.createListHTML('batteryList', this.batteryLowPowered, this.lowBatteryPoweredCount, true),
 					ack: true,
 				});
 			}
@@ -1903,7 +1879,7 @@ class DeviceWatcher extends utils.Adapter {
 			case 'schedule':
 				if (isAliveSchedule) {
 					lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
-					previousCronRun = await this.getPreviousCronRun(scheduleTime); // When was the last cron run
+					previousCronRun = this.getPreviousCronRun(scheduleTime); // When was the last cron run
 					if (previousCronRun) {
 						lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
 						diff = lastCronRun - lastUpdate;
@@ -1985,7 +1961,7 @@ class DeviceWatcher extends utils.Adapter {
 		let adapterUpdatesJsonPath;
 
 		for (const [id] of Object.entries(adapterUpdatesListVal)) {
-			adapterJsonList = await this.parseData(adapterUpdatesListVal[id].val);
+			adapterJsonList = this.parseData(adapterUpdatesListVal[id].val);
 			adapterUpdatesJsonPath = id;
 		}
 
@@ -2578,7 +2554,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * Notifications per user defined schedule
 	 * @param {string} type
 	 */
-	async sendScheduleNotifications(type) {
+	sendScheduleNotifications(type) {
 		if (isUnloaded) return;
 
 		let time;
@@ -2766,117 +2742,112 @@ class DeviceWatcher extends utils.Adapter {
 	/*=============================================
 	=       functions to create html lists        =
 	=============================================*/
-
 	/**
+	 * @param {string} type - type of list
 	 * @param {object} devices - Device
 	 * @param {number} deviceCount - Counted devices
+	 * @param {object} isLowBatteryList - list Low Battery Devices
 	 */
-	async creatLinkQualityListHTML(devices, deviceCount) {
-		devices = devices.sort((a, b) => {
-			a = a.Device || '';
-			b = b.Device || '';
-			return a.localeCompare(b);
-		});
-		let html = `<center>
-		<b>Link Quality Devices:<font> ${deviceCount}</b><small></small></font>
-		<p></p>
-		</center>   
-		<table width=100%>
-		<tr>
-		<th align=left>Device</th>
-		<th align=center width=120>Adapter</th>
-		<th align=right>Link Quality</th>
-		</tr>
-		<tr>
-		<td colspan="5"><hr></td>
-		</tr>`;
-
-		for (const device of devices) {
-			html += `<tr>
-			<td><font>${device.Device}</font></td>
-			<td align=center><font>${device.Adapter}</font></td>
-			<td align=right><font>${device['Signal strength']}</font></td>
+	async createListHTML(type, devices, deviceCount, isLowBatteryList) {
+		let html;
+		switch (type) {
+			case 'linkQualityList':
+				devices = devices.sort((a, b) => {
+					a = a.Device || '';
+					b = b.Device || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+			<b>Link Quality Devices:<font> ${deviceCount}</b><small></small></font>
+			<p></p>
+			</center>   
+			<table width=100%>
+			<tr>
+			<th align=left>Device</th>
+			<th align=center width=120>Adapter</th>
+			<th align=right>Link Quality</th>
+			</tr>
+			<tr>
+			<td colspan="5"><hr></td>
 			</tr>`;
-		}
 
-		html += '</table>';
-		return html;
-	}
+				for (const device of devices) {
+					html += `<tr>
+				<td><font>${device.Device}</font></td>
+				<td align=center><font>${device.Adapter}</font></td>
+				<td align=right><font>${device['Signal strength']}</font></td>
+				</tr>`;
+				}
 
-	/**
-	 * @param {object} devices - Device
-	 * @param {number} deviceCount - Counted devices
-	 */
-	async createOfflineListHTML(devices, deviceCount) {
-		devices = devices.sort((a, b) => {
-			a = a.Device || '';
-			b = b.Device || '';
-			return a.localeCompare(b);
-		});
-		let html = `<center>
-		<b>Offline Devices: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
-		<p></p>
-		</center>   
-		<table width=100%>
-		<tr>
-		<th align=left>Device</th>
-		<th align=center width=120>Adapter</th>
-		<th align=center>Letzter Kontakt</th>
-		</tr>
-		<tr>
-		<td colspan="5"><hr></td>
-		</tr>`;
+				html += '</table>';
+				break;
 
-		for (const device of devices) {
-			html += `<tr>
-			<td><font>${device.Device}</font></td>
-			<td align=center><font>${device.Adapter}</font></td>
-			<td align=center><font color=orange>${device['Last contact']}</font></td>
+			case 'offlineList':
+				devices = devices.sort((a, b) => {
+					a = a.Device || '';
+					b = b.Device || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+			<b>Offline Devices: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
+			<p></p>
+			</center>   
+			<table width=100%>
+			<tr>
+			<th align=left>Device</th>
+			<th align=center width=120>Adapter</th>
+			<th align=center>Letzter Kontakt</th>
+			</tr>
+			<tr>
+			<td colspan="5"><hr></td>
 			</tr>`;
+
+				for (const device of devices) {
+					html += `<tr>
+				<td><font>${device.Device}</font></td>
+				<td align=center><font>${device.Adapter}</font></td>
+				<td align=center><font color=orange>${device['Last contact']}</font></td>
+				</tr>`;
+				}
+
+				html += '</table>';
+				break;
+
+			case 'batteryList':
+				devices = devices.sort((a, b) => {
+					a = a.Device || '';
+					b = b.Device || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+			<b>${isLowBatteryList === true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
+			<p></p>
+			</center>   
+			<table width=100%>
+			<tr>
+			<th align=left>Device</th>
+			<th align=center width=120>Adapter</th>
+			<th align=${isLowBatteryList ? 'center' : 'right'}>Batterie</th>
+			</tr>
+			<tr>
+			<td colspan="5"><hr></td>
+			</tr>`;
+				for (const device of devices) {
+					html += `<tr>
+				<td><font>${device.Device}</font></td>
+				<td align=center><font>${device.Adapter}</font></td>`;
+
+					if (isLowBatteryList) {
+						html += `<td align=center><font color=orange>${device.Battery}</font></td>`;
+					} else {
+						html += `<td align=right><font color=#3bcf0e>${device.Battery}</font></td>`;
+					}
+					html += `</tr>`;
+				}
+
+				html += '</table>';
+				break;
 		}
-
-		html += '</table>';
-		return html;
-	}
-
-	/**
-	 * @param {object} [devices] - Device
-	 * @param {object} [deviceCount] - Counted devices
-	 * @param {object} [isLowBatteryList] - list Low Battery Devices
-	 */
-	async createBatteryListHTML(devices, deviceCount, isLowBatteryList) {
-		devices = devices.sort((a, b) => {
-			a = a.Device || '';
-			b = b.Device || '';
-			return a.localeCompare(b);
-		});
-		let html = `<center>
-		<b>${isLowBatteryList === true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
-		<p></p>
-		</center>   
-		<table width=100%>
-		<tr>
-		<th align=left>Device</th>
-		<th align=center width=120>Adapter</th>
-		<th align=${isLowBatteryList ? 'center' : 'right'}>Batterie</th>
-		</tr>
-		<tr>
-		<td colspan="5"><hr></td>
-		</tr>`;
-		for (const device of devices) {
-			html += `<tr>
-			<td><font>${device.Device}</font></td>
-			<td align=center><font>${device.Adapter}</font></td>`;
-
-			if (isLowBatteryList) {
-				html += `<td align=center><font color=orange>${device.Battery}</font></td>`;
-			} else {
-				html += `<td align=right><font color=#3bcf0e>${device.Battery}</font></td>`;
-			}
-			html += `</tr>`;
-		}
-
-		html += '</table>';
 		return html;
 	}
 
@@ -3389,7 +3360,7 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * @param {number} dpValue - get Time of this datapoint
 	 */
-	async getTimestamp(dpValue) {
+	getTimestamp(dpValue) {
 		const time = new Date();
 		return (dpValue = Math.round((time.getTime() - dpValue) / 1000 / 60));
 	}
@@ -3434,7 +3405,7 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * @param {object} data - object
 	 */
-	async parseData(data) {
+	parseData(data) {
 		if (!data) return {};
 		if (typeof data === 'object') return data;
 		if (typeof data === 'string') return JSON.parse(data);
@@ -3456,7 +3427,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * Inspired by https://stackoverflow.com/questions/68134104/
 	 * @param {string} lastCronRun
 	 */
-	async getPreviousCronRun(lastCronRun) {
+	getPreviousCronRun(lastCronRun) {
 		try {
 			const interval = cronParser.parseExpression(lastCronRun);
 			const previous = interval.prev();
