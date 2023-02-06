@@ -26,8 +26,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		// instances and adapters
 		// raw arrays
-		this.adapterUpdatesJsonRaw = [];
 		this.listInstanceRaw = new Map();
+		this.adapterUpdatesJsonRaw = [];
 		this.listErrorInstanceRaw = [];
 
 		// user arrays
@@ -43,6 +43,12 @@ class DeviceWatcher extends utils.Adapter {
 		this.countErrorInstance = 0;
 
 		// devices
+		// raw arrays
+		this.listAllDevicesRaw = new Map();
+		this.batteryLowPoweredRaw = [];
+		this.offlineDevicesRaw = [];
+		this.upgradableDevicesRaw = [];
+
 		// arrays
 		this.offlineDevices = [];
 		this.linkQualityDevices = [];
@@ -52,12 +58,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.selAdapter = [];
 		this.adapterSelected = [];
 		this.upgradableList = [];
-
-		// raw arrays
-		this.listAllDevicesRaw = new Map();
-		this.batteryLowPoweredRaw = [];
-		this.offlineDevicesRaw = [];
-		this.upgradableDevicesRaw = [];
 
 		// counts
 		this.offlineDevicesCount = 0;
@@ -607,7 +607,11 @@ class DeviceWatcher extends utils.Adapter {
 
 		// fill counts and lists of all selected adapter
 		try {
-			await this.createDataOfAllAdapter();
+			for (let i = 0; i < this.selAdapter.length; i++) {
+				await this.createData(i);
+				await this.createLists();
+			}
+			await this.writeDatapoints(); // fill the datapoints
 			this.log.debug(`Created and filled data for all adapters`);
 		} catch (error) {
 			this.errorReporting('[main - create data of all adapter]', error);
@@ -617,8 +621,13 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.createOwnFolder) {
 			try {
 				for (const [id] of Object.entries(arrApart)) {
-					if (this.configSetAdapter !== undefined && this.configSetAdapter[id]) {
-						await this.createDataForEachAdapter(id);
+					if (this.configSetAdapter && this.configSetAdapter[id]) {
+						for (const deviceData of this.listAllDevicesRaw.values()) {
+							// list device only if selected adapter matched with device
+							if (!deviceData.adapterID.includes(id)) continue;
+							await this.createLists(id);
+						}
+						await this.writeDatapoints(id); // fill the datapoints
 						this.log.debug(`Created and filled data for ${this.capitalize(id)}`);
 					}
 				}
@@ -643,7 +652,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (this.createOwnFolder) {
 			for (const [id] of Object.entries(arrApart)) {
-				if (this.configSetAdapter !== undefined && this.configSetAdapter[id]) {
+				if (this.configSetAdapter && this.configSetAdapter[id]) {
 					await this.createLists(id);
 					await this.writeDatapoints(id);
 					this.log.debug(`Created and filled data for ${this.capitalize(id)}`);
@@ -1524,12 +1533,10 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.config.createOwnFolder && adptName !== '') {
-				if (deviceData.adapterID.includes(adptName)) {
-					/*----------  fill user lists for each adapter  ----------*/
-					if (!this.blacklistAdapterLists.includes(deviceData.Path)) {
-						await this.theLists(deviceData);
-					}
-				}
+				if (!deviceData.adapterID.includes(adptName)) continue;
+				/*----------  fill user lists for each adapter  ----------*/
+				if (this.blacklistAdapterLists.includes(deviceData.Path)) continue;
+				await this.theLists(deviceData);
 			}
 		}
 		await this.countDevices();
@@ -1618,47 +1625,6 @@ class DeviceWatcher extends utils.Adapter {
 		// Count how many devices has update available
 		this.upgradableDevicesCount = this.upgradableList.length;
 	}
-
-	/**
-	 * @param {string} adptName - Adapter name
-	 */
-	async createDataForEachAdapter(adptName) {
-		// create Data for each Adapter in own lists
-		this.log.debug(`Function started: ${this.createDataForEachAdapter.name}`);
-
-		try {
-			for (const deviceData of this.listAllDevicesRaw.values()) {
-				if (deviceData.adapterID.includes(adptName)) {
-					// list device only if selected adapter matched with device
-					await this.createLists(adptName);
-				}
-			}
-			await this.writeDatapoints(adptName); // fill the datapoints
-		} catch (error) {
-			this.errorReporting('[createDataForEachAdapter]', error);
-		}
-
-		this.log.debug(`Function finished: ${this.createDataForEachAdapter.name}`);
-	} // <-- end of createDataForEachAdapter
-
-	/**
-	 * create Data of all selected adapter in one list
-	 */
-	async createDataOfAllAdapter() {
-		this.log.debug(`Function started: ${this.createDataOfAllAdapter.name}`);
-
-		try {
-			for (let i = 0; i < this.selAdapter.length; i++) {
-				await this.createData(i);
-				await this.createLists();
-			}
-			await this.writeDatapoints(); // fill the datapoints
-		} catch (error) {
-			this.errorReporting('[createDataOfAllAdapter]', error);
-		}
-
-		this.log.debug(`Function finished: ${this.createDataOfAllAdapter.name}`);
-	} // <-- end of createDataOfAllAdapter
 
 	/**
 	 * @param {string} [adptName] - Adaptername
@@ -2650,13 +2616,12 @@ class DeviceWatcher extends utils.Adapter {
 				schedule.scheduleJob(cron, () => {
 					list = '';
 					for (const id of this.batteryLowPoweredRaw) {
-						if (!this.blacklistNotify.includes(id.Path)) {
-							if (!this.config.showAdapterNameinMsg) {
-								list = `${list}\n${id.Device} (${id.Battery})`;
-							} else {
-								// Add adaptername if checkbox is checked true in options by user
-								list = `${list}\n${id.Adapter}: ${id.Device} (${id.Battery})`;
-							}
+						if (this.blacklistNotify.includes(id.Path)) continue;
+						if (!this.config.showAdapterNameinMsg) {
+							list = `${list}\n${id.Device} (${id.Battery})`;
+						} else {
+							// Add adaptername if checkbox is checked true in options by user
+							list = `${list}\n${id.Adapter}: ${id.Device} (${id.Battery})`;
 						}
 					}
 					if (list.length === 0) return;
@@ -2687,12 +2652,11 @@ class DeviceWatcher extends utils.Adapter {
 					list = '';
 
 					for (const id of this.offlineDevicesRaw) {
-						if (!this.blacklistNotify.includes(id.Path)) {
-							if (!this.config.showAdapterNameinMsg) {
-								list = `${list}\n${id.Device} (${id.LastContact})`;
-							} else {
-								list = `${list}\n${id.Adapter}: ${id.Device} (${id.LastContact})`;
-							}
+						if (this.blacklistNotify.includes(id.Path)) continue;
+						if (!this.config.showAdapterNameinMsg) {
+							list = `${list}\n${id.Device} (${id.LastContact})`;
+						} else {
+							list = `${list}\n${id.Adapter}: ${id.Device} (${id.LastContact})`;
 						}
 					}
 
@@ -2724,12 +2688,11 @@ class DeviceWatcher extends utils.Adapter {
 					list = '';
 
 					for (const id of this.upgradableDevicesRaw) {
-						if (!this.blacklistNotify.includes(id.Path)) {
-							if (!this.config.showAdapterNameinMsg) {
-								list = `${list}\n${id.Device}`;
-							} else {
-								list = `${list}\n${id.Adapter}: ${id.Device}`;
-							}
+						if (this.blacklistNotify.includes(id.Path)) continue;
+						if (!this.config.showAdapterNameinMsg) {
+							list = `${list}\n${id.Device}`;
+						} else {
+							list = `${list}\n${id.Adapter}: ${id.Device}`;
 						}
 					}
 					if (list.length === 0) return;
@@ -2789,9 +2752,8 @@ class DeviceWatcher extends utils.Adapter {
 					list = '';
 
 					for (const id of this.listErrorInstanceRaw) {
-						if (!this.blacklistInstancesNotify.includes(id.instanceAlivePath)) {
-							list = `${list}\n${id.Instance}: ${id.Status}`;
-						}
+						if (this.blacklistInstancesNotify.includes(id.instanceAlivePath)) continue;
+						list = `${list}\n${id.Instance}: ${id.Status}`;
 					}
 					if (list.length === 0) return;
 					message = `Tägliche Meldung über fehlerhafte Instanzen: ${list}`;
