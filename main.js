@@ -902,8 +902,8 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			/*=============================================
-				=            Get update data	              =
-				=============================================*/
+			=            Get update data	              =
+			=============================================*/
 			const deviceUpdateDP = currDeviceString + this.selAdapter[i].upgrade;
 			let isUpgradable;
 
