@@ -1622,7 +1622,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		// Device update List
-		if (device.Upgradable) {
+		if (device.Upgradable === true) {
 			this.upgradableList.push({
 				Device: device.Device,
 				Adapter: device.Adapter,
