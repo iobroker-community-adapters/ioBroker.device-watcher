@@ -80,6 +80,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Interval timer
 		this.refreshDataTimeout = null;
+		this.waitTimeout = null;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -3536,7 +3537,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	wait(time) {
 		return new Promise(function (resolve) {
-			setTimeout(resolve, time);
+			this.waitTimeout = setTimeout(resolve, time);
 		});
 	}
 
@@ -3584,6 +3585,10 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.refreshDataTimeout) {
 				this.log.debug('clearing refresh timeout');
 				this.clearTimeout(this.refreshDataTimeout);
+			}
+			if (this.waitTimeout) {
+				this.log.debug('clearing wait timeout');
+				this.clearTimeout(this.waitTimeout);
 			}
 			isUnloaded = true;
 
