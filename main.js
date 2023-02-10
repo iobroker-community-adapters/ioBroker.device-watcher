@@ -1546,7 +1546,6 @@ class DeviceWatcher extends utils.Adapter {
 			isLowBat: device.LowBat,
 			'Signal strength': device.SignalStrength,
 			'Last contact': device.LastContact,
-			'Device Error': device.faultReport,
 			'Update Available': device.Upgradable,
 			Status: device.Status,
 		});
@@ -1657,9 +1656,30 @@ class DeviceWatcher extends utils.Adapter {
 			// List all devices
 			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
-				this.listAllDevices = [{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' }];
+				this.listAllDevices = [
+					{
+						Device: '--none--',
+						Adapter: '',
+						Battery: '',
+						'Signal strength': '',
+						'Last contact': '',
+						Status: '',
+					},
+				];
 				this.listAllDevicesUserRaw = [
-					{ Device: '--none--', Adapter: '', Instance: '', Battery: '', isLowBat: '', 'Signal strength': '', 'Last contact': '', isFault: '', UpdateAvailable: '', Status: '' },
+					{
+						Device: '--none--',
+						Adapter: '',
+						Instance: '',
+						'Instance connected': '',
+						isBatteryDevice: '',
+						Battery: '',
+						isLowBat: '',
+						'Signal strength': '',
+						'Last contact': '',
+						UpdateAvailable: '',
+						Status: '',
+					},
 				];
 			}
 			await this.setStateAsync(`devices.${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
@@ -1668,7 +1688,13 @@ class DeviceWatcher extends utils.Adapter {
 			// List link quality
 			if (this.linkQualityCount === 0) {
 				// if no device is count, write the JSON List with default value
-				this.linkQualityDevices = [{ Device: '--none--', Adapter: '', 'Signal strength': '' }];
+				this.linkQualityDevices = [
+					{
+						Device: '--none--',
+						Adapter: '',
+						'Signal strength': '',
+					},
+				];
 			}
 			//write JSON list
 			await this.setStateAsync(`devices.${dpSubFolder}linkQualityList`, {
@@ -1679,7 +1705,13 @@ class DeviceWatcher extends utils.Adapter {
 			// List offline devices
 			if (this.offlineDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
-				this.offlineDevices = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
+				this.offlineDevices = [
+					{
+						Device: '--none--',
+						Adapter: '',
+						'Last contact': '',
+					},
+				];
 			}
 			//write JSON list
 			await this.setStateAsync(`devices.${dpSubFolder}offlineList`, {
@@ -1690,7 +1722,13 @@ class DeviceWatcher extends utils.Adapter {
 			// List updatable
 			if (this.upgradableDevicesCount === 0) {
 				// if no device is count, write the JSON List with default value
-				this.upgradableList = [{ Device: '--none--', Adapter: '', 'Last contact': '' }];
+				this.upgradableList = [
+					{
+						Device: '--none--',
+						Adapter: '',
+						'Last contact': '',
+					},
+				];
 			}
 			//write JSON list
 			await this.setStateAsync(`devices.${dpSubFolder}upgradableList`, {
