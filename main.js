@@ -50,11 +50,12 @@ class DeviceWatcher extends utils.Adapter {
 		this.upgradableDevicesRaw = [];
 
 		// arrays
+		this.listAllDevicesUserRaw = [];
+		this.listAllDevices = [];
 		this.offlineDevices = [];
 		this.linkQualityDevices = [];
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
-		this.listAllDevices = [];
 		this.selAdapter = [];
 		this.adapterSelected = [];
 		this.upgradableList = [];
@@ -94,9 +95,10 @@ class DeviceWatcher extends utils.Adapter {
 		this.log.debug(`Adapter ${adapterName} was started`);
 
 		try {
-			this.listOnlyBattery = this.config.listOnlyBattery;
-			this.createOwnFolder = this.config.createOwnFolder;
-			this.createHtmlList = this.config.createHtmlList;
+			this.configCreateInstanceList = this.config.checkAdapterInstances;
+			this.configListOnlyBattery = this.config.listOnlyBattery;
+			this.configCreateOwnFolder = this.config.createOwnFolder;
+			this.configCreateHtmlList = this.config.createHtmlList;
 
 			this.configSetAdapter = {
 				alexa2: this.config.alexa2Devices,
@@ -226,14 +228,14 @@ class DeviceWatcher extends utils.Adapter {
 			//create datapoints for each adapter if selected
 			for (const [id] of Object.entries(arrApart)) {
 				try {
-					if (!this.createOwnFolder) {
+					if (!this.configCreateOwnFolder) {
 						await this.deleteDPsForEachAdapter(id);
 						await this.deleteHtmlListDatapoints(id);
 					} else {
 						if (this.configSetAdapter && this.configSetAdapter[id]) {
 							await this.createDPsForEachAdapter(id);
 							// create HTML list datapoints
-							if (!this.createHtmlList) {
+							if (!this.configCreateHtmlList) {
 								await this.deleteHtmlListDatapoints(id);
 							} else {
 								await this.createHtmlListDatapoints(id);
@@ -247,7 +249,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// create HTML list datapoints
-			if (!this.createHtmlList) {
+			if (!this.configCreateHtmlList) {
 				await this.deleteHtmlListDatapoints();
 			} else {
 				await this.createHtmlListDatapoints();
@@ -258,14 +260,14 @@ class DeviceWatcher extends utils.Adapter {
 			await this.main();
 
 			// instances and adapters
-			if (!this.config.checkAdapterInstances) {
-				await this.deleteDPsForInstances();
-			} else {
+			if (this.configCreateInstanceList) {
 				// instances
 				await this.createDPsForInstances();
 				await this.getAllInstanceData();
 				// adapter updates
 				await this.createAdapterUpdateData();
+			} else {
+				await this.deleteDPsForInstances();
 			}
 
 			// update last contact data in interval
@@ -618,7 +620,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		// fill datapoints for each adapter if selected
-		if (this.createOwnFolder) {
+		if (this.configCreateOwnFolder) {
 			try {
 				for (const [id] of Object.entries(arrApart)) {
 					if (this.configSetAdapter && this.configSetAdapter[id]) {
@@ -646,11 +648,13 @@ class DeviceWatcher extends utils.Adapter {
 	async refreshData() {
 		const nextTimeout = this.config.updateinterval * 1000;
 
+		// devices data
 		await this.checkLastContact();
 		await this.createLists();
 		await this.writeDatapoints();
 
-		if (this.createOwnFolder) {
+		// devices data in own adapter folder
+		if (this.configCreateOwnFolder) {
 			for (const [id] of Object.entries(arrApart)) {
 				if (this.configSetAdapter && this.configSetAdapter[id]) {
 					await this.createLists(id);
@@ -660,7 +664,8 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		}
 
-		if (this.config.checkAdapterInstances) {
+		// instance and adapter data
+		if (this.configCreateInstanceList) {
 			await this.createInstanceList();
 			await this.writeInstanceDPs();
 		}
@@ -910,11 +915,16 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.config.checkSendDeviceUpgrade) {
 				const deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
 
-				if (deviceUpdateSelector) {
-					isUpgradable = true;
-				} else if (!deviceUpdateSelector) {
-					isUpgradable = false;
+				if (deviceUpdateSelector !== undefined) {
+					if (deviceUpdateSelector) {
+						isUpgradable = true;
+					} else if (!deviceUpdateSelector) {
+						isUpgradable = false;
+					}
+				} else {
+					isUpgradable = ' - ';
 				}
+
 				// subscribe to states
 				this.subscribeForeignStates(deviceUpdateDP);
 			}
@@ -927,6 +937,7 @@ class DeviceWatcher extends utils.Adapter {
 					Path: id,
 					instanceDeviceConnectionDP: instanceDeviceConnectionDP,
 					instancedeviceConnected: instancedeviceConnected,
+					instance: instance,
 					Device: deviceName,
 					adapterID: adapterID,
 					Adapter: adapter,
@@ -952,7 +963,7 @@ class DeviceWatcher extends utils.Adapter {
 				});
 			};
 
-			if (!this.listOnlyBattery) {
+			if (!this.configListOnlyBattery) {
 				// Add all devices
 				setupList();
 			} else {
@@ -1463,6 +1474,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.linkQualityDevices = [];
 		this.batteryPowered = [];
 		this.batteryLowPowered = [];
+		this.listAllDevicesUserRaw = [];
 		this.listAllDevices = [];
 		this.offlineDevices = [];
 		this.batteryLowPoweredRaw = [];
@@ -1523,6 +1535,22 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} device
 	 */
 	async theLists(device) {
+		// Raw List with all devices for user
+		this.listAllDevicesUserRaw.push({
+			Device: device.Device,
+			Adapter: device.Adapter,
+			Instance: device.instance,
+			'Instance connected': device.instancedeviceConnected,
+			isBatteryDevice: device.isBatteryDevice,
+			Battery: device.Battery,
+			isLowBat: device.LowBat,
+			'Signal strength': device.SignalStrength,
+			'Last contact': device.LastContact,
+			'Device Error': device.faultReport,
+			'Update Available': device.Upgradable,
+			Status: device.Status,
+		});
+
 		// List with all devices
 		this.listAllDevices.push({
 			Device: device.Device,
@@ -1630,8 +1658,12 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [{ Device: '--none--', Adapter: '', Battery: '', 'Last contact': '', 'Signal strength': '' }];
+				this.listAllDevicesUserRaw = [
+					{ Device: '--none--', Adapter: '', Instance: '', Battery: '', isLowBat: '', 'Signal strength': '', 'Last contact': '', isFault: '', UpdateAvailable: '', Status: '' },
+				];
 			}
 			await this.setStateAsync(`devices.${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
+			await this.setStateAsync(`devices.${dpSubFolder}listAllRawJSON`, { val: JSON.stringify(this.listAllDevicesUserRaw), ack: true });
 
 			// List link quality
 			if (this.linkQualityCount === 0) {
@@ -1726,7 +1758,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			//write HTML list
-			if (this.createHtmlList) {
+			if (this.configCreateHtmlList) {
 				await this.setStateAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
 					val: await this.createListHTML('linkQualityList', this.linkQualityDevices, this.linkQualityCount, null),
 					ack: true,
@@ -2938,6 +2970,30 @@ class DeviceWatcher extends utils.Adapter {
 			native: {},
 		});
 
+		await this.setObjectNotExistsAsync(`devices.${adptName}.listAllRawJSON`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON RAW List of all devices',
+					de: 'JSON RAW Liste aller Geräte',
+					ru: 'ДЖСОН РАВ Список всех устройств',
+					pt: 'JSON RAW Lista de todos os dispositivos',
+					nl: 'JSON RAW List van alle apparaten',
+					fr: 'JSON RAW Liste de tous les dispositifs',
+					it: 'JSON RAW Elenco di tutti i dispositivi',
+					es: 'JSON RAW Lista de todos los dispositivos',
+					pl: 'JSON RAW Lista wszystkich urządzeń',
+					uk: 'ДЖСОН РАВ Список всіх пристроїв',
+					'zh-cn': 'JSONRAW 所有装置清单',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
 		await this.setObjectNotExistsAsync(`devices.${adptName}.listAll`, {
 			type: 'state',
 			common: {
@@ -3207,6 +3263,7 @@ class DeviceWatcher extends utils.Adapter {
 		await this.delObjectAsync(`devices.${adptName}.offlineCount`);
 		await this.delObjectAsync(`devices.${adptName}.offlineList`);
 		await this.delObjectAsync(`devices.${adptName}.oneDeviceOffline`);
+		await this.delObjectAsync(`devices.${adptName}.listAllRawJSON`);
 		await this.delObjectAsync(`devices.${adptName}.listAll`);
 		await this.delObjectAsync(`devices.${adptName}.linkQualityList`);
 		await this.delObjectAsync(`devices.${adptName}.countAll`);
