@@ -337,6 +337,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (id && state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
 			let batteryData;
+			let signalData;
 			let oldLowBatState;
 			let contactData;
 			let oldStatus;
@@ -442,7 +443,9 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 
 					case deviceData.SignalStrengthDP:
-						deviceData.SignalStrength = await this.calculateSignalStrength(state, deviceData.adapterID);
+						signalData = await this.calculateSignalStrength(state, deviceData.adapterID);
+						deviceData.SignalStrength = signalData[0];
+
 						break;
 
 					case deviceData.batteryDP:
@@ -808,7 +811,9 @@ class DeviceWatcher extends utils.Adapter {
 			//subscribe to states
 			this.subscribeForeignStates(deviceQualityDP);
 
-			let linkQuality = await this.calculateSignalStrength(deviceQualityState, adapterID);
+			const signalData = await this.calculateSignalStrength(deviceQualityState, adapterID);
+			let linkQuality = signalData[0];
+			const linkQualityRaw = signalData[1];
 
 			/*=============================================
 				=         	    Get battery data       	      =
@@ -952,6 +957,7 @@ class DeviceWatcher extends utils.Adapter {
 					faultReportDP: faultReportingDP,
 					SignalStrengthDP: deviceQualityDP,
 					SignalStrength: linkQuality,
+					SignalStrengthRaw: linkQualityRaw,
 					UnreachState: deviceUnreachState,
 					UnreachDP: unreachDP,
 					DeviceStateSelectorDP: deviceStateSelectorDP,
@@ -1073,6 +1079,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async calculateSignalStrength(deviceQualityState, adapterID) {
 		let linkQuality;
+		let linkQualityRaw;
 		let mqttNukiValue;
 
 		if (deviceQualityState != null) {
@@ -1086,6 +1093,7 @@ class DeviceWatcher extends utils.Adapter {
 							case 'sonoff':
 							case 'smartgarden':
 								linkQuality = deviceQualityState.val + '%'; // If quality state is already an percent value
+								linkQualityRaw = deviceQualityState.val;
 								break;
 							case 'lupusec':
 								linkQuality = deviceQualityState.val;
@@ -1097,9 +1105,12 @@ class DeviceWatcher extends utils.Adapter {
 									linkQuality = ' - ';
 								} else if (deviceQualityState.val < 0) {
 									linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
+									linkQualityRaw = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100);
+
 									// If Quality State is an value between 0-255 (zigbee) calculate in percent:
 								} else if (deviceQualityState.val >= 0) {
 									linkQuality = parseFloat(((100 / 255) * deviceQualityState.val).toFixed(0)) + '%';
+									linkQualityRaw = parseFloat(((100 / 255) * deviceQualityState.val).toFixed(0));
 								}
 								break;
 						}
@@ -1122,7 +1133,7 @@ class DeviceWatcher extends utils.Adapter {
 								linkQuality = deviceQualityState.val;
 							} else if (mqttNukiValue < 0) {
 								linkQuality = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100) + '%';
-								// If Quality State is an value between 0-255 (zigbee) calculate in percent:
+								linkQualityRaw = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100);
 							}
 					}
 					break;
@@ -1130,7 +1141,7 @@ class DeviceWatcher extends utils.Adapter {
 		} else {
 			linkQuality = ' - ';
 		}
-		return linkQuality;
+		return [linkQuality, linkQualityRaw];
 	}
 
 	/**
@@ -1546,6 +1557,7 @@ class DeviceWatcher extends utils.Adapter {
 			BatteryRaw: device.BatteryRaw,
 			isLowBat: device.LowBat,
 			'Signal strength': device.SignalStrength,
+			'Signal strength Raw': device.SignalStrengthRaw,
 			'Last contact': device.LastContact,
 			'Update Available': device.Upgradable,
 			Status: device.Status,
