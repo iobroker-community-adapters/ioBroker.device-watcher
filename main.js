@@ -3536,9 +3536,11 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {number} time
 	 */
 	wait(time) {
-		return new Promise(function (resolve) {
-			this.waitTimeout = setTimeout(resolve, time);
-		});
+		if (!isUnloaded) {
+			return (this.waitTimeout = this.setTimeout(() => {
+				this.waitTimeout = null;
+			}, time));
+		}
 	}
 
 	/**
