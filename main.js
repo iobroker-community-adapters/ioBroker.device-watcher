@@ -455,6 +455,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							deviceData.Battery = batteryData[0];
 							deviceData.BatteryRaw = batteryData[2];
+							deviceData.BatteryUnitRaw = batteryData[3];
 							if (deviceData.LowBatDP !== 'none') {
 								isLowBatValue = await this.getInitValue(deviceData.LowBatDP);
 							} else {
@@ -476,6 +477,7 @@ class DeviceWatcher extends utils.Adapter {
 							batteryData = await this.getBatteryData(deviceData.BatteryRaw, state.val, deviceData.adapterID);
 							deviceData.Battery = batteryData[0];
 							deviceData.BatteryRaw = batteryData[2];
+							deviceData.BatteryUnitRaw = batteryData[3];
 							deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
 
 							if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
@@ -493,6 +495,7 @@ class DeviceWatcher extends utils.Adapter {
 
 							deviceData.Battery = batteryData[0];
 							deviceData.BatteryRaw = batteryData[2];
+							deviceData.BatteryUnitRaw = batteryData[3];
 							deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, undefined, state.val, deviceData.adapterID);
 
 							if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
@@ -822,6 +825,7 @@ class DeviceWatcher extends utils.Adapter {
 			let deviceBatteryState;
 			let batteryHealth;
 			let batteryHealthRaw;
+			let batteryUnitRaw;
 			let lowBatIndicator;
 			let isBatteryDevice;
 			let isLowBatDP;
@@ -874,6 +878,7 @@ class DeviceWatcher extends utils.Adapter {
 				const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
 				batteryHealth = batteryData[0];
 				batteryHealthRaw = batteryData[2];
+				batteryUnitRaw = batteryData[3];
 				isBatteryDevice = batteryData[1];
 
 				if (isBatteryDevice) {
@@ -950,6 +955,7 @@ class DeviceWatcher extends utils.Adapter {
 					isBatteryDevice: isBatteryDevice,
 					Battery: batteryHealth,
 					BatteryRaw: batteryHealthRaw,
+					BatteryUnitRaw: batteryUnitRaw,
 					batteryDP: deviceBatteryStateDP,
 					LowBat: lowBatIndicator,
 					LowBatDP: isLowBatDP,
@@ -1152,6 +1158,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async getBatteryData(deviceBatteryState, deviceLowBatState, adapterID) {
 		let batteryHealthRaw;
+		let batteryHealthUnitRaw;
 		let batteryHealth;
 		let isBatteryDevice;
 
@@ -1174,6 +1181,7 @@ class DeviceWatcher extends utils.Adapter {
 					} else {
 						batteryHealth = deviceBatteryState + 'V';
 						batteryHealthRaw = deviceBatteryState;
+						batteryHealthUnitRaw = 'V';
 						isBatteryDevice = true;
 					}
 				}
@@ -1193,12 +1201,13 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					batteryHealth = deviceBatteryState + '%';
 					batteryHealthRaw = deviceBatteryState;
+					batteryHealthUnitRaw = '%';
 					isBatteryDevice = true;
 				}
 				break;
 		}
 
-		return [batteryHealth, isBatteryDevice, batteryHealthRaw];
+		return [batteryHealth, isBatteryDevice, batteryHealthRaw, batteryHealthUnitRaw];
 	}
 
 	/**
@@ -1555,6 +1564,7 @@ class DeviceWatcher extends utils.Adapter {
 			isBatteryDevice: device.isBatteryDevice,
 			Battery: device.Battery,
 			BatteryRaw: device.BatteryRaw,
+			BatteryUnitRaw: device.BatteryUnitRaw,
 			isLowBat: device.LowBat,
 			'Signal strength': device.SignalStrength,
 			'Signal strength Raw': device.SignalStrengthRaw,
