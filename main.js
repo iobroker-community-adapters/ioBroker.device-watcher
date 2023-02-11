@@ -3533,14 +3533,16 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * @param {number} time
+	 * @param {number} ms
 	 */
-	wait(time) {
-		if (!isUnloaded) {
-			return (this.waitTimeout = this.setTimeout(() => {
-				this.waitTimeout = null;
-			}, time));
-		}
+	wait(ms) {
+		if (!isUnloaded) return;
+		/*return new Promise(function (resolve) {
+				this.waitTimeout = this.setTimeout(resolve, ms);
+			});*/
+		this.waitTimeout = this.setTimeout(() => {
+			this.waitTimeout = null;
+		}, ms);
 	}
 
 	/**
@@ -3585,10 +3587,11 @@ class DeviceWatcher extends utils.Adapter {
 	onUnload(callback) {
 		try {
 			this.log.debug('clearing timeouts');
-			this.clearTimeout(this.refreshDataTimeout);
-			this.clearTimeout(this.waitTimeout);
 			isUnloaded = true;
+			if (this.refreshDataTimeout) this.clearTimeout(this.refreshDataTimeout);
+			if (this.waitTimeout) this.clearTimeout(this.waitTimeout);
 
+			this.log.warn(this.refreshDataTimeout + ' ' + this.waitTimeout);
 			this.log.info('cleaned everything up...');
 
 			callback();
