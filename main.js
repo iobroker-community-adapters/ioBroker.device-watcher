@@ -3543,6 +3543,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.waitTimeout = this.setTimeout(() => {
 			this.waitTimeout = null;
 		}, ms);
+		return this.waitTimeout;
 	}
 
 	/**
