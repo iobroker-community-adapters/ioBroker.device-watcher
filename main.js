@@ -3534,7 +3534,12 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async wait(ms) {
 		if (isUnloaded) return;
-		return await new Promise((resolve) => setTimeout(resolve, ms));
+		try {
+			return await new Promise((resolve) => setTimeout(resolve, ms));
+		} catch (error) {
+			this.log.warn(error);
+			return;
+		}
 	}
 
 	/**
