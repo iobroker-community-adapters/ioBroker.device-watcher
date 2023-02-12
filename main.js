@@ -682,7 +682,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.debug('clearing old refresh timeout');
 			this.clearTimeout(this.refreshDataTimeout);
 		}
-		if (!isUnloaded) return; // cancel run if unloaded was called.
+		if (isUnloaded) return; // cancel run if unloaded was called.
 		this.refreshDataTimeout = this.setTimeout(() => {
 			this.log.debug('Updating Data');
 
@@ -3532,16 +3532,9 @@ class DeviceWatcher extends utils.Adapter {
 	/**
 	 * @param {number} ms
 	 */
-	wait(ms) {
-		if (!isUnloaded) return;
-		/*return new Promise(function (resolve) {
-				this.waitTimeout = this.setTimeout(resolve, ms);
-			});*/
-		this.waitTimeout = this.setTimeout(() => {
-			this.waitTimeout = null;
-			this.log.debug('waiting');
-		}, ms);
-		return this.waitTimeout;
+	async wait(ms) {
+		if (isUnloaded) return;
+		return await new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	/**
@@ -3588,7 +3581,6 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.debug('clearing timeouts');
 			isUnloaded = true;
 			if (this.refreshDataTimeout) this.clearTimeout(this.refreshDataTimeout);
-			if (this.waitTimeout) this.clearTimeout(this.waitTimeout);
 
 			this.log.warn(this.refreshDataTimeout + ' ' + this.waitTimeout);
 			this.log.info('cleaned everything up...');
