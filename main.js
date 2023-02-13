@@ -1526,7 +1526,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// upgradable raw list
-			if (deviceData.Upgradable) {
+			if (deviceData.Upgradable === true) {
 				this.upgradableDevicesRaw.push({
 					Path: deviceData.Path,
 					Device: deviceData.Device,
@@ -3535,7 +3535,12 @@ class DeviceWatcher extends utils.Adapter {
 	async wait(ms) {
 		if (isUnloaded) return;
 		try {
-			return await new Promise((resolve) => setTimeout(resolve, ms));
+			await new Promise((resolve) => {
+				this.waitTimeout = this.setTimeout(() => {
+					resolve((this.waitTimeout = null));
+				}, ms);
+			});
+			//return await new Promise((resolve) => setTimeout(resolve, ms));
 		} catch (error) {
 			this.log.warn(error);
 			return;
@@ -3586,6 +3591,8 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.debug('clearing timeouts');
 			isUnloaded = true;
 			if (this.refreshDataTimeout) this.clearTimeout(this.refreshDataTimeout);
+			if (this.waitTimeout) this.clearTimeout(this.waitTimeout);
+
 			this.log.info('cleaned everything up...');
 
 			callback();
