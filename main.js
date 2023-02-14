@@ -680,14 +680,12 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
-			this.log.debug('clearing old refresh timeout');
-			this.clearTimeout(this.refreshDataTimeout);
+			clearTimeout(this.refreshDataTimeout);
 			this.refreshDataTimeout = null;
 		}
+
 		this.refreshDataTimeout = setTimeout(() => {
 			this.log.debug('Updating Data');
-
-			this.refreshDataTimeout = null;
 			this.refreshData();
 		}, nextTimeout);
 	} // <-- refreshData end
@@ -3535,7 +3533,8 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async wait(ms) {
 		if (isUnloaded) return;
-
+		return new Promise((resolve) => setTimeout(resolve, ms));
+		/*
 		return await new Promise((resolve, reject) => {
 			try {
 				this.waitTimeout = setTimeout(() => {
@@ -3545,7 +3544,7 @@ class DeviceWatcher extends utils.Adapter {
 			} catch (error) {
 				reject(error);
 			}
-		});
+		});*/
 	}
 
 	/**
