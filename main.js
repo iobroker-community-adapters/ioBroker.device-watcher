@@ -653,6 +653,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * is neccessary to refresh lastContact data, especially of devices without state changes
 	 */
 	async refreshData() {
+		if (isUnloaded) return; // cancel run if unloaded was called.
 		const nextTimeout = this.config.updateinterval * 1000;
 
 		// devices data
@@ -682,8 +683,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.debug('clearing old refresh timeout');
 			this.clearTimeout(this.refreshDataTimeout);
 		}
-		if (isUnloaded) return; // cancel run if unloaded was called.
-		this.refreshDataTimeout = this.setTimeout(() => {
+		this.refreshDataTimeout = setTimeout(() => {
 			this.log.debug('Updating Data');
 
 			this.refreshDataTimeout = null;
@@ -3536,9 +3536,9 @@ class DeviceWatcher extends utils.Adapter {
 		if (isUnloaded) return;
 		try {
 			await new Promise((resolve) => {
-				return (this.waitTimeout = this.setTimeout(() => {
-					resolve((this.waitTimeout = null));
-				}, ms));
+				this.waitTimeout = setTimeout(() => {
+					return resolve;
+				}, ms);
 			});
 			//return await new Promise((resolve) => setTimeout(resolve, ms));
 		} catch (error) {
@@ -3592,7 +3592,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.debug('clearing timeouts');
 			isUnloaded = true;
 			clearTimeout(this.refreshDataTimeout);
-			clearTimeout(this.waitTimeout);
+			//clearTimeout(this.waitTimeout);
 			this.log.warn(`refresh data timeout: ${this.refreshDataTimeout} - refresh waitTimeout: ${this.waitTimeout}`);
 			this.log.info('cleaned everything up...');
 
