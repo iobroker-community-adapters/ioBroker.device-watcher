@@ -80,7 +80,6 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Interval timer
 		this.refreshDataTimeout = null;
-		this.waitTimeout = null;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -208,7 +207,7 @@ class DeviceWatcher extends utils.Adapter {
 			for (const [id] of Object.entries(arrApart)) {
 				if (this.configSetAdapter[id]) {
 					this.selAdapter.push(arrApart[id]);
-					this.adapterSelected.push(await this.capitalize(id));
+					this.adapterSelected.push(this.capitalize(id));
 				}
 			}
 
@@ -304,27 +303,35 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async onObjectChange(id, obj) {
 		if (obj) {
-			// The object was changed
-			//this.log.warn(`object ${id} changed: ${JSON.stringify(obj)}`);
+			try {
+				// The object was changed
+				//this.log.warn(`object ${id} changed: ${JSON.stringify(obj)}`);
 
-			//read new instance data and add it to the lists
-			await this.getInstanceData(id);
+				//read new instance data and add it to the lists
+				await this.getInstanceData(id);
 
-			//read devices data and renew the lists
-			await this.main();
+				//read devices data and renew the lists
+				await this.main();
+			} catch (error) {
+				this.log.error(`Issue at object change: ${error}`);
+			}
 		} else {
-			// The object was deleted
-			//this.log.warn(`object ${id} deleted`);
+			try {
+				// The object was deleted
+				this.log.info(`object ${id} deleted`);
 
-			// delete instance data in map
-			this.listInstanceRaw.delete(id);
+				// delete instance data in map
+				this.listInstanceRaw.delete(id);
 
-			// delete device data in map
-			this.listAllDevicesRaw.delete(id);
+				// delete device data in map
+				this.listAllDevicesRaw.delete(id);
 
-			//unsubscribe of Objects and states
-			this.unsubscribeForeignObjects(id);
-			this.unsubscribeForeignStates(id);
+				//unsubscribe of Objects and states
+				this.unsubscribeForeignObjects(id);
+				this.unsubscribeForeignStates(id);
+			} catch (error) {
+				this.log.error(`Issue at object deletion: ${error}`);
+			}
 		}
 	}
 
@@ -335,7 +342,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async onStateChange(id, state) {
 		// Admin JSON for Adapter updates
-		if (id && state) {
+		if (state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
 			let batteryData;
 			let signalData;
@@ -347,196 +354,203 @@ class DeviceWatcher extends utils.Adapter {
 			let oldInstanceHostState;
 			let oldInstanceDeviceState;
 
-			for (const adapter of this.adapterUpdatesJsonRaw) {
-				switch (id) {
-					case adapter.Path:
-						await this.getAdapterUpdateData(id);
-						await this.createAdapterUpdateList();
-						if (this.config.checkSendAdapterUpdateMsg) {
-							await this.sendStateNotifications('updateAdapter', null);
-						}
+			try {
+				for (const adapter of this.adapterUpdatesJsonRaw) {
+					switch (id) {
+						case adapter.Path:
+							await this.getAdapterUpdateData(id);
+							await this.createAdapterUpdateList();
+							if (this.config.checkSendAdapterUpdateMsg) {
+								await this.sendStateNotifications('updateAdapter', null);
+							}
+					}
 				}
-			}
 
-			for (const [instance, instanceData] of this.listInstanceRaw) {
-				switch (id) {
-					case instanceData.instanceAlivePath:
-						if (state.val !== instanceData.isAlive) {
-							instanceStatusRaw = await this.setInstanceStatus(
-								instanceData.instanceMode,
-								instanceData.schedule,
-								instanceData.instanceAlivePath,
-								instanceData.connectedHostPath,
-								instanceData.connectedDevicePath,
-							);
-							instanceData.isAlive = instanceStatusRaw[1];
-							instanceData.status = instanceStatusRaw[0];
-							instanceData.isHealthy = instanceStatusRaw[2];
-						}
-						break;
-					case instanceData.connectedHostPath:
-						oldInstanceHostState = instanceData.isConnectedHost;
-						instanceData.isConnectedHost = state.val;
-						if (oldInstanceHostState !== instanceData.isConnectedHost) {
-							instanceStatusRaw = await this.setInstanceStatus(
-								instanceData.instanceMode,
-								instanceData.schedule,
-								instanceData.instanceAlivePath,
-								instanceData.connectedHostPath,
-								instanceData.connectedDevicePath,
-							);
-							instanceData.isAlive = instanceStatusRaw[1];
-							instanceData.status = instanceStatusRaw[0];
-							instanceData.isHealthy = instanceStatusRaw[2];
+				for (const [instance, instanceData] of this.listInstanceRaw) {
+					switch (id) {
+						case instanceData.instanceAlivePath:
+							if (state.val !== instanceData.isAlive) {
+								instanceStatusRaw = await this.setInstanceStatus(
+									instanceData.instanceMode,
+									instanceData.schedule,
+									instanceData.instanceAlivePath,
+									instanceData.connectedHostPath,
+									instanceData.connectedDevicePath,
+								);
+								instanceData.isAlive = instanceStatusRaw[1];
+								instanceData.status = instanceStatusRaw[0];
+								instanceData.isHealthy = instanceStatusRaw[2];
+							}
+							break;
+						case instanceData.connectedHostPath:
+							oldInstanceHostState = instanceData.isConnectedHost;
+							instanceData.isConnectedHost = state.val;
+							if (oldInstanceHostState !== instanceData.isConnectedHost) {
+								instanceStatusRaw = await this.setInstanceStatus(
+									instanceData.instanceMode,
+									instanceData.schedule,
+									instanceData.instanceAlivePath,
+									instanceData.connectedHostPath,
+									instanceData.connectedDevicePath,
+								);
+								instanceData.isAlive = instanceStatusRaw[1];
+								instanceData.status = instanceStatusRaw[0];
+								instanceData.isHealthy = instanceStatusRaw[2];
 
-							if (!instanceData.isAlive) continue;
-							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
-								if (!instanceData.isHealthy) {
-									await this.sendStateNotifications('errorInstance', instance);
+								if (!instanceData.isAlive) continue;
+								if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
+									if (!instanceData.isHealthy) {
+										await this.sendStateNotifications('errorInstance', instance);
+									}
 								}
 							}
-						}
-						break;
-					case instanceData.connectedDevicePath:
-						oldInstanceDeviceState = instanceData.isConnectedDevice;
-						instanceData.isConnectedDevice = state.val;
-						if (oldInstanceDeviceState !== instanceData.isConnectedDevice) {
-							instanceStatusRaw = await this.setInstanceStatus(
-								instanceData.instanceMode,
-								instanceData.schedule,
-								instanceData.instanceAlivePath,
-								instanceData.connectedHostPath,
-								instanceData.connectedDevicePath,
-							);
-							instanceData.isAlive = instanceStatusRaw[1];
-							instanceData.status = instanceStatusRaw[0];
-							instanceData.isHealthy = instanceStatusRaw[2];
+							break;
+						case instanceData.connectedDevicePath:
+							oldInstanceDeviceState = instanceData.isConnectedDevice;
+							instanceData.isConnectedDevice = state.val;
+							if (oldInstanceDeviceState !== instanceData.isConnectedDevice) {
+								instanceStatusRaw = await this.setInstanceStatus(
+									instanceData.instanceMode,
+									instanceData.schedule,
+									instanceData.instanceAlivePath,
+									instanceData.connectedHostPath,
+									instanceData.connectedDevicePath,
+								);
+								instanceData.isAlive = instanceStatusRaw[1];
+								instanceData.status = instanceStatusRaw[0];
+								instanceData.isHealthy = instanceStatusRaw[2];
 
-							if (!instanceData.isAlive) continue;
-							if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
-								if (!instanceData.isHealthy) {
-									await this.sendStateNotifications('errorInstance', instance);
+								if (!instanceData.isAlive) continue;
+								if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
+									if (!instanceData.isHealthy) {
+										await this.sendStateNotifications('errorInstance', instance);
+									}
 								}
 							}
-						}
-						break;
+							break;
+					}
 				}
-			}
 
-			for (const [device, deviceData] of this.listAllDevicesRaw) {
-				// On statechange update available datapoint
-				switch (id) {
-					case deviceData.instanceDeviceConnectionDP:
-						if (state.val !== deviceData.instancedeviceConnected) {
-							deviceData.instancedeviceConnected = state.val;
-						}
-						break;
+				for (const [device, deviceData] of this.listAllDevicesRaw) {
+					// On statechange update available datapoint
+					switch (id) {
+						case deviceData.instanceDeviceConnectionDP:
+							if (state.val !== deviceData.instancedeviceConnected) {
+								deviceData.instancedeviceConnected = state.val;
+							}
+							break;
 
-					case deviceData.UpdateDP:
-						if (state.val !== deviceData.Upgradable) {
-							deviceData.Upgradable = state.val;
-							if (state.val) {
-								if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
-									await this.sendStateNotifications('updateDevice', device);
+						case deviceData.UpdateDP:
+							if (state.val !== deviceData.Upgradable) {
+								deviceData.Upgradable = state.val;
+								if (state.val) {
+									if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
+										await this.sendStateNotifications('updateDevice', device);
+									}
 								}
 							}
-						}
-						break;
+							break;
 
-					case deviceData.SignalStrengthDP:
-						signalData = await this.calculateSignalStrength(state, deviceData.adapterID);
-						deviceData.SignalStrength = signalData[0];
+						case deviceData.SignalStrengthDP:
+							signalData = await this.calculateSignalStrength(state, deviceData.adapterID);
+							deviceData.SignalStrength = signalData[0];
 
-						break;
+							break;
 
-					case deviceData.batteryDP:
-						if (deviceData.isBatteryDevice) {
-							oldLowBatState = deviceData.LowBat;
-							batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.adapterID);
+						case deviceData.batteryDP:
+							if (deviceData.isBatteryDevice) {
+								oldLowBatState = deviceData.LowBat;
+								batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.adapterID);
 
-							deviceData.Battery = batteryData[0];
-							deviceData.BatteryRaw = batteryData[2];
-							deviceData.BatteryUnitRaw = batteryData[3];
-							if (deviceData.LowBatDP !== 'none') {
-								isLowBatValue = await this.getInitValue(deviceData.LowBatDP);
-							} else {
-								isLowBatValue = undefined;
-							}
-							deviceData.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, deviceData.faultReport, deviceData.adapterID);
+								deviceData.Battery = batteryData[0];
+								deviceData.BatteryRaw = batteryData[2];
+								deviceData.BatteryUnitRaw = batteryData[3];
+								if (deviceData.LowBatDP !== 'none') {
+									isLowBatValue = await this.getInitValue(deviceData.LowBatDP);
+								} else {
+									isLowBatValue = undefined;
+								}
+								deviceData.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, deviceData.faultReport, deviceData.adapterID);
 
-							if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-									await this.sendStateNotifications('lowBatDevice', device);
+								if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
+									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
+										await this.sendStateNotifications('lowBatDevice', device);
+									}
 								}
 							}
-						}
-						break;
+							break;
 
-					case deviceData.LowBatDP:
-						if (deviceData.isBatteryDevice) {
-							oldLowBatState = deviceData.LowBat;
-							batteryData = await this.getBatteryData(deviceData.BatteryRaw, state.val, deviceData.adapterID);
-							deviceData.Battery = batteryData[0];
-							deviceData.BatteryRaw = batteryData[2];
-							deviceData.BatteryUnitRaw = batteryData[3];
-							deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
+						case deviceData.LowBatDP:
+							if (deviceData.isBatteryDevice) {
+								oldLowBatState = deviceData.LowBat;
+								batteryData = await this.getBatteryData(deviceData.BatteryRaw, state.val, deviceData.adapterID);
+								deviceData.Battery = batteryData[0];
+								deviceData.BatteryRaw = batteryData[2];
+								deviceData.BatteryUnitRaw = batteryData[3];
+								deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
 
-							if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-									await this.sendStateNotifications('lowBatDevice', device);
+								if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
+									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
+										await this.sendStateNotifications('lowBatDevice', device);
+									}
 								}
 							}
-						}
-						break;
+							break;
 
-					case deviceData.faultReportDP:
-						if (deviceData.isBatteryDevice) {
-							oldLowBatState = deviceData.LowBat;
-							batteryData = await this.getBatteryData(deviceData.BatteryRaw, oldLowBatState, deviceData.adapterID);
+						case deviceData.faultReportDP:
+							if (deviceData.isBatteryDevice) {
+								oldLowBatState = deviceData.LowBat;
+								batteryData = await this.getBatteryData(deviceData.BatteryRaw, oldLowBatState, deviceData.adapterID);
 
-							deviceData.Battery = batteryData[0];
-							deviceData.BatteryRaw = batteryData[2];
-							deviceData.BatteryUnitRaw = batteryData[3];
-							deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, undefined, state.val, deviceData.adapterID);
+								deviceData.Battery = batteryData[0];
+								deviceData.BatteryRaw = batteryData[2];
+								deviceData.BatteryUnitRaw = batteryData[3];
+								deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, undefined, state.val, deviceData.adapterID);
 
-							if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
-								if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-									await this.sendStateNotifications('lowBatDevice', device);
+								if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
+									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
+										await this.sendStateNotifications('lowBatDevice', device);
+									}
 								}
 							}
-						}
-						break;
+							break;
 
-					case deviceData.UnreachDP:
-						oldStatus = deviceData.Status;
-						deviceData.UnreachState = await this.getInitValue(deviceData.UnreachDP);
-						contactData = await this.getOnlineState(
-							deviceData.timeSelector,
-							deviceData.adapterID,
-							deviceData.UnreachDP,
-							deviceData.SignalStrength,
-							deviceData.UnreachState,
-							deviceData.DeviceStateSelectorDP,
-							deviceData.rssiPeerSelectorDP,
-						);
-						if (contactData !== undefined) {
-							deviceData.LastContact = contactData[0];
-							deviceData.Status = contactData[1];
-							deviceData.SignalStrength = contactData[2];
-						}
-						if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-							if (deviceData.instanceDeviceConnectionDP !== undefined) {
-								// check if the generally deviceData connected state is for a while true
-								if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
+						case deviceData.UnreachDP:
+							oldStatus = deviceData.Status;
+							deviceData.UnreachState = await this.getInitValue(deviceData.UnreachDP);
+							contactData = await this.getOnlineState(
+								deviceData.timeSelector,
+								deviceData.adapterID,
+								deviceData.UnreachDP,
+								deviceData.SignalStrength,
+								deviceData.UnreachState,
+								deviceData.DeviceStateSelectorDP,
+								deviceData.rssiPeerSelectorDP,
+							);
+							if (contactData !== undefined) {
+								deviceData.LastContact = contactData[0];
+								deviceData.Status = contactData[1];
+								deviceData.SignalStrength = contactData[2];
+							}
+							if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
+								if (deviceData.instanceDeviceConnectionDP !== undefined) {
+									// check if the generally deviceData connected state is for a while true
+									if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
+										await this.sendStateNotifications('onlineStateDevice', device);
+									}
+								} else {
 									await this.sendStateNotifications('onlineStateDevice', device);
 								}
-							} else {
-								await this.sendStateNotifications('onlineStateDevice', device);
 							}
-						}
-						break;
+							break;
+					}
 				}
+			} catch (error) {
+				this.log.error(`Issue at state change: ${error}`);
 			}
+		} else {
+			// The state was deleted
+			this.log.info(`state ${id} deleted`);
 		}
 	}
 
@@ -3534,17 +3548,6 @@ class DeviceWatcher extends utils.Adapter {
 	async wait(ms) {
 		if (isUnloaded) return;
 		return new Promise((resolve) => setTimeout(resolve, ms));
-		/*
-		return await new Promise((resolve, reject) => {
-			try {
-				this.waitTimeout = setTimeout(() => {
-					this.waitTimeout = null;
-					resolve(this.waitTimeout);
-				}, ms);
-			} catch (error) {
-				reject(error);
-			}
-		});*/
 	}
 
 	/**
@@ -3596,10 +3599,7 @@ class DeviceWatcher extends utils.Adapter {
 				clearTimeout(this.refreshDataTimeout);
 				this.refreshDataTimeout = null;
 			}
-			if (this.waitTimeout) {
-				clearTimeout(this.waitTimeout);
-				this.waitTimeout = null;
-			}
+
 			this.log.info('cleaned everything up...');
 
 			callback();
