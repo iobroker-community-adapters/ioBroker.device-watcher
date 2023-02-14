@@ -198,6 +198,8 @@
 	},
 	"native": {
 		"checkAdapterInstances": false,
+		"instanceErrorMaxMinutes": 0,
+		"instanceOfflineMaxMinutes": 0,
 		"alexa2Devices": false,
 		"alexa2MaxMinutes": 0,
 		"apcupsDevices": false,
