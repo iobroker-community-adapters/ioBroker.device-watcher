@@ -682,6 +682,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.refreshDataTimeout) {
 			this.log.debug('clearing old refresh timeout');
 			this.clearTimeout(this.refreshDataTimeout);
+			this.refreshDataTimeout = null;
 		}
 		this.refreshDataTimeout = setTimeout(() => {
 			this.log.debug('Updating Data');
