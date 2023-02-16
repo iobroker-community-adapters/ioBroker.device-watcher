@@ -765,236 +765,240 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} i - Device Object
 	 */
 	async createData(i) {
-		const devices = await this.getForeignStatesAsync(this.selAdapter[i].Selektor);
-		const adapterID = this.selAdapter[i].adapterID;
+		try {
+			const devices = await this.getForeignStatesAsync(this.selAdapter[i].Selektor);
+			const adapterID = this.selAdapter[i].adapterID;
 
-		/*----------  Start of loop  ----------*/
-		for (const [id] of Object.entries(devices)) {
-			/*=============================================
+			/*----------  Start of loop  ----------*/
+			for (const [id] of Object.entries(devices)) {
+				/*=============================================
 				=              get Instanz		          =
 				=============================================*/
-			const instance = id.slice(0, id.indexOf('.') + 2);
-			const instanceDeviceConnectionDP = `${instance}.info.connection`;
-			const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
-			this.subscribeForeignStates(instanceDeviceConnectionDP);
-			this.subscribeForeignObjectsAsync(`${this.selAdapter[i].Selektor}`);
+				const instance = id.slice(0, id.indexOf('.') + 2);
+				const instanceDeviceConnectionDP = `${instance}.info.connection`;
+				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
+				this.subscribeForeignStates(instanceDeviceConnectionDP);
+				this.subscribeForeignObjectsAsync(`${this.selAdapter[i].Selektor}`);
 
-			/*=============================================
+				/*=============================================
 				=              Get device name		          =
 				=============================================*/
-			const deviceName = await this.getDeviceName(id, i);
+				const deviceName = await this.getDeviceName(id, i);
 
-			/*=============================================
+				/*=============================================
 				=              Get adapter name		          =
 				=============================================*/
-			const adapter = this.selAdapter[i].adapter;
+				const adapter = this.selAdapter[i].adapter;
 
-			/*=============================================
+				/*=============================================
 				=            Get path to datapoints	   	      =
 				=============================================*/
-			const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
-			const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
+				const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
+				const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
 
-			// subscribe to object device path
-			this.subscribeForeignObjectsAsync(currDeviceString);
+				// subscribe to object device path
+				this.subscribeForeignObjectsAsync(currDeviceString);
 
-			/*=============================================
+				/*=============================================
 				=            Get signal strength              =
 				=============================================*/
-			let deviceQualityDP = currDeviceString + this.selAdapter[i].rssiState;
-			let deviceQualityState;
+				let deviceQualityDP = currDeviceString + this.selAdapter[i].rssiState;
+				let deviceQualityState;
 
-			switch (adapterID) {
-				case 'mihomeVacuum':
-					deviceQualityDP = shortCurrDeviceString + this.selAdapter[i].rssiState;
-					deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-					break;
-
-				case 'netatmo':
-					deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-					if (!deviceQualityState) {
-						deviceQualityDP = currDeviceString + this.selAdapter[i].rfState;
+				switch (adapterID) {
+					case 'mihomeVacuum':
+						deviceQualityDP = shortCurrDeviceString + this.selAdapter[i].rssiState;
 						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-					}
-					break;
+						break;
 
-				default:
-					deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-					break;
-			}
-			//subscribe to states
-			this.subscribeForeignStates(deviceQualityDP);
+					case 'netatmo':
+						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
+						if (!deviceQualityState) {
+							deviceQualityDP = currDeviceString + this.selAdapter[i].rfState;
+							deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
+						}
+						break;
 
-			const signalData = await this.calculateSignalStrength(deviceQualityState, adapterID);
-			let linkQuality = signalData[0];
-			const linkQualityRaw = signalData[1];
+					default:
+						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
+						break;
+				}
+				//subscribe to states
+				this.subscribeForeignStates(deviceQualityDP);
 
-			/*=============================================
+				const signalData = await this.calculateSignalStrength(deviceQualityState, adapterID);
+				let linkQuality = signalData[0];
+				const linkQualityRaw = signalData[1];
+
+				/*=============================================
 				=         	    Get battery data       	      =
 				=============================================*/
-			let deviceBatteryStateDP;
-			let deviceBatteryState;
-			let batteryHealth;
-			let batteryHealthRaw;
-			let batteryUnitRaw;
-			let lowBatIndicator;
-			let isBatteryDevice;
-			let isLowBatDP;
-			let faultReportingDP;
-			let faultReportingState;
+				let deviceBatteryStateDP;
+				let deviceBatteryState;
+				let batteryHealth;
+				let batteryHealthRaw;
+				let batteryUnitRaw;
+				let lowBatIndicator;
+				let isBatteryDevice;
+				let isLowBatDP;
+				let faultReportingDP;
+				let faultReportingState;
 
-			const deviceChargerStateDP = currDeviceString + this.selAdapter[i].charger;
-			const deviceChargerState = await this.getInitValue(deviceChargerStateDP);
+				const deviceChargerStateDP = currDeviceString + this.selAdapter[i].charger;
+				const deviceChargerState = await this.getInitValue(deviceChargerStateDP);
 
-			if (deviceChargerState === undefined || deviceChargerState === false) {
-				// Get battery states
-				switch (adapterID) {
-					case 'hueExt':
-					case 'mihomeVacuum':
-					case 'mqttNuki':
-						deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery;
-						deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						if (deviceBatteryState === undefined) {
-							deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery2;
+				if (deviceChargerState === undefined || deviceChargerState === false) {
+					// Get battery states
+					switch (adapterID) {
+						case 'hueExt':
+						case 'mihomeVacuum':
+						case 'mqttNuki':
+							deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery;
 							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						}
-						break;
-					default:
-						deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery;
-						deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						if (deviceBatteryState === undefined) {
-							deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery2;
+							if (deviceBatteryState === undefined) {
+								deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery2;
+								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							}
+							break;
+						default:
+							deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery;
 							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-						}
-						break;
+							if (deviceBatteryState === undefined) {
+								deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery2;
+								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							}
+							break;
+					}
+
+					// Get low bat states
+					isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat;
+					let deviceLowBatState = await this.getInitValue(isLowBatDP);
+					if (deviceLowBatState === undefined) {
+						isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat2;
+						deviceLowBatState = await this.getInitValue(isLowBatDP);
+					}
+					if (deviceLowBatState === undefined) isLowBatDP = 'none';
+
+					faultReportingDP = shortCurrDeviceString + this.selAdapter[i].faultReporting;
+					faultReportingState = await this.getInitValue(faultReportingDP);
+
+					//subscribe to states
+					this.subscribeForeignStates(deviceBatteryStateDP);
+					this.subscribeForeignStates(isLowBatDP);
+					this.subscribeForeignStates(faultReportingDP);
+
+					const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
+					batteryHealth = batteryData[0];
+					batteryHealthRaw = batteryData[2];
+					batteryUnitRaw = batteryData[3];
+					isBatteryDevice = batteryData[1];
+
+					if (isBatteryDevice) {
+						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID);
+					}
 				}
 
-				// Get low bat states
-				isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat;
-				let deviceLowBatState = await this.getInitValue(isLowBatDP);
-				if (deviceLowBatState === undefined) {
-					isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat2;
-					deviceLowBatState = await this.getInitValue(isLowBatDP);
-				}
-				if (deviceLowBatState === undefined) isLowBatDP = 'none';
-
-				faultReportingDP = shortCurrDeviceString + this.selAdapter[i].faultReporting;
-				faultReportingState = await this.getInitValue(faultReportingDP);
-
-				//subscribe to states
-				this.subscribeForeignStates(deviceBatteryStateDP);
-				this.subscribeForeignStates(isLowBatDP);
-				this.subscribeForeignStates(faultReportingDP);
-
-				const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
-				batteryHealth = batteryData[0];
-				batteryHealthRaw = batteryData[2];
-				batteryUnitRaw = batteryData[3];
-				isBatteryDevice = batteryData[1];
-
-				if (isBatteryDevice) {
-					lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID);
-				}
-			}
-
-			/*=============================================
+				/*=============================================
 				=          Get last contact of device         =
 				=============================================*/
-			let unreachDP = currDeviceString + this.selAdapter[i].reach;
-			const deviceStateSelectorDP = shortCurrDeviceString + this.selAdapter[i].stateValue;
-			const rssiPeerSelectorDP = currDeviceString + this.selAdapter[i].rssiPeerState;
-			const timeSelector = currDeviceString + this.selAdapter[i].timeSelector;
+				let unreachDP = currDeviceString + this.selAdapter[i].reach;
+				const deviceStateSelectorDP = shortCurrDeviceString + this.selAdapter[i].stateValue;
+				const rssiPeerSelectorDP = currDeviceString + this.selAdapter[i].rssiPeerState;
+				const timeSelector = currDeviceString + this.selAdapter[i].timeSelector;
 
-			let deviceUnreachState = await this.getInitValue(unreachDP);
-			if (deviceUnreachState === undefined) {
-				unreachDP = shortCurrDeviceString + this.selAdapter[i].reach;
-				deviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.selAdapter[i].reach);
-			}
-
-			// subscribe to states
-			this.subscribeForeignStates(timeSelector);
-			this.subscribeForeignStates(unreachDP);
-			this.subscribeForeignStates(deviceStateSelectorDP);
-			this.subscribeForeignStates(rssiPeerSelectorDP);
-
-			const onlineState = await this.getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
-			let deviceState;
-			let lastContactString;
-
-			if (onlineState) {
-				lastContactString = onlineState[0];
-				deviceState = onlineState[1];
-				linkQuality = onlineState[2];
-			}
-
-			/*=============================================
-			=            Get update data	              =
-			=============================================*/
-			const deviceUpdateDP = currDeviceString + this.selAdapter[i].upgrade;
-			let isUpgradable;
-
-			if (this.config.checkSendDeviceUpgrade) {
-				const deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
-
-				if (deviceUpdateSelector !== undefined) {
-					if (deviceUpdateSelector) {
-						isUpgradable = true;
-					} else if (!deviceUpdateSelector) {
-						isUpgradable = false;
-					}
-				} else {
-					isUpgradable = ' - ';
+				let deviceUnreachState = await this.getInitValue(unreachDP);
+				if (deviceUnreachState === undefined) {
+					unreachDP = shortCurrDeviceString + this.selAdapter[i].reach;
+					deviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.selAdapter[i].reach);
 				}
 
 				// subscribe to states
-				this.subscribeForeignStates(deviceUpdateDP);
-			}
+				this.subscribeForeignStates(timeSelector);
+				this.subscribeForeignStates(unreachDP);
+				this.subscribeForeignStates(deviceStateSelectorDP);
+				this.subscribeForeignStates(rssiPeerSelectorDP);
 
-			/*=============================================
+				const onlineState = await this.getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
+				let deviceState;
+				let lastContactString;
+
+				if (onlineState) {
+					lastContactString = onlineState[0];
+					deviceState = onlineState[1];
+					linkQuality = onlineState[2];
+				}
+
+				/*=============================================
+			=            Get update data	              =
+			=============================================*/
+				const deviceUpdateDP = currDeviceString + this.selAdapter[i].upgrade;
+				let isUpgradable;
+
+				if (this.config.checkSendDeviceUpgrade) {
+					const deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
+
+					if (deviceUpdateSelector !== undefined) {
+						if (deviceUpdateSelector) {
+							isUpgradable = true;
+						} else if (!deviceUpdateSelector) {
+							isUpgradable = false;
+						}
+					} else {
+						isUpgradable = ' - ';
+					}
+
+					// subscribe to states
+					this.subscribeForeignStates(deviceUpdateDP);
+				}
+
+				/*=============================================
 				=          		  Fill Raw Lists          	  =
 				=============================================*/
-			const setupList = () => {
-				this.listAllDevicesRaw.set(currDeviceString, {
-					Path: id,
-					instanceDeviceConnectionDP: instanceDeviceConnectionDP,
-					instancedeviceConnected: instancedeviceConnected,
-					instance: instance,
-					Device: deviceName,
-					adapterID: adapterID,
-					Adapter: adapter,
-					timeSelector: timeSelector,
-					isBatteryDevice: isBatteryDevice,
-					Battery: batteryHealth,
-					BatteryRaw: batteryHealthRaw,
-					BatteryUnitRaw: batteryUnitRaw,
-					batteryDP: deviceBatteryStateDP,
-					LowBat: lowBatIndicator,
-					LowBatDP: isLowBatDP,
-					faultReport: faultReportingState,
-					faultReportDP: faultReportingDP,
-					SignalStrengthDP: deviceQualityDP,
-					SignalStrength: linkQuality,
-					SignalStrengthRaw: linkQualityRaw,
-					UnreachState: deviceUnreachState,
-					UnreachDP: unreachDP,
-					DeviceStateSelectorDP: deviceStateSelectorDP,
-					rssiPeerSelectorDP: rssiPeerSelectorDP,
-					LastContact: lastContactString,
-					Status: deviceState,
-					UpdateDP: deviceUpdateDP,
-					Upgradable: isUpgradable,
-				});
-			};
+				const setupList = () => {
+					this.listAllDevicesRaw.set(currDeviceString, {
+						Path: id,
+						instanceDeviceConnectionDP: instanceDeviceConnectionDP,
+						instancedeviceConnected: instancedeviceConnected,
+						instance: instance,
+						Device: deviceName,
+						adapterID: adapterID,
+						Adapter: adapter,
+						timeSelector: timeSelector,
+						isBatteryDevice: isBatteryDevice,
+						Battery: batteryHealth,
+						BatteryRaw: batteryHealthRaw,
+						BatteryUnitRaw: batteryUnitRaw,
+						batteryDP: deviceBatteryStateDP,
+						LowBat: lowBatIndicator,
+						LowBatDP: isLowBatDP,
+						faultReport: faultReportingState,
+						faultReportDP: faultReportingDP,
+						SignalStrengthDP: deviceQualityDP,
+						SignalStrength: linkQuality,
+						SignalStrengthRaw: linkQualityRaw,
+						UnreachState: deviceUnreachState,
+						UnreachDP: unreachDP,
+						DeviceStateSelectorDP: deviceStateSelectorDP,
+						rssiPeerSelectorDP: rssiPeerSelectorDP,
+						LastContact: lastContactString,
+						Status: deviceState,
+						UpdateDP: deviceUpdateDP,
+						Upgradable: isUpgradable,
+					});
+				};
 
-			if (!this.configListOnlyBattery) {
-				// Add all devices
-				setupList();
-			} else {
-				// Add only devices with battery in the rawlist
-				if (!isBatteryDevice) continue;
-				setupList();
-			}
-		} // <-- end of loop
+				if (!this.configListOnlyBattery) {
+					// Add all devices
+					setupList();
+				} else {
+					// Add only devices with battery in the rawlist
+					if (!isBatteryDevice) continue;
+					setupList();
+				}
+			} // <-- end of loop
+		} catch (error) {
+			this.errorReporting('[createData - create data of devices]', error);
+		}
 	} // <-- end of createData
 
 	/*=============================================
@@ -1876,77 +1880,81 @@ class DeviceWatcher extends utils.Adapter {
 	 *@param {string} instanceObject
 	 */
 	async getInstanceData(instanceObject) {
-		const instanceAliveDP = await this.getForeignStatesAsync(`${instanceObject}.alive`);
+		try {
+			const instanceAliveDP = await this.getForeignStatesAsync(`${instanceObject}.alive`);
 
-		for (const [id] of Object.entries(instanceAliveDP)) {
-			if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
+			for (const [id] of Object.entries(instanceAliveDP)) {
+				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
 
-			// get instance name
-			const instanceName = await this.getInstanceName(id);
+				// get instance name
+				const instanceName = await this.getInstanceName(id);
 
-			// get instance connected to host data
-			const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
-			const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
+				// get instance connected to host data
+				const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
+				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
 
-			// get instance connected to device data
-			const instanceConnectedDeviceDP = `${instanceName}.info.connection`;
-			let instanceConnectedDeviceVal;
-			if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
-				instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
-			} else {
-				instanceConnectedDeviceVal = 'N/A';
-			}
-
-			// get adapter version
-			const instanceObjectPath = `system.adapter.${instanceName}`;
-			let adapterName;
-			let adapterVersion;
-			let instanceMode;
-			let scheduleTime = 'N/A';
-			const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
-			if (instanceObjectData) {
-				// @ts-ignore
-				adapterName = this.capitalize(instanceObjectData.common.name);
-				adapterVersion = instanceObjectData.common.version;
-				instanceMode = instanceObjectData.common.mode;
-
-				if (instanceMode === 'schedule') {
-					scheduleTime = instanceObjectData.common.schedule;
+				// get instance connected to device data
+				const instanceConnectedDeviceDP = `${instanceName}.info.connection`;
+				let instanceConnectedDeviceVal;
+				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
+					instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
+				} else {
+					instanceConnectedDeviceVal = 'N/A';
 				}
+
+				// get adapter version
+				const instanceObjectPath = `system.adapter.${instanceName}`;
+				let adapterName;
+				let adapterVersion;
+				let instanceMode;
+				let scheduleTime = 'N/A';
+				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
+				if (instanceObjectData) {
+					// @ts-ignore
+					adapterName = this.capitalize(instanceObjectData.common.name);
+					adapterVersion = instanceObjectData.common.version;
+					instanceMode = instanceObjectData.common.mode;
+
+					if (instanceMode === 'schedule') {
+						scheduleTime = instanceObjectData.common.schedule;
+					}
+				}
+
+				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
+				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceConnectedHostDP, instanceConnectedDeviceDP);
+				const isAlive = instanceStatusRaw[1];
+				const instanceStatus = instanceStatusRaw[0];
+				const isHealthy = instanceStatusRaw[2];
+
+				//subscribe to statechanges
+				this.subscribeForeignStatesAsync(id);
+				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
+				this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
+				this.subscribeForeignObjectsAsync(instanceObjectPath);
+
+				// create raw list
+				this.listInstanceRaw.set(instanceObjectPath, {
+					Adapter: adapterName,
+					InstanceName: instanceName,
+					instanceObjectPath: instanceObjectPath,
+					instanceAlivePath: id,
+					instanceMode: instanceMode,
+					schedule: scheduleTime,
+					adapterVersion: adapterVersion,
+					isAlive: isAlive,
+					isHealthy: isHealthy,
+					connectedHostPath: instanceConnectedHostDP,
+					isConnectedHost: instanceConnectedHostVal,
+					connectedDevicePath: instanceConnectedDeviceDP,
+					isConnectedDevice: instanceConnectedDeviceVal,
+					status: instanceStatus,
+				});
 			}
-
-			//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-			const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceConnectedHostDP, instanceConnectedDeviceDP);
-			const isAlive = instanceStatusRaw[1];
-			const instanceStatus = instanceStatusRaw[0];
-			const isHealthy = instanceStatusRaw[2];
-
-			//subscribe to statechanges
-			this.subscribeForeignStatesAsync(id);
-			this.subscribeForeignStatesAsync(instanceConnectedHostDP);
-			this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
-			this.subscribeForeignObjectsAsync(instanceObjectPath);
-
-			// create raw list
-			this.listInstanceRaw.set(instanceObjectPath, {
-				Adapter: adapterName,
-				InstanceName: instanceName,
-				instanceObjectPath: instanceObjectPath,
-				instanceAlivePath: id,
-				instanceMode: instanceMode,
-				schedule: scheduleTime,
-				adapterVersion: adapterVersion,
-				isAlive: isAlive,
-				isHealthy: isHealthy,
-				connectedHostPath: instanceConnectedHostDP,
-				isConnectedHost: instanceConnectedHostVal,
-				connectedDevicePath: instanceConnectedDeviceDP,
-				isConnectedDevice: instanceConnectedDeviceVal,
-				status: instanceStatus,
-			});
+			await this.createInstanceList();
+			await this.writeInstanceDPs();
+		} catch (error) {
+			this.errorReporting('[getInstanceData]', error);
 		}
-		await this.createInstanceList();
-		await this.writeInstanceDPs();
 	}
 
 	/**
