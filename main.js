@@ -1927,9 +1927,9 @@ class DeviceWatcher extends utils.Adapter {
 				const isHealthy = instanceStatusRaw[2];
 
 				//subscribe to statechanges
-				this.subscribeForeignStatesAsync(id);
-				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
-				this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
+				this.subscribeForeignStates(id);
+				this.subscribeForeignStates(instanceConnectedHostDP);
+				this.subscribeForeignStates(instanceConnectedDeviceDP);
 				this.subscribeForeignObjects(instanceObjectPath);
 
 				// create raw list
