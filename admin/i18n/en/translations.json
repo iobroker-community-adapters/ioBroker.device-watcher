@@ -114,5 +114,8 @@
 	"Watch instances": "Watch instances",
 	"Create lists for devices": "Create lists for devices",
 	"Adapter & Instances Notification Settings": "Adapter & Instances Notification Settings",
-	"Devices Notification Settings": "Devices Notification Settings"
+	"Devices Notification Settings": "Devices Notification Settings",
+	"Signal Instance": "Signal Instance",
+	"Please choose the Signal instance": "Please choose the Signal instance",
+	"Choose the day(s) where you want to get the overview of updatable Adapter:": "Choose the day(s) where you want to get the overview of updatable Adapter:"
 }

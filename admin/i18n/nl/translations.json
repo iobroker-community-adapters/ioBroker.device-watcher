@@ -118,5 +118,8 @@
     "Watch instances": "Bekijk instanties",
     "Create lists for devices": "Maak lijsten voor apparaten",
     "Adapter & Instances Notification Settings": "Adapter & Instances Meldingsinstellingen",
-    "Devices Notification Settings": "Apparaten Meldingsinstellingen"
+    "Devices Notification Settings": "Apparaten Meldingsinstellingen",
+    "Signal Instance": "Signaal instantie",
+    "Please choose the Signal instance": "Kies de Signal-instantie",
+    "Choose the day(s) where you want to get the overview of updatable Adapter:": "Kies de dag(en) waarop u het overzicht van de updatebare adapter wilt zien:"
 }

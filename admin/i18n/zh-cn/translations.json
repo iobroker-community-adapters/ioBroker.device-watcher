@@ -118,5 +118,8 @@
     "Watch instances": "观看实例",
     "Create lists for devices": "为设备创建列表",
     "Adapter & Instances Notification Settings": "适配器和实例通知设置",
-    "Devices Notification Settings": "设备通知设置"
+    "Devices Notification Settings": "设备通知设置",
+    "Signal Instance": "信号实例",
+    "Please choose the Signal instance": "请选择信号实例",
+    "Choose the day(s) where you want to get the overview of updatable Adapter:": "选择您希望获得可更新适配器概览的日期："
 }

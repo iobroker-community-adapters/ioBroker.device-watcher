@@ -2499,6 +2499,25 @@ class DeviceWatcher extends utils.Adapter {
 			this.errorReporting('[sendNotification Whatsapp]', error);
 		}
 
+		// Signal
+		try {
+			if (this.config.instanceSignal) {
+				//first check if instance is living
+				const signalAliveState = await this.getInitValue('system.adapter.' + this.config.instanceSignal + '.alive');
+
+				if (!signalAliveState) {
+					this.log.warn('Signal instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					await this.sendToAsync(this.config.instanceSignal, 'send', {
+						text: text,
+						phone: this.config.phoneSignal,
+					});
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Signal]', error);
+		}
+
 		// Email
 		try {
 			if (this.config.instanceEmail) {
@@ -2593,7 +2612,7 @@ class DeviceWatcher extends utils.Adapter {
 		let message = '';
 		const setMessage = async (message) => {
 			this.log.info(`${message}`);
-			await this.setStateChangedAsync('lastNotification', `${message}`, true);
+			await this.setStateAsync('lastNotification', `${message}`, true);
 			await this.sendNotification(`${message}`);
 			return (message = '');
 		};
@@ -2669,7 +2688,7 @@ class DeviceWatcher extends utils.Adapter {
 		const checkDays = [];
 		const setMessage = async (message) => {
 			this.log.info(`${message}`);
-			await this.setStateChangedAsync('lastNotification', `${message}`, true);
+			await this.setStateAsync('lastNotification', `${message}`, true);
 			await this.sendNotification(`${message}`);
 			return (message = '');
 		};

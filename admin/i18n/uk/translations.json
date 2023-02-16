@@ -118,5 +118,8 @@
     "Watch instances": "Дивитися екземпляри",
     "Create lists for devices": "Створення списків для пристроїв",
     "Adapter & Instances Notification Settings": "Налаштування сповіщень адаптера та екземплярів",
-    "Devices Notification Settings": "Налаштування сповіщень пристроїв"
+    "Devices Notification Settings": "Налаштування сповіщень пристроїв",
+    "Signal Instance": "Примірник сигналу",
+    "Please choose the Signal instance": "Виберіть екземпляр Signal",
+    "Choose the day(s) where you want to get the overview of updatable Adapter:": "Виберіть день (дні), коли ви хочете отримати огляд оновлюваного адаптера:"
 }

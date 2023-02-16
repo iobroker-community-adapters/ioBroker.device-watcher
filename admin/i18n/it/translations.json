@@ -118,5 +118,8 @@
     "Watch instances": "Guarda le istanze",
     "Create lists for devices": "Crea elenchi per i dispositivi",
     "Adapter & Instances Notification Settings": "Impostazioni di notifica dell'adattatore e delle istanze",
-    "Devices Notification Settings": "Impostazioni di notifica dei dispositivi"
+    "Devices Notification Settings": "Impostazioni di notifica dei dispositivi",
+    "Signal Instance": "Istanza del segnale",
+    "Please choose the Signal instance": "Scegli l'istanza Signal",
+    "Choose the day(s) where you want to get the overview of updatable Adapter:": "Scegli il giorno o i giorni in cui desideri ottenere la panoramica dell'adattatore aggiornabile:"
 }

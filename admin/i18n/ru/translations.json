@@ -118,5 +118,8 @@
     "Watch instances": "Смотреть экземпляры",
     "Create lists for devices": "Создание списков для устройств",
     "Adapter & Instances Notification Settings": "Настройки уведомлений адаптера и экземпляров",
-    "Devices Notification Settings": "Настройки уведомлений устройств"
+    "Devices Notification Settings": "Настройки уведомлений устройств",
+    "Signal Instance": "Экземпляр сигнала",
+    "Please choose the Signal instance": "Пожалуйста, выберите экземпляр Signal",
+    "Choose the day(s) where you want to get the overview of updatable Adapter:": "Выберите день (дни), когда вы хотите получить обзор обновляемого адаптера:"
 }

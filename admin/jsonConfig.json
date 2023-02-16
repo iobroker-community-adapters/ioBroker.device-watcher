@@ -861,6 +861,7 @@
 						{ "label": "Pushover", "value": "pushover" },
 						{ "label": "Telegram", "value": "telegram" },
 						{ "label": "Whatsapp", "value": "whatsapp" },
+						{ "label": "Signal", "value": "signal" },
 						{ "label": "E-Mail", "value": "email" },
 						{ "label": "Jarvis", "value": "jarvis" },
 						{ "label": "Lovelace", "value": "lovelace" },
@@ -997,6 +998,38 @@
 					"label": "Recipient (optional)",
 					"help": "Choose your recipient",
 					"hidden": "data.msgService !== 'whatsapp'",
+					"hideOnlyControl": false
+				},
+				"headerSignal": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Signal",
+					"size": 2,
+					"hidden": "data.msgService !== 'signal'",
+					"hideOnlyControl": false
+				},
+				"instanceSignal": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "signal-cmb",
+					"all": false,
+					"allowDeactivate": true,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Signal Instance",
+					"help": "Please choose the Signal instance",
+					"hidden": "data.msgService !== 'signal'",
+					"hideOnlyControl": false
+				},
+				"phonSignal": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Recipient (optional)",
+					"help": "Choose your recipient",
+					"hidden": "data.msgService !== 'signal'",
 					"hideOnlyControl": false
 				},
 				"_headerEmail": {
