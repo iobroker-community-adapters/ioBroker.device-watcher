@@ -1930,7 +1930,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.subscribeForeignStates(id);
 				this.subscribeForeignStates(instanceConnectedHostDP);
 				this.subscribeForeignStates(instanceConnectedDeviceDP);
-				await this.subscribeForeignObjectsAsync(instanceObjectPath);
+				//await this.subscribeForeignObjectsAsync(instanceObjectPath);
 
 				// create raw list
 				this.listInstanceRaw.set(instanceObjectPath, {
