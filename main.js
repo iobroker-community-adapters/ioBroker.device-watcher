@@ -778,7 +778,7 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
 				this.subscribeForeignStates(instanceDeviceConnectionDP);
-				this.subscribeForeignObjectsAsync(`${this.selAdapter[i].Selektor}`);
+				//this.subscribeForeignObjectsAsync(`${this.selAdapter[i].Selektor}`);
 
 				/*=============================================
 				=              Get device name		          =
@@ -797,7 +797,7 @@ class DeviceWatcher extends utils.Adapter {
 				const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
 
 				// subscribe to object device path
-				this.subscribeForeignObjectsAsync(currDeviceString);
+				//this.subscribeForeignObjectsAsync(currDeviceString);
 
 				/*=============================================
 				=            Get signal strength              =
@@ -1930,7 +1930,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.subscribeForeignStatesAsync(id);
 				this.subscribeForeignStatesAsync(instanceConnectedHostDP);
 				this.subscribeForeignStatesAsync(instanceConnectedDeviceDP);
-				this.subscribeForeignObjectsAsync(instanceObjectPath);
+				//this.subscribeForeignObjectsAsync(instanceObjectPath);
 
 				// create raw list
 				this.listInstanceRaw.set(instanceObjectPath, {
