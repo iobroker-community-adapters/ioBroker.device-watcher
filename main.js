@@ -585,7 +585,7 @@ class DeviceWatcher extends utils.Adapter {
 						});
 						this.sendTo(obj.from, obj.command, sortDevices, obj.callback);
 					} catch (error) {
-						this.sendTo(obj.from, obj.command, obj.callback);
+						this.errorReporting('[onMessage - deviceList for blacklisttable]', error);
 					}
 				} else {
 					this.sendTo(obj.from, obj.command, obj.callback);
@@ -613,7 +613,7 @@ class DeviceWatcher extends utils.Adapter {
 						});
 						this.sendTo(obj.from, obj.command, sortInstances, obj.callback);
 					} catch (error) {
-						this.sendTo(obj.from, obj.command, obj.callback);
+						this.errorReporting('[onMessage - instanceList for blacklisttable]', error);
 					}
 				} else {
 					this.sendTo(obj.from, obj.command, obj.callback);
