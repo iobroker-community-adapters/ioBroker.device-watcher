@@ -183,6 +183,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Added: Signal adapter for notifications
+-   (ciddi89) Added: Raw-List with all data of devices
 
 ### 2.6.0 (2023-02-06)
 
