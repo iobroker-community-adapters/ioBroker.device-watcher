@@ -1945,6 +1945,37 @@
 					"hideOnlyControl": false
 				}
 			}
+		},
+		"_ownData": {
+			"type": "panel",
+			"label": "Own Data",
+			"items": {
+				"_headerOwnData": {
+					"type": "header",
+					"text": "Add you own data (BETA)",
+					"size": 2
+				},
+				"textOwnData": {
+					"type": "staticText",
+					"text": "If one adapter is not supported, you can try to add it by yourself. Please refer to the template. This function is only experimental and may not work.",
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"style": {
+						"fontSize": 16,
+						"marginBottom": 10
+					}
+				},
+				"ownDataEditor": {
+					"type": "text",
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"minRows": 40,
+					"maxRows": 40,
+					"trim": false
+				}
+			}
 		}
 	}
 }
