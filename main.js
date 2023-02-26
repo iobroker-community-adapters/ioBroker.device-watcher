@@ -27,7 +27,7 @@ class DeviceWatcher extends utils.Adapter {
 		// instances and adapters
 		// raw arrays
 		this.listInstanceRaw = new Map();
-		this.adapterUpdatesJsonRaw = [];
+		this.adapterUpdatesJsonRaw = new Map();
 		this.listErrorInstanceRaw = [];
 
 		// user arrays
@@ -361,14 +361,20 @@ class DeviceWatcher extends utils.Adapter {
 			let oldInstanceDeviceState;
 
 			try {
-				for (const adapter of this.adapterUpdatesJsonRaw) {
-					switch (id) {
-						case adapter.Path:
-							await this.getAdapterUpdateData(id);
-							await this.createAdapterUpdateList();
-							if (this.config.checkSendAdapterUpdateMsg) {
-								await this.sendStateNotifications('updateAdapter', null);
+				if (id.endsWith('updatesJson')) {
+					await this.getAdapterUpdateData(id);
+					await this.createAdapterUpdateList();
+					if (this.config.checkSendAdapterUpdateMsg) {
+						await this.sendStateNotifications('updateAdapter', null);
+					}
+					for (const instance of this.listInstanceRaw.values()) {
+						if (this.adapterUpdatesJsonRaw.has(instance.Adapter)) {
+							for (const adapter of this.adapterUpdatesJsonRaw.values()) {
+								instance.updateAvailable = adapter.newVersion;
 							}
+						} else {
+							instance.updateAvailable = ' - ';
+						}
 					}
 				}
 
@@ -1912,6 +1918,7 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceObjectPath = `system.adapter.${instanceName}`;
 				let adapterName;
 				let adapterVersion;
+				let adapterAvailableUpdate = '';
 				let instanceMode;
 				let scheduleTime = 'N/A';
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
@@ -1924,6 +1931,16 @@ class DeviceWatcher extends utils.Adapter {
 					if (instanceMode === 'schedule') {
 						scheduleTime = instanceObjectData.common.schedule;
 					}
+				}
+
+				await this.getAdapterUpdateData(`admin.*.info.updatesJson`);
+
+				if (this.adapterUpdatesJsonRaw.has(adapterName)) {
+					for (const adapter of this.adapterUpdatesJsonRaw.values()) {
+						adapterAvailableUpdate = adapter.newVersion;
+					}
+				} else {
+					adapterAvailableUpdate = ' - ';
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
@@ -1947,6 +1964,7 @@ class DeviceWatcher extends utils.Adapter {
 					instanceMode: instanceMode,
 					schedule: scheduleTime,
 					adapterVersion: adapterVersion,
+					updateAvailable: adapterAvailableUpdate,
 					isAlive: isAlive,
 					isHealthy: isHealthy,
 					connectedHostPath: instanceConnectedHostDP,
@@ -2073,7 +2091,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} adapterUpdateListDP
 	 */
 	async getAdapterUpdateData(adapterUpdateListDP) {
-		this.adapterUpdatesJsonRaw = [];
+		this.adapterUpdatesJsonRaw.clear();
 		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
 
 		let adapterJsonList;
@@ -2085,9 +2103,8 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		for (const [id] of Object.entries(adapterJsonList)) {
-			this.adapterUpdatesJsonRaw.push({
+			this.adapterUpdatesJsonRaw.set(this.capitalize(id), {
 				Path: adapterUpdatesJsonPath,
-				Adapter: this.capitalize(id),
 				newVersion: adapterJsonList[id].availableVersion,
 				oldVersion: adapterJsonList[id].installedVersion,
 			});
@@ -2102,11 +2119,11 @@ class DeviceWatcher extends utils.Adapter {
 		this.listAdapterUpdates = [];
 		this.countAdapterUpdates = 0;
 
-		for (const adapter of this.adapterUpdatesJsonRaw) {
+		for (const [adapter, updateData] of this.adapterUpdatesJsonRaw) {
 			this.listAdapterUpdates.push({
-				Adapter: adapter.Adapter,
-				'Available Version': adapter.newVersion,
-				'Installed Version': adapter.oldVersion,
+				Adapter: adapter,
+				'Available Version': updateData.newVersion,
+				'Installed Version': updateData.oldVersion,
 			});
 		}
 		this.countAdapterUpdates = this.listAdapterUpdates.length;
@@ -2154,6 +2171,7 @@ class DeviceWatcher extends utils.Adapter {
 				Mode: instance.instanceMode,
 				Schedule: instance.schedule,
 				Version: instance.adapterVersion,
+				Updateable: instance.updateAvailable,
 				Status: instance.status,
 			});
 			if (!instance.isAlive) {
