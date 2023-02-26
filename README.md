@@ -179,8 +179,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.6.1 (2023-02-26)
 
 -   (ciddi89) Added: Signal adapter for notifications
 -   (ciddi89) Added: Raw-List with all data of devices

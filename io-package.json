@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.6.0",
+		"version": "2.6.1",
 		"news": {
+			"2.6.1": {
+				"en": "Added: Signal adapter for notifications\nAdded: Raw-List with all data of devices\nAdded: FHEM TFA sensors [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)\nImprovement: Objecthandling of devices/instances\nImprovement: Adapter update data\nFixed: HM-CC-RT-DN battery [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nAdded/Changed: some texts in instance config",
+				"de": "Hinzugefügt: Signal Adapter für Benachrichtigungen\nHinzugefügt: Raw-Liste mit allen Daten von Geräten\nHinzugefügt: FHEM TFA Sensoren [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)\nVerbesserung: Objektabwicklung von Geräten/Instanzen\nVerbesserung: Adapter-Update-Daten\nBehoben: HM-CC-RT-DN-Batterie [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nHinzugefügt/Geändert: einige Texte in der Instanz Config",
+				"ru": "Добавлен: сигнальный адаптер для уведомлений\nДобавлена: Raw-List со всеми данными устройств\nДобавлено: FHEM TFA датчики [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)\nУлучшение: Управление устройствами/инстанции\nУлучшение: Данные обновления адаптера\nИсправлено: HM-CC-RT-DN аккумулятор [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nДобавлен/Изменен: некоторые тексты в примере config",
+				"pt": "Adicionado: Adaptador de sinal para notificações\nAdicionado: Raw-List com todos os dados de dispositivos\nAdicionado: FHEM Sensores TFA [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)\nMelhoria: Manuseamento de dispositivos/instâncias\nMelhoria: dados de atualização do adaptador\nFixo: Bateria HM-CC-RT-DN [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nAdicionado / pendurado: alguns textos em instância config",
+				"nl": "Vertaling:\nVertaling:\nVertaling:\nImprovance: Objecthandling van apparatuur\nVertaling:\nQuality over Quantity (QoQ) Releases Vertaling:\nVertaling:",
+				"fr": "Ajouté: Adaptateur de signal pour les notifications\nAjouté: Raw-List avec toutes les données des appareils\nAjouté : capteurs FHEM TFA [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)\nAmélioration : Objecthandling of devices/instances\nAmélioration : Données de mise à jour de l'adaptateur\nFixed: HM-CC-RT-DN Battery [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nAjouté/Changed: certains textes en instance config",
+				"it": "Aggiunto: Adattatore segnale per le notifiche\nAggiunto: Raw-List con tutti i dati dei dispositivi\nAggiunto: FHEM TFA Sensors [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)\nMiglioramento: Gestione oggetti di dispositivi/instanze\nMiglioramento: Dati di aggiornamento dell'adattatore\nFisso: batteria HM-CC-RT-DN [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nAggiunto/Changed: alcuni testi in istanza config",
+				"es": "Añadido: Adaptador de señales para notificaciones\nAñadido: Raw-List con todos los datos de los dispositivos\nAñadido: FHEM TFA sensors [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)\nMejora: Objeción de dispositivos/instancias\nMejora: Datos de actualización del adaptador\nFijo: batería HM-CC-RT-DN [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nAñadido/Cambiado: algunos textos en ejemplo config",
+				"pl": "Added: adapter Signal\nAdded: Raw-List z wszystkimi danymi\nAdded: FHEM TFA sensors #137(https:/github.com/ciddi89/ioBroker,device-watcher/issues/137) (ang.)\nImprovement: Objecthandling of devices/instances (ang.)\nData dostępu: Adapter update data\nFixed: HM-CC-RT-DN battery #128(https:/github.com/ciddi89/ioBroker.device-watcher/issues/128) (ang.)\nAdded/Changed: niektóre teksty, np",
+				"uk": "Додано: Signal адаптер для повідомлень\nДодано: Сиро-список з усіма даними пристроїв\nДодано: FHEM TFA датчики [#137](https://github.com/ciddi89/ioBroker.device-watcher/products/137)\nУдосконалення: Об'єктування пристроїв / інстанцій\nУдосконалення: дані оновлення адаптера\nВиправлено: HM-CC-RT-DN акумулятор [#128] (https://github.com/ciddi89/ioBroker.device-watcher/issues/128)\nДодано/Змінити: деякі тексти в налаштуваннях екземпляра",
+				"zh-cn": "增 编:通知的签字适应者\n增 编:携带各种装置的数据\n添加:FHEMTFA传感器[第137号](http://github.com/ciddi89/ioBroker.device-watcher/issues/137)\n改进: 装置/装置的用途\n改进:更新数据\n固定:HM-CC-DN电池[#128](http://github.com/ciddi89/ioBroker.device-watcher/issues/128)。\n添加/编辑:一些案文,例如:"
+			},
 			"2.6.0": {
 				"en": "Fixed: Instance error list and count was not reset\nFixed: Made working notification for adapter update\nAdded: Delete objects automatically if it is not selected in settings.\nEnhancement: Check if general device connected state is true for more then few seconds to prevent multiple device status messages\nAdded: Proxmox Adapter ([#123](https://github.com/ciddi89/ioBroker.device-watcher/issues/123))\nFixed: Delete/Add data of new or deleted instance without restart ([#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125))\nFixed: Delete/Add data of new or deleted devices without restart ([#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125))\nEnhancement: Schedule and State notifications\nEnhancement: Some code improvements",
 				"de": "Behoben: Instanz-Fehlerliste und Zählung wurde nicht zurückgesetzt\nBehoben: Bearbeitete Benachrichtigung für Adapter-Update\nHinzugefügt: Löschen Sie Objekte automatisch, wenn es nicht in Einstellungen ausgewählt wird.\nVerbesserung: Überprüfen Sie, ob der allgemeine gerätegebundene Zustand mehr als wenige Sekunden wahr ist, um mehrere Gerätestatusmeldungen zu verhindern\nHinzugefügt: Proxmox Adapter [#123](https://github.com/ciddi89/ioBroker.device-watcher/issues/123)\nBehoben: Daten der neuen oder gelöschten Instanz ohne Neustart löschen [#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125)\nBehoben: Daten von neuen oder gelöschten Geräten ohne Neustart löschen [#125](https://github.com/ciddi89/ioBroker.device-watcher/issues/125)\nVerbesserung: Zeitplan und staatliche Meldungen\nVerbesserung: Einige Codeverbesserungen",
@@ -80,19 +93,6 @@
 				"pl": "dobór urządzenia w czarnej liście dodał sortowanie do wyboru urządzenia\nUrządzenia mogą być również czarne w wersji adapterowej\nbooleanzy dla niskopodłogowej, offline i upgradable dodać\ndodarzenie euSec dodaje #73 (https:/github.com/ciddi89/ioBroker,device-watcher/issues/73)",
 				"uk": "сортування для вибору пристрою в чорному списку\nПристрої тепер також можуть бути чорними у списку адаптерів\nболеани для негабариту, автономної та розширеної доданої\neuSec адаптер додано #[73](https://github.com/ciddi89/ioBroker.device-watcher/issues/73)",
 				"zh-cn": "黑名单中选用装置的类型\n现在也可能被黑名单人黑名单,以适应者自己的名单。\n低巴特、径流和降解的诱因\n用户增加了第[73]号(http://github.com/ciddi89/ioBroker.device-watcher/issues/73)"
-			},
-			"2.2.2": {
-				"en": "some translation added\ndatapoints will be written in intervall\nimprovements of lists\nsome other small improvements",
-				"de": "einige übersetzung hinzugefügt\ndatenpunkte werden in intervall geschrieben\nverbesserungen der listen\neinige andere kleine verbesserungen",
-				"ru": "некоторый перевод добавлен\nдата-точки будут написаны в интервале\nулучшения списков\nнекоторые другие небольшие улучшения",
-				"pt": "alguma tradução adicionada\ndatapoints serão escritos em intervalo\nmelhorias das listas\noutras pequenas melhorias",
-				"nl": "vertaling:\ndatapoints worden geschreven in intervall\nverbeteringen van lijsten\nandere kleine verbetering",
-				"fr": "une traduction ajoutée\nles points de données seront écrits en intervalles\naméliorations des listes\nd'autres petites améliorations",
-				"it": "qualche traduzione aggiunta\ni datapoint saranno scritti in intervallo\nmiglioramenti degli elenchi\nalcuni altri piccoli miglioramenti",
-				"es": "algo de traducción añadido\ndatapoints se escribirá en intervalol\nmejoras de las listas\nalgunas otras pequeñas mejoras",
-				"pl": "w tłumaczeniu dodano również nowe tłumaczenia\npunkty danych są zapisywane w interwałcie\npoprawa list\ndrobne ulepszenia",
-				"uk": "додано переклад\nдані будуть написані в інтервалі\nудосконалення переліків\nдеякі інші невеликі поліпшення",
-				"zh-cn": "一些翻译\n数据点将在相互间记录。\n改进名单\n其他一些小的改进"
 			}
 		},
 		"titleLang": {
