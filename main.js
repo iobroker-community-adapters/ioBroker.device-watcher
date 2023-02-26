@@ -2688,13 +2688,12 @@ class DeviceWatcher extends utils.Adapter {
 				setMessage(message);
 				break;
 			case 'updateAdapter':
+				if (this.countAdapterUpdates === 0) return;
 				objectData = this.listAdapterUpdates;
 				list = '';
-
 				for (const id of objectData) {
 					list = `${list}\n${id.Adapter}: v${id['Available Version']}`;
 				}
-				if (list.length === 0) return;
 				message = `Neue Adapter Updates vorhanden: ${list}`;
 				setMessage(message);
 				break;
