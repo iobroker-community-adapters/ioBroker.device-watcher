@@ -118,5 +118,15 @@
 	"Signal Instance": "Signal Instance",
 	"Please choose the Signal instance": "Please choose the Signal instance",
 	"Choose the day(s) where you want to get the overview of updatable Adapter:": "Choose the day(s) where you want to get the overview of updatable Adapter:",
-	"Watch devices": "Watch devices"
+	"Watch devices": "Watch devices",
+	"Watch devices/services": "Watch devices/services",
+	"Choose the day(s) where you want to get the overview of offline devices/services:": "Choose the day(s) where you want to get the overview of offline devices/services:",
+	"Overview of offline devices/services": "Overview of offline devices/services",
+	"Get a message with an overview all offline devices/services": "Get a message with an overview all offline devices/services",
+	"Devices/Services Blacklist": "Devices/Services Blacklist",
+	"Choose which devices/services should be excluded": "Choose which devices/services should be excluded",
+	"Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
+	"Devices/Services Notification Settings": "Devices/Services Notification Settings",
+	"Offline Time for devices/services": "Offline Time for devices/services",
+	"Watch adapter/instances": "Watch adapter/instances"
 }

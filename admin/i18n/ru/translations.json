@@ -122,5 +122,16 @@
     "Signal Instance": "Экземпляр сигнала",
     "Please choose the Signal instance": "Пожалуйста, выберите экземпляр Signal",
     "Choose the day(s) where you want to get the overview of updatable Adapter:": "Выберите день (дни), когда вы хотите получить обзор обновляемого адаптера:",
-    "Watch devices": "Смотреть устройства"
+    "Watch devices": "Смотреть устройства",
+    "Watch devices/services": "Смотреть устройства/сервисы",
+    "Choose the day(s) where you want to get the overview of offline devices/services:": "Выберите день (дни), когда вы хотите получить обзор автономных устройств/сервисов:",
+    "Overview of offline devices/services": "Обзор автономных устройств/сервисов",
+    "Get a message with an overview all offline devices/services": "Получите сообщение с обзором всех автономных устройств/сервисов",
+    "Devices/Services Blacklist": "Черный список устройств/сервисов",
+    "Choose which devices/services should be excluded": "Выберите, какие устройства/сервисы следует исключить",
+    "Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.": "Здесь вы можете определить время автономной работы каждого адаптера. Если вы хотите использовать точки данных устройств (в сети, доступны, доступны и т. д.) непосредственно для определения статуса, введите «0».",
+    "Devices/Services Notification Settings": "Настройки уведомлений устройств/служб",
+    "Offline Time devices/services": "Устройства/сервисы Offline Time",
+    "Offline Time for devices/services": "Время автономной работы для устройств/сервисов",
+    "Watch adapter/instances": "Смотреть адаптер/экземпляры"
 }

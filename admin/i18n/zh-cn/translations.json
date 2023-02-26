@@ -122,5 +122,16 @@
     "Signal Instance": "信号实例",
     "Please choose the Signal instance": "请选择信号实例",
     "Choose the day(s) where you want to get the overview of updatable Adapter:": "选择您希望获得可更新适配器概览的日期：",
-    "Watch devices": "观看设备"
+    "Watch devices": "观看设备",
+    "Watch devices/services": "观看设备/服务",
+    "Choose the day(s) where you want to get the overview of offline devices/services:": "选择您想获取离线设备/服务概览的日期：",
+    "Overview of offline devices/services": "离线设备/服务概览",
+    "Get a message with an overview all offline devices/services": "获取包含所有离线设备/服务概览的消息",
+    "Devices/Services Blacklist": "设备/服务黑名单",
+    "Choose which devices/services should be excluded": "选择应排除哪些设备/服务",
+    "Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.": "您可以在此处定义每个适配器的离线时间。如果您想直接使用设备的数据点（在线、可用、可达等）来确定状态，请输入“0”。",
+    "Devices/Services Notification Settings": "设备/服务通知设置",
+    "Offline Time devices/services": "离线时间设备/服务",
+    "Offline Time for devices/services": "设备/服务的离线时间",
+    "Watch adapter/instances": "观看适配器/实例"
 }

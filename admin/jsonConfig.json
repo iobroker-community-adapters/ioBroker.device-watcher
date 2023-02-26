@@ -8,7 +8,7 @@
 			"items": {
 				"_headerAdapter": {
 					"type": "header",
-					"text": "Watch instances",
+					"text": "Watch adapter/instances",
 					"size": 2
 				},
 				"checkAdapterInstances": {
@@ -16,11 +16,11 @@
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
-					"label": "Watch instances"
+					"label": "Watch adapter/instances"
 				},
 				"_headerDevices": {
 					"type": "header",
-					"text": "Watch devices",
+					"text": "Watch devices/services",
 					"size": 2
 				},
 				"alexa2Devices": {
@@ -560,7 +560,7 @@
 				},
 				"_headerCommon": {
 					"type": "header",
-					"text": "Devices Notification Settings",
+					"text": "Devices/Services Notification Settings",
 					"size": 2
 				},
 				"checkSendOfflineMsg": {
@@ -576,8 +576,8 @@
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
-					"label": "Overview of offline devices",
-					"help": "Get a message with an overview all offline devices"
+					"label": "Overview of offline devices/services",
+					"help": "Get a message with an overview all offline devices/services"
 				},
 				"_sendIntervallOfflineDay": {
 					"newLine": true,
@@ -589,7 +589,7 @@
 					"items": {
 						"_textDays": {
 							"type": "staticText",
-							"text": "Choose the day(s) where you want to get the overview of offline devices:",
+							"text": "Choose the day(s) where you want to get the overview of offline devices/services:",
 							"style": {
 								"fontSize": 16,
 								"marginTop": 20
@@ -1227,7 +1227,7 @@
 				"headerDevices": {
 					"newLine": "true",
 					"type": "header",
-					"text": "Devices Blacklist",
+					"text": "Devices/Services Blacklist",
 					"size": 2
 				},
 				"tableBlacklist": {
@@ -1239,7 +1239,7 @@
 					"items": [
 						{
 							"type": "selectSendTo",
-							"title": "Choose which devices should be excluded",
+							"title": "Choose which devices/services should be excluded",
 							"attr": "devices",
 							"filter": false,
 							"allowAddByFilter": false,
@@ -1354,12 +1354,12 @@
 				},
 				"_headerOfflineTime": {
 					"type": "header",
-					"text": "Offline Time",
+					"text": "Offline Time for devices/services",
 					"size": 2
 				},
 				"textOfflineTime": {
 					"type": "staticText",
-					"text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
+					"text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
 					"sm": 12,
 					"md": 12,
 					"lg": 12,

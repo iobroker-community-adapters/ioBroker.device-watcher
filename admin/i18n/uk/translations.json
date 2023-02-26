@@ -122,5 +122,16 @@
     "Signal Instance": "Примірник сигналу",
     "Please choose the Signal instance": "Виберіть екземпляр Signal",
     "Choose the day(s) where you want to get the overview of updatable Adapter:": "Виберіть день (дні), коли ви хочете отримати огляд оновлюваного адаптера:",
-    "Watch devices": "Годинникові пристрої"
+    "Watch devices": "Годинникові пристрої",
+    "Watch devices/services": "Годинники/сервіси",
+    "Choose the day(s) where you want to get the overview of offline devices/services:": "Виберіть день (дні), коли ви хочете отримати огляд офлайн-пристроїв/сервісів:",
+    "Overview of offline devices/services": "Огляд офлайн-пристроїв/сервісів",
+    "Get a message with an overview all offline devices/services": "Отримайте повідомлення з оглядом усіх офлайн-пристроїв/служб",
+    "Devices/Services Blacklist": "Чорний список пристроїв/служб",
+    "Choose which devices/services should be excluded": "Виберіть, які пристрої/послуги потрібно виключити",
+    "Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.": "Тут ви можете визначити час автономної роботи кожного адаптера. Якщо ви хочете використовувати точки даних пристроїв (онлайн, доступний, доступний тощо) безпосередньо для визначення статусу, введіть «0».",
+    "Devices/Services Notification Settings": "Налаштування сповіщень пристроїв/служб",
+    "Offline Time devices/services": "Пристрої/сервіси Offline Time",
+    "Offline Time for devices/services": "Час офлайн для пристроїв/сервісів",
+    "Watch adapter/instances": "Дивитися адаптер/примірники"
 }

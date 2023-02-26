@@ -122,5 +122,16 @@
     "Signal Instance": "Istanza del segnale",
     "Please choose the Signal instance": "Scegli l'istanza Signal",
     "Choose the day(s) where you want to get the overview of updatable Adapter:": "Scegli il giorno o i giorni in cui desideri ottenere la panoramica dell'adattatore aggiornabile:",
-    "Watch devices": "Guarda i dispositivi"
+    "Watch devices": "Guarda i dispositivi",
+    "Watch devices/services": "Guarda i dispositivi/servizi",
+    "Choose the day(s) where you want to get the overview of offline devices/services:": "Scegli il giorno o i giorni in cui vuoi ottenere la panoramica dei dispositivi/servizi offline:",
+    "Overview of offline devices/services": "Panoramica dei dispositivi/servizi offline",
+    "Get a message with an overview all offline devices/services": "Ricevi un messaggio con una panoramica di tutti i dispositivi/servizi offline",
+    "Devices/Services Blacklist": "Lista nera di dispositivi/servizi",
+    "Choose which devices/services should be excluded": "Scegli quali dispositivi/servizi devono essere esclusi",
+    "Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.": "Qui puoi definire i tempi offline di ciascun adattatore. Se si desidera utilizzare direttamente i punti dati dei dispositivi (online, disponibili, raggiungibili ecc.) per determinare lo stato, inserire ' 0 '.",
+    "Devices/Services Notification Settings": "Impostazioni di notifica dispositivi/servizi",
+    "Offline Time devices/services": "Dispositivi/servizi Offline Time",
+    "Offline Time for devices/services": "Tempo offline per dispositivi/servizi",
+    "Watch adapter/instances": "Guarda adattatori/istanze"
 }
