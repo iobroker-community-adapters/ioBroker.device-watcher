@@ -305,7 +305,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (obj) {
 			try {
 				// The object was changed
-				this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
+				//this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
 
 				if (id.startsWith('system.adapter.')) {
 					//read new instance data and add it to the lists
