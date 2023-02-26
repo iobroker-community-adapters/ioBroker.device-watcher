@@ -94,116 +94,116 @@ class DeviceWatcher extends utils.Adapter {
 	async onReady() {
 		this.log.debug(`Adapter ${adapterName} was started`);
 
+		this.configCreateInstanceList = this.config.checkAdapterInstances;
+		this.configListOnlyBattery = this.config.listOnlyBattery;
+		this.configCreateOwnFolder = this.config.createOwnFolder;
+		this.configCreateHtmlList = this.config.createHtmlList;
+
+		this.configSetAdapter = {
+			alexa2: this.config.alexa2Devices,
+			apcups: this.config.apcupsDevices,
+			ble: this.config.bleDevices,
+			deconz: this.config.deconzDevices,
+			enocean: this.config.enoceanDevices,
+			esphome: this.config.esphomeDevices,
+			eusec: this.config.eusecDevices,
+			fritzdect: this.config.fritzdectDevices,
+			fullybrowser: this.config.fullybrowserDevices,
+			ham: this.config.hamDevices,
+			harmony: this.config.harmonyDevices,
+			hmiP: this.config.hmiPDevices,
+			hmrpc: this.config.hmrpcDevices,
+			homeconnect: this.config.homeconnectDevices,
+			hs100: this.config.hs100Devices,
+			hue: this.config.hueDevices,
+			hueExt: this.config.hueExtDevices,
+			innogy: this.config.innogyDevices,
+			jeelink: this.config.jeelinkDevices,
+			lupusec: this.config.lupusecDevices,
+			maxcube: this.config.maxcubeDevices,
+			meross: this.config.merossDevices,
+			mihome: this.config.mihomeDevices,
+			mihomeGW: this.config.mihomeDevices,
+			mihomeVacuum: this.config.mihomeVacuumDevices,
+			mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttDevices,
+			mqttNuki: this.config.mqttNukiDevices,
+			musiccast: this.config.musiccastDevices,
+			netatmo: this.config.netatmoDevices,
+			nukiExt: this.config.nukiExtDevices,
+			nut: this.config.nutDevices,
+			ping: this.config.pingDevices,
+			proxmox: this.config.proxmoxDevices,
+			roomba: this.config.roombaDevices,
+			shelly: this.config.shellyDevices,
+			smartgarden: this.config.smartgardenDevices,
+			sonoff: this.config.sonoffDevices,
+			sonos: this.config.sonosDevices,
+			sureflap: this.config.sureflapDevices,
+			switchbotBle: this.config.switchbotBleDevices,
+			tado: this.config.tadoDevices,
+			tapo: this.config.tapoDevices,
+			tradfri: this.config.tradfriDevices,
+			unifi: this.config.unifiDevices,
+			wled: this.config.wledDevices,
+			yeelight: this.config.yeelightDevices,
+			zigbee: this.config.zigbeeDevices,
+			zigbee2MQTT: this.config.zigbee2mqttDevices,
+			zwave: this.config.zwaveDevices,
+		};
+
+		this.configMaxMinutes = {
+			alexa2: this.config.alexa2MaxMinutes,
+			apcups: this.config.apcupsMaxMinutes,
+			ble: this.config.bleMaxMinutes,
+			deconz: this.config.deconzMaxMinutes,
+			enocean: this.config.enoceanMaxMinutes,
+			esphome: this.config.esphomeMaxMinutes,
+			eusec: this.config.eusecMaxMinutes,
+			fritzdect: this.config.fritzdectMaxMinutes,
+			fullybrowser: this.config.fullybrowserMaxMinutes,
+			ham: this.config.hamMaxMinutes,
+			harmony: this.config.harmonyMaxMinutes,
+			hmiP: this.config.hmiPMaxMinutes,
+			hmrpc: this.config.hmrpcMaxMinutes,
+			homeconnect: this.config.homeconnectMaxMinutes,
+			hs100: this.config.hs100MaxMinutes,
+			hue: this.config.hueMaxMinutes,
+			hueExt: this.config.hueextMaxMinutes,
+			innogy: this.config.innogyMaxMinutes,
+			jeelink: this.config.jeelinkMaxMinutes,
+			lupusec: this.config.lupusecMaxMinutes,
+			maxcube: this.config.maxcubeMaxMinutes,
+			meross: this.config.merossMaxMinutes,
+			mihome: this.config.mihomeMaxMinutes,
+			mihomeGW: this.config.mihomeMaxMinutes,
+			mihomeVacuum: this.config.mihomeVacuumMaxMinutes,
+			mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttMaxMinutes,
+			mqttNuki: this.config.mqttNukiMaxMinutes,
+			musiccast: this.config.musiccastMaxMinutes,
+			netatmo: this.config.netatmoMaxMinutes,
+			nukiExt: this.config.nukiextendMaxMinutes,
+			nut: this.config.nutMaxMinutes,
+			ping: this.config.pingMaxMinutes,
+			proxmox: this.config.proxmoxMaxMinutes,
+			roomba: this.config.roombaMaxMinutes,
+			shelly: this.config.shellyMaxMinutes,
+			smartgarden: this.config.smartgardenMaxMinutes,
+			sonoff: this.config.sonoffMaxMinutes,
+			sonos: this.config.sonosMaxMinutes,
+			sureflap: this.config.sureflapMaxMinutes,
+			switchbotBle: this.config.switchbotMaxMinutes,
+			tado: this.config.tadoMaxMinutes,
+			tapo: this.config.tapoMaxMinutes,
+			tradfri: this.config.tradfriMaxMinutes,
+			unifi: this.config.unifiMaxMinutes,
+			wled: this.config.wledMaxMinutes,
+			yeelight: this.config.yeelightMaxMinutes,
+			zigbee: this.config.zigbeeMaxMinutes,
+			zigbee2MQTT: this.config.zigbee2mqttMaxMinutes,
+			zwave: this.config.zwaveMaxMinutes,
+		};
+
 		try {
-			this.configCreateInstanceList = this.config.checkAdapterInstances;
-			this.configListOnlyBattery = this.config.listOnlyBattery;
-			this.configCreateOwnFolder = this.config.createOwnFolder;
-			this.configCreateHtmlList = this.config.createHtmlList;
-
-			this.configSetAdapter = {
-				alexa2: this.config.alexa2Devices,
-				apcups: this.config.apcupsDevices,
-				ble: this.config.bleDevices,
-				deconz: this.config.deconzDevices,
-				enocean: this.config.enoceanDevices,
-				esphome: this.config.esphomeDevices,
-				eusec: this.config.eusecDevices,
-				fritzdect: this.config.fritzdectDevices,
-				fullybrowser: this.config.fullybrowserDevices,
-				ham: this.config.hamDevices,
-				harmony: this.config.harmonyDevices,
-				hmiP: this.config.hmiPDevices,
-				hmrpc: this.config.hmrpcDevices,
-				homeconnect: this.config.homeconnectDevices,
-				hs100: this.config.hs100Devices,
-				hue: this.config.hueDevices,
-				hueExt: this.config.hueExtDevices,
-				innogy: this.config.innogyDevices,
-				jeelink: this.config.jeelinkDevices,
-				lupusec: this.config.lupusecDevices,
-				maxcube: this.config.maxcubeDevices,
-				meross: this.config.merossDevices,
-				mihome: this.config.mihomeDevices,
-				mihomeGW: this.config.mihomeDevices,
-				mihomeVacuum: this.config.mihomeVacuumDevices,
-				mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttDevices,
-				mqttNuki: this.config.mqttNukiDevices,
-				musiccast: this.config.musiccastDevices,
-				netatmo: this.config.netatmoDevices,
-				nukiExt: this.config.nukiExtDevices,
-				nut: this.config.nutDevices,
-				ping: this.config.pingDevices,
-				proxmox: this.config.proxmoxDevices,
-				roomba: this.config.roombaDevices,
-				shelly: this.config.shellyDevices,
-				smartgarden: this.config.smartgardenDevices,
-				sonoff: this.config.sonoffDevices,
-				sonos: this.config.sonosDevices,
-				sureflap: this.config.sureflapDevices,
-				switchbotBle: this.config.switchbotBleDevices,
-				tado: this.config.tadoDevices,
-				tapo: this.config.tapoDevices,
-				tradfri: this.config.tradfriDevices,
-				unifi: this.config.unifiDevices,
-				wled: this.config.wledDevices,
-				yeelight: this.config.yeelightDevices,
-				zigbee: this.config.zigbeeDevices,
-				zigbee2MQTT: this.config.zigbee2mqttDevices,
-				zwave: this.config.zwaveDevices,
-			};
-
-			this.configMaxMinutes = {
-				alexa2: this.config.alexa2MaxMinutes,
-				apcups: this.config.apcupsMaxMinutes,
-				ble: this.config.bleMaxMinutes,
-				deconz: this.config.deconzMaxMinutes,
-				enocean: this.config.enoceanMaxMinutes,
-				esphome: this.config.esphomeMaxMinutes,
-				eusec: this.config.eusecMaxMinutes,
-				fritzdect: this.config.fritzdectMaxMinutes,
-				fullybrowser: this.config.fullybrowserMaxMinutes,
-				ham: this.config.hamMaxMinutes,
-				harmony: this.config.harmonyMaxMinutes,
-				hmiP: this.config.hmiPMaxMinutes,
-				hmrpc: this.config.hmrpcMaxMinutes,
-				homeconnect: this.config.homeconnectMaxMinutes,
-				hs100: this.config.hs100MaxMinutes,
-				hue: this.config.hueMaxMinutes,
-				hueExt: this.config.hueextMaxMinutes,
-				innogy: this.config.innogyMaxMinutes,
-				jeelink: this.config.jeelinkMaxMinutes,
-				lupusec: this.config.lupusecMaxMinutes,
-				maxcube: this.config.maxcubeMaxMinutes,
-				meross: this.config.merossMaxMinutes,
-				mihome: this.config.mihomeMaxMinutes,
-				mihomeGW: this.config.mihomeMaxMinutes,
-				mihomeVacuum: this.config.mihomeVacuumMaxMinutes,
-				mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttMaxMinutes,
-				mqttNuki: this.config.mqttNukiMaxMinutes,
-				musiccast: this.config.musiccastMaxMinutes,
-				netatmo: this.config.netatmoMaxMinutes,
-				nukiExt: this.config.nukiextendMaxMinutes,
-				nut: this.config.nutMaxMinutes,
-				ping: this.config.pingMaxMinutes,
-				proxmox: this.config.proxmoxMaxMinutes,
-				roomba: this.config.roombaMaxMinutes,
-				shelly: this.config.shellyMaxMinutes,
-				smartgarden: this.config.smartgardenMaxMinutes,
-				sonoff: this.config.sonoffMaxMinutes,
-				sonos: this.config.sonosMaxMinutes,
-				sureflap: this.config.sureflapMaxMinutes,
-				switchbotBle: this.config.switchbotMaxMinutes,
-				tado: this.config.tadoMaxMinutes,
-				tapo: this.config.tapoMaxMinutes,
-				tradfri: this.config.tradfriMaxMinutes,
-				unifi: this.config.unifiMaxMinutes,
-				wled: this.config.wledMaxMinutes,
-				yeelight: this.config.yeelightMaxMinutes,
-				zigbee: this.config.zigbeeMaxMinutes,
-				zigbee2MQTT: this.config.zigbee2mqttMaxMinutes,
-				zwave: this.config.zwaveMaxMinutes,
-			};
-
 			for (const [id] of Object.entries(arrApart)) {
 				if (this.configSetAdapter[id]) {
 					this.selAdapter.push(arrApart[id]);
@@ -305,13 +305,15 @@ class DeviceWatcher extends utils.Adapter {
 		if (obj) {
 			try {
 				// The object was changed
-				//this.log.warn(`object ${id} changed: ${JSON.stringify(obj)}`);
+				this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
 
-				//read new instance data and add it to the lists
-				await this.getInstanceData(id);
-
-				//read devices data and renew the lists
-				await this.main();
+				if (id.startsWith('system.adapter.')) {
+					//read new instance data and add it to the lists
+					await this.getInstanceData(id);
+				} else {
+					//read devices data and renew the lists
+					await this.main();
+				}
 			} catch (error) {
 				this.log.error(`Issue at object change: ${error}`);
 			}
@@ -321,10 +323,14 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.info(`object ${id} deleted`);
 
 				// delete instance data in map
-				this.listInstanceRaw.delete(id);
+				if (this.listInstanceRaw.has(id)) {
+					this.listInstanceRaw.delete(id);
+				}
 
 				// delete device data in map
-				this.listAllDevicesRaw.delete(id);
+				if (this.listAllDevicesRaw.has(id)) {
+					this.listAllDevicesRaw.delete(id);
+				}
 
 				//unsubscribe of Objects and states
 				this.unsubscribeForeignObjects(id);
@@ -778,7 +784,7 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
 				this.subscribeForeignStates(instanceDeviceConnectionDP);
-				await this.subscribeForeignObjectsAsync(`${this.selAdapter[i].Selektor}`);
+				this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
 
 				/*=============================================
 				=              Get device name		          =
@@ -797,7 +803,7 @@ class DeviceWatcher extends utils.Adapter {
 				const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
 
 				// subscribe to object device path
-				await this.subscribeForeignObjectsAsync(currDeviceString);
+				this.subscribeForeignObjects(currDeviceString);
 
 				/*=============================================
 				=            Get signal strength              =
@@ -1930,7 +1936,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.subscribeForeignStates(id);
 				this.subscribeForeignStates(instanceConnectedHostDP);
 				this.subscribeForeignStates(instanceConnectedDeviceDP);
-				//await this.subscribeForeignObjectsAsync(instanceObjectPath);
+				this.subscribeForeignObjects(`system.adapter.*`);
 
 				// create raw list
 				this.listInstanceRaw.set(instanceObjectPath, {
