@@ -564,7 +564,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		} else {
 			// The state was deleted
-			this.log.info(`state ${id} deleted`);
+			this.log.debug(`state ${id} deleted`);
 		}
 	}
 
