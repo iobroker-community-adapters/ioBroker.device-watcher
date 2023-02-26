@@ -121,5 +121,6 @@
     "Devices Notification Settings": "Configuración de notificaciones de dispositivos",
     "Signal Instance": "Instancia de señal",
     "Please choose the Signal instance": "Elija la instancia de Signal",
-    "Choose the day(s) where you want to get the overview of updatable Adapter:": "Elija los días en los que desea obtener la descripción general del adaptador actualizable:"
+    "Choose the day(s) where you want to get the overview of updatable Adapter:": "Elija los días en los que desea obtener la descripción general del adaptador actualizable:",
+    "Watch devices": "Ver dispositivos"
 }
