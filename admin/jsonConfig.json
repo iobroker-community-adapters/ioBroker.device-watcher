@@ -8,7 +8,7 @@
 			"items": {
 				"_headerAdapter": {
 					"type": "header",
-					"text": "Create lists for instances",
+					"text": "Watch instances",
 					"size": 2
 				},
 				"checkAdapterInstances": {
@@ -20,7 +20,7 @@
 				},
 				"_headerDevices": {
 					"type": "header",
-					"text": "Create lists for devices",
+					"text": "Watch devices",
 					"size": 2
 				},
 				"alexa2Devices": {
@@ -368,7 +368,9 @@
 				"_headerAdapterInstances": {
 					"type": "header",
 					"text": "Adapter & Instances Notification Settings",
-					"size": 2
+					"size": 2,
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
 				},
 				"checkSendAdapterUpdateMsg": {
 					"newLine": "true",
@@ -377,7 +379,9 @@
 					"md": 12,
 					"lg": 6,
 					"label": "Adapter update message",
-					"help": "Receive a message when an update for an adapter is available"
+					"help": "Receive a message when an update for an adapter is available",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
 				},
 				"checkSendAdapterUpdateMsgDaily": {
 					"type": "checkbox",
@@ -385,7 +389,9 @@
 					"md": 12,
 					"lg": 6,
 					"label": "Overview of updatable adapter",
-					"help": "Get a message with an overview of all updatable adapter"
+					"help": "Get a message with an overview of all updatable adapter",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
 				},
 				"_sendIntervallAdapterUpdateDay": {
 					"newLine": true,
@@ -393,7 +399,7 @@
 					"md": 12,
 					"lg": 6,
 					"hidden": "!data.checkSendAdapterUpdateMsgDaily",
-					"hideOnlyControl": true,
+					"hideOnlyControl": false,
 					"items": {
 						"_textDays": {
 							"type": "staticText",
@@ -439,7 +445,7 @@
 					"md": 12,
 					"lg": 6,
 					"hidden": "!data.checkSendAdapterUpdateMsgDaily",
-					"hideOnlyControl": true,
+					"hideOnlyControl": false,
 					"items": {
 						"_textTime": {
 							"type": "staticText",
@@ -458,7 +464,9 @@
 				},
 				"trennerUpdatableAdapter": {
 					"newLine": true,
-					"type": "divider"
+					"type": "divider",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
 				},
 				"checkSendInstanceFailedMsg": {
 					"newLine": "true",
@@ -467,7 +475,9 @@
 					"md": 12,
 					"lg": 6,
 					"label": "Instance failed message",
-					"help": "Receive a message when an instance failed"
+					"help": "Receive a message when an instance failed",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
 				},
 				"checkSendInstanceFailedDaily": {
 					"type": "checkbox",
@@ -475,7 +485,9 @@
 					"md": 12,
 					"lg": 6,
 					"label": "Overview of failed instances",
-					"help": "Get a message with an overview of all failed instances"
+					"help": "Get a message with an overview of all failed instances",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
 				},
 				"_sendIntervallFailedInstancesDay": {
 					"newLine": true,
@@ -483,7 +495,7 @@
 					"md": 12,
 					"lg": 6,
 					"hidden": "!data.checkSendInstanceFailedDaily",
-					"hideOnlyControl": true,
+					"hideOnlyControl": false,
 					"items": {
 						"_textDays": {
 							"type": "staticText",
@@ -529,7 +541,7 @@
 					"md": 12,
 					"lg": 6,
 					"hidden": "!data.checkSendInstanceFailedDaily",
-					"hideOnlyControl": true,
+					"hideOnlyControl": false,
 					"items": {
 						"_textTime": {
 							"type": "staticText",
@@ -1943,37 +1955,6 @@
 					"help": "in minutes",
 					"hidden": "!data.zwaveDevices",
 					"hideOnlyControl": false
-				}
-			}
-		},
-		"_ownData": {
-			"type": "panel",
-			"label": "Own Data",
-			"items": {
-				"_headerOwnData": {
-					"type": "header",
-					"text": "Add you own data (BETA)",
-					"size": 2
-				},
-				"textOwnData": {
-					"type": "staticText",
-					"text": "If one adapter is not supported, you can try to add it by yourself. Please refer to the template. This function is only experimental and may not work.",
-					"sm": 12,
-					"md": 12,
-					"lg": 12,
-					"style": {
-						"fontSize": 16,
-						"marginBottom": 10
-					}
-				},
-				"ownDataEditor": {
-					"type": "text",
-					"sm": 12,
-					"md": 12,
-					"lg": 12,
-					"minRows": 40,
-					"maxRows": 40,
-					"trim": false
 				}
 			}
 		}
