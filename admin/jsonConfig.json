@@ -1180,6 +1180,50 @@
 			"type": "panel",
 			"label": "Blacklist",
 			"items": {
+				"headerBlacklistInstances": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Instances Blacklist",
+					"size": 2,
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
+				},
+				"tableBlacklistInstances": {
+					"type": "table",
+					"nodelete": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false,
+					"items": [
+						{
+							"type": "selectSendTo",
+							"title": "Choose which instances should be excluded",
+							"attr": "instances",
+							"filter": false,
+							"allowAddByFilter": false,
+							"sort": false,
+							"jsonData": "{\"instanceName\":\"${globalData.instanceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
+							"command": "instancesList",
+							"width": "60%"
+						},
+						{
+							"type": "checkbox",
+							"title": "Ignor in notifications",
+							"attr": "checkIgnorNotify",
+							"width": "15%",
+							"alsoDependsOn": ["devices"]
+						},
+						{
+							"type": "checkbox",
+							"title": "Ignore in lists",
+							"attr": "checkIgnorLists",
+							"width": "10%",
+							"alsoDependsOn": ["devices"]
+						}
+					]
+				},
 				"headerDevices": {
 					"newLine": "true",
 					"type": "header",
@@ -1222,50 +1266,6 @@
 							"type": "checkbox",
 							"title": "Ignore in lists per adapter",
 							"attr": "checkIgnorAdapterLists",
-							"width": "10%",
-							"alsoDependsOn": ["devices"]
-						}
-					]
-				},
-				"headerBlacklistInstances": {
-					"newLine": "true",
-					"type": "header",
-					"text": "Instances Blacklist",
-					"size": 2,
-					"hidden": "!data.checkAdapterInstances && !data.checkSendInstanceFailedMsg && !data.checkSendInstanceFailedMsgDaily",
-					"hideOnlyControl": false
-				},
-				"tableBlacklistInstances": {
-					"type": "table",
-					"nodelete": true,
-					"sm": 12,
-					"md": 12,
-					"lg": 12,
-					"hidden": "!data.checkAdapterInstances && !data.checkSendInstanceFailedMsg && !data.checkSendInstanceFailedMsgDaily",
-					"hideOnlyControl": false,
-					"items": [
-						{
-							"type": "selectSendTo",
-							"title": "Choose which instances should be excluded",
-							"attr": "instances",
-							"filter": false,
-							"allowAddByFilter": false,
-							"sort": false,
-							"jsonData": "{\"instanceName\":\"${globalData.instanceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
-							"command": "instancesList",
-							"width": "60%"
-						},
-						{
-							"type": "checkbox",
-							"title": "Ignor in notifications",
-							"attr": "checkIgnorNotify",
-							"width": "15%",
-							"alsoDependsOn": ["devices"]
-						},
-						{
-							"type": "checkbox",
-							"title": "Ignore in lists",
-							"attr": "checkIgnorLists",
 							"width": "10%",
 							"alsoDependsOn": ["devices"]
 						}
