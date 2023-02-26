@@ -472,7 +472,7 @@ class DeviceWatcher extends utils.Adapter {
 						case deviceData.batteryDP:
 							if (deviceData.isBatteryDevice) {
 								oldLowBatState = deviceData.LowBat;
-								batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.adapterID);
+								batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.faultReport, deviceData.adapterID);
 
 								deviceData.Battery = batteryData[0];
 								deviceData.BatteryRaw = batteryData[2];
@@ -495,7 +495,7 @@ class DeviceWatcher extends utils.Adapter {
 						case deviceData.LowBatDP:
 							if (deviceData.isBatteryDevice) {
 								oldLowBatState = deviceData.LowBat;
-								batteryData = await this.getBatteryData(deviceData.BatteryRaw, state.val, deviceData.adapterID);
+								batteryData = await this.getBatteryData(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
 								deviceData.Battery = batteryData[0];
 								deviceData.BatteryRaw = batteryData[2];
 								deviceData.BatteryUnitRaw = batteryData[3];
@@ -512,7 +512,7 @@ class DeviceWatcher extends utils.Adapter {
 						case deviceData.faultReportDP:
 							if (deviceData.isBatteryDevice) {
 								oldLowBatState = deviceData.LowBat;
-								batteryData = await this.getBatteryData(deviceData.BatteryRaw, oldLowBatState, deviceData.adapterID);
+								batteryData = await this.getBatteryData(deviceData.BatteryRaw, oldLowBatState, state.val, deviceData.adapterID);
 
 								deviceData.Battery = batteryData[0];
 								deviceData.BatteryRaw = batteryData[2];
@@ -862,6 +862,14 @@ class DeviceWatcher extends utils.Adapter {
 				if (deviceChargerState === undefined || deviceChargerState === false) {
 					// Get battery states
 					switch (adapterID) {
+						case 'hmrpc':
+							deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery;
+							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							if (deviceBatteryState === undefined) {
+								deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].hmDNBattery;
+								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+							}
+							break;
 						case 'hueExt':
 						case 'mihomeVacuum':
 						case 'mqttNuki':
@@ -899,7 +907,7 @@ class DeviceWatcher extends utils.Adapter {
 					this.subscribeForeignStates(isLowBatDP);
 					this.subscribeForeignStates(faultReportingDP);
 
-					const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, adapterID);
+					const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID);
 					batteryHealth = batteryData[0];
 					batteryHealthRaw = batteryData[2];
 					batteryUnitRaw = batteryData[3];
@@ -1181,9 +1189,10 @@ class DeviceWatcher extends utils.Adapter {
 	 * get battery data
 	 * @param {object} deviceBatteryState - State value
 	 * @param {object} deviceLowBatState - State value
+	 * @param {object} faultReportingState - State value
 	 * @param {object} adapterID - adapter name
 	 */
-	async getBatteryData(deviceBatteryState, deviceLowBatState, adapterID) {
+	async getBatteryData(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID) {
 		let batteryHealthRaw;
 		let batteryHealthUnitRaw;
 		let batteryHealth;
@@ -1192,7 +1201,14 @@ class DeviceWatcher extends utils.Adapter {
 		switch (adapterID) {
 			case 'hmrpc':
 				if (deviceBatteryState === undefined) {
-					if (deviceLowBatState !== undefined) {
+					if (faultReportingState !== undefined) {
+						if (faultReportingState !== 6) {
+							batteryHealth = 'ok';
+						} else {
+							batteryHealth = 'low';
+						}
+						isBatteryDevice = true;
+					} else if (deviceLowBatState !== undefined) {
 						if (deviceLowBatState !== 1) {
 							batteryHealth = 'ok';
 						} else {
