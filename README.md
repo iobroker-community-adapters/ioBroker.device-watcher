@@ -184,6 +184,7 @@ It's possible to select:
 
 -   (ciddi89) Added: Signal adapter for notifications
 -   (ciddi89) Added: Raw-List with all data of devices
+-   (ciddi89) Improvement: Objecthandling of devices/instances
 
 ### 2.6.0 (2023-02-06)
 
