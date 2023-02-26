@@ -72,6 +72,13 @@
 					"lg": 3,
 					"label": "euSec"
 				},
+				"fhemTFAsensorsDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "FHEM TFA Sensors"
+				},
 				"fritzdectDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1450,6 +1457,18 @@
 					"label": "euSec",
 					"help": "in minutes",
 					"hidden": "!data.eusecDevices",
+					"hideOnlyControl": false
+				},
+				"fhemTFAsensorsMaxMinutes": {
+					"type": "number",
+					"min": 1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "FHEM TFA sensores",
+					"help": "in minutes",
+					"hidden": "!data.fhemTFAsensorsDevices",
 					"hideOnlyControl": false
 				},
 				"fritzdectMaxMinutes": {

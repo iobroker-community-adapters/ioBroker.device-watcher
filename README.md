@@ -184,7 +184,11 @@ It's possible to select:
 
 -   (ciddi89) Added: Signal adapter for notifications
 -   (ciddi89) Added: Raw-List with all data of devices
+-   (ciddi89) Added: FHEM TFA sensors [#137](https://github.com/ciddi89/ioBroker.device-watcher/issues/137)
 -   (ciddi89) Improvement: Objecthandling of devices/instances
+-   (ciddi89) Improvement: Adapter update data
+-   (ciddi89) Fixed: HM-CC-RT-DN battery [#128](https://github.com/ciddi89/ioBroker.device-watcher/issues/128)
+-   (ciddi89) Added/Changed: some texts in instance config
 
 ### 2.6.0 (2023-02-06)
 
