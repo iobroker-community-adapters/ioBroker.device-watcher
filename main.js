@@ -708,11 +708,11 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Clear existing timeout
 		if (this.refreshDataTimeout) {
-			clearTimeout(this.refreshDataTimeout);
+			this.clearTimeout(this.refreshDataTimeout);
 			this.refreshDataTimeout = null;
 		}
 
-		this.refreshDataTimeout = setTimeout(() => {
+		this.refreshDataTimeout = this.setTimeout(() => {
 			this.log.debug('Updating Data');
 			this.refreshData();
 		}, nextTimeout);
@@ -3664,7 +3664,7 @@ class DeviceWatcher extends utils.Adapter {
 			isUnloaded = true;
 
 			if (this.refreshDataTimeout) {
-				clearTimeout(this.refreshDataTimeout);
+				this.clearTimeout(this.refreshDataTimeout);
 				this.refreshDataTimeout = null;
 			}
 
