@@ -37,14 +37,21 @@
 
 ## Device-Watcher adapter for ioBroker
 
-This is a watchdog for devices. The adapter looks for the different information about the datapoints and create JSON & HTML lists of them:
+This is a watchdog for devices/services and adapter/instances. The adapter looks for the different information about the datapoints and create JSON & HTML lists of them:
 
+**Devices/Services:**
 -   devices with battery,
 -   devices with low battery,
 -   devices with link quality,
 -   updates for devices,
 -   devices offline and
 -   all devices
+
+**Adapter/Instances:**
+-   all instances
+-   deactivated instances
+-   instances with error
+-   available adapter updates
 
 It's also counting them in the same categories. You can use the lists and states for Grafana, Jarvis etc for example.
 
@@ -155,6 +162,7 @@ The adapter has different possibilities to send notifications:
 -   Email
 -   Jarvis
 -   Lovelace
+-   Signal
 -   SynoChat
 -   and also an datapoint with the last notification, so you can use it for other services which aren't supported.
 
