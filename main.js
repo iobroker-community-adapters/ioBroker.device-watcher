@@ -1032,11 +1032,13 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} i - each Device
 	 */
 	async getDeviceName(id, i) {
-		const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
-		const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
-		const shortshortCurrDeviceString = shortCurrDeviceString.slice(0, shortCurrDeviceString.lastIndexOf('.') + 1 - 1);
-
 		try {
+			id = id.replace(/[\]\\[.*,;'"`<>\\\s?]/g, '-');
+
+			const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
+			const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
+			const shortshortCurrDeviceString = shortCurrDeviceString.slice(0, shortCurrDeviceString.lastIndexOf('.') + 1 - 1);
+
 			// Get device name
 			const deviceObject = await this.getForeignObjectAsync(currDeviceString);
 			const shortDeviceObject = await this.getForeignObjectAsync(shortCurrDeviceString);
