@@ -726,52 +726,51 @@ class DeviceWatcher extends utils.Adapter {
 
 		// DEVICES
 		const myBlacklist = this.config.tableBlacklist;
-
-		for (const i in myBlacklist) {
-			try {
-				const blacklistParse = this.parseData(myBlacklist[i].devices);
-				// push devices in list to ignor device in lists
-				if (myBlacklist[i].checkIgnorLists) {
-					this.blacklistLists.push(blacklistParse.path);
+		if (myBlacklist.length >= 1) {
+			for (const i in myBlacklist) {
+				try {
+					const blacklistParse = this.parseData(myBlacklist[i].devices);
+					// push devices in list to ignor device in lists
+					if (myBlacklist[i].checkIgnorLists) {
+						this.blacklistLists.push(blacklistParse.path);
+					}
+					if (myBlacklist[i].checkIgnorAdapterLists) {
+						this.blacklistAdapterLists.push(blacklistParse.path);
+					}
+					// push devices in list to ignor device in notifications
+					if (myBlacklist[i].checkIgnorNotify) {
+						this.blacklistNotify.push(blacklistParse.path);
+					}
+				} catch (error) {
+					this.errorReporting('[createBlacklist]', error);
 				}
-				if (myBlacklist[i].checkIgnorAdapterLists) {
-					this.blacklistAdapterLists.push(blacklistParse.path);
-				}
-				// push devices in list to ignor device in notifications
-				if (myBlacklist[i].checkIgnorNotify) {
-					this.blacklistNotify.push(blacklistParse.path);
-				}
-			} catch (error) {
-				this.errorReporting('[createBlacklist]', error);
+				if (this.blacklistLists.length >= 1) this.log.info(`Found devices/services on blacklist for lists: ${this.blacklistLists}`);
+				if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found devices/services on blacklist for lists: ${this.blacklistAdapterLists}`);
+				if (this.blacklistNotify.length >= 1) this.log.info(`Found devices/services on blacklist for notifications: ${this.blacklistNotify}`);
 			}
 		}
-
-		if (this.blacklistLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistLists}`);
-		if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistAdapterLists}`);
-		if (this.blacklistNotify.length >= 1) this.log.info(`Found items on blacklist for notifications: ${this.blacklistNotify}`);
 
 		// INSTANCES
 		const myBlacklistInstances = this.config.tableBlacklistInstances;
-
-		for (const i in myBlacklistInstances) {
-			try {
-				const blacklistParse = this.parseData(myBlacklistInstances[i].instances);
-				// push devices in list to ignor device in lists
-				if (myBlacklistInstances[i].checkIgnorLists) {
-					this.blacklistInstancesLists.push(blacklistParse.path);
+		if (myBlacklistInstances.length >= 1) {
+			for (const i in myBlacklistInstances) {
+				try {
+					const blacklistParse = this.parseData(myBlacklistInstances[i].instances);
+					// push devices in list to ignor device in lists
+					if (myBlacklistInstances[i].checkIgnorLists) {
+						this.blacklistInstancesLists.push(blacklistParse.path);
+					}
+					// push devices in list to ignor device in notifications
+					if (myBlacklistInstances[i].checkIgnorNotify) {
+						this.blacklistInstancesNotify.push(blacklistParse.path);
+					}
+				} catch (error) {
+					this.errorReporting('[createBlacklist]', error);
 				}
-				// push devices in list to ignor device in notifications
-				if (myBlacklistInstances[i].checkIgnorNotify) {
-					this.blacklistInstancesNotify.push(blacklistParse.path);
-				}
-			} catch (error) {
-				this.errorReporting('[createBlacklist]', error);
 			}
+			if (this.blacklistInstancesLists.length >= 1) this.log.info(`Found instances items on blacklist for lists: ${this.blacklistInstancesLists}`);
+			if (this.blacklistInstancesNotify.length >= 1) this.log.info(`Found instances items on blacklist for notifications: ${this.blacklistInstancesNotify}`);
 		}
-
-		if (this.blacklistInstancesLists.length >= 1) this.log.info(`Found items on blacklist for lists: ${this.blacklistInstancesLists}`);
-		if (this.blacklistInstancesNotify.length >= 1) this.log.info(`Found items on blacklist for notifications: ${this.blacklistInstancesNotify}`);
-
 		this.log.debug(`Function finished: ${this.createBlacklist.name}`);
 	}
 
