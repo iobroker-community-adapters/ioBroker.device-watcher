@@ -1430,7 +1430,6 @@ class DeviceWatcher extends utils.Adapter {
 					case 'unifi':
 					case 'zigbee':
 					case 'zigbee2MQTT':
-						this.log.warn(deviceUnreachState);
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (!deviceUnreachState) {
 								deviceState = 'Offline'; //set online state to offline
