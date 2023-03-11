@@ -257,9 +257,12 @@ class DeviceWatcher extends utils.Adapter {
 			// create HTML list datapoints
 			if (!this.configCreateHtmlList) {
 				await this.deleteHtmlListDatapoints();
+				await this.deleteHtmlListDatapointsInstances();
 			} else {
 				await this.createHtmlListDatapoints();
+				if (this.config.checkAdapterInstances) await this.createHtmlListDatapointsInstances();
 			}
+			if (!this.config.checkAdapterInstances) await this.deleteHtmlListDatapointsInstances();
 
 			// read data first at start
 			// devices
@@ -1889,6 +1892,28 @@ class DeviceWatcher extends utils.Adapter {
 					val: await this.createListHTML('batteryList', this.batteryLowPowered, this.lowBatteryPoweredCount, true),
 					ack: true,
 				});
+				if (this.config.checkAdapterInstances) {
+					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`, {
+						val: await this.createListHTMLInstances('allInstancesList', this.listAllInstances, this.countAllInstances),
+						ack: true,
+					});
+					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`, {
+						val: await this.createListHTMLInstances('allActiveInstancesList', this.listAllActiveInstances, this.countAllActiveInstances),
+						ack: true,
+					});
+					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`, {
+						val: await this.createListHTMLInstances('errorInstanceList', this.listErrorInstance, this.countErrorInstance),
+						ack: true,
+					});
+					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`, {
+						val: await this.createListHTMLInstances('deactivatedInstanceList', this.listDeactivatedInstances, this.countDeactivatedInstances),
+						ack: true,
+					});
+					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`, {
+						val: await this.createListHTMLInstances('updateAdapterList', this.listAdapterUpdates, this.countAdapterUpdates),
+						ack: true,
+					});
+				}
 			}
 
 			// create timestamp of last run
@@ -2252,16 +2277,13 @@ class DeviceWatcher extends utils.Adapter {
 	 * write datapoints for instances list and counts
 	 */
 	async writeInstanceDPs() {
-		// Write Datapoints for counts
-		await this.setStateChangedAsync(`adapterAndInstances.countAllInstances`, { val: this.countAllInstances, ack: true });
-		await this.setStateChangedAsync(`adapterAndInstances.countAllActiveInstances`, { val: this.countAllActiveInstances, ack: true });
-		await this.setStateChangedAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
-
 		// List all instances
 		await this.setStateChangedAsync(`adapterAndInstances.listAllInstances`, { val: JSON.stringify(this.listAllInstances), ack: true });
+		await this.setStateChangedAsync(`adapterAndInstances.countAllInstances`, { val: this.countAllInstances, ack: true });
 
 		// List all active instances
 		await this.setStateChangedAsync(`adapterAndInstances.listAllActiveInstances`, { val: JSON.stringify(this.listAllActiveInstances), ack: true });
+		await this.setStateChangedAsync(`adapterAndInstances.countAllActiveInstances`, { val: this.countAllActiveInstances, ack: true });
 
 		// list deactivated instances
 		if (this.countDeactivatedInstances === 0) {
@@ -3118,6 +3140,172 @@ class DeviceWatcher extends utils.Adapter {
 		return html;
 	}
 
+	/**
+	 * @param {string} type - type of list
+	 * @param {object} instances - Instance
+	 * @param {number} instancesCount - Counted devices
+	 */
+	async createListHTMLInstances(type, instances, instancesCount) {
+		let html;
+		switch (type) {
+			case 'allInstancesList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instance || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+				<b>All Instances:<font> ${instancesCount}</b><small></small></font>
+				<p></p>
+				</center>   
+				<table width=100%>
+				<tr>
+				<th align=left>Adapter</th>
+				<th align=center>Instance</th>
+				<th align=center width=180>Status</th>
+				</tr>
+				<tr>
+				<td colspan="5"><hr></td>
+				</tr>`;
+
+				for (const instance of instances) {
+					html += `<tr>
+					<td><font>${instance.Adapter}</font></td>
+					<td align=center><font>${instance.Instance}</font></td>
+					<td align=center><font>${instance.Status}</font></td>
+					</tr>`;
+				}
+
+				html += '</table>';
+				break;
+
+			case 'allActiveInstancesList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instances || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+				<b>Active Devices: <font> ${instancesCount}</b><small></small></font>
+				<p></p>
+				</center>   
+				<table width=100%>
+				<tr>
+				<th align=left>Adapter</th>
+				<th align=center>Instance</th>
+				<th align=center width=180>Status</th>
+				</tr>
+				<tr>
+				<td colspan="5"><hr></td>
+				</tr>`;
+
+				for (const instance of instances) {
+					html += `<tr>
+					<td><font>${instance.Adapter}</font></td>
+					<td align=center><font>${instance.Instance}</font></td>
+					<td align=center><font color=orange>${instance.Status}</font></td>
+					</tr>`;
+				}
+
+				html += '</table>';
+				break;
+
+			case 'errorInstanceList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instances || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+				<b>Error Instances: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<p></p>
+				</center>   
+				<table width=100%>
+				<tr>
+				<th align=left>Adapter</th>
+				<th align=center width=120>Instance</th>
+				<th align=center>Status</th>
+				</tr>
+				<tr>
+				<td colspan="5"><hr></td>
+				</tr>`;
+
+				for (const instance of instances) {
+					html += `<tr>
+					<td><font>${instance.Adapter}</font></td>
+					<td align=center><font>${instance.Instance}</font></td>
+					<td align=center><font color=orange>${instance.Status}</font></td>
+					</tr>`;
+				}
+
+				html += '</table>';
+				break;
+
+			case 'deactivatedInstanceList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instances || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+				<b>Deactivated Instances: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<p></p>
+				</center>   
+				<table width=100%>
+				<tr>
+				<th align=left>Adapter</th>
+				<th align=center width=120>Instance</th>
+				<th align=center>Status</th>
+				</tr>
+				<tr>
+				<td colspan="5"><hr></td>
+				</tr>`;
+
+				for (const instance of instances) {
+					html += `<tr>
+					<td><font>${instance.Adapter}</font></td>
+					<td align=center><font>${instance.Instance}</font></td>
+					<td align=center><font color=orange>${instance.Status}</font></td>
+					</tr>`;
+				}
+
+				html += '</table>';
+				break;
+
+			case 'updateAdapterList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instances || '';
+					return a.localeCompare(b);
+				});
+				html = `<center>
+				<b>Updatable Adapter: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<p></p>
+				</center>   
+				<table width=100%>
+				<tr>
+				<th align=left>Adapter</th>
+				<th align=center>Installed Version</th>
+				<th align=center>Available Version</th>
+				</tr>
+				<tr>
+				<td colspan="5"><hr></td>
+				</tr>`;
+
+				for (const instance of instances) {
+					html += `<tr>
+					<td><font>${instance.Adapter}</font></td>
+					<td align=center><font>${instance['Installed Version']}</font></td>
+					<td align=center><font color=orange>${instance['Available Version']}</font></td>
+					</tr>`;
+				}
+
+				html += '</table>';
+				break;
+		}
+		return html;
+	}
+
 	/*=============================================
 	=     create datapoints for each adapter      =
 	=============================================*/
@@ -3635,6 +3823,161 @@ class DeviceWatcher extends utils.Adapter {
 		await this.delObjectAsync(`devices.${dpSubFolder}linkQualityListHTML`);
 		await this.delObjectAsync(`devices.${dpSubFolder}batteryListHTML`);
 		await this.delObjectAsync(`devices.${dpSubFolder}lowBatteryListHTML`);
+	}
+
+	/**
+	 * create HTML list datapoints for instances
+	 **/
+	async createHtmlListDatapointsInstances() {
+		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists`, {
+			type: 'channel',
+			common: {
+				name: {
+					en: 'HTML lists for adapter and instances',
+					de: 'HTML-Listen für Adapter und Instanzen',
+					ru: 'HTML-списки для адаптеров и инстанций',
+					pt: 'Listas HTML para adaptador e instâncias',
+					nl: 'HTML lijsten voor adapter en instituut',
+					fr: "Listes HTML pour l'adaptateur et les instances",
+					it: 'Elenchi HTML per adattatore e istanze',
+					es: 'Listas HTML para adaptador y casos',
+					pl: 'Listy HTML dla adaptera i instancji',
+					uk: 'Списки HTML для адаптерів та екземплярів',
+					'zh-cn': 'HTML名单',
+				},
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of all instances',
+					de: 'HTML Liste aller Instanzen',
+					ru: 'HTML Список всех инстанций',
+					pt: 'HTML Lista de todas as instâncias',
+					nl: 'HTM List van alle instanties',
+					fr: 'HTML Liste de tous les cas',
+					it: 'HTML Elenco di tutte le istanze',
+					es: 'HTML Lista de todos los casos',
+					pl: 'HTML Lista wszystkich instancji',
+					uk: 'Українська Список всіх екземплярів',
+					'zh-cn': 'HTML 所有事例一览表',
+				},
+				type: 'string',
+				role: 'html',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
+		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of all active instances',
+					de: 'HTML Liste aller aktiven Instanzen',
+					ru: 'HTML Список всех активных инстанций',
+					pt: 'HTML Lista de todas as instâncias ativas',
+					nl: 'HTM List van alle actieve instanties',
+					fr: 'HTML Liste de tous les cas actifs',
+					it: 'HTML Elenco di tutte le istanze attive',
+					es: 'HTML Lista de todos los casos activos',
+					pl: 'HTML Lista wszystkich aktywnych instancji',
+					uk: 'Українська Список всіх активних екземплярів',
+					'zh-cn': 'HTML 所有积极事件清单',
+				},
+				type: 'string',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
+		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of all deactivated instances',
+					de: 'HTML Liste aller deaktivierten Instanzen',
+					ru: 'HTML Список всех деактивированных инстанций',
+					pt: 'HTML Lista de todas as instâncias desativadas',
+					nl: 'HTM List van alle gedeactiveerde instanties',
+					fr: 'HTML Liste de tous les cas désactivés',
+					it: 'HTML Elenco di tutte le istanze disattivate',
+					es: 'HTML Lista de todos los casos desactivados',
+					pl: 'HTML Lista wszystkich przypadków deaktywowanych',
+					uk: 'Українська Список всіх деактивованих екземплярів',
+					'zh-cn': 'HTML 所有违犯事件清单',
+				},
+				type: 'string',
+				role: 'html',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+
+		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML List of instances with error',
+					de: 'HTML Liste der Fälle mit Fehler',
+					ru: 'HTML Список инстанций с ошибкой',
+					pt: 'HTML Lista de casos com erro',
+					nl: 'HTM List van instoringen met fouten',
+					fr: 'HTML Liste des instances avec erreur',
+					it: 'HTML Elenco delle istanze con errore',
+					es: 'HTML Lista de casos con error',
+					pl: 'HTML Lista przykładów z błądem',
+					uk: 'Українська Список екземплярів з помилкою',
+					'zh-cn': 'HTML 出现错误的情况清单',
+				},
+				type: 'string',
+				role: 'html',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'HTML list of adapters with available updates',
+					de: 'HTML-Liste der Adapter mit verfügbaren Updates',
+					ru: 'HTML список адаптеров с доступными обновлениями',
+					pt: 'Lista HTML de adaptadores com atualizações disponíveis',
+					nl: 'HTML lijst met beschikbare updates',
+					fr: 'Liste HTML des adaptateurs avec mises à jour disponibles',
+					it: 'Elenco HTML degli adattatori con aggiornamenti disponibili',
+					es: 'Lista HTML de adaptadores con actualizaciones disponibles',
+					pl: 'Lista adapterów HTML z dostępnymi aktualizacjami',
+					uk: 'HTML список адаптерів з доступними оновленнями',
+					'zh-cn': 'HTML 可供更新的适应者名单',
+				},
+				type: 'string',
+				role: 'html',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+	}
+
+	/**
+	 * delete html datapoints for instances
+	 **/
+	async deleteHtmlListDatapointsInstances() {
+		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`);
+		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`);
+		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`);
+		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`);
+		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`);
+		await this.delObjectAsync(`adapterAndInstances.HTML_Lists`);
 	}
 
 	/*=============================================
