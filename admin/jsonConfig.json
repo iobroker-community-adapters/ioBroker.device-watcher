@@ -896,12 +896,150 @@
 					],
 					"default": "none"
 				},
+				"_headerEmail": {
+					"newLine": true,
+					"type": "header",
+					"text": "Email",
+					"size": 2,
+					"hidden": "data.msgService !== 'email' && !data.instanceEmail",
+					"hideOnlyControl": false
+				},
+				"instanceEmail": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "email",
+					"all": false,
+					"allowDeactivate": true,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Email Instance",
+					"help": "Please choose the email instance",
+					"hidden": "data.msgService !== 'email' && !data.instanceEmail",
+					"hideOnlyControl": false
+				},
+				"sendToEmail": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Send to (optional)",
+					"help": "Choose your email address",
+					"hidden": "data.msgService !== 'email' && !data.instanceEmail",
+					"hideOnlyControl": false
+				},
+				"subjectEmail": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Subject (optional)",
+					"help": "Choose your subject for the Email",
+					"hidden": "data.msgService !== 'email' && !data.instanceEmail",
+					"hideOnlyControl": false
+				},
+				"headerJarvis": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Jarvis Notification",
+					"size": 2,
+					"hidden": "data.msgService !== 'jarvis' && !data.instanceJarvis",
+					"hideOnlyControl": false
+				},
+				"instanceJarvis": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "jarvis",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Jarvis Instance",
+					"help": "Please choose the jarvis instance",
+					"hidden": "data.msgService !== 'jarvis' && !data.instanceJarvis",
+					"hideOnlyControl": false
+				},
+				"titleJarvis": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Title (optional)",
+					"help": "Choose your title for Pushmessage",
+					"hidden": "data.msgService !== 'jarvis' && !data.instanceJarvis",
+					"hideOnlyControl": false
+				},
+				"headerLovelace": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Lovelace Notification",
+					"size": 2,
+					"hidden": "data.msgService !== 'lovelace' && !data.instanceLovelace",
+					"hideOnlyControl": false
+				},
+				"instanceLovelace": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "lovelace",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Lovelace Instance",
+					"help": "Please choose the lovelace instance",
+					"hidden": "data.msgService !== 'lovelace' && !data.instanceLovelace",
+					"hideOnlyControl": false
+				},
+				"titleLovelace": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Title (optional)",
+					"help": "Choose your title for Pushmessage",
+					"hidden": "data.msgService !== 'lovelace' && !data.instanceLovelace",
+					"hideOnlyControl": false
+				},
+				"headerMatrix": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Matrix",
+					"size": 2,
+					"hidden": "data.msgService !== 'matrix' && !data.instanceMatrix",
+					"hideOnlyControl": false
+				},
+				"instanceMatrix": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "matrix-org",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Matrix Instance",
+					"help": "Please choose the matrix instance",
+					"hidden": "data.msgService !== 'matrix' && !data.instanceMatrix",
+					"hideOnlyControl": false
+				},
+				"titleMatrix": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Title (optional)",
+					"help": "Choose your title for message",
+					"hidden": "data.msgService !== 'matrix' && !data.instanceMatrix",
+					"hideOnlyControl": false
+				},
 				"_headerPushover": {
 					"newLine": true,
 					"type": "header",
 					"text": "Pushover",
 					"size": 2,
-					"hidden": "data.msgService !== 'pushover'",
+					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},
 				"instancePushover": {
@@ -915,7 +1053,7 @@
 					"lg": 4,
 					"label": "Pushover Instance",
 					"help": "Please choose the pushover instance",
-					"hidden": "data.msgService !== 'pushover'",
+					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},
 				"devicePushover": {
@@ -925,7 +1063,7 @@
 					"lg": 4,
 					"label": "Device-ID (optional)",
 					"help": "Choose your device",
-					"hidden": "data.msgService !== 'pushover'",
+					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},
 				"prioPushover": {
@@ -940,7 +1078,7 @@
 						{ "label": "Silent", "value": -1 },
 						{ "label": "With confirmation", "value": 2 }
 					],
-					"hidden": "data.msgService !== 'pushover'",
+					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},
 				"titlePushover": {
@@ -950,81 +1088,7 @@
 					"lg": 4,
 					"label": "Title (optional)",
 					"help": "Choose your title for Pushmessage",
-					"hidden": "data.msgService !== 'pushover'",
-					"hideOnlyControl": false
-				},
-				"headerTelegram": {
-					"newLine": "true",
-					"type": "header",
-					"text": "Telegram",
-					"size": 2,
-					"hidden": "data.msgService !== 'telegram'",
-					"hideOnlyControl": false
-				},
-				"instanceTelegram": {
-					"newLine": true,
-					"type": "instance",
-					"adapter": "telegram",
-					"all": false,
-					"allowDeactivate": true,
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Telegram Instance",
-					"help": "Please choose the telegram instance",
-					"hidden": "data.msgService !== 'telegram'",
-					"hideOnlyControl": false
-				},
-				"deviceTelegram": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Device-ID (optional)",
-					"help": "Choose your device",
-					"hidden": "data.msgService !== 'telegram'",
-					"hideOnlyControl": false
-				},
-				"chatIdTelegram": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Chat-ID (optional)",
-					"help": "Choose your Chat-ID",
-					"hidden": "data.msgService !== 'telegram'",
-					"hideOnlyControl": false
-				},
-				"headerWhatsapp": {
-					"newLine": "true",
-					"type": "header",
-					"text": "Whatsapp",
-					"size": 2,
-					"hidden": "data.msgService !== 'whatsapp'",
-					"hideOnlyControl": false
-				},
-				"instanceWhatsapp": {
-					"newLine": true,
-					"type": "instance",
-					"adapter": "whatsapp-cmb",
-					"all": false,
-					"allowDeactivate": true,
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Whatsapp Instance",
-					"help": "Please choose the Whatsapp instance",
-					"hidden": "data.msgService !== 'whatsapp'",
-					"hideOnlyControl": false
-				},
-				"phoneWhatapp": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Recipient (optional)",
-					"help": "Choose your recipient",
-					"hidden": "data.msgService !== 'whatsapp'",
+					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},
 				"headerSignal": {
@@ -1032,7 +1096,7 @@
 					"type": "header",
 					"text": "Signal",
 					"size": 2,
-					"hidden": "data.msgService !== 'signal'",
+					"hidden": "data.msgService !== 'signal' && !data.instanceSignal",
 					"hideOnlyControl": false
 				},
 				"instanceSignal": {
@@ -1046,7 +1110,7 @@
 					"lg": 4,
 					"label": "Signal Instance",
 					"help": "Please choose the Signal instance",
-					"hidden": "data.msgService !== 'signal'",
+					"hidden": "data.msgService !== 'signal' && !data.instanceSignal",
 					"hideOnlyControl": false
 				},
 				"phonSignal": {
@@ -1056,113 +1120,15 @@
 					"lg": 4,
 					"label": "Recipient (optional)",
 					"help": "Choose your recipient",
-					"hidden": "data.msgService !== 'signal'",
+					"hidden": "data.msgService !== 'signal' && !data.instanceSignal",
 					"hideOnlyControl": false
 				},
-				"_headerEmail": {
-					"newLine": true,
-					"type": "header",
-					"text": "Email",
-					"size": 2,
-					"hidden": "data.msgService !== 'email'",
-					"hideOnlyControl": false
-				},
-				"instanceEmail": {
-					"newLine": true,
-					"type": "instance",
-					"adapter": "email",
-					"all": false,
-					"allowDeactivate": true,
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Email Instance",
-					"help": "Please choose the email instance",
-					"hidden": "data.msgService !== 'email'",
-					"hideOnlyControl": false
-				},
-				"sendToEmail": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Send to (optional)",
-					"help": "Choose your email address",
-					"hidden": "data.msgService !== 'email'",
-					"hideOnlyControl": false
-				},
-				"subjectEmail": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Subject (optional)",
-					"help": "Choose your subject for the Email",
-					"hidden": "data.msgService !== 'email'",
-					"hideOnlyControl": false
-				},
-				"headerJarvis": {
+				"headerSynochat": {
 					"newLine": "true",
 					"type": "header",
-					"text": "Jarvis Notification",
+					"text": "Synochat",
 					"size": 2,
-					"hidden": "data.msgService !== 'jarvis'",
-					"hideOnlyControl": false
-				},
-				"instanceJarvis": {
-					"newLine": true,
-					"type": "instance",
-					"adapter": "jarvis",
-					"allowDeactivate": true,
-					"all": false,
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Jarvis Instance",
-					"help": "Please choose the jarvis instance",
-					"hidden": "data.msgService !== 'jarvis'",
-					"hideOnlyControl": false
-				},
-				"titleJarvis": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Title (optional)",
-					"help": "Choose your title for Pushmessage",
-					"hidden": "data.msgService !== 'jarvis'",
-					"hideOnlyControl": false
-				},
-				"headerLovelace": {
-					"newLine": "true",
-					"type": "header",
-					"text": "Lovelace Notification",
-					"size": 2,
-					"hidden": "data.msgService !== 'lovelace'",
-					"hideOnlyControl": false
-				},
-				"instanceLovelace": {
-					"newLine": true,
-					"type": "instance",
-					"adapter": "lovelace",
-					"allowDeactivate": true,
-					"all": false,
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Lovelace Instance",
-					"help": "Please choose the lovelace instance",
-					"hidden": "data.msgService !== 'lovelace'",
-					"hideOnlyControl": false
-				},
-				"titleLovelace": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "Title (optional)",
-					"help": "Choose your title for Pushmessage",
-					"hidden": "data.msgService !== 'lovelace'",
+					"hidden": "data.msgService !== 'synochat' && !data.instanceSynochat",
 					"hideOnlyControl": false
 				},
 				"instanceSynochat": {
@@ -1176,7 +1142,7 @@
 					"lg": 4,
 					"label": "Synochat Instance",
 					"help": "Please choose the Synochat instance",
-					"hidden": "data.msgService !== 'synochat'",
+					"hidden": "data.msgService !== 'synochat' && !data.instanceSynochat",
 					"hideOnlyControl": false
 				},
 				"channelSynochat": {
@@ -1186,31 +1152,81 @@
 					"lg": 4,
 					"label": "Channel",
 					"help": "Enter the channelname for Synochat",
-					"hidden": "data.msgService !== 'synochat'",
+					"hidden": "data.msgService !== 'synochat' && !data.instanceSynochat",
 					"hideOnlyControl": false
 				},
-				"instanceMatrix": {
+				"headerTelegram": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Telegram",
+					"size": 2,
+					"hidden": "data.msgService !== 'telegram' && !data.instanceTelegram",
+					"hideOnlyControl": false
+				},
+				"instanceTelegram": {
 					"newLine": true,
 					"type": "instance",
-					"adapter": "matrix-org",
-					"allowDeactivate": true,
+					"adapter": "telegram",
 					"all": false,
+					"allowDeactivate": true,
 					"sm": 12,
 					"md": 4,
 					"lg": 4,
-					"label": "Matrix Instance",
-					"help": "Please choose the matrix instance",
-					"hidden": "data.msgService !== 'matrix'",
+					"label": "Telegram Instance",
+					"help": "Please choose the telegram instance",
+					"hidden": "data.msgService !== 'telegram' && !data.instanceTelegram",
 					"hideOnlyControl": false
 				},
-				"titleMatrix": {
+				"deviceTelegram": {
 					"type": "text",
 					"sm": 12,
 					"md": 4,
 					"lg": 4,
-					"label": "Title (optional)",
-					"help": "Choose your title for message",
-					"hidden": "data.msgService !== 'matrix'",
+					"label": "Device-ID (optional)",
+					"help": "Choose your device",
+					"hidden": "data.msgService !== 'telegram' && !data.instanceTelegram",
+					"hideOnlyControl": false
+				},
+				"chatIdTelegram": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Chat-ID (optional)",
+					"help": "Choose your Chat-ID",
+					"hidden": "data.msgService !== 'telegram' && !data.instanceTelegram",
+					"hideOnlyControl": false
+				},
+				"headerWhatsapp": {
+					"newLine": "true",
+					"type": "header",
+					"text": "Whatsapp",
+					"size": 2,
+					"hidden": "data.msgService !== 'whatsapp' && !data.instanceWhatsapp",
+					"hideOnlyControl": false
+				},
+				"instanceWhatsapp": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "whatsapp-cmb",
+					"all": false,
+					"allowDeactivate": true,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Whatsapp Instance",
+					"help": "Please choose the Whatsapp instance",
+					"hidden": "data.msgService !== 'whatsapp' && !data.instanceWhatsapp",
+					"hideOnlyControl": false
+				},
+				"phoneWhatapp": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Recipient (optional)",
+					"help": "Choose your recipient",
+					"hidden": "data.msgService !== 'whatsapp' && !data.instanceWhatsapp",
 					"hideOnlyControl": false
 				}
 			}
