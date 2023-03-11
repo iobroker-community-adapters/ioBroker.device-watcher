@@ -2287,14 +2287,14 @@ class DeviceWatcher extends utils.Adapter {
 
 		// list deactivated instances
 		if (this.countDeactivatedInstances === 0) {
-			this.listDeactivatedInstances = [{ Instance: '--none--', Version: '', Status: '' }];
+			this.listDeactivatedInstances = [{ Adapter: '--none--', Instance: '', Version: '', Status: '' }];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listDeactivatedInstances`, { val: JSON.stringify(this.listDeactivatedInstances), ack: true });
 		await this.setStateChangedAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
 
 		// list error instances
 		if (this.countErrorInstance === 0) {
-			this.listErrorInstance = [{ Instance: '--none--', Mode: '', Status: '' }];
+			this.listErrorInstance = [{ Adapter: '--none--', Instance: '', Mode: '', Status: '' }];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listInstancesError`, { val: JSON.stringify(this.listErrorInstance), ack: true });
 		await this.setStateChangedAsync(`adapterAndInstances.countInstancesError`, { val: this.countErrorInstance, ack: true });
