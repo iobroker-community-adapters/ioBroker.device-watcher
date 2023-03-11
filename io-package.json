@@ -220,6 +220,8 @@
 		"fritzdectMaxMinutes": 0,
 		"fullybrowserDevices": false,
 		"fullybrowserMaxMinutes": 0,
+		"fullyMQTTDevices": false,
+		"fullyMQTTMaxMinutes": 0,
 		"hamDevices": false,
 		"hamMaxMinutes": 300,
 		"harmonyDevices": false,
