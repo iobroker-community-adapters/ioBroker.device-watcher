@@ -136,5 +136,6 @@
     "Watch adapter/instances": "Смотреть адаптер/экземпляры",
     "Matrix Instance": "Экземпляр матрицы",
     "Please choose the matrix instance": "Пожалуйста, выберите экземпляр матрицы",
-    "Choose your title for message": "Выберите заголовок для сообщения"
+    "Choose your title for message": "Выберите заголовок для сообщения",
+    "Jarvis Notification": "Уведомление Джарвиса"
 }
