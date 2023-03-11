@@ -32,12 +32,14 @@ class DeviceWatcher extends utils.Adapter {
 
 		// user arrays
 		this.listAllInstances = [];
+		this.listAllActiveInstances = [];
 		this.listDeactivatedInstances = [];
 		this.listAdapterUpdates = [];
 		this.listErrorInstance = [];
 
 		//counts
 		this.countAllInstances = 0;
+		this.countAllActiveInstances = 0;
 		this.countDeactivatedInstances = 0;
 		this.countAdapterUpdates = 0;
 		this.countErrorInstance = 0;
@@ -2172,6 +2174,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async createInstanceList() {
 		this.listAllInstances = [];
+		this.listAllActiveInstances = [];
 		this.listDeactivatedInstances = [];
 		this.listErrorInstanceRaw = [];
 		this.listErrorInstance = [];
@@ -2188,6 +2191,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			if (this.blacklistInstancesLists.includes(instance.instanceAlivePath)) continue;
+			// all instances
 			this.listAllInstances.push({
 				Adapter: instance.Adapter,
 				Instance: instance.InstanceName,
@@ -2197,15 +2201,26 @@ class DeviceWatcher extends utils.Adapter {
 				Updateable: instance.updateAvailable,
 				Status: instance.status,
 			});
+
 			if (!instance.isAlive) {
+				// list with deactivated instances
 				this.listDeactivatedInstances.push({
 					Adapter: instance.Adapter,
 					Instance: instance.InstanceName,
 					Status: instance.status,
 				});
+			} else {
+				// list with active instances
+				this.listAllActiveInstances.push({
+					Adapter: instance.Adapter,
+					Instance: instance.InstanceName,
+					Mode: instance.instanceMode,
+					Schedule: instance.schedule,
+					Status: instance.status,
+				});
 			}
 
-			// fill List for User
+			// list with error instances
 			if (instance.isAlive && !instance.isHealthy) {
 				this.listErrorInstance.push({
 					Adapter: instance.Adapter,
@@ -2223,10 +2238,12 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async countInstances() {
 		this.countAllInstances = 0;
+		this.countAllActiveInstances = 0;
 		this.countDeactivatedInstances = 0;
 		this.countErrorInstance = 0;
 
 		this.countAllInstances = this.listAllInstances.length;
+		this.countAllActiveInstances = this.listAllActiveInstances.length;
 		this.countDeactivatedInstances = this.listDeactivatedInstances.length;
 		this.countErrorInstance = this.listErrorInstance.length;
 	}
@@ -2237,10 +2254,14 @@ class DeviceWatcher extends utils.Adapter {
 	async writeInstanceDPs() {
 		// Write Datapoints for counts
 		await this.setStateChangedAsync(`adapterAndInstances.countAllInstances`, { val: this.countAllInstances, ack: true });
+		await this.setStateChangedAsync(`adapterAndInstances.countAllActiveInstances`, { val: this.countAllActiveInstances, ack: true });
 		await this.setStateChangedAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
 
 		// List all instances
 		await this.setStateChangedAsync(`adapterAndInstances.listAllInstances`, { val: JSON.stringify(this.listAllInstances), ack: true });
+
+		// List all active instances
+		await this.setStateChangedAsync(`adapterAndInstances.listAllActiveInstances`, { val: JSON.stringify(this.listAllActiveInstances), ack: true });
 
 		// list deactivated instances
 		if (this.countDeactivatedInstances === 0) {
@@ -2320,6 +2341,53 @@ class DeviceWatcher extends utils.Adapter {
 					pl: 'Liczba wszystkich instancji',
 					uk: 'Кількість всіх екземплярів',
 					'zh-cn': '各类案件数目',
+				},
+				type: 'number',
+				role: 'value',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		// Instances
+		await this.setObjectNotExistsAsync(`adapterAndInstances.listAllActiveInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'JSON List of all active instances',
+					de: 'JSON Liste aller aktiven Instanzen',
+					ru: 'ДЖСОН Список всех активных инстанций',
+					pt: 'J. Lista de todas as instâncias ativas',
+					nl: 'JSON List van alle actieve instanties',
+					fr: 'JSON Liste de tous les cas actifs',
+					it: 'JSON Elenco di tutte le istanze attive',
+					es: 'JSON Lista de todos los casos activos',
+					pl: 'JSON Lista wszystkich aktywnych instancji',
+					uk: 'Сонце Список всіх активних екземплярів',
+					'zh-cn': '附 件 所有积极事件清单',
+				},
+				type: 'array',
+				role: 'json',
+				read: true,
+				write: false,
+			},
+			native: {},
+		});
+		await this.setObjectNotExistsAsync(`adapterAndInstances.countAllActiveInstances`, {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Number of all active instances',
+					de: 'Anzahl aller aktiven Instanzen',
+					ru: 'Количество всех активных инстанций',
+					pt: 'Número de todas as instâncias ativas',
+					nl: 'Nummer van alle actieve instanties',
+					fr: 'Nombre de toutes les instances actives',
+					it: 'Numero di tutte le istanze attive',
+					es: 'Número de casos activos',
+					pl: 'Liczba wszystkich czynnych przypadków',
+					uk: 'Кількість всіх активних екземплярів',
+					'zh-cn': '所有积极事件的数目',
 				},
 				type: 'number',
 				role: 'value',
@@ -2477,6 +2545,8 @@ class DeviceWatcher extends utils.Adapter {
 		await this.delObjectAsync(`adapterAndInstances`);
 		await this.delObjectAsync(`adapterAndInstances.listAllInstances`);
 		await this.delObjectAsync(`adapterAndInstances.countAllInstances`);
+		await this.delObjectAsync(`adapterAndInstances.listAllActiveInstances`);
+		await this.delObjectAsync(`adapterAndInstances.countAllActiveInstances`);
 		await this.delObjectAsync(`adapterAndInstances.listDeactivatedInstances`);
 		await this.delObjectAsync(`adapterAndInstances.countDeactivatedInstances`);
 		await this.delObjectAsync(`adapterAndInstances.listInstancesError`);
