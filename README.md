@@ -194,6 +194,8 @@ It's possible to select:
 
 -   (ciddi89) Added: Fully-MQTT
 -   (ciddi89) Added: Notification Service Matrix [#144](https://github.com/ciddi89/ioBroker.device-watcher/issues/144)
+-   (ciddi89) Fixed: Send notification about adapter updates only if there are new ones [#146](https://github.com/ciddi89/ioBroker.device-watcher/issues/146)
+-   (ciddi89) Improvements: Hide notification services only if no instance is choosen
 
 ### 2.6.1 (2023-02-26)
 

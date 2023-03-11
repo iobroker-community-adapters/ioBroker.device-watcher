@@ -363,12 +363,14 @@ class DeviceWatcher extends utils.Adapter {
 			let instanceStatusRaw;
 			let oldInstanceHostState;
 			let oldInstanceDeviceState;
+			let oldAdapterUpdatesCounts;
 
 			try {
 				if (id.endsWith('updatesJson')) {
+					oldAdapterUpdatesCounts = this.countAdapterUpdates;
 					await this.getAdapterUpdateData(id);
 					await this.createAdapterUpdateList();
-					if (this.config.checkSendAdapterUpdateMsg) {
+					if (this.config.checkSendAdapterUpdateMsg && this.countAdapterUpdates > oldAdapterUpdatesCounts) {
 						await this.sendStateNotifications('updateAdapter', null);
 					}
 					for (const instance of this.listInstanceRaw.values()) {
