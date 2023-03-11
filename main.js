@@ -2552,6 +2552,25 @@ class DeviceWatcher extends utils.Adapter {
 			this.errorReporting('[sendNotification Whatsapp]', error);
 		}
 
+		// Matrix
+		try {
+			if (this.config.instanceMatrix) {
+				//first check if instance is living
+				const matrixAliveState = await this.getInitValue('system.adapter.' + this.config.instanceMatrix + '.alive');
+
+				if (!matrixAliveState) {
+					this.log.warn('Matrix instance is not running. Message could not be sent. Please check your instance configuration.');
+				} else {
+					await this.sendToAsync(this.config.instanceMatrix, 'send', {
+						html: `<h1>${this.config.titleMatrix}</h1>`,
+						text: text,
+					});
+				}
+			}
+		} catch (error) {
+			this.errorReporting('[sendNotification Matrix]', error);
+		}
+
 		// Signal
 		try {
 			if (this.config.instanceSignal) {

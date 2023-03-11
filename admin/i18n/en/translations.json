@@ -128,5 +128,8 @@
 	"Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.": "Here you can define the offline times of each adapter. If you want to use the data points of the devices (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
 	"Devices/Services Notification Settings": "Devices/Services Notification Settings",
 	"Offline Time for devices/services": "Offline Time for devices/services",
-	"Watch adapter/instances": "Watch adapter/instances"
+	"Watch adapter/instances": "Watch adapter/instances",
+	"Matrix Instance": "Matrix Instance",
+	"Please choose the matrix instance": "Please choose the matrix instance",
+	"Choose your title for message": "Choose your title for message"
 }

@@ -133,5 +133,8 @@
     "Devices/Services Notification Settings": "Настройки уведомлений устройств/служб",
     "Offline Time devices/services": "Устройства/сервисы Offline Time",
     "Offline Time for devices/services": "Время автономной работы для устройств/сервисов",
-    "Watch adapter/instances": "Смотреть адаптер/экземпляры"
+    "Watch adapter/instances": "Смотреть адаптер/экземпляры",
+    "Matrix Instance": "Экземпляр матрицы",
+    "Please choose the matrix instance": "Пожалуйста, выберите экземпляр матрицы",
+    "Choose your title for message": "Выберите заголовок для сообщения"
 }

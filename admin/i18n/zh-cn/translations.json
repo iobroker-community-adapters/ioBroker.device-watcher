@@ -133,5 +133,8 @@
     "Devices/Services Notification Settings": "设备/服务通知设置",
     "Offline Time devices/services": "离线时间设备/服务",
     "Offline Time for devices/services": "设备/服务的离线时间",
-    "Watch adapter/instances": "观看适配器/实例"
+    "Watch adapter/instances": "观看适配器/实例",
+    "Matrix Instance": "矩阵实例",
+    "Please choose the matrix instance": "请选择矩阵实例",
+    "Choose your title for message": "选择您的消息标题"
 }

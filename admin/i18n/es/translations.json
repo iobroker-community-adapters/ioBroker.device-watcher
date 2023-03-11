@@ -133,5 +133,8 @@
     "Devices/Services Notification Settings": "Configuración de notificaciones de dispositivos/servicios",
     "Offline Time devices/services": "Dispositivos/servicios de tiempo sin conexión",
     "Offline Time for devices/services": "Tiempo sin conexión para dispositivos/servicios",
-    "Watch adapter/instances": "Ver adaptador/instancias"
+    "Watch adapter/instances": "Ver adaptador/instancias",
+    "Matrix Instance": "Instancia de matriz",
+    "Please choose the matrix instance": "Elija la instancia de matriz",
+    "Choose your title for message": "Elija su título para el mensaje"
 }

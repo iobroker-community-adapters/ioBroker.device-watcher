@@ -884,14 +884,15 @@
 					"help": "Choose your notification services",
 					"options": [
 						{ "label": "Please choose", "value": "none" },
-						{ "label": "Pushover", "value": "pushover" },
-						{ "label": "Telegram", "value": "telegram" },
-						{ "label": "Whatsapp", "value": "whatsapp" },
-						{ "label": "Signal", "value": "signal" },
 						{ "label": "E-Mail", "value": "email" },
 						{ "label": "Jarvis", "value": "jarvis" },
 						{ "label": "Lovelace", "value": "lovelace" },
-						{ "label": "Synochat", "value": "synochat" }
+						{ "label": "Matrix", "value": "matrix" },
+						{ "label": "Pushover", "value": "pushover" },
+						{ "label": "Signal", "value": "signal" },
+						{ "label": "Synochat", "value": "synochat" },
+						{ "label": "Telegram", "value": "telegram" },
+						{ "label": "Whatsapp", "value": "whatsapp" }
 					],
 					"default": "none"
 				},
@@ -1186,6 +1187,30 @@
 					"label": "Channel",
 					"help": "Enter the channelname for Synochat",
 					"hidden": "data.msgService !== 'synochat'",
+					"hideOnlyControl": false
+				},
+				"instanceMatrix": {
+					"newLine": true,
+					"type": "instance",
+					"adapter": "matrix-org",
+					"allowDeactivate": true,
+					"all": false,
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Matrix Instance",
+					"help": "Please choose the matrix instance",
+					"hidden": "data.msgService !== 'matrix'",
+					"hideOnlyControl": false
+				},
+				"titleMatrix": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "Title (optional)",
+					"help": "Choose your title for message",
+					"hidden": "data.msgService !== 'matrix'",
 					"hideOnlyControl": false
 				}
 			}

@@ -40,6 +40,7 @@
 This is a watchdog for devices/services and adapter/instances. The adapter looks for the different information about the datapoints and create JSON & HTML lists of them:
 
 **Devices/Services:**
+
 -   devices with battery,
 -   devices with low battery,
 -   devices with link quality,
@@ -48,6 +49,7 @@ This is a watchdog for devices/services and adapter/instances. The adapter looks
 -   all devices
 
 **Adapter/Instances:**
+
 -   all instances
 -   deactivated instances
 -   instances with error
@@ -187,6 +189,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Added: Fully-MQTT
+-   (ciddi89) Added: Notification Service Matrix [#144](https://github.com/ciddi89/ioBroker.device-watcher/issues/144)
+
 ### 2.6.1 (2023-02-26)
 
 -   (ciddi89) Added: Signal adapter for notifications

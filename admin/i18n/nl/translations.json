@@ -133,5 +133,8 @@
     "Devices/Services Notification Settings": "Meldingsinstellingen voor apparaten/services",
     "Offline Time devices/services": "Offline Time-apparaten/services",
     "Offline Time for devices/services": "Offline tijd voor apparaten/services",
-    "Watch adapter/instances": "Bekijk adapter/exemplaren"
+    "Watch adapter/instances": "Bekijk adapter/exemplaren",
+    "Matrix Instance": "Matrix-exemplaar",
+    "Please choose the matrix instance": "Kies de matrixinstantie",
+    "Choose your title for message": "Kies uw titel voor het bericht"
 }
