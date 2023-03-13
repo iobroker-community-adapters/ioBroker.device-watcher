@@ -846,17 +846,17 @@ class DeviceWatcher extends utils.Adapter {
 
 			/*----------  Start of loop  ----------*/
 			for (const [id] of Object.entries(devices)) {
-				if (id.endsWith('.')) continue; // ! Test -  sometimes id's are wrong or has no name so break up here.
 				/*=============================================
 				=              get Instanz		          =
 				=============================================*/
 				const instance = id.slice(0, id.indexOf('.') + 2);
+				if (id.endsWith('.')) continue; // ! Test - sometimes id's are wrong or has no name so break up here.
+
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
 				this.subscribeForeignStates(instanceDeviceConnectionDP);
 				this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
 
-				if (id.endsWith('.')) continue; // ! Test - sometimes id's are wrong or has no name so break up here.
 				/*=============================================
 				=              Get device name		          =
 				=============================================*/
