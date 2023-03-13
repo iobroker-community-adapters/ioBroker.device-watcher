@@ -403,7 +403,8 @@
         "checkFailedInstancesFriday": false,
         "checkFailedInstancesSaturday": false,
         "checkFailedInstancesSunday": false,
-        "checkSendInstanceFailedTime": "12:20"
+        "checkSendInstanceFailedTime": "12:20",
+        "tableTimeInstance": []
     },
     "objects": [],
     "instanceObjects": [

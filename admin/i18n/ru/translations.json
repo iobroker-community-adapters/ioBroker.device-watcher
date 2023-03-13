@@ -137,5 +137,10 @@
     "Matrix Instance": "Экземпляр матрицы",
     "Please choose the matrix instance": "Пожалуйста, выберите экземпляр матрицы",
     "Choose your title for message": "Выберите заголовок для сообщения",
-    "Jarvis Notification": "Уведомление Джарвиса"
+    "Jarvis Notification": "Уведомление Джарвиса",
+    "Expert Settings": "Настройки эксперта",
+    "Error Time for Instances": "Время ошибки для экземпляров",
+    "Here you can define the error time of each instance. The standard value is 20 seconds.": "Здесь вы можете определить время ошибки каждого экземпляра. Стандартное значение составляет 20 секунд.",
+    "Choose which instances should have a longer downtime": "Выберите, какие экземпляры должны иметь более длительное время простоя",
+    "Time in seconds": "Время в секундах"
 }

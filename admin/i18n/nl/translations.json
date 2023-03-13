@@ -137,5 +137,10 @@
     "Matrix Instance": "Matrix-exemplaar",
     "Please choose the matrix instance": "Kies de matrixinstantie",
     "Choose your title for message": "Kies uw titel voor het bericht",
-    "Jarvis Notification": "Jarvis-melding"
+    "Jarvis Notification": "Jarvis-melding",
+    "Expert Settings": "Expert-instellingen",
+    "Error Time for Instances": "Fouttijd voor instanties",
+    "Here you can define the error time of each instance. The standard value is 20 seconds.": "Hier kunt u de fouttijd van elke instantie definiëren. De standaardwaarde is 20 seconden.",
+    "Choose which instances should have a longer downtime": "Kies welke instanties een langere downtime moeten hebben",
+    "Time in seconds": "Tijd in seconden"
 }

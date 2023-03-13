@@ -137,5 +137,10 @@
     "Matrix Instance": "Instancja macierzy",
     "Please choose the matrix instance": "Wybierz instancję macierzy",
     "Choose your title for message": "Wybierz tytuł wiadomości",
-    "Jarvis Notification": "Powiadomienie Jarvisa"
+    "Jarvis Notification": "Powiadomienie Jarvisa",
+    "Expert Settings": "Ustawienia eksperckie",
+    "Error Time for Instances": "Czas błędu dla instancji",
+    "Here you can define the error time of each instance. The standard value is 20 seconds.": "Tutaj możesz zdefiniować czas błędu dla każdej instancji. Standardowa wartość to 20 sekund.",
+    "Choose which instances should have a longer downtime": "Wybierz, które instancje powinny mieć dłuższe przestoje",
+    "Time in seconds": "Czas w sekundach"
 }

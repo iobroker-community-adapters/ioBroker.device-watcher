@@ -137,5 +137,10 @@
     "Matrix Instance": "Matrix-Instanz",
     "Please choose the matrix instance": "Bitte wählen Sie die Matrixinstanz aus",
     "Choose your title for message": "Wählen Sie Ihren Titel für die Nachricht",
-    "Jarvis Notification": "Jarvis-Benachrichtigung"
+    "Jarvis Notification": "Jarvis-Benachrichtigung",
+    "Expert Settings": "Experteneinstellungen",
+    "Error Time for Instances": "Fehlerzeit für Instanzen",
+    "Here you can define the error time of each instance. The standard value is 20 seconds.": "Hier können Sie die Fehlerzeit jeder Instanz definieren. Der Standardwert beträgt 20 Sekunden.",
+    "Choose which instances should have a longer downtime": "Wählen Sie aus, welche Instanzen eine längere Ausfallzeit haben sollen",
+    "Time in seconds": "Zeit in Sekunden"
 }

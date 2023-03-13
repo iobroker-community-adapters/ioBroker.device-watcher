@@ -662,7 +662,7 @@
 						}
 					}
 				},
-				"trenner": {
+				"_trenner": {
 					"newLine": true,
 					"type": "divider"
 				},
@@ -683,7 +683,7 @@
 					"label": "Overview of low battery devices",
 					"help": "Get a regular message with an overview all low battery devices"
 				},
-				"chooseDay": {
+				"_chooseDay": {
 					"newLine": true,
 					"sm": 12,
 					"md": 12,
@@ -752,7 +752,7 @@
 						}
 					}
 				},
-				"trennerZwei": {
+				"_trennerZwei": {
 					"newLine": true,
 					"type": "divider"
 				},
@@ -870,7 +870,7 @@
 					"text": "Notification Service",
 					"size": 2
 				},
-				"msgServiceText": {
+				"_msgServiceText": {
 					"type": "staticText",
 					"text": "Here you can choose your notification service, you can use more than one service, but you can also leave all blank, then only the datapoint lastNotification will be filled.",
 					"style": {
@@ -1235,7 +1235,7 @@
 			"type": "panel",
 			"label": "Blacklist",
 			"items": {
-				"headerBlacklistInstances": {
+				"_headerBlacklistInstances": {
 					"newLine": "true",
 					"type": "header",
 					"text": "Instances Blacklist",
@@ -1267,19 +1267,17 @@
 							"type": "checkbox",
 							"title": "Ignor in notifications",
 							"attr": "checkIgnorNotify",
-							"width": "15%",
-							"alsoDependsOn": ["devices"]
+							"width": "15%"
 						},
 						{
 							"type": "checkbox",
 							"title": "Ignore in lists",
 							"attr": "checkIgnorLists",
-							"width": "10%",
-							"alsoDependsOn": ["devices"]
+							"width": "10%"
 						}
 					]
 				},
-				"headerDevices": {
+				"_headerDevices": {
 					"newLine": "true",
 					"type": "header",
 					"text": "Devices/Services Blacklist",
@@ -1307,30 +1305,27 @@
 							"type": "checkbox",
 							"title": "Ignor in notifications",
 							"attr": "checkIgnorNotify",
-							"width": "15%",
-							"alsoDependsOn": ["devices"]
+							"width": "15%"
 						},
 						{
 							"type": "checkbox",
 							"title": "Ignore in main lists",
 							"attr": "checkIgnorLists",
-							"width": "10%",
-							"alsoDependsOn": ["devices"]
+							"width": "10%"
 						},
 						{
 							"type": "checkbox",
 							"title": "Ignore in lists per adapter",
 							"attr": "checkIgnorAdapterLists",
-							"width": "10%",
-							"alsoDependsOn": ["devices"]
+							"width": "10%"
 						}
 					]
 				}
 			}
 		},
-		"_expertSettings": {
+		"_otherSettings": {
 			"type": "panel",
-			"label": "Expert Settings",
+			"label": "Other Settings",
 			"items": {
 				"_headerOtherSettings": {
 					"type": "header",
@@ -1385,7 +1380,7 @@
 					"text": "Update-Interval",
 					"size": 2
 				},
-				"textUpdateInterval": {
+				"_textUpdateInterval": {
 					"type": "staticText",
 					"text": "Here you can define the update interval of the datapoints/lists. For performance reasons, it is not recommended to select a poll value that is too low. Lower than two seconds is not selectable.",
 					"sm": 12,
@@ -1406,13 +1401,70 @@
 					"label": "Update-Interval",
 					"help": "in seconds",
 					"hideOnlyControl": false
+				}
+			}
+		},
+		"_expertSettings": {
+			"type": "panel",
+			"label": "Expert Settings",
+			"items": {
+				"_headerTimeInstances": {
+					"type": "header",
+					"text": "Error Time for Instances",
+					"size": 2,
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
+				},
+				"_textTimeInstances": {
+					"type": "staticText",
+					"text": "Here you can define the error time of each instance. The standard value is 20 seconds.",
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false,
+					"style": {
+						"fontSize": 16,
+						"marginBottom": 10
+					}
+				},
+				"tableTimeInstance": {
+					"type": "table",
+					"nodelete": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false,
+					"items": [
+						{
+							"type": "selectSendTo",
+							"title": "Choose which instances should have a longer downtime",
+							"attr": "instancesTime",
+							"filter": false,
+							"allowAddByFilter": false,
+							"sort": false,
+							"jsonData": "{\"instanceName\":\"${globalData.instanceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
+							"command": "instancesListTime",
+							"width": "60%"
+						},
+						{
+							"type": "number",
+							"min": 20,
+							"max": 1000000,
+							"default": 20,
+							"title": "Time in seconds",
+							"attr": "errorTime",
+							"width": "15%"
+						}
+					]
 				},
 				"_headerOfflineTime": {
 					"type": "header",
 					"text": "Offline Time for devices/services",
 					"size": 2
 				},
-				"textOfflineTime": {
+				"_textOfflineTime": {
 					"type": "staticText",
 					"text": "Here you can define the offline times of each adapter. If you want to use the data points of the devices/services (online, available, reachable etc.) directly to determine the status, enter ' 0 '.",
 					"sm": 12,

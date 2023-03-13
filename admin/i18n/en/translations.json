@@ -132,5 +132,10 @@
 	"Matrix Instance": "Matrix Instance",
 	"Please choose the matrix instance": "Please choose the matrix instance",
 	"Choose your title for message": "Choose your title for message",
-	"Jarvis Notification": "Jarvis Notification"
+	"Jarvis Notification": "Jarvis Notification",
+	"Expert Settings": "Expert Settings",
+	"Error Time for Instances": "Error Time for Instances",
+	"Here you can define the error time of each instance. The standard value is 20 seconds.": "Here you can define the error time of each instance. The standard value is 20 seconds.",
+	"Choose which instances should have a longer downtime": "Choose which instances should have a longer downtime",
+	"Time in seconds": "Time in seconds"
 }

@@ -80,6 +80,9 @@ class DeviceWatcher extends utils.Adapter {
 		this.blacklistAdapterLists = [];
 		this.blacklistNotify = [];
 
+		// Timelist instances
+		this.userTimeInstancesList = new Map();
+
 		// Interval timer
 		this.refreshDataTimeout = null;
 
@@ -230,6 +233,9 @@ class DeviceWatcher extends utils.Adapter {
 
 			//create Blacklist
 			await this.createBlacklist();
+
+			// create user defined list with time of error for instances
+			await this.createTimeListInstances();
 
 			//create datapoints for each adapter if selected
 			for (const [id] of Object.entries(arrApart)) {
@@ -466,7 +472,7 @@ class DeviceWatcher extends utils.Adapter {
 						case deviceData.UpdateDP:
 							if (state.val !== deviceData.Upgradable) {
 								deviceData.Upgradable = state.val;
-								if (state.val) {
+								if (state.val === true || state.val === 1) {
 									if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
 										await this.sendStateNotifications('updateDevice', device);
 									}
@@ -583,6 +589,7 @@ class DeviceWatcher extends utils.Adapter {
 	onMessage(obj) {
 		const devices = [];
 		const instances = [];
+		const instancesTime = [];
 		let countDevices = 0;
 		let countInstances = 0;
 
@@ -610,8 +617,6 @@ class DeviceWatcher extends utils.Adapter {
 					} catch (error) {
 						this.errorReporting('[onMessage - deviceList for blacklisttable]', error);
 					}
-				} else {
-					this.sendTo(obj.from, obj.command, obj.callback);
 				}
 				break;
 
@@ -636,10 +641,33 @@ class DeviceWatcher extends utils.Adapter {
 						});
 						this.sendTo(obj.from, obj.command, sortInstances, obj.callback);
 					} catch (error) {
-						this.errorReporting('[onMessage - instanceList for blacklisttable]', error);
+						this.errorReporting('[onMessage - instanceList]', error);
 					}
-				} else {
-					this.sendTo(obj.from, obj.command, obj.callback);
+				}
+				break;
+			case 'instancesListTime':
+				if (obj.message) {
+					try {
+						for (const instanceData of this.listInstanceRaw.values()) {
+							const label = `${instanceData.Adapter}: ${instanceData.InstanceName}`;
+							const valueObjectInstances = {
+								adapter: instanceData.Adapter,
+								instanceName: instanceData.InstanceName,
+								path: instanceData.instanceAlivePath,
+							};
+							instancesTime[countInstances] = { label: label, value: JSON.stringify(valueObjectInstances) };
+							countInstances++;
+						}
+						const sortInstances = instancesTime.slice(0);
+						sortInstances.sort(function (a, b) {
+							const x = a.label;
+							const y = b.label;
+							return x < y ? -1 : x > y ? 1 : 0;
+						});
+						this.sendTo(obj.from, obj.command, sortInstances, obj.callback);
+					} catch (error) {
+						this.errorReporting('[onMessage - instanceList]', error);
+					}
 				}
 				break;
 		}
@@ -784,6 +812,31 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
+	 * create list with time for instances
+	 */
+	async createTimeListInstances() {
+		// INSTANCES
+		const userTimeListInstances = this.config.tableTimeInstance;
+		if (userTimeListInstances.length >= 1) {
+			for (const i in userTimeListInstances) {
+				try {
+					const userTimeListparse = this.parseData(userTimeListInstances[i].instancesTime);
+					// push devices in list to ignor device in lists
+					if (userTimeListInstances[i].errorTime) {
+						this.userTimeInstancesList.set(userTimeListparse.path, {
+							instanceName: userTimeListparse.instanceName,
+							errorTime: userTimeListInstances[i].errorTime,
+						});
+					}
+				} catch (error) {
+					this.errorReporting('[createTimeListInstances]', error);
+				}
+			}
+			if (this.userTimeInstancesList.size >= 1) this.log.info(`Found instances items on lists for timesettings: ${this.blacklistInstancesLists}`);
+		}
+	}
+
+	/**
 	 * @param {object} i - Device Object
 	 */
 	async createData(i) {
@@ -793,6 +846,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			/*----------  Start of loop  ----------*/
 			for (const [id] of Object.entries(devices)) {
+				if (id.endsWith('.')) continue; // ! Test -  sometimes id's are wrong or has no name so break up here.
 				/*=============================================
 				=              get Instanz		          =
 				=============================================*/
@@ -802,6 +856,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.subscribeForeignStates(instanceDeviceConnectionDP);
 				this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
 
+				if (id.endsWith('.')) continue; // ! Test - sometimes id's are wrong or has no name so break up here.
 				/*=============================================
 				=              Get device name		          =
 				=============================================*/
@@ -1676,7 +1731,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		// Device update List
-		if (device.Upgradable === true) {
+		if (device.Upgradable === true || device.Upgradable === 1) {
 			this.upgradableList.push({
 				Device: device.Device,
 				Adapter: device.Adapter,
@@ -2061,6 +2116,7 @@ class DeviceWatcher extends utils.Adapter {
 		let diff;
 		let previousCronRun = null;
 		let isHealthy = false;
+		let instanceErrorTime = 20000 / 2;
 
 		switch (instanceMode) {
 			case 'schedule':
@@ -2082,14 +2138,20 @@ class DeviceWatcher extends utils.Adapter {
 			case 'daemon':
 				if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
 				if (isDeviceConnected === undefined) isDeviceConnected = true;
-				// In case of (re)start, connection may take some time. We take 3 attempts.
-				// Attempt 1/3 - immediately
+
+				if (this.userTimeInstancesList.has(instanceAlivePath)) {
+					instanceErrorTime = this.userTimeInstancesList.get(instanceAlivePath).errorTime;
+					instanceErrorTime = (instanceErrorTime * 1000) / 2; // calculate sec to ms and divide into two
+				}
+
 				if (isHostConnected && isDeviceConnected) {
+					// In case of (re)start, connection may take some time. We take 3 attempts.
+					// Attempt 1/3 - immediately
 					isHealthy = true;
 					instanceStatusString = 'Instanz okay';
 				} else {
-					// Attempt 2/3 - after 10 seconds
-					await this.wait(10000);
+					// 2/3 - after 15 seconds
+					await this.wait(instanceErrorTime);
 					isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 					isHostConnected = await this.getInitValue(hostConnectedPath);
 
@@ -2097,8 +2159,8 @@ class DeviceWatcher extends utils.Adapter {
 						isHealthy = true;
 						instanceStatusString = 'Instanz okay';
 					} else {
-						// Attempt 3/3 - after 20 seconds in total
-						await this.wait(10000);
+						// 3/3 - after 30 seconds in total or user time setting
+						await this.wait(instanceErrorTime);
 						isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 						isHostConnected = await this.getInitValue(hostConnectedPath);
 
