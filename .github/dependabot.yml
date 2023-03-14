@@ -10,3 +10,11 @@ updates:
   assignees:
   - ciddi89
   versioning-strategy: increase
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "04:00"
+    timezone: Europe/Berlin
+  assignees:
+  - ciddi89
