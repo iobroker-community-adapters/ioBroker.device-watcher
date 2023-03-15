@@ -208,6 +208,8 @@
 		"bleMaxMinutes": 300,
 		"deconzDevices": false,
 		"deconzMaxMinutes": 0,
+		"ecovacsdeebotDevices": false,
+		"ecovacsdeebotMaxMinutes": 0,
 		"enoceanDevices": false,
 		"enoceanMaxMinutes": 300,
 		"esphomeDevices": false,

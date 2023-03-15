@@ -189,6 +189,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Added: Support for Ecovacs-Deebot
+-   (ciddi89) Updated: Dependencies
+
 ### 2.7.0 (2023-03-13)
 
 -   (ciddi89) Added: Fully-MQTT
