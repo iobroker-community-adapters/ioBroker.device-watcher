@@ -194,6 +194,7 @@ It's possible to select:
 
 -   (ciddi89) Added: Support for Ecovacs-Deebot
 -   (ciddi89) Updated: Dependencies
+-   (ciddi89) Improvements: Small fixes
 
 ### 2.7.0 (2023-03-13)
 

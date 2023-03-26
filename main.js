@@ -852,7 +852,6 @@ class DeviceWatcher extends utils.Adapter {
 				=              get Instanz		          =
 				=============================================*/
 				const instance = id.slice(0, id.indexOf('.') + 2);
-				if (id.endsWith('.')) continue; // ! Test - sometimes id's are wrong or has no name so break up here.
 
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
