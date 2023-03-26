@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.7.0",
+		"version": "2.7.1",
 		"news": {
+			"2.7.1": {
+				"en": "Added: Support for Ecovacs-Deebot\nUpdated: Dependencies\nImprovements: Small fixes",
+				"de": "Hinzugefügt: Unterstützung für Ecovacs-Deebot\nAktualisiert: Abhängigkeiten\nVerbesserungen: Kleine Verbesserungen",
+				"ru": "Добавлена: Поддержка Ecovacs-Deebot\nОбновлено: зависимости\nУлучшения: Небольшие исправления",
+				"pt": "Adicionado: Suporte para Ecovacs-Deebot\nAtualizado: Dependências\nMelhorias: Pequenas correções",
+				"nl": "Vertaling:\nOpgepast\nImprovementen: Kleine fixes",
+				"fr": "Ajouté: Soutien à Ecovacs-Deebot\nActualisé : dépenses\nAméliorations : Petites corrections",
+				"it": "Aggiunto: Supporto per Ecovacs-Deebot\nAggiornato: Dipendenze\nMiglioramenti: Piccole correzioni",
+				"es": "Añadido: Apoyo para Ecovacs-Deebot\nActualizado: Dependencias\nMejoras: Arreglos pequeños",
+				"pl": "Wsparcie dla Ecovac-Deebota\nZastrzeżenie: Zależność\nPoprawa: drobne rozwiązanie",
+				"uk": "Додано: Підтримка Ecovacs-Deebot\nОновлено: Залежності\nУдосконалення: Маленькі кріплення",
+				"zh-cn": "增加:支持Ecovacs-Deebot\n更新:属地\n改进: 小型配件"
+			},
 			"2.7.0": {
 				"en": "Added: Fully-MQTT\nAdded: Notification Service Matrix\nAdded: List and number of active instances\nAdded: HTML lists for instances/adapters\nAdded: HM-RPC device update pending datapoint\nAdded: User can define reporting time for error instances\nFixed: Send notification about adapter updates only if there are new ones\nImprovements: Hide notification services only if no instance is choosen\nImprovements: Some small code changes to avoid error messages",
 				"de": "Hinzugefügt: Fully-MQTT\nHinzugefügt: Notification Service Matrix\nHinzugefügt: Liste und Anzahl der aktiven Instanzen\nHinzugefügt: HTML-Listen für Instanzen/Adapter\nHinzugefügt: HM-RPC Geräteupdate Datenpunkt\nHinzugefügt: Benutzer kann Berichtszeit für Fehlerinstanzen definieren\nBehoben: Sende Benachrichtigung über Adapter-Updates nur, wenn es neue gibt\nVerbesserungen: Ausblenden von Benachrichtigungsdiensten nur, wenn keine Instanz davon gewählt wurde\nVerbesserungen: Einige kleine Codeänderungen, um Fehlermeldungen zu vermeiden",
@@ -80,19 +93,6 @@
 				"pl": "robić na State Zmiany są tylko wtedy, gdy instancja urządzenia jest żywa\nStrona internetowa firmy Smartgarden",
 				"uk": "зробити onState Зміни тільки, коли пристрій є живим\nHomeconnect і Smartgarden адаптер додано",
 				"zh-cn": "国家 仅发生变化,当装置是活性的。\n家庭联系和Smartgarden Adapter"
-			},
-			"2.3.1": {
-				"en": "changed HMRPC lowbat to lowbat_alarm\nchanged HMRPC unreach to unreach_alarm\nfixed nuki mqtt selector\nadded shelly charge datapoint to identify battery devices better\nfixed lowbat issues\nadded lowbat support for HMRPC: HM-CC-RT-DN\nadded additionally timeSelector for each adapter for better support",
-				"de": "hMRPC lowbat zu lowbat_alarm\nhMRPC unreach to unreach_alarm\nfeste nuki mqt selektion\nhinzugefügt shelly-ladedatenpunkt, um batteriegeräte besser zu identifizieren\nfeste lowbat-probleme\nzusätzliche Lowbat-Unterstützung für HMRPC: HM-CC-RT-DN\nzusätzliche ZeitSelector für jeden Adapter für bessere Unterstützung",
-				"ru": "изменено HMRPC lowbat на lowbat_alarm\nизменил HMRPC unreach к unreach_alarm\nфиксированный нуки mqtt selector\nдобавлена точка заряда оболочки, чтобы определить устройства батареи лучше\nфиксированные низкобатные вопросы\nдобавлена поддержка lowbat для HMRPC: HM-CC-RT-DN\nдобавлено дополнительно timeSelector для каждого адаптера для лучшей поддержки",
-				"pt": "mudou HMRPC lowbat para lowbat_alarm\nmudou HMRPC unreach para unreach_alarm\nseletor nuki mqtt fixo\nadicionado shelly carregar datapoint para identificar dispositivos de bateria melhor\nproblemas fixos\nsuporte adicional de lowbat para HMRPC: HM-CC-RT-DN\nadicionado adicionalmente tempoSeletor para cada adaptador para melhor suporte",
-				"nl": "veranderde HMRPC laagbat om te zakken\nveranderde HMRPC onbereikbaar om te ontrafelen\nvertaling:\nvoegde toegevoegde lading datapoint toe om accu apparatuur te identificeren\ngerepareerde lage problemen\nhM-C-RTN\nvoeg extra tijdsversneller toe voor elke adapter voor betere steun",
-				"fr": "changement de HMRPC basbat to lowbat_alarm\nchangé HMRPC unreach to unreach_alarm\nsélecteur fixe nuki mqt\nle point de données de charge shelly ajouté pour identifier les appareils de batterie mieux\nquestions de bas niveau\nsupport de faible teneur pour HMRPC: HM-CC-RT-DN\nsupplémentaire timeSelector pour chaque adaptateur pour un meilleur support",
-				"it": "cambiato HMRPC lowbat a lowbat_alarm\ncambiato HMRPC unreach a unreach_alarm\nselettore fisso nuki mqtt\naggiunto shelly carica datapoint per identificare meglio i dispositivi della batteria\nproblemi fissi a bassa pressione\nsupporto per HMRPC: HM-CC-RT-DN\naggiunto anche tempoSelettore per ogni adattatore per un miglior supporto",
-				"es": "cambio HMRPC bajobat a lowbat_alarm\ncambió HMRPC sin llegar a unreach_alarm\nfija nuki mqtt selector\nañadir datos de carga total para identificar dispositivos de batería mejor\ncuestiones fijas de baja reducción\nagregado soporte de bajavo para HMRPC: HM-CC-RT-DN\nañadido tiempoSeleccionador para cada adaptador para un mejor soporte",
-				"pl": "zmienił niskobudżetowy słupek HMRPC\nzmienił HMRPC nieodwracany\nnuki mqtt selektor\ndodany punkt ładowania sygnału do identyfikowania urządzeń baterii znacznie lepszy\nniskobata\nwsparcie dla HMRPC: HM-CC-RT-DN\ndodano dodatkowy czas dla każdego adaptera dla lepszego wsparcia",
-				"uk": "змінив HMRPC низькобажан до низької bat_alarm\nзмінив HMRPC unreach_alarm\nфіксований nuki mqtt selector\nдодана точка заряду оболонки для виявлення пристроїв акумулятора краще\nвиправлені проблеми з низькою вагою\nhM-CC-RT-DN\nдодано додатково часСелектор для кожного адаптера для кращої підтримки",
-				"zh-cn": "mR 低巴\nb. MRPC Unach的改变\n固定微基米特选\n增拨的炮击数据点,以查明电池装置,改善\n固定的低巴特问题\n减少对影响方案的支持:HM-CC-DNRT-DN\n每个适应者增加更多时间,以更好地支助"
 			}
 		},
 		"titleLang": {

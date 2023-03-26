@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.7.1 (2023-03-26)
 
 -   (ciddi89) Added: Support for Ecovacs-Deebot
 -   (ciddi89) Updated: Dependencies
