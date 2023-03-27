@@ -4111,14 +4111,6 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * @param {number} ms
-	 */
-	async wait(ms) {
-		if (isUnloaded) return;
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	}
-
-	/**
 	 * Get previous run of cron job schedule
 	 * Requires cron-parser!
 	 * Inspired by https://stackoverflow.com/questions/68134104/
