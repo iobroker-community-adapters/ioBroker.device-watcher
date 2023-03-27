@@ -2152,7 +2152,7 @@ class DeviceWatcher extends utils.Adapter {
 					instanceStatusString = 'Instanz okay';
 				} else {
 					// 2/3 - after 15 seconds
-					await this.wait(instanceErrorTime);
+					await this.delay(instanceErrorTime);
 					isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 					isHostConnected = await this.getInitValue(hostConnectedPath);
 
@@ -2161,7 +2161,7 @@ class DeviceWatcher extends utils.Adapter {
 						instanceStatusString = 'Instanz okay';
 					} else {
 						// 3/3 - after 30 seconds in total or user time setting
-						await this.wait(instanceErrorTime);
+						await this.delay(instanceErrorTime);
 						isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 						isHostConnected = await this.getInitValue(hostConnectedPath);
 
