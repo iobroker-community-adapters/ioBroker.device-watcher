@@ -177,6 +177,13 @@
 					"lg": 3,
 					"label": "Jeelink"
 				},
+				"loqedSmartLockDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Loqed Smart Lock"
+				},
 				"lupusecDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1744,6 +1751,18 @@
 					"label": "Jeelink",
 					"help": "in minutes",
 					"hidden": "!data.jeelinkDevices",
+					"hideOnlyControl": false
+				},
+				"loqedSmartLockMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Loqed Smart Lock",
+					"help": "in minutes",
+					"hidden": "!data.loqedSmartLockDevices",
 					"hideOnlyControl": false
 				},
 				"lupusecMaxMinutes": {
