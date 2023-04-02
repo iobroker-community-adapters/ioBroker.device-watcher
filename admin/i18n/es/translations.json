@@ -142,5 +142,6 @@
     "Error Time for Instances": "Tiempo de error para instancias",
     "Here you can define the error time of each instance. The standard value is 20 seconds.": "Aquí puede definir el tiempo de error de cada instancia. El valor estándar es de 20 segundos.",
     "Choose which instances should have a longer downtime": "Elija qué instancias deben tener un tiempo de inactividad más largo",
-    "Time in seconds": "Tiempo en segundos"
+    "Time in seconds": "Tiempo en segundos",
+    "Choose your API/KEY Token for Pushmessage": "Elija su token API/KEY para Pushmessage"
 }

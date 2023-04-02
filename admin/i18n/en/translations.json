@@ -137,5 +137,6 @@
 	"Error Time for Instances": "Error Time for Instances",
 	"Here you can define the error time of each instance. The standard value is 20 seconds.": "Here you can define the error time of each instance. The standard value is 20 seconds.",
 	"Choose which instances should have a longer downtime": "Choose which instances should have a longer downtime",
-	"Time in seconds": "Time in seconds"
+	"Time in seconds": "Time in seconds",
+	"Choose your API/KEY Token for Pushmessage": "Choose your API/KEY Token for Pushmessage"
 }
