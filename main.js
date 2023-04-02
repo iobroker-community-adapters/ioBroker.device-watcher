@@ -127,6 +127,7 @@ class DeviceWatcher extends utils.Adapter {
 			hueExt: this.config.hueExtDevices,
 			innogy: this.config.innogyDevices,
 			jeelink: this.config.jeelinkDevices,
+			loqedSmartLock: this.config.loqedSmartLockDevices,
 			lupusec: this.config.lupusecDevices,
 			maxcube: this.config.maxcubeDevices,
 			meross: this.config.merossDevices,
@@ -182,6 +183,7 @@ class DeviceWatcher extends utils.Adapter {
 			hueExt: this.config.hueextMaxMinutes,
 			innogy: this.config.innogyMaxMinutes,
 			jeelink: this.config.jeelinkMaxMinutes,
+			loqedSmartLock: this.config.loqedSmartLockMaxMinutes,
 			lupusec: this.config.lupusecMaxMinutes,
 			maxcube: this.config.maxcubeMaxMinutes,
 			meross: this.config.merossMaxMinutes,
@@ -939,6 +941,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'hueExt':
 						case 'mihomeVacuum':
 						case 'mqttNuki':
+						case 'loqedSmartLock':
 							deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery;
 							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
 							if (deviceBatteryState === undefined) {
@@ -990,7 +993,12 @@ class DeviceWatcher extends utils.Adapter {
 				let unreachDP = currDeviceString + this.selAdapter[i].reach;
 				const deviceStateSelectorDP = shortCurrDeviceString + this.selAdapter[i].stateValue;
 				const rssiPeerSelectorDP = currDeviceString + this.selAdapter[i].rssiPeerState;
-				const timeSelector = currDeviceString + this.selAdapter[i].timeSelector;
+				let timeSelector = currDeviceString + this.selAdapter[i].timeSelector;
+
+				const timeSelectorState = await this.getInitValue(timeSelector);
+				if (timeSelectorState === undefined) {
+					timeSelector = shortCurrDeviceString + this.selAdapter[i].timeSelector;
+				}
 
 				let deviceUnreachState = await this.getInitValue(unreachDP);
 				if (deviceUnreachState === undefined) {
@@ -1122,6 +1130,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'nukiExt':
 				case 'wled':
 				case 'mqttNuki':
+				case 'loqedSmartLock':
 					if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 						deviceName = shortDeviceObject.common.name;
 					}
