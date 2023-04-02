@@ -2672,6 +2672,7 @@ class DeviceWatcher extends utils.Adapter {
 						title: this.config.titlePushover,
 						device: this.config.devicePushover,
 						priority: this.config.prioPushover,
+						token: this.config.tokenPushover,
 					});
 				}
 			}

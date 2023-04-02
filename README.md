@@ -193,6 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Added: Support for LOQED Smart Lock
+-   (ciddi89) Added: Option to add api key/token for Pushover
 
 ### 2.7.1 (2023-03-26)
 

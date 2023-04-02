@@ -1105,6 +1105,16 @@
 					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},
+				"tokenPushover": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "API/KEY Token (optional)",
+					"help": "Choose your API/KEY Token for Pushmessage",
+					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
+					"hideOnlyControl": false
+				},
 				"headerSignal": {
 					"newLine": "true",
 					"type": "header",

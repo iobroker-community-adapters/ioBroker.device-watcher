@@ -142,5 +142,6 @@
     "Error Time for Instances": "Час помилки для екземплярів",
     "Here you can define the error time of each instance. The standard value is 20 seconds.": "Тут ви можете визначити час помилки кожного екземпляра. Стандартне значення - 20 секунд.",
     "Choose which instances should have a longer downtime": "Виберіть, які екземпляри повинні мати довший час простою",
-    "Time in seconds": "Час у секундах"
+    "Time in seconds": "Час у секундах",
+    "Choose your API/KEY Token for Pushmessage": "Виберіть маркер API/KEY для Pushmessage"
 }
