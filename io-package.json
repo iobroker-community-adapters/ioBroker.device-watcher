@@ -244,6 +244,8 @@
 		"innogyMaxMinutes": 0,
 		"jeelinkDevices": false,
 		"jeelinkMaxMinutes": 300,
+		"loqedSmartLockDevices": false,
+		"loqedSmartLockMaxMinutes": 0,
 		"lupusecDevices": false,
 		"lupusecMaxMinutes": 0,
 		"maxcubeDevices": false,
