@@ -304,6 +304,9 @@ class DeviceWatcher extends utils.Adapter {
 			// send overview of updatable adapters
 			if (this.config.checkSendAdapterUpdateMsgDaily) this.sendScheduleNotifications('updateAdapter');
 
+			// send overview of deactivated instances
+			if (this.config.checkSendInstanceDeactivatedDaily) this.sendScheduleNotifications('deactivatedInstance');
+
 			// send overview of instances with error
 			if (this.config.checkSendInstanceFailedDaily) this.sendScheduleNotifications('errorInstance');
 		} catch (error) {
@@ -413,6 +416,11 @@ class DeviceWatcher extends utils.Adapter {
 								instanceData.isAlive = instanceStatusRaw[1];
 								instanceData.status = instanceStatusRaw[0];
 								instanceData.isHealthy = instanceStatusRaw[2];
+							}
+							if (this.config.checkSendInstanceDeactivatedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
+								if (!instanceData.isHealthy) {
+									await this.sendStateNotifications('deactivatedInstance', instance);
+								}
 							}
 							break;
 						case instanceData.connectedHostPath:
@@ -2659,8 +2667,8 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async sendNotification(text) {
 		// Pushover
-		try {
-			if (this.config.instancePushover) {
+		if (this.config.instancePushover) {
+			try {
 				//first check if instance is living
 				const pushoverAliveState = await this.getInitValue('system.adapter.' + this.config.instancePushover + '.alive');
 
@@ -2671,18 +2679,18 @@ class DeviceWatcher extends utils.Adapter {
 						message: text,
 						title: this.config.titlePushover,
 						device: this.config.devicePushover,
+						user: this.config.userPushover,
 						priority: this.config.prioPushover,
-						token: this.config.tokenPushover,
 					});
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Pushover]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Pushover]', error);
 		}
 
 		// Telegram
-		try {
-			if (this.config.instanceTelegram) {
+		if (this.config.instanceTelegram) {
+			try {
 				//first check if instance is living
 				const telegramAliveState = await this.getInitValue('system.adapter.' + this.config.instanceTelegram + '.alive');
 
@@ -2695,14 +2703,14 @@ class DeviceWatcher extends utils.Adapter {
 						chatId: this.config.chatIdTelegram,
 					});
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Telegram]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Telegram]', error);
 		}
 
 		// Whatsapp
-		try {
-			if (this.config.instanceWhatsapp) {
+		if (this.config.instanceWhatsapp) {
+			try {
 				//first check if instance is living
 				const whatsappAliveState = await this.getInitValue('system.adapter.' + this.config.instanceWhatsapp + '.alive');
 
@@ -2714,14 +2722,14 @@ class DeviceWatcher extends utils.Adapter {
 						phone: this.config.phoneWhatsapp,
 					});
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Whatsapp]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Whatsapp]', error);
 		}
 
 		// Matrix
-		try {
-			if (this.config.instanceMatrix) {
+		if (this.config.instanceMatrix) {
+			try {
 				//first check if instance is living
 				const matrixAliveState = await this.getInitValue('system.adapter.' + this.config.instanceMatrix + '.alive');
 
@@ -2733,14 +2741,14 @@ class DeviceWatcher extends utils.Adapter {
 						text: text,
 					});
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Matrix]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Matrix]', error);
 		}
 
 		// Signal
-		try {
-			if (this.config.instanceSignal) {
+		if (this.config.instanceSignal) {
+			try {
 				//first check if instance is living
 				const signalAliveState = await this.getInitValue('system.adapter.' + this.config.instanceSignal + '.alive');
 
@@ -2752,14 +2760,14 @@ class DeviceWatcher extends utils.Adapter {
 						phone: this.config.phoneSignal,
 					});
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Signal]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Signal]', error);
 		}
 
 		// Email
-		try {
-			if (this.config.instanceEmail) {
+		if (this.config.instanceEmail) {
+			try {
 				//first check if instance is living
 				const eMailAliveState = await this.getInitValue('system.adapter.' + this.config.instanceEmail + '.alive');
 
@@ -2772,14 +2780,14 @@ class DeviceWatcher extends utils.Adapter {
 						subject: this.config.subjectEmail,
 					});
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification eMail]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification eMail]', error);
 		}
 
 		// Jarvis Notification
-		try {
-			if (this.config.instanceJarvis) {
+		if (this.config.instanceJarvis) {
+			try {
 				//first check if instance is living
 				const jarvisAliveState = await this.getInitValue('system.adapter.' + this.config.instanceJarvis + '.alive');
 
@@ -2792,14 +2800,14 @@ class DeviceWatcher extends utils.Adapter {
 						'{"title":"' + this.config.titleJarvis + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message": ' + jsonText + ',"display": "drawer"}',
 					);
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Jarvis]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Jarvis]', error);
 		}
 
 		// Lovelace Notification
-		try {
-			if (this.config.instanceLovelace) {
+		if (this.config.instanceLovelace) {
+			try {
 				//first check if instance is living
 				const lovelaceAliveState = await this.getInitValue('system.adapter.' + this.config.instanceLovelace + '.alive');
 
@@ -2812,14 +2820,14 @@ class DeviceWatcher extends utils.Adapter {
 						'{"message":' + jsonText + ', "title":"' + this.config.titleLovelace + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}',
 					);
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Lovelace]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Lovelace]', error);
 		}
 
 		// Synochat Notification
-		try {
-			if (this.config.instanceSynochat) {
+		if (this.config.instanceSynochat) {
+			try {
 				//first check if instance is living
 				const synochatAliveState = await this.getInitValue('system.adapter.' + this.config.instanceSynochat + '.alive');
 
@@ -2832,9 +2840,9 @@ class DeviceWatcher extends utils.Adapter {
 						this.log.warn('Synochat channel is not set. Message could not be sent. Please check your instance configuration.');
 					}
 				}
+			} catch (error) {
+				this.errorReporting('[sendNotification Synochat]', error);
 			}
-		} catch (error) {
-			this.errorReporting('[sendNotification Synochat]', error);
 		}
 	} // <-- End of sendNotification function
 
@@ -2905,6 +2913,11 @@ class DeviceWatcher extends utils.Adapter {
 				setMessage(message);
 				break;
 			case 'errorInstance':
+				objectData = this.listInstanceRaw.get(id);
+				message = `Instanz Watchdog:\n${objectData.InstanceName}: ${objectData.status}`;
+				setMessage(message);
+				break;
+			case 'deactivatedInstance':
 				objectData = this.listInstanceRaw.get(id);
 				message = `Instanz Watchdog:\n${objectData.InstanceName}: ${objectData.status}`;
 				setMessage(message);
@@ -3095,6 +3108,36 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					if (list.length === 0) return;
 					message = `Tägliche Meldung über fehlerhafte Instanzen: ${list}`;
+					setMessage(message);
+				});
+				break;
+			case 'deactivatedInstance':
+				// push the selected days in list
+				if (this.config.checkInstanceDeactivatedMonday) checkDays.push(1);
+				if (this.config.checkInstanceDeactivatedTuesday) checkDays.push(2);
+				if (this.config.checkInstanceDeactivatedWednesday) checkDays.push(3);
+				if (this.config.checkInstanceDeactivatedThursday) checkDays.push(4);
+				if (this.config.checkInstanceDeactivatedFriday) checkDays.push(5);
+				if (this.config.checkInstanceDeactivatedSaturday) checkDays.push(6);
+				if (this.config.checkInstanceDeactivatedSunday) checkDays.push(0);
+
+				time = this.config.checkSendInstanceDeactivatedTime.split(':');
+
+				if (checkDays.length === 0) {
+					this.log.warn(`No days selected for daily instance deactivated message. Please check the instance configuration!`);
+					return; // cancel function if no day is selected
+				}
+				this.log.debug(`Number of selected days for daily instance deactivated message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
+				cron = '5 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
+				schedule.scheduleJob(cron, () => {
+					list = '';
+
+					for (const id of this.listDeactivatedInstances) {
+						if (this.blacklistInstancesNotify.includes(id.instanceAlivePath)) continue;
+						list = `${list}\n${id.Instance}`;
+					}
+					if (list.length === 0) return;
+					message = `Tägliche Meldung über deaktivierte Instanzen: ${list}`;
 					setMessage(message);
 				});
 				break;

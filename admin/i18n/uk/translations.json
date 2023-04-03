@@ -143,5 +143,12 @@
     "Here you can define the error time of each instance. The standard value is 20 seconds.": "Тут ви можете визначити час помилки кожного екземпляра. Стандартне значення - 20 секунд.",
     "Choose which instances should have a longer downtime": "Виберіть, які екземпляри повинні мати довший час простою",
     "Time in seconds": "Час у секундах",
-    "Choose your API/KEY Token for Pushmessage": "Виберіть маркер API/KEY для Pushmessage"
+    "Choose your API/KEY Token for Pushmessage": "Виберіть маркер API/KEY для Pushmessage",
+    "Instance deactivated message": "Повідомлення про деактивацію екземпляра",
+    "Receive a message when an instance is deactivated": "Отримувати повідомлення, коли примірник дезактивовано",
+    "Overview of deactivated instances": "Огляд деактивованих примірників",
+    "Get a message with an overview of all deactivated instances": "Отримайте повідомлення з оглядом усіх дезактивованих екземплярів",
+    "Choose the day(s) where you want to get the overview of deactivated instances:": "Виберіть день (дні), коли ви хочете отримати огляд дезактивованих екземплярів:",
+    "User/Group key (optional)": "Ключ користувача/групи (необов'язково)",
+    "Choose your User/Group key for Pushmessage": "Виберіть ключ користувача/групи для Pushmessage"
 }

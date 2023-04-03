@@ -143,5 +143,12 @@
     "Here you can define the error time of each instance. The standard value is 20 seconds.": "Здесь вы можете определить время ошибки каждого экземпляра. Стандартное значение составляет 20 секунд.",
     "Choose which instances should have a longer downtime": "Выберите, какие экземпляры должны иметь более длительное время простоя",
     "Time in seconds": "Время в секундах",
-    "Choose your API/KEY Token for Pushmessage": "Выберите свой токен API/KEY для Pushmessage"
+    "Choose your API/KEY Token for Pushmessage": "Выберите свой токен API/KEY для Pushmessage",
+    "Instance deactivated message": "Сообщение об отключении экземпляра",
+    "Receive a message when an instance is deactivated": "Получение сообщения, когда экземпляр деактивирован",
+    "Overview of deactivated instances": "Обзор деактивированных экземпляров",
+    "Get a message with an overview of all deactivated instances": "Получите сообщение с обзором всех деактивированных экземпляров",
+    "Choose the day(s) where you want to get the overview of deactivated instances:": "Выберите день (дни), когда вы хотите получить обзор деактивированных экземпляров:",
+    "User/Group key (optional)": "Ключ пользователя/группы (необязательно)",
+    "Choose your User/Group key for Pushmessage": "Выберите ключ пользователя/группы для Pushmessage"
 }

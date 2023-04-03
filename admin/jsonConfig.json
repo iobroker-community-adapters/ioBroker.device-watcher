@@ -496,6 +496,102 @@
 					"hidden": "!data.checkAdapterInstances",
 					"hideOnlyControl": false
 				},
+				"checkSendInstanceDeactivatedMsg": {
+					"newLine": "true",
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Instance deactivated message",
+					"help": "Receive a message when an instance is deactivated",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
+				},
+				"checkSendInstanceDeactivatedDaily": {
+					"type": "checkbox",
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"label": "Overview of deactivated instances",
+					"help": "Get a message with an overview of all deactivated instances",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
+				},
+				"_sendIntervallInstanceDeactivatedDay": {
+					"newLine": true,
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendInstanceDeactivatedDaily",
+					"hideOnlyControl": false,
+					"items": {
+						"_textDays": {
+							"type": "staticText",
+							"text": "Choose the day(s) where you want to get the overview of deactivated instances:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkInstanceDeactivatedMonday": {
+							"newLine": true,
+							"type": "checkbox",
+							"label": "Mon"
+						},
+						"checkInstanceDeactivatedTuesday": {
+							"type": "checkbox",
+							"label": "Tue"
+						},
+						"checkInstanceDeactivatedWednesday": {
+							"type": "checkbox",
+							"label": "Wed"
+						},
+						"checkInstanceDeactivatedThursday": {
+							"type": "checkbox",
+							"label": "Thu"
+						},
+						"checkInstanceDeactivatedFriday": {
+							"type": "checkbox",
+							"label": "Fri"
+						},
+						"checkInstanceDeactivatedSaturday": {
+							"type": "checkbox",
+							"label": "Sat"
+						},
+						"checkInstanceDeactivatedSunday": {
+							"type": "checkbox",
+							"label": "Sun"
+						}
+					}
+				},
+				"_sendIntervallInstanceDeactivatedMsgTime": {
+					"sm": 12,
+					"md": 12,
+					"lg": 6,
+					"hidden": "!data.checkSendInstanceDeactivatedDaily",
+					"hideOnlyControl": false,
+					"items": {
+						"_textTime": {
+							"type": "staticText",
+							"text": "Choose the Time:",
+							"style": {
+								"fontSize": 16,
+								"marginTop": 20
+							}
+						},
+						"checkSendInstanceDeactivatedTime": {
+							"newLine": true,
+							"type": "text",
+							"help": "Format hh:mm"
+						}
+					}
+				},
+				"trennerInstanceDeactivated": {
+					"newLine": true,
+					"type": "divider",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
+				},
 				"checkSendInstanceFailedMsg": {
 					"newLine": "true",
 					"type": "checkbox",
@@ -1070,6 +1166,16 @@
 					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},
+				"userPushover": {
+					"type": "text",
+					"sm": 12,
+					"md": 4,
+					"lg": 4,
+					"label": "User/Group key (optional)",
+					"help": "Choose your User/Group key for Pushmessage",
+					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
+					"hideOnlyControl": false
+				},
 				"devicePushover": {
 					"type": "text",
 					"sm": 12,
@@ -1102,16 +1208,6 @@
 					"lg": 4,
 					"label": "Title (optional)",
 					"help": "Choose your title for Pushmessage",
-					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
-					"hideOnlyControl": false
-				},
-				"tokenPushover": {
-					"type": "text",
-					"sm": 12,
-					"md": 4,
-					"lg": 4,
-					"label": "API/KEY Token (optional)",
-					"help": "Choose your API/KEY Token for Pushmessage",
 					"hidden": "data.msgService !== 'pushover' && !data.instancePushover",
 					"hideOnlyControl": false
 				},

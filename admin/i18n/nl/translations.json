@@ -143,5 +143,12 @@
     "Here you can define the error time of each instance. The standard value is 20 seconds.": "Hier kunt u de fouttijd van elke instantie definiëren. De standaardwaarde is 20 seconden.",
     "Choose which instances should have a longer downtime": "Kies welke instanties een langere downtime moeten hebben",
     "Time in seconds": "Tijd in seconden",
-    "Choose your API/KEY Token for Pushmessage": "Kies uw API/KEY-token voor pushberichten"
+    "Choose your API/KEY Token for Pushmessage": "Kies uw API/KEY-token voor pushberichten",
+    "Instance deactivated message": "Instantie gedeactiveerd bericht",
+    "Receive a message when an instance is deactivated": "Ontvang een bericht wanneer een instantie wordt gedeactiveerd",
+    "Overview of deactivated instances": "Overzicht gedeactiveerde exemplaren",
+    "Get a message with an overview of all deactivated instances": "Krijg een bericht met een overzicht van alle gedeactiveerde instanties",
+    "Choose the day(s) where you want to get the overview of deactivated instances:": "Kies de dag(en) waarop u het overzicht van gedeactiveerde instanties wilt zien:",
+    "User/Group key (optional)": "Gebruikers-/groepssleutel (optioneel)",
+    "Choose your User/Group key for Pushmessage": "Kies uw gebruikers-/groepssleutel voor pushberichten"
 }

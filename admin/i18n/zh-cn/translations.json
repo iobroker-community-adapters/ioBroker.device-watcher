@@ -143,5 +143,12 @@
     "Here you can define the error time of each instance. The standard value is 20 seconds.": "您可以在此处定义每个实例的错误时间。标准值为 20 秒。",
     "Choose which instances should have a longer downtime": "选择哪些实例应该有更长的停机时间",
     "Time in seconds": "时间以秒为单位",
-    "Choose your API/KEY Token for Pushmessage": "为推送消息选择您的 API/KEY 令牌"
+    "Choose your API/KEY Token for Pushmessage": "为推送消息选择您的 API/KEY 令牌",
+    "Instance deactivated message": "实例停用消息",
+    "Receive a message when an instance is deactivated": "实例停用时接收消息",
+    "Overview of deactivated instances": "停用实例概览",
+    "Get a message with an overview of all deactivated instances": "获取包含所有已停用实例概览的消息",
+    "Choose the day(s) where you want to get the overview of deactivated instances:": "选择您希望获得已停用实例概览的日期：",
+    "User/Group key (optional)": "用户/组密钥（可选）",
+    "Choose your User/Group key for Pushmessage": "为推送消息选择您的用户/组密钥"
 }

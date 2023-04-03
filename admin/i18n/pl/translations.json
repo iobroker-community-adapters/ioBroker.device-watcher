@@ -143,5 +143,12 @@
     "Here you can define the error time of each instance. The standard value is 20 seconds.": "Tutaj możesz zdefiniować czas błędu dla każdej instancji. Standardowa wartość to 20 sekund.",
     "Choose which instances should have a longer downtime": "Wybierz, które instancje powinny mieć dłuższe przestoje",
     "Time in seconds": "Czas w sekundach",
-    "Choose your API/KEY Token for Pushmessage": "Wybierz swój token API/KEY dla Pushmessage"
+    "Choose your API/KEY Token for Pushmessage": "Wybierz swój token API/KEY dla Pushmessage",
+    "Instance deactivated message": "Komunikat o dezaktywacji instancji",
+    "Receive a message when an instance is deactivated": "Odbierz wiadomość, gdy instancja zostanie dezaktywowana",
+    "Overview of deactivated instances": "Przegląd dezaktywowanych instancji",
+    "Get a message with an overview of all deactivated instances": "Otrzymaj wiadomość z przeglądem wszystkich dezaktywowanych instancji",
+    "Choose the day(s) where you want to get the overview of deactivated instances:": "Wybierz dni, w których chcesz uzyskać przegląd dezaktywowanych instancji:",
+    "User/Group key (optional)": "Klucz użytkownika/grupy (opcjonalnie)",
+    "Choose your User/Group key for Pushmessage": "Wybierz klucz użytkownika/grupy dla wiadomości Push"
 }
