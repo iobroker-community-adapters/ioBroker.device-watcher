@@ -2170,6 +2170,10 @@ class DeviceWatcher extends utils.Adapter {
 				} else {
 					// 2/3 - after 15 seconds
 					await this.delay(instanceErrorTime);
+
+					isAlive = await this.getInitValue(instanceAlivePath);
+					if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
+
 					isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 					isHostConnected = await this.getInitValue(hostConnectedPath);
 
@@ -2179,6 +2183,10 @@ class DeviceWatcher extends utils.Adapter {
 					} else {
 						// 3/3 - after 30 seconds in total or user time setting
 						await this.delay(instanceErrorTime);
+
+						isAlive = await this.getInitValue(instanceAlivePath);
+						if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
+
 						isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 						isHostConnected = await this.getInitValue(hostConnectedPath);
 
