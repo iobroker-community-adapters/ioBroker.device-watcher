@@ -197,6 +197,7 @@ It's possible to select:
 -   (ciddi89) Added: Option to send notification if an instance was stopped
 -   (ciddi89) Added: Option to send shedule notifications with overview of stopped instances
 -   (ciddi89) Fixed: Issue if notifications was send of stopped instance but the option wasn't choosen
+-   (ciddi89) Fixed: Ignore battery values 0% if they were not smaller than 5% before
 
 ### 2.7.1 (2023-03-26)
 
