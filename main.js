@@ -384,6 +384,7 @@ class DeviceWatcher extends utils.Adapter {
 			let oldAdapterUpdatesCounts;
 
 			try {
+				// adapter updates
 				if (id.endsWith('updatesJson')) {
 					oldAdapterUpdatesCounts = this.countAdapterUpdates;
 					await this.getAdapterUpdateData(id);
@@ -402,8 +403,10 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 
+				// instances
 				for (const [instance, instanceData] of this.listInstanceRaw) {
 					switch (id) {
+						// instance alive
 						case instanceData.instanceAlivePath:
 							if (state.val !== instanceData.isAlive) {
 								instanceStatusRaw = await this.setInstanceStatus(
@@ -423,6 +426,7 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							}
 							break;
+						// instance connected host
 						case instanceData.connectedHostPath:
 							oldInstanceHostState = instanceData.isConnectedHost;
 							instanceData.isConnectedHost = state.val;
@@ -446,6 +450,7 @@ class DeviceWatcher extends utils.Adapter {
 								}
 							}
 							break;
+						// instance connected device
 						case instanceData.connectedDevicePath:
 							oldInstanceDeviceState = instanceData.isConnectedDevice;
 							instanceData.isConnectedDevice = state.val;
@@ -475,12 +480,14 @@ class DeviceWatcher extends utils.Adapter {
 				for (const [device, deviceData] of this.listAllDevicesRaw) {
 					// On statechange update available datapoint
 					switch (id) {
+						// device connection
 						case deviceData.instanceDeviceConnectionDP:
 							if (state.val !== deviceData.instancedeviceConnected) {
 								deviceData.instancedeviceConnected = state.val;
 							}
 							break;
 
+						// device updates
 						case deviceData.UpdateDP:
 							if (state.val !== deviceData.Upgradable) {
 								deviceData.Upgradable = state.val;
@@ -492,15 +499,18 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 
+						// device signal
 						case deviceData.SignalStrengthDP:
 							signalData = await this.calculateSignalStrength(state, deviceData.adapterID);
 							deviceData.SignalStrength = signalData[0];
 
 							break;
 
+						// device battery
 						case deviceData.batteryDP:
 							if (deviceData.isBatteryDevice) {
 								oldLowBatState = deviceData.LowBat;
+								if (state.val === 0 && deviceData.BatteryRaw >= 5) continue;
 								batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.faultReport, deviceData.adapterID);
 
 								deviceData.Battery = batteryData[0];
@@ -521,6 +531,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 
+						// device low bat
 						case deviceData.LowBatDP:
 							if (deviceData.isBatteryDevice) {
 								oldLowBatState = deviceData.LowBat;
@@ -538,6 +549,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 
+						//device error / fault reports
 						case deviceData.faultReportDP:
 							if (deviceData.isBatteryDevice) {
 								oldLowBatState = deviceData.LowBat;
@@ -556,6 +568,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 							break;
 
+						// device unreach
 						case deviceData.UnreachDP:
 							oldStatus = deviceData.Status;
 							deviceData.UnreachState = await this.getInitValue(deviceData.UnreachDP);
