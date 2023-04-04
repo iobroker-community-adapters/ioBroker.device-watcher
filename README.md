@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.8.0 (2023-04-04)
 
 -   (ciddi89) Added: Support for LOQED Smart Lock
 -   (ciddi89) Added: Option to add user/group api key for Pushover
