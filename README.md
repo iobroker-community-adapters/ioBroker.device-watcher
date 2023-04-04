@@ -193,7 +193,10 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Added: Support for LOQED Smart Lock
--   (ciddi89) Added: Option to add api key/token for Pushover
+-   (ciddi89) Added: Option to add user/group api key for Pushover
+-   (ciddi89) Added: Option to send notification if an instance was stopped
+-   (ciddi89) Added: Option to send shedule notifications with overview of stopped instances
+-   (ciddi89) Fixed: Issue if notifications was send of stopped instance but the option wasn't choosen
 
 ### 2.7.1 (2023-03-26)
 
