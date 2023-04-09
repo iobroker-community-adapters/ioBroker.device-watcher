@@ -150,5 +150,8 @@
     "Get a message with an overview of all deactivated instances": "获取包含所有已停用实例概览的消息",
     "Choose the day(s) where you want to get the overview of deactivated instances:": "选择您希望获得已停用实例概览的日期：",
     "User/Group key (optional)": "用户/组密钥（可选）",
-    "Choose your User/Group key for Pushmessage": "为推送消息选择您的用户/组密钥"
+    "Choose your User/Group key for Pushmessage": "为推送消息选择您的用户/组密钥",
+    "Global error time": "全局错误时间",
+    "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "如果需要，可以在这里自行设置每个实例的错误时间。此设置会覆盖所选实例的全局设置。",
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "定义实例的全局错误时间。标准值为 20 秒。"
 }

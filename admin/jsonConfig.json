@@ -1537,7 +1537,38 @@
 				},
 				"_textTimeInstances": {
 					"type": "staticText",
-					"text": "Here you can define the error time of each instance. The standard value is 20 seconds.",
+					"text": "Define the globale error time of the instances. The standard value is 20 seconds.",
+					"sm": 12,
+					"md": 12,
+					"lg": 12,
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false,
+					"style": {
+						"fontSize": 16,
+						"marginBottom": 10
+					}
+				},
+				"errorTimeInstances": {
+					"type": "number",
+					"min": 20,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Global error time",
+					"help": "in seconds",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
+				},
+				"_divider": {
+					"newLine": true,
+					"type": "divider",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
+				},
+				"_textTableTimeInstances": {
+					"type": "staticText",
+					"text": "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.",
 					"sm": 12,
 					"md": 12,
 					"lg": 12,

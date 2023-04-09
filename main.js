@@ -2147,7 +2147,7 @@ class DeviceWatcher extends utils.Adapter {
 		let diff;
 		let previousCronRun = null;
 		let isHealthy = false;
-		let instanceErrorTime = 20000 / 2;
+		let instanceErrorTime = (this.config.errorTimeInstances * 1000) / 2;
 
 		switch (instanceMode) {
 			case 'schedule':

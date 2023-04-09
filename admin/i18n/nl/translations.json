@@ -150,5 +150,8 @@
     "Get a message with an overview of all deactivated instances": "Krijg een bericht met een overzicht van alle gedeactiveerde instanties",
     "Choose the day(s) where you want to get the overview of deactivated instances:": "Kies de dag(en) waarop u het overzicht van gedeactiveerde instanties wilt zien:",
     "User/Group key (optional)": "Gebruikers-/groepssleutel (optioneel)",
-    "Choose your User/Group key for Pushmessage": "Kies uw gebruikers-/groepssleutel voor pushberichten"
+    "Choose your User/Group key for Pushmessage": "Kies uw gebruikers-/groepssleutel voor pushberichten",
+    "Global error time": "Globale fouttijd",
+    "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Stel hier indien nodig de fouttijd van elke instantie voor jezelf in. Deze instelling overschrijft de algemene instelling voor de geselecteerde instantie.",
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "Definieer de globale fouttijd van de instanties. De standaardwaarde is 20 seconden."
 }

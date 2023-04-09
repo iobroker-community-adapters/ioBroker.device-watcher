@@ -150,5 +150,8 @@
     "Get a message with an overview of all deactivated instances": "Recibe un mensaje con una descripción general de todas las instancias desactivadas",
     "Choose the day(s) where you want to get the overview of deactivated instances:": "Elija los días en los que desea obtener la descripción general de las instancias desactivadas:",
     "User/Group key (optional)": "Clave de usuario/grupo (opcional)",
-    "Choose your User/Group key for Pushmessage": "Elija su clave de usuario/grupo para Pushmessage"
+    "Choose your User/Group key for Pushmessage": "Elija su clave de usuario/grupo para Pushmessage",
+    "Global error time": "Tiempo de error global",
+    "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Si es necesario, configure aquí el tiempo de error de cada instancia. Esta configuración sobrescribe la configuración global para la instancia seleccionada.",
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "Defina el tiempo de error global de las instancias. El valor estándar es de 20 segundos."
 }
