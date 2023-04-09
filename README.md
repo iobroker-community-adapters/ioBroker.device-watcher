@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Added: Possibility for the user to select the global error time for instances
+
 ### 2.8.0 (2023-04-04)
 
 -   (ciddi89) Added: Support for LOQED Smart Lock
