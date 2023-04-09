@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.8.1 (2023-04-09)
 
 -   (ciddi89) Added: Possibility for the user to select the global error time for instances
 
