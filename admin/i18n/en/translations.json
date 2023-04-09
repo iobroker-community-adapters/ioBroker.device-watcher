@@ -145,5 +145,8 @@
 	"Get a message with an overview of all deactivated instances": "Get a message with an overview of all deactivated instances",
 	"Choose the day(s) where you want to get the overview of deactivated instances:": "Choose the day(s) where you want to get the overview of deactivated instances:",
 	"User/Group key (optional)": "User/Group key (optional)",
-	"Choose your User/Group key for Pushmessage": "Choose your User/Group key for Pushmessage"
+	"Choose your User/Group key for Pushmessage": "Choose your User/Group key for Pushmessage",
+	"Global error time": "Global error time",
+	"If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.",
+	"Define the globale error time of the instances. The standard value is 20 seconds.": "Define the globale error time of the instances. The standard value is 20 seconds."
 }

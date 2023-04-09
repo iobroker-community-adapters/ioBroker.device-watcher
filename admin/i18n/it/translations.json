@@ -150,5 +150,8 @@
     "Get a message with an overview of all deactivated instances": "Ricevi un messaggio con una panoramica di tutte le istanze disattivate",
     "Choose the day(s) where you want to get the overview of deactivated instances:": "Scegli il giorno o i giorni in cui vuoi ottenere la panoramica delle istanze disattivate:",
     "User/Group key (optional)": "Chiave utente/gruppo (opzionale)",
-    "Choose your User/Group key for Pushmessage": "Scegli la tua chiave utente/gruppo per Pushmessage"
+    "Choose your User/Group key for Pushmessage": "Scegli la tua chiave utente/gruppo per Pushmessage",
+    "Global error time": "Tempo di errore globale",
+    "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Se necessario, impostare qui l'ora dell'errore di ogni istanza. Questa impostazione sovrascrive l'impostazione globale per l'istanza selezionata.",
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "Definire il tempo di errore globale delle istanze. Il valore standard è 20 secondi."
 }

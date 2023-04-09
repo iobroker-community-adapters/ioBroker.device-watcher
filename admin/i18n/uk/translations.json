@@ -150,5 +150,8 @@
     "Get a message with an overview of all deactivated instances": "Отримайте повідомлення з оглядом усіх дезактивованих екземплярів",
     "Choose the day(s) where you want to get the overview of deactivated instances:": "Виберіть день (дні), коли ви хочете отримати огляд дезактивованих екземплярів:",
     "User/Group key (optional)": "Ключ користувача/групи (необов'язково)",
-    "Choose your User/Group key for Pushmessage": "Виберіть ключ користувача/групи для Pushmessage"
+    "Choose your User/Group key for Pushmessage": "Виберіть ключ користувача/групи для Pushmessage",
+    "Global error time": "Глобальний час помилки",
+    "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "За потреби встановіть тут для себе час помилки кожного екземпляра. Це налаштування перезаписує глобальне налаштування для вибраного екземпляра.",
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "Визначте глобальний час помилки екземплярів. Стандартне значення - 20 секунд."
 }
