@@ -871,6 +871,8 @@ class DeviceWatcher extends utils.Adapter {
 
 			/*----------  Start of loop  ----------*/
 			for (const [id] of Object.entries(devices)) {
+				if (id.endsWith('.')) continue;
+
 				/*=============================================
 				=              get Instanz		          =
 				=============================================*/
