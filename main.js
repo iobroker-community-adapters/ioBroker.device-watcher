@@ -2133,26 +2133,25 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Check if instance is alive
-	 * @param {string | number | boolean | null | undefined} isAlive
 	 * @param {any} instanceAlivePath
 	 * @param {number} instanceDeactivationTime
 	 */
-	async checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime) {
-		isAlive = await this.getInitValue(instanceAlivePath);
-		if (isAlive) return isAlive;
+	async checkIsAlive(instanceAlivePath, instanceDeactivationTime) {
+		let aliveState = await this.getInitValue(instanceAlivePath);
+		if (aliveState) return true;
 
 		await this.delay(instanceDeactivationTime);
-		isAlive = await this.getInitValue(instanceAlivePath);
-		if (!isAlive) {
+		aliveState = await this.getInitValue(instanceAlivePath);
+		if (!aliveState) {
 			await this.delay(instanceDeactivationTime);
-			isAlive = await this.getInitValue(instanceAlivePath);
-			if (!isAlive) {
+			aliveState = await this.getInitValue(instanceAlivePath);
+			if (!aliveState) {
 				return false; // if instance is turned off
 			} else {
-				return isAlive;
+				return true;
 			}
 		} else {
-			return isAlive;
+			return true;
 		}
 	}
 
@@ -2196,8 +2195,6 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				break;
 			case 'daemon':
-				if (isDeviceConnected === undefined) isDeviceConnected = true;
-
 				if (this.userTimeInstancesList.has(instanceAlivePath)) {
 					// User set own setting for deactivation time
 					instanceDeactivationTime = this.userTimeInstancesList.get(instanceAlivePath).deactivationTime;
@@ -2209,8 +2206,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				// if instance was deactivated
-				isAlive = await this.checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime);
+				isAlive = await this.checkIsAlive(instanceAlivePath, instanceDeactivationTime);
 				if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
+
+				if (isDeviceConnected === undefined) isDeviceConnected = true;
 
 				// if instance has an error
 				if (isHostConnected && isDeviceConnected) {
@@ -2219,26 +2218,30 @@ class DeviceWatcher extends utils.Adapter {
 					isHealthy = true;
 					instanceStatusString = 'Instanz okay';
 				} else {
-					// 2/3 - after 15 seconds
+					// 2/3 - after x seconds
 					await this.delay(instanceErrorTime);
 
-					isAlive = await this.checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime);
+					isAlive = await this.checkIsAlive(instanceAlivePath, instanceDeactivationTime);
 					if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
 
 					isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
+					if (isDeviceConnected === undefined) isDeviceConnected = true;
+
 					isHostConnected = await this.getInitValue(hostConnectedPath);
 
 					if (isHostConnected && isDeviceConnected) {
 						isHealthy = true;
 						instanceStatusString = 'Instanz okay';
 					} else {
-						// 3/3 - after 30 seconds in total or user time setting
+						// 3/3 - after x seconds in total or user time setting
 						await this.delay(instanceErrorTime);
 
-						isAlive = await this.checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime);
+						isAlive = await this.checkIsAlive(instanceAlivePath, instanceDeactivationTime);
 						if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
 
 						isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
+						if (isDeviceConnected === undefined) isDeviceConnected = true;
+
 						isHostConnected = await this.getInitValue(hostConnectedPath);
 
 						if (isHostConnected && isDeviceConnected) {
