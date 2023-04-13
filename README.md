@@ -193,6 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Fixed: Don't handle id's which ends with fullstop
+-   (ciddi89) Added: Possibility for the user to select the global deactivation time for instances
 
 ### 2.8.1 (2023-04-09)
 

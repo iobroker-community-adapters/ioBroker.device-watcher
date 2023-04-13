@@ -2131,6 +2131,12 @@ class DeviceWatcher extends utils.Adapter {
 		return instance;
 	}
 
+	/**
+	 * Check if instance is alive
+	 * @param {string | number | boolean | null | undefined} isAlive
+	 * @param {any} instanceAlivePath
+	 * @param {number} instanceDeactivationTime
+	 */
 	async checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime) {
 		isAlive = await this.getInitValue(instanceAlivePath);
 		if (isAlive) return isAlive;
