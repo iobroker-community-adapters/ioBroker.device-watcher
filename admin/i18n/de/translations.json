@@ -153,5 +153,11 @@
     "Choose your User/Group key for Pushmessage": "Wählen Sie Ihren Benutzer-/Gruppenschlüssel für die Push-Nachricht",
     "Global error time": "Globale Fehlerzeit",
     "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Stellen Sie hier ggf. die Fehlerzeit jeder Instanz für sich ein. Diese Einstellung überschreibt die globale Einstellung für die ausgewählte Instanz.",
-    "Define the globale error time of the instances. The standard value is 20 seconds.": "Definieren Sie die globale Fehlerzeit der Instanzen. Der Standardwert beträgt 20 Sekunden."
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "Definieren Sie die globale Fehlerzeit der Instanzen. Der Standardwert beträgt 20 Sekunden.",
+    "Deactivation time in seconds": "Deaktivierungszeit in Sekunden",
+    "Error time in seconds": "Fehlerzeit in Sekunden",
+    "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Stellen Sie hier bei Bedarf die Deaktivierungs- und Fehlerzeit jeder Instanz für sich ein. Diese Einstellung überschreibt die globale Einstellung für die ausgewählte Instanz.",
+    "Global deactivation time": "Globale Deaktivierungszeit",
+    "Define the global instance deactivation and error time. The default value is 20 seconds.": "Definieren Sie die globale Instanz-Deaktivierungs- und Fehlerzeit. Der Standardwert ist 20 Sekunden.",
+    "Deactivation and Error Time for Instances": "Deaktivierungs- und Fehlerzeit für Instanzen"
 }

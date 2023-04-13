@@ -153,5 +153,11 @@
     "Choose your User/Group key for Pushmessage": "为推送消息选择您的用户/组密钥",
     "Global error time": "全局错误时间",
     "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "如果需要，可以在这里自行设置每个实例的错误时间。此设置会覆盖所选实例的全局设置。",
-    "Define the globale error time of the instances. The standard value is 20 seconds.": "定义实例的全局错误时间。标准值为 20 秒。"
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "定义实例的全局错误时间。标准值为 20 秒。",
+    "Deactivation time in seconds": "停用时间（秒）",
+    "Error time in seconds": "以秒为单位的错误时间",
+    "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "如有必要，请在此处自行设置每个实例的停用和错误时间。此设置会覆盖所选实例的全局设置。",
+    "Global deactivation time": "全局停用时间",
+    "Define the global instance deactivation and error time. The default value is 20 seconds.": "定义全局实例停用和错误时间。默认值为 20 秒。",
+    "Deactivation and Error Time for Instances": "实例的停用和错误时间"
 }

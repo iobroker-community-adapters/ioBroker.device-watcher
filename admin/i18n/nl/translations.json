@@ -153,5 +153,11 @@
     "Choose your User/Group key for Pushmessage": "Kies uw gebruikers-/groepssleutel voor pushberichten",
     "Global error time": "Globale fouttijd",
     "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Stel hier indien nodig de fouttijd van elke instantie voor jezelf in. Deze instelling overschrijft de algemene instelling voor de geselecteerde instantie.",
-    "Define the globale error time of the instances. The standard value is 20 seconds.": "Definieer de globale fouttijd van de instanties. De standaardwaarde is 20 seconden."
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "Definieer de globale fouttijd van de instanties. De standaardwaarde is 20 seconden.",
+    "Deactivation time in seconds": "Deactivatietijd in seconden",
+    "Error time in seconds": "Fouttijd in seconden",
+    "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Stel hier eventueel voor jezelf de deactiverings- en fouttijd van elke instantie in. Deze instelling overschrijft de algemene instelling voor de geselecteerde instantie.",
+    "Global deactivation time": "Globale deactiveringstijd",
+    "Define the global instance deactivation and error time. The default value is 20 seconds.": "Definieer de globale deactivering van instanties en de fouttijd. De standaardwaarde is 20 seconden.",
+    "Deactivation and Error Time for Instances": "Deactivering en fouttijd voor instanties"
 }

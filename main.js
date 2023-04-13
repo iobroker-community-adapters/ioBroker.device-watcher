@@ -850,6 +850,7 @@ class DeviceWatcher extends utils.Adapter {
 					if (userTimeListInstances[i].errorTime) {
 						this.userTimeInstancesList.set(userTimeListparse.path, {
 							instanceName: userTimeListparse.instanceName,
+							deactivationTime: userTimeListInstances[i].deactivationTime,
 							errorTime: userTimeListInstances[i].errorTime,
 						});
 					}
@@ -2130,6 +2131,25 @@ class DeviceWatcher extends utils.Adapter {
 		return instance;
 	}
 
+	async checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime) {
+		isAlive = await this.getInitValue(instanceAlivePath);
+		if (isAlive) return isAlive;
+
+		await this.delay(instanceDeactivationTime);
+		isAlive = await this.getInitValue(instanceAlivePath);
+		if (!isAlive) {
+			await this.delay(instanceDeactivationTime);
+			isAlive = await this.getInitValue(instanceAlivePath);
+			if (!isAlive) {
+				return false; // if instance is turned off
+			} else {
+				return isAlive;
+			}
+		} else {
+			return isAlive;
+		}
+	}
+
 	/**
 	 * set status for instance
 	 * @param {string} instanceMode
@@ -2141,14 +2161,15 @@ class DeviceWatcher extends utils.Adapter {
 	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, hostConnectedPath, isDeviceConnctedPath) {
 		const isAliveSchedule = await this.getForeignStateAsync(instanceAlivePath);
 		let isHostConnected = await this.getInitValue(hostConnectedPath);
-		let isAlive = await this.getInitValue(instanceAlivePath);
 		let isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
 		let instanceStatusString = 'Instance deactivated';
 		let lastUpdate;
 		let lastCronRun;
 		let diff;
+		let isAlive;
 		let previousCronRun = null;
 		let isHealthy = false;
+		let instanceDeactivationTime = (this.config.offlineTimeInstances * 1000) / 2;
 		let instanceErrorTime = (this.config.errorTimeInstances * 1000) / 2;
 
 		switch (instanceMode) {
@@ -2169,14 +2190,23 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				break;
 			case 'daemon':
-				if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
 				if (isDeviceConnected === undefined) isDeviceConnected = true;
 
 				if (this.userTimeInstancesList.has(instanceAlivePath)) {
+					// User set own setting for deactivation time
+					instanceDeactivationTime = this.userTimeInstancesList.get(instanceAlivePath).deactivationTime;
+					instanceDeactivationTime = (instanceDeactivationTime * 1000) / 2; // calculate sec to ms and divide into two
+
+					// User set own setting for error time
 					instanceErrorTime = this.userTimeInstancesList.get(instanceAlivePath).errorTime;
 					instanceErrorTime = (instanceErrorTime * 1000) / 2; // calculate sec to ms and divide into two
 				}
 
+				// if instance was deactivated
+				isAlive = await this.checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime);
+				if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
+
+				// if instance has an error
 				if (isHostConnected && isDeviceConnected) {
 					// In case of (re)start, connection may take some time. We take 3 attempts.
 					// Attempt 1/3 - immediately
@@ -2186,7 +2216,7 @@ class DeviceWatcher extends utils.Adapter {
 					// 2/3 - after 15 seconds
 					await this.delay(instanceErrorTime);
 
-					isAlive = await this.getInitValue(instanceAlivePath);
+					isAlive = await this.checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime);
 					if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
 
 					isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
@@ -2199,7 +2229,7 @@ class DeviceWatcher extends utils.Adapter {
 						// 3/3 - after 30 seconds in total or user time setting
 						await this.delay(instanceErrorTime);
 
-						isAlive = await this.getInitValue(instanceAlivePath);
+						isAlive = await this.checkIsAlive(isAlive, instanceAlivePath, instanceDeactivationTime);
 						if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
 
 						isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);

@@ -153,5 +153,11 @@
     "Choose your User/Group key for Pushmessage": "Виберіть ключ користувача/групи для Pushmessage",
     "Global error time": "Глобальний час помилки",
     "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "За потреби встановіть тут для себе час помилки кожного екземпляра. Це налаштування перезаписує глобальне налаштування для вибраного екземпляра.",
-    "Define the globale error time of the instances. The standard value is 20 seconds.": "Визначте глобальний час помилки екземплярів. Стандартне значення - 20 секунд."
+    "Define the globale error time of the instances. The standard value is 20 seconds.": "Визначте глобальний час помилки екземплярів. Стандартне значення - 20 секунд.",
+    "Deactivation time in seconds": "Час дезактивації в секундах",
+    "Error time in seconds": "Час помилки в секундах",
+    "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Якщо потрібно, тут можна встановити для себе час дезактивації та час помилки кожного екземпляра. Це налаштування перезаписує глобальне налаштування для вибраного екземпляра.",
+    "Global deactivation time": "Глобальний час дезактивації",
+    "Define the global instance deactivation and error time. The default value is 20 seconds.": "Визначте час дезактивації глобального екземпляра та час помилки. Значення за замовчуванням становить 20 секунд.",
+    "Deactivation and Error Time for Instances": "Деактивація та час помилки для екземплярів"
 }
