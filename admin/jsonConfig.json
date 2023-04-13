@@ -1530,14 +1530,14 @@
 			"items": {
 				"_headerTimeInstances": {
 					"type": "header",
-					"text": "Error Time for Instances",
+					"text": "Deactivation and Error Time for Instances",
 					"size": 2,
 					"hidden": "!data.checkAdapterInstances",
 					"hideOnlyControl": false
 				},
 				"_textTimeInstances": {
 					"type": "staticText",
-					"text": "Define the globale error time of the instances. The standard value is 20 seconds.",
+					"text": "Define the global instance deactivation and error time. The default value is 20 seconds.",
 					"sm": 12,
 					"md": 12,
 					"lg": 12,
@@ -1547,6 +1547,18 @@
 						"fontSize": 16,
 						"marginBottom": 10
 					}
+				},
+				"offlineTimeInstances": {
+					"type": "number",
+					"min": 20,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Global deactivation time",
+					"help": "in seconds",
+					"hidden": "!data.checkAdapterInstances",
+					"hideOnlyControl": false
 				},
 				"errorTimeInstances": {
 					"type": "number",
@@ -1568,7 +1580,7 @@
 				},
 				"_textTableTimeInstances": {
 					"type": "staticText",
-					"text": "If necessary, set the error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.",
+					"text": "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.",
 					"sm": 12,
 					"md": 12,
 					"lg": 12,
@@ -1604,7 +1616,16 @@
 							"min": 20,
 							"max": 1000000,
 							"default": 20,
-							"title": "Time in seconds",
+							"title": "Deactivation time in seconds",
+							"attr": "deactivationTime",
+							"width": "15%"
+						},
+						{
+							"type": "number",
+							"min": 20,
+							"max": 1000000,
+							"default": 20,
+							"title": "Error time in seconds",
 							"attr": "errorTime",
 							"width": "15%"
 						}
