@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.8.2 (2023-04-13)
 
 -   (ciddi89) Fixed: Don't handle id's which ends with fullstop
 -   (ciddi89) Added: Possibility for the user to select the global deactivation time for instances
