@@ -342,7 +342,7 @@ class DeviceWatcher extends utils.Adapter {
 		} else {
 			try {
 				// The object was deleted
-				this.log.info(`object ${id} deleted`);
+				this.log.debug(`object ${id} deleted`);
 
 				// delete instance data in map
 				if (this.listInstanceRaw.has(id)) {
@@ -421,40 +421,23 @@ class DeviceWatcher extends utils.Adapter {
 								instanceData.isHealthy = instanceStatusRaw[2];
 							}
 							if (this.config.checkSendInstanceDeactivatedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
-								if (!instanceData.isHealthy) {
+								if (!instanceData.isAlive) {
 									await this.sendStateNotifications('deactivatedInstance', instance);
 								}
 							}
 							break;
 						// instance connected host
 						case instanceData.connectedHostPath:
-							oldInstanceHostState = instanceData.isConnectedHost;
-							instanceData.isConnectedHost = state.val;
-							if (oldInstanceHostState !== instanceData.isConnectedHost) {
-								instanceStatusRaw = await this.setInstanceStatus(
-									instanceData.instanceMode,
-									instanceData.schedule,
-									instanceData.instanceAlivePath,
-									instanceData.connectedHostPath,
-									instanceData.connectedDevicePath,
-								);
-								instanceData.isAlive = instanceStatusRaw[1];
-								instanceData.status = instanceStatusRaw[0];
-								instanceData.isHealthy = instanceStatusRaw[2];
-
-								if (!instanceData.isAlive) continue;
-								if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
-									if (!instanceData.isHealthy) {
-										await this.sendStateNotifications('errorInstance', instance);
-									}
-								}
-							}
-							break;
-						// instance connected device
 						case instanceData.connectedDevicePath:
-							oldInstanceDeviceState = instanceData.isConnectedDevice;
-							instanceData.isConnectedDevice = state.val;
-							if (oldInstanceDeviceState !== instanceData.isConnectedDevice) {
+							if (instanceData.connectedHostPath) {
+								oldInstanceHostState = instanceData.isConnectedHost;
+								instanceData.isConnectedHost = state.val;
+							}
+							if (instanceData.connectedDevicePath) {
+								oldInstanceDeviceState = instanceData.isConnectedDevice;
+								instanceData.isConnectedDevice = state.val;
+							}
+							if (oldInstanceHostState !== instanceData.isConnectedHost || oldInstanceDeviceState !== instanceData.isConnectedDevice) {
 								instanceStatusRaw = await this.setInstanceStatus(
 									instanceData.instanceMode,
 									instanceData.schedule,
