@@ -2121,7 +2121,11 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async checkIsAlive(instanceAlivePath, instanceDeactivationTime) {
 		let aliveState = await this.getInitValue(instanceAlivePath);
-		if (aliveState) return true;
+		if (aliveState) {
+			await this.delay(20000);
+			aliveState = await this.getInitValue(instanceAlivePath);
+			if (aliveState) return true;
+		}
 
 		await this.delay(instanceDeactivationTime);
 		aliveState = await this.getInitValue(instanceAlivePath);
