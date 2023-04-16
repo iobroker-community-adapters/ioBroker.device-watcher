@@ -2168,6 +2168,7 @@ class DeviceWatcher extends utils.Adapter {
 		let isHealthy = false;
 		let scheduleIsAlive;
 		let daemonIsAlive;
+		let daemonIsNotAlive;
 		let instanceDeactivationTime = (this.config.offlineTimeInstances * 1000) / 2;
 		let instanceErrorTime = (this.config.errorTimeInstances * 1000) / 2;
 
@@ -2191,28 +2192,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
 
-				if (daemonIsAlive[0]) {
-					if (daemonIsAlive[1]) {
-						isAlive = Boolean(daemonIsAlive[0]);
-						isHealthy = Boolean(daemonIsAlive[1]);
-						instanceStatusString = String(daemonIsAlive[2]);
-					} else if (daemonIsAlive[0] && !daemonIsAlive[1]) {
-						// wait first time
-						await this.delay(instanceErrorTime);
-						daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
-						if (!daemonIsAlive[1]) {
-							// wait second time
-							await this.delay(instanceErrorTime);
-							daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
-							if (!daemonIsAlive[1]) {
-								// finally
-								isAlive = Boolean(daemonIsAlive[0]);
-								isHealthy = Boolean(daemonIsAlive[1]);
-								instanceStatusString = String(daemonIsAlive[2]);
-							}
-						}
-					}
-				} else if (!daemonIsAlive[0]) {
+				daemonIsNotAlive = async () => {
 					// wait first time
 					await this.delay(instanceDeactivationTime);
 					daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
@@ -2227,6 +2207,37 @@ class DeviceWatcher extends utils.Adapter {
 							instanceStatusString = String(daemonIsAlive[2]);
 						}
 					}
+				};
+
+				if (daemonIsAlive[0]) {
+					if (daemonIsAlive[1]) {
+						isAlive = Boolean(daemonIsAlive[0]);
+						isHealthy = Boolean(daemonIsAlive[1]);
+						instanceStatusString = String(daemonIsAlive[2]);
+					} else if (daemonIsAlive[0] && !daemonIsAlive[1]) {
+						// wait first time
+						await this.delay(instanceErrorTime);
+						daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
+						if (daemonIsAlive[0] && !daemonIsAlive[1]) {
+							// wait second time
+							await this.delay(instanceErrorTime);
+							daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
+							if (daemonIsAlive[0] && !daemonIsAlive[1]) {
+								// finally
+								isAlive = Boolean(daemonIsAlive[0]);
+								isHealthy = Boolean(daemonIsAlive[1]);
+								instanceStatusString = String(daemonIsAlive[2]);
+							} else if (!daemonIsAlive[0]) {
+								await daemonIsNotAlive();
+							}
+						} else if (!daemonIsAlive[0]) {
+							await daemonIsNotAlive();
+						}
+					} else if (!daemonIsAlive[0]) {
+						await daemonIsNotAlive();
+					}
+				} else if (!daemonIsAlive[0]) {
+					await daemonIsNotAlive();
 				}
 				break;
 		}
