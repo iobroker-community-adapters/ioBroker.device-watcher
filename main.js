@@ -379,8 +379,6 @@ class DeviceWatcher extends utils.Adapter {
 			let oldStatus;
 			let isLowBatValue;
 			let instanceStatusRaw;
-			let oldInstanceHostState;
-			let oldInstanceDeviceState;
 			let oldAdapterUpdatesCounts;
 
 			try {
@@ -406,55 +404,28 @@ class DeviceWatcher extends utils.Adapter {
 				// instances
 				for (const [instance, instanceData] of this.listInstanceRaw) {
 					switch (id) {
-						// instance alive
 						case instanceData.instanceAlivePath:
-							if (state.val !== instanceData.isAlive) {
-								instanceStatusRaw = await this.setInstanceStatus(
-									instanceData.instanceMode,
-									instanceData.schedule,
-									instanceData.instanceAlivePath,
-									instanceData.connectedHostPath,
-									instanceData.connectedDevicePath,
-								);
-								instanceData.isAlive = instanceStatusRaw[1];
-								instanceData.status = instanceStatusRaw[0];
-								instanceData.isHealthy = instanceStatusRaw[2];
-							}
-							if (this.config.checkSendInstanceDeactivatedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
-								if (!instanceData.isAlive) {
-									await this.sendStateNotifications('deactivatedInstance', instance);
-								}
-							}
-							break;
-						// instance connected host
 						case instanceData.connectedHostPath:
 						case instanceData.connectedDevicePath:
-							if (instanceData.connectedHostPath) {
-								oldInstanceHostState = instanceData.isConnectedHost;
-								instanceData.isConnectedHost = state.val;
-							}
-							if (instanceData.connectedDevicePath) {
-								oldInstanceDeviceState = instanceData.isConnectedDevice;
-								instanceData.isConnectedDevice = state.val;
-							}
-							if (oldInstanceHostState !== instanceData.isConnectedHost || oldInstanceDeviceState !== instanceData.isConnectedDevice) {
-								instanceStatusRaw = await this.setInstanceStatus(
-									instanceData.instanceMode,
-									instanceData.schedule,
-									instanceData.instanceAlivePath,
-									instanceData.connectedHostPath,
-									instanceData.connectedDevicePath,
-								);
-								instanceData.isAlive = instanceStatusRaw[1];
-								instanceData.status = instanceStatusRaw[0];
-								instanceData.isHealthy = instanceStatusRaw[2];
+							if (!instanceData.checkIsRunning) {
+								instanceData.checkIsRunning = true;
+								instanceStatusRaw = await this.setInstanceStatus(instanceData.instanceMode, instanceData.schedule, instance);
+								instanceData.isAlive = instanceStatusRaw[0];
+								instanceData.isHealthy = instanceStatusRaw[1];
+								instanceData.status = instanceStatusRaw[2];
 
-								if (!instanceData.isAlive) continue;
-								if (this.config.checkSendInstanceFailedMsg && !this.blacklistInstancesNotify.includes(instanceData.instanceAlivePath)) {
-									if (!instanceData.isHealthy) {
+								if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
+									if (!this.blacklistInstancesNotify.includes(instance)) {
+										await this.sendStateNotifications('deactivatedInstance', instance);
+									}
+								}
+
+								if (this.config.checkSendInstanceFailedMsg && instanceData.isAlive && !instanceData.isHealthy) {
+									if (!this.blacklistInstancesNotify.includes(instance)) {
 										await this.sendStateNotifications('errorInstance', instance);
 									}
 								}
+								instanceData.checkIsRunning = false;
 							}
 							break;
 					}
@@ -631,12 +602,11 @@ class DeviceWatcher extends utils.Adapter {
 			case 'instancesList':
 				if (obj.message) {
 					try {
-						for (const instanceData of this.listInstanceRaw.values()) {
-							const label = `${instanceData.Adapter}: ${instanceData.InstanceName}`;
+						for (const [instance, instanceData] of this.listInstanceRaw) {
+							const label = `${instanceData.Adapter}: ${instance}`;
 							const valueObjectInstances = {
 								adapter: instanceData.Adapter,
-								instanceName: instanceData.InstanceName,
-								path: instanceData.instanceAlivePath,
+								instanceID: instance,
 							};
 							instances[countInstances] = { label: label, value: JSON.stringify(valueObjectInstances) };
 							countInstances++;
@@ -656,12 +626,11 @@ class DeviceWatcher extends utils.Adapter {
 			case 'instancesListTime':
 				if (obj.message) {
 					try {
-						for (const instanceData of this.listInstanceRaw.values()) {
-							const label = `${instanceData.Adapter}: ${instanceData.InstanceName}`;
+						for (const [instance, instanceData] of this.listInstanceRaw) {
+							const label = `${instanceData.Adapter}: ${instance}`;
 							const valueObjectInstances = {
 								adapter: instanceData.Adapter,
-								instanceName: instanceData.InstanceName,
-								path: instanceData.instanceAlivePath,
+								instanceName: instance,
 							};
 							instancesTime[countInstances] = { label: label, value: JSON.stringify(valueObjectInstances) };
 							countInstances++;
@@ -803,11 +772,11 @@ class DeviceWatcher extends utils.Adapter {
 					const blacklistParse = this.parseData(myBlacklistInstances[i].instances);
 					// push devices in list to ignor device in lists
 					if (myBlacklistInstances[i].checkIgnorLists) {
-						this.blacklistInstancesLists.push(blacklistParse.path);
+						this.blacklistInstancesLists.push(blacklistParse.instanceID);
 					}
 					// push devices in list to ignor device in notifications
 					if (myBlacklistInstances[i].checkIgnorNotify) {
-						this.blacklistInstancesNotify.push(blacklistParse.path);
+						this.blacklistInstancesNotify.push(blacklistParse.instanceID);
 					}
 				} catch (error) {
 					this.errorReporting('[createBlacklist]', error);
@@ -831,8 +800,7 @@ class DeviceWatcher extends utils.Adapter {
 					const userTimeListparse = this.parseData(userTimeListInstances[i].instancesTime);
 					// push devices in list to ignor device in lists
 					if (userTimeListInstances[i].errorTime) {
-						this.userTimeInstancesList.set(userTimeListparse.path, {
-							instanceName: userTimeListparse.instanceName,
+						this.userTimeInstancesList.set(userTimeListparse.instanceID, {
 							deactivationTime: userTimeListInstances[i].deactivationTime,
 							errorTime: userTimeListInstances[i].errorTime,
 						});
@@ -2021,14 +1989,14 @@ class DeviceWatcher extends utils.Adapter {
 				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
 
 				// get instance name
-				const instanceName = await this.getInstanceName(id);
+				const instanceID = await this.getInstanceName(id);
 
 				// get instance connected to host data
-				const instanceConnectedHostDP = `system.adapter.${instanceName}.connected`;
+				const instanceConnectedHostDP = `system.adapter.${instanceID}.connected`;
 				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
 
 				// get instance connected to device data
-				const instanceConnectedDeviceDP = `${instanceName}.info.connection`;
+				const instanceConnectedDeviceDP = `${instanceID}.info.connection`;
 				let instanceConnectedDeviceVal;
 				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
 					instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
@@ -2037,7 +2005,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				// get adapter version
-				const instanceObjectPath = `system.adapter.${instanceName}`;
+				const instanceObjectPath = `system.adapter.${instanceID}`;
 				let adapterName;
 				let adapterVersion;
 				let adapterAvailableUpdate = '';
@@ -2066,10 +2034,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-				const instanceStatusRaw = await this.setInstanceStatus(instanceMode, scheduleTime, id, instanceConnectedHostDP, instanceConnectedDeviceDP);
-				const isAlive = instanceStatusRaw[1];
-				const instanceStatus = instanceStatusRaw[0];
-				const isHealthy = instanceStatusRaw[2];
+				const instanceStatusRaw = await this.checkDaemonIsHealthy(instanceID);
+				const isAlive = instanceStatusRaw[0];
+				const isHealthy = instanceStatusRaw[1];
+				const instanceStatus = instanceStatusRaw[2];
 
 				//subscribe to statechanges
 				this.subscribeForeignStates(id);
@@ -2078,9 +2046,8 @@ class DeviceWatcher extends utils.Adapter {
 				this.subscribeForeignObjects(`system.adapter.*`);
 
 				// create raw list
-				this.listInstanceRaw.set(instanceObjectPath, {
+				this.listInstanceRaw.set(instanceID, {
 					Adapter: adapterName,
-					InstanceName: instanceName,
 					instanceObjectPath: instanceObjectPath,
 					instanceAlivePath: id,
 					instanceMode: instanceMode,
@@ -2094,6 +2061,7 @@ class DeviceWatcher extends utils.Adapter {
 					connectedDevicePath: instanceConnectedDeviceDP,
 					isConnectedDevice: instanceConnectedDeviceVal,
 					status: instanceStatus,
+					checkIsRunning: false,
 				});
 			}
 			await this.createInstanceList();
@@ -2115,52 +2083,59 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * Check if instance is alive
-	 * @param {any} instanceAlivePath
-	 * @param {number} instanceDeactivationTime
+	 * Check if instance is alive and ok
+	 * @param {string} instanceID
 	 */
-	async checkIsAlive(instanceAlivePath, instanceDeactivationTime) {
-		let aliveState = await this.getInitValue(instanceAlivePath);
-		if (aliveState) {
-			await this.delay(20000);
-			aliveState = await this.getInitValue(instanceAlivePath);
-			if (aliveState) return true;
+	async checkDaemonIsHealthy(instanceID) {
+		const aliveState = await this.getInitValue(`system.adapter.${instanceID}.alive`);
+		const connectedHostState = await this.getInitValue(`system.adapter.${instanceID}.connected`);
+		let connectedDeviceState = await this.getInitValue(`${instanceID}.info.connection`);
+		if (connectedDeviceState === undefined) connectedDeviceState = true;
+
+		let isAlive = false;
+		let isHealthy = false;
+		let instanceStatusString = 'Instanz deaktiviert';
+
+		if (!aliveState) {
+			isAlive = false;
+			isHealthy = false;
+			instanceStatusString = 'Instanz deaktiviert';
+		} else {
+			if (connectedHostState && connectedDeviceState) {
+				isAlive = true;
+				isHealthy = true;
+				instanceStatusString = 'Instanz okay';
+			} else if (!connectedHostState) {
+				isAlive = true;
+				isHealthy = false;
+				instanceStatusString = 'Nicht verbunden mit Host';
+			} else if (!connectedDeviceState) {
+				isAlive = true;
+				isHealthy = false;
+				instanceStatusString = 'Nicht verbunden mit Gerät oder Dienst';
+			}
 		}
 
-		await this.delay(instanceDeactivationTime);
-		aliveState = await this.getInitValue(instanceAlivePath);
-		if (!aliveState) {
-			await this.delay(instanceDeactivationTime);
-			aliveState = await this.getInitValue(instanceAlivePath);
-			if (!aliveState) {
-				return false; // if instance is turned off
-			} else {
-				return true;
-			}
-		} else {
-			return true;
-		}
+		return [isAlive, isHealthy, instanceStatusString];
 	}
 
 	/**
 	 * set status for instance
 	 * @param {string} instanceMode
 	 * @param {string} scheduleTime
-	 * @param {object} instanceAlivePath
-	 * @param {string} hostConnectedPath
-	 * @param {string} isDeviceConnctedPath
+	 * @param {any} instanceID
 	 */
-	async setInstanceStatus(instanceMode, scheduleTime, instanceAlivePath, hostConnectedPath, isDeviceConnctedPath) {
-		const isAliveSchedule = await this.getForeignStateAsync(instanceAlivePath);
-		let isHostConnected = await this.getInitValue(hostConnectedPath);
-		let isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
-		let instanceStatusString = 'Instance deactivated';
+	async setInstanceStatus(instanceMode, scheduleTime, instanceID) {
+		const isAliveSchedule = await this.getForeignStateAsync(`system.adapter.${instanceID}.alive`);
+
+		let instanceStatusString = 'Instanz deaktiviert';
 		let lastUpdate;
 		let lastCronRun;
 		let diff;
-		let isAlive;
-		let previousCronRun = null;
+		let isAlive = false;
 		let isHealthy = false;
+		let daemonIsAlive;
+		let previousCronRun = null;
 		let instanceDeactivationTime = (this.config.offlineTimeInstances * 1000) / 2;
 		let instanceErrorTime = (this.config.errorTimeInstances * 1000) / 2;
 
@@ -2182,73 +2157,59 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				break;
 			case 'daemon':
-				if (this.userTimeInstancesList.has(instanceAlivePath)) {
+				// check with time the user did define for error and deactivation
+				if (this.userTimeInstancesList.has(instanceID)) {
 					// User set own setting for deactivation time
-					instanceDeactivationTime = this.userTimeInstancesList.get(instanceAlivePath).deactivationTime;
+					instanceDeactivationTime = this.userTimeInstancesList.get(instanceID).deactivationTime;
 					instanceDeactivationTime = (instanceDeactivationTime * 1000) / 2; // calculate sec to ms and divide into two
 
 					// User set own setting for error time
-					instanceErrorTime = this.userTimeInstancesList.get(instanceAlivePath).errorTime;
+					instanceErrorTime = this.userTimeInstancesList.get(instanceID).errorTime;
 					instanceErrorTime = (instanceErrorTime * 1000) / 2; // calculate sec to ms and divide into two
 				}
+				daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
 
-				// if instance was deactivated
-				isAlive = await this.checkIsAlive(instanceAlivePath, instanceDeactivationTime);
-				if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
-
-				if (isDeviceConnected === undefined) isDeviceConnected = true;
-
-				// if instance has an error
-				if (isHostConnected && isDeviceConnected) {
-					// In case of (re)start, connection may take some time. We take 3 attempts.
-					// Attempt 1/3 - immediately
-					isHealthy = true;
-					instanceStatusString = 'Instanz okay';
-				} else {
-					// 2/3 - after x seconds
-					await this.delay(instanceErrorTime);
-
-					isAlive = await this.checkIsAlive(instanceAlivePath, instanceDeactivationTime);
-					if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
-
-					isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
-					if (isDeviceConnected === undefined) isDeviceConnected = true;
-
-					isHostConnected = await this.getInitValue(hostConnectedPath);
-
-					if (isHostConnected && isDeviceConnected) {
-						isHealthy = true;
-						instanceStatusString = 'Instanz okay';
-					} else {
-						// 3/3 - after x seconds in total or user time setting
+				if (daemonIsAlive[0]) {
+					if (daemonIsAlive[1]) {
+						isAlive = Boolean(daemonIsAlive[0]);
+						isHealthy = Boolean(daemonIsAlive[1]);
+						instanceStatusString = String(daemonIsAlive[2]);
+					} else if (daemonIsAlive[0] && !daemonIsAlive[1]) {
+						// wait first time
 						await this.delay(instanceErrorTime);
-
-						isAlive = await this.checkIsAlive(instanceAlivePath, instanceDeactivationTime);
-						if (!isAlive) return ['Instanz deaktiviert', false, null]; // if instance is turned off
-
-						isDeviceConnected = await this.getInitValue(isDeviceConnctedPath);
-						if (isDeviceConnected === undefined) isDeviceConnected = true;
-
-						isHostConnected = await this.getInitValue(hostConnectedPath);
-
-						if (isHostConnected && isDeviceConnected) {
-							isHealthy = true;
-							instanceStatusString = 'Instanz okay';
-						} else {
-							if (!isDeviceConnected) {
-								instanceStatusString = 'Nicht verbunden mit Gerät oder Dienst';
-								isHealthy = false;
-							} else if (!isHostConnected) {
-								instanceStatusString = 'Nicht verbunden mit Host';
-								isHealthy = false;
+						daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
+						if (!daemonIsAlive[1]) {
+							// wait second time
+							await this.delay(instanceErrorTime);
+							daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
+							if (!daemonIsAlive[1]) {
+								// finally
+								isAlive = Boolean(daemonIsAlive[0]);
+								isHealthy = Boolean(daemonIsAlive[1]);
+								instanceStatusString = String(daemonIsAlive[2]);
 							}
+						}
+					}
+				} else if (!daemonIsAlive[0]) {
+					// wait first time
+					await this.delay(instanceDeactivationTime);
+					daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
+					if (!daemonIsAlive[0]) {
+						// wait second time
+						await this.delay(instanceDeactivationTime);
+						daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
+						if (!daemonIsAlive[0]) {
+							// finally
+							isAlive = Boolean(daemonIsAlive[0]);
+							isHealthy = Boolean(daemonIsAlive[1]);
+							instanceStatusString = String(daemonIsAlive[2]);
 						}
 					}
 				}
 				break;
 		}
 
-		return [instanceStatusString, isAlive, isHealthy];
+		return [isAlive, isHealthy, instanceStatusString];
 	}
 
 	/**
@@ -2333,54 +2294,54 @@ class DeviceWatcher extends utils.Adapter {
 		this.listErrorInstanceRaw = [];
 		this.listErrorInstance = [];
 
-		for (const instance of this.listInstanceRaw.values()) {
+		for (const [instance, instanceData] of this.listInstanceRaw) {
 			// fill raw list
-			if (instance.isAlive && !instance.isHealthy) {
+			if (instanceData.isAlive && !instanceData.isHealthy) {
 				this.listErrorInstanceRaw.push({
-					Adapter: instance.Adapter,
-					Instance: instance.InstanceName,
-					Mode: instance.instanceMode,
-					Status: instance.status,
+					Adapter: instanceData.Adapter,
+					Instance: instance,
+					Mode: instanceData.instanceMode,
+					Status: instanceData.status,
 				});
 			}
 
-			if (this.blacklistInstancesLists.includes(instance.instanceAlivePath)) continue;
+			if (this.blacklistInstancesLists.includes(instance)) continue;
 			// all instances
 			this.listAllInstances.push({
-				Adapter: instance.Adapter,
-				Instance: instance.InstanceName,
-				Mode: instance.instanceMode,
-				Schedule: instance.schedule,
-				Version: instance.adapterVersion,
-				Updateable: instance.updateAvailable,
-				Status: instance.status,
+				Adapter: instanceData.Adapter,
+				Instance: instance,
+				Mode: instanceData.instanceMode,
+				Schedule: instanceData.schedule,
+				Version: instanceData.adapterVersion,
+				Updateable: instanceData.updateAvailable,
+				Status: instanceData.status,
 			});
 
-			if (!instance.isAlive) {
+			if (!instanceData.isAlive) {
 				// list with deactivated instances
 				this.listDeactivatedInstances.push({
-					Adapter: instance.Adapter,
-					Instance: instance.InstanceName,
-					Status: instance.status,
+					Adapter: instanceData.Adapter,
+					Instance: instance,
+					Status: instanceData.status,
 				});
 			} else {
 				// list with active instances
 				this.listAllActiveInstances.push({
-					Adapter: instance.Adapter,
-					Instance: instance.InstanceName,
-					Mode: instance.instanceMode,
-					Schedule: instance.schedule,
-					Status: instance.status,
+					Adapter: instanceData.Adapter,
+					Instance: instance,
+					Mode: instanceData.instanceMode,
+					Schedule: instanceData.schedule,
+					Status: instanceData.status,
 				});
 			}
 
 			// list with error instances
-			if (instance.isAlive && !instance.isHealthy) {
+			if (instanceData.isAlive && !instanceData.isHealthy) {
 				this.listErrorInstance.push({
-					Adapter: instance.Adapter,
-					Instance: instance.InstanceName,
-					Mode: instance.instanceMode,
-					Status: instance.status,
+					Adapter: instanceData.Adapter,
+					Instance: instance,
+					Mode: instanceData.instanceMode,
+					Status: instanceData.status,
 				});
 			}
 		}
@@ -2963,12 +2924,12 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 			case 'errorInstance':
 				objectData = this.listInstanceRaw.get(id);
-				message = `Instanz Watchdog:\n${objectData.InstanceName}: ${objectData.status}`;
+				message = `Instanz Watchdog:\n${id}: ${objectData.status}`;
 				setMessage(message);
 				break;
 			case 'deactivatedInstance':
 				objectData = this.listInstanceRaw.get(id);
-				message = `Instanz Watchdog:\n${objectData.InstanceName}: ${objectData.status}`;
+				message = `Instanz Watchdog:\n${id}: ${objectData.status}`;
 				setMessage(message);
 				break;
 		}

@@ -1379,7 +1379,7 @@
 							"filter": false,
 							"allowAddByFilter": false,
 							"sort": false,
-							"jsonData": "{\"instanceName\":\"${globalData.instanceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
+							"jsonData": "{\"instanceID\":\"${globalData.instanceID}\",\"adapter\":\"${globalData.adapter}\"}",
 							"command": "instancesList",
 							"width": "60%"
 						},
@@ -1607,7 +1607,7 @@
 							"filter": false,
 							"allowAddByFilter": false,
 							"sort": false,
-							"jsonData": "{\"instanceName\":\"${globalData.instanceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
+							"jsonData": "{\"instanceID\":\"${globalData.instanceID}\",\"adapter\":\"${globalData.adapter}\"}",
 							"command": "instancesListTime",
 							"width": "60%"
 						},
