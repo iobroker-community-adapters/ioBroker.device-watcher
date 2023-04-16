@@ -159,5 +159,9 @@
     "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "如有必要，请在此处自行设置每个实例的停用和错误时间。此设置会覆盖所选实例的全局设置。",
     "Global deactivation time": "全局停用时间",
     "Define the global instance deactivation and error time. The default value is 20 seconds.": "定义全局实例停用和错误时间。默认值为 20 秒。",
-    "Deactivation and Error Time for Instances": "实例的停用和错误时间"
+    "Deactivation and Error Time for Instances": "实例的停用和错误时间",
+    "Attention!": "注意力！",
+    "This selection is only possible with a running instance!": "此选择仅适用于正在运行的实例！",
+    "Got it!": "知道了！",
+    "cancel": "取消"
 }

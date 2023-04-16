@@ -159,5 +159,9 @@
     "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Stel hier eventueel voor jezelf de deactiverings- en fouttijd van elke instantie in. Deze instelling overschrijft de algemene instelling voor de geselecteerde instantie.",
     "Global deactivation time": "Globale deactiveringstijd",
     "Define the global instance deactivation and error time. The default value is 20 seconds.": "Definieer de globale deactivering van instanties en de fouttijd. De standaardwaarde is 20 seconden.",
-    "Deactivation and Error Time for Instances": "Deactivering en fouttijd voor instanties"
+    "Deactivation and Error Time for Instances": "Deactivering en fouttijd voor instanties",
+    "Attention!": "Aandacht!",
+    "This selection is only possible with a running instance!": "Deze selectie is alleen mogelijk met een lopende instantie!",
+    "Got it!": "Begrepen!",
+    "cancel": "annuleren"
 }

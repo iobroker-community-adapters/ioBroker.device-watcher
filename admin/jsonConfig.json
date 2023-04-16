@@ -1371,6 +1371,14 @@
 					"lg": 12,
 					"hidden": "!data.checkAdapterInstances",
 					"hideOnlyControl": false,
+					"confirm": {
+						"condition": "!_alive",
+						"title": "Attention!",
+						"text": "This selection is only possible with a running instance!",
+						"ok": "Got it!",
+						"cancel": "cancel",
+						"type": "warning"
+					},
 					"items": [
 						{
 							"type": "selectSendTo",
@@ -1381,7 +1389,15 @@
 							"sort": false,
 							"jsonData": "{\"instanceID\":\"${globalData.instanceID}\",\"adapter\":\"${globalData.adapter}\"}",
 							"command": "instancesList",
-							"width": "60%"
+							"width": "60%",
+							"confirm": {
+								"condition": "_alive",
+								"title": "Attention!",
+								"text": "This selection is only possible with a running instance!",
+								"ok": "Got it!",
+								"cancel": "cancel",
+								"type": "warning"
+							}
 						},
 						{
 							"type": "checkbox",
@@ -1409,6 +1425,14 @@
 					"sm": 12,
 					"md": 12,
 					"lg": 12,
+					"confirm": {
+						"condition": "!_alive",
+						"title": "Attention!",
+						"text": "This selection is only possible with a running instance!",
+						"ok": "Got it!",
+						"cancel": "cancel",
+						"type": "warning"
+					},
 					"items": [
 						{
 							"type": "selectSendTo",
@@ -1599,6 +1623,14 @@
 					"lg": 12,
 					"hidden": "!data.checkAdapterInstances",
 					"hideOnlyControl": false,
+					"confirm": {
+						"condition": "!_alive",
+						"title": "Attention!",
+						"text": "This selection is only possible with a running instance!",
+						"ok": "Got it!",
+						"cancel": "cancel",
+						"type": "warning"
+					},
 					"items": [
 						{
 							"type": "selectSendTo",

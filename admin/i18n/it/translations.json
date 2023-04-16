@@ -159,5 +159,9 @@
     "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "Se necessario, impostare qui la disattivazione e il tempo di errore di ogni istanza. Questa impostazione sovrascrive l'impostazione globale per l'istanza selezionata.",
     "Global deactivation time": "Tempo di disattivazione globale",
     "Define the global instance deactivation and error time. The default value is 20 seconds.": "Definire la disattivazione dell'istanza globale e il tempo di errore. Il valore predefinito è 20 secondi.",
-    "Deactivation and Error Time for Instances": "Disattivazione e tempo di errore per le istanze"
+    "Deactivation and Error Time for Instances": "Disattivazione e tempo di errore per le istanze",
+    "Attention!": "Attenzione!",
+    "This selection is only possible with a running instance!": "Questa selezione è possibile solo con un'istanza in esecuzione!",
+    "Got it!": "Fatto!",
+    "cancel": "Annulla"
 }

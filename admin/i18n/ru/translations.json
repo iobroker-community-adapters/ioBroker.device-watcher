@@ -159,5 +159,9 @@
     "If necessary, set the deactivation and error time of each instance for yourself here. This setting overwrites the global setting for the selected instance.": "При необходимости установите здесь для себя время деактивации и ошибки каждого инстанса. Этот параметр перезаписывает глобальный параметр для выбранного экземпляра.",
     "Global deactivation time": "Глобальное время деактивации",
     "Define the global instance deactivation and error time. The default value is 20 seconds.": "Определите глобальную деактивацию экземпляра и время ошибки. Значение по умолчанию — 20 секунд.",
-    "Deactivation and Error Time for Instances": "Время деактивации и ошибки для экземпляров"
+    "Deactivation and Error Time for Instances": "Время деактивации и ошибки для экземпляров",
+    "Attention!": "Внимание!",
+    "This selection is only possible with a running instance!": "Этот выбор возможен только при работающем экземпляре!",
+    "Got it!": "Понятно!",
+    "cancel": "отмена"
 }
