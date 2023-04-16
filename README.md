@@ -189,6 +189,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: Functions for instance status completely renewed
+-   (ciddi89) Added: Popup message when the instance is not running and the user tries to select a device/instance in the settings tables
+
 ### 2.8.3 (2023-04-13)
 
 -   (ciddi89) Fixed: Multiple push messages when restarting an instance ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))
