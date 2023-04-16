@@ -803,17 +803,15 @@ class DeviceWatcher extends utils.Adapter {
 				try {
 					const userTimeListparse = this.parseData(userTimeListInstances[i].instancesTime);
 					// push devices in list to ignor device in lists
-					if (userTimeListInstances[i].errorTime) {
-						this.userTimeInstancesList.set(userTimeListparse.instanceID, {
-							deactivationTime: userTimeListInstances[i].deactivationTime,
-							errorTime: userTimeListInstances[i].errorTime,
-						});
-					}
+					this.userTimeInstancesList.set(userTimeListparse.instanceName, {
+						deactivationTime: userTimeListInstances[i].deactivationTime,
+						errorTime: userTimeListInstances[i].errorTime,
+					});
 				} catch (error) {
 					this.errorReporting('[createTimeListInstances]', error);
 				}
 			}
-			if (this.userTimeInstancesList.size >= 1) this.log.info(`Found instances items on lists for timesettings: ${this.blacklistInstancesLists}`);
+			if (this.userTimeInstancesList.size >= 1) this.log.info(`Found instances items on lists for timesettings: ${Array.from(this.userTimeInstancesList.keys())}`);
 		}
 	}
 
