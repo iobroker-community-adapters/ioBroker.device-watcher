@@ -380,6 +380,7 @@ class DeviceWatcher extends utils.Adapter {
 			let isLowBatValue;
 			let instanceStatusRaw;
 			let oldAdapterUpdatesCounts;
+			let oldIsHealthyValue;
 
 			try {
 				// adapter updates
@@ -402,27 +403,30 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				// instances
-				for (const [instance, instanceData] of this.listInstanceRaw) {
+				for (const [instanceID, instanceData] of this.listInstanceRaw) {
 					switch (id) {
-						case instanceData.instanceAlivePath:
-						case instanceData.connectedHostPath:
-						case instanceData.connectedDevicePath:
+						case `system.adapter.${instanceID}.alive`:
+						case `system.adapter.${instanceID}.connected`:
+						case `${instanceID}.info.connection`:
 							if (!instanceData.checkIsRunning) {
 								instanceData.checkIsRunning = true;
-								instanceStatusRaw = await this.setInstanceStatus(instanceData.instanceMode, instanceData.schedule, instance);
+								oldIsHealthyValue = instanceData.isHealthy;
+								instanceStatusRaw = await this.setInstanceStatus(instanceData.instanceMode, instanceData.schedule, instanceID);
 								instanceData.isAlive = instanceStatusRaw[0];
 								instanceData.isHealthy = instanceStatusRaw[1];
 								instanceData.status = instanceStatusRaw[2];
 
-								if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
-									if (!this.blacklistInstancesNotify.includes(instance)) {
-										await this.sendStateNotifications('deactivatedInstance', instance);
+								if (oldIsHealthyValue !== instanceData.isHealthy) {
+									if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
+										if (!this.blacklistInstancesNotify.includes(instanceID)) {
+											await this.sendStateNotifications('deactivatedInstance', instanceID);
+										}
 									}
-								}
 
-								if (this.config.checkSendInstanceFailedMsg && instanceData.isAlive && !instanceData.isHealthy) {
-									if (!this.blacklistInstancesNotify.includes(instance)) {
-										await this.sendStateNotifications('errorInstance', instance);
+									if (this.config.checkSendInstanceFailedMsg && instanceData.isAlive && !instanceData.isHealthy) {
+										if (!this.blacklistInstancesNotify.includes(instanceID)) {
+											await this.sendStateNotifications('errorInstance', instanceID);
+										}
 									}
 								}
 								instanceData.checkIsRunning = false;
@@ -2049,16 +2053,13 @@ class DeviceWatcher extends utils.Adapter {
 				this.listInstanceRaw.set(instanceID, {
 					Adapter: adapterName,
 					instanceObjectPath: instanceObjectPath,
-					instanceAlivePath: id,
 					instanceMode: instanceMode,
 					schedule: scheduleTime,
 					adapterVersion: adapterVersion,
 					updateAvailable: adapterAvailableUpdate,
 					isAlive: isAlive,
 					isHealthy: isHealthy,
-					connectedHostPath: instanceConnectedHostDP,
 					isConnectedHost: instanceConnectedHostVal,
-					connectedDevicePath: instanceConnectedDeviceDP,
 					isConnectedDevice: instanceConnectedDeviceVal,
 					status: instanceStatus,
 					checkIsRunning: false,
@@ -2142,6 +2143,9 @@ class DeviceWatcher extends utils.Adapter {
 		switch (instanceMode) {
 			case 'schedule':
 				if (isAliveSchedule) {
+					isAlive = true;
+					isHealthy = true;
+					instanceStatusString = 'Instanz okay';
 					lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
 					previousCronRun = this.getPreviousCronRun(scheduleTime); // When was the last cron run
 					if (previousCronRun) {
@@ -3113,8 +3117,8 @@ class DeviceWatcher extends utils.Adapter {
 					list = '';
 
 					for (const id of this.listErrorInstanceRaw) {
-						if (this.blacklistInstancesNotify.includes(id.instanceAlivePath)) continue;
-						list = `${list}\n${id.Instance}: ${id.Status}`;
+						if (this.blacklistInstancesNotify.includes(id)) continue;
+						list = `${list}\n${id}: ${id.Status}`;
 					}
 					if (list.length === 0) return;
 					message = `Tägliche Meldung über fehlerhafte Instanzen: ${list}`;
@@ -3143,8 +3147,8 @@ class DeviceWatcher extends utils.Adapter {
 					list = '';
 
 					for (const id of this.listDeactivatedInstances) {
-						if (this.blacklistInstancesNotify.includes(id.instanceAlivePath)) continue;
-						list = `${list}\n${id.Instance}`;
+						if (this.blacklistInstancesNotify.includes(id)) continue;
+						list = `${list}\n${id}`;
 					}
 					if (list.length === 0) return;
 					message = `Tägliche Meldung über deaktivierte Instanzen: ${list}`;
