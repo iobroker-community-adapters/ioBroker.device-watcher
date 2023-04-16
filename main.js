@@ -2037,11 +2037,20 @@ class DeviceWatcher extends utils.Adapter {
 					adapterAvailableUpdate = ' - ';
 				}
 
-				//const adapterVersionVal = await this.getInitValue(adapterVersionDP);
-				const instanceStatusRaw = await this.checkDaemonIsHealthy(instanceID);
-				const isAlive = instanceStatusRaw[0];
-				const isHealthy = instanceStatusRaw[1];
-				const instanceStatus = instanceStatusRaw[2];
+				let isAlive;
+				let isHealthy;
+				let instanceStatus;
+				if (instanceMode === 'schedule') {
+					const instanceStatusRaw = await this.checkScheduleisHealty(instanceID, scheduleTime);
+					isAlive = instanceStatusRaw[0];
+					isHealthy = instanceStatusRaw[1];
+					instanceStatus = instanceStatusRaw[2];
+				} else if (instanceMode === 'daemon') {
+					const instanceStatusRaw = await this.checkDaemonIsHealthy(instanceID);
+					isAlive = instanceStatusRaw[0];
+					isHealthy = instanceStatusRaw[1];
+					instanceStatus = instanceStatusRaw[2];
+				}
 
 				//subscribe to statechanges
 				this.subscribeForeignStates(id);
@@ -2120,6 +2129,35 @@ class DeviceWatcher extends utils.Adapter {
 		return [isAlive, isHealthy, instanceStatusString];
 	}
 
+	async checkScheduleisHealty(instanceID, scheduleTime) {
+		let lastUpdate;
+		let previousCronRun = null;
+		let lastCronRun;
+		let diff;
+		let isAlive = false;
+		let isHealthy = false;
+		let instanceStatusString = 'Instanz deaktiviert';
+
+		const isAliveSchedule = await this.getForeignStateAsync(`system.adapter.${instanceID}.alive`);
+
+		if (isAliveSchedule) {
+			lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
+			previousCronRun = this.getPreviousCronRun(scheduleTime); // When was the last cron run
+			if (previousCronRun) {
+				lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
+				diff = lastCronRun - lastUpdate;
+				if (diff > -300) {
+					// if 5 minutes difference exceeded, instance is not alive
+					isAlive = true;
+					isHealthy = true;
+					instanceStatusString = 'Instanz okay';
+				}
+			}
+		}
+
+		return [isAlive, isHealthy, instanceStatusString];
+	}
+
 	/**
 	 * set status for instance
 	 * @param {string} instanceMode
@@ -2127,38 +2165,20 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {any} instanceID
 	 */
 	async setInstanceStatus(instanceMode, scheduleTime, instanceID) {
-		const isAliveSchedule = await this.getForeignStateAsync(`system.adapter.${instanceID}.alive`);
-
 		let instanceStatusString = 'Instanz deaktiviert';
-		let lastUpdate;
-		let lastCronRun;
-		let diff;
 		let isAlive = false;
 		let isHealthy = false;
+		let scheduleIsAlive;
 		let daemonIsAlive;
-		let previousCronRun = null;
 		let instanceDeactivationTime = (this.config.offlineTimeInstances * 1000) / 2;
 		let instanceErrorTime = (this.config.errorTimeInstances * 1000) / 2;
 
 		switch (instanceMode) {
 			case 'schedule':
-				if (isAliveSchedule) {
-					isAlive = true;
-					isHealthy = true;
-					instanceStatusString = 'Instanz okay';
-					lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
-					previousCronRun = this.getPreviousCronRun(scheduleTime); // When was the last cron run
-					if (previousCronRun) {
-						lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
-						diff = lastCronRun - lastUpdate;
-						if (diff > -300) {
-							// if 5 minutes difference exceeded, instance is not alive
-							isAlive = true;
-							isHealthy = true;
-							instanceStatusString = 'Instanz okay';
-						}
-					}
-				}
+				scheduleIsAlive = await this.checkScheduleisHealty(instanceID, scheduleTime);
+				isAlive = Boolean(scheduleIsAlive[0]);
+				isHealthy = Boolean(scheduleIsAlive[1]);
+				instanceStatusString = String(scheduleIsAlive[2]);
 				break;
 			case 'daemon':
 				// check with time the user did define for error and deactivation
