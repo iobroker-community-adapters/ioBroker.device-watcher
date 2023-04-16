@@ -192,8 +192,8 @@ It's possible to select:
 
 ### **WORK IN PROGRESS**
 
--   (ciddi89) Fixed: Functions for instance status completely renewed
--   (ciddi89) Added: Popup message when the instance is not running and the user tries to select a device/instance in the settings tables
+-   (ciddi89) Fixed: Functions for instance status completely renewed ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))
+-   (ciddi89) Added: Popup message when the instance is not running and the user tries to select a device/instance in the settings tables ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))
 
 ### 2.8.3 (2023-04-13)
 
