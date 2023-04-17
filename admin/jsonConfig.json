@@ -1389,15 +1389,7 @@
 							"sort": false,
 							"jsonData": "{\"instanceID\":\"${globalData.instanceID}\",\"adapter\":\"${globalData.adapter}\"}",
 							"command": "instancesList",
-							"width": "60%",
-							"confirm": {
-								"condition": "_alive",
-								"title": "Attention!",
-								"text": "This selection is only possible with a running instance!",
-								"ok": "Got it!",
-								"cancel": "cancel",
-								"type": "warning"
-							}
+							"width": "60%"
 						},
 						{
 							"type": "checkbox",
