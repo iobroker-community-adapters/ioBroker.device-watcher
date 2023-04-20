@@ -418,18 +418,17 @@ class DeviceWatcher extends utils.Adapter {
 
 								if (oldIsHealthyValue !== instanceData.isHealthy) {
 									if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
-										if (!this.blacklistInstancesNotify.includes(instanceID)) {
-											await this.sendStateNotifications('deactivatedInstance', instanceID);
-										}
+										if (this.blacklistInstancesNotify.includes(instanceID)) continue;
+										await this.sendStateNotifications('deactivatedInstance', instanceID);
+										this.log.warn('Hallo1');
 									}
 
 									if (this.config.checkSendInstanceFailedMsg && instanceData.isAlive && !instanceData.isHealthy) {
-										if (!this.blacklistInstancesNotify.includes(instanceID)) {
-											await this.sendStateNotifications('errorInstance', instanceID);
-										}
+										if (this.blacklistInstancesNotify.includes(instanceID)) continue;
+										await this.sendStateNotifications('errorInstance', instanceID);
 									}
+									instanceData.checkIsRunning = false;
 								}
-								instanceData.checkIsRunning = false;
 							}
 							break;
 					}
@@ -2190,7 +2189,6 @@ class DeviceWatcher extends utils.Adapter {
 					instanceErrorTime = this.userTimeInstancesList.get(instanceID).errorTime;
 					instanceErrorTime = (instanceErrorTime * 1000) / 2; // calculate sec to ms and divide into two
 				}
-				daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
 
 				daemonIsNotAlive = async () => {
 					// wait first time
@@ -2208,6 +2206,8 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 				};
+
+				daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
 
 				if (daemonIsAlive[0]) {
 					if (daemonIsAlive[1]) {
