@@ -420,7 +420,6 @@ class DeviceWatcher extends utils.Adapter {
 									if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
 										if (this.blacklistInstancesNotify.includes(instanceID)) continue;
 										await this.sendStateNotifications('deactivatedInstance', instanceID);
-										this.log.warn('Hallo1');
 									}
 
 									if (this.config.checkSendInstanceFailedMsg && instanceData.isAlive && !instanceData.isHealthy) {
