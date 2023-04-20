@@ -193,7 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Fixed: Error that instances can not be added to the blacklist because of the popup message
--   (ciddi89) Fixed: That messages have been sent when the instance has briefly jumped from Enabled to Disabled and back to Enabled.
+-   (ciddi89) Fixed: That messages have been sent when the instance has briefly jumped from Enabled to Disabled and back to Enabled. [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)
 
 ### 2.8.4 (2023-04-16)
 
