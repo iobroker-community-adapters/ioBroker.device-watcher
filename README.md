@@ -189,6 +189,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: Error that instances can not be added to the blacklist because of the popup message
+-   (ciddi89) Fixed: That messages have been sent when the instance has briefly jumped from Enabled to Disabled and back to Enabled.
+
 ### 2.8.4 (2023-04-16)
 
 -   (ciddi89) Fixed: Functions for instance status completely renewed ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))
