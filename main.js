@@ -153,6 +153,7 @@ class DeviceWatcher extends utils.Adapter {
 			tapo: this.config.tapoDevices,
 			tradfri: this.config.tradfriDevices,
 			unifi: this.config.unifiDevices,
+			viessmann: this.config.viessmannDevices,
 			wled: this.config.wledDevices,
 			yeelight: this.config.yeelightDevices,
 			zigbee: this.config.zigbeeDevices,
@@ -209,6 +210,7 @@ class DeviceWatcher extends utils.Adapter {
 			tapo: this.config.tapoMaxMinutes,
 			tradfri: this.config.tradfriMaxMinutes,
 			unifi: this.config.unifiMaxMinutes,
+			viessmann: this.config.viessmannMaxMinutes,
 			wled: this.config.wledMaxMinutes,
 			yeelight: this.config.yeelightMaxMinutes,
 			zigbee: this.config.zigbeeMaxMinutes,
@@ -1107,6 +1109,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'wled':
 				case 'mqttNuki':
 				case 'loqedSmartLock':
+				case 'viessmann':
 					if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 						deviceName = shortDeviceObject.common.name;
 					}
@@ -1441,21 +1444,21 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState === 1) {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState === 1) {
 							deviceState = 'Offline'; //set online state to offline
-							linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 						}
 						break;
 					case 'proxmox':
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
-								deviceState = 'Offline'; //set online state to offline
+								if (linkQuality !== ' - ') deviceState = 'Offline'; //set online state to offline
 							}
 						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
-							linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 						}
 						break;
 					case 'hmiP':
@@ -1463,11 +1466,11 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState) {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
-							linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 						}
 						break;
 					case 'apcups':
@@ -1483,22 +1486,22 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (!deviceUnreachState) {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 						}
 						break;
 					case 'mqttClientZigbee2Mqtt':
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState !== 'online') {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 						}
 						break;
 					case 'mihome':
@@ -1506,21 +1509,21 @@ class DeviceWatcher extends utils.Adapter {
 							if (this.configMaxMinutes[adapterID] <= 0) {
 								if (!deviceUnreachState) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = '0%'; // set linkQuality to nothing
+									if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 								}
 							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else {
 							if (this.config.mihomeMaxMinutes <= 0) {
 								if (this.configMaxMinutes[adapterID] <= 0) {
 									deviceState = 'Offline'; //set online state to offline
-									linkQuality = '0%'; // set linkQuality to nothing
+									if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 								}
 							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						}
 						break;
@@ -1528,22 +1531,22 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState === 'OFFLINE') {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 						}
 						break;
 					default:
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (!deviceUnreachState) {
 								deviceState = 'Offline'; //set online state to offline
-								linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 						}
 						break;
 				}
