@@ -3212,10 +3212,9 @@ class DeviceWatcher extends utils.Adapter {
 				cron = '5 ' + time[1] + ' ' + time[0] + ' * * ' + checkDays;
 				schedule.scheduleJob(cron, () => {
 					list = '';
-
 					for (const id of this.listDeactivatedInstances) {
-						if (this.blacklistInstancesNotify.includes(id)) continue;
-						list = `${list}\n${id}`;
+						if (this.blacklistInstancesNotify.includes(id.Instance)) continue;
+						list = `${list}\n${id.Instance}`;
 					}
 					if (list.length === 0) return;
 					message = `Tägliche Meldung über deaktivierte Instanzen: ${list}`;
