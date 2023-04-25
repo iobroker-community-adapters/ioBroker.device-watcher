@@ -193,7 +193,8 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Fixed: Deactivated instances were not displayed in the daily message about deactivated instances
--   (ciddi89) Added: Viessmann Device
+-   (ciddi89) Added: Viessmann devices, Homekit-Controller devices
+-   (ciddi89) Improvements: Text of overview messages
 
 ### 2.8.5 (2023-04-20)
 

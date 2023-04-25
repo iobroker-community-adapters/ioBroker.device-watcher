@@ -122,6 +122,7 @@ class DeviceWatcher extends utils.Adapter {
 			hmiP: this.config.hmiPDevices,
 			hmrpc: this.config.hmrpcDevices,
 			homeconnect: this.config.homeconnectDevices,
+			homekitController: this.config.homekitControllerDevices,
 			hs100: this.config.hs100Devices,
 			hue: this.config.hueDevices,
 			hueExt: this.config.hueExtDevices,
@@ -179,6 +180,7 @@ class DeviceWatcher extends utils.Adapter {
 			hmiP: this.config.hmiPMaxMinutes,
 			hmrpc: this.config.hmrpcMaxMinutes,
 			homeconnect: this.config.homeconnectMaxMinutes,
+			homekitController: this.config.homekitControllerMaxMinutes,
 			hs100: this.config.hs100MaxMinutes,
 			hue: this.config.hueMaxMinutes,
 			hueExt: this.config.hueextMaxMinutes,
@@ -1116,6 +1118,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'mqttNuki':
 				case 'loqedSmartLock':
 				case 'viessmann':
+				case 'homekitController':
 					if (shortDeviceObject && typeof shortDeviceObject === 'object') {
 						deviceName = shortDeviceObject.common.name;
 					}

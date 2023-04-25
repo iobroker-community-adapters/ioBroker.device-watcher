@@ -234,6 +234,8 @@
 		"hmrpcMaxMinutes": 0,
 		"homeconnectDevices": false,
 		"homeconnectMaxMinutes": 0,
+		"homekitControllerDevices": false,
+		"homekitControllerMaxMinutes": 0,
 		"hs100Devices": false,
 		"hs100MaxMinutes": 300,
 		"hueDevices": false,

@@ -142,6 +142,13 @@
 					"lg": 3,
 					"label": "Home Connect"
 				},
+				"homekitControllerDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Homekit-Controller"
+				},
 				"hs100Devices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1880,6 +1887,18 @@
 					"label": "Home Connect",
 					"help": "in minutes",
 					"hidden": "!data.homeconnectDevices",
+					"hideOnlyControl": false
+				},
+				"homekitControllerMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Homekit-Controller",
+					"help": "in minutes",
+					"hidden": "!data.homekitControllerDevices",
 					"hideOnlyControl": false
 				},
 				"hs100MaxMinutes": {
