@@ -449,8 +449,8 @@ class DeviceWatcher extends utils.Adapter {
 						// device updates
 						case deviceData.UpdateDP:
 							if (state.val !== deviceData.Upgradable) {
-								deviceData.Upgradable = state.val;
-								if (state.val === true || state.val === 1) {
+								deviceData.Upgradable = await this.checkDeviceUpdate(deviceData.adapterID, state.val);
+								if (deviceData.Upgradable === true) {
 									if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
 										await this.sendStateNotifications('updateDevice', device);
 									}
@@ -1003,18 +1003,24 @@ class DeviceWatcher extends utils.Adapter {
 				/*=============================================
 			=            Get update data	              =
 			=============================================*/
-				const deviceUpdateDP = currDeviceString + this.selAdapter[i].upgrade;
 				let isUpgradable;
+				let deviceUpdateDP;
 
 				if (this.config.checkSendDeviceUpgrade) {
-					const deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
+					deviceUpdateDP = currDeviceString + this.selAdapter[i].upgrade;
+					let deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
+					if (deviceUpdateSelector === undefined) {
+						deviceUpdateDP = shortCurrDeviceString + this.selAdapter[i].upgrade;
+						deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
+						if (deviceUpdateSelector === undefined) {
+							const shortShortCurrDeviceString = shortCurrDeviceString.slice(0, shortCurrDeviceString.lastIndexOf('.') + 1 - 1);
+							deviceUpdateDP = shortShortCurrDeviceString + this.selAdapter[i].upgrade;
+							deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
+						}
+					}
 
 					if (deviceUpdateSelector !== undefined) {
-						if (deviceUpdateSelector) {
-							isUpgradable = true;
-						} else if (!deviceUpdateSelector) {
-							isUpgradable = false;
-						}
+						isUpgradable = await this.checkDeviceUpdate(adapterID, deviceUpdateSelector);
 					} else {
 						isUpgradable = ' - ';
 					}
@@ -1587,7 +1593,34 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
+	 * @param {any} adapterID
+	 * @param {string | number | boolean | null} deviceUpdateSelector
+	 */
+	async checkDeviceUpdate(adapterID, deviceUpdateSelector) {
+		let isUpgradable;
+
+		switch (adapterID) {
+			case 'hmiP':
+				if (deviceUpdateSelector === 'UPDATE_AVAILABLE') {
+					isUpgradable = true;
+				} else {
+					isUpgradable = false;
+				}
+				break;
+			default:
+				if (deviceUpdateSelector) {
+					isUpgradable = true;
+				} else if (!deviceUpdateSelector) {
+					isUpgradable = false;
+				}
+		}
+
+		return isUpgradable;
+	}
+
+	/**
 	 * Create Lists
+	 * @param {string | undefined} [adptName]
 	 */
 	async createLists(adptName) {
 		this.linkQualityDevices = [];
