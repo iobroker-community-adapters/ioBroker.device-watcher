@@ -3057,10 +3057,22 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 					if (list.length === 0) return;
-					message = `Tägliche Meldung über Geräte mit niedrigen Batteriezuständen: ${list}`;
+
+					switch (checkDays.length) {
+						case 1:
+							message = `Wöchentliche Übersicht über Geräte mit niedrigen Batteriezuständen: ${list}`;
+							break;
+						case 7:
+							message = `Tägliche Übersicht über Geräte mit niedrigen Batteriezuständen: ${list}`;
+							break;
+						default:
+							message = `Übersicht über Geräte mit niedrigen Batteriezuständen: ${list}`;
+							break;
+					}
 					setMessage(message);
 				});
 				break;
+
 			case 'offlineDevices':
 				// push the selected days in list
 				if (this.config.checkOfflineMonday) checkDays.push(1);
@@ -3093,10 +3105,22 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					if (list.length === 0) return;
-					message = `Tägliche Meldung über offline Geräte: ${list}`;
+
+					switch (checkDays.length) {
+						case 1:
+							message = `Wöchentliche Übersicht über offline Geräte: ${list}`;
+							break;
+						case 7:
+							message = `Tägliche Übersicht über offline Geräte: ${list}`;
+							break;
+						default:
+							message = `Übersicht über offline Geräte: ${list}`;
+							break;
+					}
 					setMessage(message);
 				});
 				break;
+
 			case 'updateDevices':
 				// push the selected days in list
 				if (this.config.checkUpgradeMonday) checkDays.push(1);
@@ -3128,10 +3152,22 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 					if (list.length === 0) return;
-					message = `Tägliche Meldung über verfügbare Geräte Updates: ${list}`;
+
+					switch (checkDays.length) {
+						case 1:
+							message = `Wöchentliche Übersicht über verfügbare Geräte Updates: ${list}`;
+							break;
+						case 7:
+							message = `Tägliche Übersicht über verfügbare Geräte Updates: ${list}`;
+							break;
+						default:
+							message = `Übersicht über verfügbare Geräte Updates: ${list}`;
+							break;
+					}
 					setMessage(message);
 				});
 				break;
+
 			case 'updateAdapter':
 				// push the selected days in list
 				if (this.config.checkAdapterUpdateMonday) checkDays.push(1);
@@ -3158,10 +3194,22 @@ class DeviceWatcher extends utils.Adapter {
 						list = `${list}\n${id.Adapter}: v${id['Available Version']}`;
 					}
 					if (list.length === 0) return;
-					message = `Tägliche Meldung über verfügbare Adapter Updates: ${list}`;
+
+					switch (checkDays.length) {
+						case 1:
+							message = `Wöchentliche Übersicht über verfügbare Adapter Updates: ${list}`;
+							break;
+						case 7:
+							message = `Tägliche Übersicht über verfügbare Adapter Updates: ${list}`;
+							break;
+						default:
+							message = `Übersicht über verfügbare Adapter Updates: ${list}`;
+							break;
+					}
 					setMessage(message);
 				});
 				break;
+
 			case 'errorInstance':
 				// push the selected days in list
 				if (this.config.checkFailedInstancesMonday) checkDays.push(1);
@@ -3216,8 +3264,20 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.blacklistInstancesNotify.includes(id.Instance)) continue;
 						list = `${list}\n${id.Instance}`;
 					}
+
 					if (list.length === 0) return;
-					message = `Tägliche Meldung über deaktivierte Instanzen: ${list}`;
+
+					switch (checkDays.length) {
+						case 1:
+							message = `Wöchentliche Übersicht über deaktivierte Instanzen: ${list}`;
+							break;
+						case 7:
+							message = `Tägliche Übersicht über deaktivierte Instanzen: ${list}`;
+							break;
+						default:
+							message = `Übersicht über deaktivierte Instanzen: ${list}`;
+							break;
+					}
 					setMessage(message);
 				});
 				break;
