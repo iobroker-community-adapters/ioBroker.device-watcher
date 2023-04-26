@@ -1,7 +1,3 @@
-/* jshint -W097 */
-/* jshint strict: false */
-/* jslint node: true */
-
 'use strict';
 
 const utils = require('@iobroker/adapter-core');
@@ -9,9 +5,6 @@ const adapterName = require('./package.json').name.split('.').pop();
 const schedule = require('node-schedule');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
 const cronParser = require('cron-parser');
-
-// Sentry error reporting, disable when testing code!
-const enableSendSentry = true;
 
 // indicator if the adapter is running or not (for intervall/shedule)
 let isUnloaded = false;
@@ -264,7 +257,7 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 				} catch (error) {
-					this.errorReporting('[onReady - create and fill datapoints for each adapter]', error);
+					this.log.error(`[onReady - create and fill datapoints for each adapter] - ${error}`);
 				}
 			}
 
@@ -314,7 +307,7 @@ class DeviceWatcher extends utils.Adapter {
 			// send overview of instances with error
 			if (this.config.checkSendInstanceFailedDaily) this.sendScheduleNotifications('errorInstance');
 		} catch (error) {
-			this.errorReporting('[onReady]', error);
+			this.log.error(`[onReady] - ${error}`);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
 	} // <-- onReady end
@@ -601,7 +594,7 @@ class DeviceWatcher extends utils.Adapter {
 						});
 						this.sendTo(obj.from, obj.command, sortDevices, obj.callback);
 					} catch (error) {
-						this.errorReporting('[onMessage - deviceList for blacklisttable]', error);
+						this.log.error(`[onMessage - deviceList for blacklisttable] - ${error}`);
 					}
 				}
 				break;
@@ -626,7 +619,7 @@ class DeviceWatcher extends utils.Adapter {
 						});
 						this.sendTo(obj.from, obj.command, sortInstances, obj.callback);
 					} catch (error) {
-						this.errorReporting('[onMessage - instanceList]', error);
+						this.log.error(`[onMessage - instanceList] - ${error}`);
 					}
 				}
 				break;
@@ -650,7 +643,7 @@ class DeviceWatcher extends utils.Adapter {
 						});
 						this.sendTo(obj.from, obj.command, sortInstances, obj.callback);
 					} catch (error) {
-						this.errorReporting('[onMessage - instanceList]', error);
+						this.log.error(`[onMessage - instanceList] - ${error}`);
 					}
 				}
 				break;
@@ -672,7 +665,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.writeDatapoints(); // fill the datapoints
 			this.log.debug(`Created and filled data for all adapters`);
 		} catch (error) {
-			this.errorReporting('[main - create data of all adapter]', error);
+			this.log.error(`[main - create data of all adapter] - ${error}`);
 		}
 
 		// fill datapoints for each adapter if selected
@@ -690,7 +683,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 			} catch (error) {
-				this.errorReporting('[main - create and fill datapoints for each adapter]', error);
+				this.log.error(`[main - create and fill datapoints for each adapter] - ${error}`);
 			}
 		}
 
@@ -763,7 +756,7 @@ class DeviceWatcher extends utils.Adapter {
 						this.blacklistNotify.push(blacklistParse.path);
 					}
 				} catch (error) {
-					this.errorReporting('[createBlacklist]', error);
+					this.log.error(`[createBlacklist] - ${error}`);
 				}
 				if (this.blacklistLists.length >= 1) this.log.info(`Found devices/services on blacklist for lists: ${this.blacklistLists}`);
 				if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found devices/services on blacklist for lists: ${this.blacklistAdapterLists}`);
@@ -786,7 +779,7 @@ class DeviceWatcher extends utils.Adapter {
 						this.blacklistInstancesNotify.push(blacklistParse.instanceID);
 					}
 				} catch (error) {
-					this.errorReporting('[createBlacklist]', error);
+					this.log.error(`[createBlacklist] - ${error}`);
 				}
 			}
 			if (this.blacklistInstancesLists.length >= 1) this.log.info(`Found instances items on blacklist for lists: ${this.blacklistInstancesLists}`);
@@ -811,7 +804,7 @@ class DeviceWatcher extends utils.Adapter {
 						errorTime: userTimeListInstances[i].errorTime,
 					});
 				} catch (error) {
-					this.errorReporting('[createTimeListInstances]', error);
+					this.log.error(`[createTimeListInstances] - ${error}`);
 				}
 			}
 			if (this.userTimeInstancesList.size >= 1) this.log.info(`Found instances items on lists for timesettings: ${Array.from(this.userTimeInstancesList.keys())}`);
@@ -1077,7 +1070,7 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			} // <-- end of loop
 		} catch (error) {
-			this.errorReporting('[createData - create data of devices]', error);
+			this.log.error(`[createData - create data of devices] - ${error}`);
 		}
 	} // <-- end of createData
 
@@ -1174,7 +1167,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 			return deviceName;
 		} catch (error) {
-			this.errorReporting('[getDeviceName]', error);
+			this.log.error(`[getDeviceName] - ${error}`);
 		}
 	}
 
@@ -1562,7 +1555,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 			return [lastContactString, deviceState, linkQuality];
 		} catch (error) {
-			this.errorReporting('[getLastContact]', error);
+			this.log.error(`[getLastContact] - ${error}`);
 		}
 	}
 
@@ -2000,7 +1993,7 @@ class DeviceWatcher extends utils.Adapter {
 			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
 			await this.setStateChangedAsync('lastCheck', lastCheck, true);
 		} catch (error) {
-			this.errorReporting('[writeDatapoints]', error);
+			this.log.error(`[writeDatapoints] - ${error}`);
 		}
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	} //<--End  of writing Datapoints
@@ -2013,7 +2006,7 @@ class DeviceWatcher extends utils.Adapter {
 			const allInstances = `system.adapter.*`;
 			await this.getInstanceData(allInstances);
 		} catch (error) {
-			this.errorReporting('[getInstance]', error);
+			this.log.error(`[getInstance] - ${error}`);
 		}
 	}
 
@@ -2113,7 +2106,7 @@ class DeviceWatcher extends utils.Adapter {
 			await this.createInstanceList();
 			await this.writeInstanceDPs();
 		} catch (error) {
-			this.errorReporting('[getInstanceData]', error);
+			this.log.error(`[getInstanceData] - ${error}`);
 		}
 	}
 
@@ -2804,7 +2797,7 @@ class DeviceWatcher extends utils.Adapter {
 					});
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Pushover]', error);
+				this.log.error(`[sendNotification Pushover] - ${error}`);
 			}
 		}
 
@@ -2824,7 +2817,7 @@ class DeviceWatcher extends utils.Adapter {
 					});
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Telegram]', error);
+				this.log.error(`[sendNotification Telegram] - ${error}`);
 			}
 		}
 
@@ -2843,7 +2836,7 @@ class DeviceWatcher extends utils.Adapter {
 					});
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Whatsapp]', error);
+				this.log.error(`[sendNotification Whatsapp] - ${error}`);
 			}
 		}
 
@@ -2862,7 +2855,7 @@ class DeviceWatcher extends utils.Adapter {
 					});
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Matrix]', error);
+				this.log.error(`[sendNotification Matrix] - ${error}`);
 			}
 		}
 
@@ -2881,7 +2874,7 @@ class DeviceWatcher extends utils.Adapter {
 					});
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Signal]', error);
+				this.log.error(`[sendNotification Signal] - ${error}`);
 			}
 		}
 
@@ -2901,7 +2894,7 @@ class DeviceWatcher extends utils.Adapter {
 					});
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification eMail]', error);
+				this.log.error(`[sendNotification eMail] - ${error}`);
 			}
 		}
 
@@ -2921,7 +2914,7 @@ class DeviceWatcher extends utils.Adapter {
 					);
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Jarvis]', error);
+				this.log.error(`[sendNotification Jarvis] - ${error}`);
 			}
 		}
 
@@ -2941,7 +2934,7 @@ class DeviceWatcher extends utils.Adapter {
 					);
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Lovelace]', error);
+				this.log.error(`[sendNotification Lovelace] - ${error}`);
 			}
 		}
 
@@ -2961,7 +2954,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 			} catch (error) {
-				this.errorReporting('[sendNotification Synochat]', error);
+				this.log.error(`[sendNotification Synochat] - ${error}`);
 			}
 		}
 	} // <-- End of sendNotification function
@@ -4354,29 +4347,9 @@ class DeviceWatcher extends utils.Adapter {
 			const previous = interval.prev();
 			return Math.floor(Date.now() - previous.getTime()); // in ms
 		} catch (error) {
-			this.log.warn(error);
-			return;
+			this.log.error(`[getPreviousCronRun] - ${error}`);
 		}
 	}
-
-	/**
-	 * @param {string} codePart - Message Prefix
-	 * @param {object} error - Sentry message
-	 */
-	errorReporting(codePart, error) {
-		const msg = `[${codePart}] error: ${error.message}`;
-		if (enableSendSentry) {
-			if (this.supportsFeature && this.supportsFeature('PLUGINS')) {
-				const sentryInstance = this.getPluginInstance('sentry');
-				if (sentryInstance) {
-					this.log.warn(`Error catched and sent to Sentry, error: ${msg}`);
-					sentryInstance.getSentryObject().captureException(msg);
-				}
-			}
-		} else {
-			this.log.error(`Sentry disabled, error catched : ${msg}`);
-		}
-	} // <-- end of errorReporting
 
 	/**
 	 * @param {() => void} callback
