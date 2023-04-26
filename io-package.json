@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.8.5",
+		"version": "2.9.0",
 		"news": {
+			"2.9.0": {
+				"en": "Fixed: Deactivated instances were not displayed in the daily message about deactivated instances\nAdded: Viessmann devices, Homekit-Controller devices\nImprovements: Text of overview messages",
+				"de": "Behoben: Deaktivierte Instanzen wurden nicht in den Übersichtnachrichten über deaktivierte Instanzen angezeigt\nHinzugefügt: Viessmann Geräte, Homekit-Controller Geräte\nVerbesserungen: Text der Übersichtsnachrichten",
+				"ru": "Исправлено: Отключенные экземпляры не отображались в ежедневном сообщении о деактивированных инстанциях\nДобавлены: Viessmann устройства, Homekit-Controller устройства\nУлучшения: Текст обзорных сообщений",
+				"pt": "Corrigido: As instâncias desativadas não foram exibidas na mensagem diária sobre instâncias desativadas\nAdicionado: dispositivos Viessmann, dispositivos Homekit-Controller\nMelhorias: Texto de mensagens de visão geral",
+				"nl": "Gedeactiveerde instanties werden niet getoond in de dagelijkse boodschap over gedeactiveerde instanties\nVertaling:\nImprovementen: Text of overzicht berichten",
+				"fr": "Correction : Les instances désactivées n'ont pas été affichées dans le message quotidien concernant les instances désactivées\nAjouté: Appareils Viessmann, Dispositifs Homekit-Controller\nAméliorations : Texte des messages d ' aperçu",
+				"it": "Risolto: Le istanze disattivate non sono state visualizzate nel messaggio quotidiano sulle istanze disattivate\nAggiunto: dispositivi Viessmann, dispositivi Homekit-Controller\nMiglioramenti: Testo dei messaggi di panoramica",
+				"es": "Fijo: No se mostraron casos desactivados en el mensaje diario sobre casos desactivados\nAñadido: dispositivos Viessmann, dispositivos Homekit-Controller\nMejoras: Texto de los mensajes de visión general",
+				"pl": "Na przykładzie uaktywniono: Zdeaktywowane instancje nie były wyświetlane w codziennym wiadomości o deaktywowanych instancjach\nAdded: urządzenia Viessmanna\nPoprawa: Tekst overview",
+				"uk": "Виправлено: Деактивовані екземпляри не відображалися в щоденному повідомленні про деактивовані екземпляри\nДодано: пристрої Viessmann, пристрої Homekit-Controller\nУдосконалення: Текст повідомлення",
+				"zh-cn": "Fixed:Deactiving cases的每日信息未显示有关违犯事件的报道。\n增 编:维斯曼装置、家里克特-Controller装置\n改进: 总讯案文"
+			},
 			"2.8.5": {
 				"en": "Fixed: Error that instances can not be added to the blacklist because of the popup message [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: That messages have been sent when the instance has briefly jumped from Enabled to Disabled and back to Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
 				"de": "Behoben: Fehler, dass Instanzen aufgrund der Popup-Nachricht nicht zur Blacklist hinzugefügt werden können [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nBehoben: Das Meldungen gesendet wurden, wenn die Instanz kurz von Aktiviert auf Deaktiviert und zurück zu Aktiviert gesprungen ist [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
@@ -80,19 +93,6 @@
 				"pl": "Added: wsparcie dla LOQED Smart Lock\nAdded: Option to add user/group api key\nAdded: Option, aby wysłać powiadomienie, czy instancja została zatrzymana\nAdded: Option to send castule notification with overview of a zatrzymane instancje\nFixed: Wydanie, jeśli powiadomienia zostały wysłane z przerwy, ale opcja nie została wybrana\nFixed: Ignore akumulatory 0%, jeśli nie były one mniejsze niż 5% przed rozpoczęciem budowy",
 				"uk": "Доданий: Підтримка LOQED Смарт блокування\nДодано: Параметри, щоб додати ключ користувача / групи Api для Pushover\nДоданий: Опція надсилати повідомлення, якщо було припинено\nДодано: Опція для відправки повідомлень про скидання з оглядом припинених екземплярів\nВиправлено: Питання, якщо повідомлення було відправлено припинено, але варіант не був обраний\nВиправлено: значення Ignore батареї 0%, якщо вони не менше 5% до",
 				"zh-cn": "增加:支持LOQED Smart Lock\n增 编:增加用户/集群的备选办法\n增加:如果某一例子被停止,可发出通知。\n增 编:发出简写通知,概述停止事件\nIxed:如果发出通知被阻止,但选择是选择的。\n固定:Ignore电池数值.0%"
-			},
-			"2.7.1": {
-				"en": "Added: Support for Ecovacs-Deebot\nUpdated: Dependencies\nImprovements: Small fixes",
-				"de": "Hinzugefügt: Unterstützung für Ecovacs-Deebot\nAktualisiert: Abhängigkeiten\nVerbesserungen: Kleine Verbesserungen",
-				"ru": "Добавлена: Поддержка Ecovacs-Deebot\nОбновлено: зависимости\nУлучшения: Небольшие исправления",
-				"pt": "Adicionado: Suporte para Ecovacs-Deebot\nAtualizado: Dependências\nMelhorias: Pequenas correções",
-				"nl": "Vertaling:\nOpgepast\nImprovementen: Kleine fixes",
-				"fr": "Ajouté: Soutien à Ecovacs-Deebot\nActualisé : dépenses\nAméliorations : Petites corrections",
-				"it": "Aggiunto: Supporto per Ecovacs-Deebot\nAggiornato: Dipendenze\nMiglioramenti: Piccole correzioni",
-				"es": "Añadido: Apoyo para Ecovacs-Deebot\nActualizado: Dependencias\nMejoras: Arreglos pequeños",
-				"pl": "Wsparcie dla Ecovac-Deebota\nZastrzeżenie: Zależność\nPoprawa: drobne rozwiązanie",
-				"uk": "Додано: Підтримка Ecovacs-Deebot\nОновлено: Залежності\nУдосконалення: Маленькі кріплення",
-				"zh-cn": "增加:支持Ecovacs-Deebot\n更新:属地\n改进: 小型配件"
 			}
 		},
 		"titleLang": {

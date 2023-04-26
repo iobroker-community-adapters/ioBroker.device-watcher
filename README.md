@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.0 (2023-04-26)
 
 -   (ciddi89) Fixed: Deactivated instances were not displayed in the daily message about deactivated instances
 -   (ciddi89) Added: Viessmann devices, Homekit-Controller devices
