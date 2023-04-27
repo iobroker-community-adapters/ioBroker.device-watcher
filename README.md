@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.1 (2023-04-27)
 
 -   (ciddi89) Removed: Function for error handling (not neccessary)
 
