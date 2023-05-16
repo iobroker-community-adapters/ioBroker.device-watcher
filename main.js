@@ -3265,7 +3265,7 @@ class DeviceWatcher extends utils.Adapter {
 
 					for (const id of this.listErrorInstanceRaw) {
 						if (this.blacklistInstancesNotify.includes(id)) continue;
-						list = `${list}\n${id}: ${id.Status}`;
+						list = `${list}\n${id.Instance}: ${id.Status}`;
 					}
 					if (list.length === 0) return;
 					message = `Tägliche Meldung über fehlerhafte Instanzen: ${list}`;
