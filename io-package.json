@@ -1,853 +1,833 @@
 {
-  "common": {
-    "name": "device-watcher",
-    "version": "2.9.1",
-    "news": {
-      "2.9.1": {
-        "en": "Removed: Function for error handling (not neccessary)",
-        "de": "Entfernt: Funktion zur Fehlerbehandlung (nicht erforderlich)",
-        "ru": "Удалено: функция обработки ошибок (не обязательно)",
-        "pt": "Removido: Função para manipulação de erros (não necessário)",
-        "nl": "Verwijderd: Functie voor fouten omgaan met (niet negatief)",
-        "fr": "Supprimé : Fonction pour la manipulation d'erreurs (pas neccessaire)",
-        "it": "Rimosso: Funzione per la gestione degli errori (non neccessario)",
-        "es": "Retirado: Función para el manejo de errores (no es necesario)",
-        "pl": "Removed: Funkcje służące do obsługi błędów (nie wymagania)",
-        "uk": "Видалити: Функція для обробки помилок (необхідний)",
-        "zh-cn": "删除:处理错误(未作必要说明)的职能"
-      },
-      "2.9.0": {
-        "en": "Fixed: Deactivated instances were not displayed in the daily message about deactivated instances\nAdded: Viessmann devices, Homekit-Controller devices\nImprovements: Text of overview messages",
-        "de": "Behoben: Deaktivierte Instanzen wurden nicht in den Übersichtnachrichten über deaktivierte Instanzen angezeigt\nHinzugefügt: Viessmann Geräte, Homekit-Controller Geräte\nVerbesserungen: Text der Übersichtsnachrichten",
-        "ru": "Исправлено: Отключенные экземпляры не отображались в ежедневном сообщении о деактивированных инстанциях\nДобавлены: Viessmann устройства, Homekit-Controller устройства\nУлучшения: Текст обзорных сообщений",
-        "pt": "Corrigido: As instâncias desativadas não foram exibidas na mensagem diária sobre instâncias desativadas\nAdicionado: dispositivos Viessmann, dispositivos Homekit-Controller\nMelhorias: Texto de mensagens de visão geral",
-        "nl": "Gedeactiveerde instanties werden niet getoond in de dagelijkse boodschap over gedeactiveerde instanties\nVertaling:\nImprovementen: Text of overzicht berichten",
-        "fr": "Correction : Les instances désactivées n'ont pas été affichées dans le message quotidien concernant les instances désactivées\nAjouté: Appareils Viessmann, Dispositifs Homekit-Controller\nAméliorations : Texte des messages d ' aperçu",
-        "it": "Risolto: Le istanze disattivate non sono state visualizzate nel messaggio quotidiano sulle istanze disattivate\nAggiunto: dispositivi Viessmann, dispositivi Homekit-Controller\nMiglioramenti: Testo dei messaggi di panoramica",
-        "es": "Fijo: No se mostraron casos desactivados en el mensaje diario sobre casos desactivados\nAñadido: dispositivos Viessmann, dispositivos Homekit-Controller\nMejoras: Texto de los mensajes de visión general",
-        "pl": "Na przykładzie uaktywniono: Zdeaktywowane instancje nie były wyświetlane w codziennym wiadomości o deaktywowanych instancjach\nAdded: urządzenia Viessmanna\nPoprawa: Tekst overview",
-        "uk": "Виправлено: Деактивовані екземпляри не відображалися в щоденному повідомленні про деактивовані екземпляри\nДодано: пристрої Viessmann, пристрої Homekit-Controller\nУдосконалення: Текст повідомлення",
-        "zh-cn": "Fixed:Deactiving cases的每日信息未显示有关违犯事件的报道。\n增 编:维斯曼装置、家里克特-Controller装置\n改进: 总讯案文"
-      },
-      "2.8.5": {
-        "en": "Fixed: Error that instances can not be added to the blacklist because of the popup message [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: That messages have been sent when the instance has briefly jumped from Enabled to Disabled and back to Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "de": "Behoben: Fehler, dass Instanzen aufgrund der Popup-Nachricht nicht zur Blacklist hinzugefügt werden können [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nBehoben: Das Meldungen gesendet wurden, wenn die Instanz kurz von Aktiviert auf Deaktiviert und zurück zu Aktiviert gesprungen ist [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "ru": "Исправлено: Ошибка, которую нельзя добавить в черный список из-за всплывающего сообщения [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nИсправлено: Эти сообщения были отправлены, когда экземпляр кратко перепрыгнул из Enabled в Disabled и обратно в Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "pt": "Corrigido: Erro que as instâncias não podem ser adicionadas à lista negra por causa da mensagem pop-up [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nCorrigido: Essas mensagens foram enviadas quando a instância saltou brevemente de Enabled para Disabled e de volta para Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "nl": "Dat kan niet worden toegevoegd aan de blacklist vanwege de popup-bericht\nVertaling: Die berichten zijn verstuurd toen het instituut kort van Enabled naar Disabled en terug naar Enabled 173: jittps, /ciddi89-Brokerdewadet-17",
-        "fr": "Correction : Erreur que les instances ne peuvent pas être ajoutées à la liste noire en raison du message popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nCorrection : Ces messages ont été envoyés lorsque l ' instance a brièvement sauté de Enabled à Disabled et de retour à Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "it": "Risolto: Errore che le istanze non possono essere aggiunte alla lista nera a causa del messaggio popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nRisolto: Tali messaggi sono stati inviati quando l'istanza è saltata brevemente da Enabled a disabilitare e di nuovo a Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "es": "Corregido: Error de que los casos no se pueden agregar a la lista negra debido al mensaje popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nArreglado: Esos mensajes se han enviado cuando el caso ha saltado brevemente de Enabled a Disabled y de regreso a Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "pl": "Error, że instancje nie mogą być dodane do czarnej listy z powodu popupu #172(https:/github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: Wiadomości te zostały wysłane, gdy instancja przeskakuje z Enabled do Disabled #173 (https:/github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "uk": "Виправлено: помилка, що екземпляри не можуть бути додані в чорний список через повідомлення електронної пошти [#172] (https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nВиправлено: Що повідомлення було відправлено, коли екземпляр коротко стрибнув з Увімкненого і назад до Увімкненого [#173] (https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-        "zh-cn": "固定:由于人口信息[第172号](http://github.com/ciddi89/ioBroker.device-watcher/issues/172)而无法增加黑名单。\n固定: 这一信息是在以下情况下发出的:从便携起降到残疾人,回到了可居住的[第173号](http://github.com/ciddi89/ioBroker.device-watcher/issues/173)。"
-      },
-      "2.8.4": {
-        "en": "Fixed: Functions for instance status completely renewed ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))\nAdded: Popup message when the instance is not running and the user tries to select a device/instance in the settings tables ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))",
-        "de": "Behoben: Funktionen für Instanzen Status vollständig erneuert [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nHinzugefügt: Popup-Nachricht, wenn die Instanz nicht läuft und der Benutzer versucht ein Gerät/Instance in den Einstellungstabellen auszuwählen [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "ru": "Исправлено: Функции для статуса экземпляра полностью обновлены [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nДобавлена: Всплывающее сообщение, когда экземпляр не работает, и пользователь пытается выбрать устройство/инстанция в таблицах настроек [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "pt": "Corrigido: Funções por exemplo, estado completamente renovado [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAdicionado: Popup message when the instance is not running and the user try to select a device/instance in the settings table [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "nl": "Functies voor instance-status volledig hernieuwd 70) (htub,com/ciddi89/ioBroker\nVertaling:",
-        "fr": "Fixed: Functions for instance status completely renewed [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAjouté : Message popup lorsque l ' instance ne fonctionne pas et que l ' utilisateur essaie de sélectionner un dispositif/instance dans les tableaux de configuration [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "it": "Fisso: Funzioni per esempio stato completamente rinnovato [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAggiunto: messaggio popup quando l'istanza non è in esecuzione e l'utente cerca di selezionare un dispositivo/instanza nelle tabelle delle impostazioni [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "es": "Fijo: Funciones para el estado de la instancia completamente renovadas [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAñadido: Mensaje de Popup cuando la instancia no se ejecuta y el usuario intenta seleccionar un dispositivo/instancia en los cuadros de configuración [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "pl": "Fixed: Functions for example full new #170(https:/github.com/ciddi89/ioBroker,device-watcher/issues/170) (ang.)\nAdded: wiadomość Popup, gdy instancja nie jest uruchomiona, a użytkownik próbuje wybrać urządzenie/instance in the settings table #170(https:/github.com/ciddi89/ioBrokerdevice-watcher/issues/170)",
-        "uk": "Виправлено: Функції статусу екземпляра повністю оновлено [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nДодано: Поповнення повідомлення, коли екземпляр не працює, і користувач намагається вибрати пристрій/інстанцію в таблицях налаштувань [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "zh-cn": "固定:举例身份功能完全延长[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)\n添加:当事没有运行时,Popup讯息和用户在表格[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)中选择一种装置/装置。"
-      },
-      "2.8.3": {
-        "en": "Fixed: Multiple push messages when restarting an instance ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))",
-        "de": "Behoben: Mehrere Push-Nachrichten beim Neustart einer Instanz [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "ru": "Исправлено: Несколько push-сообщений при перезагрузке экземпляра [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "pt": "Corrigido: Múltiplas mensagens de push ao reiniciar uma instância [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "nl": "Meerdere persberichten als het herstarten van een instance 70170:",
-        "fr": "Correction : Messages multiples pour le redémarrage d ' une instance [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "it": "Risolto: Messaggi push multipli al riavvio di un'istanza [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "es": "Corregido: Múltiples mensajes de empuje al reiniciar una instancia [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "pl": "Fixed: Multiple push messages when restarting a program #170(https:/github.com/ciddi89/ioBroker.device-watcher/issues/170) (ang.)",
-        "uk": "Виправлено: Кілька поштових повідомлень при перезапускі екземпляра [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-        "zh-cn": "九. 固定:在重新树立一个例子(http://github.com/ciddi89/ioBroker.device-watcher/issues/170)时,多人传信息。"
-      },
-      "2.8.2": {
-        "en": "Fixed: Don't handle id's which ends with fullstop\nAdded: Possibility for the user to select the global deactivation time for instances",
-        "de": "Behoben: Behandle nicht id's, die mit einem Punkt enden\nHinzugefügt: Möglichkeit für den Benutzer, die globale Deaktivierungszeit für Instanzen selbst zu wählen",
-        "ru": "Исправлено: Не обрабатывайте id's который заканчивается с fullstop\nДобавлена: Возможность для пользователя выбрать глобальное время деактивации для инстанций",
-        "pt": "Corrigido: Não manuseie id's que termina com fullstop\nAdicionado: Possibilidade para o usuário selecionar o tempo de desativação global para instâncias",
-        "nl": "Niet omgaan met ID's die eindigen met volledige stop\nToegevoegd, mogelijk voor de gebruiker om de wereldwijde deactiveringstijd te selecteren voor bijvoorbeeld",
-        "fr": "Fixé: Ne manipule pas l'id qui se termine avec le haut\nAjouté: Possibilité pour l'utilisateur de sélectionner le temps de désactivation global pour les instances",
-        "it": "Fisso: Non maneggiare id che termina con fullstop\nAggiunto: Possibilità per l'utente di selezionare il tempo di disattivazione globale per le istanze",
-        "es": "Arreglado: No maneje id's que termina con fullstop\nAñadido: Posibilidad para que el usuario seleccione el tiempo de desactivación global para los casos",
-        "pl": "Fixed: Don't handle id's (ang.)\nAdded: Possibility for the user to select the global deactivation time",
-        "uk": "Виправлено: Не робіть id's, які закінчуються повною поверхнею\nДодано: Можливість вибору глобального часу деактивації екземплярів",
-        "zh-cn": "九. 固定:捐税处理停止完全停战的叛国行为\n增 编:用户可以选择全球启动时间,以选择发生的情况"
-      },
-      "2.8.1": {
-        "en": "Added: Possibility for the user to select the global error time for instances",
-        "de": "Hinzugefügt: Möglichkeit der Auswahl der globalen Fehlerzeit für Instanzen durch den Benutzer",
-        "ru": "Добавлена: Возможность для пользователя выбрать глобальное время ошибки для инстанций",
-        "pt": "Adicionado: Possibilidade para o usuário selecionar o tempo de erro global para instâncias",
-        "nl": "Toegevoegd voor de gebruiker om de wereldwijde fouten uit te kiezen voor instituut",
-        "fr": "Ajouté: Possibilité pour l'utilisateur de sélectionner le temps d'erreur global pour les instances",
-        "it": "Aggiunto: Possibilità per l'utente di selezionare il tempo di errore globale per le istanze",
-        "es": "Añadido: Posibilidad para que el usuario seleccione el tiempo de error global para los casos",
-        "pl": "Added: Possibility for the user to select the global error time for instances",
-        "uk": "Додано: Можливість вибору часу глобальної помилки для екземплярів",
-        "zh-cn": "增加:用户选择全球错误时间的可能性"
-      }
-    },
-    "titleLang": {
-      "en": "Device-Watcher",
-      "de": "Device-Watcher",
-      "ru": "Устройство-наблюдатель",
-      "pt": "Dispositivo-Observador",
-      "nl": "Device-Watcher",
-      "fr": "Device-Watcher",
-      "it": "Dispositivo di osservazione",
-      "es": "Vigilante de dispositivos",
-      "pl": "Obserwator urządzeń",
-      "zh-cn": "设备观察者",
-      "uk": "Device-Watcher"
-    },
-    "desc": {
-      "en": "Watchdog for devices",
-      "de": "Watchdog für Geräte",
-      "ru": "Сторожевой таймер для устройств",
-      "pt": "Watchdog para dispositivos",
-      "nl": "Waakhond voor apparaten",
-      "fr": "Chien de garde pour les appareils",
-      "it": "Watchdog per i dispositivi",
-      "es": "Vigilancia de dispositivos",
-      "pl": "Watchdog dla urządzeń",
-      "zh-cn": "设备看门狗",
-      "uk": "Сторожовий пес для пристроїв"
-    },
-    "authors": [
-      "Christian Behrends <mail@christian-behrends.de>"
-    ],
-    "keywords": [
-      "device",
-      "watcher",
-      "device-watcher",
-      "battery",
-      "rssi",
-      "link-quality",
-      "lists"
-    ],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "main": "main.js",
-    "icon": "device-watcher.png",
-    "enabled": true,
-    "extIcon": "https://raw.githubusercontent.com/ciddi89/ioBroker.device-watcher/main/admin/device-watcher.png",
-    "readme": "https://github.com/ciddi89/ioBroker.device-watcher/blob/main/README.md",
-    "loglevel": "info",
-    "mode": "daemon",
-    "type": "misc-data",
-    "compact": true,
-    "connectionType": "local",
-    "dataSource": "poll",
-    "plugins": {
-      "sentry": {
-        "dsn": "https://77c117cb4f6e43059424e03819439c24@o1337119.ingest.sentry.io/6606442"
-      }
-    },
-    "adminUI": {
-      "config": "json"
-    },
-    "messagebox": true,
-    "docs": {
-      "en": [
-        "docs/en/README.md"
-      ],
-      "de": [
-        "docs/de/README.md"
-      ]
-    },
-    "dependencies": [
-      {
-        "js-controller": ">=4.0.0"
-      }
-    ],
-    "globalDependencies": [
-      {
-        "admin": ">=6.0.0"
-      }
-    ],
-    "messages": [
-      {
-        "condition": {
-          "operand": "and",
-          "rules": [
-            "oldVersion<2.5.0",
-            "newVersion>=2.5.0"
-          ]
-        },
-        "title": {
-          "en": "Important notice!",
-          "de": "Wichtiger Hinweis!",
-          "ru": "Важное замечание!",
-          "pt": "Notícia importante!",
-          "nl": "Belangrijke mededeling!",
-          "fr": "Avis important!",
-          "it": "Avviso IMPORTANTE!",
-          "es": "Noticia importante!",
-          "pl": "Ważna uwaga!",
-          "zh-cn": "重要通知!",
-          "uk": "Важливе повідомлення!"
-        },
-        "text": {
-          "en": "The new version 2.5.x has a new structure of list objects. You have to delete the object tree of the instance manually and restart the instance to rebuild the structure!",
-          "de": "Die neue Version 2.5.x hat eine neue Struktur von Listenobjekten. Sie müssen den Objektbaum der Instanz manuell löschen und die Instanz neu starten, um die Struktur neu aufzubauen!",
-          "ru": "Новая версия 2.5.x имеет новую структуру объектов списка. Вы должны удалить дерево объекта экземпляра вручную и перезагрузить экземпляр для восстановления структуры!",
-          "pt": "A nova versão 2.5.x tem uma nova estrutura de objetos de lista. Você tem que excluir a árvore de objetos da instância manualmente e reiniciar a instância para reconstruir a estrutura!",
-          "nl": "De nieuwe versie 2.5.x heeft een nieuwe lijst objecten. Je moet de objectenboom van het instance handmatig verwijderen en het instance herstarten om het gebouw te herbouwen!",
-          "fr": "La nouvelle version 2.5.x a une nouvelle structure d'objets de liste. Vous devez supprimer l'arbre objet de l'instance manuellement et redémarrer l'instance pour reconstruire la structure!",
-          "it": "La nuova versione 2.5.x ha una nuova struttura di oggetti di lista. È necessario eliminare l'albero dell'oggetto dell'istanza manualmente e riavviare l'istanza per ricostruire la struttura!",
-          "es": "La nueva versión 2.5.x tiene una nueva estructura de objetos de lista. Usted tiene que eliminar el árbol objeto de la instancia manualmente y reiniciar la instancia para reconstruir la estructura!",
-          "pl": "Nowa wersja 2.5.x ma nową strukturę obiektów. Musisz usunąć obiektowy drzewo instancji ręcznie i wznowić przykład, aby odbudować konstrukcję!",
-          "uk": "Нова версія 2.5.x має нову структуру об'єктів списку. Ви повинні видалити дерево об'єкта екземпляра вручну і перезавантажити екземпляр для відновлення структури!",
-          "zh-cn": "新版本2.5.x有新的清单目标结构。 你们必须删除这一例子的树,重新树立重建结构的榜样!"
-        },
-        "level": "warn",
-        "buttons": [
-          "agree",
-          "cancel"
-        ]
-      }
-    ]
-  },
-  "native": {
-    "checkAdapterInstances": false,
-    "instanceErrorMaxMinutes": 0,
-    "instanceOfflineMaxMinutes": 0,
-    "alexa2Devices": false,
-    "alexa2MaxMinutes": 0,
-    "apcupsDevices": false,
-    "apcupsMaxMinutes": 0,
-    "bleDevices": false,
-    "bleMaxMinutes": 300,
-    "deconzDevices": false,
-    "deconzMaxMinutes": 0,
-    "ecovacsdeebotDevices": false,
-    "ecovacsdeebotMaxMinutes": 0,
-    "enoceanDevices": false,
-    "enoceanMaxMinutes": 300,
-    "esphomeDevices": false,
-    "esphomeMaxMinutes": 0,
-    "eusecDevices": false,
-    "eusecMaxMinutes": 300,
-    "fhemTFAsensorsDevices": false,
-    "fhemTFAsensorsMaxMinutes": 300,
-    "fritzdectDevices": false,
-    "fritzdectMaxMinutes": 0,
-    "fullybrowserDevices": false,
-    "fullybrowserMaxMinutes": 0,
-    "fullyMQTTDevices": false,
-    "fullyMQTTMaxMinutes": 0,
-    "hamDevices": false,
-    "hamMaxMinutes": 300,
-    "harmonyDevices": false,
-    "harmonyMaxMinutes": 0,
-    "hmiPDevices": false,
-    "hmiPMaxMinutes": 0,
-    "hmrpcDevices": false,
-    "hmrpcMaxMinutes": 0,
-    "homeconnectDevices": false,
-    "homeconnectMaxMinutes": 0,
-    "homekitControllerDevices": false,
-    "homekitControllerMaxMinutes": 0,
-    "hs100Devices": false,
-    "hs100MaxMinutes": 300,
-    "hueDevices": false,
-    "hueMaxMinutes": 0,
-    "hueExtDevices": false,
-    "hueextMaxMinutes": 0,
-    "innogyDevices": false,
-    "innogyMaxMinutes": 0,
-    "loqedSmartLockDevices": false,
-    "loqedSmartLockMaxMinutes": 0,
-    "jeelinkDevices": false,
-    "jeelinkMaxMinutes": 300,
-    "lupusecDevices": false,
-    "lupusecMaxMinutes": 0,
-    "maxcubeDevices": false,
-    "maxcubeMaxMinutes": 0,
-    "merossDevices": false,
-    "merossMaxMinutes": 0,
-    "mihomeDevices": false,
-    "mihomeMaxMinutes": 300,
-    "mihomeGWMaxMinutes": 0,
-    "mihomeVacuumDevices": false,
-    "mihomeVacuumMaxMinutes": 0,
-    "mqttClientZigbee2MqttDevices": false,
-    "mqttClientZigbee2MqttMaxMinutes": 0,
-    "mqttNukiDevices": false,
-    "mqttNukiMaxMinutes": 300,
-    "musiccastDevices": false,
-    "musiccastMaxMinutes": 0,
-    "netatmoDevices": false,
-    "netatmoMaxMinutes": 300,
-    "nukiExtDevices": false,
-    "nukiextendMaxMinutes": 300,
-    "nutDevices": false,
-    "nutMaxMinutes": 300,
-    "pingDevices": false,
-    "pingMaxMinutes": 0,
-    "proxmoxDevices": false,
-    "proxmoxMaxMinutes": 0,
-    "roombaDevices": false,
-    "roombaMaxMinutes": 0,
-    "shellyDevices": false,
-    "shellyMaxMinutes": 0,
-    "smartgardenDevices": false,
-    "smartgardenMaxMinutes": 0,
-    "sonoffDevices": false,
-    "sonoffMaxMinutes": 0,
-    "sonosDevices": false,
-    "sonosMaxMinutes": 0,
-    "sureflapDevices": false,
-    "sureflapMaxMinutes": 0,
-    "switchbotBleDevices": false,
-    "switchbotMaxMinutes": 300,
-    "tadoDevices": false,
-    "tadoMaxMinutes": 0,
-    "tapoDevices": false,
-    "tapoMaxMinutes": 300,
-    "tradfriDevices": false,
-    "tradfriMaxMinutes": 0,
-    "unifiDevices": false,
-    "unifiMaxMinutes": 0,
-    "viessmannDevices": false,
-    "viessmannMaxMinutes": 0,
-    "wledDevices": false,
-    "wledMaxMinutes": 0,
-    "yeelightDevices": false,
-    "yeelightMaxMinutes": 0,
-    "zigbeeDevices": false,
-    "zigbeeMaxMinutes": 300,
-    "zigbee2mqttDevices": false,
-    "zigbee2mqttMaxMinutes": 0,
-    "zwaveDevices": false,
-    "zwaveMaxMinutes": 0,
-    "trueState": false,
-    "listOnlyBattery": false,
-    "createOwnFolder": false,
-    "createHtmlList": false,
-    "checkSendOfflineMsg": false,
-    "checkSendOfflineMsgDaily": false,
-    "checkOfflineMonday": false,
-    "checkOfflineTuesday": false,
-    "checkOfflineWednesday": false,
-    "checkOfflineThursday": false,
-    "checkOfflineFriday": false,
-    "checkOfflineSaturday": false,
-    "checkOfflineSunday": false,
-    "checkSendBatteryMsg": false,
-    "checkSendBatteryTime": "12:00",
-    "checkSendOfflineTime": "12:05",
-    "minWarnBatterie": 35,
-    "checkMonday": false,
-    "checkTuesday": false,
-    "checkWednesday": false,
-    "checkThursday": false,
-    "checkFriday": false,
-    "checkSaturday": false,
-    "checkSunday": false,
-    "instancePushover": "",
-    "titlePushover": "",
-    "devicePushover": "",
-    "prioPushover": "",
-    "userPushover": "",
-    "instanceEmail": "",
-    "subjectEmail": "",
-    "sendToEmail": "",
-    "instanceTelegram": "",
-    "deviceTelegram": "",
-    "chatIdTelegram": "",
-    "instanceWhatsapp": "",
-    "phoneWhatsapp": "",
-    "instanceSignal": "",
-    "phoneSignal": "",
-    "instanceJarvis": "",
-    "titleJarvis": "Device-Watcher",
-    "instanceLovelace": "",
-    "titleLovelace": "Device-Watcher",
-    "instanceSynochat": "",
-    "channelSynochat": "",
-    "instanceMatrix": "",
-    "titleMatrix": "",
-    "showAdapterNameinMsg": false,
-    "checkSendAdapterUpdateMsg": false,
-    "tableBlacklist": [],
-    "tableBlacklistInstances": [],
-    "updateinterval": 10,
-    "ownDataEditor": [],
-    "checkSendDeviceUpgrade": false,
-    "checkSendUpgradeMsg": false,
-    "checkSendUpgradeMsgDaily": false,
-    "checkUpgradeMonday": false,
-    "checkUpgradeTuesday": false,
-    "checkUpgradeWednesday": false,
-    "checkUpgradeThursday": false,
-    "checkUpgradeFriday": false,
-    "checkUpgradeSaturday": false,
-    "checkUpgradeSunday": false,
-    "checkSendUpgradeTime": "12:10",
-    "checkSendBatteryMsgDaily": false,
-    "checkSendAdapterUpdateMsgDaily": false,
-    "checkSendAdapterUpdateTime": "12:15",
-    "checkAdapterUpdateMonday": false,
-    "checkAdapterUpdateTuesday": false,
-    "checkAdapterUpdateWednesday": false,
-    "checkAdapterUpdateThursday": false,
-    "checkAdapterUpdateFriday": false,
-    "checkAdapterUpdateSaturday": false,
-    "checkAdapterUpdateSunday": false,
-    "checkSendInstanceDeactivatedMsg": false,
-    "checkSendInstanceDeactivatedDaily": false,
-    "checkInstanceDeactivatedMonday": false,
-    "checkInstanceDeactivatedTuesday": false,
-    "checkInstanceDeactivatedWednesday": false,
-    "checkInstanceDeactivatedThursday": false,
-    "checkInstanceDeactivatedFriday": false,
-    "checkInstanceDeactivatedSaturday": false,
-    "checkInstanceDeactivatedSunday": false,
-    "checkSendInstanceDeactivatedTime": "12:20",
-    "checkSendInstanceFailedMsg": false,
-    "checkSendInstanceFailedDaily": false,
-    "checkFailedInstancesMonday": false,
-    "checkFailedInstancesTuesday": false,
-    "checkFailedInstancesWednesday": false,
-    "checkFailedInstancesThursday": false,
-    "checkFailedInstancesFriday": false,
-    "checkFailedInstancesSaturday": false,
-    "checkFailedInstancesSunday": false,
-    "checkSendInstanceFailedTime": "12:20",
-    "errorTimeInstances": 20,
-    "offlineTimeInstances": 20,
-    "tableTimeInstance": []
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "lastCheck",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Timestamp from last run",
-          "de": "Zeitstempel der letzten Ausführung",
-          "ru": "Timestamp от последнего запуска",
-          "pt": "Vampiro da última corrida",
-          "nl": "Timestamp",
-          "fr": "Timestamp de la dernière course",
-          "it": "Timestamp dall'ultima corsa",
-          "es": "Timestamp de la última carrera",
-          "pl": "Timestamp",
-          "zh-cn": "二. 从最后经营期间的时间限制"
-        },
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "lastNotification",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Last notification",
-          "de": "Letzte Meldung",
-          "ru": "Последнее уведомление",
-          "pt": "Última notificação",
-          "nl": "Laatste bericht",
-          "fr": "Dernière notification",
-          "it": "Ultimo avviso",
-          "es": "Última notificación",
-          "pl": "Oświadczenie",
-          "zh-cn": "上次通知"
-        },
-        "type": "string",
-        "role": "text",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices",
-      "type": "channel",
-      "common": {
-        "name": {
-          "en": "Devices",
-          "de": "Geräte",
-          "ru": "Устройства",
-          "pt": "Dispositivos",
-          "nl": "Vernietiging",
-          "fr": "Appareils",
-          "it": "Dispositivi",
-          "es": "Dispositivos",
-          "pl": "Device",
-          "uk": "Пристрої",
-          "zh-cn": "证人"
-        }
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.offlineCount",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of devices offline",
-          "de": "Anzahl der Geräte offline",
-          "ru": "Количество устройств offline",
-          "pt": "Número de dispositivos offline",
-          "nl": "Nummer van apparatuur offline",
-          "fr": "Nombre de dispositifs hors ligne",
-          "it": "Numero di dispositivi offline",
-          "es": "Número de dispositivos sin conexión",
-          "pl": "Ilość urządzeń offline",
-          "zh-cn": "线内装置数量"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.offlineList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of offline devices",
-          "de": "JSON Liste der Offline-Geräte",
-          "ru": "JSON Список оффлайн устройств",
-          "pt": "JSON Lista de dispositivos off-line",
-          "nl": "JSON List van offline apparatuur",
-          "fr": "JSON Liste des dispositifs hors ligne",
-          "it": "JSON Elenco dei dispositivi offline",
-          "es": "JSON Lista de dispositivos sin conexión",
-          "pl": "JSON Lista urządzeń offline",
-          "zh-cn": "JSON 线装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.oneDeviceOffline",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Is one device with offline",
-          "de": "Ist ein Gerät mit Offline",
-          "ru": "Это одно устройство с offline",
-          "pt": "É um dispositivo com offline",
-          "nl": "Is een apparaat met offline",
-          "fr": "Est un appareil avec hors ligne",
-          "it": "È un dispositivo con offline",
-          "es": "Es un dispositivo sin conexión",
-          "pl": "Jest to jeden urządzenie z offlinem",
-          "uk": "Є один пристрій з автономним",
-          "zh-cn": "一处有线装置"
-        },
-        "type": "boolean",
-        "role": "state",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.listAllRawJSON",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON RAW List of all devices",
-          "de": "JSON RAW Liste aller Geräte",
-          "ru": "ДЖСОН РАВ Список всех устройств",
-          "pt": "JSON RAW Lista de todos os dispositivos",
-          "nl": "JSON RAW List van alle apparaten",
-          "fr": "JSON RAW Liste de tous les dispositifs",
-          "it": "JSON RAW Elenco di tutti i dispositivi",
-          "es": "JSON RAW Lista de todos los dispositivos",
-          "pl": "JSON RAW Lista wszystkich urządzeń",
-          "uk": "ДЖСОН РАВ Список всіх пристроїв",
-          "zh-cn": "JSONRAW 所有装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.listAll",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of all devices",
-          "de": "JSON Liste aller Geräte",
-          "ru": "JSON Список всех устройств",
-          "pt": "JSON Lista de todos os dispositivos",
-          "nl": "JSON List van alle apparaten",
-          "fr": "JSON Liste de tous les dispositifs",
-          "it": "JSON Elenco di tutti i dispositivi",
-          "es": "JSON Lista de todos los dispositivos",
-          "pl": "JSON Lista wszystkich urządzeń",
-          "zh-cn": "JSON 所有装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.linkQualityList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of devices with signal strength",
-          "de": "JSON Liste der Geräte mit Signalstärke",
-          "ru": "JSON Список устройств с силой сигнала",
-          "pt": "JSON Lista de dispositivos com força de sinal",
-          "nl": "JSON List van apparaten met signaalkracht",
-          "fr": "JSON Liste des dispositifs avec force de signal",
-          "it": "JSON Elenco dei dispositivi con forza del segnale",
-          "es": "JSON Lista de dispositivos con fuerza de señal",
-          "pl": "JSON Lista urządzeń z siłą sygnałową",
-          "zh-cn": "JSON 具有信号实力的装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.countAll",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of all devices",
-          "de": "Anzahl aller Geräte",
-          "ru": "Количество всех устройств",
-          "pt": "Número de todos os dispositivos",
-          "nl": "Nummer van alle apparaten",
-          "fr": "Nombre de tous les appareils",
-          "it": "Numero di tutti i dispositivi",
-          "es": "Número de todos los dispositivos",
-          "pl": "Ilość wszystkich urządzeń",
-          "zh-cn": "所有装置的数目"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.batteryList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of devices with battery state",
-          "de": "JSON Liste der Geräte mit Batteriezustand",
-          "ru": "JSON Список устройств с состоянием батареи",
-          "pt": "JSON Lista de dispositivos com estado da bateria",
-          "nl": "JSON List van apparaten met batterij staat",
-          "fr": "JSON Liste des appareils avec état de batterie",
-          "it": "JSON Elenco dei dispositivi con stato della batteria",
-          "es": "JSON Lista de dispositivos con estado de batería",
-          "pl": "JSON Lista urządzeń z baterią stanową",
-          "zh-cn": "JSON 电池国装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.lowBatteryList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of devices with low battery state",
-          "de": "JSON Liste der Geräte mit niedrigem Batteriezustand",
-          "ru": "JSON Список устройств с низким состоянием батареи",
-          "pt": "JSON Lista de dispositivos com baixo estado da bateria",
-          "nl": "JSON List van apparaten met lage batterij staat",
-          "fr": "JSON Liste des appareils à faible état de batterie",
-          "it": "JSON Elenco di dispositivi con stato di batteria basso",
-          "es": "JSON Lista de dispositivos con estado de batería bajo",
-          "pl": "JSON Lista urządzeń o niskim stanie baterii",
-          "zh-cn": "JSON 低电池国家装置清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.lowBatteryCount",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of devices with low battery",
-          "de": "Anzahl der Geräte mit niedriger Batterie",
-          "ru": "Количество устройств c низкой батареей",
-          "pt": "Número de dispositivos com bateria baixa",
-          "nl": "Nummer van apparaten met lage batterij",
-          "fr": "Nombre de dispositifs avec batterie basse",
-          "it": "Numero di dispositivi con batteria bassa",
-          "es": "Número de dispositivos con batería baja",
-          "pl": "Liczba urządzeń z niską baterią",
-          "zh-cn": "低电池的装置数量"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.batteryCount",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of devices with battery",
-          "de": "Anzahl der Geräte mit Batterie",
-          "ru": "Количество устройств c батареей",
-          "pt": "Número de dispositivos com bateria",
-          "nl": "Nummer van apparaten met batterij",
-          "fr": "Nombre de dispositifs avec batterie",
-          "it": "Numero di dispositivi con batteria",
-          "es": "Número de dispositivos con batería",
-          "pl": "Liczba urządzeń z baterią",
-          "zh-cn": "电池的装置数量"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.oneDeviceLowBat",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Is one device with low battery",
-          "de": "Ist ein Gerät mit niedrigem Akku",
-          "ru": "Один прибор с низкой батареей",
-          "pt": "É um dispositivo com bateria baixa",
-          "nl": "Is een apparaat met lage batterijen",
-          "fr": "Est un appareil avec batterie basse",
-          "it": "È un dispositivo con batteria bassa",
-          "es": "Es un dispositivo con batería baja",
-          "pl": "Jest to jeden urządzenie z niską baterią",
-          "uk": "Є одним пристроєм з низьких акумуляторів",
-          "zh-cn": "低电池的装置"
-        },
-        "type": "boolean",
-        "role": "state",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.upgradableList",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "JSON List of devices with available updates ",
-          "de": "JSON Liste der Geräte mit verfügbaren Updates",
-          "ru": "ДЖСОН Список устройств с доступными обновлениями",
-          "pt": "J. Lista de dispositivos com atualizações disponíveis",
-          "nl": "JSON List van apparatuur met beschikbare updates",
-          "fr": "JSON Liste des appareils avec mises à jour disponibles",
-          "it": "JSON Elenco dei dispositivi con aggiornamenti disponibili",
-          "es": "JSON Lista de dispositivos con actualizaciones disponibles",
-          "pl": "JSON Lista urządzeń korzystających z aktualizacji",
-          "uk": "Сонце Перелік пристроїв з доступними оновленнями",
-          "zh-cn": "附 件 现有最新设备清单"
-        },
-        "type": "array",
-        "role": "json",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.upgradableCount",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Number of devices with available updates ",
-          "de": "Anzahl der Geräte mit verfügbaren Updates",
-          "ru": "Количество устройств с доступными обновлениями",
-          "pt": "Número de dispositivos com atualizações disponíveis",
-          "nl": "Nummer van apparatuur met beschikbare updates",
-          "fr": "Nombre de dispositifs avec mises à jour disponibles",
-          "it": "Numero di dispositivi con aggiornamenti disponibili",
-          "es": "Número de dispositivos con actualizaciones disponibles",
-          "pl": "Liczba urządzeń z dostępną aktualizacją",
-          "uk": "Кількість пристроїв з доступними оновленнями",
-          "zh-cn": "现有更新的装置数目"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "devices.oneDeviceUpdatable",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Is one device updatable",
-          "de": "Ist ein Gerät aufnehmbar",
-          "ru": "Одно устройство обновляется",
-          "pt": "É um dispositivo updatable",
-          "nl": "Is een apparaat updat",
-          "fr": "Est-ce qu'un appareil est indéfectible",
-          "it": "È un dispositivo updatable",
-          "es": "Es un dispositivo actualizado",
-          "pl": "Jest to jedno urządzenie updatable",
-          "uk": "Є одним пристроєм",
-          "zh-cn": "一台装置"
-        },
-        "type": "boolean",
-        "role": "state",
-        "read": true,
-        "write": false,
-        "def": false
-      },
-      "native": {}
-    }
-  ]
+	"common": {
+		"name": "device-watcher",
+		"version": "2.9.1",
+		"news": {
+			"2.9.1": {
+				"en": "Removed: Function for error handling (not neccessary)",
+				"de": "Entfernt: Funktion zur Fehlerbehandlung (nicht erforderlich)",
+				"ru": "Удалено: функция обработки ошибок (не обязательно)",
+				"pt": "Removido: Função para manipulação de erros (não necessário)",
+				"nl": "Verwijderd: Functie voor fouten omgaan met (niet negatief)",
+				"fr": "Supprimé : Fonction pour la manipulation d'erreurs (pas neccessaire)",
+				"it": "Rimosso: Funzione per la gestione degli errori (non neccessario)",
+				"es": "Retirado: Función para el manejo de errores (no es necesario)",
+				"pl": "Removed: Funkcje służące do obsługi błędów (nie wymagania)",
+				"uk": "Видалити: Функція для обробки помилок (необхідний)",
+				"zh-cn": "删除:处理错误(未作必要说明)的职能"
+			},
+			"2.9.0": {
+				"en": "Fixed: Deactivated instances were not displayed in the daily message about deactivated instances\nAdded: Viessmann devices, Homekit-Controller devices\nImprovements: Text of overview messages",
+				"de": "Behoben: Deaktivierte Instanzen wurden nicht in den Übersichtnachrichten über deaktivierte Instanzen angezeigt\nHinzugefügt: Viessmann Geräte, Homekit-Controller Geräte\nVerbesserungen: Text der Übersichtsnachrichten",
+				"ru": "Исправлено: Отключенные экземпляры не отображались в ежедневном сообщении о деактивированных инстанциях\nДобавлены: Viessmann устройства, Homekit-Controller устройства\nУлучшения: Текст обзорных сообщений",
+				"pt": "Corrigido: As instâncias desativadas não foram exibidas na mensagem diária sobre instâncias desativadas\nAdicionado: dispositivos Viessmann, dispositivos Homekit-Controller\nMelhorias: Texto de mensagens de visão geral",
+				"nl": "Gedeactiveerde instanties werden niet getoond in de dagelijkse boodschap over gedeactiveerde instanties\nVertaling:\nImprovementen: Text of overzicht berichten",
+				"fr": "Correction : Les instances désactivées n'ont pas été affichées dans le message quotidien concernant les instances désactivées\nAjouté: Appareils Viessmann, Dispositifs Homekit-Controller\nAméliorations : Texte des messages d ' aperçu",
+				"it": "Risolto: Le istanze disattivate non sono state visualizzate nel messaggio quotidiano sulle istanze disattivate\nAggiunto: dispositivi Viessmann, dispositivi Homekit-Controller\nMiglioramenti: Testo dei messaggi di panoramica",
+				"es": "Fijo: No se mostraron casos desactivados en el mensaje diario sobre casos desactivados\nAñadido: dispositivos Viessmann, dispositivos Homekit-Controller\nMejoras: Texto de los mensajes de visión general",
+				"pl": "Na przykładzie uaktywniono: Zdeaktywowane instancje nie były wyświetlane w codziennym wiadomości o deaktywowanych instancjach\nAdded: urządzenia Viessmanna\nPoprawa: Tekst overview",
+				"uk": "Виправлено: Деактивовані екземпляри не відображалися в щоденному повідомленні про деактивовані екземпляри\nДодано: пристрої Viessmann, пристрої Homekit-Controller\nУдосконалення: Текст повідомлення",
+				"zh-cn": "Fixed:Deactiving cases的每日信息未显示有关违犯事件的报道。\n增 编:维斯曼装置、家里克特-Controller装置\n改进: 总讯案文"
+			},
+			"2.8.5": {
+				"en": "Fixed: Error that instances can not be added to the blacklist because of the popup message [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: That messages have been sent when the instance has briefly jumped from Enabled to Disabled and back to Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"de": "Behoben: Fehler, dass Instanzen aufgrund der Popup-Nachricht nicht zur Blacklist hinzugefügt werden können [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nBehoben: Das Meldungen gesendet wurden, wenn die Instanz kurz von Aktiviert auf Deaktiviert und zurück zu Aktiviert gesprungen ist [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"ru": "Исправлено: Ошибка, которую нельзя добавить в черный список из-за всплывающего сообщения [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nИсправлено: Эти сообщения были отправлены, когда экземпляр кратко перепрыгнул из Enabled в Disabled и обратно в Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"pt": "Corrigido: Erro que as instâncias não podem ser adicionadas à lista negra por causa da mensagem pop-up [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nCorrigido: Essas mensagens foram enviadas quando a instância saltou brevemente de Enabled para Disabled e de volta para Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"nl": "Dat kan niet worden toegevoegd aan de blacklist vanwege de popup-bericht\nVertaling: Die berichten zijn verstuurd toen het instituut kort van Enabled naar Disabled en terug naar Enabled 173: jittps, /ciddi89-Brokerdewadet-17",
+				"fr": "Correction : Erreur que les instances ne peuvent pas être ajoutées à la liste noire en raison du message popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nCorrection : Ces messages ont été envoyés lorsque l ' instance a brièvement sauté de Enabled à Disabled et de retour à Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"it": "Risolto: Errore che le istanze non possono essere aggiunte alla lista nera a causa del messaggio popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nRisolto: Tali messaggi sono stati inviati quando l'istanza è saltata brevemente da Enabled a disabilitare e di nuovo a Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"es": "Corregido: Error de que los casos no se pueden agregar a la lista negra debido al mensaje popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nArreglado: Esos mensajes se han enviado cuando el caso ha saltado brevemente de Enabled a Disabled y de regreso a Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"pl": "Error, że instancje nie mogą być dodane do czarnej listy z powodu popupu #172(https:/github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: Wiadomości te zostały wysłane, gdy instancja przeskakuje z Enabled do Disabled #173 (https:/github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"uk": "Виправлено: помилка, що екземпляри не можуть бути додані в чорний список через повідомлення електронної пошти [#172] (https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nВиправлено: Що повідомлення було відправлено, коли екземпляр коротко стрибнув з Увімкненого і назад до Увімкненого [#173] (https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
+				"zh-cn": "固定:由于人口信息[第172号](http://github.com/ciddi89/ioBroker.device-watcher/issues/172)而无法增加黑名单。\n固定: 这一信息是在以下情况下发出的:从便携起降到残疾人,回到了可居住的[第173号](http://github.com/ciddi89/ioBroker.device-watcher/issues/173)。"
+			},
+			"2.8.4": {
+				"en": "Fixed: Functions for instance status completely renewed ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))\nAdded: Popup message when the instance is not running and the user tries to select a device/instance in the settings tables ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))",
+				"de": "Behoben: Funktionen für Instanzen Status vollständig erneuert [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nHinzugefügt: Popup-Nachricht, wenn die Instanz nicht läuft und der Benutzer versucht ein Gerät/Instance in den Einstellungstabellen auszuwählen [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"ru": "Исправлено: Функции для статуса экземпляра полностью обновлены [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nДобавлена: Всплывающее сообщение, когда экземпляр не работает, и пользователь пытается выбрать устройство/инстанция в таблицах настроек [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"pt": "Corrigido: Funções por exemplo, estado completamente renovado [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAdicionado: Popup message when the instance is not running and the user try to select a device/instance in the settings table [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"nl": "Functies voor instance-status volledig hernieuwd 70) (htub,com/ciddi89/ioBroker\nVertaling:",
+				"fr": "Fixed: Functions for instance status completely renewed [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAjouté : Message popup lorsque l ' instance ne fonctionne pas et que l ' utilisateur essaie de sélectionner un dispositif/instance dans les tableaux de configuration [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"it": "Fisso: Funzioni per esempio stato completamente rinnovato [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAggiunto: messaggio popup quando l'istanza non è in esecuzione e l'utente cerca di selezionare un dispositivo/instanza nelle tabelle delle impostazioni [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"es": "Fijo: Funciones para el estado de la instancia completamente renovadas [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAñadido: Mensaje de Popup cuando la instancia no se ejecuta y el usuario intenta seleccionar un dispositivo/instancia en los cuadros de configuración [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"pl": "Fixed: Functions for example full new #170(https:/github.com/ciddi89/ioBroker,device-watcher/issues/170) (ang.)\nAdded: wiadomość Popup, gdy instancja nie jest uruchomiona, a użytkownik próbuje wybrać urządzenie/instance in the settings table #170(https:/github.com/ciddi89/ioBrokerdevice-watcher/issues/170)",
+				"uk": "Виправлено: Функції статусу екземпляра повністю оновлено [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nДодано: Поповнення повідомлення, коли екземпляр не працює, і користувач намагається вибрати пристрій/інстанцію в таблицях налаштувань [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"zh-cn": "固定:举例身份功能完全延长[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)\n添加:当事没有运行时,Popup讯息和用户在表格[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)中选择一种装置/装置。"
+			},
+			"2.8.3": {
+				"en": "Fixed: Multiple push messages when restarting an instance ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))",
+				"de": "Behoben: Mehrere Push-Nachrichten beim Neustart einer Instanz [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"ru": "Исправлено: Несколько push-сообщений при перезагрузке экземпляра [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"pt": "Corrigido: Múltiplas mensagens de push ao reiniciar uma instância [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"nl": "Meerdere persberichten als het herstarten van een instance 70170:",
+				"fr": "Correction : Messages multiples pour le redémarrage d ' une instance [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"it": "Risolto: Messaggi push multipli al riavvio di un'istanza [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"es": "Corregido: Múltiples mensajes de empuje al reiniciar una instancia [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"pl": "Fixed: Multiple push messages when restarting a program #170(https:/github.com/ciddi89/ioBroker.device-watcher/issues/170) (ang.)",
+				"uk": "Виправлено: Кілька поштових повідомлень при перезапускі екземпляра [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
+				"zh-cn": "九. 固定:在重新树立一个例子(http://github.com/ciddi89/ioBroker.device-watcher/issues/170)时,多人传信息。"
+			},
+			"2.8.2": {
+				"en": "Fixed: Don't handle id's which ends with fullstop\nAdded: Possibility for the user to select the global deactivation time for instances",
+				"de": "Behoben: Behandle nicht id's, die mit einem Punkt enden\nHinzugefügt: Möglichkeit für den Benutzer, die globale Deaktivierungszeit für Instanzen selbst zu wählen",
+				"ru": "Исправлено: Не обрабатывайте id's который заканчивается с fullstop\nДобавлена: Возможность для пользователя выбрать глобальное время деактивации для инстанций",
+				"pt": "Corrigido: Não manuseie id's que termina com fullstop\nAdicionado: Possibilidade para o usuário selecionar o tempo de desativação global para instâncias",
+				"nl": "Niet omgaan met ID's die eindigen met volledige stop\nToegevoegd, mogelijk voor de gebruiker om de wereldwijde deactiveringstijd te selecteren voor bijvoorbeeld",
+				"fr": "Fixé: Ne manipule pas l'id qui se termine avec le haut\nAjouté: Possibilité pour l'utilisateur de sélectionner le temps de désactivation global pour les instances",
+				"it": "Fisso: Non maneggiare id che termina con fullstop\nAggiunto: Possibilità per l'utente di selezionare il tempo di disattivazione globale per le istanze",
+				"es": "Arreglado: No maneje id's que termina con fullstop\nAñadido: Posibilidad para que el usuario seleccione el tiempo de desactivación global para los casos",
+				"pl": "Fixed: Don't handle id's (ang.)\nAdded: Possibility for the user to select the global deactivation time",
+				"uk": "Виправлено: Не робіть id's, які закінчуються повною поверхнею\nДодано: Можливість вибору глобального часу деактивації екземплярів",
+				"zh-cn": "九. 固定:捐税处理停止完全停战的叛国行为\n增 编:用户可以选择全球启动时间,以选择发生的情况"
+			},
+			"2.8.1": {
+				"en": "Added: Possibility for the user to select the global error time for instances",
+				"de": "Hinzugefügt: Möglichkeit der Auswahl der globalen Fehlerzeit für Instanzen durch den Benutzer",
+				"ru": "Добавлена: Возможность для пользователя выбрать глобальное время ошибки для инстанций",
+				"pt": "Adicionado: Possibilidade para o usuário selecionar o tempo de erro global para instâncias",
+				"nl": "Toegevoegd voor de gebruiker om de wereldwijde fouten uit te kiezen voor instituut",
+				"fr": "Ajouté: Possibilité pour l'utilisateur de sélectionner le temps d'erreur global pour les instances",
+				"it": "Aggiunto: Possibilità per l'utente di selezionare il tempo di errore globale per le istanze",
+				"es": "Añadido: Posibilidad para que el usuario seleccione el tiempo de error global para los casos",
+				"pl": "Added: Possibility for the user to select the global error time for instances",
+				"uk": "Додано: Можливість вибору часу глобальної помилки для екземплярів",
+				"zh-cn": "增加:用户选择全球错误时间的可能性"
+			}
+		},
+		"titleLang": {
+			"en": "Device-Watcher",
+			"de": "Device-Watcher",
+			"ru": "Устройство-наблюдатель",
+			"pt": "Dispositivo-Observador",
+			"nl": "Device-Watcher",
+			"fr": "Device-Watcher",
+			"it": "Dispositivo di osservazione",
+			"es": "Vigilante de dispositivos",
+			"pl": "Obserwator urządzeń",
+			"zh-cn": "设备观察者",
+			"uk": "Device-Watcher"
+		},
+		"desc": {
+			"en": "Watchdog for devices",
+			"de": "Watchdog für Geräte",
+			"ru": "Сторожевой таймер для устройств",
+			"pt": "Watchdog para dispositivos",
+			"nl": "Waakhond voor apparaten",
+			"fr": "Chien de garde pour les appareils",
+			"it": "Watchdog per i dispositivi",
+			"es": "Vigilancia de dispositivos",
+			"pl": "Watchdog dla urządzeń",
+			"zh-cn": "设备看门狗",
+			"uk": "Сторожовий пес для пристроїв"
+		},
+		"authors": ["Christian Behrends <mail@christian-behrends.de>"],
+		"keywords": ["device", "watcher", "device-watcher", "battery", "rssi", "link-quality", "lists"],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "device-watcher.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/ciddi89/ioBroker.device-watcher/main/admin/device-watcher.png",
+		"readme": "https://github.com/ciddi89/ioBroker.device-watcher/blob/main/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "misc-data",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "push",
+		"plugins": {
+			"sentry": {
+				"dsn": "https://77c117cb4f6e43059424e03819439c24@o1337119.ingest.sentry.io/6606442"
+			}
+		},
+		"adminUI": {
+			"config": "json"
+		},
+		"messagebox": true,
+		"docs": {
+			"en": ["docs/en/README.md"],
+			"de": ["docs/de/README.md"]
+		},
+		"dependencies": [
+			{
+				"js-controller": ">=4.0.0"
+			}
+		],
+		"globalDependencies": [
+			{
+				"admin": ">=6.0.0"
+			}
+		],
+		"messages": [
+			{
+				"condition": {
+					"operand": "and",
+					"rules": ["oldVersion<2.5.0", "newVersion>=2.5.0"]
+				},
+				"title": {
+					"en": "Important notice!",
+					"de": "Wichtiger Hinweis!",
+					"ru": "Важное замечание!",
+					"pt": "Notícia importante!",
+					"nl": "Belangrijke mededeling!",
+					"fr": "Avis important!",
+					"it": "Avviso IMPORTANTE!",
+					"es": "Noticia importante!",
+					"pl": "Ważna uwaga!",
+					"zh-cn": "重要通知!",
+					"uk": "Важливе повідомлення!"
+				},
+				"text": {
+					"en": "The new version 2.5.x has a new structure of list objects. You have to delete the object tree of the instance manually and restart the instance to rebuild the structure!",
+					"de": "Die neue Version 2.5.x hat eine neue Struktur von Listenobjekten. Sie müssen den Objektbaum der Instanz manuell löschen und die Instanz neu starten, um die Struktur neu aufzubauen!",
+					"ru": "Новая версия 2.5.x имеет новую структуру объектов списка. Вы должны удалить дерево объекта экземпляра вручную и перезагрузить экземпляр для восстановления структуры!",
+					"pt": "A nova versão 2.5.x tem uma nova estrutura de objetos de lista. Você tem que excluir a árvore de objetos da instância manualmente e reiniciar a instância para reconstruir a estrutura!",
+					"nl": "De nieuwe versie 2.5.x heeft een nieuwe lijst objecten. Je moet de objectenboom van het instance handmatig verwijderen en het instance herstarten om het gebouw te herbouwen!",
+					"fr": "La nouvelle version 2.5.x a une nouvelle structure d'objets de liste. Vous devez supprimer l'arbre objet de l'instance manuellement et redémarrer l'instance pour reconstruire la structure!",
+					"it": "La nuova versione 2.5.x ha una nuova struttura di oggetti di lista. È necessario eliminare l'albero dell'oggetto dell'istanza manualmente e riavviare l'istanza per ricostruire la struttura!",
+					"es": "La nueva versión 2.5.x tiene una nueva estructura de objetos de lista. Usted tiene que eliminar el árbol objeto de la instancia manualmente y reiniciar la instancia para reconstruir la estructura!",
+					"pl": "Nowa wersja 2.5.x ma nową strukturę obiektów. Musisz usunąć obiektowy drzewo instancji ręcznie i wznowić przykład, aby odbudować konstrukcję!",
+					"uk": "Нова версія 2.5.x має нову структуру об'єктів списку. Ви повинні видалити дерево об'єкта екземпляра вручну і перезавантажити екземпляр для відновлення структури!",
+					"zh-cn": "新版本2.5.x有新的清单目标结构。 你们必须删除这一例子的树,重新树立重建结构的榜样!"
+				},
+				"level": "warn",
+				"buttons": ["agree", "cancel"]
+			}
+		]
+	},
+	"native": {
+		"checkAdapterInstances": false,
+		"instanceErrorMaxMinutes": 0,
+		"instanceOfflineMaxMinutes": 0,
+		"alexa2Devices": false,
+		"alexa2MaxMinutes": 0,
+		"apcupsDevices": false,
+		"apcupsMaxMinutes": 0,
+		"bleDevices": false,
+		"bleMaxMinutes": 300,
+		"deconzDevices": false,
+		"deconzMaxMinutes": 0,
+		"ecovacsdeebotDevices": false,
+		"ecovacsdeebotMaxMinutes": 0,
+		"enoceanDevices": false,
+		"enoceanMaxMinutes": 300,
+		"esphomeDevices": false,
+		"esphomeMaxMinutes": 0,
+		"eusecDevices": false,
+		"eusecMaxMinutes": 300,
+		"fhemTFAsensorsDevices": false,
+		"fhemTFAsensorsMaxMinutes": 300,
+		"fritzdectDevices": false,
+		"fritzdectMaxMinutes": 0,
+		"fullybrowserDevices": false,
+		"fullybrowserMaxMinutes": 0,
+		"fullyMQTTDevices": false,
+		"fullyMQTTMaxMinutes": 0,
+		"hamDevices": false,
+		"hamMaxMinutes": 300,
+		"harmonyDevices": false,
+		"harmonyMaxMinutes": 0,
+		"hmiPDevices": false,
+		"hmiPMaxMinutes": 0,
+		"hmrpcDevices": false,
+		"hmrpcMaxMinutes": 0,
+		"homeconnectDevices": false,
+		"homeconnectMaxMinutes": 0,
+		"homekitControllerDevices": false,
+		"homekitControllerMaxMinutes": 0,
+		"hs100Devices": false,
+		"hs100MaxMinutes": 300,
+		"hueDevices": false,
+		"hueMaxMinutes": 0,
+		"hueExtDevices": false,
+		"hueextMaxMinutes": 0,
+		"innogyDevices": false,
+		"innogyMaxMinutes": 0,
+		"loqedSmartLockDevices": false,
+		"loqedSmartLockMaxMinutes": 0,
+		"jeelinkDevices": false,
+		"jeelinkMaxMinutes": 300,
+		"lupusecDevices": false,
+		"lupusecMaxMinutes": 0,
+		"maxcubeDevices": false,
+		"maxcubeMaxMinutes": 0,
+		"merossDevices": false,
+		"merossMaxMinutes": 0,
+		"mihomeDevices": false,
+		"mihomeMaxMinutes": 300,
+		"mihomeGWMaxMinutes": 0,
+		"mihomeVacuumDevices": false,
+		"mihomeVacuumMaxMinutes": 0,
+		"mqttClientZigbee2MqttDevices": false,
+		"mqttClientZigbee2MqttMaxMinutes": 0,
+		"mqttNukiDevices": false,
+		"mqttNukiMaxMinutes": 300,
+		"musiccastDevices": false,
+		"musiccastMaxMinutes": 0,
+		"netatmoDevices": false,
+		"netatmoMaxMinutes": 300,
+		"nukiExtDevices": false,
+		"nukiextendMaxMinutes": 300,
+		"nutDevices": false,
+		"nutMaxMinutes": 300,
+		"pingDevices": false,
+		"pingMaxMinutes": 0,
+		"proxmoxDevices": false,
+		"proxmoxMaxMinutes": 0,
+		"roombaDevices": false,
+		"roombaMaxMinutes": 0,
+		"shellyDevices": false,
+		"shellyMaxMinutes": 0,
+		"smartgardenDevices": false,
+		"smartgardenMaxMinutes": 0,
+		"sonoffDevices": false,
+		"sonoffMaxMinutes": 0,
+		"sonosDevices": false,
+		"sonosMaxMinutes": 0,
+		"sureflapDevices": false,
+		"sureflapMaxMinutes": 0,
+		"switchbotBleDevices": false,
+		"switchbotMaxMinutes": 300,
+		"tadoDevices": false,
+		"tadoMaxMinutes": 0,
+		"tapoDevices": false,
+		"tapoMaxMinutes": 300,
+		"tradfriDevices": false,
+		"tradfriMaxMinutes": 0,
+		"unifiDevices": false,
+		"unifiMaxMinutes": 0,
+		"viessmannDevices": false,
+		"viessmannMaxMinutes": 0,
+		"wledDevices": false,
+		"wledMaxMinutes": 0,
+		"yeelightDevices": false,
+		"yeelightMaxMinutes": 0,
+		"zigbeeDevices": false,
+		"zigbeeMaxMinutes": 300,
+		"zigbee2mqttDevices": false,
+		"zigbee2mqttMaxMinutes": 0,
+		"zwaveDevices": false,
+		"zwaveMaxMinutes": 0,
+		"trueState": false,
+		"listOnlyBattery": false,
+		"createOwnFolder": false,
+		"createHtmlList": false,
+		"checkSendOfflineMsg": false,
+		"checkSendOfflineMsgDaily": false,
+		"checkOfflineMonday": false,
+		"checkOfflineTuesday": false,
+		"checkOfflineWednesday": false,
+		"checkOfflineThursday": false,
+		"checkOfflineFriday": false,
+		"checkOfflineSaturday": false,
+		"checkOfflineSunday": false,
+		"checkSendBatteryMsg": false,
+		"checkSendBatteryTime": "12:00",
+		"checkSendOfflineTime": "12:05",
+		"minWarnBatterie": 35,
+		"checkMonday": false,
+		"checkTuesday": false,
+		"checkWednesday": false,
+		"checkThursday": false,
+		"checkFriday": false,
+		"checkSaturday": false,
+		"checkSunday": false,
+		"instancePushover": "",
+		"titlePushover": "",
+		"devicePushover": "",
+		"prioPushover": "",
+		"userPushover": "",
+		"instanceEmail": "",
+		"subjectEmail": "",
+		"sendToEmail": "",
+		"instanceTelegram": "",
+		"deviceTelegram": "",
+		"chatIdTelegram": "",
+		"instanceWhatsapp": "",
+		"phoneWhatsapp": "",
+		"instanceSignal": "",
+		"phoneSignal": "",
+		"instanceJarvis": "",
+		"titleJarvis": "Device-Watcher",
+		"instanceLovelace": "",
+		"titleLovelace": "Device-Watcher",
+		"instanceSynochat": "",
+		"channelSynochat": "",
+		"instanceMatrix": "",
+		"titleMatrix": "",
+		"showAdapterNameinMsg": false,
+		"checkSendAdapterUpdateMsg": false,
+		"tableBlacklist": [],
+		"tableBlacklistInstances": [],
+		"updateinterval": 10,
+		"ownDataEditor": [],
+		"checkSendDeviceUpgrade": false,
+		"checkSendUpgradeMsg": false,
+		"checkSendUpgradeMsgDaily": false,
+		"checkUpgradeMonday": false,
+		"checkUpgradeTuesday": false,
+		"checkUpgradeWednesday": false,
+		"checkUpgradeThursday": false,
+		"checkUpgradeFriday": false,
+		"checkUpgradeSaturday": false,
+		"checkUpgradeSunday": false,
+		"checkSendUpgradeTime": "12:10",
+		"checkSendBatteryMsgDaily": false,
+		"checkSendAdapterUpdateMsgDaily": false,
+		"checkSendAdapterUpdateTime": "12:15",
+		"checkAdapterUpdateMonday": false,
+		"checkAdapterUpdateTuesday": false,
+		"checkAdapterUpdateWednesday": false,
+		"checkAdapterUpdateThursday": false,
+		"checkAdapterUpdateFriday": false,
+		"checkAdapterUpdateSaturday": false,
+		"checkAdapterUpdateSunday": false,
+		"checkSendInstanceDeactivatedMsg": false,
+		"checkSendInstanceDeactivatedDaily": false,
+		"checkInstanceDeactivatedMonday": false,
+		"checkInstanceDeactivatedTuesday": false,
+		"checkInstanceDeactivatedWednesday": false,
+		"checkInstanceDeactivatedThursday": false,
+		"checkInstanceDeactivatedFriday": false,
+		"checkInstanceDeactivatedSaturday": false,
+		"checkInstanceDeactivatedSunday": false,
+		"checkSendInstanceDeactivatedTime": "12:20",
+		"checkSendInstanceFailedMsg": false,
+		"checkSendInstanceFailedDaily": false,
+		"checkFailedInstancesMonday": false,
+		"checkFailedInstancesTuesday": false,
+		"checkFailedInstancesWednesday": false,
+		"checkFailedInstancesThursday": false,
+		"checkFailedInstancesFriday": false,
+		"checkFailedInstancesSaturday": false,
+		"checkFailedInstancesSunday": false,
+		"checkSendInstanceFailedTime": "12:20",
+		"errorTimeInstances": 20,
+		"offlineTimeInstances": 20,
+		"tableTimeInstance": []
+	},
+	"objects": [],
+	"instanceObjects": [
+		{
+			"_id": "lastCheck",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Timestamp from last run",
+					"de": "Zeitstempel der letzten Ausführung",
+					"ru": "Timestamp от последнего запуска",
+					"pt": "Vampiro da última corrida",
+					"nl": "Timestamp",
+					"fr": "Timestamp de la dernière course",
+					"it": "Timestamp dall'ultima corsa",
+					"es": "Timestamp de la última carrera",
+					"pl": "Timestamp",
+					"zh-cn": "二. 从最后经营期间的时间限制"
+				},
+				"type": "string",
+				"role": "text",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "lastNotification",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Last notification",
+					"de": "Letzte Meldung",
+					"ru": "Последнее уведомление",
+					"pt": "Última notificação",
+					"nl": "Laatste bericht",
+					"fr": "Dernière notification",
+					"it": "Ultimo avviso",
+					"es": "Última notificación",
+					"pl": "Oświadczenie",
+					"zh-cn": "上次通知"
+				},
+				"type": "string",
+				"role": "text",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices",
+			"type": "channel",
+			"common": {
+				"name": {
+					"en": "Devices",
+					"de": "Geräte",
+					"ru": "Устройства",
+					"pt": "Dispositivos",
+					"nl": "Vernietiging",
+					"fr": "Appareils",
+					"it": "Dispositivi",
+					"es": "Dispositivos",
+					"pl": "Device",
+					"uk": "Пристрої",
+					"zh-cn": "证人"
+				}
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.offlineCount",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of devices offline",
+					"de": "Anzahl der Geräte offline",
+					"ru": "Количество устройств offline",
+					"pt": "Número de dispositivos offline",
+					"nl": "Nummer van apparatuur offline",
+					"fr": "Nombre de dispositifs hors ligne",
+					"it": "Numero di dispositivi offline",
+					"es": "Número de dispositivos sin conexión",
+					"pl": "Ilość urządzeń offline",
+					"zh-cn": "线内装置数量"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.offlineList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of offline devices",
+					"de": "JSON Liste der Offline-Geräte",
+					"ru": "JSON Список оффлайн устройств",
+					"pt": "JSON Lista de dispositivos off-line",
+					"nl": "JSON List van offline apparatuur",
+					"fr": "JSON Liste des dispositifs hors ligne",
+					"it": "JSON Elenco dei dispositivi offline",
+					"es": "JSON Lista de dispositivos sin conexión",
+					"pl": "JSON Lista urządzeń offline",
+					"zh-cn": "JSON 线装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.oneDeviceOffline",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Is one device with offline",
+					"de": "Ist ein Gerät mit Offline",
+					"ru": "Это одно устройство с offline",
+					"pt": "É um dispositivo com offline",
+					"nl": "Is een apparaat met offline",
+					"fr": "Est un appareil avec hors ligne",
+					"it": "È un dispositivo con offline",
+					"es": "Es un dispositivo sin conexión",
+					"pl": "Jest to jeden urządzenie z offlinem",
+					"uk": "Є один пристрій з автономним",
+					"zh-cn": "一处有线装置"
+				},
+				"type": "boolean",
+				"role": "state",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.listAllRawJSON",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON RAW List of all devices",
+					"de": "JSON RAW Liste aller Geräte",
+					"ru": "ДЖСОН РАВ Список всех устройств",
+					"pt": "JSON RAW Lista de todos os dispositivos",
+					"nl": "JSON RAW List van alle apparaten",
+					"fr": "JSON RAW Liste de tous les dispositifs",
+					"it": "JSON RAW Elenco di tutti i dispositivi",
+					"es": "JSON RAW Lista de todos los dispositivos",
+					"pl": "JSON RAW Lista wszystkich urządzeń",
+					"uk": "ДЖСОН РАВ Список всіх пристроїв",
+					"zh-cn": "JSONRAW 所有装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.listAll",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of all devices",
+					"de": "JSON Liste aller Geräte",
+					"ru": "JSON Список всех устройств",
+					"pt": "JSON Lista de todos os dispositivos",
+					"nl": "JSON List van alle apparaten",
+					"fr": "JSON Liste de tous les dispositifs",
+					"it": "JSON Elenco di tutti i dispositivi",
+					"es": "JSON Lista de todos los dispositivos",
+					"pl": "JSON Lista wszystkich urządzeń",
+					"zh-cn": "JSON 所有装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.linkQualityList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of devices with signal strength",
+					"de": "JSON Liste der Geräte mit Signalstärke",
+					"ru": "JSON Список устройств с силой сигнала",
+					"pt": "JSON Lista de dispositivos com força de sinal",
+					"nl": "JSON List van apparaten met signaalkracht",
+					"fr": "JSON Liste des dispositifs avec force de signal",
+					"it": "JSON Elenco dei dispositivi con forza del segnale",
+					"es": "JSON Lista de dispositivos con fuerza de señal",
+					"pl": "JSON Lista urządzeń z siłą sygnałową",
+					"zh-cn": "JSON 具有信号实力的装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.countAll",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of all devices",
+					"de": "Anzahl aller Geräte",
+					"ru": "Количество всех устройств",
+					"pt": "Número de todos os dispositivos",
+					"nl": "Nummer van alle apparaten",
+					"fr": "Nombre de tous les appareils",
+					"it": "Numero di tutti i dispositivi",
+					"es": "Número de todos los dispositivos",
+					"pl": "Ilość wszystkich urządzeń",
+					"zh-cn": "所有装置的数目"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.batteryList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of devices with battery state",
+					"de": "JSON Liste der Geräte mit Batteriezustand",
+					"ru": "JSON Список устройств с состоянием батареи",
+					"pt": "JSON Lista de dispositivos com estado da bateria",
+					"nl": "JSON List van apparaten met batterij staat",
+					"fr": "JSON Liste des appareils avec état de batterie",
+					"it": "JSON Elenco dei dispositivi con stato della batteria",
+					"es": "JSON Lista de dispositivos con estado de batería",
+					"pl": "JSON Lista urządzeń z baterią stanową",
+					"zh-cn": "JSON 电池国装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.lowBatteryList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of devices with low battery state",
+					"de": "JSON Liste der Geräte mit niedrigem Batteriezustand",
+					"ru": "JSON Список устройств с низким состоянием батареи",
+					"pt": "JSON Lista de dispositivos com baixo estado da bateria",
+					"nl": "JSON List van apparaten met lage batterij staat",
+					"fr": "JSON Liste des appareils à faible état de batterie",
+					"it": "JSON Elenco di dispositivi con stato di batteria basso",
+					"es": "JSON Lista de dispositivos con estado de batería bajo",
+					"pl": "JSON Lista urządzeń o niskim stanie baterii",
+					"zh-cn": "JSON 低电池国家装置清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.lowBatteryCount",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of devices with low battery",
+					"de": "Anzahl der Geräte mit niedriger Batterie",
+					"ru": "Количество устройств c низкой батареей",
+					"pt": "Número de dispositivos com bateria baixa",
+					"nl": "Nummer van apparaten met lage batterij",
+					"fr": "Nombre de dispositifs avec batterie basse",
+					"it": "Numero di dispositivi con batteria bassa",
+					"es": "Número de dispositivos con batería baja",
+					"pl": "Liczba urządzeń z niską baterią",
+					"zh-cn": "低电池的装置数量"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.batteryCount",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of devices with battery",
+					"de": "Anzahl der Geräte mit Batterie",
+					"ru": "Количество устройств c батареей",
+					"pt": "Número de dispositivos com bateria",
+					"nl": "Nummer van apparaten met batterij",
+					"fr": "Nombre de dispositifs avec batterie",
+					"it": "Numero di dispositivi con batteria",
+					"es": "Número de dispositivos con batería",
+					"pl": "Liczba urządzeń z baterią",
+					"zh-cn": "电池的装置数量"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.oneDeviceLowBat",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Is one device with low battery",
+					"de": "Ist ein Gerät mit niedrigem Akku",
+					"ru": "Один прибор с низкой батареей",
+					"pt": "É um dispositivo com bateria baixa",
+					"nl": "Is een apparaat met lage batterijen",
+					"fr": "Est un appareil avec batterie basse",
+					"it": "È un dispositivo con batteria bassa",
+					"es": "Es un dispositivo con batería baja",
+					"pl": "Jest to jeden urządzenie z niską baterią",
+					"uk": "Є одним пристроєм з низьких акумуляторів",
+					"zh-cn": "低电池的装置"
+				},
+				"type": "boolean",
+				"role": "state",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.upgradableList",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "JSON List of devices with available updates ",
+					"de": "JSON Liste der Geräte mit verfügbaren Updates",
+					"ru": "ДЖСОН Список устройств с доступными обновлениями",
+					"pt": "J. Lista de dispositivos com atualizações disponíveis",
+					"nl": "JSON List van apparatuur met beschikbare updates",
+					"fr": "JSON Liste des appareils avec mises à jour disponibles",
+					"it": "JSON Elenco dei dispositivi con aggiornamenti disponibili",
+					"es": "JSON Lista de dispositivos con actualizaciones disponibles",
+					"pl": "JSON Lista urządzeń korzystających z aktualizacji",
+					"uk": "Сонце Перелік пристроїв з доступними оновленнями",
+					"zh-cn": "附 件 现有最新设备清单"
+				},
+				"type": "array",
+				"role": "json",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.upgradableCount",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Number of devices with available updates ",
+					"de": "Anzahl der Geräte mit verfügbaren Updates",
+					"ru": "Количество устройств с доступными обновлениями",
+					"pt": "Número de dispositivos com atualizações disponíveis",
+					"nl": "Nummer van apparatuur met beschikbare updates",
+					"fr": "Nombre de dispositifs avec mises à jour disponibles",
+					"it": "Numero di dispositivi con aggiornamenti disponibili",
+					"es": "Número de dispositivos con actualizaciones disponibles",
+					"pl": "Liczba urządzeń z dostępną aktualizacją",
+					"uk": "Кількість пристроїв з доступними оновленнями",
+					"zh-cn": "现有更新的装置数目"
+				},
+				"type": "number",
+				"role": "value",
+				"read": true,
+				"write": false
+			},
+			"native": {}
+		},
+		{
+			"_id": "devices.oneDeviceUpdatable",
+			"type": "state",
+			"common": {
+				"name": {
+					"en": "Is one device updatable",
+					"de": "Ist ein Gerät aufnehmbar",
+					"ru": "Одно устройство обновляется",
+					"pt": "É um dispositivo updatable",
+					"nl": "Is een apparaat updat",
+					"fr": "Est-ce qu'un appareil est indéfectible",
+					"it": "È un dispositivo updatable",
+					"es": "Es un dispositivo actualizado",
+					"pl": "Jest to jedno urządzenie updatable",
+					"uk": "Є одним пристроєм",
+					"zh-cn": "一台装置"
+				},
+				"type": "boolean",
+				"role": "state",
+				"read": true,
+				"write": false,
+				"def": false
+			},
+			"native": {}
+		}
+	]
 }
