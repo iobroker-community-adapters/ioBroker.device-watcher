@@ -30,14 +30,14 @@ staleLabel: wontfix
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
   This issue has been automatically marked as stale because it has not had
-  recent activity. It will be closed if no further activity occurs within the next 7 days.
+  recent activity. It will be closed if no further activity occurs within the next 30 days.
   Please check if the issue is still relevant in the most current version of the adapter
   and tell us. Also check that all relevant details, logs and reproduction steps
   are included and update them if needed.
   Thank you for your contributions.
 
   Dieses Problem wurde automatisch als veraltet markiert, da es in letzter Zeit keine Aktivitäten gab.
-  Es wird geschlossen, wenn nicht innerhalb der nächsten 7 Tage weitere Aktivitäten stattfinden.
+  Es wird geschlossen, wenn nicht innerhalb der nächsten 30 Tage weitere Aktivitäten stattfinden.
   Bitte überprüft, ob das Problem auch in der aktuellsten Version des Adapters noch relevant ist,
   und teilt uns dies mit. Überprüft auch, ob alle relevanten Details, Logs und Reproduktionsschritte
   enthalten sind bzw. aktualisiert diese.
