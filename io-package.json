@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.1",
+		"version": "2.9.2",
 		"news": {
+			"2.9.2": {
+				"en": "Fixed: Instance name in schedule notifications for faulty instances\nFixed: Ignore null values in update datapoints of devices\nUpdated: Dependencies",
+				"de": "Behoben: Instancenamen in Schedule Benachrichtigungen für Fehlerhafte Instanzen\nBehoben: Nullwerte in Update-Datenpunkten von Geräten ignorieren\nAktualisiert: Abhängigkeiten",
+				"ru": "Исправлено: Наименование Instance в расписании уведомлений для неисправных инстанций\nИсправлено: Игнорировать значения null в обновлении точек данных устройств\nОбновлено: зависимости",
+				"pt": "Corrigido: Nome da instância em notificações de horário para casos defeituosos\nCorrigido: Ignorar valores nulos em datapoints de atualização de dispositivos\nAtualizado: Dependências",
+				"nl": "Vertaling:\nIgnore noll waarden in updategegevens van apparaten\nOpgepast",
+				"fr": "Correction : Nom d'instance dans les notifications horaires pour les cas défectueux\nFixed: Ignore les valeurs nulles dans les points de données de mise à jour des dispositifs\nActualisé : dépenses",
+				"it": "Risolto: nome dell'istanza nelle notifiche di pianificazione per istanze difettose\nRisolto: ignorare i valori null nell'aggiornamento dei datapoint dei dispositivi\nAggiornato: Dipendenze",
+				"es": "Fijo: Nombre de la instalación en notificaciones programadas para casos defectuosos\nFijo: Ignorar los valores nulos en los puntos de datos actualizados de los dispositivos\nActualizado: Dependencias",
+				"pl": "Fixed: Instance in schedule notifications for faulty instances (ang.)\nFix: Ignore null value in updated datapoints (ang.)\nZastrzeżenie: Zależność",
+				"uk": "Виправлено: Ім'я користувача в розкладі повідомлень для несправних екземплярів\nВиправлено: значення Ignore null в оновленні точок даних пристроїв\nОновлено: Залежності",
+				"zh-cn": "固定:在通知过失事件时的名称\nFixed: Ignore在更新装置数据点时丧失价值\n更新:属地"
+			},
 			"2.9.1": {
 				"en": "Removed: Function for error handling (not neccessary)",
 				"de": "Entfernt: Funktion zur Fehlerbehandlung (nicht erforderlich)",
@@ -80,19 +93,6 @@
 				"pl": "Fixed: Don't handle id's (ang.)\nAdded: Possibility for the user to select the global deactivation time",
 				"uk": "Виправлено: Не робіть id's, які закінчуються повною поверхнею\nДодано: Можливість вибору глобального часу деактивації екземплярів",
 				"zh-cn": "九. 固定:捐税处理停止完全停战的叛国行为\n增 编:用户可以选择全球启动时间,以选择发生的情况"
-			},
-			"2.8.1": {
-				"en": "Added: Possibility for the user to select the global error time for instances",
-				"de": "Hinzugefügt: Möglichkeit der Auswahl der globalen Fehlerzeit für Instanzen durch den Benutzer",
-				"ru": "Добавлена: Возможность для пользователя выбрать глобальное время ошибки для инстанций",
-				"pt": "Adicionado: Possibilidade para o usuário selecionar o tempo de erro global para instâncias",
-				"nl": "Toegevoegd voor de gebruiker om de wereldwijde fouten uit te kiezen voor instituut",
-				"fr": "Ajouté: Possibilité pour l'utilisateur de sélectionner le temps d'erreur global pour les instances",
-				"it": "Aggiunto: Possibilità per l'utente di selezionare il tempo di errore globale per le istanze",
-				"es": "Añadido: Posibilidad para que el usuario seleccione el tiempo de error global para los casos",
-				"pl": "Added: Possibility for the user to select the global error time for instances",
-				"uk": "Додано: Можливість вибору часу глобальної помилки для екземплярів",
-				"zh-cn": "增加:用户选择全球错误时间的可能性"
 			}
 		},
 		"titleLang": {
