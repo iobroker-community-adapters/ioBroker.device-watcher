@@ -189,6 +189,13 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: Instance name in schedule notifications for faulty instances
+-   (ciddi89) Fixed: Ignore null values in update datapoints of devices
+-   (ciddi89) Updated: Dependencies
+
 ### 2.9.1 (2023-04-27)
 
 -   (ciddi89) Removed: Function for error handling (not neccessary)

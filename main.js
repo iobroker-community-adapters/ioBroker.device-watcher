@@ -1604,10 +1604,12 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				break;
 			default:
-				if (deviceUpdateSelector) {
-					isUpgradable = true;
-				} else if (!deviceUpdateSelector) {
-					isUpgradable = false;
+				if (deviceUpdateSelector !== null && typeof deviceUpdateSelector === 'boolean') {
+					if (deviceUpdateSelector) {
+						isUpgradable = true;
+					} else if (!deviceUpdateSelector) {
+						isUpgradable = false;
+					}
 				}
 		}
 
