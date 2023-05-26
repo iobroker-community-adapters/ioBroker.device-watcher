@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Dropped: Node v14.x support and added: Node v20.x support
+
 ### 2.9.2 (2023-05-19)
 
 -   (ciddi89) Fixed: Instance name in schedule notifications for faulty instances
