@@ -541,7 +541,7 @@ class DeviceWatcher extends utils.Adapter {
 								deviceData.SignalStrength = contactData[2];
 							}
 							if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-								if (deviceData.instanceDeviceConnectionDP !== undefined) {
+								if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
 									// check if the generally deviceData connected state is for a while true
 									if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
 										await this.sendStateNotifications('onlineStateDevice', device);
