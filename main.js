@@ -1425,7 +1425,7 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						}
 					} else {
-						if (deviceUnreachState === 0 && deviceTimeSelector) {
+						if ((!deviceUnreachState || deviceUnreachState === 0) && deviceTimeSelector) {
 							lastContactString = await this.getLastContact(deviceTimeSelector.lc);
 						} else {
 							if (deviceTimeSelector) lastContactString = await this.getLastContact(deviceTimeSelector.ts);
