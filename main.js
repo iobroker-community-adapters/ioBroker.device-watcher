@@ -1482,6 +1482,7 @@ class DeviceWatcher extends utils.Adapter {
 					case 'deconz':
 					case 'shelly':
 					case 'sonoff':
+					case 'tradfri':
 					case 'unifi':
 					case 'zigbee':
 					case 'zigbee2MQTT':
