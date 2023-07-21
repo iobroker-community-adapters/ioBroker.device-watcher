@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.3 (2023-07-21)
 
 -   (ciddi89) Dropped: Node v14.x support and added: Node v20.x support
 -   (ciddi89) Fixed: last seen of Ping devices

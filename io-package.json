@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.2",
+		"version": "2.9.3",
 		"news": {
+			"2.9.3": {
+				"en": "Dropped: Node v14.x support and added: Node v20.x support\nFixed: last seen of Ping devices\nFixed: Connection messages of devices without instance connection datapoint\nFixed: Data & Lists of instances wasn't refreshed correctly\nFixed: Tradfri state alive must be false for device offline state",
+				"de": "Dropped: Node v14.x Unterstützung und hinzugefügt: Node v20.x Unterstützung\nFix: zuletzt gesehen von Ping-Geräten\nFix: Verbindungsnachrichten von Geräten ohne Instanz-Verbindungsdatenpunkt\nFix: Daten & Instanzlisten wurden nicht korrekt aktualisiert\nFix: Tradfri der Datenpunkt alive muss für den Offlinezustand eines Gerätes false sein",
+				"ru": "Dropped: Поддержка Node v14.x и добавил: Поддержка Node v20.x\nИсправлено: последний раз видели Ping устройств\nИсправлено: Соединение сообщений устройств без контактной точки\nИсправлено: Данные и списки инстанций не были обновлены правильно\nИсправлено: состояние Tradfri живое должно быть ложным для состояния устройства offline",
+				"pt": "Dropped: Node v14.x suporte e adicionado: Suporte de Node v20.x\nFixo: visto pela última vez de dispositivos Ping\nCorrigido: Mensagens de conexão de dispositivos sem datapoint de conexão de instância\nCorrigido: Dados e listas de instâncias não foram atualizados corretamente\nCorrigido: Estado Tradfri vivo deve ser falso para o estado off-line do dispositivo",
+				"nl": "Node v14.x steun en toegevoegd: Node v20\n_\nVerbindingsberichten van apparatuur zonder instantie datapoint\nVertaling:\nVertaling:",
+				"fr": "Dropped: Node v14.x support et ajouté: Node v20.x support\nCorrection : dernière vue des appareils Ping\nCorrection : Messages de connexion des périphériques sans point de données de connexion par instance\nCorrection : Les listes des cas n'ont pas été rafraîchies correctement\nCorrection : l'état de Tradfri vivant doit être faux pour l'état hors ligne",
+				"it": "Dropped: Node v14.x supporto e aggiunto: Supporto Node v20.x\nFisso: ultimo visto di dispositivi Ping\nRisolto: Messaggi di connessione di dispositivi senza datapoint di connessione di istanza\nRisolto: i dati e le liste delle istanze non sono stati aggiornati correttamente\nFisso: Tradfri stato vivo deve essere falso per lo stato offline del dispositivo",
+				"es": "Suprimido: soporte Nodo v14.x y añadido: Soporte Node v20.x\nFijación: última vista de dispositivos Ping\nFijo: mensajes de conexión de dispositivos sin punto de datos de conexión de instancia\nFijo: Datos \" Listas de casos no se refrescó correctamente\nFijo: El estado de Tradfri vivo debe ser falso para el estado fuera de línea del dispositivo",
+				"pl": "Przewodnik: wsparcie i dodanie. Node v20x (ang.)\nFixed: ostatni raz widziany z urządzenia Ping\nFixe: Powiązane wiadomości urządzeń bez użycia danych\nFixed: Data & Lists nie został odświeżony\nFixed: żywy stan Tradfri jest fałszywy dla ubezpieczenia",
+				"uk": "Dropped: Node v14.x підтримка і додано: Підтримка Node v20.x\nВиправлено: Останній бачив Ping пристроїв\nВиправлено: З'єднання повідомлень пристроїв без точки з'єднання\nВиправлено: Дані та списки екземплярів не освіжали правильно\nВиправлено: Tradfri держава живий повинен бути помилковим для пристрою автономний стан",
+				"zh-cn": "增 编: 无de v20.x 支持\nFixed:最后可见的装置\n固定:无线数据识别装置的识别信息\n固定:案例的数据和清单正确地予以驳斥。\n固定:Tdfri State的活活性必须为线性州的装置作假"
+			},
 			"2.9.2": {
 				"en": "Fixed: Instance name in schedule notifications for faulty instances\nFixed: Ignore null values in update datapoints of devices\nUpdated: Dependencies",
 				"de": "Behoben: Instancenamen in Schedule Benachrichtigungen für Fehlerhafte Instanzen\nBehoben: Nullwerte in Update-Datenpunkten von Geräten ignorieren\nAktualisiert: Abhängigkeiten",
@@ -80,19 +93,6 @@
 				"pl": "Fixed: Multiple push messages when restarting a program #170(https:/github.com/ciddi89/ioBroker.device-watcher/issues/170) (ang.)",
 				"uk": "Виправлено: Кілька поштових повідомлень при перезапускі екземпляра [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
 				"zh-cn": "九. 固定:在重新树立一个例子(http://github.com/ciddi89/ioBroker.device-watcher/issues/170)时,多人传信息。"
-			},
-			"2.8.2": {
-				"en": "Fixed: Don't handle id's which ends with fullstop\nAdded: Possibility for the user to select the global deactivation time for instances",
-				"de": "Behoben: Behandle nicht id's, die mit einem Punkt enden\nHinzugefügt: Möglichkeit für den Benutzer, die globale Deaktivierungszeit für Instanzen selbst zu wählen",
-				"ru": "Исправлено: Не обрабатывайте id's который заканчивается с fullstop\nДобавлена: Возможность для пользователя выбрать глобальное время деактивации для инстанций",
-				"pt": "Corrigido: Não manuseie id's que termina com fullstop\nAdicionado: Possibilidade para o usuário selecionar o tempo de desativação global para instâncias",
-				"nl": "Niet omgaan met ID's die eindigen met volledige stop\nToegevoegd, mogelijk voor de gebruiker om de wereldwijde deactiveringstijd te selecteren voor bijvoorbeeld",
-				"fr": "Fixé: Ne manipule pas l'id qui se termine avec le haut\nAjouté: Possibilité pour l'utilisateur de sélectionner le temps de désactivation global pour les instances",
-				"it": "Fisso: Non maneggiare id che termina con fullstop\nAggiunto: Possibilità per l'utente di selezionare il tempo di disattivazione globale per le istanze",
-				"es": "Arreglado: No maneje id's que termina con fullstop\nAñadido: Posibilidad para que el usuario seleccione el tiempo de desactivación global para los casos",
-				"pl": "Fixed: Don't handle id's (ang.)\nAdded: Possibility for the user to select the global deactivation time",
-				"uk": "Виправлено: Не робіть id's, які закінчуються повною поверхнею\nДодано: Можливість вибору глобального часу деактивації екземплярів",
-				"zh-cn": "九. 固定:捐税处理停止完全停战的叛国行为\n增 编:用户可以选择全球启动时间,以选择发生的情况"
 			}
 		},
 		"titleLang": {
