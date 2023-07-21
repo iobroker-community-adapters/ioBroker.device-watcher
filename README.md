@@ -196,6 +196,7 @@ It's possible to select:
 -   (ciddi89) Fixed: last seen of Ping devices
 -   (ciddi89) Fixed: Connection messages of devices without instance connection datapoint
 -   (ciddi89) Fixed: Data & Lists of instances wasn't refreshed correctly
+-   (ciddi89) Fixed: Tradfri state alive must be false for device offline state
 
 ### 2.9.2 (2023-05-19)
 
