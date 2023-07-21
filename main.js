@@ -412,7 +412,7 @@ class DeviceWatcher extends utils.Adapter {
 								instanceData.isAlive = instanceStatusRaw[0];
 								instanceData.isHealthy = instanceStatusRaw[1];
 								instanceData.status = instanceStatusRaw[2];
-
+								instanceData.checkIsRunning = false;
 								if (oldIsHealthyValue === instanceData.isHealthy) continue;
 								// send message when instance was deactivated
 								if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
@@ -424,8 +424,6 @@ class DeviceWatcher extends utils.Adapter {
 									if (this.blacklistInstancesNotify.includes(instanceID)) continue;
 									await this.sendStateNotifications('errorInstance', instanceID);
 								}
-
-								instanceData.checkIsRunning = false;
 							}
 							break;
 					}
@@ -2248,7 +2246,6 @@ class DeviceWatcher extends utils.Adapter {
 		let daemonIsNotAlive;
 		let instanceDeactivationTime = (this.config.offlineTimeInstances * 1000) / 2;
 		let instanceErrorTime = (this.config.errorTimeInstances * 1000) / 2;
-
 		switch (instanceMode) {
 			case 'schedule':
 				scheduleIsAlive = await this.checkScheduleisHealty(instanceID, scheduleTime);
@@ -2267,9 +2264,7 @@ class DeviceWatcher extends utils.Adapter {
 					instanceErrorTime = this.userTimeInstancesList.get(instanceID).errorTime;
 					instanceErrorTime = (instanceErrorTime * 1000) / 2; // calculate sec to ms and divide into two
 				}
-
 				daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
-
 				if (daemonIsAlive[0]) {
 					if (daemonIsAlive[1]) {
 						isAlive = Boolean(daemonIsAlive[0]);
