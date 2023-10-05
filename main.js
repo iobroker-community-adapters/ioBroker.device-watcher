@@ -1454,7 +1454,8 @@ class DeviceWatcher extends utils.Adapter {
 					case 'proxmox':
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
-								if (linkQuality !== ' - ') deviceState = 'Offline'; //set online state to offline
+								deviceState = 'Offline'; //set online state to offline
+								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
 							}
 						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
