@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.4 (2023-10-16)
 
 -   (ciddi89) Added: Fallback for HmIp-eTRV-2 batterie devices [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)
 -   (@mango1402) Fixed: Proxmox VM/CT online status [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)

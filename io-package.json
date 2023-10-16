@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.3",
+		"version": "2.9.4",
 		"news": {
+			"2.9.4": {
+				"en": "Added: Fallback for HmIp-eTRV-2 batterie devices [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Fixed: Proxmox VM/CT online status [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nUpdated: Dependencies",
+				"de": "Hinzugefügt: Fallback für HmIp-eTRV-2 Batterie-Geräte [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Behoben: Proxmox VM/CT Online-Status [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nAktualisiert: Abhängigkeiten",
+				"ru": "Добавлено: Падение для батареек HmIp-eTRV-2 [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Исправлено: Proxmox VM/CT онлайн статус [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nОбновлено: зависимости",
+				"pt": "Adicionado: Fallback for HmIp-eTRV-2 batterie devices [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Corrigido: status online Proxmox VM/CT [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nAtualizado: Dependências",
+				"nl": "Vertaling:\n (@mango1402) Quality over Quantity Releases Vertaling:\nOpgepast",
+				"fr": "Ajouté: Fallback for HmIp-eTRV-2 batterie devices [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Correction : Proxmox VM/CT statut en ligne [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nActualisé : dépenses",
+				"it": "Aggiunto: Fallback for HmIp-eTRV-2 batterie [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Fisso: Proxmox VM/CT stato online [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nAggiornato: Dipendenze",
+				"es": "Añadido: Fallback for HmIp-eTRV-2 batterie devices [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Arreglado: Proxmox VM/CT online status [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nActualizado: Dependencias",
+				"pl": "Added: Fallback for HmIp-eTRV-2 batterie devices #218(https:/github.com/ciddi89/ioBroker.device-watcher/issues/218 (ang.)\n(@mango1402) Proxmox VM/CT online status #241(https:/github.com/ciddi89/ioBroker.device-watcher/issues/241) (ang.)\nZastrzeżenie: Zależność",
+				"uk": "Додано: Fallback для пристроїв HmIp-eTRV-2 [#218](https://github.com/ciddi89/ioBroker.device-watcher/products/218)\n(@mango1402) Виправлено: Proxmox VM/CT онлайн статус [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nОновлено: Залежності",
+				"zh-cn": "增 编:HmIp-eTRV-2电池装置的Faback[#218](http://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) 固定:Proxmox VM/CT在线地位[第241号](http://github.com/ciddi89/ioBroker.device-watcher/issues/241)\n更新:属地"
+			},
 			"2.9.3": {
 				"en": "Dropped: Node v14.x support and added: Node v20.x support\nFixed: last seen of Ping devices\nFixed: Connection messages of devices without instance connection datapoint\nFixed: Data & Lists of instances wasn't refreshed correctly\nFixed: Tradfri state alive must be false for device offline state",
 				"de": "Dropped: Node v14.x Unterstützung und hinzugefügt: Node v20.x Unterstützung\nFix: zuletzt gesehen von Ping-Geräten\nFix: Verbindungsnachrichten von Geräten ohne Instanz-Verbindungsdatenpunkt\nFix: Daten & Instanzlisten wurden nicht korrekt aktualisiert\nFix: Tradfri der Datenpunkt alive muss für den Offlinezustand eines Gerätes false sein",
@@ -80,19 +93,6 @@
 				"pl": "Fixed: Functions for example full new #170(https:/github.com/ciddi89/ioBroker,device-watcher/issues/170) (ang.)\nAdded: wiadomość Popup, gdy instancja nie jest uruchomiona, a użytkownik próbuje wybrać urządzenie/instance in the settings table #170(https:/github.com/ciddi89/ioBrokerdevice-watcher/issues/170)",
 				"uk": "Виправлено: Функції статусу екземпляра повністю оновлено [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nДодано: Поповнення повідомлення, коли екземпляр не працює, і користувач намагається вибрати пристрій/інстанцію в таблицях налаштувань [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
 				"zh-cn": "固定:举例身份功能完全延长[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)\n添加:当事没有运行时,Popup讯息和用户在表格[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)中选择一种装置/装置。"
-			},
-			"2.8.3": {
-				"en": "Fixed: Multiple push messages when restarting an instance ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))",
-				"de": "Behoben: Mehrere Push-Nachrichten beim Neustart einer Instanz [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"ru": "Исправлено: Несколько push-сообщений при перезагрузке экземпляра [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"pt": "Corrigido: Múltiplas mensagens de push ao reiniciar uma instância [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"nl": "Meerdere persberichten als het herstarten van een instance 70170:",
-				"fr": "Correction : Messages multiples pour le redémarrage d ' une instance [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"it": "Risolto: Messaggi push multipli al riavvio di un'istanza [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"es": "Corregido: Múltiples mensajes de empuje al reiniciar una instancia [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"pl": "Fixed: Multiple push messages when restarting a program #170(https:/github.com/ciddi89/ioBroker.device-watcher/issues/170) (ang.)",
-				"uk": "Виправлено: Кілька поштових повідомлень при перезапускі екземпляра [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"zh-cn": "九. 固定:在重新树立一个例子(http://github.com/ciddi89/ioBroker.device-watcher/issues/170)时,多人传信息。"
 			}
 		},
 		"titleLang": {
