@@ -936,6 +936,10 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceLowBatState === undefined) {
 						isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat2;
 						deviceLowBatState = await this.getInitValue(isLowBatDP);
+						if (deviceLowBatState === undefined) {
+							isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat3;
+							deviceLowBatState = await this.getInitValue(isLowBatDP);
+						}
 					}
 					if (deviceLowBatState === undefined) isLowBatDP = 'none';
 
@@ -1325,7 +1329,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (deviceLowBatState !== undefined || faultReportState !== undefined) {
 			switch (adapterID) {
 				case 'hmrpc':
-					if (deviceLowBatState === 1 || faultReportState === 6) {
+					if (deviceLowBatState === 1 || deviceLowBatState === true || faultReportState === 6) {
 						lowBatIndicator = true;
 					}
 					break;
