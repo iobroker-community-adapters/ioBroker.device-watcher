@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Added: if available use deviceName datapoint for sonoff devices
+
 ### 2.9.4 (2023-10-16)
 
 -   (ciddi89) Added: Fallback for HmIp-eTRV-2 batterie devices [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)
