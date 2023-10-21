@@ -1114,14 +1114,14 @@ class DeviceWatcher extends utils.Adapter {
 				case 'loqedSmartLock':
 				case 'viessmann':
 				case 'homekitController':
-					if (shortDeviceObject && typeof shortDeviceObject === 'object') {
+					if (shortDeviceObject && typeof shortDeviceObject === 'object' && shortDeviceObject.common) {
 						deviceName = shortDeviceObject.common.name;
 					}
 					break;
 
 				// Get ID with short short currDeviceString from objectjson (HMiP Devices)
 				case 'hmiP':
-					if (shortshortDeviceObject && typeof shortshortDeviceObject === 'object') {
+					if (shortshortDeviceObject && typeof shortshortDeviceObject === 'object' && shortshortDeviceObject.common) {
 						deviceName = shortshortDeviceObject.common.name;
 					}
 					break;
@@ -1141,7 +1141,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				// Format Device name
 				case 'sureflap':
-					if (deviceObject && typeof deviceObject === 'object') {
+					if (deviceObject && typeof deviceObject === 'object' && deviceObject.common) {
 						deviceName = deviceObject.common.name
 							// @ts-ignore FIXME: fix syntax error
 							.replace(/'/g, '')
@@ -1161,7 +1161,7 @@ class DeviceWatcher extends utils.Adapter {
 				default:
 					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) deviceName = await this.getInitValue(currDeviceString + this.selAdapter[i].id);
 					if (deviceName === null || deviceName === undefined) {
-						if (deviceObject && typeof deviceObject === 'object') {
+						if (deviceObject && typeof deviceObject === 'object' && deviceObject.common) {
 							deviceName = deviceObject.common.name;
 						}
 					}
@@ -2513,6 +2513,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Adattatore e istanze',
 					es: 'Adaptador e instalaciones',
 					pl: 'Adapter and Instances',
+					// @ts-ignore
 					uk: 'Адаптер та інстанції',
 					'zh-cn': '道歉和案',
 				},
@@ -2534,6 +2535,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'JSON Elenco di tutte le istanze',
 					es: 'JSON Lista de todos los casos',
 					pl: 'JSON Lista wszystkich instancji',
+					// @ts-ignore
 					uk: 'Сонце Список всіх екземплярів',
 					'zh-cn': '附 件 所有事例一览表',
 				},
@@ -2557,6 +2559,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Numero di tutte le istanze',
 					es: 'Número de casos',
 					pl: 'Liczba wszystkich instancji',
+					// @ts-ignore
 					uk: 'Кількість всіх екземплярів',
 					'zh-cn': '各类案件数目',
 				},
@@ -2581,6 +2584,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'JSON Elenco di tutte le istanze attive',
 					es: 'JSON Lista de todos los casos activos',
 					pl: 'JSON Lista wszystkich aktywnych instancji',
+					// @ts-ignore
 					uk: 'Сонце Список всіх активних екземплярів',
 					'zh-cn': '附 件 所有积极事件清单',
 				},
@@ -2604,6 +2608,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Numero di tutte le istanze attive',
 					es: 'Número de casos activos',
 					pl: 'Liczba wszystkich czynnych przypadków',
+					// @ts-ignore
 					uk: 'Кількість всіх активних екземплярів',
 					'zh-cn': '所有积极事件的数目',
 				},
@@ -2627,6 +2632,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'JSON Elenco delle istanze disattivate',
 					es: 'JSON Lista de casos desactivados',
 					pl: 'JSON Lista przypadków deaktywowanych',
+					// @ts-ignore
 					uk: 'Сонце Перелік деактивованих екземплярів',
 					'zh-cn': '附 件 被动事例清单',
 				},
@@ -2650,6 +2656,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Numero di istanze disattivate',
 					es: 'Número de casos desactivados',
 					pl: 'Liczba deaktywowanych instancji',
+					// @ts-ignore
 					uk: 'Кількість деактивованих екземплярів',
 					'zh-cn': 'A. 递解事件的数目',
 				},
@@ -2673,6 +2680,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Elenco JSON delle istanze con errore',
 					es: 'JSON lista de casos con error',
 					pl: 'Lista błędów JSON',
+					// @ts-ignore
 					uk: 'JSON список екземплярів з помилкою',
 					'zh-cn': '联合工作组办公室错误事件清单',
 				},
@@ -2696,6 +2704,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Conteggio di istanze con errore',
 					es: 'Cuenta de casos con error',
 					pl: 'Liczba przykładów w przypadku błędów',
+					// @ts-ignore
 					uk: 'Кількість екземплярів з помилкою',
 					'zh-cn': '发生错误的情况',
 				},
@@ -2721,6 +2730,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Elenco di adattatori JSON con aggiornamenti disponibili',
 					es: 'JSON lista de adaptadores con actualizaciones disponibles',
 					pl: 'JSON lista adapterów z dostępnymi aktualizacjami',
+					// @ts-ignore
 					uk: 'JSON список адаптерів з доступними оновленнями',
 					'zh-cn': '附录A',
 				},
@@ -2744,6 +2754,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Numero di adattatori con aggiornamenti disponibili',
 					es: 'Número de adaptadores con actualizaciones disponibles',
 					pl: 'Liczba adapterów z dostępną aktualizacją',
+					// @ts-ignore
 					uk: 'Кількість адаптерів з доступними оновленнями',
 					'zh-cn': '更新的适应者人数',
 				},
@@ -2973,7 +2984,7 @@ class DeviceWatcher extends utils.Adapter {
 		let objectData;
 		let list = '';
 		let message = '';
-		const setMessage = async (message) => {
+		const setMessage = async (/** @type {string} */ message) => {
 			this.log.info(`${message}`);
 			await this.setStateAsync('lastNotification', `${message}`, true);
 			await this.sendNotification(`${message}`);
@@ -3672,6 +3683,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'È un dispositivo con offline',
 					es: 'Es un dispositivo sin conexión',
 					pl: 'Jest to jeden urządzenie z offlinem',
+					// @ts-ignore
 					uk: 'Є один пристрій з автономним',
 					'zh-cn': '一处有线装置',
 				},
@@ -3697,6 +3709,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'JSON RAW Elenco di tutti i dispositivi',
 					es: 'JSON RAW Lista de todos los dispositivos',
 					pl: 'JSON RAW Lista wszystkich urządzeń',
+					// @ts-ignore
 					uk: 'ДЖСОН РАВ Список всіх пристроїв',
 					'zh-cn': 'JSONRAW 所有装置清单',
 				},
@@ -3859,6 +3872,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'È un dispositivo con batteria bassa',
 					es: 'Es un dispositivo con batería baja',
 					pl: 'Jest to jeden urządzenie z niską baterią',
+					// @ts-ignore
 					uk: 'Є одним пристроєм з низьких акумуляторів',
 					'zh-cn': '低电池的装置',
 				},
@@ -3907,6 +3921,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Numero di dispositivi con aggiornamenti disponibili',
 					es: 'Número de dispositivos con actualizaciones disponibles',
 					pl: 'Liczba urządzeń z dostępną aktualizacją',
+					// @ts-ignore
 					uk: 'Кількість пристроїв з доступними оновленнями',
 					'zh-cn': '现有更新的装置数目',
 				},
@@ -3931,6 +3946,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'JSON Elenco dei dispositivi con aggiornamenti disponibili',
 					es: 'JSON Lista de dispositivos con actualizaciones disponibles',
 					pl: 'JSON Lista urządzeń korzystających z aktualizacji',
+					// @ts-ignore
 					uk: 'Сонце Перелік пристроїв з доступними оновленнями',
 					'zh-cn': '附 件 现有最新设备清单',
 				},
@@ -3955,6 +3971,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'È un dispositivo updatable',
 					es: 'Es un dispositivo actualizado',
 					pl: 'Jest to jedno urządzenie updatable',
+					// @ts-ignore
 					uk: 'Є одним пристроєм',
 					'zh-cn': '一台装置',
 				},
@@ -4133,6 +4150,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Elenchi HTML per adattatore e istanze',
 					es: 'Listas HTML para adaptador y casos',
 					pl: 'Listy HTML dla adaptera i instancji',
+					// @ts-ignore
 					uk: 'Списки HTML для адаптерів та екземплярів',
 					'zh-cn': 'HTML名单',
 				},
@@ -4152,6 +4170,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'HTML Elenco di tutte le istanze',
 					es: 'HTML Lista de todos los casos',
 					pl: 'HTML Lista wszystkich instancji',
+					// @ts-ignore
 					uk: 'Українська Список всіх екземплярів',
 					'zh-cn': 'HTML 所有事例一览表',
 				},
@@ -4176,6 +4195,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'HTML Elenco di tutte le istanze attive',
 					es: 'HTML Lista de todos los casos activos',
 					pl: 'HTML Lista wszystkich aktywnych instancji',
+					// @ts-ignore
 					uk: 'Українська Список всіх активних екземплярів',
 					'zh-cn': 'HTML 所有积极事件清单',
 				},
@@ -4200,6 +4220,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'HTML Elenco di tutte le istanze disattivate',
 					es: 'HTML Lista de todos los casos desactivados',
 					pl: 'HTML Lista wszystkich przypadków deaktywowanych',
+					// @ts-ignore
 					uk: 'Українська Список всіх деактивованих екземплярів',
 					'zh-cn': 'HTML 所有违犯事件清单',
 				},
@@ -4224,6 +4245,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'HTML Elenco delle istanze con errore',
 					es: 'HTML Lista de casos con error',
 					pl: 'HTML Lista przykładów z błądem',
+					// @ts-ignore
 					uk: 'Українська Список екземплярів з помилкою',
 					'zh-cn': 'HTML 出现错误的情况清单',
 				},
@@ -4247,6 +4269,7 @@ class DeviceWatcher extends utils.Adapter {
 					it: 'Elenco HTML degli adattatori con aggiornamenti disponibili',
 					es: 'Lista HTML de adaptadores con actualizaciones disponibles',
 					pl: 'Lista adapterów HTML z dostępnymi aktualizacjami',
+					// @ts-ignore
 					uk: 'HTML список адаптерів з доступними оновленнями',
 					'zh-cn': 'HTML 可供更新的适应者名单',
 				},
