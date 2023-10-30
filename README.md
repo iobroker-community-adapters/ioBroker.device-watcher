@@ -193,6 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Added: if available use deviceName datapoint for sonoff devices
+-   (arteck) Fixed: Changed zwave to zwave2
 
 ### 2.9.4 (2023-10-16)
 
