@@ -415,7 +415,7 @@
 					"hideOnlyControl": false
 				},
 				"checkSendAdapterUpdateMsg": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "checkbox",
 					"sm": 12,
 					"md": 12,
@@ -511,7 +511,7 @@
 					"hideOnlyControl": false
 				},
 				"checkSendInstanceDeactivatedMsg": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "checkbox",
 					"sm": 12,
 					"md": 12,
@@ -607,7 +607,7 @@
 					"hideOnlyControl": false
 				},
 				"checkSendInstanceFailedMsg": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "checkbox",
 					"sm": 12,
 					"md": 12,
@@ -791,7 +791,7 @@
 					"type": "divider"
 				},
 				"checkSendBatteryMsg": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "checkbox",
 					"sm": 12,
 					"md": 12,
@@ -881,7 +881,7 @@
 					"type": "divider"
 				},
 				"checkSendDeviceUpgrade": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "checkbox",
 					"sm": 12,
 					"md": 12,
@@ -973,7 +973,7 @@
 					"hidden": "!data.checkSendBatteryMsg && !data.checkSendBatteryMsgDaily && !data.checkSendOfflineMsgDaily && !data.checkSendOfflineMsg && !data.checkSendDeviceUpgrade && !data.checkSendUpgradeMsgDaily"
 				},
 				"showAdapterNameinMsg": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "checkbox",
 					"sm": 12,
 					"md": 6,
@@ -1063,7 +1063,7 @@
 					"hideOnlyControl": false
 				},
 				"headerJarvis": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Jarvis Notification",
 					"size": 2,
@@ -1095,7 +1095,7 @@
 					"hideOnlyControl": false
 				},
 				"headerLovelace": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Lovelace Notification",
 					"size": 2,
@@ -1127,7 +1127,7 @@
 					"hideOnlyControl": false
 				},
 				"headerMatrix": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Matrix",
 					"size": 2,
@@ -1226,7 +1226,7 @@
 					"hideOnlyControl": false
 				},
 				"headerSignal": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Signal",
 					"size": 2,
@@ -1258,7 +1258,7 @@
 					"hideOnlyControl": false
 				},
 				"headerSynochat": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Synochat",
 					"size": 2,
@@ -1290,7 +1290,7 @@
 					"hideOnlyControl": false
 				},
 				"headerTelegram": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Telegram",
 					"size": 2,
@@ -1332,7 +1332,7 @@
 					"hideOnlyControl": false
 				},
 				"headerWhatsapp": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Whatsapp",
 					"size": 2,
@@ -1370,7 +1370,7 @@
 			"label": "Blacklist",
 			"items": {
 				"_headerBlacklistInstances": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Instances Blacklist",
 					"size": 2,
@@ -1420,7 +1420,7 @@
 					]
 				},
 				"_headerDevices": {
-					"newLine": "true",
+					"newLine": true,
 					"type": "header",
 					"text": "Devices/Services Blacklist",
 					"size": 2
