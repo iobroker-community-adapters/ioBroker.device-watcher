@@ -21,6 +21,9 @@
     "type": "git",
     "url": "https://github.com/ciddi89/ioBroker.device-watcher"
   },
+  "engines": {
+    "node": ">= 16"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.4"
   },
