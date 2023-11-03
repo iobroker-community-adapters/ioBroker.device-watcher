@@ -1104,6 +1104,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			switch (this.selAdapter[i].adapterID) {
 				case 'fullybrowser':
+				case 'fullybrowserV3':
 					deviceName = (await this.getInitValue(currDeviceString + this.selAdapter[i].id)) + ' ' + (await this.getInitValue(currDeviceString + this.selAdapter[i].id2));
 					break;
 
