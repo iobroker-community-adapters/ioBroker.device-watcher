@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.4",
+		"version": "2.9.5",
 		"news": {
+			"2.9.5": {
+				"en": "Added: if available use deviceName datapoint for sonoff devices\nFixed: Changed zwave to zwave2\nFixed: minor bugfixes\nAdded: FullyBrowser > v3",
+				"de": "Hinzugefügt: Wenn verfügbar benutze deviceName Datenpunkt für Sonoff Geräte\nBehoben: Zwave zu zwave2 geändert\nBehoben: kleinere Bugfixes\nHinzugefügt: FullyBrowser > V3",
+				"ru": "Добавлена: если доступно использование устройстваName datapoint для устройств sonoff\nИсправлено: Изменено zwave в zwave2\nИсправлено: незначительные багфиксы\nДобавлено: FullyBrowser > В3",
+				"pt": "Adicionado: se disponível use deviceName datapoint for sonoff devices\nCorrigido: Alterado zwave para zwave2\nCorrigido: pequenos bugfixes\nAdicionado: FullyBrowser > v3",
+				"nl": "Toegegeven:\nQuality over Quantity (QoQ) Releases Vertaling:\nQuality over Quantity (QoQ) Releases Vertaling:\nVertaling: Vertaling:",
+				"fr": "Ajouté: si le dispositif d'utilisation disponibleNom datapoint pour les appareils à sonoff\nFixé: Zwave changée en zwave2\nCorrection : corrections mineures\nAjouté: FullyBrowser phy v3",
+				"it": "Aggiunto: if available use deviceName datapoint for sonoff devices\nFisso: Cambiato zwave a zwave2\nRisolto: bugfix minori\nAggiunto: FullyBrowser > V",
+				"es": "Añadido: si está disponible el punto de datos del dispositivoName para dispositivos sonoff\nFijo: Cambio de onda de zwave2\nFijación: bugfixes menores\nAñadido: FullyBrowser v3",
+				"pl": "Addd: jeśli urządzenie użyte do transmisji danych\nFixed: Changed zwave to zwave2 (ang.)\nFixed: minor bugfixes\nAdded: FullyBrowser> (ang.). v3",
+				"uk": "Додано: якщо доступний пристрій useName для пристроїв sonoff\nВиправлено: Змінено zwave to zwave2\nВиправлено: незначні виправлення\nДоданий: FullyBrowser > в3",
+				"zh-cn": "增删:如果能用装置Name数据点用于子壳装置\n九. 固定:对兹瓦韦的改变\n固定:小额配件\n增 编:全页 评 注"
+			},
 			"2.9.4": {
 				"en": "Added: Fallback for HmIp-eTRV-2 batterie devices [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Fixed: Proxmox VM/CT online status [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nUpdated: Dependencies",
 				"de": "Hinzugefügt: Fallback für HmIp-eTRV-2 Batterie-Geräte [#218](https://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) Behoben: Proxmox VM/CT Online-Status [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nAktualisiert: Abhängigkeiten",
@@ -80,19 +93,6 @@
 				"pl": "Error, że instancje nie mogą być dodane do czarnej listy z powodu popupu #172(https:/github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: Wiadomości te zostały wysłane, gdy instancja przeskakuje z Enabled do Disabled #173 (https:/github.com/ciddi89/ioBroker.device-watcher/issues/173)",
 				"uk": "Виправлено: помилка, що екземпляри не можуть бути додані в чорний список через повідомлення електронної пошти [#172] (https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nВиправлено: Що повідомлення було відправлено, коли екземпляр коротко стрибнув з Увімкненого і назад до Увімкненого [#173] (https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
 				"zh-cn": "固定:由于人口信息[第172号](http://github.com/ciddi89/ioBroker.device-watcher/issues/172)而无法增加黑名单。\n固定: 这一信息是在以下情况下发出的:从便携起降到残疾人,回到了可居住的[第173号](http://github.com/ciddi89/ioBroker.device-watcher/issues/173)。"
-			},
-			"2.8.4": {
-				"en": "Fixed: Functions for instance status completely renewed ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))\nAdded: Popup message when the instance is not running and the user tries to select a device/instance in the settings tables ([#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170))",
-				"de": "Behoben: Funktionen für Instanzen Status vollständig erneuert [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nHinzugefügt: Popup-Nachricht, wenn die Instanz nicht läuft und der Benutzer versucht ein Gerät/Instance in den Einstellungstabellen auszuwählen [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"ru": "Исправлено: Функции для статуса экземпляра полностью обновлены [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nДобавлена: Всплывающее сообщение, когда экземпляр не работает, и пользователь пытается выбрать устройство/инстанция в таблицах настроек [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"pt": "Corrigido: Funções por exemplo, estado completamente renovado [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAdicionado: Popup message when the instance is not running and the user try to select a device/instance in the settings table [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"nl": "Functies voor instance-status volledig hernieuwd 70) (htub,com/ciddi89/ioBroker\nVertaling:",
-				"fr": "Fixed: Functions for instance status completely renewed [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAjouté : Message popup lorsque l ' instance ne fonctionne pas et que l ' utilisateur essaie de sélectionner un dispositif/instance dans les tableaux de configuration [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"it": "Fisso: Funzioni per esempio stato completamente rinnovato [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAggiunto: messaggio popup quando l'istanza non è in esecuzione e l'utente cerca di selezionare un dispositivo/instanza nelle tabelle delle impostazioni [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"es": "Fijo: Funciones para el estado de la instancia completamente renovadas [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nAñadido: Mensaje de Popup cuando la instancia no se ejecuta y el usuario intenta seleccionar un dispositivo/instancia en los cuadros de configuración [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"pl": "Fixed: Functions for example full new #170(https:/github.com/ciddi89/ioBroker,device-watcher/issues/170) (ang.)\nAdded: wiadomość Popup, gdy instancja nie jest uruchomiona, a użytkownik próbuje wybrać urządzenie/instance in the settings table #170(https:/github.com/ciddi89/ioBrokerdevice-watcher/issues/170)",
-				"uk": "Виправлено: Функції статусу екземпляра повністю оновлено [#170] (https://github.com/ciddi89/ioBroker.device-watcher/issues/170)\nДодано: Поповнення повідомлення, коли екземпляр не працює, і користувач намагається вибрати пристрій/інстанцію в таблицях налаштувань [#170](https://github.com/ciddi89/ioBroker.device-watcher/issues/170)",
-				"zh-cn": "固定:举例身份功能完全延长[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)\n添加:当事没有运行时,Popup讯息和用户在表格[第170](http://github.com/ciddi89/ioBroker.device-watcher/issues/170)中选择一种装置/装置。"
 			}
 		},
 		"titleLang": {
