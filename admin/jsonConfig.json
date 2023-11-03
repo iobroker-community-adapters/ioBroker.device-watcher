@@ -100,6 +100,13 @@
 					"lg": 3,
 					"label": "fullyBrowser"
 				},
+				"fullybrowserV3Devices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "fullyBrowser > v3"
+				},
 				"fullyMQTTDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -1815,6 +1822,18 @@
 					"label": "fullyBrowser",
 					"help": "in minutes",
 					"hidden": "!data.fullybrowserDevices",
+					"hideOnlyControl": false
+				},
+				"fullybrowserV3MaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "fullyBrowser > v3",
+					"help": "in minutes",
+					"hidden": "!data.fullybrowserV3Devices",
 					"hideOnlyControl": false
 				},
 				"fullyMQTTMaxMinutes": {
