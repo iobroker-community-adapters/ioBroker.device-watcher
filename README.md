@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: Admin jsonConfig schema
+
 ### 2.9.5 (2023-11-03)
 
 -   (ciddi89) Added: if available use deviceName datapoint for sonoff devices

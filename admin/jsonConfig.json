@@ -443,6 +443,7 @@
 					"hideOnlyControl": false
 				},
 				"_sendIntervallAdapterUpdateDay": {
+					"type": "panel",
 					"newLine": true,
 					"sm": 12,
 					"md": 12,
@@ -490,6 +491,7 @@
 					}
 				},
 				"_sendIntervallAdapterUpdateMsgTime": {
+					"type": "panel",
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
@@ -539,6 +541,7 @@
 					"hideOnlyControl": false
 				},
 				"_sendIntervallInstanceDeactivatedDay": {
+					"type": "panel",
 					"newLine": true,
 					"sm": 12,
 					"md": 12,
@@ -586,6 +589,7 @@
 					}
 				},
 				"_sendIntervallInstanceDeactivatedMsgTime": {
+					"type": "panel",
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
@@ -635,6 +639,7 @@
 					"hideOnlyControl": false
 				},
 				"_sendIntervallFailedInstancesDay": {
+					"type": "panel",
 					"newLine": true,
 					"sm": 12,
 					"md": 12,
@@ -682,6 +687,7 @@
 					}
 				},
 				"_sendIntervallInstanceFailedMsgTime": {
+					"type": "panel",
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
@@ -725,6 +731,7 @@
 					"help": "Get a message with an overview all offline devices/services"
 				},
 				"_sendIntervallOfflineDay": {
+					"type": "panel",
 					"newLine": true,
 					"sm": 12,
 					"md": 12,
@@ -772,6 +779,7 @@
 					}
 				},
 				"_sendIntervallOfflineTime": {
+					"type": "panel",
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
@@ -815,6 +823,7 @@
 					"help": "Get a regular message with an overview all low battery devices"
 				},
 				"_chooseDay": {
+					"type": "panel",
 					"newLine": true,
 					"sm": 12,
 					"md": 12,
@@ -862,6 +871,7 @@
 					}
 				},
 				"_checkSendBatteryTime": {
+					"type": "panel",
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
@@ -905,6 +915,7 @@
 					"help": "Get a message with an overview all devices with update"
 				},
 				"_sendIntervallUpgradeDay": {
+					"type": "panel",
 					"newLine": true,
 					"sm": 12,
 					"md": 12,
@@ -952,6 +963,7 @@
 					}
 				},
 				"_sendIntervallUpgradeTime": {
+					"type": "panel",
 					"sm": 12,
 					"md": 12,
 					"lg": 6,
@@ -1040,7 +1052,6 @@
 					"type": "instance",
 					"adapter": "email",
 					"all": false,
-					"allowDeactivate": true,
 					"sm": 12,
 					"md": 4,
 					"lg": 4,
@@ -1081,7 +1092,6 @@
 					"newLine": true,
 					"type": "instance",
 					"adapter": "jarvis",
-					"allowDeactivate": true,
 					"all": false,
 					"sm": 12,
 					"md": 4,
@@ -1113,7 +1123,6 @@
 					"newLine": true,
 					"type": "instance",
 					"adapter": "lovelace",
-					"allowDeactivate": true,
 					"all": false,
 					"sm": 12,
 					"md": 4,
@@ -1145,7 +1154,6 @@
 					"newLine": true,
 					"type": "instance",
 					"adapter": "matrix-org",
-					"allowDeactivate": true,
 					"all": false,
 					"sm": 12,
 					"md": 4,
@@ -1178,7 +1186,6 @@
 					"type": "instance",
 					"adapter": "pushover",
 					"all": false,
-					"allowDeactivate": true,
 					"sm": 12,
 					"md": 4,
 					"lg": 4,
@@ -1245,7 +1252,6 @@
 					"type": "instance",
 					"adapter": "signal-cmb",
 					"all": false,
-					"allowDeactivate": true,
 					"sm": 12,
 					"md": 4,
 					"lg": 4,
@@ -1276,7 +1282,6 @@
 					"newLine": true,
 					"type": "instance",
 					"adapter": "synochat",
-					"allowDeactivate": true,
 					"all": false,
 					"sm": 12,
 					"md": 4,
@@ -1309,7 +1314,6 @@
 					"type": "instance",
 					"adapter": "telegram",
 					"all": false,
-					"allowDeactivate": true,
 					"sm": 12,
 					"md": 4,
 					"lg": 4,
@@ -1351,7 +1355,6 @@
 					"type": "instance",
 					"adapter": "whatsapp-cmb",
 					"all": false,
-					"allowDeactivate": true,
 					"sm": 12,
 					"md": 4,
 					"lg": 4,
@@ -1386,7 +1389,6 @@
 				},
 				"tableBlacklistInstances": {
 					"type": "table",
-					"nodelete": true,
 					"sm": 12,
 					"md": 12,
 					"lg": 12,
@@ -1406,7 +1408,6 @@
 							"title": "Choose which instances should be excluded",
 							"attr": "instances",
 							"filter": false,
-							"allowAddByFilter": false,
 							"sort": false,
 							"jsonData": "{\"instanceID\":\"${globalData.instanceID}\",\"adapter\":\"${globalData.adapter}\"}",
 							"command": "instancesList",
@@ -1434,7 +1435,6 @@
 				},
 				"tableBlacklist": {
 					"type": "table",
-					"nodelete": true,
 					"sm": 12,
 					"md": 12,
 					"lg": 12,
@@ -1452,7 +1452,6 @@
 							"title": "Choose which devices/services should be excluded",
 							"attr": "devices",
 							"filter": false,
-							"allowAddByFilter": false,
 							"sort": false,
 							"jsonData": "{\"deviceName\":\"${globalData.deviceName}\",\"adapter\":\"${globalData.adapter}\",\"path\":\"${globalData.path}\"}",
 							"command": "devicesList",
@@ -1630,7 +1629,6 @@
 				},
 				"tableTimeInstance": {
 					"type": "table",
-					"nodelete": true,
 					"sm": 12,
 					"md": 12,
 					"lg": 12,
@@ -1650,7 +1648,6 @@
 							"title": "Choose which instances should have a longer downtime",
 							"attr": "instancesTime",
 							"filter": false,
-							"allowAddByFilter": false,
 							"sort": false,
 							"jsonData": "{\"instanceID\":\"${globalData.instanceID}\",\"adapter\":\"${globalData.adapter}\"}",
 							"command": "instancesListTime",
