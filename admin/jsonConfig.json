@@ -359,6 +359,13 @@
 					"lg": 3,
 					"label": "Tradfri"
 				},
+				"tuyaDevices": {
+					"type": "checkbox",
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tuya"
+				},
 				"unifiDevices": {
 					"type": "checkbox",
 					"sm": 6,
@@ -2275,6 +2282,18 @@
 					"label": "Tradfri",
 					"help": "in minutes",
 					"hidden": "!data.tradfriDevices",
+					"hideOnlyControl": false
+				},
+				"tuyaMaxMinutes": {
+					"type": "number",
+					"min": -1,
+					"max": 100000,
+					"sm": 6,
+					"md": 6,
+					"lg": 3,
+					"label": "Tuya",
+					"help": "in minutes",
+					"hidden": "!data.tuyaDevices",
 					"hideOnlyControl": false
 				},
 				"unifiMaxMinutes": {

@@ -297,6 +297,8 @@
 		"tapoMaxMinutes": 300,
 		"tradfriDevices": false,
 		"tradfriMaxMinutes": 0,
+		"tuyaDevices": false,
+		"tuyaMaxMinutes": 0,
 		"unifiDevices": false,
 		"unifiMaxMinutes": 0,
 		"viessmannDevices": false,

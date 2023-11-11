@@ -192,6 +192,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Fixed: Admin jsonConfig schema
+-   (ciddi89) Added: Support for Tuya devices with online state
 
 ### 2.9.5 (2023-11-03)
 
