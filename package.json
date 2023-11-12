@@ -58,10 +58,8 @@
   },
   "main": "main.js",
   "files": [
-    "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
-    "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
+    "admin/",
     "lib/",
-    "www/",
     "io-package.json",
     "LICENSE",
     "main.js"
