@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.5",
+		"version": "2.9.6",
 		"news": {
+			"2.9.6": {
+				"en": "Fixed: Admin jsonConfig schema\nChanged: Admin jsonConfig to json5\nAdded: Support for Tuya devices with online state\nOthers: cleaned up files",
+				"de": "Behoben: Admin jsonConfig Schema\nGeändert: Admin jsonConfig zu json5\nHinzugefügt: Unterstützung für Tuya-Geräte mit Online-Zustand\nAnderes: Dateien aufgeräumt",
+				"ru": "Исправлено: Admin jsonConfig schema\nИзменено: Admin jsonConfig в json5\nДобавлена: Поддержка устройств Tuya с онлайн состоянием\nДругое: очищенные файлы",
+				"pt": "Corrigido: Admin jsonConfig schema\nAlterado: Admin jsonConfig to json5\nAdicionado: Suporte para dispositivos Tuya com estado on-line\nOutros: limpe arquivos",
+				"nl": "Admin jsonConfig schema\nAdministratie JsonConfig aan Json5\nVersterking voor Tuya apparaten met online staat\nVertaling:",
+				"fr": "Correction : Admin jsonConfig schema\nChanged: Admin jsonConfig to json5\nAjouté: Support pour les appareils Tuya avec l'état en ligne\nAutre: nettoyer les fichiers",
+				"it": "Fisso: Schema Admin jsonConfig\nModificato: Admin jsonConfig a json5\nAggiunto: Supporto per dispositivi Tuya con stato online\nAltro: file ripuliti",
+				"es": "Arreglado: Amin jsonConfig schema\nCambios: Admin jsonConfig a json5\nAñadido: Soporte para dispositivos Tuya con estado en línea\nOtros: limpiar archivos",
+				"pl": "Admin jsonConfig schema\nZmiana: Admin jsonConfig to json5\nWstęp: Wsparcie dla urządzeń Tuya z internetowym państwem\nInne: czyste pliki plikowe",
+				"uk": "Виправлено: Admin jsonConfig schema\nЗмінено: Admin jsonConfig to json5\nДодано: Підтримка пристроїв Туя з онлайн-державою\nІнше: очищення файлів",
+				"zh-cn": "Fix: Admin json Config schema\n修改: Admin json Configg to json5\n增 编:在网上国家支持图亚装置\n其他:清洁档案"
+			},
 			"2.9.5": {
 				"en": "Added: if available use deviceName datapoint for sonoff devices\nFixed: Changed zwave to zwave2\nFixed: minor bugfixes\nAdded: FullyBrowser > v3",
 				"de": "Hinzugefügt: Wenn verfügbar benutze deviceName Datenpunkt für Sonoff Geräte\nBehoben: Zwave zu zwave2 geändert\nBehoben: kleinere Bugfixes\nHinzugefügt: FullyBrowser > V3",
@@ -80,19 +93,6 @@
 				"pl": "Na przykładzie uaktywniono: Zdeaktywowane instancje nie były wyświetlane w codziennym wiadomości o deaktywowanych instancjach\nAdded: urządzenia Viessmanna\nPoprawa: Tekst overview",
 				"uk": "Виправлено: Деактивовані екземпляри не відображалися в щоденному повідомленні про деактивовані екземпляри\nДодано: пристрої Viessmann, пристрої Homekit-Controller\nУдосконалення: Текст повідомлення",
 				"zh-cn": "Fixed:Deactiving cases的每日信息未显示有关违犯事件的报道。\n增 编:维斯曼装置、家里克特-Controller装置\n改进: 总讯案文"
-			},
-			"2.8.5": {
-				"en": "Fixed: Error that instances can not be added to the blacklist because of the popup message [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: That messages have been sent when the instance has briefly jumped from Enabled to Disabled and back to Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"de": "Behoben: Fehler, dass Instanzen aufgrund der Popup-Nachricht nicht zur Blacklist hinzugefügt werden können [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nBehoben: Das Meldungen gesendet wurden, wenn die Instanz kurz von Aktiviert auf Deaktiviert und zurück zu Aktiviert gesprungen ist [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"ru": "Исправлено: Ошибка, которую нельзя добавить в черный список из-за всплывающего сообщения [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nИсправлено: Эти сообщения были отправлены, когда экземпляр кратко перепрыгнул из Enabled в Disabled и обратно в Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"pt": "Corrigido: Erro que as instâncias não podem ser adicionadas à lista negra por causa da mensagem pop-up [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nCorrigido: Essas mensagens foram enviadas quando a instância saltou brevemente de Enabled para Disabled e de volta para Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"nl": "Dat kan niet worden toegevoegd aan de blacklist vanwege de popup-bericht\nVertaling: Die berichten zijn verstuurd toen het instituut kort van Enabled naar Disabled en terug naar Enabled 173: jittps, /ciddi89-Brokerdewadet-17",
-				"fr": "Correction : Erreur que les instances ne peuvent pas être ajoutées à la liste noire en raison du message popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nCorrection : Ces messages ont été envoyés lorsque l ' instance a brièvement sauté de Enabled à Disabled et de retour à Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"it": "Risolto: Errore che le istanze non possono essere aggiunte alla lista nera a causa del messaggio popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nRisolto: Tali messaggi sono stati inviati quando l'istanza è saltata brevemente da Enabled a disabilitare e di nuovo a Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"es": "Corregido: Error de que los casos no se pueden agregar a la lista negra debido al mensaje popup [#172](https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nArreglado: Esos mensajes se han enviado cuando el caso ha saltado brevemente de Enabled a Disabled y de regreso a Enabled [#173](https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"pl": "Error, że instancje nie mogą być dodane do czarnej listy z powodu popupu #172(https:/github.com/ciddi89/ioBroker.device-watcher/issues/172)\nFixed: Wiadomości te zostały wysłane, gdy instancja przeskakuje z Enabled do Disabled #173 (https:/github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"uk": "Виправлено: помилка, що екземпляри не можуть бути додані в чорний список через повідомлення електронної пошти [#172] (https://github.com/ciddi89/ioBroker.device-watcher/issues/172)\nВиправлено: Що повідомлення було відправлено, коли екземпляр коротко стрибнув з Увімкненого і назад до Увімкненого [#173] (https://github.com/ciddi89/ioBroker.device-watcher/issues/173)",
-				"zh-cn": "固定:由于人口信息[第172号](http://github.com/ciddi89/ioBroker.device-watcher/issues/172)而无法增加黑名单。\n固定: 这一信息是在以下情况下发出的:从便携起降到残疾人,回到了可居住的[第173号](http://github.com/ciddi89/ioBroker.device-watcher/issues/173)。"
 			}
 		},
 		"titleLang": {
