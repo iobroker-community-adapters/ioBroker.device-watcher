@@ -380,6 +380,13 @@
 					lg: 3,
 					label: 'Viessmann',
 				},
+				wifilightDevices: {
+					type: 'checkbox',
+					sm: 6,
+					md: 6,
+					lg: 3,
+					label: 'Wifilight',
+				},
 				wledDevices: {
 					type: 'checkbox',
 					sm: 6,
@@ -2318,6 +2325,18 @@
 					label: 'Viessmann',
 					help: 'in minutes',
 					hidden: '!data.viessmannDevices',
+					hideOnlyControl: false,
+				},
+				wifilightMaxMinutes: {
+					type: 'number',
+					min: -1,
+					max: 100000,
+					sm: 6,
+					md: 6,
+					lg: 3,
+					label: 'Wifilight',
+					help: 'in minutes',
+					hidden: '!data.wifilightDevices',
 					hideOnlyControl: false,
 				},
 				wledMaxMinutes: {

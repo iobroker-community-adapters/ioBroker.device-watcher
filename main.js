@@ -150,6 +150,7 @@ class DeviceWatcher extends utils.Adapter {
 			tuya: this.config.tuyaDevices,
 			unifi: this.config.unifiDevices,
 			viessmann: this.config.viessmannDevices,
+			wifilight: this.config.wifilightDevices,
 			wled: this.config.wledDevices,
 			yeelight: this.config.yeelightDevices,
 			zigbee: this.config.zigbeeDevices,
@@ -210,6 +211,7 @@ class DeviceWatcher extends utils.Adapter {
 			tuya: this.config.tuyaMaxMinutes,
 			unifi: this.config.unifiMaxMinutes,
 			viessmann: this.config.viessmannMaxMinutes,
+			wifilight: this.config.wifilightMaxMinutes,
 			wled: this.config.wledMaxMinutes,
 			yeelight: this.config.yeelightMaxMinutes,
 			zigbee: this.config.zigbeeMaxMinutes,
@@ -1141,6 +1143,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				//Get ID of foldername
 				case 'tado':
+				case 'wifilight':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
 					break;
 

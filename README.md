@@ -188,6 +188,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Added: Support for Wifilight
+
 ### 2.9.6 (2023-11-12)
 
 -   (ciddi89) Fixed: Admin jsonConfig schema

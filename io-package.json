@@ -303,6 +303,8 @@
 		"unifiMaxMinutes": 0,
 		"viessmannDevices": false,
 		"viessmannMaxMinutes": 0,
+		"wifilightDevices": false,
+		"wifilightMaxMinutes": 0,
 		"wledDevices": false,
 		"wledMaxMinutes": 0,
 		"yeelightDevices": false,
