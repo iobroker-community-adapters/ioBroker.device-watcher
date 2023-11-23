@@ -193,6 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Added: Support for Wifilight
+-   (ciddi89) Fixed: Multiple messages if Sonoff devices reachable [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)
 
 ### 2.9.6 (2023-11-12)
 
