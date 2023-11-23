@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.7 (2023-11-23)
 
 -   (ciddi89) Added: Support for Wifilight
 -   (ciddi89) Fixed: Multiple messages if Sonoff devices reachable [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)
