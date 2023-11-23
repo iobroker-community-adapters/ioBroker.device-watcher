@@ -19,6 +19,7 @@
 **Tests:** </br>
 ![Test and Release](https://github.com/ciddi89/ioBroker.device-watcher/workflows/Test%20and%20Release/badge.svg)
 [![CodeQL](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml/badge.svg)](https://github.com/ciddi89/ioBroker.device-watcher/actions/workflows/codeql.yml)
+[![Known Vulnerabilities](https://snyk.io/test/github/ciddi89/ioBroker.device-watcher/badge.svg)](https://snyk.io/test/github/ciddi89/ioBroker.device-watcher)
 
 ## Sentry
 
