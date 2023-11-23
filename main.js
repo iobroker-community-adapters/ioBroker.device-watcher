@@ -372,7 +372,6 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {ioBroker.State | null | undefined} state
 	 */
 	async onStateChange(id, state) {
-		// Admin JSON for Adapter updates
 		if (state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
 			let batteryData;
@@ -528,30 +527,32 @@ class DeviceWatcher extends utils.Adapter {
 
 						// device unreach
 						case deviceData.UnreachDP:
-							oldStatus = deviceData.Status;
-							deviceData.UnreachState = await this.getInitValue(deviceData.UnreachDP);
-							contactData = await this.getOnlineState(
-								deviceData.timeSelector,
-								deviceData.adapterID,
-								deviceData.UnreachDP,
-								deviceData.SignalStrength,
-								deviceData.UnreachState,
-								deviceData.DeviceStateSelectorDP,
-								deviceData.rssiPeerSelectorDP,
-							);
-							if (contactData !== undefined) {
-								deviceData.LastContact = contactData[0];
-								deviceData.Status = contactData[1];
-								deviceData.SignalStrength = contactData[2];
-							}
-							if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-								if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
-									// check if the generally deviceData connected state is for a while true
-									if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
+							if (deviceData.UnreachState !== state.val) {
+								oldStatus = deviceData.Status;
+								deviceData.UnreachState = state.val;
+								contactData = await this.getOnlineState(
+									deviceData.timeSelector,
+									deviceData.adapterID,
+									deviceData.UnreachDP,
+									deviceData.SignalStrength,
+									deviceData.UnreachState,
+									deviceData.DeviceStateSelectorDP,
+									deviceData.rssiPeerSelectorDP,
+								);
+								if (contactData !== undefined) {
+									deviceData.LastContact = contactData[0];
+									deviceData.Status = contactData[1];
+									deviceData.SignalStrength = contactData[2];
+								}
+								if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
+									if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
+										// check if the generally deviceData connected state is for a while true
+										if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
+											await this.sendStateNotifications('onlineStateDevice', device);
+										}
+									} else {
 										await this.sendStateNotifications('onlineStateDevice', device);
 									}
-								} else {
-									await this.sendStateNotifications('onlineStateDevice', device);
 								}
 							}
 							break;
