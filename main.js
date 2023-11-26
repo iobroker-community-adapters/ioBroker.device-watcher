@@ -227,17 +227,6 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
-			//Check if an Adapter is selected.
-			if (this.adapterSelected.length >= 1) {
-				// show list in debug log
-				this.log.debug(JSON.stringify(this.selAdapter));
-
-				this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${this.adapterSelected.join(', ')} ...`);
-			} else {
-				this.log.warn(`No adapter selected. Please check the instance configuration!`);
-				return; // cancel run if no adapter is selected
-			}
-
 			//create Blacklist
 			await this.createBlacklist();
 
@@ -678,6 +667,17 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
+
+		//Check if an Adapter is selected.
+		if (this.adapterSelected.length >= 1) {
+			// show list in debug log
+			this.log.debug(JSON.stringify(this.selAdapter));
+
+			this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${this.adapterSelected.join(', ')} ...`);
+		} else {
+			this.log.info(`No adapter selected. Please check the instance configuration!`);
+			return; // cancel run if no adapter is selected
+		}
 
 		// fill counts and lists of all selected adapter
 		try {
