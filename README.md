@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.8 (2023-11-26)
 
 -   (ciddi89) Fixed: Added additional check for instance states [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262)
 -   (ciddi89) Fixed: Execute adapter even if no device adapter is selected
