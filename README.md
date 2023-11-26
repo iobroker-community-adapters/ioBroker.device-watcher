@@ -193,6 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Fixed: Added additional check for instance states
+-   (ciddi89) Fixed: Execute adapter even if no device adapter is selected
 
 ### 2.9.7 (2023-11-23)
 
