@@ -420,6 +420,7 @@ class DeviceWatcher extends utils.Adapter {
 							return;
 						}
 					};
+
 					switch (id) {
 						case `system.adapter.${instanceID}.alive`:
 							if (state.val !== instanceData.isAlive) {
