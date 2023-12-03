@@ -220,6 +220,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		try {
+			// create list with selected adapters for monitor devices
 			for (const [id] of Object.entries(arrApart)) {
 				if (this.configSetAdapter[id]) {
 					this.selAdapter.push(arrApart[id]);
@@ -227,7 +228,17 @@ class DeviceWatcher extends utils.Adapter {
 				}
 			}
 
-			//create Blacklist
+			// Check if an adapter to monitor devices is selected.
+			if (this.adapterSelected.length >= 1) {
+				// show list in debug log
+				this.log.debug(JSON.stringify(this.selAdapter));
+
+				this.log.info(`Number of selected adapters to monitor devices: ${this.adapterSelected.length}. Loading data from: ${this.adapterSelected.join(', ')} ...`);
+			} else {
+				this.log.info(`No adapters selected to monitor devices.`);
+			}
+
+			// create Blacklist
 			await this.createBlacklist();
 
 			// create user defined list with time of error for instances
@@ -668,16 +679,8 @@ class DeviceWatcher extends utils.Adapter {
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
 
-		//Check if an Adapter is selected.
-		if (this.adapterSelected.length >= 1) {
-			// show list in debug log
-			this.log.debug(JSON.stringify(this.selAdapter));
-
-			this.log.info(`Number of selected adapters: ${this.adapterSelected.length}. Loading data from: ${this.adapterSelected.join(', ')} ...`);
-		} else {
-			this.log.info(`No adapter selected. Please check the instance configuration!`);
-			return; // cancel run if no adapter is selected
-		}
+		// cancel run if no adapter is selected
+		if (this.adapterSelected.length === 0) return;
 
 		// fill counts and lists of all selected adapter
 		try {
