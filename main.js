@@ -384,7 +384,9 @@ class DeviceWatcher extends utils.Adapter {
 			let oldAdapterUpdatesCounts;
 
 			try {
-				// adapter updates
+				/*=============================================
+				=           	 Adapter Updates      	     =
+				=============================================*/
 				if (id.endsWith('updatesJson')) {
 					oldAdapterUpdatesCounts = this.countAdapterUpdates;
 					await this.getAdapterUpdateData(id);
@@ -403,7 +405,9 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 
-				// instances
+				/*=============================================
+				=       	    	Instances       	     =
+				=============================================*/
 				for (const [instanceID, instanceData] of this.listInstanceRaw) {
 					const checkInstance = async (instanceID, instanceData) => {
 						if (!instanceData.checkIsRunning) {
@@ -452,6 +456,9 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 
+				/*=============================================
+				=          		  Devices     			      =
+				=============================================*/
 				for (const [device, deviceData] of this.listAllDevicesRaw) {
 					// On statechange update available datapoint
 					switch (id) {
