@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.9 (2023-12-07)
 
 -   (ciddi89) Fixed: Write log message of selected adapters only on startup
 
