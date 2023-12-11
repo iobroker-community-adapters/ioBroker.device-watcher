@@ -1235,6 +1235,7 @@ class DeviceWatcher extends utils.Adapter {
 								linkQualityRaw = deviceQualityState.val;
 								break;
 							case 'lupusec':
+							case 'fullybrowserV3':
 								linkQuality = deviceQualityState.val;
 								break;
 
