@@ -1236,7 +1236,7 @@ class DeviceWatcher extends utils.Adapter {
 								break;
 							case 'lupusec':
 							case 'fullybrowserV3':
-								linkQuality = deviceQualityState.val;
+								linkQuality = deviceQualityState.val; // use real state
 								break;
 
 							default:
