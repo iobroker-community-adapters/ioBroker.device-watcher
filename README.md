@@ -193,6 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Fixed: Fullybroswer >v3 devicename
+-   (ciddi89) Fixed: Fullybroswer >v3 wifi signal
 
 ### 2.9.9 (2023-12-07)
 
