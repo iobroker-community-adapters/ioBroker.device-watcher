@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.9.9",
+    "version": "2.9.10",
     "news": {
+      "2.9.10": {
+        "en": "Fixed: Fullybroswer >v3 devicename\nFixed: Fullybroswer >v3 wifi signal",
+        "de": "Behoben: Fullybroswer >v3 Gerätename\nBehoben: Fullybroswer >v3 Wifi-Signal",
+        "ru": "Исправлено: Fullybroswer >v3 имя устройства\nИсправлено: Fullybroswer >v3 wifi сигнал",
+        "pt": "Fixo: Fullybroswer >v3 nome do dispositivo\nFixo: sinal wifi Fullybroswer >v3",
+        "nl": "Vertaling:\nQuality over Quantity (QoQ) Releases Vertaling:",
+        "fr": "Correction : Nom du dispositif Fullybroswer ACIAv3\nCorrection : signal wifi Fullybroswer ACIAv3",
+        "it": "Risolto: Fullybroswer >v3 nome del dispositivo\nFisso: Fullybroswer >v3 segnale wifi",
+        "es": "Fijación: Fullybroswer >v3 nombre de dispositivo\nFijación: Fullybroswer 3v3 señal wifi",
+        "pl": "Fixed: Fullybroswer >v3\nFixed: Fullybroswer >v3 wifi signal",
+        "uk": "Виправлено: Fullybroswer >v3 назва пристрою\nВиправлено: Fullybroswer >v3 Wi-Fi сигнал",
+        "zh-cn": "固定装置:全盘变压装置\n九. 固定:完全妓院"
+      },
       "2.9.9": {
         "en": "Fixed: Write log message of selected adapters only on startup",
         "de": "Fixed: Log-Nachricht von ausgewählten Adaptern nur beim Start schreiben",
@@ -80,19 +93,6 @@
         "pl": "Added: Fallback for HmIp-eTRV-2 batterie devices #218(https:/github.com/ciddi89/ioBroker.device-watcher/issues/218 (ang.)\n(@mango1402) Proxmox VM/CT online status #241(https:/github.com/ciddi89/ioBroker.device-watcher/issues/241) (ang.)\nZastrzeżenie: Zależność",
         "uk": "Додано: Fallback для пристроїв HmIp-eTRV-2 [#218](https://github.com/ciddi89/ioBroker.device-watcher/products/218)\n(@mango1402) Виправлено: Proxmox VM/CT онлайн статус [#241](https://github.com/ciddi89/ioBroker.device-watcher/issues/241)\nОновлено: Залежності",
         "zh-cn": "增 编:HmIp-eTRV-2电池装置的Faback[#218](http://github.com/ciddi89/ioBroker.device-watcher/issues/218)\n(@mango1402) 固定:Proxmox VM/CT在线地位[第241号](http://github.com/ciddi89/ioBroker.device-watcher/issues/241)\n更新:属地"
-      },
-      "2.9.3": {
-        "en": "Dropped: Node v14.x support and added: Node v20.x support\nFixed: last seen of Ping devices\nFixed: Connection messages of devices without instance connection datapoint\nFixed: Data & Lists of instances wasn't refreshed correctly\nFixed: Tradfri state alive must be false for device offline state",
-        "de": "Dropped: Node v14.x Unterstützung und hinzugefügt: Node v20.x Unterstützung\nFix: zuletzt gesehen von Ping-Geräten\nFix: Verbindungsnachrichten von Geräten ohne Instanz-Verbindungsdatenpunkt\nFix: Daten & Instanzlisten wurden nicht korrekt aktualisiert\nFix: Tradfri der Datenpunkt alive muss für den Offlinezustand eines Gerätes false sein",
-        "ru": "Dropped: Поддержка Node v14.x и добавил: Поддержка Node v20.x\nИсправлено: последний раз видели Ping устройств\nИсправлено: Соединение сообщений устройств без контактной точки\nИсправлено: Данные и списки инстанций не были обновлены правильно\nИсправлено: состояние Tradfri живое должно быть ложным для состояния устройства offline",
-        "pt": "Dropped: Node v14.x suporte e adicionado: Suporte de Node v20.x\nFixo: visto pela última vez de dispositivos Ping\nCorrigido: Mensagens de conexão de dispositivos sem datapoint de conexão de instância\nCorrigido: Dados e listas de instâncias não foram atualizados corretamente\nCorrigido: Estado Tradfri vivo deve ser falso para o estado off-line do dispositivo",
-        "nl": "Node v14.x steun en toegevoegd: Node v20\n_\nVerbindingsberichten van apparatuur zonder instantie datapoint\nVertaling:\nVertaling:",
-        "fr": "Dropped: Node v14.x support et ajouté: Node v20.x support\nCorrection : dernière vue des appareils Ping\nCorrection : Messages de connexion des périphériques sans point de données de connexion par instance\nCorrection : Les listes des cas n'ont pas été rafraîchies correctement\nCorrection : l'état de Tradfri vivant doit être faux pour l'état hors ligne",
-        "it": "Dropped: Node v14.x supporto e aggiunto: Supporto Node v20.x\nFisso: ultimo visto di dispositivi Ping\nRisolto: Messaggi di connessione di dispositivi senza datapoint di connessione di istanza\nRisolto: i dati e le liste delle istanze non sono stati aggiornati correttamente\nFisso: Tradfri stato vivo deve essere falso per lo stato offline del dispositivo",
-        "es": "Suprimido: soporte Nodo v14.x y añadido: Soporte Node v20.x\nFijación: última vista de dispositivos Ping\nFijo: mensajes de conexión de dispositivos sin punto de datos de conexión de instancia\nFijo: Datos \" Listas de casos no se refrescó correctamente\nFijo: El estado de Tradfri vivo debe ser falso para el estado fuera de línea del dispositivo",
-        "pl": "Przewodnik: wsparcie i dodanie. Node v20x (ang.)\nFixed: ostatni raz widziany z urządzenia Ping\nFixe: Powiązane wiadomości urządzeń bez użycia danych\nFixed: Data & Lists nie został odświeżony\nFixed: żywy stan Tradfri jest fałszywy dla ubezpieczenia",
-        "uk": "Dropped: Node v14.x підтримка і додано: Підтримка Node v20.x\nВиправлено: Останній бачив Ping пристроїв\nВиправлено: З'єднання повідомлень пристроїв без точки з'єднання\nВиправлено: Дані та списки екземплярів не освіжали правильно\nВиправлено: Tradfri держава живий повинен бути помилковим для пристрою автономний стан",
-        "zh-cn": "增 编: 无de v20.x 支持\nFixed:最后可见的装置\n固定:无线数据识别装置的识别信息\n固定:案例的数据和清单正确地予以驳斥。\n固定:Tdfri State的活活性必须为线性州的装置作假"
       }
     },
     "titleLang": {
