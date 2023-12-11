@@ -1150,7 +1150,6 @@ class DeviceWatcher extends utils.Adapter {
 				case 'loqedSmartLock':
 				case 'viessmann':
 				case 'homekitController':
-				case 'fullybrowserV3':
 					if (shortDeviceObject && typeof shortDeviceObject === 'object' && shortDeviceObject.common) {
 						deviceName = shortDeviceObject.common.name;
 					}
