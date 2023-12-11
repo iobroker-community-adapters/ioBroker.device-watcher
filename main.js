@@ -1138,7 +1138,6 @@ class DeviceWatcher extends utils.Adapter {
 
 			switch (this.selAdapter[i].adapterID) {
 				case 'fullybrowser':
-				case 'fullybrowserV3':
 					deviceName = (await this.getInitValue(currDeviceString + this.selAdapter[i].id)) + ' ' + (await this.getInitValue(currDeviceString + this.selAdapter[i].id2));
 					break;
 
@@ -1151,6 +1150,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'loqedSmartLock':
 				case 'viessmann':
 				case 'homekitController':
+				case 'fullybrowserV3':
 					if (shortDeviceObject && typeof shortDeviceObject === 'object' && shortDeviceObject.common) {
 						deviceName = shortDeviceObject.common.name;
 					}
