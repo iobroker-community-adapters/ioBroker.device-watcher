@@ -1173,6 +1173,7 @@ class DeviceWatcher extends utils.Adapter {
 				//Get ID of foldername
 				case 'tado':
 				case 'wifilight':
+				case 'fullybrowserV3':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
 					break;
 
