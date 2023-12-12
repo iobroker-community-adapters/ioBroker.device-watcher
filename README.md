@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.11 (2023-12-12)
 
 -   (ciddi89) Fixed: Fullybroswer >v3 use id not common name
 
