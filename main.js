@@ -374,12 +374,7 @@ class DeviceWatcher extends utils.Adapter {
 	async onStateChange(id, state) {
 		if (state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
-			let batteryData;
-			let signalData;
-			let oldLowBatState;
-			let contactData;
-			let oldStatus;
-			let isLowBatValue;
+
 			let oldAdapterUpdatesCounts;
 
 			try {
@@ -408,11 +403,7 @@ class DeviceWatcher extends utils.Adapter {
 				=       	    	Instances       	     =
 				=============================================*/
 				if (this.config.checkAdapterInstances) {
-					const mapContainsInstanceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.aliveDP === id);
-					const mapContainsHostDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.hostConnectionDP === id);
-					const mapContainsDeviceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.deviceConnectionDP === id);
-
-					if (mapContainsInstanceAliveDP || mapContainsHostDP || mapContainsDeviceAliveDP) {
+					if (Array.from(this.listInstanceRaw.values()).some((obj) => Object.values(obj).includes(id))) {
 						await this.renewInstanceData(id, state);
 					}
 				}
@@ -420,129 +411,8 @@ class DeviceWatcher extends utils.Adapter {
 				/*=============================================
 				=          		  Devices     			      =
 				=============================================*/
-				for (const [device, deviceData] of this.listAllDevicesRaw) {
-					// On statechange update available datapoint
-					switch (id) {
-						// device connection
-						case deviceData.instanceDeviceConnectionDP:
-							if (state.val !== deviceData.instancedeviceConnected) {
-								deviceData.instancedeviceConnected = state.val;
-							}
-							break;
-
-						// device updates
-						case deviceData.UpdateDP:
-							if (state.val !== deviceData.Upgradable) {
-								deviceData.Upgradable = await this.checkDeviceUpdate(deviceData.adapterID, state.val);
-								if (deviceData.Upgradable === true) {
-									if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
-										await this.sendStateNotifications('updateDevice', device);
-									}
-								}
-							}
-							break;
-
-						// device signal
-						case deviceData.SignalStrengthDP:
-							signalData = await this.calculateSignalStrength(state, deviceData.adapterID);
-							deviceData.SignalStrength = signalData[0];
-
-							break;
-
-						// device battery
-						case deviceData.batteryDP:
-							if (deviceData.isBatteryDevice) {
-								oldLowBatState = deviceData.LowBat;
-								if (state.val === 0 && deviceData.BatteryRaw >= 5) continue;
-								batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.faultReport, deviceData.adapterID);
-
-								deviceData.Battery = batteryData[0];
-								deviceData.BatteryRaw = batteryData[2];
-								deviceData.BatteryUnitRaw = batteryData[3];
-								if (deviceData.LowBatDP !== 'none') {
-									isLowBatValue = await this.getInitValue(deviceData.LowBatDP);
-								} else {
-									isLowBatValue = undefined;
-								}
-								deviceData.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, deviceData.faultReport, deviceData.adapterID);
-
-								if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
-									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-										await this.sendStateNotifications('lowBatDevice', device);
-									}
-								}
-							}
-							break;
-
-						// device low bat
-						case deviceData.LowBatDP:
-							if (deviceData.isBatteryDevice) {
-								oldLowBatState = deviceData.LowBat;
-								batteryData = await this.getBatteryData(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
-								deviceData.Battery = batteryData[0];
-								deviceData.BatteryRaw = batteryData[2];
-								deviceData.BatteryUnitRaw = batteryData[3];
-								deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
-
-								if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
-									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-										await this.sendStateNotifications('lowBatDevice', device);
-									}
-								}
-							}
-							break;
-
-						//device error / fault reports
-						case deviceData.faultReportDP:
-							if (deviceData.isBatteryDevice) {
-								oldLowBatState = deviceData.LowBat;
-								batteryData = await this.getBatteryData(deviceData.BatteryRaw, oldLowBatState, state.val, deviceData.adapterID);
-
-								deviceData.Battery = batteryData[0];
-								deviceData.BatteryRaw = batteryData[2];
-								deviceData.BatteryUnitRaw = batteryData[3];
-								deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, undefined, state.val, deviceData.adapterID);
-
-								if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
-									if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-										await this.sendStateNotifications('lowBatDevice', device);
-									}
-								}
-							}
-							break;
-
-						// device unreach
-						case deviceData.UnreachDP:
-							if (deviceData.UnreachState !== state.val) {
-								oldStatus = deviceData.Status;
-								deviceData.UnreachState = state.val;
-								contactData = await this.getOnlineState(
-									deviceData.timeSelector,
-									deviceData.adapterID,
-									deviceData.UnreachDP,
-									deviceData.SignalStrength,
-									deviceData.UnreachState,
-									deviceData.DeviceStateSelectorDP,
-									deviceData.rssiPeerSelectorDP,
-								);
-								if (contactData !== undefined) {
-									deviceData.LastContact = contactData[0];
-									deviceData.Status = contactData[1];
-									deviceData.SignalStrength = contactData[2];
-								}
-								if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-									if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
-										// check if the generally deviceData connected state is for a while true
-										if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
-											await this.sendStateNotifications('onlineStateDevice', device);
-										}
-									} else {
-										await this.sendStateNotifications('onlineStateDevice', device);
-									}
-								}
-							}
-							break;
-					}
+				if (Array.from(this.listAllDevicesRaw.values()).some((obj) => Object.values(obj).includes(id))) {
+					await this.renewDeviceData(id, state);
 				}
 			} catch (error) {
 				this.log.error(`Issue at state change: ${error}`);
@@ -2004,6 +1874,146 @@ class DeviceWatcher extends utils.Adapter {
 	} //<--End  of writing Datapoints
 
 	/**
+	 * @param {string | string[]} id
+	 * @param {ioBroker.State} state
+	 */
+	async renewDeviceData(id, state) {
+		let batteryData;
+		let signalData;
+		let oldLowBatState;
+		let contactData;
+		let oldStatus;
+		let isLowBatValue;
+
+		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
+		const deviceData = this.listAllDevicesRaw.get(deviceID);
+
+		if (deviceData) {
+			// On statechange update available datapoint
+			switch (id) {
+				// device connection
+				case deviceData.instanceDeviceConnectionDP:
+					if (state.val !== deviceData.instancedeviceConnected) {
+						deviceData.instancedeviceConnected = state.val;
+					}
+					break;
+
+				// device updates
+				case deviceData.UpdateDP:
+					if (state.val !== deviceData.Upgradable) {
+						deviceData.Upgradable = await this.checkDeviceUpdate(deviceData.adapterID, state.val);
+						if (deviceData.Upgradable === true) {
+							if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
+								await this.sendStateNotifications('updateDevice', deviceID);
+							}
+						}
+					}
+					break;
+
+				// device signal
+				case deviceData.SignalStrengthDP:
+					signalData = await this.calculateSignalStrength(state, deviceData.adapterID);
+					deviceData.SignalStrength = signalData[0];
+
+					break;
+
+				// device battery
+				case deviceData.batteryDP:
+					if (deviceData.isBatteryDevice) {
+						oldLowBatState = deviceData.LowBat;
+						if (state.val === 0 && deviceData.BatteryRaw >= 5) return;
+						batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.faultReport, deviceData.adapterID);
+
+						deviceData.Battery = batteryData[0];
+						deviceData.BatteryRaw = batteryData[2];
+						deviceData.BatteryUnitRaw = batteryData[3];
+						if (deviceData.LowBatDP !== 'none') {
+							isLowBatValue = await this.getInitValue(deviceData.LowBatDP);
+						} else {
+							isLowBatValue = undefined;
+						}
+						deviceData.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, deviceData.faultReport, deviceData.adapterID);
+
+						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
+							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
+								await this.sendStateNotifications('lowBatDevice', deviceID);
+							}
+						}
+					}
+					break;
+
+				// device low bat
+				case deviceData.LowBatDP:
+					if (deviceData.isBatteryDevice) {
+						oldLowBatState = deviceData.LowBat;
+						batteryData = await this.getBatteryData(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
+						deviceData.Battery = batteryData[0];
+						deviceData.BatteryRaw = batteryData[2];
+						deviceData.BatteryUnitRaw = batteryData[3];
+						deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
+
+						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
+							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
+								await this.sendStateNotifications('lowBatDevice', deviceID);
+							}
+						}
+					}
+					break;
+
+				//device error / fault reports
+				case deviceData.faultReportDP:
+					if (deviceData.isBatteryDevice) {
+						oldLowBatState = deviceData.LowBat;
+						batteryData = await this.getBatteryData(deviceData.BatteryRaw, oldLowBatState, state.val, deviceData.adapterID);
+
+						deviceData.Battery = batteryData[0];
+						deviceData.BatteryRaw = batteryData[2];
+						deviceData.BatteryUnitRaw = batteryData[3];
+						deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, undefined, state.val, deviceData.adapterID);
+
+						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
+							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
+								await this.sendStateNotifications('lowBatDevice', deviceID);
+							}
+						}
+					}
+					break;
+
+				// device unreach
+				case deviceData.UnreachDP:
+					if (deviceData.UnreachState !== state.val) {
+						oldStatus = deviceData.Status;
+						deviceData.UnreachState = state.val;
+						contactData = await this.getOnlineState(
+							deviceData.timeSelector,
+							deviceData.adapterID,
+							deviceData.UnreachDP,
+							deviceData.SignalStrength,
+							deviceData.UnreachState,
+							deviceData.DeviceStateSelectorDP,
+							deviceData.rssiPeerSelectorDP,
+						);
+						if (contactData !== undefined) {
+							deviceData.LastContact = contactData[0];
+							deviceData.Status = contactData[1];
+							deviceData.SignalStrength = contactData[2];
+						}
+						if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
+							if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
+								// check if the generally deviceData connected state is for a while true
+								if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
+									await this.sendStateNotifications('onlineStateDevice', deviceID);
+								}
+							} else {
+								await this.sendStateNotifications('onlineStateDevice', deviceID);
+							}
+						}
+					}
+					break;
+			}
+		}
+	}
+	/**
 	 * get all Instances at start
 	 */
 	async getAllInstanceData() {
@@ -2517,7 +2527,6 @@ class DeviceWatcher extends utils.Adapter {
 					instanceData.isHealthy = instanceStatusRaw[1];
 					instanceData.status = instanceStatusRaw[2];
 					instanceData.checkIsRunning = false;
-					this.listInstanceRaw.set(instanceID, instanceData);
 					return;
 				}
 			};
