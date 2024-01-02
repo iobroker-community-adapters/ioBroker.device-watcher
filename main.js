@@ -1964,31 +1964,29 @@ class DeviceWatcher extends utils.Adapter {
 
 				// device unreach
 				case deviceData.UnreachDP:
-					if (deviceData.UnreachState !== state.val) {
-						oldStatus = deviceData.Status;
-						deviceData.UnreachState = state.val;
-						contactData = await this.getOnlineState(
-							deviceData.timeSelector,
-							deviceData.adapterID,
-							deviceData.UnreachDP,
-							deviceData.SignalStrength,
-							deviceData.UnreachState,
-							deviceData.DeviceStateSelectorDP,
-							deviceData.rssiPeerSelectorDP,
-						);
-						if (contactData !== undefined) {
-							deviceData.LastContact = contactData[0];
-							deviceData.Status = contactData[1];
-							deviceData.SignalStrength = contactData[2];
-						}
-						if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-							if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
-								// check if the generally deviceData connected state is for a while true
-								if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
+					if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
+						// check if the generally deviceData connected state is for a while true
+						if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
+							if (deviceData.UnreachState !== state.val) {
+								oldStatus = deviceData.Status;
+								deviceData.UnreachState = state.val;
+								contactData = await this.getOnlineState(
+									deviceData.timeSelector,
+									deviceData.adapterID,
+									deviceData.UnreachDP,
+									deviceData.SignalStrength,
+									deviceData.UnreachState,
+									deviceData.DeviceStateSelectorDP,
+									deviceData.rssiPeerSelectorDP,
+								);
+								if (contactData !== undefined) {
+									deviceData.LastContact = contactData[0];
+									deviceData.Status = contactData[1];
+									deviceData.SignalStrength = contactData[2];
+								}
+								if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
 									await this.sendStateNotifications('onlineStateDevice', deviceID);
 								}
-							} else {
-								await this.sendStateNotifications('onlineStateDevice', deviceID);
 							}
 						}
 					}
