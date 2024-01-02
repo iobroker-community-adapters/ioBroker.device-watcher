@@ -380,7 +380,6 @@ class DeviceWatcher extends utils.Adapter {
 			let contactData;
 			let oldStatus;
 			let isLowBatValue;
-			let instanceStatusRaw;
 			let oldAdapterUpdatesCounts;
 
 			try {
@@ -408,53 +407,12 @@ class DeviceWatcher extends utils.Adapter {
 				/*=============================================
 				=       	    	Instances       	     =
 				=============================================*/
-				for (const [instanceID, instanceData] of this.listInstanceRaw) {
-					const checkInstance = async (instanceID, instanceData) => {
-						if (!instanceData.checkIsRunning) {
-							instanceData.checkIsRunning = true;
-							instanceStatusRaw = await this.setInstanceStatus(instanceData.instanceMode, instanceData.schedule, instanceID);
-							instanceData.isAlive = instanceStatusRaw[0];
-							instanceData.isHealthy = instanceStatusRaw[1];
-							instanceData.status = instanceStatusRaw[2];
-							instanceData.checkIsRunning = false;
-							return;
-						}
-					};
+				const mapContainsInstanceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.aliveDP === id);
+				const mapContainsHostDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.hostConnectionDP === id);
+				const mapContainsDeviceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.deviceConnectionDP === id);
 
-					switch (id) {
-						case `system.adapter.${instanceID}.alive`:
-							if (state.val !== instanceData.isAlive) {
-								await checkInstance(instanceID, instanceData);
-								// send message when instance was deactivated
-								if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
-									if (this.blacklistInstancesNotify.includes(instanceID)) continue;
-									await this.sendStateNotifications('deactivatedInstance', instanceID);
-								}
-							}
-
-							break;
-						case `system.adapter.${instanceID}.connected`:
-							if (state.val !== instanceData.isConnectedHost && instanceData.isAlive) {
-								await checkInstance(instanceID, instanceData);
-								// send message when instance has an error
-								if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
-									if (this.blacklistInstancesNotify.includes(instanceID)) continue;
-									await this.sendStateNotifications('errorInstance', instanceID);
-								}
-							}
-							break;
-						case `${instanceID}.info.connection`:
-							if (state.val !== instanceData.isConnectedDevice && instanceData.isAlive) {
-								await checkInstance(instanceID, instanceData);
-								// send message when instance has an error
-								if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
-									if (this.blacklistInstancesNotify.includes(instanceID)) continue;
-									await this.sendStateNotifications('errorInstance', instanceID);
-								}
-							}
-
-							break;
-					}
+				if (mapContainsInstanceAliveDP || mapContainsHostDP || mapContainsDeviceAliveDP) {
+					await this.renewInstanceData(id, state);
 				}
 
 				/*=============================================
@@ -2146,6 +2104,9 @@ class DeviceWatcher extends utils.Adapter {
 					isConnectedDevice: instanceConnectedDeviceVal,
 					status: instanceStatus,
 					checkIsRunning: false,
+					aliveDP: `system.adapter.${instanceID}.alive`,
+					hostConnectionDP: instanceConnectedHostDP,
+					deviceConnectionDP: instanceConnectedDeviceDP,
 				});
 			}
 			await this.createInstanceList();
@@ -2533,6 +2494,67 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listInstancesError`, { val: JSON.stringify(this.listErrorInstance), ack: true });
 		await this.setStateChangedAsync(`adapterAndInstances.countInstancesError`, { val: this.countErrorInstance, ack: true });
+	}
+
+	/**
+	 * call function on state change, renew data and send messages
+	 * @param {string} id
+	 * @param {ioBroker.State} state
+	 */
+	async renewInstanceData(id, state) {
+		const instanceID = await this.getInstanceName(id);
+		const instanceData = this.listInstanceRaw.get(instanceID);
+		if (instanceData) {
+			let instanceStatusRaw;
+
+			const checkInstance = async (instanceID, instanceData) => {
+				if (!instanceData.checkIsRunning) {
+					instanceData.checkIsRunning = true;
+					instanceStatusRaw = await this.setInstanceStatus(instanceData.instanceMode, instanceData.schedule, instanceID);
+					instanceData.isAlive = instanceStatusRaw[0];
+					instanceData.isHealthy = instanceStatusRaw[1];
+					instanceData.status = instanceStatusRaw[2];
+					instanceData.checkIsRunning = false;
+					this.listInstanceRaw.set(instanceID, instanceData);
+					return;
+				}
+			};
+
+			switch (id) {
+				case `system.adapter.${instanceID}.alive`:
+					if (state.val !== instanceData.isAlive) {
+						await checkInstance(instanceID, instanceData);
+						// send message when instance was deactivated
+						if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
+							if (this.blacklistInstancesNotify.includes(instanceID)) return;
+							await this.sendStateNotifications('deactivatedInstance', instanceID);
+						}
+					}
+					break;
+
+				case `system.adapter.${instanceID}.connected`:
+					if (state.val !== instanceData.isConnectedHost && instanceData.isAlive) {
+						await checkInstance(instanceID, instanceData);
+						// send message when instance has an error
+						if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
+							if (this.blacklistInstancesNotify.includes(instanceID)) return;
+							await this.sendStateNotifications('errorInstance', instanceID);
+						}
+					}
+					break;
+
+				case `${instanceID}.info.connection`:
+					if (state.val !== instanceData.isConnectedDevice && instanceData.isAlive) {
+						await checkInstance(instanceID, instanceData);
+						// send message when instance has an error
+						if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
+							if (this.blacklistInstancesNotify.includes(instanceID)) return;
+							await this.sendStateNotifications('errorInstance', instanceID);
+						}
+					}
+					break;
+			}
+		}
 	}
 
 	/**
