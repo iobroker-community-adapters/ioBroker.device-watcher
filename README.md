@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: Changed handling for state changes and subscriptions [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)
+
 ### 2.9.11 (2023-12-12)
 
 -   (ciddi89) Fixed: Fullybroswer >v3 use id not common name
