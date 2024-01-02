@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.11",
+		"version": "2.9.12",
 		"news": {
+			"2.9.12": {
+				"en": "Fixed: Changed handling for state changes and subscriptions [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"de": "Behoben: Handhabung für Zustandsänderungen und Abonnements geändert [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"ru": "Исправлено: Изменение обработки государственных изменений и подписок [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"pt": "Corrigido: Manuseio alterado para alterações e assinaturas do Estado [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"nl": "Gewijzigd voor staatsverandering en abonnementen",
+				"fr": "Correction : Traitement modifié pour les changements d ' état et les abonnements [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"it": "Risolto: Modificato il trattamento per le modifiche dello stato e gli abbonamenti [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"es": "Corregido: Modificación de la tramitación de los cambios y suscripciones estatales [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"pl": "Fixed: Changed handling for state changes and subscriptions #283(https:/github.com/ciddi89/ioBroker.device-watcher/issues/283) (ang.)",
+				"uk": "Виправлено: Змінене поводження з державними змінами та підписками [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"zh-cn": "固定:国家变化和订阅的改变(第283号)"
+			},
 			"2.9.11": {
 				"en": "Fixed: Fullybroswer >v3 use id not common name",
 				"de": "Behoben: Fullybroswer >v3 verwende den ID Namen",
@@ -80,19 +93,6 @@
 				"pl": "Admin jsonConfig schema\nZmiana: Admin jsonConfig to json5\nWstęp: Wsparcie dla urządzeń Tuya z internetowym państwem\nInne: czyste pliki plikowe",
 				"uk": "Виправлено: Admin jsonConfig schema\nЗмінено: Admin jsonConfig to json5\nДодано: Підтримка пристроїв Туя з онлайн-державою\nІнше: очищення файлів",
 				"zh-cn": "Fix: Admin json Config schema\n修改: Admin json Configg to json5\n增 编:在网上国家支持图亚装置\n其他:清洁档案"
-			},
-			"2.9.5": {
-				"en": "Added: if available use deviceName datapoint for sonoff devices\nFixed: Changed zwave to zwave2\nFixed: minor bugfixes\nAdded: FullyBrowser > v3",
-				"de": "Hinzugefügt: Wenn verfügbar benutze deviceName Datenpunkt für Sonoff Geräte\nBehoben: Zwave zu zwave2 geändert\nBehoben: kleinere Bugfixes\nHinzugefügt: FullyBrowser > V3",
-				"ru": "Добавлена: если доступно использование устройстваName datapoint для устройств sonoff\nИсправлено: Изменено zwave в zwave2\nИсправлено: незначительные багфиксы\nДобавлено: FullyBrowser > В3",
-				"pt": "Adicionado: se disponível use deviceName datapoint for sonoff devices\nCorrigido: Alterado zwave para zwave2\nCorrigido: pequenos bugfixes\nAdicionado: FullyBrowser > v3",
-				"nl": "Toegegeven:\nQuality over Quantity (QoQ) Releases Vertaling:\nQuality over Quantity (QoQ) Releases Vertaling:\nVertaling: Vertaling:",
-				"fr": "Ajouté: si le dispositif d'utilisation disponibleNom datapoint pour les appareils à sonoff\nFixé: Zwave changée en zwave2\nCorrection : corrections mineures\nAjouté: FullyBrowser phy v3",
-				"it": "Aggiunto: if available use deviceName datapoint for sonoff devices\nFisso: Cambiato zwave a zwave2\nRisolto: bugfix minori\nAggiunto: FullyBrowser > V",
-				"es": "Añadido: si está disponible el punto de datos del dispositivoName para dispositivos sonoff\nFijo: Cambio de onda de zwave2\nFijación: bugfixes menores\nAñadido: FullyBrowser v3",
-				"pl": "Addd: jeśli urządzenie użyte do transmisji danych\nFixed: Changed zwave to zwave2 (ang.)\nFixed: minor bugfixes\nAdded: FullyBrowser> (ang.). v3",
-				"uk": "Додано: якщо доступний пристрій useName для пристроїв sonoff\nВиправлено: Змінено zwave to zwave2\nВиправлено: незначні виправлення\nДоданий: FullyBrowser > в3",
-				"zh-cn": "增删:如果能用装置Name数据点用于子壳装置\n九. 固定:对兹瓦韦的改变\n固定:小额配件\n增 编:全页 评 注"
 			}
 		},
 		"titleLang": {

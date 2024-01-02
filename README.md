@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.12 (2024-01-02)
 
 -   (ciddi89) Fixed: Changed handling for state changes and subscriptions [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)
 
