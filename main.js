@@ -375,34 +375,16 @@ class DeviceWatcher extends utils.Adapter {
 		if (state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
 
-			let oldAdapterUpdatesCounts;
-
 			try {
 				/*=============================================
-				=           	 Adapter Updates      	     =
-				=============================================*/
-				if (id.endsWith('updatesJson')) {
-					oldAdapterUpdatesCounts = this.countAdapterUpdates;
-					await this.getAdapterUpdateData(id);
-					await this.createAdapterUpdateList();
-					if (this.config.checkSendAdapterUpdateMsg && this.countAdapterUpdates > oldAdapterUpdatesCounts) {
-						await this.sendStateNotifications('updateAdapter', null);
-					}
-					for (const instance of this.listInstanceRaw.values()) {
-						if (this.adapterUpdatesJsonRaw.has(instance.Adapter)) {
-							for (const adapter of this.adapterUpdatesJsonRaw.values()) {
-								instance.updateAvailable = adapter.newVersion;
-							}
-						} else {
-							instance.updateAvailable = ' - ';
-						}
-					}
-				}
-
-				/*=============================================
-				=       	    	Instances       	     =
+				=        	Instances / Adapter     	     =
 				=============================================*/
 				if (this.config.checkAdapterInstances) {
+					// Adapter Update data
+					if (id.endsWith('updatesJson')) {
+						await this.renewAdapterUpdateData(id);
+					}
+					// Instanz data
 					if (Array.from(this.listInstanceRaw.values()).some((obj) => Object.values(obj).includes(id))) {
 						await this.renewInstanceData(id, state);
 					}
@@ -2511,6 +2493,21 @@ class DeviceWatcher extends utils.Adapter {
 		await this.setStateChangedAsync(`adapterAndInstances.countInstancesError`, { val: this.countErrorInstance, ack: true });
 	}
 
+	/**
+	 * @param {string} id
+	 */
+	async renewAdapterUpdateData(id) {
+		const oldAdapterUpdatesCounts = this.countAdapterUpdates;
+		await this.getAdapterUpdateData(id);
+		await this.createAdapterUpdateList();
+		if (this.config.checkSendAdapterUpdateMsg && this.countAdapterUpdates > oldAdapterUpdatesCounts) {
+			await this.sendStateNotifications('updateAdapter', null);
+		}
+		this.listInstanceRaw.forEach((instance) => {
+			const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance.Adapter);
+			instance.updateAvailable = adapterUpdate ? adapterUpdate.newVersion : ' - ';
+		});
+	}
 	/**
 	 * call function on state change, renew data and send messages
 	 * @param {string} id
