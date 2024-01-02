@@ -527,7 +527,7 @@ It's possible to select:
 
 MIT License
 
-Copyright (c) 2023 Christian Behrends <mail@christian-behrends.de>
+Copyright (c) 2024 Christian Behrends <mail@christian-behrends.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
