@@ -407,12 +407,14 @@ class DeviceWatcher extends utils.Adapter {
 				/*=============================================
 				=       	    	Instances       	     =
 				=============================================*/
-				const mapContainsInstanceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.aliveDP === id);
-				const mapContainsHostDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.hostConnectionDP === id);
-				const mapContainsDeviceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.deviceConnectionDP === id);
+				if (this.config.checkAdapterInstances) {
+					const mapContainsInstanceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.aliveDP === id);
+					const mapContainsHostDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.hostConnectionDP === id);
+					const mapContainsDeviceAliveDP = Array.from(this.listInstanceRaw.values()).some((obj) => obj.deviceConnectionDP === id);
 
-				if (mapContainsInstanceAliveDP || mapContainsHostDP || mapContainsDeviceAliveDP) {
-					await this.renewInstanceData(id, state);
+					if (mapContainsInstanceAliveDP || mapContainsHostDP || mapContainsDeviceAliveDP) {
+						await this.renewInstanceData(id, state);
+					}
 				}
 
 				/*=============================================
