@@ -2150,9 +2150,9 @@ class DeviceWatcher extends utils.Adapter {
 		let connectedDeviceState = await this.getInitValue(`${instanceID}.info.connection`);
 		if (connectedDeviceState === undefined) connectedDeviceState = true;
 
-		let isAlive = false;
+		let isAlive = aliveState;
 		let isHealthy = false;
-		let instanceStatusString = 'Instanz deaktiviert';
+		let instanceStatusString = aliveState ? 'Instanz aktiviert' : 'Instanz deaktiviert';
 
 		if (!aliveState) {
 			isAlive = false;
