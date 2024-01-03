@@ -79,7 +79,7 @@ class DeviceWatcher extends utils.Adapter {
 		// Interval timer
 		this.refreshDataTimeout = null;
 
-		this.buffer = false;
+		this.mainRunning = false;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -334,12 +334,19 @@ class DeviceWatcher extends utils.Adapter {
 				// The object was changed
 				//this.log.debug(`object ${id} changed: ${JSON.stringify(obj)}`);
 
-				if (id.startsWith('system.adapter.')) {
+				if (this.config.checkAdapterInstances && id.startsWith('system.adapter.')) {
 					//read new instance data and add it to the lists
 					await this.getInstanceData(id);
 				} else {
-					//read devices data and renew the lists
-					await this.main();
+					if (Array.from(this.listAllDevicesRaw.values()).some((obj) => obj.mainSelector === id)) {
+						if (!this.mainRunning) {
+							await this.main();
+						} else {
+							return;
+						}
+					} else {
+						return;
+					}
 				}
 			} catch (error) {
 				this.log.error(`Issue at object change: ${error}`);
@@ -396,12 +403,7 @@ class DeviceWatcher extends utils.Adapter {
 				=          		  Devices     			      =
 				=============================================*/
 				if (Array.from(this.listAllDevicesRaw.values()).some((obj) => Object.values(obj).includes(id))) {
-					const instanceAlive = await this.checkIfInstanzIsAlive(id);
-					if (instanceAlive) {
-						await this.renewDeviceData(id, state);
-					} else {
-						return;
-					}
+					await this.renewDeviceData(id, state);
 				}
 			} catch (error) {
 				this.log.error(`Issue at state change: ${error}`);
@@ -505,6 +507,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async main() {
 		this.log.debug(`Function started: ${this.main.name}`);
+		this.mainRunning = true;
 
 		// cancel run if no adapter is selected
 		if (this.adapterSelected.length === 0) return;
@@ -539,7 +542,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.error(`[main - create and fill datapoints for each adapter] - ${error}`);
 			}
 		}
-
+		this.mainRunning = false;
 		this.log.debug(`Function finished: ${this.main.name}`);
 	} //<--End of main function
 
@@ -675,14 +678,13 @@ class DeviceWatcher extends utils.Adapter {
 			/*----------  Start of loop  ----------*/
 			for (const [id] of Object.entries(devices)) {
 				if (id.endsWith('.')) continue;
+				const mainSelector = id;
 
 				/*=============================================
 				=              get Instanz		          =
 				=============================================*/
 				const instance = id.slice(0, id.indexOf('.') + 2);
 
-				const instanceAliveDP = `system.adapter.${instance}.alive`;
-				const instanceAlive = await this.getInitValue(instanceAliveDP);
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
 				// this.subscribeForeignStates(instanceDeviceConnectionDP);
@@ -891,8 +893,7 @@ class DeviceWatcher extends utils.Adapter {
 				const setupList = () => {
 					this.listAllDevicesRaw.set(currDeviceString, {
 						Path: id,
-						instanceAliveDP: instanceAliveDP,
-						instanceAlive: instanceAlive,
+						mainSelector: mainSelector,
 						instanceDeviceConnectionDP: instanceDeviceConnectionDP,
 						instancedeviceConnected: instancedeviceConnected,
 						instance: instance,
@@ -1867,18 +1868,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
 	} //<--End  of writing Datapoints
-
-	/**
-	 * @param {string | string[]} id
-	 */
-	async checkIfInstanzIsAlive(id) {
-		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
-		const deviceData = this.listAllDevicesRaw.get(deviceID);
-		if (deviceData.instanceAliveDP) {
-			const isAlive = await this.getInitValue(deviceData.instanceAliveDP);
-			return isAlive;
-		}
-	}
 
 	/**
 	 * @param {string | string[]} id
