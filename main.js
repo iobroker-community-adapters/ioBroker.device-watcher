@@ -2188,7 +2188,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		let isAlive = false;
 		let isHealthy = false;
-		let instanceStatusString = 'Instanz deaktiviert';
+		let instanceStatusString = aliveState ? 'Instanz aktiviert' : 'Instanz deaktiviert';
 
 		if (aliveState) {
 			daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
