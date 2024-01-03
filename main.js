@@ -678,9 +678,10 @@ class DeviceWatcher extends utils.Adapter {
 
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
-				this.subscribeForeignStates(instanceDeviceConnectionDP);
+				// this.subscribeForeignStates(instanceDeviceConnectionDP);
 				this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
 				// this.subscribeForeignObjects('*');
+				this.subscribeForeignStates('*');
 				/*=============================================
 				=              Get device name		          =
 				=============================================*/
@@ -873,8 +874,8 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					// subscribe to states
-					this.subscribeForeignStates(deviceUpdateDP);
-					// this.subscribeForeignStates('*');
+					// this.subscribeForeignStates(deviceUpdateDP);
+					this.subscribeForeignStates('*');
 				}
 
 				/*=============================================
@@ -2085,11 +2086,11 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//subscribe to statechanges
-				this.subscribeForeignStates(id);
-				this.subscribeForeignStates(instanceConnectedHostDP);
-				this.subscribeForeignStates(instanceConnectedDeviceDP);
+				// this.subscribeForeignStates(id);
+				// this.subscribeForeignStates(instanceConnectedHostDP);
+				// this.subscribeForeignStates(instanceConnectedDeviceDP);
 				this.subscribeForeignObjects(`system.adapter.*`);
-				// this.subscribeForeignStates('*');
+				this.subscribeForeignStates('*');
 				// this.subscribeForeignObjects('*');
 
 				// create raw list
@@ -4467,8 +4468,6 @@ class DeviceWatcher extends utils.Adapter {
 				this.clearTimeout(this.refreshDataTimeout);
 				this.refreshDataTimeout = null;
 			}
-
-			this.unsubscribeForeignStates('*');
 
 			this.log.info('cleaned everything up...');
 
