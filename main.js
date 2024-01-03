@@ -4468,6 +4468,8 @@ class DeviceWatcher extends utils.Adapter {
 				this.refreshDataTimeout = null;
 			}
 
+			this.unsubscribeForeignStates('*');
+
 			this.log.info('cleaned everything up...');
 
 			callback();
