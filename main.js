@@ -678,9 +678,9 @@ class DeviceWatcher extends utils.Adapter {
 
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
-				// this.subscribeForeignStates(instanceDeviceConnectionDP);
-				//this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
-				this.subscribeForeignObjects('*');
+				this.subscribeForeignStates(instanceDeviceConnectionDP);
+				this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
+				// this.subscribeForeignObjects('*');
 				/*=============================================
 				=              Get device name		          =
 				=============================================*/
@@ -873,8 +873,8 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					// subscribe to states
-					// this.subscribeForeignStates(deviceUpdateDP);
-					this.subscribeForeignStates('*');
+					this.subscribeForeignStates(deviceUpdateDP);
+					// this.subscribeForeignStates('*');
 				}
 
 				/*=============================================
@@ -2085,12 +2085,12 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//subscribe to statechanges
-				// this.subscribeForeignStates(id);
-				// this.subscribeForeignStates(instanceConnectedHostDP);
-				// this.subscribeForeignStates(instanceConnectedDeviceDP);
-				this.subscribeForeignStates('*');
-				//this.subscribeForeignObjects(`system.adapter.*`);
-				this.subscribeForeignObjects('*');
+				this.subscribeForeignStates(id);
+				this.subscribeForeignStates(instanceConnectedHostDP);
+				this.subscribeForeignStates(instanceConnectedDeviceDP);
+				this.subscribeForeignObjects(`system.adapter.*`);
+				// this.subscribeForeignStates('*');
+				// this.subscribeForeignObjects('*');
 
 				// create raw list
 				this.listInstanceRaw.set(instanceID, {
