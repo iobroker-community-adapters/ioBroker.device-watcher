@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.12",
+		"version": "2.9.13",
 		"news": {
+			"2.9.13": {
+				"en": "Fixed: Issues from v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nFixed: High CPU usage at object and state changes [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"de": "Behoben: Fehler von v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nBehoben: Hohe CPU-Nutzung bei Objekt- und Zustandsänderungen [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"ru": "Исправлено: Вопросы от v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nИсправлено: Высокое использование процессора на объектах и государственных изменениях [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"pt": "Corrigido: Questões do v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nCorrigido: Uso de alta CPU em alterações de objeto e estado [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"nl": "Quality over Quantity (QoQ) Releases Vertaling:\nQuality over Quantity (QoQ) Releases Vertaling:",
+				"fr": "Correction : Questions renvoyées à l ' adresse v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nFixed: High CPU use at object and state changes [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"it": "Risolto: Problemi da v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nRisolto: alto uso della CPU a oggetto e cambiamenti di stato [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"es": "Arreglado: Cuestiones de v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nFijo: Alto uso de la CPU en los cambios de objeto y estado [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"pl": "Fixed: Issues from v2.9.12 #283(https:/github.com/ciddi89/ioBroker,device-watcher/issues/283) (ang.)\n(Użycie procesora) w obiektach i stanach zmienia liczbę #283 (https:/github.com/ciddi89/ioBroker,device-watcher/issues/283)",
+				"uk": "Виправлено: Випуски від v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nВиправлено: Високий рівень використання процесора при об'єктах та змінах стану [#283] (https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
+				"zh-cn": "Fixed: Issues from v2.9.12[#283] (http://github.com/ciddi89/ioBroker.device-watcher/issues/283)\n九. 固定:在物体和州变化中使用高频单位[第283](http://github.com/ciddi89/ioBroker.device-watcher/issues/283)"
+			},
 			"2.9.12": {
 				"en": "Fixed: Changed handling for state changes and subscriptions [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
 				"de": "Behoben: Handhabung für Zustandsänderungen und Abonnements geändert [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
@@ -80,19 +93,6 @@
 				"pl": "Wspieranie Wifilight\nFixed: Multiple messages, jeśli urządzenia Sonoff docierają do miejsca #244 (https:/github.com/ciddi89/ioBroker.device-watcher/issues/244)",
 				"uk": "Доданий: Підтримка Wifilight\nВиправлено: Кілька повідомлень, якщо пристрої Sonoff досягаються [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
 				"zh-cn": "增 编:支持光明\nFixed:Sonoff装置可达到[第244](http://github.com/ciddi89/ioBroker.device-watcher/issues/244)"
-			},
-			"2.9.6": {
-				"en": "Fixed: Admin jsonConfig schema\nChanged: Admin jsonConfig to json5\nAdded: Support for Tuya devices with online state\nOthers: cleaned up files",
-				"de": "Behoben: Admin jsonConfig Schema\nGeändert: Admin jsonConfig zu json5\nHinzugefügt: Unterstützung für Tuya-Geräte mit Online-Zustand\nAnderes: Dateien aufgeräumt",
-				"ru": "Исправлено: Admin jsonConfig schema\nИзменено: Admin jsonConfig в json5\nДобавлена: Поддержка устройств Tuya с онлайн состоянием\nДругое: очищенные файлы",
-				"pt": "Corrigido: Admin jsonConfig schema\nAlterado: Admin jsonConfig to json5\nAdicionado: Suporte para dispositivos Tuya com estado on-line\nOutros: limpe arquivos",
-				"nl": "Admin jsonConfig schema\nAdministratie JsonConfig aan Json5\nVersterking voor Tuya apparaten met online staat\nVertaling:",
-				"fr": "Correction : Admin jsonConfig schema\nChanged: Admin jsonConfig to json5\nAjouté: Support pour les appareils Tuya avec l'état en ligne\nAutre: nettoyer les fichiers",
-				"it": "Fisso: Schema Admin jsonConfig\nModificato: Admin jsonConfig a json5\nAggiunto: Supporto per dispositivi Tuya con stato online\nAltro: file ripuliti",
-				"es": "Arreglado: Amin jsonConfig schema\nCambios: Admin jsonConfig a json5\nAñadido: Soporte para dispositivos Tuya con estado en línea\nOtros: limpiar archivos",
-				"pl": "Admin jsonConfig schema\nZmiana: Admin jsonConfig to json5\nWstęp: Wsparcie dla urządzeń Tuya z internetowym państwem\nInne: czyste pliki plikowe",
-				"uk": "Виправлено: Admin jsonConfig schema\nЗмінено: Admin jsonConfig to json5\nДодано: Підтримка пристроїв Туя з онлайн-державою\nІнше: очищення файлів",
-				"zh-cn": "Fix: Admin json Config schema\n修改: Admin json Configg to json5\n增 编:在网上国家支持图亚装置\n其他:清洁档案"
 			}
 		},
 		"titleLang": {
