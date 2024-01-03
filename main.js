@@ -687,10 +687,10 @@ class DeviceWatcher extends utils.Adapter {
 
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
-				// this.subscribeForeignStates(instanceDeviceConnectionDP);
+				this.subscribeForeignStates(instanceDeviceConnectionDP);
 				this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
 				// this.subscribeForeignObjects('*');
-				this.subscribeForeignStates('*');
+				//this.subscribeForeignStates('*');
 				/*=============================================
 				=              Get device name		          =
 				=============================================*/
@@ -708,7 +708,7 @@ class DeviceWatcher extends utils.Adapter {
 				const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
 
 				// subscribe to object device path
-				// this.subscribeForeignStates(currDeviceString);
+				this.subscribeForeignStates(currDeviceString);
 
 				/*=============================================
 				=            Get signal strength              =
@@ -735,7 +735,7 @@ class DeviceWatcher extends utils.Adapter {
 						break;
 				}
 				//subscribe to states
-				// this.subscribeForeignStates(deviceQualityDP);
+				this.subscribeForeignStates(deviceQualityDP);
 
 				const signalData = await this.calculateSignalStrength(deviceQualityState, adapterID);
 				let linkQuality = signalData[0];
@@ -807,9 +807,9 @@ class DeviceWatcher extends utils.Adapter {
 					faultReportingState = await this.getInitValue(faultReportingDP);
 
 					//subscribe to states
-					// this.subscribeForeignStates(deviceBatteryStateDP);
-					// this.subscribeForeignStates(isLowBatDP);
-					// this.subscribeForeignStates(faultReportingDP);
+					this.subscribeForeignStates(deviceBatteryStateDP);
+					this.subscribeForeignStates(isLowBatDP);
+					this.subscribeForeignStates(faultReportingDP);
 
 					const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID);
 					batteryHealth = batteryData[0];
@@ -842,10 +842,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				// subscribe to states
-				// this.subscribeForeignStates(timeSelector);
-				// this.subscribeForeignStates(unreachDP);
-				// this.subscribeForeignStates(deviceStateSelectorDP);
-				// this.subscribeForeignStates(rssiPeerSelectorDP);
+				this.subscribeForeignStates(timeSelector);
+				this.subscribeForeignStates(unreachDP);
+				this.subscribeForeignStates(deviceStateSelectorDP);
+				this.subscribeForeignStates(rssiPeerSelectorDP);
 
 				const onlineState = await this.getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
 				let deviceState;
@@ -883,8 +883,8 @@ class DeviceWatcher extends utils.Adapter {
 					}
 
 					// subscribe to states
-					// this.subscribeForeignStates(deviceUpdateDP);
-					this.subscribeForeignStates('*');
+					this.subscribeForeignStates(deviceUpdateDP);
+					// this.subscribeForeignStates('*');
 				}
 
 				/*=============================================
@@ -2096,11 +2096,11 @@ class DeviceWatcher extends utils.Adapter {
 				}
 
 				//subscribe to statechanges
-				// this.subscribeForeignStates(id);
-				// this.subscribeForeignStates(instanceConnectedHostDP);
-				// this.subscribeForeignStates(instanceConnectedDeviceDP);
+				this.subscribeForeignStates(id);
+				this.subscribeForeignStates(instanceConnectedHostDP);
+				this.subscribeForeignStates(instanceConnectedDeviceDP);
 				this.subscribeForeignObjects(`system.adapter.*`);
-				this.subscribeForeignStates('*');
+				// this.subscribeForeignStates('*');
 				// this.subscribeForeignObjects('*');
 
 				// create raw list
