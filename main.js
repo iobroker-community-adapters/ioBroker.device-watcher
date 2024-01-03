@@ -396,7 +396,12 @@ class DeviceWatcher extends utils.Adapter {
 				=          		  Devices     			      =
 				=============================================*/
 				if (Array.from(this.listAllDevicesRaw.values()).some((obj) => Object.values(obj).includes(id))) {
-					await this.renewDeviceData(id, state);
+					const instanceAlive = await this.checkIfInstanzIsAlive(id);
+					if (instanceAlive) {
+						await this.renewDeviceData(id, state);
+					} else {
+						return;
+					}
 				}
 			} catch (error) {
 				this.log.error(`Issue at state change: ${error}`);
@@ -676,6 +681,8 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				const instance = id.slice(0, id.indexOf('.') + 2);
 
+				const instanceAliveDP = `system.adapter.${instance}.alive`;
+				const instanceAlive = await this.getInitValue(instanceAliveDP);
 				const instanceDeviceConnectionDP = `${instance}.info.connection`;
 				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
 				// this.subscribeForeignStates(instanceDeviceConnectionDP);
@@ -884,6 +891,8 @@ class DeviceWatcher extends utils.Adapter {
 				const setupList = () => {
 					this.listAllDevicesRaw.set(currDeviceString, {
 						Path: id,
+						instanceAliveDP: instanceAliveDP,
+						instanceAlive: instanceAlive,
 						instanceDeviceConnectionDP: instanceDeviceConnectionDP,
 						instancedeviceConnected: instancedeviceConnected,
 						instance: instance,
@@ -1861,6 +1870,18 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * @param {string | string[]} id
+	 */
+	async checkIfInstanzIsAlive(id) {
+		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
+		const deviceData = this.listAllDevicesRaw.get(deviceID);
+		if (deviceData.instanceAliveDP) {
+			const isAlive = await this.getInitValue(deviceData.instanceAliveDP);
+			return isAlive;
+		}
+	}
+
+	/**
+	 * @param {string | string[]} id
 	 * @param {ioBroker.State} state
 	 */
 	async renewDeviceData(id, state) {
@@ -1967,37 +1988,37 @@ class DeviceWatcher extends utils.Adapter {
 
 				// device unreach
 				case deviceData.UnreachDP:
-					this.buffer = true;
-					if (!this.buffer) {
-						if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
-							// check if the generally deviceData connected state is for a while true
-							if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
-								if (deviceData.UnreachState !== state.val) {
-									oldStatus = deviceData.Status;
-									deviceData.UnreachState = state.val;
-									contactData = await this.getOnlineState(
-										deviceData.timeSelector,
-										deviceData.adapterID,
-										deviceData.UnreachDP,
-										deviceData.SignalStrength,
-										deviceData.UnreachState,
-										deviceData.DeviceStateSelectorDP,
-										deviceData.rssiPeerSelectorDP,
-									);
-									if (contactData !== undefined) {
-										deviceData.LastContact = contactData[0];
-										deviceData.Status = contactData[1];
-										deviceData.SignalStrength = contactData[2];
-									}
-									if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
+					if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
+						// check if the generally deviceData connected state is for a while true
+						if (deviceData.UnreachState !== state.val) {
+							oldStatus = deviceData.Status;
+							deviceData.UnreachState = state.val;
+							contactData = await this.getOnlineState(
+								deviceData.timeSelector,
+								deviceData.adapterID,
+								deviceData.UnreachDP,
+								deviceData.SignalStrength,
+								deviceData.UnreachState,
+								deviceData.DeviceStateSelectorDP,
+								deviceData.rssiPeerSelectorDP,
+							);
+							if (contactData !== undefined) {
+								deviceData.LastContact = contactData[0];
+								deviceData.Status = contactData[1];
+								deviceData.SignalStrength = contactData[2];
+							}
+							if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
+								if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
+									// check if the generally deviceData connected state is for a while true
+									if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
 										await this.sendStateNotifications('onlineStateDevice', deviceID);
 									}
+								} else {
+									await this.sendStateNotifications('onlineStateDevice', deviceID);
 								}
 							}
 						}
 					}
-
-					this.buffer = false;
 					break;
 			}
 		}
