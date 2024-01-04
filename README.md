@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: This schould fixed the bugs with high cpu and ram load, finally. Sorry about the last two buggy versions.
+
 ### 2.9.13 (2024-01-03)
 
 -   (ciddi89) Fixed: Issues from v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)
