@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "device-watcher",
-		"version": "2.9.13",
+		"version": "2.9.14",
 		"news": {
+			"2.9.14": {
+				"en": "Fixed: This schould fixed the bugs with high cpu and ram load, finally. Sorry about the last two buggy versions.",
+				"de": "Behoben: Damit sollten die Fehler mit hoher CPU- und Ram-Last endlich behoben sein. Entschuldigung für die letzten beiden fehlerhaften Versionen.",
+				"ru": "Исправлено: Этот щит исправил ошибки с высокой загрузкой cpu и ram, наконец. Извините за последние две версии buggy.",
+				"pt": "Corrigido: Este schould corrigiu os insetos com alta carga cpu e ram, finalmente. Lamento as duas últimas versões.",
+				"nl": "Gerepareerd: Deze schould heeft de insecten gemaakt met hoge cpu en ramlading, eindelijk. Sorry voor de laatste twee rotversieën.",
+				"fr": "Correction : Ce schould a réparé les bogues avec une charge de cpu et de bélier élevée, enfin. Désolé pour les deux dernières versions de buggy.",
+				"it": "Risolto: Questa schould ha fissato i bug con un alto carico di cpu e raggi, finalmente. Mi dispiace per le ultime due versioni buggy.",
+				"es": "Arreglado: Esto podría arreglar los bichos con alta carga de cpu y carnero, finalmente. Siento lo de las últimas dos versiones.",
+				"pl": "Fixed: Ten schemat mógł naprawić błędy o wysokim cpu i załadowaniu ramy, w końcu. O ostatnich dwóch wersjach.",
+				"uk": "Виправлено: Цей schould зафіксував помилки з високою cpu і ram навантаження, нарешті. Про нас.",
+				"zh-cn": "固定: 最终,这就将固定在高棉和泥石头。 关于最后两个走私版本。."
+			},
 			"2.9.13": {
 				"en": "Fixed: Issues from v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nFixed: High CPU usage at object and state changes [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
 				"de": "Behoben: Fehler von v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nBehoben: Hohe CPU-Nutzung bei Objekt- und Zustandsänderungen [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
@@ -80,19 +93,6 @@
 				"pl": "Fixed: Added additional check for example states #262(https:/github.com/ciddi89/ioBroker,device-watcher/issues/262)\nFixed: Dostosowanie Execute nawet jeśli nie doda się adapter urządzenia",
 				"uk": "Виправлено: Додана додаткова перевірка станів екземпляра [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262)\nВиправлено: Виконувати адаптер навіть якщо пристрій не вибрано",
 				"zh-cn": "固定地点:添加更多检查,例如[第262](http://github.com/ciddi89/ioBroker.device-watcher/issues/262)\n固定:假肢变器,即使没有装置的配件被选用"
-			},
-			"2.9.7": {
-				"en": "Added: Support for Wifilight\nFixed: Multiple messages if Sonoff devices reachable [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"de": "Hinzugefügt: Unterstützung für Wifilight\nBehoben: Mehrere Meldungen, wenn Sonoff-Geräte erreichbar sind [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"ru": "Добавлена: Поддержка Wifilight\nИсправлено: Несколько сообщений, если устройства Sonoff доступны [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"pt": "Adicionado: Suporte para Wifilight\nCorrigido: Múltiplas mensagens se os dispositivos Sonoff atingirem [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"nl": "Vertaling:\nVertaling:",
-				"fr": "Ajouté: Support pour Wifi\nCorrection : Messages multiples si les appareils Sonoff sont accessibles [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"it": "Aggiunto: Supporto per Wifilight\nFisso: Messaggi multipli se dispositivi Sonoff raggiungibili [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"es": "Añadido: Soporte para Wifilight\nCorregido: Múltiples mensajes si los dispositivos Sonoff pueden llegar a ser [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"pl": "Wspieranie Wifilight\nFixed: Multiple messages, jeśli urządzenia Sonoff docierają do miejsca #244 (https:/github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"uk": "Доданий: Підтримка Wifilight\nВиправлено: Кілька повідомлень, якщо пристрої Sonoff досягаються [#244](https://github.com/ciddi89/ioBroker.device-watcher/issues/244)",
-				"zh-cn": "增 编:支持光明\nFixed:Sonoff装置可达到[第244](http://github.com/ciddi89/ioBroker.device-watcher/issues/244)"
 			}
 		},
 		"titleLang": {

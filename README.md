@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.9.14 (2024-01-04)
 
 -   (ciddi89) Fixed: This schould fixed the bugs with high cpu and ram load, finally. Sorry about the last two buggy versions.
 
