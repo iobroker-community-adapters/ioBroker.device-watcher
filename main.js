@@ -1315,43 +1315,25 @@ class DeviceWatcher extends utils.Adapter {
 				=            Set Online Status             =
 				=============================================*/
 			let lastContact;
+
 			if (deviceTimeSelector) lastContact = this.getTimestamp(deviceTimeSelector.ts);
 
 			if (this.configMaxMinutes !== undefined) {
+				let setOfflineState = false;
+
 				switch (adapterID) {
 					case 'hmrpc':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState === 1) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
-						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState === 1) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-						}
+						setOfflineState =
+							(this.configMaxMinutes[adapterID] <= 0 && deviceUnreachState === 1) || (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState === 1);
 						break;
 					case 'proxmox':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
-						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-						}
+						setOfflineState =
+							(this.configMaxMinutes[adapterID] <= 0 && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') ||
+							(lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState !== 'running' && deviceUnreachState !== 'online');
 						break;
 					case 'hmiP':
 					case 'maxcube':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
-						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-						}
+						setOfflineState = (this.configMaxMinutes[adapterID] <= 0 && deviceUnreachState) || (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState);
 						break;
 					case 'apcups':
 					case 'hue':
@@ -1364,74 +1346,36 @@ class DeviceWatcher extends utils.Adapter {
 					case 'unifi':
 					case 'zigbee':
 					case 'zigbee2MQTT':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (!deviceUnreachState) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
-						} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-						}
+						setOfflineState = (this.configMaxMinutes[adapterID] <= 0 && !deviceUnreachState) || (!deviceUnreachState && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]);
 						break;
 					case 'mqttClientZigbee2Mqtt':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState !== 'online') {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
-						} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-						}
+						setOfflineState =
+							(this.configMaxMinutes[adapterID] <= 0 && deviceUnreachState !== 'online') ||
+							(deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]);
 						break;
 					case 'mihome':
 						if (deviceUnreachState !== undefined) {
-							if (this.configMaxMinutes[adapterID] <= 0) {
-								if (!deviceUnreachState) {
-									deviceState = 'Offline'; //set online state to offline
-									if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-								}
-							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
+							setOfflineState = (this.configMaxMinutes[adapterID] <= 0 && !deviceUnreachState) || (lastContact && lastContact > this.configMaxMinutes[adapterID]);
 						} else {
-							if (this.config.mihomeMaxMinutes <= 0) {
-								if (this.configMaxMinutes[adapterID] <= 0) {
-									deviceState = 'Offline'; //set online state to offline
-									if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-								}
-							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
+							setOfflineState = (this.config.mihomeMaxMinutes <= 0 && this.configMaxMinutes[adapterID] <= 0) || (lastContact && lastContact > this.configMaxMinutes[adapterID]);
 						}
 						break;
 					case 'smartgarden':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState === 'OFFLINE') {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
-						} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-						}
+						setOfflineState =
+							(this.configMaxMinutes[adapterID] <= 0 && deviceUnreachState === 'OFFLINE') ||
+							(deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]);
 						break;
 					default:
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (!deviceUnreachState) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-							}
-						} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
-						}
+						setOfflineState = (this.configMaxMinutes[adapterID] <= 0 && !deviceUnreachState) || (lastContact && lastContact > this.configMaxMinutes[adapterID]);
 						break;
 				}
+
+				if (setOfflineState) {
+					deviceState = 'Offline';
+					if (linkQuality !== ' - ') linkQuality = '0%';
+				}
 			}
+
 			return [lastContactString, deviceState, linkQuality];
 		} catch (error) {
 			this.log.error(`[getLastContact] - ${error}`);
