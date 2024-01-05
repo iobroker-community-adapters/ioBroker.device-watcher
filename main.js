@@ -1386,7 +1386,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * when was last contact of device
 	 */
 	async checkLastContact() {
-		for (const [device, deviceData] of this.listAllDevicesRaw) {
+		for (const [device, deviceData] of this.listAllDevicesRaw.entries()) {
 			if (deviceData.instancedeviceConnected !== false) {
 				const oldContactState = deviceData.Status;
 				deviceData.UnreachState = await this.getInitValue(deviceData.UnreachDP);
