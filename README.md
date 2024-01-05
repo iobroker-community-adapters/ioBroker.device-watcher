@@ -189,6 +189,12 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: Batterie value for shelly plus Gen2 devices
+-   (ciddi89) Added: Option to display the last signal strength value when the device is offline
+
 ### 2.9.14 (2024-01-04)
 
 -   (ciddi89) Fixed: This schould fixed the bugs with high cpu and ram load, finally. Sorry about the last two buggy versions.
