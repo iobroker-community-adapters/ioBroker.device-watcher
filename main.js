@@ -764,6 +764,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'hmrpc':
 							deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery;
 							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+
 							if (deviceBatteryState === undefined) {
 								deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].hmDNBattery;
 								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
@@ -775,6 +776,7 @@ class DeviceWatcher extends utils.Adapter {
 						case 'loqedSmartLock':
 							deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery;
 							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+
 							if (deviceBatteryState === undefined) {
 								deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery2;
 								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
@@ -783,9 +785,15 @@ class DeviceWatcher extends utils.Adapter {
 						default:
 							deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery;
 							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+
 							if (deviceBatteryState === undefined) {
 								deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery2;
 								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+
+								if (deviceBatteryState === undefined) {
+									deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery3;
+									deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
+								}
 							}
 							break;
 					}
@@ -793,9 +801,11 @@ class DeviceWatcher extends utils.Adapter {
 					// Get low bat states
 					isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat;
 					let deviceLowBatState = await this.getInitValue(isLowBatDP);
+
 					if (deviceLowBatState === undefined) {
 						isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat2;
 						deviceLowBatState = await this.getInitValue(isLowBatDP);
+
 						if (deviceLowBatState === undefined) {
 							isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat3;
 							deviceLowBatState = await this.getInitValue(isLowBatDP);
