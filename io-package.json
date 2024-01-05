@@ -319,6 +319,7 @@
 		"listOnlyBattery": false,
 		"createOwnFolder": false,
 		"createHtmlList": false,
+		"showLastSignal": false,
 		"checkSendOfflineMsg": false,
 		"checkSendOfflineMsgDaily": false,
 		"checkOfflineMonday": false,

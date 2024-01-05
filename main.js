@@ -1372,7 +1372,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				if (setOfflineState) {
 					deviceState = 'Offline';
-					if (linkQuality !== ' - ') linkQuality = '0%';
+					if (linkQuality !== ' - ' && !this.config.showLastSignal) linkQuality = '0%';
 				}
 			}
 

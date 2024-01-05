@@ -1545,6 +1545,14 @@
 					label: 'Create additionally HTML lists',
 					help: 'Create the lists also in HTML',
 				},
+				showLastSignal: {
+					type: 'checkbox',
+					sm: 12,
+					md: 6,
+					lg: 4,
+					label: 'Display last signal strength',
+					help: 'Display of the last signal strength value when the device is offline',
+				},
 				_updateInterval: {
 					type: 'header',
 					text: 'Update-Interval',
