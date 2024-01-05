@@ -1275,37 +1275,35 @@ class DeviceWatcher extends utils.Adapter {
 			const deviceUnreachSelector = await this.getForeignStateAsync(unreachDP);
 			const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorDP); // for hmrpc devices
 			const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorDP);
-			const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? this.getTimestamp(deviceUnreachSelector.lc) : this.getTimestamp(timeSelector.ts);
-			//  If there is no contact since user sets minutes add device in offline list
-			// calculate to days after 48 hours
+			const lastDeviceUnreachStateChange = deviceUnreachSelector !== undefined ? this.getTimestamp(deviceUnreachSelector.lc) : this.getTimestamp(timeSelector.ts);
+
+			// If there is no contact since the user sets minutes, add the device to the offline list and calculate to days after 48 hours
 			switch (unreachDP) {
 				case 'none':
-					if (deviceTimeSelector) lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+					if (deviceTimeSelector) {
+						lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+					}
 					break;
 
 				default:
-					//State changed
+					// State changed
 					if (adapterID === 'hmrpc') {
 						if (linkQuality !== ' - ' && deviceTimeSelector) {
-							if (deviceUnreachState === 1) {
-								lastContactString = await this.getLastContact(deviceTimeSelector.lc);
-							} else {
-								lastContactString = await this.getLastContact(deviceTimeSelector.ts);
-							}
+							lastContactString = deviceUnreachState === 1 ? await this.getLastContact(deviceTimeSelector.lc) : await this.getLastContact(deviceTimeSelector.ts);
 						} else {
 							if (deviceStateSelector) {
-								// because old hm devices don't send rssi states
+								// Because old hm devices don't send rssi states
 								lastContactString = await this.getLastContact(deviceStateSelector.ts);
 							} else if (rssiPeerSelector) {
-								// because old hm sensors don't send rssi/state values
+								// Because old hm sensors don't send rssi/state values
 								lastContactString = await this.getLastContact(rssiPeerSelector.ts);
 							}
 						}
 					} else {
 						if ((!deviceUnreachState || deviceUnreachState === 0) && deviceTimeSelector) {
 							lastContactString = await this.getLastContact(deviceTimeSelector.lc);
-						} else {
-							if (deviceTimeSelector) lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+						} else if (deviceTimeSelector) {
+							lastContactString = await this.getLastContact(deviceTimeSelector.ts);
 						}
 						break;
 					}
