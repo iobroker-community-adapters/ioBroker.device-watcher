@@ -192,8 +192,8 @@ It's possible to select:
 
 ### **WORK IN PROGRESS**
 
--   (ciddi89) Fixed: Batterie value for shelly plus Gen2 devices
--   (ciddi89) Added: Option to display the last signal strength value when the device is offline
+-   (ciddi89) Fixed: Batterie value for shelly plus Gen2 devices [#282](https://github.com/ciddi89/ioBroker.device-watcher/issues/282)
+-   (ciddi89) Added: Option to display the last signal strength value when the device is offline [#282](https://github.com/ciddi89/ioBroker.device-watcher/issues/282)
 
 ### 2.9.14 (2024-01-04)
 
