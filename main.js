@@ -2145,16 +2145,15 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} instanceID
 	 */
 	async checkDaemonIsHealthy(instanceID) {
-		const aliveState = await this.getInitValue(`system.adapter.${instanceID}.alive`);
 		const connectedHostState = await this.getInitValue(`system.adapter.${instanceID}.connected`);
+		let isAlive = await this.getInitValue(`system.adapter.${instanceID}.alive`);
 		let connectedDeviceState = await this.getInitValue(`${instanceID}.info.connection`);
 		if (connectedDeviceState === undefined) connectedDeviceState = true;
 
-		let isAlive = aliveState;
 		let isHealthy = false;
-		let instanceStatusString = aliveState ? 'Instanz aktiviert' : 'Instanz deaktiviert';
+		let instanceStatusString = isAlive ? 'Instanz aktiviert' : 'Instanz deaktiviert';
 
-		if (!aliveState) {
+		if (!isAlive) {
 			isAlive = false;
 			isHealthy = false;
 			instanceStatusString = 'Instanz deaktiviert';
@@ -2183,19 +2182,17 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {number} instanceDeactivationTime
 	 */
 	async checkDaemonIsAlive(instanceID, instanceDeactivationTime) {
-		const aliveState = await this.getInitValue(`system.adapter.${instanceID}.alive`);
+		let isAlive = await this.getInitValue(`system.adapter.${instanceID}.alive`);
 		let daemonIsAlive;
-
-		let isAlive = false;
 		let isHealthy = false;
-		let instanceStatusString = aliveState ? 'Instanz aktiviert' : 'Instanz deaktiviert';
+		let instanceStatusString = isAlive ? 'Instanz aktiviert' : 'Instanz deaktiviert';
 
-		if (aliveState) {
+		if (isAlive) {
 			daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
 			isAlive = Boolean(daemonIsAlive[0]);
 			isHealthy = Boolean(daemonIsAlive[1]);
 			instanceStatusString = String(daemonIsAlive[2]);
-		} else if (!aliveState) {
+		} else if (!isAlive) {
 			await this.delay(instanceDeactivationTime);
 			daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
 			if (!daemonIsAlive[0]) {
@@ -2228,7 +2225,6 @@ class DeviceWatcher extends utils.Adapter {
 		let isAlive = false;
 		let isHealthy = false;
 		let instanceStatusString = 'Instanz deaktiviert';
-
 		const isAliveSchedule = await this.getForeignStateAsync(`system.adapter.${instanceID}.alive`);
 
 		if (isAliveSchedule) {
