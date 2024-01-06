@@ -1128,9 +1128,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} adapterID - adapter name
 	 */
 	async getBatteryData(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID) {
+		let batteryHealth;
 		let batteryHealthRaw;
 		let batteryHealthUnitRaw;
-		let batteryHealth;
 		let isBatteryDevice;
 
 		switch (adapterID) {
@@ -1139,22 +1139,24 @@ class DeviceWatcher extends utils.Adapter {
 					if (faultReportingState !== undefined) {
 						if (faultReportingState !== 6) {
 							batteryHealth = 'ok';
+							isBatteryDevice = true;
 						} else {
 							batteryHealth = 'low';
+							isBatteryDevice = true;
 						}
-						isBatteryDevice = true;
 					} else if (deviceLowBatState !== undefined) {
 						if (deviceLowBatState !== 1) {
 							batteryHealth = 'ok';
+							isBatteryDevice = true;
 						} else {
 							batteryHealth = 'low';
+							isBatteryDevice = true;
 						}
-						isBatteryDevice = true;
 					} else {
 						batteryHealth = ' - ';
 					}
 				} else {
-					if (deviceBatteryState === 0 || deviceBatteryState >= 6) {
+					if (deviceBatteryState >= 6) {
 						batteryHealth = ' - ';
 					} else {
 						batteryHealth = deviceBatteryState + 'V';
@@ -1167,12 +1169,13 @@ class DeviceWatcher extends utils.Adapter {
 			default:
 				if (deviceBatteryState === undefined) {
 					if (deviceLowBatState !== undefined) {
-						if (deviceLowBatState !== true || deviceLowBatState === 'NORMAL' || deviceLowBatState === 1) {
+						if (deviceLowBatState !== 1) {
 							batteryHealth = 'ok';
+							isBatteryDevice = true;
 						} else {
 							batteryHealth = 'low';
+							isBatteryDevice = true;
 						}
-						isBatteryDevice = true;
 					} else {
 						batteryHealth = ' - ';
 					}
