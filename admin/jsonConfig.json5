@@ -1551,7 +1551,7 @@
 					md: 6,
 					lg: 4,
 					label: 'Display last signal strength',
-					help: 'Display of the last signal strength value when the device is offline',
+					help: 'Display the last signal strength value when the device is offline',
 				},
 				_updateInterval: {
 					type: 'header',
