@@ -1183,9 +1183,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	async setLowbatIndicator(deviceBatteryState, deviceLowBatState, faultReportState, adapterID) {
 		let lowBatIndicator = false;
-		/*=============================================
-			=            Set Lowbat indicator             =
-			=============================================*/
+
 		if (deviceLowBatState !== undefined || faultReportState !== undefined) {
 			switch (adapterID) {
 				case 'hmrpc':
@@ -1194,32 +1192,18 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				default:
-					switch (typeof deviceLowBatState) {
-						case 'number':
-							if (deviceLowBatState === 0) {
-								lowBatIndicator = true;
-							}
-							break;
-
-						case 'string':
-							if (deviceLowBatState !== 'NORMAL') {
-								// Tado devices
-								lowBatIndicator = true;
-							}
-							break;
-
-						case 'boolean':
-							if (deviceLowBatState) {
-								lowBatIndicator = true;
-							}
-							break;
+					if (typeof deviceLowBatState === 'number' && deviceLowBatState === 0) {
+						lowBatIndicator = true;
+					} else if (typeof deviceLowBatState === 'string' && deviceLowBatState !== 'NORMAL') {
+						lowBatIndicator = true;
+					} else if (typeof deviceLowBatState === 'boolean' && deviceLowBatState) {
+						lowBatIndicator = true;
 					}
 			}
-		} else {
-			if (deviceBatteryState < this.config.minWarnBatterie) {
-				lowBatIndicator = true;
-			}
+		} else if (deviceBatteryState < this.config.minWarnBatterie) {
+			lowBatIndicator = true;
 		}
+
 		return lowBatIndicator;
 	}
 
@@ -1231,13 +1215,14 @@ class DeviceWatcher extends utils.Adapter {
 		const lastContact = this.getTimestamp(selector);
 		let lastContactString;
 
-		lastContactString = this.formatDate(new Date(selector), 'hh:mm') + ' Uhr';
 		if (Math.round(lastContact) > 100) {
-			lastContactString = Math.round(lastContact / 60) + ' Stunden';
-		}
-		if (Math.round(lastContact / 60) > 48) {
 			lastContactString = Math.round(lastContact / 60 / 24) + ' Tagen';
+		} else if (Math.round(lastContact) > 48) {
+			lastContactString = Math.round(lastContact / 60) + ' Stunden';
+		} else {
+			lastContactString = this.formatDate(new Date(selector), 'hh:mm') + ' Uhr';
 		}
+
 		return lastContactString;
 	}
 
