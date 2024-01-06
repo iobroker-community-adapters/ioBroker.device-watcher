@@ -1060,61 +1060,53 @@ class DeviceWatcher extends utils.Adapter {
 		if (deviceQualityState != null) {
 			const { val } = deviceQualityState;
 
-			switch (typeof val) {
-				case 'number':
-					if (this.config.trueState) {
-						linkQuality = val;
-					} else {
-						switch (adapterID) {
-							case 'roomba':
-							case 'sonoff':
-							case 'smartgarden':
-								linkQuality = `${val}%`; // If quality state is already an percent value
-								linkQualityRaw = val;
-								break;
-							case 'lupusec':
-							case 'fullybrowserV3':
-								linkQuality = val; // use real state
-								break;
-
-							default:
-								// If quality state is an RSSI value calculate in percent:
-								if (val == -255) {
-									linkQuality = ' - ';
-								} else if (val < 0) {
-									linkQualityRaw = Math.min(Math.max(2 * (val + 100), 0), 100);
-									linkQuality = `${linkQualityRaw}%`;
-
-									// If Quality State is an value between 0-255 (zigbee) calculate in percent:
-								} else if (val >= 0) {
-									linkQualityRaw = parseFloat(((100 / 255) * val).toFixed(0));
-									linkQuality = `${linkQualityRaw}%`;
-								}
-								break;
-						}
-					}
-					break;
-
-				case 'string':
+			if (typeof val === 'number') {
+				if (this.config.trueState) {
+					linkQuality = val;
+				} else {
 					switch (adapterID) {
-						case 'netatmo':
-							// for Netatmo devices
+						case 'roomba':
+						case 'sonoff':
+						case 'smartgarden':
+							linkQuality = `${val}%`;
+							linkQualityRaw = val;
+							break;
+						case 'lupusec':
+						case 'fullybrowserV3':
 							linkQuality = val;
 							break;
-						case 'nukiExt':
-							linkQuality = ' - ';
-							break;
-						case 'mqttNuki':
-							linkQuality = val;
-							mqttNukiValue = parseInt(linkQuality);
-							if (this.config.trueState) {
-								linkQuality = val;
-							} else if (mqttNukiValue < 0) {
-								linkQualityRaw = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100);
+						default:
+							if (val == -255) {
+								linkQuality = ' - ';
+							} else if (val < 0) {
+								linkQualityRaw = Math.min(Math.max(2 * (val + 100), 0), 100);
+								linkQuality = `${linkQualityRaw}%`;
+							} else if (val >= 0) {
+								linkQualityRaw = parseFloat(((100 / 255) * val).toFixed(0));
 								linkQuality = `${linkQualityRaw}%`;
 							}
+							break;
 					}
-					break;
+				}
+			} else if (typeof val === 'string') {
+				switch (adapterID) {
+					case 'netatmo':
+						linkQuality = val;
+						break;
+					case 'nukiExt':
+						linkQuality = ' - ';
+						break;
+					case 'mqttNuki':
+						linkQuality = val;
+						mqttNukiValue = parseInt(linkQuality);
+						if (this.config.trueState) {
+							linkQuality = val;
+						} else if (mqttNukiValue < 0) {
+							linkQualityRaw = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100);
+							linkQuality = `${linkQualityRaw}%`;
+						}
+						break;
+				}
 			}
 		} else {
 			linkQuality = ' - ';
