@@ -2254,10 +2254,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * create adapter update data
 	 */
 	async createAdapterUpdateData() {
-		const adapterUpdateListDP = `admin.*.info.updatesJson`;
-
+		const adapterUpdateListDP = 'admin.*.info.updatesJson';
 		// subscribe to datapoint
-		// this.subscribeForeignStates(adapterUpdateListDP);
+		this.subscribeForeignStates(adapterUpdateListDP);
 
 		await this.getAdapterUpdateData(adapterUpdateListDP);
 
@@ -2269,24 +2268,30 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} adapterUpdateListDP
 	 */
 	async getAdapterUpdateData(adapterUpdateListDP) {
+		// Clear the existing adapter updates data
 		this.adapterUpdatesJsonRaw.clear();
+
+		// Fetch the adapter updates list
 		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
 
 		let adapterJsonList;
 		let adapterUpdatesJsonPath;
 
-		for (const [id] of Object.entries(adapterUpdatesListVal)) {
-			adapterJsonList = this.parseData(adapterUpdatesListVal[id].val);
+		// Extract adapter data from the list
+		for (const [id, value] of Object.entries(adapterUpdatesListVal)) {
+			adapterJsonList = this.parseData(value.val);
 			adapterUpdatesJsonPath = id;
 		}
 
-		for (const [id] of Object.entries(adapterJsonList)) {
+		// Populate the adapter updates data
+		for (const [id, adapterData] of Object.entries(adapterJsonList)) {
 			this.adapterUpdatesJsonRaw.set(this.capitalize(id), {
 				Path: adapterUpdatesJsonPath,
-				newVersion: adapterJsonList[id].availableVersion,
-				oldVersion: adapterJsonList[id].installedVersion,
+				newVersion: adapterData.availableVersion,
+				oldVersion: adapterData.installedVersion,
 			});
 		}
+
 		return this.adapterUpdatesJsonRaw;
 	}
 
@@ -2432,16 +2437,26 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} id
 	 */
 	async renewAdapterUpdateData(id) {
-		const oldAdapterUpdatesCounts = this.countAdapterUpdates;
+		const previousAdapterUpdatesCount = this.countAdapterUpdates;
+
+		// Fetch and process adapter update data
 		await this.getAdapterUpdateData(id);
 		await this.createAdapterUpdateList();
-		if (this.config.checkSendAdapterUpdateMsg && this.countAdapterUpdates > oldAdapterUpdatesCounts) {
+
+		// Check and send update notification if required
+		if (this.config.checkSendAdapterUpdateMsg && this.countAdapterUpdates > previousAdapterUpdatesCount) {
 			await this.sendStateNotifications('updateAdapter', null);
 		}
-		this.listInstanceRaw.forEach((instance) => {
-			const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance.Adapter);
-			instance.updateAvailable = adapterUpdate ? adapterUpdate.newVersion : ' - ';
-		});
+
+		// Update instances with available adapter updates
+		for (const instance of this.listInstanceRaw.values()) {
+			if (this.adapterUpdatesJsonRaw.has(instance.Adapter)) {
+				const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance.Adapter);
+				instance.updateAvailable = adapterUpdate.newVersion;
+			} else {
+				instance.updateAvailable = ' - ';
+			}
+		}
 	}
 	/**
 	 * call function on state change, renew data and send messages
