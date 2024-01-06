@@ -1058,35 +1058,37 @@ class DeviceWatcher extends utils.Adapter {
 		let mqttNukiValue;
 
 		if (deviceQualityState != null) {
-			switch (typeof deviceQualityState.val) {
+			const { val } = deviceQualityState;
+
+			switch (typeof val) {
 				case 'number':
 					if (this.config.trueState) {
-						linkQuality = deviceQualityState.val;
+						linkQuality = val;
 					} else {
 						switch (adapterID) {
 							case 'roomba':
 							case 'sonoff':
 							case 'smartgarden':
-								linkQuality = deviceQualityState.val + '%'; // If quality state is already an percent value
-								linkQualityRaw = deviceQualityState.val;
+								linkQuality = `${val}%`; // If quality state is already an percent value
+								linkQualityRaw = val;
 								break;
 							case 'lupusec':
 							case 'fullybrowserV3':
-								linkQuality = deviceQualityState.val; // use real state
+								linkQuality = val; // use real state
 								break;
 
 							default:
 								// If quality state is an RSSI value calculate in percent:
-								if (deviceQualityState.val == -255) {
+								if (val == -255) {
 									linkQuality = ' - ';
-								} else if (deviceQualityState.val < 0) {
-									linkQuality = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100) + '%';
-									linkQualityRaw = Math.min(Math.max(2 * (deviceQualityState.val + 100), 0), 100);
+								} else if (val < 0) {
+									linkQualityRaw = Math.min(Math.max(2 * (val + 100), 0), 100);
+									linkQuality = `${linkQualityRaw}%`;
 
 									// If Quality State is an value between 0-255 (zigbee) calculate in percent:
-								} else if (deviceQualityState.val >= 0) {
-									linkQuality = parseFloat(((100 / 255) * deviceQualityState.val).toFixed(0)) + '%';
-									linkQualityRaw = parseFloat(((100 / 255) * deviceQualityState.val).toFixed(0));
+								} else if (val >= 0) {
+									linkQualityRaw = parseFloat(((100 / 255) * val).toFixed(0));
+									linkQuality = `${linkQualityRaw}%`;
 								}
 								break;
 						}
@@ -1097,19 +1099,19 @@ class DeviceWatcher extends utils.Adapter {
 					switch (adapterID) {
 						case 'netatmo':
 							// for Netatmo devices
-							linkQuality = deviceQualityState.val;
+							linkQuality = val;
 							break;
 						case 'nukiExt':
 							linkQuality = ' - ';
 							break;
 						case 'mqttNuki':
-							linkQuality = deviceQualityState.val;
+							linkQuality = val;
 							mqttNukiValue = parseInt(linkQuality);
 							if (this.config.trueState) {
-								linkQuality = deviceQualityState.val;
+								linkQuality = val;
 							} else if (mqttNukiValue < 0) {
-								linkQuality = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100) + '%';
 								linkQualityRaw = Math.min(Math.max(2 * (mqttNukiValue + 100), 0), 100);
+								linkQuality = `${linkQualityRaw}%`;
 							}
 					}
 					break;
