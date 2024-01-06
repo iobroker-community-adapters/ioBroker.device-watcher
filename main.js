@@ -1128,64 +1128,46 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} adapterID - adapter name
 	 */
 	async getBatteryData(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID) {
-		let batteryHealth;
+		let batteryHealth = '-';
+		let isBatteryDevice = false;
 		let batteryHealthRaw;
 		let batteryHealthUnitRaw;
-		let isBatteryDevice;
 
-		switch (adapterID) {
-			case 'hmrpc':
-				if (deviceBatteryState === undefined) {
-					if (faultReportingState !== undefined) {
-						if (faultReportingState !== 6) {
-							batteryHealth = 'ok';
-							isBatteryDevice = true;
-						} else {
-							batteryHealth = 'low';
-							isBatteryDevice = true;
-						}
-					} else if (deviceLowBatState !== undefined) {
-						if (deviceLowBatState !== 1) {
-							batteryHealth = 'ok';
-							isBatteryDevice = true;
-						} else {
-							batteryHealth = 'low';
-							isBatteryDevice = true;
-						}
-					} else {
-						batteryHealth = ' - ';
-					}
-				} else {
-					if (deviceBatteryState >= 6) {
-						batteryHealth = ' - ';
-					} else {
-						batteryHealth = deviceBatteryState + 'V';
-						batteryHealthRaw = deviceBatteryState;
-						batteryHealthUnitRaw = 'V';
+		if (adapterID === 'hmrpc') {
+			if (deviceBatteryState === undefined) {
+				if (faultReportingState !== undefined && faultReportingState !== 6) {
+					batteryHealth = 'ok';
+					isBatteryDevice = true;
+				} else if (deviceLowBatState !== undefined && deviceLowBatState !== 1) {
+					batteryHealth = 'ok';
+					isBatteryDevice = true;
+				} else if (deviceLowBatState !== undefined) {
+					batteryHealth = 'low';
+					isBatteryDevice = true;
+				}
+			} else if (deviceBatteryState !== 0 && deviceBatteryState < 6) {
+				batteryHealth = `${deviceBatteryState}V`;
+				batteryHealthRaw = deviceBatteryState;
+				batteryHealthUnitRaw = 'V';
+				isBatteryDevice = true;
+			}
+		} else {
+			if (deviceBatteryState === undefined) {
+				if (deviceLowBatState !== undefined) {
+					if (deviceLowBatState !== true && deviceLowBatState !== 'NORMAL' && deviceLowBatState !== 1) {
+						batteryHealth = 'ok';
+						isBatteryDevice = true;
+					} else if (deviceLowBatState !== true) {
+						batteryHealth = 'low';
 						isBatteryDevice = true;
 					}
 				}
-				break;
-			default:
-				if (deviceBatteryState === undefined) {
-					if (deviceLowBatState !== undefined) {
-						if (deviceLowBatState !== 1) {
-							batteryHealth = 'ok';
-							isBatteryDevice = true;
-						} else {
-							batteryHealth = 'low';
-							isBatteryDevice = true;
-						}
-					} else {
-						batteryHealth = ' - ';
-					}
-				} else {
-					batteryHealth = deviceBatteryState + '%';
-					batteryHealthRaw = deviceBatteryState;
-					batteryHealthUnitRaw = '%';
-					isBatteryDevice = true;
-				}
-				break;
+			} else {
+				batteryHealth = `${deviceBatteryState}%`;
+				batteryHealthRaw = deviceBatteryState;
+				batteryHealthUnitRaw = '%';
+				isBatteryDevice = true;
+			}
 		}
 
 		return [batteryHealth, isBatteryDevice, batteryHealthRaw, batteryHealthUnitRaw];
