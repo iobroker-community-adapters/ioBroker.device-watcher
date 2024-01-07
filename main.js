@@ -4,6 +4,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 const schedule = require('node-schedule');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
+const translations = require('./lib/translations.js');
 const cronParser = require('cron-parser');
 
 // indicator if the adapter is running or not (for intervall/shedule)
@@ -1472,74 +1473,74 @@ class DeviceWatcher extends utils.Adapter {
 	async theLists(device) {
 		// Raw List with all devices for user
 		this.listAllDevicesUserRaw.push({
-			Device: device.Device,
-			Adapter: device.Adapter,
-			Instance: device.instance,
-			'Instance connected': device.instancedeviceConnected,
-			isBatteryDevice: device.isBatteryDevice,
-			Battery: device.Battery,
-			BatteryRaw: device.BatteryRaw,
-			BatteryUnitRaw: device.BatteryUnitRaw,
-			isLowBat: device.LowBat,
-			'Signal strength': device.SignalStrength,
-			'Signal strength Raw': device.SignalStrengthRaw,
-			'Last contact': device.LastContact,
-			'Update Available': device.Upgradable,
-			Status: device.Status,
+			[translations.Device[this.language]]: device.Device,
+			[translations.Adapter[this.language]]: device.Adapter,
+			[translations.Instance[this.language]]: device.instance,
+			[translations.Instance_connected[this.language]]: device.instancedeviceConnected,
+			[translations.isBatteryDevice[this.language]]: device.isBatteryDevice,
+			[translations.Battery[this.language]]: device.Battery,
+			[translations.BatteryRaw[this.language]]: device.BatteryRaw,
+			[translations.BatteryUnitRaw[this.language]]: device.BatteryUnitRaw,
+			[translations.isLowBat[this.language]]: device.LowBat,
+			[translations.Signal_strength[this.language]]: device.SignalStrength,
+			[translations.Signal_strength_Raw[this.language]]: device.SignalStrengthRaw,
+			[translations.Last_Contact[this.language]]: device.LastContact,
+			[translations.Update_Available[this.language]]: device.Upgradable,
+			[translations.Status[this.language]]: device.Status,
 		});
 
 		// List with all devices
 		this.listAllDevices.push({
-			Device: device.Device,
-			Adapter: device.Adapter,
-			Battery: device.Battery,
-			'Signal strength': device.SignalStrength,
-			'Last contact': device.LastContact,
-			Status: device.Status,
+			[translations.Device[this.language]]: device.Device,
+			[translations.Adapter[this.language]]: device.Adapter,
+			[translations.Battery[this.language]]: device.Battery,
+			[translations.Signal_strength[this.language]]: device.SignalStrength,
+			[translations.Last_Contact[this.language]]: device.LastContact,
+			[translations.Status[this.language]]: device.Status,
 		});
 
 		// LinkQuality lists
 		if (device.SignalStrength != ' - ') {
 			this.linkQualityDevices.push({
-				Device: device.Device,
-				Adapter: device.Adapter,
-				'Signal strength': device.SignalStrength,
+				[translations.Device[this.language]]: device.Device,
+				[translations.Adapter[this.language]]: device.Adapter,
+				[translations.Signal_strength[this.language]]: device.SignalStrength,
 			});
 		}
 
 		// Battery lists
 		if (device.isBatteryDevice) {
 			this.batteryPowered.push({
-				Device: device.Device,
-				Adapter: device.Adapter,
-				Battery: device.Battery,
-				Status: device.Status,
+				[translations.Device[this.language]]: device.Device,
+				[translations.Adapter[this.language]]: device.Adapter,
+				[translations.Battery[this.language]]: device.Battery,
+				[translations.Status[this.language]]: device.Status,
 			});
 		}
 
 		// Low Bat lists
 		if (device.LowBat && device.Status !== 'Offline') {
 			this.batteryLowPowered.push({
-				Device: device.Device,
-				Adapter: device.Adapter,
-				Battery: device.Battery,
+				[translations.Device[this.language]]: device.Device,
+				[translations.Adapter[this.language]]: device.Adapter,
+				[translations.Battery[this.language]]: device.Battery,
 			});
 		}
 
 		// Offline List
 		if (device.Status === 'Offline') {
 			this.offlineDevices.push({
-				Device: device.Device,
-				Adapter: device.Adapter,
-				'Last contact': device.LastContact,
+				[translations.Device[this.language]]: device.Device,
+				[translations.Adapter[this.language]]: device.Adapter,
+				[translations.Last_Contact[this.language]]: device.LastContact,
 			});
 		}
 
 		// Device update List
 		if (device.Upgradable === true || device.Upgradable === 1) {
 			this.upgradableList.push({
-				Device: device.Device,
-				Adapter: device.Adapter,
+				[translations.Device[this.language]]: device.Device,
+				[translations.Adapter[this.language]]: device.Adapter,
 			});
 		}
 	}
@@ -1596,28 +1597,28 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [
 					{
-						Device: '--none--',
-						Adapter: '',
-						Battery: '',
-						'Signal strength': '',
-						'Last contact': '',
-						Status: '',
+						[translations.Device[this.language]]: '--none--',
+						[translations.Adapter[this.language]]: '',
+						[translations.Battery[this.language]]: '',
+						[translations.Signal_strength[this.language]]: '',
+						[translations.Last_Contact[this.language]]: '',
+						[translations.Status[this.language]]: '',
 					},
 				];
 				this.listAllDevicesUserRaw = [
 					{
-						Device: '--none--',
-						Adapter: '',
-						Instance: '',
-						'Instance connected': '',
-						isBatteryDevice: '',
-						Battery: '',
-						BatteryRaw: '',
-						isLowBat: '',
-						'Signal strength': '',
-						'Last contact': '',
+						[translations.Device[this.language]]: '--none--',
+						[translations.Adapter[this.language]]: '',
+						[translations.Instance[this.language]]: '',
+						[translations.Instance_connected[this.language]]: '',
+						[translations.isBatteryDevice[this.language]]: '',
+						[translations.Battery[this.language]]: '',
+						[translations.BatteryRaw[this.language]]: '',
+						[translations.isLowBat[this.language]]: '',
+						[translations.Signal_strength[this.language]]: '',
+						[translations.Last_Contact[this.language]]: '',
 						UpdateAvailable: '',
-						Status: '',
+						[translations.Status[this.language]]: '',
 					},
 				];
 			}
@@ -1629,9 +1630,9 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.linkQualityDevices = [
 					{
-						Device: '--none--',
-						Adapter: '',
-						'Signal strength': '',
+						[translations.Device[this.language]]: '--none--',
+						[translations.Adapter[this.language]]: '',
+						[translations.Signal_strength[this.language]]: '',
 					},
 				];
 			}
@@ -1646,9 +1647,9 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.offlineDevices = [
 					{
-						Device: '--none--',
-						Adapter: '',
-						'Last contact': '',
+						[translations.Device[this.language]]: '--none--',
+						[translations.Adapter[this.language]]: '',
+						[translations.Last_Contact[this.language]]: '',
 					},
 				];
 			}
@@ -1663,9 +1664,9 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.upgradableList = [
 					{
-						Device: '--none--',
-						Adapter: '',
-						'Last contact': '',
+						[translations.Device[this.language]]: '--none--',
+						[translations.Adapter[this.language]]: '',
+						[translations.Last_Contact[this.language]]: '',
 					},
 				];
 			}
@@ -1678,7 +1679,7 @@ class DeviceWatcher extends utils.Adapter {
 			// List battery powered
 			if (this.batteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
+				this.batteryPowered = [{ [translations.Device[this.language]]: '--none--', [translations.Adapter[this.language]]: '', [translations.Battery[this.language]]: '' }];
 			}
 			//write JSON list
 			await this.setStateChangedAsync(`devices.${dpSubFolder}batteryList`, {
@@ -1689,7 +1690,7 @@ class DeviceWatcher extends utils.Adapter {
 			// list battery low powered
 			if (this.lowBatteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryLowPowered = [{ Device: '--none--', Adapter: '', Battery: '' }];
+				this.batteryLowPowered = [{ [translations.Device[this.language]]: '--none--', [translations.Adapter[this.language]]: '', [translations.Battery[this.language]]: '' }];
 			}
 			//write JSON list
 			await this.setStateChangedAsync(`devices.${dpSubFolder}lowBatteryList`, {
@@ -2268,7 +2269,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		for (const [adapter, updateData] of this.adapterUpdatesJsonRaw) {
 			this.listAdapterUpdates.push({
-				Adapter: adapter,
+				[translations.Adapter[this.language]]: adapter,
 				'Available Version': updateData.newVersion,
 				'Installed Version': updateData.oldVersion,
 			});
@@ -2286,7 +2287,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// list deactivated instances
 		if (this.countAdapterUpdates === 0) {
-			this.listAdapterUpdates = [{ Adapter: '--none--', 'Available Version': '', 'Installed Version': '' }];
+			this.listAdapterUpdates = [{ [translations.Adapter[this.language]]: '--none--', 'Available Version': '', 'Installed Version': '' }];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listAdapterUpdates`, { val: JSON.stringify(this.listAdapterUpdates), ack: true });
 	}
@@ -2315,40 +2316,40 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.blacklistInstancesLists.includes(instance)) continue;
 			// all instances
 			this.listAllInstances.push({
-				Adapter: instanceData.Adapter,
-				Instance: instance,
-				Mode: instanceData.instanceMode,
-				Schedule: instanceData.schedule,
-				Version: instanceData.adapterVersion,
-				Updateable: instanceData.updateAvailable,
-				Status: instanceData.status,
+				[translations.Adapter[this.language]]: instanceData.Adapter,
+				[translations.Instance[this.language]]: instance,
+				[translations.Mode[this.language]]: instanceData.instanceMode,
+				[translations.Schedule[this.language]]: instanceData.schedule,
+				[translations.Version[this.language]]: instanceData.adapterVersion,
+				[translations.Updateable[this.language]]: instanceData.updateAvailable,
+				[translations.Status[this.language]]: instanceData.status,
 			});
 
 			if (!instanceData.isAlive) {
 				// list with deactivated instances
 				this.listDeactivatedInstances.push({
-					Adapter: instanceData.Adapter,
-					Instance: instance,
-					Status: instanceData.status,
+					[translations.Adapter[this.language]]: instanceData.Adapter,
+					[translations.Instance[this.language]]: instance,
+					[translations.Status[this.language]]: instanceData.status,
 				});
 			} else {
 				// list with active instances
 				this.listAllActiveInstances.push({
-					Adapter: instanceData.Adapter,
-					Instance: instance,
-					Mode: instanceData.instanceMode,
-					Schedule: instanceData.schedule,
-					Status: instanceData.status,
+					[translations.Adapter[this.language]]: instanceData.Adapter,
+					[translations.Instance[this.language]]: instance,
+					[translations.Mode[this.language]]: instanceData.instanceMode,
+					[translations.Schedule[this.language]]: instanceData.schedule,
+					[translations.Status[this.language]]: instanceData.status,
 				});
 			}
 
 			// list with error instances
 			if (instanceData.isAlive && !instanceData.isHealthy) {
 				this.listErrorInstance.push({
-					Adapter: instanceData.Adapter,
-					Instance: instance,
-					Mode: instanceData.instanceMode,
-					Status: instanceData.status,
+					[translations.Adapter[this.language]]: instanceData.Adapter,
+					[translations.Instance[this.language]]: instance,
+					[translations.Mode[this.language]]: instanceData.instanceMode,
+					[translations.Status[this.language]]: instanceData.status,
 				});
 			}
 		}
@@ -2384,14 +2385,18 @@ class DeviceWatcher extends utils.Adapter {
 
 		// list deactivated instances
 		if (this.countDeactivatedInstances === 0) {
-			this.listDeactivatedInstances = [{ Adapter: '--none--', Instance: '', Version: '', Status: '' }];
+			this.listDeactivatedInstances = [
+				{ [translations.Adapter[this.language]]: '--none--', [translations.Instance[this.language]]: '', [translations.Version[this.language]]: '', [translations.Status[this.language]]: '' },
+			];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listDeactivatedInstances`, { val: JSON.stringify(this.listDeactivatedInstances), ack: true });
 		await this.setStateChangedAsync(`adapterAndInstances.countDeactivatedInstances`, { val: this.countDeactivatedInstances, ack: true });
 
 		// list error instances
 		if (this.countErrorInstance === 0) {
-			this.listErrorInstance = [{ Adapter: '--none--', Instance: '', Mode: '', Status: '' }];
+			this.listErrorInstance = [
+				{ [translations.Adapter[this.language]]: '--none--', [translations.Instance[this.language]]: '', [translations.Mode[this.language]]: '', [translations.Status[this.language]]: '' },
+			];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listInstancesError`, { val: JSON.stringify(this.listErrorInstance), ack: true });
 		await this.setStateChangedAsync(`adapterAndInstances.countInstancesError`, { val: this.countErrorInstance, ack: true });
@@ -3567,7 +3572,7 @@ class DeviceWatcher extends utils.Adapter {
 					return a.localeCompare(b);
 				});
 				html = `<center>
-				<b>Updatable Adapter: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<b>Updatable [translations.Adapter[this.language]]: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
