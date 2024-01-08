@@ -1573,7 +1573,6 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async writeDatapoints(adptName) {
 		// fill the datapoints
-
 		this.log.debug(`Start the function: ${this.writeDatapoints.name}`);
 
 		try {
@@ -1591,7 +1590,6 @@ class DeviceWatcher extends utils.Adapter {
 			await this.setStateChangedAsync(`devices.${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
 			await this.setStateChangedAsync(`devices.${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
 			await this.setStateChangedAsync(`devices.${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
-
 			// List all devices
 			if (this.deviceCounter === 0) {
 				// if no device is count, write the JSON List with default value
@@ -1617,7 +1615,7 @@ class DeviceWatcher extends utils.Adapter {
 						[translations.isLowBat[this.language]]: '',
 						[translations.Signal_strength[this.language]]: '',
 						[translations.Last_Contact[this.language]]: '',
-						UpdateAvailable: '',
+						[translations.Update_Available[this.language]]: '',
 						[translations.Status[this.language]]: '',
 					},
 				];
@@ -1755,23 +1753,23 @@ class DeviceWatcher extends utils.Adapter {
 				});
 				if (this.config.checkAdapterInstances) {
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`, {
-						val: await this.createListHTMLInstances('allInstancesList', this.listAllInstances, this.countAllInstances),
+						val: await this.createListHTMLInstances('allInstancesList', this.listInstanceRaw, this.countAllInstances),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`, {
-						val: await this.createListHTMLInstances('allActiveInstancesList', this.listAllActiveInstances, this.countAllActiveInstances),
+						val: await this.createListHTMLInstances('allActiveInstancesList', this.listInstanceRaw, this.countAllActiveInstances),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`, {
-						val: await this.createListHTMLInstances('errorInstanceList', this.listErrorInstance, this.countErrorInstance),
+						val: await this.createListHTMLInstances('errorInstanceList', this.listErrorInstanceRaw, this.countErrorInstance),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`, {
-						val: await this.createListHTMLInstances('deactivatedInstanceList', this.listDeactivatedInstances, this.countDeactivatedInstances),
+						val: await this.createListHTMLInstances('deactivatedInstanceList', this.listInstanceRaw, this.countDeactivatedInstances),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`, {
-						val: await this.createListHTMLInstances('updateAdapterList', this.listAdapterUpdates, this.countAdapterUpdates),
+						val: await this.createListHTMLInstances('updateAdapterList', this.listInstanceRaw, this.countAdapterUpdates),
 						ack: true,
 					});
 				}
@@ -3442,30 +3440,25 @@ class DeviceWatcher extends utils.Adapter {
 		let html;
 		switch (type) {
 			case 'allInstancesList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instance || '';
-					return a.localeCompare(b);
-				});
 				html = `<center>
-				<b>All Instances:<font> ${instancesCount}</b><small></small></font>
+				<b>${[translations.All_Instances[this.language]]}:<font> ${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>Adapter</th>
-				<th align=center>Instance</th>
-				<th align=center width=180>Status</th>
+				<th align=left>${[translations.Adapter[this.language]]}</th>
+				<th align=center>${[translations.Instance[this.language]]}</th>
+				<th align=center width=180>${[translations.Status[this.language]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const instance of instances) {
+				for (const [instance, instanceData] of instances) {
 					html += `<tr>
-					<td><font>${instance.Adapter}</font></td>
-					<td align=center><font>${instance.Instance}</font></td>
-					<td align=center><font>${instance.Status}</font></td>
+					<td><font>${instanceData.Adapter}</font></td>
+					<td align=center><font>${instance}</font></td>
+					<td align=center><font>${instanceData.status}</font></td>
 					</tr>`;
 				}
 
@@ -3473,61 +3466,53 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'allActiveInstancesList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instances || '';
-					return a.localeCompare(b);
-				});
 				html = `<center>
-				<b>Active Devices: <font> ${instancesCount}</b><small></small></font>
+				<b>${[translations.Active_Instances[this.language]]}: <font> ${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>Adapter</th>
-				<th align=center>Instance</th>
-				<th align=center width=180>Status</th>
+				<th align=left>${[translations.Adapter[this.language]]}</th>
+				<th align=center>${[translations.Instance[this.language]]}</th>
+				<th align=center width=180>${[translations.Status[this.language]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const instance of instances) {
-					html += `<tr>
-					<td><font>${instance.Adapter}</font></td>
-					<td align=center><font>${instance.Instance}</font></td>
-					<td align=center><font color=orange>${instance.Status}</font></td>
+				for (const [instance, instanceData] of instances) {
+					if (instanceData.isAlive) {
+						html += `<tr>
+					<td><font>${instanceData.Adapter}</font></td>
+					<td align=center><font>${instance}</font></td>
+					<td align=center><font color=orange>${instanceData.status}</font></td>
 					</tr>`;
+					}
 				}
 
 				html += '</table>';
 				break;
 
 			case 'errorInstanceList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instances || '';
-					return a.localeCompare(b);
-				});
 				html = `<center>
-				<b>Error Instances: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<b>${[translations.Error_Instances[this.language]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>Adapter</th>
-				<th align=center width=120>Instance</th>
-				<th align=center>Status</th>
+				<th align=left>${[translations.Adapter[this.language]]}</th>
+				<th align=center>${[translations.Instance[this.language]]}</th>
+				<th align=center width=180>${[translations.Status[this.language]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const instance of instances) {
+				for (const [instance, instanceData] of instances) {
 					html += `<tr>
-					<td><font>${instance.Adapter}</font></td>
-					<td align=center><font>${instance.Instance}</font></td>
-					<td align=center><font color=orange>${instance.Status}</font></td>
+					<td><font>${instanceData.Adapter}</font></td>
+					<td align=center><font>${instance}</font></td>
+					<td align=center><font color=orange>${instanceData.status}</font></td>
 					</tr>`;
 				}
 
@@ -3535,62 +3520,56 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'deactivatedInstanceList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instances || '';
-					return a.localeCompare(b);
-				});
 				html = `<center>
-				<b>Deactivated Instances: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<b>${[translations.Deactivated_Instances[this.language]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>Adapter</th>
-				<th align=center width=120>Instance</th>
-				<th align=center>Status</th>
+				<th align=left>${[translations.Adapter[this.language]]}</th>
+				<th align=center>${[translations.Instance[this.language]]}</th>
+				<th align=center width=180>${[translations.Status[this.language]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const instance of instances) {
-					html += `<tr>
-					<td><font>${instance.Adapter}</font></td>
-					<td align=center><font>${instance.Instance}</font></td>
-					<td align=center><font color=orange>${instance.Status}</font></td>
+				for (const [instance, instanceData] of instances) {
+					if (!instanceData.isAlive) {
+						html += `<tr>
+					<td><font>${instanceData.Adapter}</font></td>
+					<td align=center><font>${instance}</font></td>
+					<td align=center><font color=orange>${instanceData.status}</font></td>
 					</tr>`;
+					}
 				}
 
 				html += '</table>';
 				break;
 
 			case 'updateAdapterList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instances || '';
-					return a.localeCompare(b);
-				});
 				html = `<center>
-				<b>Updatable [translations.Adapter[this.language]]: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<b>${[translations.Updatable_adapters[this.language]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>Adapter</th>
-				<th align=center>Installed Version</th>
-				<th align=center>Available Version</th>
+				<th align=left>${[translations.Adapter[this.language]]}</th>
+				<th align=center>${[translations.Installed_Version[this.language]]}</th>
+				<th align=center>${[translations.Available_Version[this.language]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const instance of instances) {
-					html += `<tr>
-					<td><font>${instance.Adapter}</font></td>
-					<td align=center><font>${instance['Installed Version']}</font></td>
-					<td align=center><font color=orange>${instance['Available Version']}</font></td>
+				for (const instanceData of instances.values()) {
+					if (instanceData.updateAvailable !== ' - ') {
+						html += `<tr>
+					<td><font>${instanceData.Adapter}</font></td>
+					<td align=center><font>${instanceData.adapterVersion}</font></td>
+					<td align=center><font color=orange>${instanceData.updateAvailable}</font></td>
 					</tr>`;
+					}
 				}
 
 				html += '</table>';
