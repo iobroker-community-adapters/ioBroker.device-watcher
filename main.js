@@ -2970,72 +2970,54 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async sendStateNotifications(type, id) {
 		if (isUnloaded) return;
-		let objectData;
+
+		let objectData = this.listAllDevicesRaw.get(id);
+		const adapterName = this.config.showAdapterNameinMsg ? `${objectData.Adapter}: ` : '';
 		let list = '';
 		let message = '';
-		const setMessage = async (/** @type {string} */ message) => {
-			this.log.info(`${message}`);
-			await this.setStateAsync('lastNotification', `${message}`, true);
-			await this.sendNotification(`${message}`);
-			return (message = '');
+
+		const setMessage = async (message) => {
+			this.log.info(message);
+			await this.setStateAsync('lastNotification', message, true);
+			await this.sendNotification(message);
 		};
+
 		switch (type) {
 			case 'lowBatDevice':
-				objectData = this.listAllDevicesRaw.get(id);
-				if (!this.config.showAdapterNameinMsg) {
-					message = `Gerät mit geringer Batterie erkannt: \n${objectData.Device} (${objectData.Battery})`;
-				} else {
-					message = `Gerät mit geringer Batterie erkannt: \n${objectData.Adapter}: ${objectData.Device} (${objectData.Battery})`;
-				}
+				message = `${translations.Device_low_bat_detected[this.language]}: \n${adapterName}: ${objectData.Device} (${objectData.Battery})`;
 				setMessage(message);
 				break;
+
 			case 'onlineStateDevice':
-				objectData = this.listAllDevicesRaw.get(id);
 				switch (objectData.Status) {
 					case 'Online':
-						if (!this.config.showAdapterNameinMsg) {
-							message = `Folgendes Gerät ist wieder erreichbar: \n${objectData.Device} (${objectData.LastContact})`;
-						} else {
-							message = `Folgendes Gerät ist wieder erreichbar: \n${objectData.Adapter}: ${objectData.Device} (${objectData.LastContact})`;
-						}
+						message = `${translations.Device_available_again[this.language]}: \n${adapterName}: ${objectData.Device} (${objectData.LastContact})`;
 						break;
+
 					case 'Offline':
-						if (!this.config.showAdapterNameinMsg) {
-							message = `Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n${objectData.Device} (${objectData.LastContact})`;
-						} else {
-							message = `Folgendes Gerät ist seit einiger Zeit nicht erreichbar: \n${objectData.Adapter}: ${objectData.Device} (${objectData.LastContact})`;
-						}
+						message = `${translations.Device_not_reachable[this.language]}: \n${adapterName}: ${objectData.Device} (${objectData.LastContact})`;
 						break;
 				}
 				setMessage(message);
 				break;
+
 			case 'updateDevice':
-				objectData = this.listAllDevicesRaw.get(id);
-				if (!this.config.showAdapterNameinMsg) {
-					message = `Neue Geräte Updates vorhanden: \n${objectData.Device}`;
-				} else {
-					message = `Neue Geräte Updates vorhanden: \n${objectData.Adapter}: ${objectData.Device}`;
-				}
+				message = `${translations.Device_new_updates[this.language]}: \n${adapterName}: ${objectData.Device}`;
 				setMessage(message);
 				break;
+
 			case 'updateAdapter':
 				if (this.countAdapterUpdates === 0) return;
-				objectData = this.listAdapterUpdates;
-				list = '';
-				for (const id of objectData) {
-					list = `${list}\n${id.Adapter}: v${id['Available Version']}`;
-				}
-				message = `Neue Adapter Updates vorhanden: ${list}`;
+
+				list = objectData.map((id) => `${id.Adapter}: v${id['Available Version']}`).join('\n');
+				message = `${translations.Adapter_new_updates[this.language]}: ${list}`;
 				setMessage(message);
 				break;
+
 			case 'errorInstance':
-				objectData = this.listInstanceRaw.get(id);
-				message = `Instanz Watchdog:\n${id}: ${objectData.status}`;
-				setMessage(message);
-				break;
 			case 'deactivatedInstance':
 				objectData = this.listInstanceRaw.get(id);
-				message = `Instanz Watchdog:\n${id}: ${objectData.status}`;
+				message = `${translations.Instance_Watchdog[this.language]}:\n${id}: ${objectData.status}`;
 				setMessage(message);
 				break;
 		}
