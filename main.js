@@ -3031,32 +3031,14 @@ class DeviceWatcher extends utils.Adapter {
 		if (isUnloaded) return;
 
 		const checkDays = [];
+		const dayConfigKeys = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		let list = '';
 		let message = '';
-		const dayConfigKeys = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 		const setMessage = async (message) => {
 			this.log.info(message);
 			await this.setStateAsync('lastNotification', message, true);
 			await this.sendNotification(message);
-		};
-
-		const processNotification = (list, messageType) => {
-			if (list.length === 0) return;
-
-			switch (checkDays.length) {
-				case 1:
-					message = `Wöchentliche Übersicht über ${messageType}: ${list}`;
-					break;
-				case 7:
-					message = `Tägliche Übersicht über ${messageType}: ${list}`;
-					break;
-				default:
-					message = `Übersicht über ${messageType}: ${list}`;
-					break;
-			}
-
-			setMessage(message);
 		};
 
 		const processDeviceList = (deviceList, property1, property2) => {
@@ -3068,21 +3050,27 @@ class DeviceWatcher extends utils.Adapter {
 
 		const processInstanceList = (instanceList, property) => {
 			for (const id of instanceList) {
-				if (this.blacklistInstancesNotify.includes(id.Instance)) continue;
-				list += `\n${id.Instance}${property ? `: ${id[property]}` : ''}`;
+				if (this.blacklistInstancesNotify.includes(id[translations['Instance'][this.language]])) continue;
+				list += `\n${id[translations['Instance'][this.language]]}${property ? `: ${id[property]}` : ''}`;
 			}
 		};
 
-		const processNotificationList = (rawList, property1, property2) => {
-			list = '';
-			processDeviceList(rawList, property1, property2);
-			processNotification(list, property1);
-		};
+		const processNotification = (list, messageType) => {
+			if (list.length === 0) return;
 
-		const processInstanceNotificationList = (rawList, property) => {
-			list = '';
-			processInstanceList(rawList, property);
-			processNotification(list, property);
+			switch (checkDays.length) {
+				case 1:
+					message = `${translations.Weekly_overview[this.language]} ${translations[messageType][this.language]}: ${list}`;
+					break;
+				case 7:
+					message = `${translations.Daily_overview[this.language]} ${translations[messageType][this.language]}: ${list}`;
+					break;
+				default:
+					message = `${translations.Overview_of[this.language]} ${translations[messageType][this.language]}: ${list}`;
+					break;
+			}
+
+			setMessage(message);
 		};
 
 		switch (type) {
@@ -3096,7 +3084,9 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily low battery devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`1 ${this.config.checkSendBatteryTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
-					processNotificationList(this.batteryLowPoweredRaw, 'Device', 'Battery');
+					processDeviceList(this.batteryLowPoweredRaw, 'Device', 'Battery');
+
+					processNotification(list, 'devices_low_bat');
 				});
 				break;
 
@@ -3110,7 +3100,9 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily offline devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`2 ${this.config.checkSendOfflineTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
-					processNotificationList(this.offlineDevicesRaw, 'Device', 'LastContact');
+					processDeviceList(this.offlineDevicesRaw, `Device`, 'LastContact');
+
+					processNotification(list, 'offline_devices');
 				});
 				break;
 
@@ -3124,7 +3116,9 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily updatable devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`3 ${this.config.checkSendUpgradeTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
-					processNotificationList(this.upgradableDevicesRaw, 'Device');
+					processDeviceList(this.upgradableDevicesRaw, 'Device');
+
+					processNotification(list, 'available_updatable_devices');
 				});
 				break;
 
@@ -3138,7 +3132,9 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`4 ${this.config.checkSendAdapterUpdateTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
-					processNotificationList(this.listAdapterUpdates, 'Adapter', 'Available Version');
+					processDeviceList(this.listAdapterUpdates, translations.Adapter[this.language], translations.Available_Version[this.language]);
+
+					processNotification(list, 'available_adapter_update');
 				});
 				break;
 
@@ -3152,7 +3148,9 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily instance error message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`5 ${this.config.checkSendInstanceFailedTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
-					processInstanceNotificationList(this.listErrorInstanceRaw, 'Status');
+					processInstanceList(this.listErrorInstanceRaw, 'Status');
+
+					processNotification(list, 'error_instances_msg');
 				});
 				break;
 
@@ -3166,7 +3164,9 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily instance deactivated message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`5 ${this.config.checkSendInstanceDeactivatedTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
-					processInstanceNotificationList(this.listDeactivatedInstances);
+					processInstanceList(this.listDeactivatedInstances);
+
+					processNotification(list, 'deactivated_instances_msg');
 				});
 				break;
 		}
