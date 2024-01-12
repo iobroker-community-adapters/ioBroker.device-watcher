@@ -1211,11 +1211,11 @@ class DeviceWatcher extends utils.Adapter {
 		let lastContactString;
 
 		if (Math.round(lastContact) > 100) {
-			lastContactString = Math.round(lastContact / 60 / 24) + ' Tagen';
+			lastContactString = `${Math.round(lastContact / 60 / 24)} ${translations.days[this.language]}`;
 		} else if (Math.round(lastContact) > 48) {
-			lastContactString = Math.round(lastContact / 60) + ' Stunden';
+			lastContactString = `${Math.round(lastContact / 60)} ${translations.hours[this.language]}`;
 		} else {
-			lastContactString = this.formatDate(new Date(selector), 'hh:mm') + ' Uhr';
+			lastContactString = `${this.formatDate(new Date(selector), 'hh:mm')}`;
 		}
 
 		return lastContactString;
