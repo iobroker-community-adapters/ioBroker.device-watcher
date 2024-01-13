@@ -3419,11 +3419,11 @@ class DeviceWatcher extends utils.Adapter {
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const [instance, instanceData] of instances) {
+				for (const instance of instances) {
 					html += `<tr>
-					<td><font>${instanceData.Adapter}</font></td>
-					<td align=center><font>${instance}</font></td>
-					<td align=center><font color=orange>${instanceData.status}</font></td>
+					<td><font>${instance.Adapter}</font></td>
+					<td align=center><font>${instance.Instance}</font></td>
+					<td align=center><font color=orange>${instance.Status}</font></td>
 					</tr>`;
 				}
 
