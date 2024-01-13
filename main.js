@@ -2984,25 +2984,25 @@ class DeviceWatcher extends utils.Adapter {
 
 		switch (type) {
 			case 'lowBatDevice':
-				message = `${translations.Device_low_bat_detected[this.language]}: \n${adapterName}: ${objectData.Device} (${objectData.Battery})`;
+				message = `${translations.Device_low_bat_detected[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.Battery})`;
 				setMessage(message);
 				break;
 
 			case 'onlineStateDevice':
 				switch (objectData.Status) {
 					case 'Online':
-						message = `${translations.Device_available_again[this.language]}: \n${adapterName}: ${objectData.Device} (${objectData.LastContact})`;
+						message = `${translations.Device_available_again[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.LastContact})`;
 						break;
 
 					case 'Offline':
-						message = `${translations.Device_not_reachable[this.language]}: \n${adapterName}: ${objectData.Device} (${objectData.LastContact})`;
+						message = `${translations.Device_not_reachable[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.LastContact})`;
 						break;
 				}
 				setMessage(message);
 				break;
 
 			case 'updateDevice':
-				message = `${translations.Device_new_updates[this.language]}: \n${adapterName}: ${objectData.Device}`;
+				message = `${translations.Device_new_updates[this.language]}: \n${adapterName} ${objectData.Device}`;
 				setMessage(message);
 				break;
 
@@ -3198,7 +3198,7 @@ class DeviceWatcher extends utils.Adapter {
 			<tr>
 			<th align=left>${[translations.Device[this.language]]}</th>
 			<th align=center width=120>${[translations.Adapter[this.language]]}</th>
-			<th align=right>${[translations.Link_Quality[this.language]]}</th>
+			<th align=right>${[translations.Signal_strength[this.language]]}</th>
 			</tr>
 			<tr>
 			<td colspan="5"><hr></td>
