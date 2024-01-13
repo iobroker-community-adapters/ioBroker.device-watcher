@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.10.0 (2024-01-13)
 
 -   (ciddi89) Fixed: Batterie value for shelly plus Gen2 devices [#282](https://github.com/ciddi89/ioBroker.device-watcher/issues/282)
 -   (ciddi89) Added: Option to display the last signal strength value when the device is offline [#282](https://github.com/ciddi89/ioBroker.device-watcher/issues/282)
