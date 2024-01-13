@@ -1740,7 +1740,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 				await this.setStateChangedAsync(`devices.${dpSubFolder}offlineListHTML`, {
-					val: await this.createListHTML('offlineList', this.offlineDevices, this.offlineDevicesCount, null),
+					val: await this.createListHTML('offlineList', this.offlineDevicesRaw, this.offlineDevicesCount, null),
 					ack: true,
 				});
 				await this.setStateChangedAsync(`devices.${dpSubFolder}batteryListHTML`, {
@@ -3191,14 +3191,14 @@ class DeviceWatcher extends utils.Adapter {
 					return a.localeCompare(b);
 				});
 				html = `<center>
-			<b>Link Quality Devices:<font> ${deviceCount}</b><small></small></font>
+			<b>${[translations.Link_quality_devices[this.language]]}:<font> ${deviceCount}</b><small></small></font>
 			<p></p>
 			</center>   
 			<table width=100%>
 			<tr>
-			<th align=left>Device</th>
-			<th align=center width=120>Adapter</th>
-			<th align=right>Link Quality</th>
+			<th align=left>${[translations.Device[this.language]]}</th>
+			<th align=center width=120>${[translations.Adapter[this.language]]}</th>
+			<th align=right>${[translations.Link_Quality[this.language]]}</th>
 			</tr>
 			<tr>
 			<td colspan="5"><hr></td>
@@ -3206,9 +3206,9 @@ class DeviceWatcher extends utils.Adapter {
 
 				for (const device of devices) {
 					html += `<tr>
-				<td><font>${device.Device}</font></td>
-				<td align=center><font>${device.Adapter}</font></td>
-				<td align=right><font>${device['Signal strength']}</font></td>
+				<td><font>${device[translations.Device[this.language]]}</font></td>
+				<td align=center><font>${device[translations.Adapter[this.language]]}</font></td>
+				<td align=right><font>${device[translations.Signal_strength[this.language]]}</font></td>
 				</tr>`;
 				}
 
@@ -3222,14 +3222,14 @@ class DeviceWatcher extends utils.Adapter {
 					return a.localeCompare(b);
 				});
 				html = `<center>
-			<b>Offline Devices: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
+			<b>${[translations.offline_devices[this.language]]}: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
 			<p></p>
 			</center>   
 			<table width=100%>
 			<tr>
-			<th align=left>Device</th>
-			<th align=center width=120>Adapter</th>
-			<th align=center>Letzter Kontakt</th>
+			<th align=left>${[translations.Device[this.language]]}</th>
+			<th align=center width=120>${[translations.Adapter[this.language]]}</th>
+			<th align=center>${[translations.Last_Contact[this.language]]}</th>
 			</tr>
 			<tr>
 			<td colspan="5"><hr></td>
@@ -3239,7 +3239,7 @@ class DeviceWatcher extends utils.Adapter {
 					html += `<tr>
 				<td><font>${device.Device}</font></td>
 				<td align=center><font>${device.Adapter}</font></td>
-				<td align=center><font color=orange>${device['Last contact']}</font></td>
+				<td align=center><font color=orange>${device.LastContact}</font></td>
 				</tr>`;
 				}
 
@@ -3253,27 +3253,28 @@ class DeviceWatcher extends utils.Adapter {
 					return a.localeCompare(b);
 				});
 				html = `<center>
-			<b>${isLowBatteryList === true ? 'Schwache ' : ''}Batterie Devices: <font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
+			<b>${isLowBatteryList === true ? `${[translations.low[this.language]]} ` : ''}${[translations.battery_devices[this.language]]}: 
+			<font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
 			<p></p>
 			</center>   
 			<table width=100%>
 			<tr>
-			<th align=left>Device</th>
-			<th align=center width=120>Adapter</th>
-			<th align=${isLowBatteryList ? 'center' : 'right'}>Batterie</th>
+			<th align=left>${[translations.Device[this.language]]}</th>
+			<th align=center width=120>${[translations.Adapter[this.language]]}</th>
+			<th align=${isLowBatteryList ? 'center' : 'right'}>${[translations.Battery[this.language]]}</th>
 			</tr>
 			<tr>
 			<td colspan="5"><hr></td>
 			</tr>`;
 				for (const device of devices) {
 					html += `<tr>
-				<td><font>${device.Device}</font></td>
-				<td align=center><font>${device.Adapter}</font></td>`;
+				<td><font>${device[translations.Device[this.language]]}</font></td>
+				<td align=center><font>${device[translations.Adapter[this.language]]}</font></td>`;
 
 					if (isLowBatteryList) {
-						html += `<td align=center><font color=orange>${device.Battery}</font></td>`;
+						html += `<td align=center><font color=orange>${device[translations.Battery[this.language]]}</font></td>`;
 					} else {
-						html += `<td align=right><font color=#3bcf0e>${device.Battery}</font></td>`;
+						html += `<td align=right><font color=#3bcf0e>${device[translations.Battery[this.language]]}</font></td>`;
 					}
 					html += `</tr>`;
 				}
