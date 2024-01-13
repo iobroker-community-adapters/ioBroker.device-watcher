@@ -194,7 +194,7 @@ It's possible to select:
 
 -   (ciddi89) Fixed: Batterie value for shelly plus Gen2 devices [#282](https://github.com/ciddi89/ioBroker.device-watcher/issues/282)
 -   (ciddi89) Added: Option to display the last signal strength value when the device is offline [#282](https://github.com/ciddi89/ioBroker.device-watcher/issues/282)
--   (ciddi89) Added: Translation for JSON lists, HTML lists and notifications
+-   (ciddi89) Added: Translation for JSON lists, HTML lists and notifications [#245](https://github.com/ciddi89/ioBroker.device-watcher/issues/245)
 -   (ciddi89) Other: clean up code
 
 ### 2.9.14 (2024-01-04)
