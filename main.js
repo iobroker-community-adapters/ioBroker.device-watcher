@@ -299,22 +299,22 @@ class DeviceWatcher extends utils.Adapter {
 			await this.refreshData();
 
 			// send overview for low battery devices
-			if (this.config.checkSendBatteryMsgDaily) this.sendScheduleNotifications('lowBatteryDevices');
+			if (this.config.checkSendBatteryMsgDaily) await this.sendScheduleNotifications('lowBatteryDevices');
 
 			// send overview of offline devices
-			if (this.config.checkSendOfflineMsgDaily) this.sendScheduleNotifications('offlineDevices');
+			if (this.config.checkSendOfflineMsgDaily) await this.sendScheduleNotifications('offlineDevices');
 
 			// send overview of upgradeable devices
-			if (this.config.checkSendUpgradeMsgDaily) this.sendScheduleNotifications('updateDevices');
+			if (this.config.checkSendUpgradeMsgDaily) await this.sendScheduleNotifications('updateDevices');
 
 			// send overview of updatable adapters
-			if (this.config.checkSendAdapterUpdateMsgDaily) this.sendScheduleNotifications('updateAdapter');
+			if (this.config.checkSendAdapterUpdateMsgDaily) await this.sendScheduleNotifications('updateAdapter');
 
 			// send overview of deactivated instances
-			if (this.config.checkSendInstanceDeactivatedDaily) this.sendScheduleNotifications('deactivatedInstance');
+			if (this.config.checkSendInstanceDeactivatedDaily) await this.sendScheduleNotifications('deactivatedInstance');
 
 			// send overview of instances with error
-			if (this.config.checkSendInstanceFailedDaily) this.sendScheduleNotifications('errorInstance');
+			if (this.config.checkSendInstanceFailedDaily) await this.sendScheduleNotifications('errorInstance');
 		} catch (error) {
 			this.log.error(`[onReady] - ${error}`);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -583,9 +583,9 @@ class DeviceWatcher extends utils.Adapter {
 			this.refreshDataTimeout = null;
 		}
 
-		this.refreshDataTimeout = this.setTimeout(() => {
+		this.refreshDataTimeout = this.setTimeout(async () => {
 			this.log.debug('Updating Data');
-			this.refreshData();
+			await this.refreshData();
 		}, nextTimeout);
 	} // <-- refreshData end
 
@@ -3042,7 +3042,7 @@ class DeviceWatcher extends utils.Adapter {
 		switch (type) {
 			case 'lowBatDevice':
 				message = `${translations.Device_low_bat_detected[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.Battery})`;
-				setMessage(message);
+				await setMessage(message);
 				break;
 
 			case 'onlineStateDevice':
@@ -3055,12 +3055,12 @@ class DeviceWatcher extends utils.Adapter {
 						message = `${translations.Device_not_reachable[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.LastContact})`;
 						break;
 				}
-				setMessage(message);
+				await setMessage(message);
 				break;
 
 			case 'updateDevice':
 				message = `${translations.Device_new_updates[this.language]}: \n${adapterName} ${objectData.Device}`;
-				setMessage(message);
+				await setMessage(message);
 				break;
 
 			case 'updateAdapter':
@@ -3068,14 +3068,14 @@ class DeviceWatcher extends utils.Adapter {
 
 				list = objectData.map((id) => `${id.Adapter}: v${id['Available Version']}`).join('\n');
 				message = `${translations.Adapter_new_updates[this.language]}: ${list}`;
-				setMessage(message);
+				await setMessage(message);
 				break;
 
 			case 'errorInstance':
 			case 'deactivatedInstance':
 				objectData = this.listInstanceRaw.get(id);
 				message = `${translations.Instance_Watchdog[this.language]}:\n${id}: ${objectData.status}`;
-				setMessage(message);
+				await setMessage(message);
 				break;
 		}
 	}
@@ -3112,7 +3112,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		};
 
-		const processNotification = (list, messageType) => {
+		const processNotification = async (list, messageType) => {
 			if (list.length === 0) return;
 
 			switch (checkDays.length) {
@@ -3127,7 +3127,7 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 			}
 
-			setMessage(message);
+			await setMessage(message);
 		};
 
 		switch (type) {
@@ -3140,10 +3140,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily low battery devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				schedule.scheduleJob(`1 ${this.config.checkSendBatteryTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
+				schedule.scheduleJob(`1 ${this.config.checkSendBatteryTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
 					processDeviceList(this.batteryLowPoweredRaw, 'Device', 'Battery');
 
-					processNotification(list, 'devices_low_bat');
+					await processNotification(list, 'devices_low_bat');
 				});
 				break;
 
@@ -3156,10 +3156,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily offline devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				schedule.scheduleJob(`2 ${this.config.checkSendOfflineTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
+				schedule.scheduleJob(`2 ${this.config.checkSendOfflineTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
 					processDeviceList(this.offlineDevicesRaw, `Device`, 'LastContact');
 
-					processNotification(list, 'offline_devices');
+					await processNotification(list, 'offline_devices');
 				});
 				break;
 
@@ -3172,10 +3172,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily updatable devices message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				schedule.scheduleJob(`3 ${this.config.checkSendUpgradeTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
+				schedule.scheduleJob(`3 ${this.config.checkSendUpgradeTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
 					processDeviceList(this.upgradableDevicesRaw, 'Device');
 
-					processNotification(list, 'available_updatable_devices');
+					await processNotification(list, 'available_updatable_devices');
 				});
 				break;
 
@@ -3188,10 +3188,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				schedule.scheduleJob(`4 ${this.config.checkSendAdapterUpdateTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
+				schedule.scheduleJob(`4 ${this.config.checkSendAdapterUpdateTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
 					processDeviceList(this.listAdapterUpdates, translations.Adapter[this.language], translations.Available_Version[this.language]);
 
-					processNotification(list, 'available_adapter_update');
+					await processNotification(list, 'available_adapter_update');
 				});
 				break;
 
@@ -3204,10 +3204,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily instance error message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				schedule.scheduleJob(`5 ${this.config.checkSendInstanceFailedTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
+				schedule.scheduleJob(`5 ${this.config.checkSendInstanceFailedTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
 					processInstanceList(this.listErrorInstanceRaw, 'Status');
 
-					processNotification(list, 'error_instances_msg');
+					await processNotification(list, 'error_instances_msg');
 				});
 				break;
 
@@ -3220,10 +3220,10 @@ class DeviceWatcher extends utils.Adapter {
 				}
 				this.log.debug(`Number of selected days for daily instance deactivated message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
-				schedule.scheduleJob(`5 ${this.config.checkSendInstanceDeactivatedTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, () => {
+				schedule.scheduleJob(`5 ${this.config.checkSendInstanceDeactivatedTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
 					processInstanceList(this.listDeactivatedInstances);
 
-					processNotification(list, 'deactivated_instances_msg');
+					await processNotification(list, 'deactivated_instances_msg');
 				});
 				break;
 		}
