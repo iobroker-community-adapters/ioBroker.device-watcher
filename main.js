@@ -1530,20 +1530,20 @@ class DeviceWatcher extends utils.Adapter {
 	async theLists(device) {
 		// Raw List with all devices for user
 		this.listAllDevicesUserRaw.push({
-			[translations.Device[this.language]]: device.Device,
-			[translations.Adapter[this.language]]: device.Adapter,
-			[translations.Instance[this.language]]: device.instance,
-			[translations.Instance_connected[this.language]]: device.instancedeviceConnected,
-			[translations.isBatteryDevice[this.language]]: device.isBatteryDevice,
-			[translations.Battery[this.language]]: device.Battery,
-			[translations.BatteryRaw[this.language]]: device.BatteryRaw,
-			[translations.BatteryUnitRaw[this.language]]: device.BatteryUnitRaw,
-			[translations.isLowBat[this.language]]: device.LowBat,
-			[translations.Signal_strength[this.language]]: device.SignalStrength,
-			[translations.Signal_strength_Raw[this.language]]: device.SignalStrengthRaw,
-			[translations.Last_Contact[this.language]]: device.LastContact,
-			[translations.Update_Available[this.language]]: device.Upgradable,
-			[translations.Status[this.language]]: device.Status,
+			Device: device.Device,
+			Adapter: device.Adapter,
+			Instance: device.instance,
+			'Instance connected': device.instancedeviceConnected,
+			isBatteryDevice: device.isBatteryDevice,
+			Battery: device.Battery,
+			BatteryRaw: device.BatteryRaw,
+			BatteryUnitRaw: device.BatteryUnitRaw,
+			isLowBat: device.LowBat,
+			'Signal strength': device.SignalStrength,
+			'Signal strength Raw': device.SignalStrengthRaw,
+			'Last contact': device.LastContact,
+			'Update Available': device.Upgradable,
+			Status: device.Status,
 		});
 
 		// List with all devices
@@ -1662,18 +1662,18 @@ class DeviceWatcher extends utils.Adapter {
 				];
 				this.listAllDevicesUserRaw = [
 					{
-						[translations.Device[this.language]]: '--none--',
-						[translations.Adapter[this.language]]: '',
-						[translations.Instance[this.language]]: '',
-						[translations.Instance_connected[this.language]]: '',
-						[translations.isBatteryDevice[this.language]]: '',
-						[translations.Battery[this.language]]: '',
-						[translations.BatteryRaw[this.language]]: '',
-						[translations.isLowBat[this.language]]: '',
-						[translations.Signal_strength[this.language]]: '',
-						[translations.Last_Contact[this.language]]: '',
-						[translations.Update_Available[this.language]]: '',
-						[translations.Status[this.language]]: '',
+						Device: '--none--',
+						Adapter: '',
+						Instance: '',
+						'Instance connected': '',
+						isBatteryDevice: '',
+						Battery: '',
+						BatteryRaw: '',
+						isLowBat: '',
+						'Signal strength': '',
+						'Last contact': '',
+						UpdateAvailable: '',
+						Status: '',
 					},
 				];
 			}
