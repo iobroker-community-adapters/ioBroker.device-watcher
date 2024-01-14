@@ -5,11 +5,11 @@
 		"node": true,
 		"mocha": true
 	},
-	"extends": [
-		"eslint:recommended"
-	],
-	"plugins": [],
+	"parser": "@typescript-eslint/parser",
+	"extends": ["eslint:recommended"],
+	"plugins": ["@typescript-eslint"],
 	"rules": {
+		"@typescript-eslint/no-floating-promises": ["error"],
 		"indent": [
 			"error",
 			"tab",
@@ -36,12 +36,10 @@
 				"allowTemplateLiterals": true
 			}
 		],
-		"semi": [
-			"error",
-			"always"
-		]
+		"semi": ["error", "always"]
 	},
 	"parserOptions": {
-		"ecmaVersion": 2018
+		"ecmaVersion": 2018,
+		"project": "./tsconfig.json"
 	}
 }
