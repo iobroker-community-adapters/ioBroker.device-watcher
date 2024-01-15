@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.10.1 (2024-01-15)
 
 -   (ciddi89) Fixed: several bugs from last version
 -   (ciddi89) Added: finished translations
