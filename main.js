@@ -2126,16 +2126,16 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		let isHealthy = false;
-		let instanceStatusString = 'Instanz deaktiviert';
+		let instanceStatusString = translations.instance_deactivated[this.language];
 
 		if (isAlive) {
 			if (connectedHostState && connectedDeviceState) {
 				isHealthy = true;
-				instanceStatusString = 'Instanz okay';
+				instanceStatusString = translations.instance_okay[this.language];
 			} else if (!connectedHostState) {
-				instanceStatusString = 'Nicht verbunden mit Host';
+				instanceStatusString = translations.not_connected_host[this.language];
 			} else if (!connectedDeviceState) {
-				instanceStatusString = 'Nicht verbunden mit Gerät oder Dienst';
+				instanceStatusString = translations.not_connected_device[this.language];
 			}
 		}
 
@@ -2151,7 +2151,7 @@ class DeviceWatcher extends utils.Adapter {
 		let isAlive = await this.getInitValue(`system.adapter.${instanceID}.alive`);
 		let daemonIsAlive;
 		let isHealthy = false;
-		let instanceStatusString = isAlive ? 'Instanz aktiviert' : 'Instanz deaktiviert';
+		let instanceStatusString = isAlive ? translations.instance_activated[this.language] : translations.instance_deactivated[this.language];
 
 		if (isAlive) {
 			daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
@@ -2178,7 +2178,7 @@ class DeviceWatcher extends utils.Adapter {
 		let diff;
 		let isAlive = false;
 		let isHealthy = false;
-		let instanceStatusString = 'Instanz deaktiviert';
+		let instanceStatusString = translations.instance_deactivated[this.language];
 		const isAliveSchedule = await this.getForeignStateAsync(`system.adapter.${instanceID}.alive`);
 
 		if (isAliveSchedule) {
@@ -2191,7 +2191,7 @@ class DeviceWatcher extends utils.Adapter {
 					// if 5 minutes difference exceeded, instance is not alive
 					isAlive = true;
 					isHealthy = true;
-					instanceStatusString = 'Instanz okay';
+					instanceStatusString = translations.instance_okay[this.language];
 				}
 			}
 		}
@@ -2249,7 +2249,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		let isAlive = false;
 		let isHealthy = false;
-		let instanceStatusString = 'Instanz deaktiviert';
+		let instanceStatusString = translations.instance_deactivated[this.language];
 
 		switch (instanceMode) {
 			case 'schedule':
