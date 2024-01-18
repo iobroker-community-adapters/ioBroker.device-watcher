@@ -80,7 +80,11 @@ class DeviceWatcher extends utils.Adapter {
 		// Interval timer
 		this.refreshDataTimeout = null;
 
+		// Check if main function is running
 		this.mainRunning = false;
+
+		// System anguage
+		this.userSystemLanguage = this.language;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -94,6 +98,11 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async onReady() {
 		this.log.debug(`Adapter ${adapterName} was started`);
+
+		// set user language
+		if (this.userSystemLanguage === undefined && this.userSystemLanguage === null) {
+			this.userSystemLanguage = 'de';
+		}
 
 		this.configCreateInstanceList = this.config.checkAdapterInstances;
 		this.configListOnlyBattery = this.config.listOnlyBattery;
@@ -1212,10 +1221,10 @@ class DeviceWatcher extends utils.Adapter {
 
 		lastContactString = `${this.formatDate(new Date(selector), 'hh:mm')}`;
 		if (Math.round(lastContact) > 100) {
-			lastContactString = `${Math.round(lastContact / 60)} ${translations.hours[this.language]}`;
+			lastContactString = `${Math.round(lastContact / 60)} ${translations.hours[this.userSystemLanguage]}`;
 		}
 		if (Math.round(lastContact / 60) > 48) {
-			lastContactString = `${Math.round(lastContact / 60 / 24)} ${translations.days[this.language]}`;
+			lastContactString = `${Math.round(lastContact / 60 / 24)} ${translations.days[this.userSystemLanguage]}`;
 		}
 		return lastContactString;
 	}
@@ -1548,56 +1557,56 @@ class DeviceWatcher extends utils.Adapter {
 
 		// List with all devices
 		this.listAllDevices.push({
-			[translations.Device[this.language]]: device.Device,
-			[translations.Adapter[this.language]]: device.Adapter,
-			[translations.Battery[this.language]]: device.Battery,
-			[translations.Signal_strength[this.language]]: device.SignalStrength,
-			[translations.Last_Contact[this.language]]: device.LastContact,
-			[translations.Status[this.language]]: device.Status,
+			[translations.Device[this.userSystemLanguage]]: device.Device,
+			[translations.Adapter[this.userSystemLanguage]]: device.Adapter,
+			[translations.Battery[this.userSystemLanguage]]: device.Battery,
+			[translations.Signal_strength[this.userSystemLanguage]]: device.SignalStrength,
+			[translations.Last_Contact[this.userSystemLanguage]]: device.LastContact,
+			[translations.Status[this.userSystemLanguage]]: device.Status,
 		});
 
 		// LinkQuality lists
 		if (device.SignalStrength != ' - ') {
 			this.linkQualityDevices.push({
-				[translations.Device[this.language]]: device.Device,
-				[translations.Adapter[this.language]]: device.Adapter,
-				[translations.Signal_strength[this.language]]: device.SignalStrength,
+				[translations.Device[this.userSystemLanguage]]: device.Device,
+				[translations.Adapter[this.userSystemLanguage]]: device.Adapter,
+				[translations.Signal_strength[this.userSystemLanguage]]: device.SignalStrength,
 			});
 		}
 
 		// Battery lists
 		if (device.isBatteryDevice) {
 			this.batteryPowered.push({
-				[translations.Device[this.language]]: device.Device,
-				[translations.Adapter[this.language]]: device.Adapter,
-				[translations.Battery[this.language]]: device.Battery,
-				[translations.Status[this.language]]: device.Status,
+				[translations.Device[this.userSystemLanguage]]: device.Device,
+				[translations.Adapter[this.userSystemLanguage]]: device.Adapter,
+				[translations.Battery[this.userSystemLanguage]]: device.Battery,
+				[translations.Status[this.userSystemLanguage]]: device.Status,
 			});
 		}
 
 		// Low Bat lists
 		if (device.LowBat && device.Status !== 'Offline') {
 			this.batteryLowPowered.push({
-				[translations.Device[this.language]]: device.Device,
-				[translations.Adapter[this.language]]: device.Adapter,
-				[translations.Battery[this.language]]: device.Battery,
+				[translations.Device[this.userSystemLanguage]]: device.Device,
+				[translations.Adapter[this.userSystemLanguage]]: device.Adapter,
+				[translations.Battery[this.userSystemLanguage]]: device.Battery,
 			});
 		}
 
 		// Offline List
 		if (device.Status === 'Offline') {
 			this.offlineDevices.push({
-				[translations.Device[this.language]]: device.Device,
-				[translations.Adapter[this.language]]: device.Adapter,
-				[translations.Last_Contact[this.language]]: device.LastContact,
+				[translations.Device[this.userSystemLanguage]]: device.Device,
+				[translations.Adapter[this.userSystemLanguage]]: device.Adapter,
+				[translations.Last_Contact[this.userSystemLanguage]]: device.LastContact,
 			});
 		}
 
 		// Device update List
 		if (device.Upgradable === true || device.Upgradable === 1) {
 			this.upgradableList.push({
-				[translations.Device[this.language]]: device.Device,
-				[translations.Adapter[this.language]]: device.Adapter,
+				[translations.Device[this.userSystemLanguage]]: device.Device,
+				[translations.Adapter[this.userSystemLanguage]]: device.Adapter,
 			});
 		}
 	}
@@ -1652,12 +1661,12 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.listAllDevices = [
 					{
-						[translations.Device[this.language]]: '--none--',
-						[translations.Adapter[this.language]]: '',
-						[translations.Battery[this.language]]: '',
-						[translations.Signal_strength[this.language]]: '',
-						[translations.Last_Contact[this.language]]: '',
-						[translations.Status[this.language]]: '',
+						[translations.Device[this.userSystemLanguage]]: '--none--',
+						[translations.Adapter[this.userSystemLanguage]]: '',
+						[translations.Battery[this.userSystemLanguage]]: '',
+						[translations.Signal_strength[this.userSystemLanguage]]: '',
+						[translations.Last_Contact[this.userSystemLanguage]]: '',
+						[translations.Status[this.userSystemLanguage]]: '',
 					},
 				];
 				this.listAllDevicesUserRaw = [
@@ -1685,9 +1694,9 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.linkQualityDevices = [
 					{
-						[translations.Device[this.language]]: '--none--',
-						[translations.Adapter[this.language]]: '',
-						[translations.Signal_strength[this.language]]: '',
+						[translations.Device[this.userSystemLanguage]]: '--none--',
+						[translations.Adapter[this.userSystemLanguage]]: '',
+						[translations.Signal_strength[this.userSystemLanguage]]: '',
 					},
 				];
 			}
@@ -1702,9 +1711,9 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.offlineDevices = [
 					{
-						[translations.Device[this.language]]: '--none--',
-						[translations.Adapter[this.language]]: '',
-						[translations.Last_Contact[this.language]]: '',
+						[translations.Device[this.userSystemLanguage]]: '--none--',
+						[translations.Adapter[this.userSystemLanguage]]: '',
+						[translations.Last_Contact[this.userSystemLanguage]]: '',
 					},
 				];
 			}
@@ -1719,9 +1728,9 @@ class DeviceWatcher extends utils.Adapter {
 				// if no device is count, write the JSON List with default value
 				this.upgradableList = [
 					{
-						[translations.Device[this.language]]: '--none--',
-						[translations.Adapter[this.language]]: '',
-						[translations.Last_Contact[this.language]]: '',
+						[translations.Device[this.userSystemLanguage]]: '--none--',
+						[translations.Adapter[this.userSystemLanguage]]: '',
+						[translations.Last_Contact[this.userSystemLanguage]]: '',
 					},
 				];
 			}
@@ -1734,7 +1743,9 @@ class DeviceWatcher extends utils.Adapter {
 			// List battery powered
 			if (this.batteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryPowered = [{ [translations.Device[this.language]]: '--none--', [translations.Adapter[this.language]]: '', [translations.Battery[this.language]]: '' }];
+				this.batteryPowered = [
+					{ [translations.Device[this.userSystemLanguage]]: '--none--', [translations.Adapter[this.userSystemLanguage]]: '', [translations.Battery[this.userSystemLanguage]]: '' },
+				];
 			}
 			//write JSON list
 			await this.setStateChangedAsync(`devices.${dpSubFolder}batteryList`, {
@@ -1745,7 +1756,9 @@ class DeviceWatcher extends utils.Adapter {
 			// list battery low powered
 			if (this.lowBatteryPoweredCount === 0) {
 				// if no device is count, write the JSON List with default value
-				this.batteryLowPowered = [{ [translations.Device[this.language]]: '--none--', [translations.Adapter[this.language]]: '', [translations.Battery[this.language]]: '' }];
+				this.batteryLowPowered = [
+					{ [translations.Device[this.userSystemLanguage]]: '--none--', [translations.Adapter[this.userSystemLanguage]]: '', [translations.Battery[this.userSystemLanguage]]: '' },
+				];
 			}
 			//write JSON list
 			await this.setStateChangedAsync(`devices.${dpSubFolder}lowBatteryList`, {
@@ -2126,16 +2139,16 @@ class DeviceWatcher extends utils.Adapter {
 		}
 
 		let isHealthy = false;
-		let instanceStatusString = translations.instance_deactivated[this.language];
+		let instanceStatusString = translations.instance_deactivated[this.userSystemLanguage];
 
 		if (isAlive) {
 			if (connectedHostState && connectedDeviceState) {
 				isHealthy = true;
-				instanceStatusString = translations.instance_okay[this.language];
+				instanceStatusString = translations.instance_okay[this.userSystemLanguage];
 			} else if (!connectedHostState) {
-				instanceStatusString = translations.not_connected_host[this.language];
+				instanceStatusString = translations.not_connected_host[this.userSystemLanguage];
 			} else if (!connectedDeviceState) {
-				instanceStatusString = translations.not_connected_device[this.language];
+				instanceStatusString = translations.not_connected_device[this.userSystemLanguage];
 			}
 		}
 
@@ -2151,7 +2164,7 @@ class DeviceWatcher extends utils.Adapter {
 		let isAlive = await this.getInitValue(`system.adapter.${instanceID}.alive`);
 		let daemonIsAlive;
 		let isHealthy = false;
-		let instanceStatusString = isAlive ? translations.instance_activated[this.language] : translations.instance_deactivated[this.language];
+		let instanceStatusString = isAlive ? translations.instance_activated[this.userSystemLanguage] : translations.instance_deactivated[this.userSystemLanguage];
 
 		if (isAlive) {
 			daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
@@ -2178,7 +2191,7 @@ class DeviceWatcher extends utils.Adapter {
 		let diff;
 		let isAlive = false;
 		let isHealthy = false;
-		let instanceStatusString = translations.instance_deactivated[this.language];
+		let instanceStatusString = translations.instance_deactivated[this.userSystemLanguage];
 		const isAliveSchedule = await this.getForeignStateAsync(`system.adapter.${instanceID}.alive`);
 
 		if (isAliveSchedule) {
@@ -2191,7 +2204,7 @@ class DeviceWatcher extends utils.Adapter {
 					// if 5 minutes difference exceeded, instance is not alive
 					isAlive = true;
 					isHealthy = true;
-					instanceStatusString = translations.instance_okay[this.language];
+					instanceStatusString = translations.instance_okay[this.userSystemLanguage];
 				}
 			}
 		}
@@ -2249,7 +2262,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		let isAlive = false;
 		let isHealthy = false;
-		let instanceStatusString = translations.instance_deactivated[this.language];
+		let instanceStatusString = translations.instance_deactivated[this.userSystemLanguage];
 
 		switch (instanceMode) {
 			case 'schedule':
@@ -2324,7 +2337,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		for (const [adapter, updateData] of this.adapterUpdatesJsonRaw) {
 			this.listAdapterUpdates.push({
-				[translations.Adapter[this.language]]: adapter,
+				[translations.Adapter[this.userSystemLanguage]]: adapter,
 				'Available Version': updateData.newVersion,
 				'Installed Version': updateData.oldVersion,
 			});
@@ -2342,7 +2355,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// list deactivated instances
 		if (this.countAdapterUpdates === 0) {
-			this.listAdapterUpdates = [{ [translations.Adapter[this.language]]: '--none--', 'Available Version': '', 'Installed Version': '' }];
+			this.listAdapterUpdates = [{ [translations.Adapter[this.userSystemLanguage]]: '--none--', 'Available Version': '', 'Installed Version': '' }];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listAdapterUpdates`, { val: JSON.stringify(this.listAdapterUpdates), ack: true });
 	}
@@ -2371,40 +2384,40 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.blacklistInstancesLists.includes(instance)) continue;
 			// all instances
 			this.listAllInstances.push({
-				[translations.Adapter[this.language]]: instanceData.Adapter,
-				[translations.Instance[this.language]]: instance,
-				[translations.Mode[this.language]]: instanceData.instanceMode,
-				[translations.Schedule[this.language]]: instanceData.schedule,
-				[translations.Version[this.language]]: instanceData.adapterVersion,
-				[translations.Updateable[this.language]]: instanceData.updateAvailable,
-				[translations.Status[this.language]]: instanceData.status,
+				[translations.Adapter[this.userSystemLanguage]]: instanceData.Adapter,
+				[translations.Instance[this.userSystemLanguage]]: instance,
+				[translations.Mode[this.userSystemLanguage]]: instanceData.instanceMode,
+				[translations.Schedule[this.userSystemLanguage]]: instanceData.schedule,
+				[translations.Version[this.userSystemLanguage]]: instanceData.adapterVersion,
+				[translations.Updateable[this.userSystemLanguage]]: instanceData.updateAvailable,
+				[translations.Status[this.userSystemLanguage]]: instanceData.status,
 			});
 
 			if (!instanceData.isAlive) {
 				// list with deactivated instances
 				this.listDeactivatedInstances.push({
-					[translations.Adapter[this.language]]: instanceData.Adapter,
-					[translations.Instance[this.language]]: instance,
-					[translations.Status[this.language]]: instanceData.status,
+					[translations.Adapter[this.userSystemLanguage]]: instanceData.Adapter,
+					[translations.Instance[this.userSystemLanguage]]: instance,
+					[translations.Status[this.userSystemLanguage]]: instanceData.status,
 				});
 			} else {
 				// list with active instances
 				this.listAllActiveInstances.push({
-					[translations.Adapter[this.language]]: instanceData.Adapter,
-					[translations.Instance[this.language]]: instance,
-					[translations.Mode[this.language]]: instanceData.instanceMode,
-					[translations.Schedule[this.language]]: instanceData.schedule,
-					[translations.Status[this.language]]: instanceData.status,
+					[translations.Adapter[this.userSystemLanguage]]: instanceData.Adapter,
+					[translations.Instance[this.userSystemLanguage]]: instance,
+					[translations.Mode[this.userSystemLanguage]]: instanceData.instanceMode,
+					[translations.Schedule[this.userSystemLanguage]]: instanceData.schedule,
+					[translations.Status[this.userSystemLanguage]]: instanceData.status,
 				});
 			}
 
 			// list with error instances
 			if (instanceData.isAlive && !instanceData.isHealthy) {
 				this.listErrorInstance.push({
-					[translations.Adapter[this.language]]: instanceData.Adapter,
-					[translations.Instance[this.language]]: instance,
-					[translations.Mode[this.language]]: instanceData.instanceMode,
-					[translations.Status[this.language]]: instanceData.status,
+					[translations.Adapter[this.userSystemLanguage]]: instanceData.Adapter,
+					[translations.Instance[this.userSystemLanguage]]: instance,
+					[translations.Mode[this.userSystemLanguage]]: instanceData.instanceMode,
+					[translations.Status[this.userSystemLanguage]]: instanceData.status,
 				});
 			}
 		}
@@ -2441,7 +2454,12 @@ class DeviceWatcher extends utils.Adapter {
 		// list deactivated instances
 		if (this.countDeactivatedInstances === 0) {
 			this.listDeactivatedInstances = [
-				{ [translations.Adapter[this.language]]: '--none--', [translations.Instance[this.language]]: '', [translations.Version[this.language]]: '', [translations.Status[this.language]]: '' },
+				{
+					[translations.Adapter[this.userSystemLanguage]]: '--none--',
+					[translations.Instance[this.userSystemLanguage]]: '',
+					[translations.Version[this.userSystemLanguage]]: '',
+					[translations.Status[this.userSystemLanguage]]: '',
+				},
 			];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listDeactivatedInstances`, { val: JSON.stringify(this.listDeactivatedInstances), ack: true });
@@ -2450,7 +2468,12 @@ class DeviceWatcher extends utils.Adapter {
 		// list error instances
 		if (this.countErrorInstance === 0) {
 			this.listErrorInstance = [
-				{ [translations.Adapter[this.language]]: '--none--', [translations.Instance[this.language]]: '', [translations.Mode[this.language]]: '', [translations.Status[this.language]]: '' },
+				{
+					[translations.Adapter[this.userSystemLanguage]]: '--none--',
+					[translations.Instance[this.userSystemLanguage]]: '',
+					[translations.Mode[this.userSystemLanguage]]: '',
+					[translations.Status[this.userSystemLanguage]]: '',
+				},
 			];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listInstancesError`, { val: JSON.stringify(this.listErrorInstance), ack: true });
@@ -3041,25 +3064,25 @@ class DeviceWatcher extends utils.Adapter {
 
 		switch (type) {
 			case 'lowBatDevice':
-				message = `${translations.Device_low_bat_detected[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.Battery})`;
+				message = `${translations.Device_low_bat_detected[this.userSystemLanguage]}: \n${adapterName} ${objectData.Device} (${objectData.Battery})`;
 				await setMessage(message);
 				break;
 
 			case 'onlineStateDevice':
 				switch (objectData.Status) {
 					case 'Online':
-						message = `${translations.Device_available_again[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.LastContact})`;
+						message = `${translations.Device_available_again[this.userSystemLanguage]}: \n${adapterName} ${objectData.Device} (${objectData.LastContact})`;
 						break;
 
 					case 'Offline':
-						message = `${translations.Device_not_reachable[this.language]}: \n${adapterName} ${objectData.Device} (${objectData.LastContact})`;
+						message = `${translations.Device_not_reachable[this.userSystemLanguage]}: \n${adapterName} ${objectData.Device} (${objectData.LastContact})`;
 						break;
 				}
 				await setMessage(message);
 				break;
 
 			case 'updateDevice':
-				message = `${translations.Device_new_updates[this.language]}: \n${adapterName} ${objectData.Device}`;
+				message = `${translations.Device_new_updates[this.userSystemLanguage]}: \n${adapterName} ${objectData.Device}`;
 				await setMessage(message);
 				break;
 
@@ -3067,14 +3090,14 @@ class DeviceWatcher extends utils.Adapter {
 				if (this.countAdapterUpdates === 0) return;
 
 				list = objectData.map((id) => `${id.Adapter}: v${id['Available Version']}`).join('\n');
-				message = `${translations.Adapter_new_updates[this.language]}: ${list}`;
+				message = `${translations.Adapter_new_updates[this.userSystemLanguage]}: ${list}`;
 				await setMessage(message);
 				break;
 
 			case 'errorInstance':
 			case 'deactivatedInstance':
 				objectData = this.listInstanceRaw.get(id);
-				message = `${translations.Instance_Watchdog[this.language]}:\n${id}: ${objectData.status}`;
+				message = `${translations.Instance_Watchdog[this.userSystemLanguage]}:\n${id}: ${objectData.status}`;
 				await setMessage(message);
 				break;
 		}
@@ -3107,8 +3130,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		const processInstanceList = (instanceList, property) => {
 			for (const id of instanceList) {
-				if (this.blacklistInstancesNotify.includes(id[translations['Instance'][this.language]])) continue;
-				list += `\n${id[translations['Instance'][this.language]]}${property ? `: ${id[property]}` : ''}`;
+				if (this.blacklistInstancesNotify.includes(id[translations['Instance'][this.userSystemLanguage]])) continue;
+				list += `\n${id[translations['Instance'][this.userSystemLanguage]]}${property ? `: ${id[property]}` : ''}`;
 			}
 		};
 
@@ -3117,13 +3140,13 @@ class DeviceWatcher extends utils.Adapter {
 
 			switch (checkDays.length) {
 				case 1:
-					message = `${translations.Weekly_overview[this.language]} ${translations[messageType][this.language]}: ${list}`;
+					message = `${translations.Weekly_overview[this.userSystemLanguage]} ${translations[messageType][this.userSystemLanguage]}: ${list}`;
 					break;
 				case 7:
-					message = `${translations.Daily_overview[this.language]} ${translations[messageType][this.language]}: ${list}`;
+					message = `${translations.Daily_overview[this.userSystemLanguage]} ${translations[messageType][this.userSystemLanguage]}: ${list}`;
 					break;
 				default:
-					message = `${translations.Overview_of[this.language]} ${translations[messageType][this.language]}: ${list}`;
+					message = `${translations.Overview_of[this.userSystemLanguage]} ${translations[messageType][this.userSystemLanguage]}: ${list}`;
 					break;
 			}
 
@@ -3189,7 +3212,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`4 ${this.config.checkSendAdapterUpdateTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
-					processDeviceList(this.listAdapterUpdates, translations.Adapter[this.language], translations.Available_Version[this.language]);
+					processDeviceList(this.listAdapterUpdates, translations.Adapter[this.userSystemLanguage], translations.Available_Version[this.userSystemLanguage]);
 
 					await processNotification(list, 'available_adapter_update');
 				});
@@ -3248,14 +3271,14 @@ class DeviceWatcher extends utils.Adapter {
 					return a.localeCompare(b);
 				});
 				html = `<center>
-			<b>${[translations.Link_quality_devices[this.language]]}:<font> ${deviceCount}</b><small></small></font>
+			<b>${[translations.Link_quality_devices[this.userSystemLanguage]]}:<font> ${deviceCount}</b><small></small></font>
 			<p></p>
 			</center>   
 			<table width=100%>
 			<tr>
-			<th align=left>${[translations.Device[this.language]]}</th>
-			<th align=center width=120>${[translations.Adapter[this.language]]}</th>
-			<th align=right>${[translations.Signal_strength[this.language]]}</th>
+			<th align=left>${[translations.Device[this.userSystemLanguage]]}</th>
+			<th align=center width=120>${[translations.Adapter[this.userSystemLanguage]]}</th>
+			<th align=right>${[translations.Signal_strength[this.userSystemLanguage]]}</th>
 			</tr>
 			<tr>
 			<td colspan="5"><hr></td>
@@ -3263,9 +3286,9 @@ class DeviceWatcher extends utils.Adapter {
 
 				for (const device of devices) {
 					html += `<tr>
-				<td><font>${device[translations.Device[this.language]]}</font></td>
-				<td align=center><font>${device[translations.Adapter[this.language]]}</font></td>
-				<td align=right><font>${device[translations.Signal_strength[this.language]]}</font></td>
+				<td><font>${device[translations.Device[this.userSystemLanguage]]}</font></td>
+				<td align=center><font>${device[translations.Adapter[this.userSystemLanguage]]}</font></td>
+				<td align=right><font>${device[translations.Signal_strength[this.userSystemLanguage]]}</font></td>
 				</tr>`;
 				}
 
@@ -3279,14 +3302,14 @@ class DeviceWatcher extends utils.Adapter {
 					return a.localeCompare(b);
 				});
 				html = `<center>
-			<b>${[translations.offline_devices[this.language]]}: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
+			<b>${[translations.offline_devices[this.userSystemLanguage]]}: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
 			<p></p>
 			</center>   
 			<table width=100%>
 			<tr>
-			<th align=left>${[translations.Device[this.language]]}</th>
-			<th align=center width=120>${[translations.Adapter[this.language]]}</th>
-			<th align=center>${[translations.Last_Contact[this.language]]}</th>
+			<th align=left>${[translations.Device[this.userSystemLanguage]]}</th>
+			<th align=center width=120>${[translations.Adapter[this.userSystemLanguage]]}</th>
+			<th align=center>${[translations.Last_Contact[this.userSystemLanguage]]}</th>
 			</tr>
 			<tr>
 			<td colspan="5"><hr></td>
@@ -3310,28 +3333,28 @@ class DeviceWatcher extends utils.Adapter {
 					return a.localeCompare(b);
 				});
 				html = `<center>
-			<b>${isLowBatteryList === true ? `${[translations.low[this.language]]} ` : ''}${[translations.battery_devices[this.language]]}: 
+			<b>${isLowBatteryList === true ? `${[translations.low[this.userSystemLanguage]]} ` : ''}${[translations.battery_devices[this.userSystemLanguage]]}: 
 			<font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
 			<p></p>
 			</center>   
 			<table width=100%>
 			<tr>
-			<th align=left>${[translations.Device[this.language]]}</th>
-			<th align=center width=120>${[translations.Adapter[this.language]]}</th>
-			<th align=${isLowBatteryList ? 'center' : 'right'}>${[translations.Battery[this.language]]}</th>
+			<th align=left>${[translations.Device[this.userSystemLanguage]]}</th>
+			<th align=center width=120>${[translations.Adapter[this.userSystemLanguage]]}</th>
+			<th align=${isLowBatteryList ? 'center' : 'right'}>${[translations.Battery[this.userSystemLanguage]]}</th>
 			</tr>
 			<tr>
 			<td colspan="5"><hr></td>
 			</tr>`;
 				for (const device of devices) {
 					html += `<tr>
-				<td><font>${device[translations.Device[this.language]]}</font></td>
-				<td align=center><font>${device[translations.Adapter[this.language]]}</font></td>`;
+				<td><font>${device[translations.Device[this.userSystemLanguage]]}</font></td>
+				<td align=center><font>${device[translations.Adapter[this.userSystemLanguage]]}</font></td>`;
 
 					if (isLowBatteryList) {
-						html += `<td align=center><font color=orange>${device[translations.Battery[this.language]]}</font></td>`;
+						html += `<td align=center><font color=orange>${device[translations.Battery[this.userSystemLanguage]]}</font></td>`;
 					} else {
-						html += `<td align=right><font color=#3bcf0e>${device[translations.Battery[this.language]]}</font></td>`;
+						html += `<td align=right><font color=#3bcf0e>${device[translations.Battery[this.userSystemLanguage]]}</font></td>`;
 					}
 					html += `</tr>`;
 				}
@@ -3352,14 +3375,14 @@ class DeviceWatcher extends utils.Adapter {
 		switch (type) {
 			case 'allInstancesList':
 				html = `<center>
-				<b>${[translations.All_Instances[this.language]]}:<font> ${instancesCount}</b><small></small></font>
+				<b>${[translations.All_Instances[this.userSystemLanguage]]}:<font> ${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>${[translations.Adapter[this.language]]}</th>
-				<th align=center>${[translations.Instance[this.language]]}</th>
-				<th align=center width=180>${[translations.Status[this.language]]}</th>
+				<th align=left>${[translations.Adapter[this.userSystemLanguage]]}</th>
+				<th align=center>${[translations.Instance[this.userSystemLanguage]]}</th>
+				<th align=center width=180>${[translations.Status[this.userSystemLanguage]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
@@ -3378,14 +3401,14 @@ class DeviceWatcher extends utils.Adapter {
 
 			case 'allActiveInstancesList':
 				html = `<center>
-				<b>${[translations.Active_Instances[this.language]]}: <font> ${instancesCount}</b><small></small></font>
+				<b>${[translations.Active_Instances[this.userSystemLanguage]]}: <font> ${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>${[translations.Adapter[this.language]]}</th>
-				<th align=center>${[translations.Instance[this.language]]}</th>
-				<th align=center width=180>${[translations.Status[this.language]]}</th>
+				<th align=left>${[translations.Adapter[this.userSystemLanguage]]}</th>
+				<th align=center>${[translations.Instance[this.userSystemLanguage]]}</th>
+				<th align=center width=180>${[translations.Status[this.userSystemLanguage]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
@@ -3406,14 +3429,14 @@ class DeviceWatcher extends utils.Adapter {
 
 			case 'errorInstanceList':
 				html = `<center>
-				<b>${[translations.Error_Instances[this.language]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<b>${[translations.Error_Instances[this.userSystemLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>${[translations.Adapter[this.language]]}</th>
-				<th align=center>${[translations.Instance[this.language]]}</th>
-				<th align=center width=180>${[translations.Status[this.language]]}</th>
+				<th align=left>${[translations.Adapter[this.userSystemLanguage]]}</th>
+				<th align=center>${[translations.Instance[this.userSystemLanguage]]}</th>
+				<th align=center width=180>${[translations.Status[this.userSystemLanguage]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
@@ -3432,14 +3455,14 @@ class DeviceWatcher extends utils.Adapter {
 
 			case 'deactivatedInstanceList':
 				html = `<center>
-				<b>${[translations.Deactivated_Instances[this.language]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<b>${[translations.Deactivated_Instances[this.userSystemLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>${[translations.Adapter[this.language]]}</th>
-				<th align=center>${[translations.Instance[this.language]]}</th>
-				<th align=center width=180>${[translations.Status[this.language]]}</th>
+				<th align=left>${[translations.Adapter[this.userSystemLanguage]]}</th>
+				<th align=center>${[translations.Instance[this.userSystemLanguage]]}</th>
+				<th align=center width=180>${[translations.Status[this.userSystemLanguage]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
@@ -3460,14 +3483,14 @@ class DeviceWatcher extends utils.Adapter {
 
 			case 'updateAdapterList':
 				html = `<center>
-				<b>${[translations.Updatable_adapters[this.language]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
+				<b>${[translations.Updatable_adapters[this.userSystemLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
 				</center>   
 				<table width=100%>
 				<tr>
-				<th align=left>${[translations.Adapter[this.language]]}</th>
-				<th align=center>${[translations.Installed_Version[this.language]]}</th>
-				<th align=center>${[translations.Available_Version[this.language]]}</th>
+				<th align=left>${[translations.Adapter[this.userSystemLanguage]]}</th>
+				<th align=center>${[translations.Installed_Version[this.userSystemLanguage]]}</th>
+				<th align=center>${[translations.Available_Version[this.userSystemLanguage]]}</th>
 				</tr>
 				<tr>
 				<td colspan="5"><hr></td>
