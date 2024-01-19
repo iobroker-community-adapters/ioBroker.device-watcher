@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: typeError for available adapter update messages
+
 ### 2.10.1 (2024-01-15)
 
 -   (ciddi89) Fixed: several bugs from last version
