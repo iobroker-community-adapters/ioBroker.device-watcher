@@ -84,7 +84,7 @@ class DeviceWatcher extends utils.Adapter {
 		this.mainRunning = false;
 
 		// System anguage
-		this.userSystemLanguage = this.language;
+		this.userSystemLanguage;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -102,6 +102,8 @@ class DeviceWatcher extends utils.Adapter {
 		// set user language
 		if (this.userSystemLanguage === undefined && this.userSystemLanguage === null) {
 			this.userSystemLanguage = 'de';
+		} else {
+			this.userSystemLanguage = this.language;
 		}
 
 		this.configCreateInstanceList = this.config.checkAdapterInstances;
@@ -3088,8 +3090,13 @@ class DeviceWatcher extends utils.Adapter {
 
 			case 'updateAdapter':
 				if (this.countAdapterUpdates === 0) return;
+				objectData = this.listAdapterUpdates;
+				list = '';
 
-				list = objectData.map((id) => `${id.Adapter}: v${id['Available Version']}`).join('\n');
+				for (const id of objectData) {
+					list = `${list}\n${id[translations.Adapter[this.userSystemLanguage]]}: v${id['Available Version']}`;
+				}
+
 				message = `${translations.Adapter_new_updates[this.userSystemLanguage]}: ${list}`;
 				await setMessage(message);
 				break;
@@ -3212,9 +3219,10 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`4 ${this.config.checkSendAdapterUpdateTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
-					processDeviceList(this.listAdapterUpdates, translations.Adapter[this.userSystemLanguage], translations.Available_Version[this.userSystemLanguage]);
-
-					await processNotification(list, 'available_adapter_update');
+					for (const id of this.listAdapterUpdates) {
+						list = `${list}\n${id[translations.Adapter[this.userSystemLanguage]]}: v${id['Available Version']}`;
+					}
+					await processNotification(list, 'available_adapter_updates');
 				});
 				break;
 
