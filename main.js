@@ -2504,8 +2504,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Update instances with available adapter updates
 		for (const instance of this.listInstanceRaw.values()) {
-			if (this.adapterUpdatesJsonRaw.has(instance)) {
-				const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance);
+			if (this.adapterUpdatesJsonRaw.has(instance.Adapter)) {
+				const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance.Adapter);
 				instance.updateAvailable = adapterUpdate.newVersion;
 			} else {
 				instance.updateAvailable = ' - ';
@@ -3057,9 +3057,14 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async sendStateNotifications(type, id) {
 		if (isUnloaded) return;
+		let objectData;
+		let adapterName;
 
-		let objectData = this.listAllDevicesRaw.get(id);
-		const adapterName = this.config.showAdapterNameinMsg ? `${objectData.Adapter}: ` : '';
+		if (id !== null) {
+			objectData = this.listAllDevicesRaw.get(id);
+			adapterName = this.config.showAdapterNameinMsg ? `${objectData.Adapter}: ` : '';
+		}
+
 		let list = '';
 		let message = '';
 
@@ -3095,6 +3100,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			case 'updateAdapter':
 				if (this.countAdapterUpdates === 0) return;
+
 				objectData = this.listAdapterUpdates;
 				list = '';
 

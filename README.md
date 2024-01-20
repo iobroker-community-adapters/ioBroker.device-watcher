@@ -193,6 +193,7 @@ It's possible to select:
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Fixed: typeError for available adapter update messages
+-   (ciddi89) Fixed: Lists for updatable adapter
 
 ### 2.10.1 (2024-01-15)
 
