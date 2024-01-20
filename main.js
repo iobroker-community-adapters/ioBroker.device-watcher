@@ -2504,8 +2504,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Update instances with available adapter updates
 		for (const instance of this.listInstanceRaw.values()) {
-			if (this.adapterUpdatesJsonRaw.has(instance.Adapter)) {
-				const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance.Adapter);
+			if (this.adapterUpdatesJsonRaw.has(instance)) {
+				const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance);
 				instance.updateAvailable = adapterUpdate.newVersion;
 			} else {
 				instance.updateAvailable = ' - ';
