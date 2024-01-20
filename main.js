@@ -2340,8 +2340,8 @@ class DeviceWatcher extends utils.Adapter {
 		for (const [adapter, updateData] of this.adapterUpdatesJsonRaw) {
 			this.listAdapterUpdates.push({
 				[translations.Adapter[this.userSystemLanguage]]: adapter,
-				'Available Version': updateData.newVersion,
-				'Installed Version': updateData.oldVersion,
+				[translations.Available_Version[this.userSystemLanguage]]: updateData.newVersion,
+				[translations.Installed_Version[this.userSystemLanguage]]: updateData.oldVersion,
 			});
 		}
 		this.countAdapterUpdates = this.listAdapterUpdates.length;
@@ -2355,9 +2355,14 @@ class DeviceWatcher extends utils.Adapter {
 		// Write Datapoints for counts
 		await this.setStateChangedAsync(`adapterAndInstances.countAdapterUpdates`, { val: this.countAdapterUpdates, ack: true });
 
-		// list deactivated instances
 		if (this.countAdapterUpdates === 0) {
-			this.listAdapterUpdates = [{ [translations.Adapter[this.userSystemLanguage]]: '--none--', 'Available Version': '', 'Installed Version': '' }];
+			this.listAdapterUpdates = [
+				{
+					[translations.Adapter[this.userSystemLanguage]]: '--none--',
+					[translations.Available_Version[this.userSystemLanguage]]: '',
+					[translations.Installed_Version[this.userSystemLanguage]]: '',
+				},
+			];
 		}
 		await this.setStateChangedAsync(`adapterAndInstances.listAdapterUpdates`, { val: JSON.stringify(this.listAdapterUpdates), ack: true });
 	}
@@ -3094,7 +3099,7 @@ class DeviceWatcher extends utils.Adapter {
 				list = '';
 
 				for (const id of objectData) {
-					list = `${list}\n${id[translations.Adapter[this.userSystemLanguage]]}: v${id['Available Version']}`;
+					list = `${list}\n${id[translations.Adapter[this.userSystemLanguage]]}: v${id[translations.Available_Version[this.userSystemLanguage]]}`;
 				}
 
 				message = `${translations.Adapter_new_updates[this.userSystemLanguage]}: ${list}`;
@@ -3220,7 +3225,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				schedule.scheduleJob(`4 ${this.config.checkSendAdapterUpdateTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
 					for (const id of this.listAdapterUpdates) {
-						list = `${list}\n${id[translations.Adapter[this.userSystemLanguage]]}: v${id['Available Version']}`;
+						list = `${list}\n${id[translations.Adapter[this.userSystemLanguage]]}: v${id[translations.Available_Version[this.userSystemLanguage]]}`;
 					}
 					await processNotification(list, 'available_adapter_updates');
 				});
