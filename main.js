@@ -394,7 +394,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async onStateChange(id, state) {
 		if (state) {
-			// this.log.debug(`State changed: ${id} changed ${state.val}`);
+			this.log.debug(`State changed: ${id} changed ${state.val}`);
 
 			try {
 				/*=============================================
@@ -1436,7 +1436,7 @@ class DeviceWatcher extends utils.Adapter {
 					deviceData.linkQuality = contactData[2];
 				}
 				if (this.config.checkSendOfflineMsg && oldContactState !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-					await this.sendStateNotifications('onlineStateDevice', device);
+					await this.sendStateNotifications('Devices', 'onlineStateDevice', device);
 				}
 			}
 		}
@@ -1887,7 +1887,7 @@ class DeviceWatcher extends utils.Adapter {
 						deviceData.Upgradable = await this.checkDeviceUpdate(deviceData.adapterID, state.val);
 						if (deviceData.Upgradable === true) {
 							if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('updateDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'updateDevice', deviceID);
 							}
 						}
 					}
@@ -1919,7 +1919,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
 							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('lowBatDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID);
 							}
 						}
 					}
@@ -1937,7 +1937,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
 							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('lowBatDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID);
 							}
 						}
 					}
@@ -1956,7 +1956,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
 							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('lowBatDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID);
 							}
 						}
 					}
@@ -1987,10 +1987,10 @@ class DeviceWatcher extends utils.Adapter {
 								if (deviceData.instanceDeviceConnectionDP.val !== undefined) {
 									// check if the generally deviceData connected state is for a while true
 									if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 20000)) {
-										await this.sendStateNotifications('onlineStateDevice', deviceID);
+										await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID);
 									}
 								} else {
-									await this.sendStateNotifications('onlineStateDevice', deviceID);
+									await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID);
 								}
 							}
 						}
@@ -2499,7 +2499,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Check and send update notification if required
 		if (this.config.checkSendAdapterUpdateMsg && this.countAdapterUpdates > previousAdapterUpdatesCount) {
-			await this.sendStateNotifications('updateAdapter', null);
+			await this.sendStateNotifications('AdapterUpdates', 'updateAdapter', null);
 		}
 
 		// Update instances with available adapter updates
@@ -2542,7 +2542,7 @@ class DeviceWatcher extends utils.Adapter {
 						// send message when instance was deactivated
 						if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
 							if (this.blacklistInstancesNotify.includes(instanceID)) return;
-							await this.sendStateNotifications('deactivatedInstance', instanceID);
+							await this.sendStateNotifications('Instances', 'deactivatedInstance', instanceID);
 						}
 					}
 					break;
@@ -2553,7 +2553,7 @@ class DeviceWatcher extends utils.Adapter {
 						// send message when instance has an error
 						if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
 							if (this.blacklistInstancesNotify.includes(instanceID)) return;
-							await this.sendStateNotifications('errorInstance', instanceID);
+							await this.sendStateNotifications('Instances', 'errorInstance', instanceID);
 						}
 					}
 					break;
@@ -2564,7 +2564,7 @@ class DeviceWatcher extends utils.Adapter {
 						// send message when instance has an error
 						if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
 							if (this.blacklistInstancesNotify.includes(instanceID)) return;
-							await this.sendStateNotifications('errorInstance', instanceID);
+							await this.sendStateNotifications('Instances', 'errorInstance', instanceID);
 						}
 					}
 					break;
@@ -3052,21 +3052,25 @@ class DeviceWatcher extends utils.Adapter {
 	/*---------- Notifications ----------*/
 	/**
 	 * Notifications on state changes
+	 * @param {string} mainType
 	 * @param {string} type
 	 * @param {object} id
 	 */
-	async sendStateNotifications(type, id) {
+	async sendStateNotifications(mainType, type, id) {
 		if (isUnloaded) return;
 		let objectData;
 		let adapterName;
-
-		if (id !== null) {
-			objectData = this.listAllDevicesRaw.get(id);
-			adapterName = this.config.showAdapterNameinMsg ? `${objectData.Adapter}: ` : '';
-		}
-
 		let list = '';
 		let message = '';
+
+		if (id !== null) {
+			if (mainType === 'Devices') {
+				objectData = this.listAllDevicesRaw.get(id);
+				adapterName = this.config.showAdapterNameinMsg ? `${objectData.Adapter}: ` : '';
+			} else if (mainType === 'Instances') {
+				objectData = this.listInstanceRaw.get(id);
+			}
+		}
 
 		const setMessage = async (message) => {
 			this.log.info(message);
@@ -3114,7 +3118,6 @@ class DeviceWatcher extends utils.Adapter {
 
 			case 'errorInstance':
 			case 'deactivatedInstance':
-				objectData = this.listInstanceRaw.get(id);
 				message = `${translations.Instance_Watchdog[this.userSystemLanguage]}:\n${id}: ${objectData.status}`;
 				await setMessage(message);
 				break;
