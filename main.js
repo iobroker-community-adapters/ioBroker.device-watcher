@@ -627,7 +627,7 @@ class DeviceWatcher extends utils.Adapter {
 					this.log.error(`[createBlacklist] - ${error}`);
 				}
 				if (this.blacklistLists.length >= 1) this.log.info(`Found devices/services on blacklist for lists: ${this.blacklistLists}`);
-				if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found devices/services on blacklist for lists: ${this.blacklistAdapterLists}`);
+				if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found devices/services on blacklist for own adapter lists: ${this.blacklistAdapterLists}`);
 				if (this.blacklistNotify.length >= 1) this.log.info(`Found devices/services on blacklist for notifications: ${this.blacklistNotify}`);
 			}
 		}
@@ -1812,7 +1812,7 @@ class DeviceWatcher extends utils.Adapter {
 					ack: true,
 				});
 				await this.setStateChangedAsync(`devices.${dpSubFolder}offlineListHTML`, {
-					val: await this.createListHTML('offlineList', this.offlineDevicesRaw, this.offlineDevicesCount, null),
+					val: await this.createListHTML('offlineList', this.offlineDevices, this.offlineDevicesCount, null),
 					ack: true,
 				});
 				await this.setStateChangedAsync(`devices.${dpSubFolder}batteryListHTML`, {
@@ -1825,23 +1825,23 @@ class DeviceWatcher extends utils.Adapter {
 				});
 				if (this.config.checkAdapterInstances) {
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`, {
-						val: await this.createListHTMLInstances('allInstancesList', this.listInstanceRaw, this.countAllInstances),
+						val: await this.createListHTMLInstances('allInstancesList', this.listAllInstances, this.countAllInstances),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`, {
-						val: await this.createListHTMLInstances('allActiveInstancesList', this.listInstanceRaw, this.countAllActiveInstances),
+						val: await this.createListHTMLInstances('allActiveInstancesList', this.listAllActiveInstances, this.countAllActiveInstances),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`, {
-						val: await this.createListHTMLInstances('errorInstanceList', this.listErrorInstanceRaw, this.countErrorInstance),
+						val: await this.createListHTMLInstances('errorInstanceList', this.listErrorInstance, this.countErrorInstance),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`, {
-						val: await this.createListHTMLInstances('deactivatedInstanceList', this.listInstanceRaw, this.countDeactivatedInstances),
+						val: await this.createListHTMLInstances('deactivatedInstanceList', this.listDeactivatedInstances, this.countDeactivatedInstances),
 						ack: true,
 					});
 					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`, {
-						val: await this.createListHTMLInstances('updateAdapterList', this.listInstanceRaw, this.countAdapterUpdates),
+						val: await this.createListHTMLInstances('updateAdapterList', this.listAdapterUpdates, this.countAdapterUpdates),
 						ack: true,
 					});
 				}
@@ -3336,9 +3336,9 @@ class DeviceWatcher extends utils.Adapter {
 
 				for (const device of devices) {
 					html += `<tr>
-				<td><font>${device.Device}</font></td>
-				<td align=center><font>${device.Adapter}</font></td>
-				<td align=center><font color=orange>${device.LastContact}</font></td>
+				<td><font>${device[translations.Device[this.userSystemLanguage]]}</font></td>
+				<td align=center><font>${device[translations.Adapter[this.userSystemLanguage]]}</font></td>
+				<td align=center><font color=orange>${device[translations.Last_Contact[this.userSystemLanguage]]}</font></td>
 				</tr>`;
 				}
 
@@ -3393,6 +3393,11 @@ class DeviceWatcher extends utils.Adapter {
 		let html;
 		switch (type) {
 			case 'allInstancesList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instance || '';
+					return a.localeCompare(b);
+				});
 				html = `<center>
 				<b>${[translations.All_Instances[this.userSystemLanguage]]}:<font> ${instancesCount}</b><small></small></font>
 				<p></p>
@@ -3407,11 +3412,11 @@ class DeviceWatcher extends utils.Adapter {
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const [instance, instanceData] of instances) {
+				for (const instanceData of instances) {
 					html += `<tr>
-					<td><font>${instanceData.Adapter}</font></td>
-					<td align=center><font>${instance}</font></td>
-					<td align=center><font>${instanceData.status}</font></td>
+					<td><font>${instanceData[translations.Adapter[this.userSystemLanguage]]}</font></td>
+					<td align=center><font>${instanceData[translations.Instance[this.userSystemLanguage]]}</font></td>
+					<td align=center><font>${instanceData[translations.Status[this.userSystemLanguage]]}</font></td>
 					</tr>`;
 				}
 
@@ -3419,6 +3424,11 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'allActiveInstancesList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instances || '';
+					return a.localeCompare(b);
+				});
 				html = `<center>
 				<b>${[translations.Active_Instances[this.userSystemLanguage]]}: <font> ${instancesCount}</b><small></small></font>
 				<p></p>
@@ -3433,20 +3443,23 @@ class DeviceWatcher extends utils.Adapter {
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const [instance, instanceData] of instances) {
-					if (instanceData.isAlive) {
-						html += `<tr>
-					<td><font>${instanceData.Adapter}</font></td>
-					<td align=center><font>${instance}</font></td>
-					<td align=center><font color=orange>${instanceData.status}</font></td>
+				for (const instanceData of instances) {
+					html += `<tr>
+					<td><font>${instanceData[translations.Adapter[this.userSystemLanguage]]}</font></td>
+					<td align=center><font>${instanceData[translations.Instance[this.userSystemLanguage]]}</font></td>
+					<td align=center><font color=orange>${instanceData[translations.Status[this.userSystemLanguage]]}</font></td>
 					</tr>`;
-					}
 				}
 
 				html += '</table>';
 				break;
 
 			case 'errorInstanceList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instances || '';
+					return a.localeCompare(b);
+				});
 				html = `<center>
 				<b>${[translations.Error_Instances[this.userSystemLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
@@ -3461,11 +3474,11 @@ class DeviceWatcher extends utils.Adapter {
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const instance of instances) {
+				for (const instanceData of instances) {
 					html += `<tr>
-					<td><font>${instance.Adapter}</font></td>
-					<td align=center><font>${instance.Instance}</font></td>
-					<td align=center><font color=orange>${instance.Status}</font></td>
+					<td><font>${instanceData[translations.Adapter[this.userSystemLanguage]]}</font></td>
+					<td align=center><font>${instanceData[translations.Instance[this.userSystemLanguage]]}</font></td>
+					<td align=center><font color=orange>${instanceData[translations.Status[this.userSystemLanguage]]}</font></td>
 					</tr>`;
 				}
 
@@ -3473,6 +3486,11 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'deactivatedInstanceList':
+				instances = instances.sort((a, b) => {
+					a = a.Instance || '';
+					b = b.Instances || '';
+					return a.localeCompare(b);
+				});
 				html = `<center>
 				<b>${[translations.Deactivated_Instances[this.userSystemLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
 				<p></p>
@@ -3487,12 +3505,12 @@ class DeviceWatcher extends utils.Adapter {
 				<td colspan="5"><hr></td>
 				</tr>`;
 
-				for (const [instance, instanceData] of instances) {
+				for (const instanceData of instances) {
 					if (!instanceData.isAlive) {
 						html += `<tr>
-					<td><font>${instanceData.Adapter}</font></td>
-					<td align=center><font>${instance}</font></td>
-					<td align=center><font color=orange>${instanceData.status}</font></td>
+					<td><font>${instanceData[translations.Adapter[this.userSystemLanguage]]}</font></td>
+					<td align=center><font>${instanceData[translations.Instance[this.userSystemLanguage]]}</font></td>
+					<td align=center><font color=orange>${instanceData[translations.Status[this.userSystemLanguage]]}</font></td>
 					</tr>`;
 					}
 				}
@@ -3518,9 +3536,9 @@ class DeviceWatcher extends utils.Adapter {
 				for (const instanceData of instances.values()) {
 					if (instanceData.updateAvailable !== ' - ') {
 						html += `<tr>
-					<td><font>${instanceData.Adapter}</font></td>
-					<td align=center><font>${instanceData.adapterVersion}</font></td>
-					<td align=center><font color=orange>${instanceData.updateAvailable}</font></td>
+					<td><font>${instanceData[translations.Adapter[this.userSystemLanguage]]}</font></td>
+					<td align=center><font>${instanceData[translations.Installed_Version[this.userSystemLanguage]]}</font></td>
+					<td align=center><font color=orange>${instanceData[translations.Available_Version[this.userSystemLanguage]]}</font></td>
 					</tr>`;
 					}
 				}
