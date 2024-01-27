@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.10.3 (2024-01-27)
 
 -   (ciddi89) Fixed [#299](https://github.com/ciddi89/ioBroker.device-watcher/issues/299): blacklisted devices was shown in html-list
 
