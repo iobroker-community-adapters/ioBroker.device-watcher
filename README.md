@@ -192,7 +192,7 @@ It's possible to select:
 
 ### **WORK IN PROGRESS**
 
--   (ciddi89) Fixed: blacklisted devices was shown in html-list
+-   (ciddi89) Fixed [#299](https://github.com/ciddi89/ioBroker.device-watcher/issues/299): blacklisted devices was shown in html-list
 
 ### 2.10.2 (2024-01-20)
 
