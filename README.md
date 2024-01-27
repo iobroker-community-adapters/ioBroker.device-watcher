@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Fixed: blacklisted devices was shown in html-list
+
 ### 2.10.2 (2024-01-20)
 
 -   (ciddi89) Fixed: typeError for available adapter update messages
