@@ -165,5 +165,6 @@
     "option2": "选项2",
     "show adapter name in notification": "在通知中显示适配器名称",
     "Display last signal strength": "显示最后的信号强度",
-    "Display the last signal strength value when the device is offline": "设备离线时显示最后一次信号强度值"
+    "Display the last signal strength value when the device is offline": "设备离线时显示最后一次信号强度值",
+    "Here you can select the language for the tables and messages": "您可以在此处选择表格和消息的语言"
 }

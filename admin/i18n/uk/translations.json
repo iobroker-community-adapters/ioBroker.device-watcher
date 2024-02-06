@@ -165,5 +165,6 @@
     "option2": "варіант2",
     "show adapter name in notification": "показати назву адаптера в сповіщенні",
     "Display last signal strength": "Показати силу останнього сигналу",
-    "Display the last signal strength value when the device is offline": "Відображення останнього значення потужності сигналу, коли пристрій офлайн"
+    "Display the last signal strength value when the device is offline": "Відображення останнього значення потужності сигналу, коли пристрій офлайн",
+    "Here you can select the language for the tables and messages": "Тут ви можете вибрати мову для таблиць і повідомлень"
 }

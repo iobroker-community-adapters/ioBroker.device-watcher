@@ -1592,6 +1592,30 @@
 					help: 'in seconds',
 					hideOnlyControl: false,
 				},
+				_headerLanguage: {
+					type: 'header',
+					text: 'Language',
+					size: 2,
+				},
+				_textLanguage: {
+					type: 'staticText',
+					text: 'Here you can select the language for the tables and messages',
+					sm: 12,
+					md: 12,
+					lg: 12,
+					style: {
+						fontSize: 16,
+						marginBottom: 10,
+					},
+				},
+				userSelectedLanguage: {
+					type: 'language',
+					system: true,
+					sm: 6,
+					md: 6,
+					lg: 3,
+					label: 'Language',
+				},
 			},
 		},
 		_expertSettings: {

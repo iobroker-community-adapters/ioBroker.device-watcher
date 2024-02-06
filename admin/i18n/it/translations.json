@@ -165,5 +165,6 @@
     "option2": "opzione 2",
     "show adapter name in notification": "mostra il nome dell'adattatore nella notifica",
     "Display last signal strength": "Visualizza l'ultima potenza del segnale",
-    "Display the last signal strength value when the device is offline": "Visualizza l'ultimo valore di potenza del segnale quando il dispositivo è offline"
+    "Display the last signal strength value when the device is offline": "Visualizza l'ultimo valore di potenza del segnale quando il dispositivo è offline",
+    "Here you can select the language for the tables and messages": "Qui è possibile selezionare la lingua per le tabelle e i messaggi"
 }

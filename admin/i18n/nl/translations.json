@@ -165,5 +165,6 @@
     "option2": "Optie 2",
     "show adapter name in notification": "toon adapternaam in melding",
     "Display last signal strength": "Weergave laatste signaalsterkte",
-    "Display the last signal strength value when the device is offline": "Geef de laatste signaalsterktewaarde weer wanneer het apparaat offline is"
+    "Display the last signal strength value when the device is offline": "Geef de laatste signaalsterktewaarde weer wanneer het apparaat offline is",
+    "Here you can select the language for the tables and messages": "Hier kunt u de taal voor de tabellen en berichten selecteren"
 }
