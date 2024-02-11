@@ -104,6 +104,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.config.userSelectedLanguage = 'de';
 			}
 		}
+		this.log.debug(`Set language to ${this.config.userSelectedLanguage}`);
 
 		this.configCreateInstanceList = this.config.checkAdapterInstances;
 		this.configListOnlyBattery = this.config.listOnlyBattery;
