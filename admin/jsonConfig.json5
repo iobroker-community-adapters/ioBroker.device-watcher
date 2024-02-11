@@ -1610,7 +1610,7 @@
 				},
 				userSelectedLanguage: {
 					type: 'language',
-					system: true,
+					system: false,
 					sm: 6,
 					md: 6,
 					lg: 3,
