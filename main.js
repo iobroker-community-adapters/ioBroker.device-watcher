@@ -3151,6 +3151,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		const processDeviceList = (deviceList, property1, property2) => {
+			list = '';
 			for (const id of deviceList) {
 				if (this.blacklistNotify.includes(id.Path)) continue;
 				list += `\n${!this.config.showAdapterNameinMsg ? '' : id.Adapter + ': '}${id[property1]}${property2 ? ` (${id[property2]})` : ''}`;
@@ -3158,6 +3159,7 @@ class DeviceWatcher extends utils.Adapter {
 		};
 
 		const processInstanceList = (instanceList, property) => {
+			list = '';
 			for (const id of instanceList) {
 				if (this.blacklistInstancesNotify.includes(id[translations['Instance'][this.config.userSelectedLanguage]])) continue;
 				list += `\n${id[translations['Instance'][this.config.userSelectedLanguage]]}${property ? `: ${id[property]}` : ''}`;
@@ -3241,6 +3243,7 @@ class DeviceWatcher extends utils.Adapter {
 				this.log.debug(`Number of selected days for daily adapter update message: ${checkDays.length}. Send Message on: ${checkDays.join(', ')} ...`);
 
 				schedule.scheduleJob(`4 ${this.config.checkSendAdapterUpdateTime.split(':').reverse().join(' ')} * * ${checkDays.join(',')}`, async () => {
+					list = '';
 					for (const id of this.listAdapterUpdates) {
 						list = `${list}\n${id[translations.Adapter[this.config.userSelectedLanguage]]}: v${id[translations.Available_Version[this.config.userSelectedLanguage]]}`;
 					}
