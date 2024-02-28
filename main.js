@@ -394,7 +394,7 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async onStateChange(id, state) {
 		if (state) {
-			// this.log.debug(`State changed: ${id} changed ${state.val}`);
+			this.log.debug(`State changed: ${id} changed ${state.val}`);
 			try {
 				/*=============================================
 				=        	Instances / Adapter     	     =
