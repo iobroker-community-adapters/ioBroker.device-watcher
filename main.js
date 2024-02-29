@@ -2109,7 +2109,6 @@ class DeviceWatcher extends utils.Adapter {
 					isConnectedHost: instanceConnectedHostVal,
 					isConnectedDevice: instanceConnectedDeviceVal,
 					status: instanceStatus,
-					checkIsRunning: false,
 					aliveDP: `system.adapter.${instanceID}.alive`,
 					hostConnectionDP: instanceConnectedHostDP,
 					deviceConnectionDP: instanceConnectedDeviceDP,
@@ -2141,7 +2140,6 @@ class DeviceWatcher extends utils.Adapter {
 		const connectedHostState = await this.getInitValue(`system.adapter.${instanceID}.connected`);
 		const isAlive = await this.getInitValue(`system.adapter.${instanceID}.alive`);
 		let connectedDeviceState = await this.getInitValue(`${instanceID}.info.connection`);
-
 		if (connectedDeviceState === undefined) {
 			connectedDeviceState = true;
 		}
@@ -2160,7 +2158,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		}
 
-		return [Boolean(isAlive), Boolean(isHealthy), String(instanceStatusString)];
+		return [Boolean(isAlive), Boolean(isHealthy), String(instanceStatusString), Boolean(connectedHostState), Boolean(connectedDeviceState)];
 	}
 
 	/**
@@ -2188,8 +2186,10 @@ class DeviceWatcher extends utils.Adapter {
 		isAlive = Boolean(daemonIsAlive[0]);
 		isHealthy = Boolean(daemonIsAlive[1]);
 		instanceStatusString = String(daemonIsAlive[2]);
+		const connectedToHost = Boolean(daemonIsAlive[3]);
+		const connectedToDevice = Boolean(daemonIsAlive[4]);
 
-		return [isAlive, isHealthy, instanceStatusString];
+		return [isAlive, isHealthy, instanceStatusString, connectedToHost, connectedToDevice];
 	}
 
 	async checkScheduleisHealty(instanceID, scheduleTime) {
@@ -2229,52 +2229,21 @@ class DeviceWatcher extends utils.Adapter {
 	async setInstanceStatus(instanceMode, scheduleTime, instanceID) {
 		let instanceDeactivationTime = (this.config.offlineTimeInstances * 1000) / 2;
 		let instanceErrorTime = (this.config.errorTimeInstances * 1000) / 2;
-
-		const checkScheduleIsHealthy = async () => {
-			const scheduleIsAlive = await this.checkScheduleisHealty(instanceID, scheduleTime);
-			return {
-				isAlive: Boolean(scheduleIsAlive[0]),
-				isHealthy: Boolean(scheduleIsAlive[1]),
-				instanceStatusString: String(scheduleIsAlive[2]),
-			};
-		};
-
-		const checkDaemonIsHealthy = async () => {
-			const daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
-
-			if (daemonIsAlive[0] && !daemonIsAlive[1]) {
-				await this.delay(instanceErrorTime);
-				const daemonIsAliveAfterDelay = await this.checkDaemonIsHealthy(instanceID);
-
-				if (daemonIsAliveAfterDelay[0] && !daemonIsAliveAfterDelay[1]) {
-					await this.delay(instanceErrorTime);
-					const daemonIsAliveAfterSecondDelay = await this.checkDaemonIsHealthy(instanceID);
-
-					if (daemonIsAliveAfterSecondDelay[0] && !daemonIsAliveAfterSecondDelay[1]) {
-						return {
-							isAlive: Boolean(daemonIsAliveAfterSecondDelay[0]),
-							isHealthy: Boolean(daemonIsAliveAfterSecondDelay[1]),
-							instanceStatusString: String(daemonIsAliveAfterSecondDelay[2]),
-						};
-					}
-				}
-			}
-
-			const daemonIsNotAlive = await this.checkDaemonIsAlive(instanceID, instanceDeactivationTime);
-			return {
-				isAlive: Boolean(daemonIsNotAlive[0]),
-				isHealthy: Boolean(daemonIsNotAlive[1]),
-				instanceStatusString: String(daemonIsNotAlive[2]),
-			};
-		};
-
-		let isAlive = false;
-		let isHealthy = false;
-		let instanceStatusString = translations.instance_deactivated[this.config.userSelectedLanguage];
+		let isAlive;
+		let isHealthy;
+		let instanceStatusString;
+		let daemonIsAlive;
+		let daemonIsNotAlive;
+		let scheduleIsAlive;
+		let connectedToHost;
+		let connectedToDevice;
 
 		switch (instanceMode) {
 			case 'schedule':
-				({ isAlive, isHealthy, instanceStatusString } = await checkScheduleIsHealthy());
+				scheduleIsAlive = await this.checkScheduleisHealty(instanceID, scheduleTime);
+				isAlive = Boolean(scheduleIsAlive[0]);
+				isHealthy = Boolean(scheduleIsAlive[1]);
+				instanceStatusString = String(scheduleIsAlive[2]);
 				break;
 			case 'daemon':
 				// check with time the user did define for error and deactivation
@@ -2283,12 +2252,36 @@ class DeviceWatcher extends utils.Adapter {
 					instanceDeactivationTime = (userTimeInstances.deactivationTime * 1000) / 2;
 					instanceErrorTime = (userTimeInstances.errorTime * 1000) / 2;
 				}
+				daemonIsAlive = await this.checkDaemonIsHealthy(instanceID);
+				if (daemonIsAlive[0] && !daemonIsAlive[1]) {
+					await this.delay(instanceErrorTime);
+					const daemonIsAliveAfterDelay = await this.checkDaemonIsHealthy(instanceID);
 
-				({ isAlive, isHealthy, instanceStatusString } = await checkDaemonIsHealthy());
+					if (daemonIsAliveAfterDelay[0] && !daemonIsAliveAfterDelay[1]) {
+						await this.delay(instanceErrorTime);
+						const daemonIsAliveAfterSecondDelay = await this.checkDaemonIsHealthy(instanceID);
+
+						if (daemonIsAliveAfterSecondDelay[0] && !daemonIsAliveAfterSecondDelay[1]) {
+							isAlive = Boolean(daemonIsAliveAfterSecondDelay[0]);
+							isHealthy = Boolean(daemonIsAliveAfterSecondDelay[1]);
+							instanceStatusString = String(daemonIsAliveAfterSecondDelay[2]);
+							connectedToHost = Boolean(daemonIsAliveAfterSecondDelay[3]);
+							connectedToDevice = Boolean(daemonIsAliveAfterSecondDelay[4]);
+						}
+					}
+				} else {
+					daemonIsNotAlive = await this.checkDaemonIsAlive(instanceID, instanceDeactivationTime);
+					isAlive = Boolean(daemonIsNotAlive[0]);
+					isHealthy = Boolean(daemonIsNotAlive[1]);
+					instanceStatusString = String(daemonIsNotAlive[2]);
+					connectedToHost = Boolean(daemonIsNotAlive[3]);
+					connectedToDevice = Boolean(daemonIsNotAlive[4]);
+				}
+
 				break;
 		}
 
-		return [isAlive, isHealthy, instanceStatusString];
+		return [isAlive, isHealthy, instanceStatusString, connectedToHost, connectedToDevice];
 	}
 
 	/**
@@ -2530,15 +2523,13 @@ class DeviceWatcher extends utils.Adapter {
 			let instanceStatusRaw;
 
 			const checkInstance = async (instanceID, instanceData) => {
-				if (!instanceData.checkIsRunning) {
-					instanceData.checkIsRunning = true;
-					instanceStatusRaw = await this.setInstanceStatus(instanceData.instanceMode, instanceData.schedule, instanceID);
-					instanceData.isAlive = instanceStatusRaw[0];
-					instanceData.isHealthy = instanceStatusRaw[1];
-					instanceData.status = instanceStatusRaw[2];
-					instanceData.checkIsRunning = false;
-					return;
-				}
+				instanceStatusRaw = await this.setInstanceStatus(instanceData.instanceMode, instanceData.schedule, instanceID);
+				instanceData.isAlive = instanceStatusRaw[0];
+				instanceData.isHealthy = instanceStatusRaw[1];
+				instanceData.status = instanceStatusRaw[2];
+				instanceData.isConnectedHost = instanceStatusRaw[3];
+				instanceData.isConnectedDevice = instanceStatusRaw[4];
+				return;
 			};
 
 			switch (id) {
