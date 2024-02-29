@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.10.4",
+    "version": "2.10.5",
     "news": {
+      "2.10.5": {
+        "en": "Fixed [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Phantom Messages",
+        "de": "Behoben [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Phantom-Nachrichten",
+        "ru": "Fixed [#262] (https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292] (https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Фантомные сообщения",
+        "pt": "Corrigido [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Mensagens de Fantasma",
+        "nl": "Vast [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Phantom messages",
+        "fr": "Correction [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) et [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292) : Messages fantômes",
+        "it": "[#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Messaggi fantasma",
+        "es": "[#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Mensajes Fantasma",
+        "pl": "Fixed [# 262] (https: / / github.com / ciddi89 / ioBroker.device- watcher / issues / 262) & [# 292] (https: / / github.com / ciddi89 / iBroker.device- watcher / issues / 292): Wiadomości Phantom",
+        "uk": "Виправлено [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/products/292): Повідомлення",
+        "zh-cn": "固定 [262] (https://github.com/ciddi89/ioBroker.device-watcher/issues/262) 和 [292] (https://github.com/ciddi89/ioBroker.device-watcher/issues/292): 幽灵消息"
+      },
       "2.10.4": {
         "en": "Added: Option to set language for messages and tables\nFixed [#312](https://github.com/ciddi89/ioBroker.device-watcher/issues/312): Schedule messages were not emptied after they were sent\nFixed: Too many messages were sent about online / offline devices when an instance was started or ended",
         "de": "Hinzugefügt: Option zur Einstellung der Sprache für Nachrichten und Tabellen\nBehoben [#312](https://github.com/ciddi89/ioBroker.device-watcher/issues/312): Nachrichten wurden nicht entleert, nachdem sie gesendet wurden\nFix: Zu viele Nachrichten wurden über Online / Offline-Geräte gesendet, wenn eine Instanz gestartet oder beendet wurde",
@@ -80,19 +93,6 @@
         "pl": "Fixed: Ten schemat mógł naprawić błędy o wysokim cpu i załadowaniu ramy, w końcu. O ostatnich dwóch wersjach.",
         "uk": "Виправлено: Цей schould зафіксував помилки з високою cpu і ram навантаження, нарешті. Про нас.",
         "zh-cn": "固定: 最终,这就将固定在高棉和泥石头。 关于最后两个走私版本。."
-      },
-      "2.9.13": {
-        "en": "Fixed: Issues from v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nFixed: High CPU usage at object and state changes [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "de": "Behoben: Fehler von v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nBehoben: Hohe CPU-Nutzung bei Objekt- und Zustandsänderungen [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "ru": "Исправлено: Вопросы от v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nИсправлено: Высокое использование процессора на объектах и государственных изменениях [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "pt": "Corrigido: Questões do v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nCorrigido: Uso de alta CPU em alterações de objeto e estado [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "nl": "Quality over Quantity (QoQ) Releases Vertaling:\nQuality over Quantity (QoQ) Releases Vertaling:",
-        "fr": "Correction : Questions renvoyées à l ' adresse v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nFixed: High CPU use at object and state changes [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "it": "Risolto: Problemi da v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nRisolto: alto uso della CPU a oggetto e cambiamenti di stato [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "es": "Arreglado: Cuestiones de v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nFijo: Alto uso de la CPU en los cambios de objeto y estado [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "pl": "Fixed: Issues from v2.9.12 #283(https:/github.com/ciddi89/ioBroker,device-watcher/issues/283) (ang.)\n(Użycie procesora) w obiektach i stanach zmienia liczbę #283 (https:/github.com/ciddi89/ioBroker,device-watcher/issues/283)",
-        "uk": "Виправлено: Випуски від v2.9.12 [#283](https://github.com/ciddi89/ioBroker.device-watcher/issues/283)\nВиправлено: Високий рівень використання процесора при об'єктах та змінах стану [#283] (https://github.com/ciddi89/ioBroker.device-watcher/issues/283)",
-        "zh-cn": "Fixed: Issues from v2.9.12[#283] (http://github.com/ciddi89/ioBroker.device-watcher/issues/283)\n九. 固定:在物体和州变化中使用高频单位[第283](http://github.com/ciddi89/ioBroker.device-watcher/issues/283)"
       }
     },
     "titleLang": {
