@@ -189,6 +189,11 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Added [#323](https://github.com/ciddi89/ioBroker.device-watcher/issues/323): Support for Ring Cameras
+
 ### 2.10.5 (2024-02-29)
 
 -   (ciddi89) Fixed [#262](https://github.com/ciddi89/ioBroker.device-watcher/issues/262) & [#292](https://github.com/ciddi89/ioBroker.device-watcher/issues/292): Phantom Messages

@@ -151,6 +151,7 @@ class DeviceWatcher extends utils.Adapter {
 			nut: this.config.nutDevices,
 			ping: this.config.pingDevices,
 			proxmox: this.config.proxmoxDevices,
+			ring: this.config.ringDevices,
 			roomba: this.config.roombaDevices,
 			shelly: this.config.shellyDevices,
 			smartgarden: this.config.smartgardenDevices,
@@ -212,6 +213,7 @@ class DeviceWatcher extends utils.Adapter {
 			nut: this.config.nutMaxMinutes,
 			ping: this.config.pingMaxMinutes,
 			proxmox: this.config.proxmoxMaxMinutes,
+			ring: this.config.ringMaxMinutes,
 			roomba: this.config.roombaMaxMinutes,
 			shelly: this.config.shellyMaxMinutes,
 			smartgarden: this.config.smartgardenMaxMinutes,
@@ -997,6 +999,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'loqedSmartLock':
 				case 'viessmann':
 				case 'homekitController':
+				case 'ring':
 					if (shortDeviceObject && typeof shortDeviceObject === 'object' && shortDeviceObject.common) {
 						deviceName = shortDeviceObject.common.name;
 					}
@@ -1138,41 +1141,44 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryHealthRaw;
 		let batteryHealthUnitRaw;
 
-		if (adapterID === 'hmrpc') {
-			if (deviceBatteryState === undefined) {
-				if (faultReportingState !== undefined && faultReportingState !== 6) {
-					batteryHealth = 'ok';
-					isBatteryDevice = true;
-				} else if (deviceLowBatState !== undefined && deviceLowBatState !== 1) {
-					batteryHealth = 'ok';
-					isBatteryDevice = true;
-				} else if (deviceLowBatState !== undefined) {
-					batteryHealth = 'low';
-					isBatteryDevice = true;
-				}
-			} else if (deviceBatteryState !== 0 && deviceBatteryState < 6) {
-				batteryHealth = `${deviceBatteryState}V`;
-				batteryHealthRaw = deviceBatteryState;
-				batteryHealthUnitRaw = 'V';
-				isBatteryDevice = true;
-			}
-		} else {
-			if (deviceBatteryState === undefined) {
-				if (deviceLowBatState !== undefined) {
-					if (deviceLowBatState !== true && deviceLowBatState !== 'NORMAL' && deviceLowBatState !== 1) {
+		switch (adapterID) {
+			case 'hmrpc':
+				if (deviceBatteryState === undefined) {
+					if (faultReportingState !== undefined && faultReportingState !== 6) {
 						batteryHealth = 'ok';
 						isBatteryDevice = true;
-					} else if (deviceLowBatState !== true) {
+					} else if (deviceLowBatState !== undefined && deviceLowBatState !== 1) {
+						batteryHealth = 'ok';
+						isBatteryDevice = true;
+					} else if (deviceLowBatState !== undefined) {
 						batteryHealth = 'low';
 						isBatteryDevice = true;
 					}
+				} else if (deviceBatteryState !== 0 && deviceBatteryState < 6) {
+					batteryHealth = `${deviceBatteryState}V`;
+					batteryHealthRaw = deviceBatteryState;
+					batteryHealthUnitRaw = 'V';
+					isBatteryDevice = true;
 				}
-			} else {
-				batteryHealth = `${deviceBatteryState}%`;
-				batteryHealthRaw = deviceBatteryState;
-				batteryHealthUnitRaw = '%';
-				isBatteryDevice = true;
-			}
+				break;
+			default:
+				if (deviceBatteryState === undefined) {
+					if (deviceLowBatState !== undefined) {
+						if (deviceLowBatState !== true && deviceLowBatState !== 'NORMAL' && deviceLowBatState !== 1) {
+							batteryHealth = 'ok';
+							isBatteryDevice = true;
+						} else if (deviceLowBatState !== true) {
+							batteryHealth = 'low';
+							isBatteryDevice = true;
+						}
+					}
+				} else {
+					batteryHealth = `${deviceBatteryState}%`;
+					batteryHealthRaw = deviceBatteryState;
+					batteryHealthUnitRaw = '%';
+					isBatteryDevice = true;
+				}
+				break;
 		}
 
 		return [batteryHealth, isBatteryDevice, batteryHealthRaw, batteryHealthUnitRaw];
@@ -1454,6 +1460,13 @@ class DeviceWatcher extends utils.Adapter {
 		switch (adapterID) {
 			case 'hmiP':
 				if (deviceUpdateSelector === 'UPDATE_AVAILABLE') {
+					isUpgradable = true;
+				} else {
+					isUpgradable = false;
+				}
+				break;
+			case 'ring':
+				if (deviceUpdateSelector !== 'Up to Date') {
 					isUpgradable = true;
 				} else {
 					isUpgradable = false;

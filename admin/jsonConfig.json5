@@ -289,6 +289,13 @@
 					lg: 3,
 					label: 'Proxmox',
 				},
+				ringDevices: {
+					type: 'checkbox',
+					sm: 6,
+					md: 6,
+					lg: 3,
+					label: 'Ring',
+				},
 				roombaDevices: {
 					type: 'checkbox',
 					sm: 6,
@@ -2213,6 +2220,18 @@
 					label: 'Proxmox',
 					help: 'in minutes',
 					hidden: '!data.proxmoxDevices',
+					hideOnlyControl: false,
+				},
+				ringMaxMinutes: {
+					type: 'number',
+					min: -1,
+					max: 100000,
+					sm: 6,
+					md: 6,
+					lg: 3,
+					label: 'Ring',
+					help: 'in minutes',
+					hidden: '!data.ringDevices',
 					hideOnlyControl: false,
 				},
 				roombaMaxMinutes: {
