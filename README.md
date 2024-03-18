@@ -189,8 +189,7 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.11.0 (2024-03-18)
 
 -   (ciddi89) Added [#323](https://github.com/ciddi89/ioBroker.device-watcher/issues/323): Support for Ring Cameras
 
