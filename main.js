@@ -7,7 +7,7 @@ const arrApart = require('./lib/arrApart.js'); // list of supported adapters
 const translations = require('./lib/translations.js');
 const cronParser = require('cron-parser');
 
-// indicator if the adapter is running or not (for intervall/shedule)
+// indicator if the adapter is running (for intervall/shedule)
 let isUnloaded = false;
 
 class DeviceWatcher extends utils.Adapter {
