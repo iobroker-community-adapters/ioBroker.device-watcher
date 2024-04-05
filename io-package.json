@@ -121,16 +121,31 @@
 			"zh-cn": "设备看门狗",
 			"uk": "Сторожовий пес для пристроїв"
 		},
-		"authors": ["Christian Behrends <mail@christian-behrends.de>"],
-		"keywords": ["device", "instance", "watcher", "device-watcher", "instance-watcher", "battery", "rssi", "link-quality", "lists"],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
+		"authors": [
+			"Christian Behrends <mail@christian-behrends.de>"
+		],
+		"keywords": [
+			"device", 
+			"instance", 
+			"watcher", 
+			"device-watcher", 
+			"instance-watcher", 
+			"battery", 
+			"rssi", 
+			"link-quality", 
+			"lists"
+		],
+		"licenseInformation": {
+			"license": "MIT",
+			"type": "free"
+		},
+	  	"platform": "Javascript/Node.js",
 		"icon": "device-watcher.png",
 		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/ciddi89/ioBroker.device-watcher/main/admin/device-watcher.png",
+		"extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.device-watcher/main/admin/device-watcher.png",
 		"readme": "https://github.com/iobroker-community-adapters/ioBroker.device-watcher/blob/main/README.md",
 		"loglevel": "info",
+		"tier": 2,
 		"mode": "daemon",
 		"type": "misc-data",
 		"compact": true,
