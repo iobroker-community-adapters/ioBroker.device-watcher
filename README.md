@@ -188,6 +188,10 @@ It's possible to select:
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+**WORK IN PROGRESS**
+- (mcm1957) Adapter requires nodeJS >= 18 and js-controller >= 5 now
+- (mcm1957) Adpter has been migrated to iobroker-community-adapters organisation
+- (mcm1957) Dependencies have been updated
 
 ### 2.11.0 (2024-03-18)
 
@@ -570,6 +574,7 @@ It's possible to select:
 
 MIT License
 
+Copyright (c) 2024 iobroker-community-adapters <iobroker-community-adapters@gmx.de>
 Copyright (c) 2024 Christian Behrends <mail@christian-behrends.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
