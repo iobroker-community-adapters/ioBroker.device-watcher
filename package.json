@@ -6,7 +6,7 @@
     "name": "Christian Behrends",
     "email": "mail@christian-behrends.de"
   },
-  "homepage": "https://github.com/ciddi89/ioBroker.device-watcher",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.device-watcher",
   "license": "MIT",
   "keywords": [
     "device",
@@ -19,7 +19,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ciddi89/ioBroker.device-watcher"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.device-watcher"
   },
   "engines": {
     "node": ">=18"
@@ -78,7 +78,7 @@
     "release": "release-script"
   },
   "bugs": {
-    "url": "https://github.com/ciddi89/ioBroker.device-watcher/issues"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues"
   },
   "readmeFilename": "README.md"
 }
