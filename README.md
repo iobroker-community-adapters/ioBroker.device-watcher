@@ -191,7 +191,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-**WORK IN PROGRESS**
+### **WORK IN PROGRESS**
 - (mcm1957) Adapter requires nodeJS >= 18 and js-controller >= 5 now
 - (mcm1957) Adpter has been migrated to iobroker-community-adapters organisation
 - (mcm1957) Dependencies have been updated
