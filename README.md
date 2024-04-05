@@ -182,6 +182,9 @@ It's possible to select:
 ![list2.png](admin/images/list2.png)
 ![list3.png](admin/images/list3.png)
 
+## Credits
+This adapter would not have been possible without the great work of Christian Behrends <mail@christian-behrends.de> who implemented the initial releases of this adapter.
+
 ## Changelog
 
 <!--
