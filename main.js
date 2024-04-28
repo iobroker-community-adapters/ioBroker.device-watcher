@@ -1173,10 +1173,22 @@ class DeviceWatcher extends utils.Adapter {
 						}
 					}
 				} else {
-					batteryHealth = `${deviceBatteryState}%`;
-					batteryHealthRaw = deviceBatteryState;
-					batteryHealthUnitRaw = '%';
-					isBatteryDevice = true;
+					if (typeof deviceBatteryState === 'string') {
+						if (deviceBatteryState === 'high' || deviceBatteryState === 'medium')
+						{
+							batteryHealth = 'ok';
+							isBatteryDevice = true;
+						}
+						else if (deviceBatteryState === 'low') {
+							batteryHealth = 'low';
+							isBatteryDevice = true;
+						}
+					} else {
+						batteryHealth = `${deviceBatteryState}%`;
+						batteryHealthRaw = deviceBatteryState;
+						batteryHealthUnitRaw = '%';
+						isBatteryDevice = true;
+					}
 				}
 				break;
 		}
@@ -1211,7 +1223,9 @@ class DeviceWatcher extends utils.Adapter {
 						lowBatIndicator = true;
 					}
 			}
-		} else if (deviceBatteryState < this.config.minWarnBatterie) {
+		} else if (typeof deviceBatteryState === 'number' && deviceBatteryState < this.config.minWarnBatterie) {
+			lowBatIndicator = true;
+		} else if  (typeof deviceBatteryState === 'string' && deviceBatteryState === 'low') {
 			lowBatIndicator = true;
 		}
 
