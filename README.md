@@ -191,10 +191,15 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+-   (ciddi89) Added: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Support for Zigbee battery_state datapoint
+
 ### 2.12.0 (2024-04-05)
-- (mcm1957) Adapter requires nodeJS >= 18 and js-controller >= 5 now
-- (mcm1957) Adpter has been migrated to iobroker-community-adapters organisation
-- (mcm1957) Dependencies have been updated
+
+-   (mcm1957) Adapter requires nodeJS >= 18 and js-controller >= 5 now
+-   (mcm1957) Adpter has been migrated to iobroker-community-adapters organisation
+-   (mcm1957) Dependencies have been updated
 
 ### 2.11.0 (2024-03-18)
 
