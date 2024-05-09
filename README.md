@@ -183,6 +183,7 @@ It's possible to select:
 ![list3.png](admin/images/list3.png)
 
 ## Credits
+
 This adapter would not have been possible without the great work of Christian Behrends <mail@christian-behrends.de> who implemented the initial releases of this adapter.
 
 ## Changelog
@@ -191,6 +192,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
 ### **WORK IN PROGRESS**
 
 -   (ciddi89) Added: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Support for Zigbee battery_state datapoint
