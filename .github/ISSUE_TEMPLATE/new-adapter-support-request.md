@@ -3,7 +3,7 @@ name: New adapter support request
 about: Suggest an request to add an new adapter
 title: ''
 labels: new adapter support
-assignees: ciddi89
+assignees: ''
 
 ---
 
