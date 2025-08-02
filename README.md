@@ -192,8 +192,12 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### 2.12.2 (2025-08-02)
+### 2.12.3 (2025-08-02)
+- (arteck) add XSense
+- (arteck) fix Sonoff Name
+- (arteck) Dependencies have been updated
 
+### 2.12.2 (2025-08-02)
 - (ciddi89) Fixed [#362](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/362): Ecovacs Deebot use connectionUptime dp as timeselector
 - (mcm1957) Dependencies have been updated
 

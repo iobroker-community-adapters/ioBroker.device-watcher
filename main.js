@@ -1026,6 +1026,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'tado':
 				case 'wifilight':
 				case 'fullybrowserV3':
+        case 'sonoff':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
 					break;
 

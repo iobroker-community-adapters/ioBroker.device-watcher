@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.12.2",
+    "version": "2.12.3",
     "news": {
+      "2.12.3": {
+        "en": "add XSense\nfix Sonoff Name\nDependencies have been updated",
+        "de": "xSense hinzufügen\nsonoff Name entfernen\nAbhängigkeiten wurden aktualisiert",
+        "ru": "добавить XSense\nоригинальное название Sonoff\nЗависимости были обновлены",
+        "pt": "adicionar XSense\ncorrigir o Nome do Sonoff\nAs dependências foram atualizadas",
+        "nl": "xSense toevoegen\nfix Sonoff Naam\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "ajouter XSense\ncorrection du nom de sonoff\nLes dépendances ont été actualisées",
+        "it": "aggiungere XSense\ncorrezione Nome Sonoff\nLe dipendenze sono state aggiornate",
+        "es": "añadir XSense\nnombre de Sonoff\nSe han actualizado las dependencias",
+        "pl": "dodaj XSense\nfix Sonoff Name\nZaktualizowano zależności",
+        "uk": "додати XSense\nфіксувати ім'я Sonoff\nЗалежність було оновлено",
+        "zh-cn": "添加 X 语句\n修复 Sonoff 名称\n依赖关系已更新"
+      },
       "2.12.2": {
         "en": "Fixed [#362](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/362): Ecovacs Deebot use connectionUptime dp as timeselector\nDependencies have been updated",
         "de": "Behoben [#362](https://github.com/iobroker-community-adapter/ioBroker.device-watcher/issues/362): Ecovacs Deebot-Verbindung Aktualisierung dp als Zeitselektor\nAbhängigkeiten wurden aktualisiert",
@@ -80,19 +93,6 @@
         "pl": "Dodano: Opcja ustawienia języka dla wiadomości i tabel\nData umieszczenia w wykazie Wiadomości nie zostały opróżnione po wysłaniu\nNaprawiono: zbyt wiele wiadomości zostało wysłanych o urządzeniach online / offline, gdy instancja została uruchomiona lub zakończona",
         "uk": "Додано: Варіант встановити мову для повідомлень і таблиць\nВиправлено [#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/312): Після того, як вони відправили\nВиправлено: Занадто багато повідомлень надіслали про онлайн / офлайн-пристрої, коли було запущено екземпляр або закінчився",
         "zh-cn": "添加: 设置信件和表格语言的选项\n固定 [# 312] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/isses/312): (中文(简体) ). 发送后未清空调度信件\n固定: 当一个实例开始或结束时, 关于在线/ 离线设备的邮件过多"
-      },
-      "2.10.3": {
-        "en": "Fixed [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299): blacklisted devices was shown in html-list",
-        "de": "Behoben [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299): In der Blacklist aufgeführte Geräte wurden in html-list angezeigt",
-        "ru": "Fixed [#299] (http://github.com/ciddi89/ioBroker.device-watcher/issues/299): blacklisted devices was shown in html-list",
-        "pt": "Corrigido [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299): dispositivos listados em pretos foram mostrados em html-list",
-        "nl": "Fixed [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299): blacklisted devices werd getoond in html-list",
-        "fr": "Correction [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299): les appareils sur liste noire sont affichés dans la liste html",
-        "it": "Fisso [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299): la lista nera è stata mostrata nella lista html",
-        "es": "Fixed [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299): blacklisted devices was shown in html-list",
-        "pl": "Poprawiono [# 299] (https: / / github.com / ciddi89 / ioBroker.device- watcher / issues / 299): na liście html- pokazano na czarnej liście urządzenia",
-        "uk": "Виправлено [#299](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/299): Чорнелистові пристрої були показані в html-list",
-        "zh-cn": "固定 [299] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/299):列入黑名单的设备在html列表中显示"
       }
     },
     "titleLang": {
@@ -334,6 +334,8 @@
     "wifilightMaxMinutes": 0,
     "wledDevices": false,
     "wledMaxMinutes": 0,
+    "xsenseDevices": false,
+    "xsenseMaxMinutes": 300,
     "yeelightDevices": false,
     "yeelightMaxMinutes": 0,
     "zigbeeDevices": false,
