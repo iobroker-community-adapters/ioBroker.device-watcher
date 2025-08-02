@@ -193,6 +193,11 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.12.4 (2025-08-02)
+- (arteck) ignore zigbee2mqtt disabled devices
+- (arteck) fix proxmox
+- (arteck) add proxmox new structure request
+
 ### 2.12.3 (2025-08-02)
 - (arteck) add XSense
 - (arteck) fix Sonoff Name

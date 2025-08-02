@@ -367,7 +367,7 @@
 					xl: 3,
 					label: 'Proxmox',
 				},
-				ringDevices: {
+			    ringDevices: {
 					type: 'checkbox',
 					xs: 12,
 					sm: 6,

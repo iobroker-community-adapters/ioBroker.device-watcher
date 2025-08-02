@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.12.3",
+    "version": "2.12.4",
     "news": {
+      "2.12.4": {
+        "en": "ignore zigbee2mqtt disabled devices\nfix proxmox\nadd proxmox new structure request",
+        "de": "ignorieren zickbee2mqt behinderte geräte\nfixer proxmox\nneue strukturanforderung hinzufügen",
+        "ru": "игнорировать zigbee2mqtt отключенные устройства\nисправить проксмокс\nдобавить proxmox новый запрос структуры",
+        "pt": "ignorar os dispositivos desactivados do zigbee2mqtt\ncorrigir proxmox\nadicionar proxmox nova solicitação de estrutura",
+        "nl": "zigbee2mqtt uitgeschakelde apparaten negeren\nproxmox repareren\nproxmox nieuw structuurverzoek toevoegen",
+        "fr": "ignorer les périphériques désactivés zigbee2mqtt\nréparer proxmox\najouter proxmox nouvelle demande de structure",
+        "it": "ignorare i dispositivi disabilitati zigbee2mqtt\ncorrezione di proxmox\naggiungere proxmox nuova struttura richiesta",
+        "es": "ignorar los dispositivos discapacitados zigbee2mqtt\narreglar proxmox\nañadir proxmox nueva solicitud de estructura",
+        "pl": "ignoruj wyłączone urządzenia zigbee2mqtt\nfix proxmox\ndodaj proxmox nowe żądanie struktury",
+        "uk": "ігнорувати zigbee2mqtt вимкнені пристрої\nфіксатор проксмокс\nдодати проксмокс новий порядок структури",
+        "zh-cn": "忽略已禁用的 zigbee2mqtt 设备\n修补proxmox\n添加正则结构请求"
+      },
       "2.12.3": {
         "en": "add XSense\nfix Sonoff Name\nDependencies have been updated",
         "de": "xSense hinzufügen\nsonoff Name entfernen\nAbhängigkeiten wurden aktualisiert",
@@ -80,19 +93,6 @@
         "pl": "Fixed [# 262] (https: / / github.com / ciddi89 / ioBroker.device- watcher / issues / 262) & [# 292] (https: / / github.com / ciddi89 / iBroker.device- watcher / issues / 292): Wiadomości Phantom",
         "uk": "Виправлено [#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/292): Повідомлення",
         "zh-cn": "固定 [262] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) 和 [292] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): 幽灵消息"
-      },
-      "2.10.4": {
-        "en": "Added: Option to set language for messages and tables\nFixed [#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312): Schedule messages were not emptied after they were sent\nFixed: Too many messages were sent about online / offline devices when an instance was started or ended",
-        "de": "Hinzugefügt: Option zur Einstellung der Sprache für Nachrichten und Tabellen\nBehoben [#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312): Nachrichten wurden nicht entleert, nachdem sie gesendet wurden\nFix: Zu viele Nachrichten wurden über Online / Offline-Geräte gesendet, wenn eine Instanz gestartet oder beendet wurde",
-        "ru": "Добавлено: Возможность установки языка для сообщений и таблиц\nFixed [#312] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312): Расписание сообщений не было опустошено после их отправки\nИсправлено: слишком много сообщений было отправлено о онлайн-/офлайн-устройствах, когда экземпляр был запущен или закончился",
-        "pt": "Adicionado: Opção para definir o idioma para mensagens e tabelas\nCorrigido [#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312): Mensagens de agendamento não foram esvaziadas após serem enviadas\nCorrigido: Muitas mensagens foram enviadas sobre dispositivos online / offline quando uma instância foi iniciada ou terminada",
-        "nl": "Toegevoegd: optie om taal voor berichten en tabellen in te stellen\nVaste [#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312): Schemaberichten werden niet geleegd nadat ze werden verzonden\nFixed: Te veel berichten werden verzonden over online / offline apparaten wanneer een instantie werd gestart of beëindigd",
-        "fr": "Ajouté : Option pour définir la langue des messages et des tables\nCorrection [#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312) : Les messages ne sont pas vidés après leur envoi\nCorrection : Trop de messages ont été envoyés sur les appareils en ligne / hors ligne quand une instance a été lancée ou terminée",
-        "it": "Aggiunto: Opzione per impostare la lingua per i messaggi e le tabelle\n[#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312): I messaggi di pianificazione non sono stati svuotati dopo che sono stati inviati\nFisso: Troppi messaggi sono stati inviati su dispositivi online / offline quando un'istanza è stata avviata o terminata",
-        "es": "Añadido: Opción de establecer el lenguaje para mensajes y tablas\n[#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/312): Los mensajes programados no fueron vaciados después de ser enviados\nFijo: Demasiados mensajes fueron enviados sobre dispositivos en línea / offline cuando una instancia se inició o terminó",
-        "pl": "Dodano: Opcja ustawienia języka dla wiadomości i tabel\nData umieszczenia w wykazie Wiadomości nie zostały opróżnione po wysłaniu\nNaprawiono: zbyt wiele wiadomości zostało wysłanych o urządzeniach online / offline, gdy instancja została uruchomiona lub zakończona",
-        "uk": "Додано: Варіант встановити мову для повідомлень і таблиць\nВиправлено [#312](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/312): Після того, як вони відправили\nВиправлено: Занадто багато повідомлень надіслали про онлайн / офлайн-пристрої, коли було запущено екземпляр або закінчився",
-        "zh-cn": "添加: 设置信件和表格语言的选项\n固定 [# 312] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/isses/312): (中文(简体) ). 发送后未清空调度信件\n固定: 当一个实例开始或结束时, 关于在线/ 离线设备的邮件过多"
       }
     },
     "titleLang": {

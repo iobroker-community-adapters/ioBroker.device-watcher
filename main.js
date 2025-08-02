@@ -5,10 +5,12 @@ const adapterName = require('./package.json').name.split('.').pop();
 const schedule = require('node-schedule');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
 const translations = require('./lib/translations.js');
-const cronParser = require('cron-parser');
+const tools = require('./lib/tools.js');
+const crud = require('./lib/crud.js');
 
 // indicator if the adapter is running (for intervall/shedule)
 let isUnloaded = false;
+const adapterUpdateListDP = 'admin.*.info.updatesJson';
 
 class DeviceWatcher extends utils.Adapter {
 	constructor(options) {
@@ -21,7 +23,7 @@ class DeviceWatcher extends utils.Adapter {
 		// instances and adapters
 		// raw arrays
 		this.listInstanceRaw = new Map();
-		this.adapterUpdatesJsonRaw = new Map();
+		this.adapterUpdatesJsonRaw = [];
 		this.listErrorInstanceRaw = [];
 
 		// user arrays
@@ -88,6 +90,9 @@ class DeviceWatcher extends utils.Adapter {
 		this.on('objectChange', this.onObjectChange.bind(this));
 		this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
+
+
+
 	}
 
 	/**
@@ -242,7 +247,7 @@ class DeviceWatcher extends utils.Adapter {
 			for (const [id] of Object.entries(arrApart)) {
 				if (this.configSetAdapter[id]) {
 					this.selAdapter.push(arrApart[id]);
-					this.adapterSelected.push(this.capitalize(id));
+					this.adapterSelected.push(tools.capitalize(id));
 				}
 			}
 
@@ -257,27 +262,27 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			// create Blacklist
-			await this.createBlacklist();
+			await crud.createBlacklist(this);
 
 			// create user defined list with time of error for instances
-			await this.createTimeListInstances();
+			await crud.createTimeListInstances(this);
 
 			//create datapoints for each adapter if selected
 			for (const [id] of Object.entries(arrApart)) {
 				try {
 					if (!this.configCreateOwnFolder) {
-						await this.deleteDPsForEachAdapter(id);
-						await this.deleteHtmlListDatapoints(id);
+						await crud.deleteDPsForEachAdapter(this, id);
+						await crud.deleteHtmlListDatapoints(this, id);
 					} else {
 						if (this.configSetAdapter && this.configSetAdapter[id]) {
-							await this.createDPsForEachAdapter(id);
+							await crud.createDPsForEachAdapter(this, id);
 							// create HTML list datapoints
 							if (!this.configCreateHtmlList) {
-								await this.deleteHtmlListDatapoints(id);
+								await crud.deleteHtmlListDatapoints(this, id);
 							} else {
-								await this.createHtmlListDatapoints(id);
+								await crud.createHtmlListDatapoints(this, id);
 							}
-							this.log.debug(`Created datapoints for ${this.capitalize(id)}`);
+							this.log.debug(`Created datapoints for ${tools.capitalize(id)}`);
 						}
 					}
 				} catch (error) {
@@ -287,28 +292,27 @@ class DeviceWatcher extends utils.Adapter {
 
 			// create HTML list datapoints
 			if (!this.configCreateHtmlList) {
-				await this.deleteHtmlListDatapoints();
-				await this.deleteHtmlListDatapointsInstances();
+				await crud.deleteHtmlListDatapoints(this);
+				await crud.deleteHtmlListDatapointsInstances(this);
 			} else {
-				await this.createHtmlListDatapoints();
-				if (this.config.checkAdapterInstances) await this.createHtmlListDatapointsInstances();
+				await crud.createHtmlListDatapoints(this);
+				if (this.config.checkAdapterInstances) await crud.createHtmlListDatapointsInstances(this);
 			}
-			if (!this.config.checkAdapterInstances) await this.deleteHtmlListDatapointsInstances();
+			if (!this.config.checkAdapterInstances) await crud.deleteHtmlListDatapointsInstances(this);
 
-			// read data first at start
-			// devices
-			await this.main();
 
 			// instances and adapters
 			if (this.configCreateInstanceList) {
 				// instances
-				await this.createDPsForInstances();
+				await crud.createDPsForInstances(this);
 				await this.getAllInstanceData();
 				// adapter updates
-				await this.createAdapterUpdateData();
+				await crud.createAdapterUpdateData(this, adapterUpdateListDP);
 			} else {
-				await this.deleteDPsForInstances();
+				await crud.deleteDPsForInstances(this);
 			}
+
+			await this.main();
 
 			// update last contact data in interval
 			await this.refreshData();
@@ -330,11 +334,56 @@ class DeviceWatcher extends utils.Adapter {
 
 			// send overview of instances with error
 			if (this.config.checkSendInstanceFailedDaily) await this.sendScheduleNotifications('errorInstance');
-		} catch (error) {
+
+        } catch (error) {
 			this.log.error(`[onReady] - ${error}`);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
 	} // <-- onReady end
+
+	/**
+	 * main function
+	 */
+	async main() {
+		this.log.debug(`Function started main`);
+		this.mainRunning = true;
+
+		// cancel run if no adapter is selected
+		if (this.adapterSelected.length === 0) return;
+
+		// fill counts and lists of all selected adapter
+		try {
+			for (let i = 0; i < this.selAdapter.length; i++) {
+				await crud.createData(this, i);
+				await crud.createLists(this);
+			}
+			await crud.writeDatapoints(this); // fill the datapoints
+			this.log.debug(`Created and filled data for all adapters`);
+		} catch (error) {
+			this.log.error(`[main - create data of all adapter] - ${error}`);
+		}
+
+		// fill datapoints for each adapter if selected
+		if (this.configCreateOwnFolder) {
+			try {
+				for (const [id] of Object.entries(arrApart)) {
+					if (this.configSetAdapter && this.configSetAdapter[id]) {
+						for (const deviceData of this.listAllDevicesRaw.values()) {
+							// list device only if selected adapter matched with device
+							if (!deviceData.adapterID.includes(id)) continue;
+							await crud.createLists(this, id);
+						}
+						await crud.writeDatapoints(this, id); // fill the datapoints
+						this.log.debug(`Created and filled data for ${tools.capitalize(id)}`);
+					}
+				}
+			} catch (error) {
+				this.log.error(`[main - create and fill datapoints for each adapter] - ${error}`);
+			}
+		}
+		this.mainRunning = false;
+		this.log.debug(`Function finished: ${this.main.name}`);
+	} //<--End of main function
 
 	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
 	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
@@ -518,50 +567,6 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * main function
-	 */
-	async main() {
-		this.log.debug(`Function started: ${this.main.name}`);
-		this.mainRunning = true;
-
-		// cancel run if no adapter is selected
-		if (this.adapterSelected.length === 0) return;
-
-		// fill counts and lists of all selected adapter
-		try {
-			for (let i = 0; i < this.selAdapter.length; i++) {
-				await this.createData(i);
-				await this.createLists();
-			}
-			await this.writeDatapoints(); // fill the datapoints
-			this.log.debug(`Created and filled data for all adapters`);
-		} catch (error) {
-			this.log.error(`[main - create data of all adapter] - ${error}`);
-		}
-
-		// fill datapoints for each adapter if selected
-		if (this.configCreateOwnFolder) {
-			try {
-				for (const [id] of Object.entries(arrApart)) {
-					if (this.configSetAdapter && this.configSetAdapter[id]) {
-						for (const deviceData of this.listAllDevicesRaw.values()) {
-							// list device only if selected adapter matched with device
-							if (!deviceData.adapterID.includes(id)) continue;
-							await this.createLists(id);
-						}
-						await this.writeDatapoints(id); // fill the datapoints
-						this.log.debug(`Created and filled data for ${this.capitalize(id)}`);
-					}
-				}
-			} catch (error) {
-				this.log.error(`[main - create and fill datapoints for each adapter] - ${error}`);
-			}
-		}
-		this.mainRunning = false;
-		this.log.debug(`Function finished: ${this.main.name}`);
-	} //<--End of main function
-
-	/**
 	 * refresh data with interval
 	 * is neccessary to refresh lastContact data, especially of devices without state changes
 	 */
@@ -570,17 +575,17 @@ class DeviceWatcher extends utils.Adapter {
 		const nextTimeout = this.config.updateinterval * 1000;
 
 		// devices data
-		await this.checkLastContact();
-		await this.createLists();
-		await this.writeDatapoints();
+		await tools.checkLastContact(this);
+		await crud.createLists(this);
+		await crud.writeDatapoints(this);
 
 		// devices data in own adapter folder
 		if (this.configCreateOwnFolder) {
 			for (const [id] of Object.entries(arrApart)) {
 				if (this.configSetAdapter && this.configSetAdapter[id]) {
-					await this.createLists(id);
-					await this.writeDatapoints(id);
-					this.log.debug(`Created and filled data for ${this.capitalize(id)}`);
+					await crud.createLists(this, id);
+					await crud.writeDatapoints(this, id);
+					this.log.debug(`Created and filled data for ${tools.capitalize(id)}`);
 				}
 			}
 		}
@@ -602,366 +607,6 @@ class DeviceWatcher extends utils.Adapter {
 			await this.refreshData();
 		}, nextTimeout);
 	} // <-- refreshData end
-
-	/**
-	 * create blacklist
-	 */
-	async createBlacklist() {
-		this.log.debug(`Function started: ${this.createBlacklist.name}`);
-
-		// DEVICES
-		const myBlacklist = this.config.tableBlacklist;
-		if (myBlacklist.length >= 1) {
-			for (const i in myBlacklist) {
-				try {
-					const blacklistParse = this.parseData(myBlacklist[i].devices);
-					// push devices in list to ignor device in lists
-					if (myBlacklist[i].checkIgnorLists) {
-						this.blacklistLists.push(blacklistParse.path);
-					}
-					if (myBlacklist[i].checkIgnorAdapterLists) {
-						this.blacklistAdapterLists.push(blacklistParse.path);
-					}
-					// push devices in list to ignor device in notifications
-					if (myBlacklist[i].checkIgnorNotify) {
-						this.blacklistNotify.push(blacklistParse.path);
-					}
-				} catch (error) {
-					this.log.error(`[createBlacklist] - ${error}`);
-				}
-				if (this.blacklistLists.length >= 1) this.log.info(`Found devices/services on blacklist for lists: ${this.blacklistLists}`);
-				if (this.blacklistAdapterLists.length >= 1) this.log.info(`Found devices/services on blacklist for own adapter lists: ${this.blacklistAdapterLists}`);
-				if (this.blacklistNotify.length >= 1) this.log.info(`Found devices/services on blacklist for notifications: ${this.blacklistNotify}`);
-			}
-		}
-
-		// INSTANCES
-		const myBlacklistInstances = this.config.tableBlacklistInstances;
-		if (myBlacklistInstances.length >= 1) {
-			for (const i in myBlacklistInstances) {
-				try {
-					const blacklistParse = this.parseData(myBlacklistInstances[i].instances);
-					// push devices in list to ignor device in lists
-					if (myBlacklistInstances[i].checkIgnorLists) {
-						this.blacklistInstancesLists.push(blacklistParse.instanceID);
-					}
-					// push devices in list to ignor device in notifications
-					if (myBlacklistInstances[i].checkIgnorNotify) {
-						this.blacklistInstancesNotify.push(blacklistParse.instanceID);
-					}
-				} catch (error) {
-					this.log.error(`[createBlacklist] - ${error}`);
-				}
-			}
-			if (this.blacklistInstancesLists.length >= 1) this.log.info(`Found instances items on blacklist for lists: ${this.blacklistInstancesLists}`);
-			if (this.blacklistInstancesNotify.length >= 1) this.log.info(`Found instances items on blacklist for notifications: ${this.blacklistInstancesNotify}`);
-		}
-		this.log.debug(`Function finished: ${this.createBlacklist.name}`);
-	}
-
-	/**
-	 * create list with time for instances
-	 */
-	async createTimeListInstances() {
-		// INSTANCES
-		const userTimeListInstances = this.config.tableTimeInstance;
-		if (userTimeListInstances.length >= 1) {
-			for (const i in userTimeListInstances) {
-				try {
-					const userTimeListparse = this.parseData(userTimeListInstances[i].instancesTime);
-					// push devices in list to ignor device in lists
-					this.userTimeInstancesList.set(userTimeListparse.instanceName, {
-						deactivationTime: userTimeListInstances[i].deactivationTime,
-						errorTime: userTimeListInstances[i].errorTime,
-					});
-				} catch (error) {
-					this.log.error(`[createTimeListInstances] - ${error}`);
-				}
-			}
-			if (this.userTimeInstancesList.size >= 1) this.log.info(`Found instances items on lists for timesettings: ${Array.from(this.userTimeInstancesList.keys())}`);
-		}
-	}
-
-	/**
-	 * @param {object} i - Device Object
-	 */
-	async createData(i) {
-		try {
-			const devices = await this.getForeignStatesAsync(this.selAdapter[i].Selektor);
-			const adapterID = this.selAdapter[i].adapterID;
-
-			/*----------  Start of loop  ----------*/
-			for (const [id] of Object.entries(devices)) {
-				if (id.endsWith('.')) continue;
-				const mainSelector = id;
-
-				/*=============================================
-				=              get Instanz		          =
-				=============================================*/
-				const instance = id.slice(0, id.indexOf('.') + 2);
-
-				const instanceDeviceConnectionDP = `${instance}.info.connection`;
-				const instancedeviceConnected = await this.getInitValue(instanceDeviceConnectionDP);
-				this.subscribeForeignStates(instanceDeviceConnectionDP);
-				this.subscribeForeignObjects(`${this.selAdapter[i].Selektor}`);
-				// this.subscribeForeignObjects('*');
-				//this.subscribeForeignStates('*');
-				/*=============================================
-				=              Get device name		          =
-				=============================================*/
-				const deviceName = await this.getDeviceName(id, i);
-
-				/*=============================================
-				=              Get adapter name		          =
-				=============================================*/
-				const adapter = this.selAdapter[i].adapter;
-
-				/*=============================================
-				=            Get path to datapoints	   	      =
-				=============================================*/
-				const currDeviceString = id.slice(0, id.lastIndexOf('.') + 1 - 1);
-				const shortCurrDeviceString = currDeviceString.slice(0, currDeviceString.lastIndexOf('.') + 1 - 1);
-
-				// subscribe to object device path
-				this.subscribeForeignStates(currDeviceString);
-
-				/*=============================================
-				=            Get signal strength              =
-				=============================================*/
-				let deviceQualityDP = currDeviceString + this.selAdapter[i].rssiState;
-				let deviceQualityState;
-
-				switch (adapterID) {
-					case 'mihomeVacuum':
-						deviceQualityDP = shortCurrDeviceString + this.selAdapter[i].rssiState;
-						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-						break;
-
-					case 'netatmo':
-						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-						if (!deviceQualityState) {
-							deviceQualityDP = currDeviceString + this.selAdapter[i].rfState;
-							deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-						}
-						break;
-
-					default:
-						deviceQualityState = await this.getForeignStateAsync(deviceQualityDP);
-						break;
-				}
-				//subscribe to states
-				this.subscribeForeignStates(deviceQualityDP);
-
-				const signalData = await this.calculateSignalStrength(deviceQualityState, adapterID);
-				let linkQuality = signalData[0];
-				const linkQualityRaw = signalData[1];
-
-				/*=============================================
-				=         	    Get battery data       	      =
-				=============================================*/
-				let deviceBatteryStateDP;
-				let deviceBatteryState;
-				let batteryHealth;
-				let batteryHealthRaw;
-				let batteryUnitRaw;
-				let lowBatIndicator;
-				let isBatteryDevice;
-				let isLowBatDP;
-				let faultReportingDP;
-				let faultReportingState;
-
-				const deviceChargerStateDP = currDeviceString + this.selAdapter[i].charger;
-				const deviceChargerState = await this.getInitValue(deviceChargerStateDP);
-
-				if (deviceChargerState === undefined || deviceChargerState === false) {
-					// Get battery states
-					switch (adapterID) {
-						case 'hmrpc':
-							deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery;
-							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-
-							if (deviceBatteryState === undefined) {
-								deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].hmDNBattery;
-								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-							}
-							break;
-						case 'hueExt':
-						case 'mihomeVacuum':
-						case 'mqttNuki':
-						case 'loqedSmartLock':
-							deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery;
-							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-
-							if (deviceBatteryState === undefined) {
-								deviceBatteryStateDP = shortCurrDeviceString + this.selAdapter[i].battery2;
-								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-							}
-							break;
-						default:
-							deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery;
-							deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-
-							if (deviceBatteryState === undefined) {
-								deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery2;
-								deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-
-								if (deviceBatteryState === undefined) {
-									deviceBatteryStateDP = currDeviceString + this.selAdapter[i].battery3;
-									deviceBatteryState = await this.getInitValue(deviceBatteryStateDP);
-								}
-							}
-							break;
-					}
-
-					// Get low bat states
-					isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat;
-					let deviceLowBatState = await this.getInitValue(isLowBatDP);
-
-					if (deviceLowBatState === undefined) {
-						isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat2;
-						deviceLowBatState = await this.getInitValue(isLowBatDP);
-
-						if (deviceLowBatState === undefined) {
-							isLowBatDP = currDeviceString + this.selAdapter[i].isLowBat3;
-							deviceLowBatState = await this.getInitValue(isLowBatDP);
-						}
-					}
-					if (deviceLowBatState === undefined) isLowBatDP = 'none';
-
-					faultReportingDP = shortCurrDeviceString + this.selAdapter[i].faultReporting;
-					faultReportingState = await this.getInitValue(faultReportingDP);
-
-					//subscribe to states
-					this.subscribeForeignStates(deviceBatteryStateDP);
-					this.subscribeForeignStates(isLowBatDP);
-					this.subscribeForeignStates(faultReportingDP);
-
-					const batteryData = await this.getBatteryData(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID);
-					batteryHealth = batteryData[0];
-					batteryHealthRaw = batteryData[2];
-					batteryUnitRaw = batteryData[3];
-					isBatteryDevice = batteryData[1];
-
-					if (isBatteryDevice) {
-						lowBatIndicator = await this.setLowbatIndicator(deviceBatteryState, deviceLowBatState, faultReportingState, adapterID);
-					}
-				}
-
-				/*=============================================
-				=          Get last contact of device         =
-				=============================================*/
-				let unreachDP = currDeviceString + this.selAdapter[i].reach;
-				const deviceStateSelectorDP = shortCurrDeviceString + this.selAdapter[i].stateValue;
-				const rssiPeerSelectorDP = currDeviceString + this.selAdapter[i].rssiPeerState;
-				let timeSelector = currDeviceString + this.selAdapter[i].timeSelector;
-
-				const timeSelectorState = await this.getInitValue(timeSelector);
-				if (timeSelectorState === undefined) {
-					timeSelector = shortCurrDeviceString + this.selAdapter[i].timeSelector;
-				}
-
-				let deviceUnreachState = await this.getInitValue(unreachDP);
-				if (deviceUnreachState === undefined) {
-					unreachDP = shortCurrDeviceString + this.selAdapter[i].reach;
-					deviceUnreachState = await this.getInitValue(shortCurrDeviceString + this.selAdapter[i].reach);
-				}
-
-				// subscribe to states
-				this.subscribeForeignStates(timeSelector);
-				this.subscribeForeignStates(unreachDP);
-				this.subscribeForeignStates(deviceStateSelectorDP);
-				this.subscribeForeignStates(rssiPeerSelectorDP);
-
-				const onlineState = await this.getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP);
-				let deviceState;
-				let lastContactString;
-
-				if (onlineState) {
-					lastContactString = onlineState[0];
-					deviceState = onlineState[1];
-					linkQuality = onlineState[2];
-				}
-
-				/*=============================================
-			=            Get update data	              =
-			=============================================*/
-				let isUpgradable;
-				let deviceUpdateDP;
-
-				if (this.config.checkSendDeviceUpgrade) {
-					deviceUpdateDP = currDeviceString + this.selAdapter[i].upgrade;
-					let deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
-					if (deviceUpdateSelector === undefined) {
-						deviceUpdateDP = shortCurrDeviceString + this.selAdapter[i].upgrade;
-						deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
-						if (deviceUpdateSelector === undefined) {
-							const shortShortCurrDeviceString = shortCurrDeviceString.slice(0, shortCurrDeviceString.lastIndexOf('.') + 1 - 1);
-							deviceUpdateDP = shortShortCurrDeviceString + this.selAdapter[i].upgrade;
-							deviceUpdateSelector = await this.getInitValue(deviceUpdateDP);
-						}
-					}
-
-					if (deviceUpdateSelector !== undefined) {
-						isUpgradable = await this.checkDeviceUpdate(adapterID, deviceUpdateSelector);
-					} else {
-						isUpgradable = ' - ';
-					}
-
-					// subscribe to states
-					this.subscribeForeignStates(deviceUpdateDP);
-					// this.subscribeForeignStates('*');
-				}
-
-				/*=============================================
-				=          		  Fill Raw Lists          	  =
-				=============================================*/
-				const setupList = () => {
-					this.listAllDevicesRaw.set(currDeviceString, {
-						Path: id,
-						mainSelector: mainSelector,
-						instanceDeviceConnectionDP: instanceDeviceConnectionDP,
-						instancedeviceConnected: instancedeviceConnected,
-						instance: instance,
-						Device: deviceName,
-						adapterID: adapterID,
-						Adapter: adapter,
-						timeSelector: timeSelector,
-						isBatteryDevice: isBatteryDevice,
-						Battery: batteryHealth,
-						BatteryRaw: batteryHealthRaw,
-						BatteryUnitRaw: batteryUnitRaw,
-						batteryDP: deviceBatteryStateDP,
-						LowBat: lowBatIndicator,
-						LowBatDP: isLowBatDP,
-						faultReport: faultReportingState,
-						faultReportDP: faultReportingDP,
-						SignalStrengthDP: deviceQualityDP,
-						SignalStrength: linkQuality,
-						SignalStrengthRaw: linkQualityRaw,
-						UnreachState: deviceUnreachState,
-						UnreachDP: unreachDP,
-						DeviceStateSelectorDP: deviceStateSelectorDP,
-						rssiPeerSelectorDP: rssiPeerSelectorDP,
-						LastContact: lastContactString,
-						Status: deviceState,
-						UpdateDP: deviceUpdateDP,
-						Upgradable: isUpgradable,
-					});
-				};
-
-				if (!this.configListOnlyBattery) {
-					// Add all devices
-					setupList();
-				} else {
-					// Add only devices with battery in the rawlist
-					if (!isBatteryDevice) continue;
-					setupList();
-				}
-			} // <-- end of loop
-		} catch (error) {
-			this.log.error(`[createData - create data of devices] - ${error}`);
-		}
-	} // <-- end of createData
 
 	/*=============================================
 	=            functions to get data            =
@@ -989,7 +634,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			switch (this.selAdapter[i].adapterID) {
 				case 'fullybrowser':
-					deviceName = (await this.getInitValue(currDeviceString + this.selAdapter[i].id)) + ' ' + (await this.getInitValue(currDeviceString + this.selAdapter[i].id2));
+					deviceName = (await tools.getInitValue(this,currDeviceString + this.selAdapter[i].id)) + ' ' + (await tools.getInitValue(this,currDeviceString + this.selAdapter[i].id2));
 					break;
 
 				// Get ID with short currDeviceString from objectjson
@@ -1018,7 +663,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'mihomeVacuum':
 				case 'roomba':
 					folderName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
-					deviceID = await this.getInitValue(shortCurrDeviceString + this.selAdapter[i].id);
+					deviceID = await tools.getInitValue(this,shortCurrDeviceString + this.selAdapter[i].id);
 					deviceName = `I${folderName} ${deviceID}`;
 					break;
 
@@ -1026,7 +671,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'tado':
 				case 'wifilight':
 				case 'fullybrowserV3':
-        case 'sonoff':
+        		case 'sonoff':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
 					break;
 
@@ -1050,7 +695,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				// Get ID with main selektor from objectjson
 				default:
-					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) deviceName = await this.getInitValue(currDeviceString + this.selAdapter[i].id);
+					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) deviceName = await tools.getInitValue(this,currDeviceString + this.selAdapter[i].id);
 					if (deviceName === null || deviceName === undefined) {
 						if (deviceObject && typeof deviceObject === 'object' && deviceObject.common) {
 							deviceName = deviceObject.common.name;
@@ -1263,7 +908,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} selector - Selector
 	 */
 	async getLastContact(selector) {
-		const lastContact = this.getTimestamp(selector);
+		const lastContact = tools.getTimestamp(selector);
 		let lastContactString;
 
 		lastContactString = `${this.formatDate(new Date(selector), 'hh:mm')}`;
@@ -1283,19 +928,29 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} unreachDP - Datapoint of Unreach
 	 * @param {object} linkQuality - Linkquality Value
 	 * @param {object} deviceUnreachState - State of deviceUnreach datapoint
-	 * @param {string} deviceStateSelectorDP - Selector of device state (like .state)
-	 * @param {string} rssiPeerSelectorDP - HM RSSI Peer Datapoint
+	 * @param {string} deviceStateSelectorHMRPC - Selector of device state (like .state)
+	 * @param {string} rssiPeerSelectorHMRPC - HM RSSI Peer Datapoint
 	 */
-	async getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorDP, rssiPeerSelectorDP) {
+	async getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorHMRPC, rssiPeerSelectorHMRPC) {
 		let lastContactString;
 		let deviceState = 'Online';
 
 		try {
 			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
 			const deviceUnreachSelector = await this.getForeignStateAsync(unreachDP);
-			const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorDP); // for hmrpc devices
-			const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorDP);
-			const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? this.getTimestamp(deviceUnreachSelector.lc) : this.getTimestamp(timeSelector.ts);
+			const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorHMRPC); // for hmrpc devices
+			const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorHMRPC);
+			const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? tools.getTimestamp(deviceUnreachSelector.lc) : tools.getTimestamp(timeSelector.ts);
+
+			// ignore disabled device from zigbee2MQTT
+			if (adapterID === 'zigbee2MQTT') {
+				const is_device_disabled = await tools.isDisabledDevice(this, unreachDP.substring(0, unreachDP.lastIndexOf('.')));
+
+				if (is_device_disabled) {
+					return [null, 'disabled', '0%'];
+				}
+			}
+
 			//  If there is no contact since user sets minutes add device in offline list
 			// calculate to days after 48 hours
 			switch (unreachDP) {
@@ -1335,7 +990,7 @@ class DeviceWatcher extends utils.Adapter {
 					=            Set Online Status             =
 					=============================================*/
 			let lastContact;
-			if (deviceTimeSelector) lastContact = this.getTimestamp(deviceTimeSelector.ts);
+			if (deviceTimeSelector) lastContact = tools.getTimestamp(deviceTimeSelector.ts);
 
 			if (this.configMaxMinutes !== undefined) {
 				switch (adapterID) {
@@ -1459,38 +1114,6 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * when was last contact of device
-	 */
-	async checkLastContact() {
-		for (const [deviceID, deviceData] of this.listAllDevicesRaw.entries()) {
-			if (deviceData.instancedeviceConnected !== false) {
-				const oldContactState = deviceData.Status;
-				deviceData.UnreachState = await this.getInitValue(deviceData.UnreachDP);
-				const contactData = await this.getOnlineState(
-					deviceData.timeSelector,
-					deviceData.adapterID,
-					deviceData.UnreachDP,
-					deviceData.SignalStrength,
-					deviceData.UnreachState,
-					deviceData.DeviceStateSelectorDP,
-					deviceData.rssiPeerSelectorDP,
-				);
-				if (contactData !== undefined) {
-					deviceData.LastContact = contactData[0];
-					deviceData.Status = contactData[1];
-					deviceData.linkQuality = contactData[2];
-				}
-				if (this.config.checkSendOfflineMsg && oldContactState !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-					// check if the generally deviceData connected state is for a while true
-					if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 50000)) {
-						await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID);
-					}
-				}
-			}
-		}
-	}
-
-	/**
 	 * @param {any} adapterID
 	 * @param {string | number | boolean | null} deviceUpdateSelector
 	 */
@@ -1526,398 +1149,87 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * Create Lists
-	 * @param {string | undefined} [adptName]
-	 */
-	async createLists(adptName) {
-		this.linkQualityDevices = [];
-		this.batteryPowered = [];
-		this.batteryLowPowered = [];
-		this.listAllDevicesUserRaw = [];
-		this.listAllDevices = [];
-		this.offlineDevices = [];
-		this.batteryLowPoweredRaw = [];
-		this.offlineDevicesRaw = [];
-		this.upgradableDevicesRaw = [];
-		this.upgradableList = [];
-
-		if (adptName === undefined) {
-			adptName = '';
-		}
-
-		for (const deviceData of this.listAllDevicesRaw.values()) {
-			/*----------  fill raw lists  ----------*/
-			// low bat list
-			if (deviceData.LowBat && deviceData.Status !== 'Offline') {
-				this.batteryLowPoweredRaw.push({
-					Path: deviceData.Path,
-					Device: deviceData.Device,
-					Adapter: deviceData.Adapter,
-					Battery: deviceData.Battery,
-				});
-			}
-			// offline raw list
-			if (deviceData.Status === 'Offline') {
-				this.offlineDevicesRaw.push({
-					Path: deviceData.Path,
-					Device: deviceData.Device,
-					Adapter: deviceData.Adapter,
-					LastContact: deviceData.LastContact,
-				});
-			}
-
-			// upgradable raw list
-			if (deviceData.Upgradable === true) {
-				this.upgradableDevicesRaw.push({
-					Path: deviceData.Path,
-					Device: deviceData.Device,
-					Adapter: deviceData.Adapter,
-				});
-			}
-
-			if (adptName === '' && !this.blacklistLists.includes(deviceData.Path)) {
-				await this.theLists(deviceData);
-			}
-
-			if (this.config.createOwnFolder && adptName !== '') {
-				if (!deviceData.adapterID.includes(adptName)) continue;
-				/*----------  fill user lists for each adapter  ----------*/
-				if (this.blacklistAdapterLists.includes(deviceData.Path)) continue;
-				await this.theLists(deviceData);
-			}
-		}
-		await this.countDevices();
-	}
-
-	/**
 	 * fill the lists for user
 	 * @param {object} device
 	 */
 	async theLists(device) {
 		// Raw List with all devices for user
-		this.listAllDevicesUserRaw.push({
-			Device: device.Device,
-			Adapter: device.Adapter,
-			Instance: device.instance,
-			'Instance connected': device.instancedeviceConnected,
-			isBatteryDevice: device.isBatteryDevice,
-			Battery: device.Battery,
-			BatteryRaw: device.BatteryRaw,
-			BatteryUnitRaw: device.BatteryUnitRaw,
-			isLowBat: device.LowBat,
-			'Signal strength': device.SignalStrength,
-			'Signal strength Raw': device.SignalStrengthRaw,
-			'Last contact': device.LastContact,
-			'Update Available': device.Upgradable,
-			Status: device.Status,
-		});
+		if (device.Status !== 'disabled') {
 
-		// List with all devices
-		this.listAllDevices.push({
-			[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-			[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-			[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
-			[translations.Signal_strength[this.config.userSelectedLanguage]]: device.SignalStrength,
-			[translations.Last_Contact[this.config.userSelectedLanguage]]: device.LastContact,
-			[translations.Status[this.config.userSelectedLanguage]]: device.Status,
-		});
-
-		// LinkQuality lists
-		if (device.SignalStrength != ' - ') {
-			this.linkQualityDevices.push({
-				[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-				[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-				[translations.Signal_strength[this.config.userSelectedLanguage]]: device.SignalStrength,
+			this.listAllDevicesUserRaw.push({
+				Device: device.Device,
+				Adapter: device.Adapter,
+				Instance: device.instance,
+				'Instance connected': device.instancedeviceConnected,
+				isBatteryDevice: device.isBatteryDevice,
+				Battery: device.Battery,
+				BatteryRaw: device.BatteryRaw,
+				BatteryUnitRaw: device.BatteryUnitRaw,
+				isLowBat: device.LowBat,
+				'Signal strength': device.SignalStrength,
+				'Signal strength Raw': device.SignalStrengthRaw,
+				'Last contact': device.LastContact,
+				'Update Available': device.Upgradable,
+				Status: device.Status,
 			});
-		}
 
-		// Battery lists
-		if (device.isBatteryDevice) {
-			this.batteryPowered.push({
+			// List with all devices
+			this.listAllDevices.push({
 				[translations.Device[this.config.userSelectedLanguage]]: device.Device,
 				[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
 				[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
+				[translations.Signal_strength[this.config.userSelectedLanguage]]: device.SignalStrength,
+				[translations.Last_Contact[this.config.userSelectedLanguage]]: device.LastContact,
 				[translations.Status[this.config.userSelectedLanguage]]: device.Status,
 			});
-		}
 
-		// Low Bat lists
-		if (device.LowBat && device.Status !== 'Offline') {
-			this.batteryLowPowered.push({
-				[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-				[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-				[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
-			});
-		}
+			// LinkQuality lists
+			if (device.SignalStrength != ' - ') {
+				this.linkQualityDevices.push({
+					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
+					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
+					[translations.Signal_strength[this.config.userSelectedLanguage]]: device.SignalStrength,
+				});
+			}
 
-		// Offline List
-		if (device.Status === 'Offline') {
-			this.offlineDevices.push({
-				[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-				[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-				[translations.Last_Contact[this.config.userSelectedLanguage]]: device.LastContact,
-			});
-		}
+			// Battery lists
+			if (device.isBatteryDevice) {
+				this.batteryPowered.push({
+					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
+					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
+					[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
+					[translations.Status[this.config.userSelectedLanguage]]: device.Status,
+				});
+			}
 
-		// Device update List
-		if (device.Upgradable === true || device.Upgradable === 1) {
-			this.upgradableList.push({
-				[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-				[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-			});
+			// Low Bat lists
+			if (device.LowBat && device.Status !== 'Offline') {
+				this.batteryLowPowered.push({
+					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
+					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
+					[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
+				});
+			}
+
+			// Offline List
+			if (device.Status === 'Offline') {
+				this.offlineDevices.push({
+					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
+					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
+					[translations.Last_Contact[this.config.userSelectedLanguage]]: device.LastContact,
+				});
+			}
+
+			// Device update List
+			if (device.Upgradable === true || device.Upgradable === 1) {
+				this.upgradableList.push({
+					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
+					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
+				});
+			}
 		}
 	}
 
-	/**
-	 * Count devices for each type
-	 */
-	async countDevices() {
-		// Count how many devices with link Quality
-		this.linkQualityCount = this.linkQualityDevices.length;
-
-		// Count how many devcies are offline
-		this.offlineDevicesCount = this.offlineDevices.length;
-
-		// Count how many devices are with battery
-		this.batteryPoweredCount = this.batteryPowered.length;
-
-		// 3d. Count how many devices are with low battery
-		this.lowBatteryPoweredCount = this.batteryLowPowered.length;
-
-		// Count how many devices are exists
-		this.deviceCounter = this.listAllDevices.length;
-
-		// Count how many devices has update available
-		this.upgradableDevicesCount = this.upgradableList.length;
-	}
-
-	/**
-	 * @param {string} [adptName] - Adaptername
-	 */
-	async writeDatapoints(adptName) {
-		// fill the datapoints
-		this.log.debug(`Start the function: ${this.writeDatapoints.name}`);
-
-		try {
-			let dpSubFolder;
-			//write the datapoints in subfolders with the adaptername otherwise write the dP's in the root folder
-			if (adptName) {
-				dpSubFolder = adptName + '.';
-			} else {
-				dpSubFolder = '';
-			}
-
-			// Write Datapoints for counts
-			await this.setStateChangedAsync(`devices.${dpSubFolder}offlineCount`, { val: this.offlineDevicesCount, ack: true });
-			await this.setStateChangedAsync(`devices.${dpSubFolder}countAll`, { val: this.deviceCounter, ack: true });
-			await this.setStateChangedAsync(`devices.${dpSubFolder}batteryCount`, { val: this.batteryPoweredCount, ack: true });
-			await this.setStateChangedAsync(`devices.${dpSubFolder}lowBatteryCount`, { val: this.lowBatteryPoweredCount, ack: true });
-			await this.setStateChangedAsync(`devices.${dpSubFolder}upgradableCount`, { val: this.upgradableDevicesCount, ack: true });
-			// List all devices
-			if (this.deviceCounter === 0) {
-				// if no device is count, write the JSON List with default value
-				this.listAllDevices = [
-					{
-						[translations.Device[this.config.userSelectedLanguage]]: '--none--',
-						[translations.Adapter[this.config.userSelectedLanguage]]: '',
-						[translations.Battery[this.config.userSelectedLanguage]]: '',
-						[translations.Signal_strength[this.config.userSelectedLanguage]]: '',
-						[translations.Last_Contact[this.config.userSelectedLanguage]]: '',
-						[translations.Status[this.config.userSelectedLanguage]]: '',
-					},
-				];
-				this.listAllDevicesUserRaw = [
-					{
-						Device: '--none--',
-						Adapter: '',
-						Instance: '',
-						'Instance connected': '',
-						isBatteryDevice: '',
-						Battery: '',
-						BatteryRaw: '',
-						isLowBat: '',
-						'Signal strength': '',
-						'Last contact': '',
-						UpdateAvailable: '',
-						Status: '',
-					},
-				];
-			}
-			await this.setStateChangedAsync(`devices.${dpSubFolder}listAll`, { val: JSON.stringify(this.listAllDevices), ack: true });
-			await this.setStateChangedAsync(`devices.${dpSubFolder}listAllRawJSON`, { val: JSON.stringify(this.listAllDevicesUserRaw), ack: true });
-
-			// List link quality
-			if (this.linkQualityCount === 0) {
-				// if no device is count, write the JSON List with default value
-				this.linkQualityDevices = [
-					{
-						[translations.Device[this.config.userSelectedLanguage]]: '--none--',
-						[translations.Adapter[this.config.userSelectedLanguage]]: '',
-						[translations.Signal_strength[this.config.userSelectedLanguage]]: '',
-					},
-				];
-			}
-			//write JSON list
-			await this.setStateChangedAsync(`devices.${dpSubFolder}linkQualityList`, {
-				val: JSON.stringify(this.linkQualityDevices),
-				ack: true,
-			});
-
-			// List offline devices
-			if (this.offlineDevicesCount === 0) {
-				// if no device is count, write the JSON List with default value
-				this.offlineDevices = [
-					{
-						[translations.Device[this.config.userSelectedLanguage]]: '--none--',
-						[translations.Adapter[this.config.userSelectedLanguage]]: '',
-						[translations.Last_Contact[this.config.userSelectedLanguage]]: '',
-					},
-				];
-			}
-			//write JSON list
-			await this.setStateChangedAsync(`devices.${dpSubFolder}offlineList`, {
-				val: JSON.stringify(this.offlineDevices),
-				ack: true,
-			});
-
-			// List updatable
-			if (this.upgradableDevicesCount === 0) {
-				// if no device is count, write the JSON List with default value
-				this.upgradableList = [
-					{
-						[translations.Device[this.config.userSelectedLanguage]]: '--none--',
-						[translations.Adapter[this.config.userSelectedLanguage]]: '',
-						[translations.Last_Contact[this.config.userSelectedLanguage]]: '',
-					},
-				];
-			}
-			//write JSON list
-			await this.setStateChangedAsync(`devices.${dpSubFolder}upgradableList`, {
-				val: JSON.stringify(this.upgradableList),
-				ack: true,
-			});
-
-			// List battery powered
-			if (this.batteryPoweredCount === 0) {
-				// if no device is count, write the JSON List with default value
-				this.batteryPowered = [
-					{
-						[translations.Device[this.config.userSelectedLanguage]]: '--none--',
-						[translations.Adapter[this.config.userSelectedLanguage]]: '',
-						[translations.Battery[this.config.userSelectedLanguage]]: '',
-					},
-				];
-			}
-			//write JSON list
-			await this.setStateChangedAsync(`devices.${dpSubFolder}batteryList`, {
-				val: JSON.stringify(this.batteryPowered),
-				ack: true,
-			});
-
-			// list battery low powered
-			if (this.lowBatteryPoweredCount === 0) {
-				// if no device is count, write the JSON List with default value
-				this.batteryLowPowered = [
-					{
-						[translations.Device[this.config.userSelectedLanguage]]: '--none--',
-						[translations.Adapter[this.config.userSelectedLanguage]]: '',
-						[translations.Battery[this.config.userSelectedLanguage]]: '',
-					},
-				];
-			}
-			//write JSON list
-			await this.setStateChangedAsync(`devices.${dpSubFolder}lowBatteryList`, {
-				val: JSON.stringify(this.batteryLowPowered),
-				ack: true,
-			});
-
-			// set booleans datapoints
-			if (this.offlineDevicesCount === 0) {
-				await this.setStateChangedAsync(`devices.${dpSubFolder}oneDeviceOffline`, {
-					val: false,
-					ack: true,
-				});
-			} else {
-				await this.setStateChangedAsync(`devices.${dpSubFolder}oneDeviceOffline`, {
-					val: true,
-					ack: true,
-				});
-			}
-
-			if (this.lowBatteryPoweredCount === 0) {
-				await this.setStateChangedAsync(`devices.${dpSubFolder}oneDeviceLowBat`, {
-					val: false,
-					ack: true,
-				});
-			} else {
-				await this.setStateChangedAsync(`devices.${dpSubFolder}oneDeviceLowBat`, {
-					val: true,
-					ack: true,
-				});
-			}
-
-			if (this.upgradableDevicesCount === 0) {
-				await this.setStateChangedAsync(`devices.${dpSubFolder}oneDeviceUpdatable`, {
-					val: false,
-					ack: true,
-				});
-			} else {
-				await this.setStateChangedAsync(`devices.${dpSubFolder}oneDeviceUpdatable`, {
-					val: true,
-					ack: true,
-				});
-			}
-
-			//write HTML list
-			if (this.configCreateHtmlList) {
-				await this.setStateChangedAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
-					val: await this.createListHTML('linkQualityList', this.linkQualityDevices, this.linkQualityCount, null),
-					ack: true,
-				});
-				await this.setStateChangedAsync(`devices.${dpSubFolder}offlineListHTML`, {
-					val: await this.createListHTML('offlineList', this.offlineDevices, this.offlineDevicesCount, null),
-					ack: true,
-				});
-				await this.setStateChangedAsync(`devices.${dpSubFolder}batteryListHTML`, {
-					val: await this.createListHTML('batteryList', this.batteryPowered, this.batteryPoweredCount, false),
-					ack: true,
-				});
-				await this.setStateChangedAsync(`devices.${dpSubFolder}lowBatteryListHTML`, {
-					val: await this.createListHTML('batteryList', this.batteryLowPowered, this.lowBatteryPoweredCount, true),
-					ack: true,
-				});
-				if (this.config.checkAdapterInstances) {
-					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`, {
-						val: await this.createListHTMLInstances('allInstancesList', this.listAllInstances, this.countAllInstances),
-						ack: true,
-					});
-					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`, {
-						val: await this.createListHTMLInstances('allActiveInstancesList', this.listAllActiveInstances, this.countAllActiveInstances),
-						ack: true,
-					});
-					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`, {
-						val: await this.createListHTMLInstances('errorInstanceList', this.listErrorInstance, this.countErrorInstance),
-						ack: true,
-					});
-					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`, {
-						val: await this.createListHTMLInstances('deactivatedInstanceList', this.listDeactivatedInstances, this.countDeactivatedInstances),
-						ack: true,
-					});
-					await this.setStateChangedAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`, {
-						val: await this.createListHTMLInstances('updateAdapterList', this.listAdapterUpdates, this.countAdapterUpdates),
-						ack: true,
-					});
-				}
-			}
-
-			// create timestamp of last run
-			const lastCheck = this.formatDate(new Date(), 'DD.MM.YYYY') + ' - ' + this.formatDate(new Date(), 'hh:mm:ss');
-			await this.setStateChangedAsync('lastCheck', lastCheck, true);
-		} catch (error) {
-			this.log.error(`[writeDatapoints] - ${error}`);
-		}
-		this.log.debug(`Function finished: ${this.writeDatapoints.name}`);
-	} //<--End  of writing Datapoints
 
 	/**
 	 * @param {string | string[]} id
@@ -1974,7 +1286,7 @@ class DeviceWatcher extends utils.Adapter {
 						deviceData.BatteryRaw = batteryData[2];
 						deviceData.BatteryUnitRaw = batteryData[3];
 						if (deviceData.LowBatDP !== 'none') {
-							isLowBatValue = await this.getInitValue(deviceData.LowBatDP);
+							isLowBatValue = await tools.getInitValue(this,deviceData.LowBatDP);
 						} else {
 							isLowBatValue = undefined;
 						}
@@ -2037,17 +1349,17 @@ class DeviceWatcher extends utils.Adapter {
 								deviceData.UnreachDP,
 								deviceData.SignalStrength,
 								deviceData.UnreachState,
-								deviceData.DeviceStateSelectorDP,
-								deviceData.rssiPeerSelectorDP,
+								deviceData.deviceStateSelectorHMRPC,
+								deviceData.rssiPeerSelectorHMRPC,
 							);
-							if (contactData !== undefined) {
+							if (contactData !== undefined && contactData !== null) {
 								deviceData.LastContact = contactData[0];
 								deviceData.Status = contactData[1];
 								deviceData.SignalStrength = contactData[2];
 							}
 							if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
 								// check if the generally deviceData connected state is for a while true
-								if (await this.getTimestampConnectionDP(deviceData.instanceDeviceConnectionDP, 50000)) {
+								if (await tools.getTimestampConnectionDP(this, deviceData.instanceDeviceConnectionDP, 50000)) {
 									await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID);
 								}
 							}
@@ -2078,6 +1390,9 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			const instanceAliveDP = await this.getForeignStatesAsync(`${instanceObject}.alive`);
 
+			this.adapterUpdatesJsonRaw = await this.getAdapterUpdateData(adapterUpdateListDP);
+
+
 			for (const [id] of Object.entries(instanceAliveDP)) {
 				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
 
@@ -2086,13 +1401,13 @@ class DeviceWatcher extends utils.Adapter {
 
 				// get instance connected to host data
 				const instanceConnectedHostDP = `system.adapter.${instanceID}.connected`;
-				const instanceConnectedHostVal = await this.getInitValue(instanceConnectedHostDP);
+				const instanceConnectedHostVal = await tools.getInitValue(this,instanceConnectedHostDP);
 
 				// get instance connected to device data
 				const instanceConnectedDeviceDP = `${instanceID}.info.connection`;
 				let instanceConnectedDeviceVal;
 				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
-					instanceConnectedDeviceVal = await this.getInitValue(instanceConnectedDeviceDP);
+					instanceConnectedDeviceVal = await tools.getInitValue(this,instanceConnectedDeviceDP);
 				} else {
 					instanceConnectedDeviceVal = 'N/A';
 				}
@@ -2107,7 +1422,7 @@ class DeviceWatcher extends utils.Adapter {
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
 				if (instanceObjectData) {
 					// @ts-ignore
-					adapterName = this.capitalize(instanceObjectData.common.name);
+					adapterName = tools.capitalize(instanceObjectData.common.name);
 					adapterVersion = instanceObjectData.common.version;
 					instanceMode = instanceObjectData.common.mode;
 
@@ -2116,12 +1431,13 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 
-				await this.getAdapterUpdateData(`admin.*.info.updatesJson`);
 
-				if (this.adapterUpdatesJsonRaw.has(adapterName)) {
-					for (const adapter of this.adapterUpdatesJsonRaw.values()) {
-						adapterAvailableUpdate = adapter.newVersion;
-					}
+				const updateEntry = this.adapterUpdatesJsonRaw.find(
+					entry => entry.adapter.toLowerCase() === adapterName.toLowerCase()
+				);
+
+				if (updateEntry) {
+					adapterAvailableUpdate = updateEntry.newVersion;
 				} else {
 					adapterAvailableUpdate = ' - ';
 				}
@@ -2190,9 +1506,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} instanceID
 	 */
 	async checkDaemonIsHealthy(instanceID) {
-		const connectedHostState = await this.getInitValue(`system.adapter.${instanceID}.connected`);
-		const isAlive = await this.getInitValue(`system.adapter.${instanceID}.alive`);
-		let connectedDeviceState = await this.getInitValue(`${instanceID}.info.connection`);
+		const connectedHostState = await tools.getInitValue(this,`system.adapter.${instanceID}.connected`);
+		const isAlive = await tools.getInitValue(this,`system.adapter.${instanceID}.alive`);
+		let connectedDeviceState = await tools.getInitValue(this,`${instanceID}.info.connection`);
 		if (connectedDeviceState === undefined) {
 			connectedDeviceState = true;
 		}
@@ -2220,7 +1536,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {number} instanceDeactivationTime
 	 */
 	async checkDaemonIsAlive(instanceID, instanceDeactivationTime) {
-		let isAlive = await this.getInitValue(`system.adapter.${instanceID}.alive`);
+		let isAlive = await tools.getInitValue(this,`system.adapter.${instanceID}.alive`);
 		let daemonIsAlive;
 		let isHealthy = false;
 		let instanceStatusString = isAlive ? translations.instance_activated[this.config.userSelectedLanguage] : translations.instance_deactivated[this.config.userSelectedLanguage];
@@ -2257,7 +1573,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (isAliveSchedule) {
 			lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
-			previousCronRun = this.getPreviousCronRun(scheduleTime); // When was the last cron run
+			previousCronRun = tools.getPreviousCronRun(this, scheduleTime); // When was the last cron run
 			if (previousCronRun) {
 				lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
 				diff = lastCronRun - lastUpdate;
@@ -2338,25 +1654,12 @@ class DeviceWatcher extends utils.Adapter {
 	}
 
 	/**
-	 * create adapter update data
-	 */
-	async createAdapterUpdateData() {
-		const adapterUpdateListDP = 'admin.*.info.updatesJson';
-		// subscribe to datapoint
-		this.subscribeForeignStates(adapterUpdateListDP);
-
-		await this.getAdapterUpdateData(adapterUpdateListDP);
-
-		await this.createAdapterUpdateList();
-	}
-
-	/**
 	 * create adapter update raw lists
 	 * @param {string} adapterUpdateListDP
 	 */
 	async getAdapterUpdateData(adapterUpdateListDP) {
 		// Clear the existing adapter updates data
-		this.adapterUpdatesJsonRaw.clear();
+		let adapterUpdatesJsonRaw = [];
 
 		// Fetch the adapter updates list
 		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
@@ -2366,20 +1669,22 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Extract adapter data from the list
 		for (const [id, value] of Object.entries(adapterUpdatesListVal)) {
-			adapterJsonList = this.parseData(value.val);
+			adapterJsonList = tools.parseData(value.val);
 			adapterUpdatesJsonPath = id;
 		}
 
 		// Populate the adapter updates data
 		for (const [id, adapterData] of Object.entries(adapterJsonList)) {
-			this.adapterUpdatesJsonRaw.set(this.capitalize(id), {
-				Path: adapterUpdatesJsonPath,
-				newVersion: adapterData.availableVersion,
-				oldVersion: adapterData.installedVersion,
-			});
+			adapterUpdatesJsonRaw.push(
+				{
+					adapter: tools.capitalize(id),
+					newVersion: adapterData.availableVersion,
+					oldVersion: adapterData.installedVersion,
+				}
+			);
 		}
 
-		return this.adapterUpdatesJsonRaw;
+		return adapterUpdatesJsonRaw;
 	}
 
 	/**
@@ -2389,13 +1694,14 @@ class DeviceWatcher extends utils.Adapter {
 		this.listAdapterUpdates = [];
 		this.countAdapterUpdates = 0;
 
-		for (const [adapter, updateData] of this.adapterUpdatesJsonRaw) {
+		for (const updateData of this.adapterUpdatesJsonRaw) {
 			this.listAdapterUpdates.push({
-				[translations.Adapter[this.config.userSelectedLanguage]]: adapter,
+				[translations.Adapter[this.config.userSelectedLanguage]]: updateData.adapter,
 				[translations.Available_Version[this.config.userSelectedLanguage]]: updateData.newVersion,
 				[translations.Installed_Version[this.config.userSelectedLanguage]]: updateData.oldVersion,
 			});
 		}
+
 		this.countAdapterUpdates = this.listAdapterUpdates.length;
 		await this.writeAdapterUpdatesDPs();
 	}
@@ -2410,7 +1716,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.countAdapterUpdates === 0) {
 			this.listAdapterUpdates = [
 				{
-					[translations.Adapter[this.config.userSelectedLanguage]]: '--none--',
+					[translations.Adapter[this.config.userSelectedLanguage]]: '--no updates--',
 					[translations.Available_Version[this.config.userSelectedLanguage]]: '',
 					[translations.Installed_Version[this.config.userSelectedLanguage]]: '',
 				},
@@ -2556,8 +1862,11 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Update instances with available adapter updates
 		for (const instance of this.listInstanceRaw.values()) {
-			if (this.adapterUpdatesJsonRaw.has(instance.Adapter)) {
-				const adapterUpdate = this.adapterUpdatesJsonRaw.get(instance.Adapter);
+			const adapterUpdate = this.adapterUpdatesJsonRaw.find(
+				entry => entry.adapter.toLowerCase() === instance.Adapter.toLowerCase()
+			);
+
+			if (adapterUpdate) {
 				instance.updateAvailable = adapterUpdate.newVersion;
 			} else {
 				instance.updateAvailable = ' - ';
@@ -2622,294 +1931,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-	/**
-	 * create Datapoints for Instances
-	 */
-	async createDPsForInstances() {
-		await this.setObjectNotExistsAsync(`adapterAndInstances`, {
-			type: 'channel',
-			common: {
-				name: {
-					en: 'Adapter and Instances',
-					de: 'Adapter und Instanzen',
-					ru: 'Адаптер и Instances',
-					pt: 'Adaptador e instâncias',
-					nl: 'Adapter en Instance',
-					fr: 'Adaptateur et instances',
-					it: 'Adattatore e istanze',
-					es: 'Adaptador e instalaciones',
-					pl: 'Adapter and Instances',
-					// @ts-ignore
-					uk: 'Адаптер та інстанції',
-					'zh-cn': '道歉和案',
-				},
-			},
-			native: {},
-		});
-
-		// Instances
-		await this.setObjectNotExistsAsync(`adapterAndInstances.listAllInstances`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'JSON List of all instances',
-					de: 'JSON Liste aller Instanzen',
-					ru: 'ДЖСОН Список всех инстанций',
-					pt: 'J. Lista de todas as instâncias',
-					nl: 'JSON List van alle instanties',
-					fr: 'JSON Liste de tous les cas',
-					it: 'JSON Elenco di tutte le istanze',
-					es: 'JSON Lista de todos los casos',
-					pl: 'JSON Lista wszystkich instancji',
-					// @ts-ignore
-					uk: 'Сонце Список всіх екземплярів',
-					'zh-cn': '附 件 所有事例一览表',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.countAllInstances`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of all instances',
-					de: 'Anzahl aller Instanzen',
-					ru: 'Количество всех инстанций',
-					pt: 'Número de todas as instâncias',
-					nl: 'Nummer van alle gevallen',
-					fr: 'Nombre de cas',
-					it: 'Numero di tutte le istanze',
-					es: 'Número de casos',
-					pl: 'Liczba wszystkich instancji',
-					// @ts-ignore
-					uk: 'Кількість всіх екземплярів',
-					'zh-cn': '各类案件数目',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		// Instances
-		await this.setObjectNotExistsAsync(`adapterAndInstances.listAllActiveInstances`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'JSON List of all active instances',
-					de: 'JSON Liste aller aktiven Instanzen',
-					ru: 'ДЖСОН Список всех активных инстанций',
-					pt: 'J. Lista de todas as instâncias ativas',
-					nl: 'JSON List van alle actieve instanties',
-					fr: 'JSON Liste de tous les cas actifs',
-					it: 'JSON Elenco di tutte le istanze attive',
-					es: 'JSON Lista de todos los casos activos',
-					pl: 'JSON Lista wszystkich aktywnych instancji',
-					// @ts-ignore
-					uk: 'Сонце Список всіх активних екземплярів',
-					'zh-cn': '附 件 所有积极事件清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.countAllActiveInstances`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of all active instances',
-					de: 'Anzahl aller aktiven Instanzen',
-					ru: 'Количество всех активных инстанций',
-					pt: 'Número de todas as instâncias ativas',
-					nl: 'Nummer van alle actieve instanties',
-					fr: 'Nombre de toutes les instances actives',
-					it: 'Numero di tutte le istanze attive',
-					es: 'Número de casos activos',
-					pl: 'Liczba wszystkich czynnych przypadków',
-					// @ts-ignore
-					uk: 'Кількість всіх активних екземплярів',
-					'zh-cn': '所有积极事件的数目',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.listDeactivatedInstances`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'JSON List of deactivated instances',
-					de: 'JSON Liste der deaktivierten Instanzen',
-					ru: 'ДЖСОН Список деактивированных инстанций',
-					pt: 'J. Lista de instâncias desativadas',
-					nl: 'JSON List van gedeactiveerde instanties',
-					fr: 'JSON Liste des cas désactivés',
-					it: 'JSON Elenco delle istanze disattivate',
-					es: 'JSON Lista de casos desactivados',
-					pl: 'JSON Lista przypadków deaktywowanych',
-					// @ts-ignore
-					uk: 'Сонце Перелік деактивованих екземплярів',
-					'zh-cn': '附 件 被动事例清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.countDeactivatedInstances`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of deactivated instances',
-					de: 'Anzahl deaktivierter Instanzen',
-					ru: 'Количество деактивированных инстанций',
-					pt: 'Número de instâncias desativadas',
-					nl: 'Nummer van gedeactiveerde instanties',
-					fr: 'Nombre de cas désactivés',
-					it: 'Numero di istanze disattivate',
-					es: 'Número de casos desactivados',
-					pl: 'Liczba deaktywowanych instancji',
-					// @ts-ignore
-					uk: 'Кількість деактивованих екземплярів',
-					'zh-cn': 'A. 递解事件的数目',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.listInstancesError`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'JSON list of instances with error',
-					de: 'JSON-Liste von Instanzen mit Fehler',
-					ru: 'JSON список инстанций с ошибкой',
-					pt: 'Lista de instâncias JSON com erro',
-					nl: 'JSON lijst met fouten',
-					fr: 'Liste des instances avec erreur',
-					it: 'Elenco JSON delle istanze con errore',
-					es: 'JSON lista de casos con error',
-					pl: 'Lista błędów JSON',
-					// @ts-ignore
-					uk: 'JSON список екземплярів з помилкою',
-					'zh-cn': '联合工作组办公室错误事件清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.countInstancesError`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Count of instances with error',
-					de: 'Anzahl der Instanzen mit Fehler',
-					ru: 'Количество инстанций с ошибкой',
-					pt: 'Contagem de instâncias com erro',
-					nl: 'Graaf van instoringen met fouten',
-					fr: 'Nombre de cas avec erreur',
-					it: 'Conteggio di istanze con errore',
-					es: 'Cuenta de casos con error',
-					pl: 'Liczba przykładów w przypadku błędów',
-					// @ts-ignore
-					uk: 'Кількість екземплярів з помилкою',
-					'zh-cn': '发生错误的情况',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		// Adapter
-		await this.setObjectNotExistsAsync(`adapterAndInstances.listAdapterUpdates`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'JSON list of adapters with available updates',
-					de: 'JSON-Liste der Adapter mit verfügbaren Updates',
-					ru: 'JSON список адаптеров с доступными обновлениями',
-					pt: 'Lista de adaptadores JSON com atualizações disponíveis',
-					nl: 'JSON lijst met beschikbare updates',
-					fr: 'Liste JSON des adaptateurs avec mises à jour disponibles',
-					it: 'Elenco di adattatori JSON con aggiornamenti disponibili',
-					es: 'JSON lista de adaptadores con actualizaciones disponibles',
-					pl: 'JSON lista adapterów z dostępnymi aktualizacjami',
-					// @ts-ignore
-					uk: 'JSON список адаптерів з доступними оновленнями',
-					'zh-cn': '附录A',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.countAdapterUpdates`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of adapters with available updates',
-					de: 'Anzahl der Adapter mit verfügbaren Updates',
-					ru: 'Количество адаптеров с доступными обновлениями',
-					pt: 'Número de adaptadores com atualizações disponíveis',
-					nl: 'Nummer van adapters met beschikbare updates',
-					fr: "Nombre d'adaptateurs avec mises à jour disponibles",
-					it: 'Numero di adattatori con aggiornamenti disponibili',
-					es: 'Número de adaptadores con actualizaciones disponibles',
-					pl: 'Liczba adapterów z dostępną aktualizacją',
-					// @ts-ignore
-					uk: 'Кількість адаптерів з доступними оновленнями',
-					'zh-cn': '更新的适应者人数',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-	}
-
-	/**
-	 * delete Datapoints for Instances
-	 */
-	async deleteDPsForInstances() {
-		await this.delObjectAsync(`adapterAndInstances`);
-		await this.delObjectAsync(`adapterAndInstances.listAllInstances`);
-		await this.delObjectAsync(`adapterAndInstances.countAllInstances`);
-		await this.delObjectAsync(`adapterAndInstances.listAllActiveInstances`);
-		await this.delObjectAsync(`adapterAndInstances.countAllActiveInstances`);
-		await this.delObjectAsync(`adapterAndInstances.listDeactivatedInstances`);
-		await this.delObjectAsync(`adapterAndInstances.countDeactivatedInstances`);
-		await this.delObjectAsync(`adapterAndInstances.listInstancesError`);
-		await this.delObjectAsync(`adapterAndInstances.countInstancesError`);
-		await this.delObjectAsync(`adapterAndInstances.listAdapterUpdates`);
-		await this.delObjectAsync(`adapterAndInstances.countAdapterUpdates`);
-	}
-
 	/*=============================================
 	=       functions to send notifications       =
 	=============================================*/
@@ -2923,7 +1944,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instancePushover) {
 			try {
 				//first check if instance is living
-				const pushoverAliveState = await this.getInitValue('system.adapter.' + this.config.instancePushover + '.alive');
+				const pushoverAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instancePushover + '.alive');
 
 				if (!pushoverAliveState) {
 					this.log.warn('Pushover instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2945,7 +1966,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceTelegram) {
 			try {
 				//first check if instance is living
-				const telegramAliveState = await this.getInitValue('system.adapter.' + this.config.instanceTelegram + '.alive');
+				const telegramAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceTelegram + '.alive');
 
 				if (!telegramAliveState) {
 					this.log.warn('Telegram instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2965,7 +1986,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceWhatsapp) {
 			try {
 				//first check if instance is living
-				const whatsappAliveState = await this.getInitValue('system.adapter.' + this.config.instanceWhatsapp + '.alive');
+				const whatsappAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceWhatsapp + '.alive');
 
 				if (!whatsappAliveState) {
 					this.log.warn('Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2984,7 +2005,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceMatrix) {
 			try {
 				//first check if instance is living
-				const matrixAliveState = await this.getInitValue('system.adapter.' + this.config.instanceMatrix + '.alive');
+				const matrixAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceMatrix + '.alive');
 
 				if (!matrixAliveState) {
 					this.log.warn('Matrix instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -3003,7 +2024,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceSignal) {
 			try {
 				//first check if instance is living
-				const signalAliveState = await this.getInitValue('system.adapter.' + this.config.instanceSignal + '.alive');
+				const signalAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceSignal + '.alive');
 
 				if (!signalAliveState) {
 					this.log.warn('Signal instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -3022,7 +2043,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceEmail) {
 			try {
 				//first check if instance is living
-				const eMailAliveState = await this.getInitValue('system.adapter.' + this.config.instanceEmail + '.alive');
+				const eMailAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceEmail + '.alive');
 
 				if (!eMailAliveState) {
 					this.log.warn('eMail instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -3042,7 +2063,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceJarvis) {
 			try {
 				//first check if instance is living
-				const jarvisAliveState = await this.getInitValue('system.adapter.' + this.config.instanceJarvis + '.alive');
+				const jarvisAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceJarvis + '.alive');
 
 				if (!jarvisAliveState) {
 					this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -3062,7 +2083,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceLovelace) {
 			try {
 				//first check if instance is living
-				const lovelaceAliveState = await this.getInitValue('system.adapter.' + this.config.instanceLovelace + '.alive');
+				const lovelaceAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceLovelace + '.alive');
 
 				if (!lovelaceAliveState) {
 					this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -3082,7 +2103,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceSynochat) {
 			try {
 				//first check if instance is living
-				const synochatAliveState = await this.getInitValue('system.adapter.' + this.config.instanceSynochat + '.alive');
+				const synochatAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceSynochat + '.alive');
 
 				if (!synochatAliveState) {
 					this.log.warn('Synochat instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -3324,1053 +2345,6 @@ class DeviceWatcher extends utils.Adapter {
 					await processNotification(list, 'deactivated_instances_msg');
 				});
 				break;
-		}
-	}
-
-	/*=============================================
-	=       functions to create html lists        =
-	=============================================*/
-	/**
-	 * @param {string} type - type of list
-	 * @param {object} devices - Device
-	 * @param {number} deviceCount - Counted devices
-	 * @param {object} isLowBatteryList - list Low Battery Devices
-	 */
-	async createListHTML(type, devices, deviceCount, isLowBatteryList) {
-		let html;
-		switch (type) {
-			case 'linkQualityList':
-				devices = devices.sort((a, b) => {
-					a = a.Device || '';
-					b = b.Device || '';
-					return a.localeCompare(b);
-				});
-				html = `<center>
-			<b>${[translations.Link_quality_devices[this.config.userSelectedLanguage]]}:<font> ${deviceCount}</b><small></small></font>
-			<p></p>
-			</center>   
-			<table width=100%>
-			<tr>
-			<th align=left>${[translations.Device[this.config.userSelectedLanguage]]}</th>
-			<th align=center width=120>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-			<th align=right>${[translations.Signal_strength[this.config.userSelectedLanguage]]}</th>
-			</tr>
-			<tr>
-			<td colspan="5"><hr></td>
-			</tr>`;
-
-				for (const device of devices) {
-					html += `<tr>
-				<td><font>${device[translations.Device[this.config.userSelectedLanguage]]}</font></td>
-				<td align=center><font>${device[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>
-				<td align=right><font>${device[translations.Signal_strength[this.config.userSelectedLanguage]]}</font></td>
-				</tr>`;
-				}
-
-				html += '</table>';
-				break;
-
-			case 'offlineList':
-				devices = devices.sort((a, b) => {
-					a = a.Device || '';
-					b = b.Device || '';
-					return a.localeCompare(b);
-				});
-				html = `<center>
-			<b>${[translations.offline_devices[this.config.userSelectedLanguage]]}: <font color=${deviceCount === 0 ? '#3bcf0e' : 'orange'}>${deviceCount}</b><small></small></font>
-			<p></p>
-			</center>   
-			<table width=100%>
-			<tr>
-			<th align=left>${[translations.Device[this.config.userSelectedLanguage]]}</th>
-			<th align=center width=120>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-			<th align=center>${[translations.Last_Contact[this.config.userSelectedLanguage]]}</th>
-			</tr>
-			<tr>
-			<td colspan="5"><hr></td>
-			</tr>`;
-
-				for (const device of devices) {
-					html += `<tr>
-				<td><font>${device[translations.Device[this.config.userSelectedLanguage]]}</font></td>
-				<td align=center><font>${device[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>
-				<td align=center><font color=orange>${device[translations.Last_Contact[this.config.userSelectedLanguage]]}</font></td>
-				</tr>`;
-				}
-
-				html += '</table>';
-				break;
-
-			case 'batteryList':
-				devices = devices.sort((a, b) => {
-					a = a.Device || '';
-					b = b.Device || '';
-					return a.localeCompare(b);
-				});
-				html = `<center>
-			<b>${isLowBatteryList === true ? `${[translations.low[this.config.userSelectedLanguage]]} ` : ''}${[translations.battery_devices[this.config.userSelectedLanguage]]}: 
-			<font color=${isLowBatteryList === true ? (deviceCount > 0 ? 'orange' : '#3bcf0e') : ''}>${deviceCount}</b></font>
-			<p></p>
-			</center>   
-			<table width=100%>
-			<tr>
-			<th align=left>${[translations.Device[this.config.userSelectedLanguage]]}</th>
-			<th align=center width=120>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-			<th align=${isLowBatteryList ? 'center' : 'right'}>${[translations.Battery[this.config.userSelectedLanguage]]}</th>
-			</tr>
-			<tr>
-			<td colspan="5"><hr></td>
-			</tr>`;
-				for (const device of devices) {
-					html += `<tr>
-				<td><font>${device[translations.Device[this.config.userSelectedLanguage]]}</font></td>
-				<td align=center><font>${device[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>`;
-
-					if (isLowBatteryList) {
-						html += `<td align=center><font color=orange>${device[translations.Battery[this.config.userSelectedLanguage]]}</font></td>`;
-					} else {
-						html += `<td align=right><font color=#3bcf0e>${device[translations.Battery[this.config.userSelectedLanguage]]}</font></td>`;
-					}
-					html += `</tr>`;
-				}
-
-				html += '</table>';
-				break;
-		}
-		return html;
-	}
-
-	/**
-	 * @param {string} type - type of list
-	 * @param {object} instances - Instance
-	 * @param {number} instancesCount - Counted devices
-	 */
-	async createListHTMLInstances(type, instances, instancesCount) {
-		let html;
-		switch (type) {
-			case 'allInstancesList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instance || '';
-					return a.localeCompare(b);
-				});
-				html = `<center>
-				<b>${[translations.All_Instances[this.config.userSelectedLanguage]]}:<font> ${instancesCount}</b><small></small></font>
-				<p></p>
-				</center>   
-				<table width=100%>
-				<tr>
-				<th align=left>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-				<th align=center>${[translations.Instance[this.config.userSelectedLanguage]]}</th>
-				<th align=center width=180>${[translations.Status[this.config.userSelectedLanguage]]}</th>
-				</tr>
-				<tr>
-				<td colspan="5"><hr></td>
-				</tr>`;
-
-				for (const instanceData of instances) {
-					html += `<tr>
-					<td><font>${instanceData[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font>${instanceData[translations.Instance[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font>${instanceData[translations.Status[this.config.userSelectedLanguage]]}</font></td>
-					</tr>`;
-				}
-
-				html += '</table>';
-				break;
-
-			case 'allActiveInstancesList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instances || '';
-					return a.localeCompare(b);
-				});
-				html = `<center>
-				<b>${[translations.Active_Instances[this.config.userSelectedLanguage]]}: <font> ${instancesCount}</b><small></small></font>
-				<p></p>
-				</center>   
-				<table width=100%>
-				<tr>
-				<th align=left>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-				<th align=center>${[translations.Instance[this.config.userSelectedLanguage]]}</th>
-				<th align=center width=180>${[translations.Status[this.config.userSelectedLanguage]]}</th>
-				</tr>
-				<tr>
-				<td colspan="5"><hr></td>
-				</tr>`;
-
-				for (const instanceData of instances) {
-					html += `<tr>
-					<td><font>${instanceData[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font>${instanceData[translations.Instance[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font color=orange>${instanceData[translations.Status[this.config.userSelectedLanguage]]}</font></td>
-					</tr>`;
-				}
-
-				html += '</table>';
-				break;
-
-			case 'errorInstanceList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instances || '';
-					return a.localeCompare(b);
-				});
-				html = `<center>
-				<b>${[translations.Error_Instances[this.config.userSelectedLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
-				<p></p>
-				</center>   
-				<table width=100%>
-				<tr>
-				<th align=left>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-				<th align=center>${[translations.Instance[this.config.userSelectedLanguage]]}</th>
-				<th align=center width=180>${[translations.Status[this.config.userSelectedLanguage]]}</th>
-				</tr>
-				<tr>
-				<td colspan="5"><hr></td>
-				</tr>`;
-
-				for (const instanceData of instances) {
-					html += `<tr>
-					<td><font>${instanceData[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font>${instanceData[translations.Instance[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font color=orange>${instanceData[translations.Status[this.config.userSelectedLanguage]]}</font></td>
-					</tr>`;
-				}
-
-				html += '</table>';
-				break;
-
-			case 'deactivatedInstanceList':
-				instances = instances.sort((a, b) => {
-					a = a.Instance || '';
-					b = b.Instances || '';
-					return a.localeCompare(b);
-				});
-				html = `<center>
-				<b>${[translations.Deactivated_Instances[this.config.userSelectedLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
-				<p></p>
-				</center>   
-				<table width=100%>
-				<tr>
-				<th align=left>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-				<th align=center>${[translations.Instance[this.config.userSelectedLanguage]]}</th>
-				<th align=center width=180>${[translations.Status[this.config.userSelectedLanguage]]}</th>
-				</tr>
-				<tr>
-				<td colspan="5"><hr></td>
-				</tr>`;
-
-				for (const instanceData of instances) {
-					if (!instanceData.isAlive) {
-						html += `<tr>
-					<td><font>${instanceData[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font>${instanceData[translations.Instance[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font color=orange>${instanceData[translations.Status[this.config.userSelectedLanguage]]}</font></td>
-					</tr>`;
-					}
-				}
-
-				html += '</table>';
-				break;
-
-			case 'updateAdapterList':
-				html = `<center>
-				<b>${[translations.Updatable_adapters[this.config.userSelectedLanguage]]}: <font color=${instancesCount === 0 ? '#3bcf0e' : 'orange'}>${instancesCount}</b><small></small></font>
-				<p></p>
-				</center>   
-				<table width=100%>
-				<tr>
-				<th align=left>${[translations.Adapter[this.config.userSelectedLanguage]]}</th>
-				<th align=center>${[translations.Installed_Version[this.config.userSelectedLanguage]]}</th>
-				<th align=center>${[translations.Available_Version[this.config.userSelectedLanguage]]}</th>
-				</tr>
-				<tr>
-				<td colspan="5"><hr></td>
-				</tr>`;
-
-				for (const instanceData of instances.values()) {
-					if (instanceData.updateAvailable !== ' - ') {
-						html += `<tr>
-					<td><font>${instanceData[translations.Adapter[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font>${instanceData[translations.Installed_Version[this.config.userSelectedLanguage]]}</font></td>
-					<td align=center><font color=orange>${instanceData[translations.Available_Version[this.config.userSelectedLanguage]]}</font></td>
-					</tr>`;
-					}
-				}
-
-				html += '</table>';
-				break;
-		}
-		return html;
-	}
-
-	/*=============================================
-	=     create datapoints for each adapter      =
-	=============================================*/
-
-	/**
-	 * @param {object} adptName - Adaptername of devices
-	 */
-	async createDPsForEachAdapter(adptName) {
-		await this.setObjectNotExistsAsync(`devices.${adptName}`, {
-			type: 'channel',
-			common: {
-				name: adptName,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.offlineCount`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of devices offline',
-					de: 'Anzahl der Geräte offline',
-					ru: 'Количество устройств offline',
-					pt: 'Número de dispositivos offline',
-					nl: 'Nummer van apparatuur offline',
-					fr: 'Nombre de dispositifs hors ligne',
-					it: 'Numero di dispositivi offline',
-					es: 'Número de dispositivos sin conexión',
-					pl: 'Ilość urządzeń offline',
-					'zh-cn': '线内装置数量',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.offlineList`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'List of offline devices',
-					de: 'Liste der Offline-Geräte',
-					ru: 'Список оффлайн устройств',
-					pt: 'Lista de dispositivos off-line',
-					nl: 'List van offline apparatuur',
-					fr: 'Liste des dispositifs hors ligne',
-					it: 'Elenco dei dispositivi offline',
-					es: 'Lista de dispositivos sin conexión',
-					pl: 'Lista urządzeń offline',
-					'zh-cn': '线装置清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceOffline`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Is one device with offline',
-					de: 'Ist ein Gerät mit Offline',
-					ru: 'Это одно устройство с offline',
-					pt: 'É um dispositivo com offline',
-					nl: 'Is een apparaat met offline',
-					fr: 'Est un appareil avec hors ligne',
-					it: 'È un dispositivo con offline',
-					es: 'Es un dispositivo sin conexión',
-					pl: 'Jest to jeden urządzenie z offlinem',
-					// @ts-ignore
-					uk: 'Є один пристрій з автономним',
-					'zh-cn': '一处有线装置',
-				},
-				type: 'boolean',
-				role: 'state',
-				read: true,
-				write: false,
-				def: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.listAllRawJSON`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'JSON RAW List of all devices',
-					de: 'JSON RAW Liste aller Geräte',
-					ru: 'ДЖСОН РАВ Список всех устройств',
-					pt: 'JSON RAW Lista de todos os dispositivos',
-					nl: 'JSON RAW List van alle apparaten',
-					fr: 'JSON RAW Liste de tous les dispositifs',
-					it: 'JSON RAW Elenco di tutti i dispositivi',
-					es: 'JSON RAW Lista de todos los dispositivos',
-					pl: 'JSON RAW Lista wszystkich urządzeń',
-					// @ts-ignore
-					uk: 'ДЖСОН РАВ Список всіх пристроїв',
-					'zh-cn': 'JSONRAW 所有装置清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.listAll`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'List of all devices',
-					de: 'Liste aller Geräte',
-					ru: 'Список всех устройств',
-					pt: 'Lista de todos os dispositivos',
-					nl: 'List van alle apparaten',
-					fr: 'Liste de tous les dispositifs',
-					it: 'Elenco di tutti i dispositivi',
-					es: 'Lista de todos los dispositivos',
-					pl: 'Lista wszystkich urządzeń',
-					'zh-cn': '所有装置清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.linkQualityList`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'List of devices with signal strength',
-					de: 'Liste der Geräte mit Signalstärke',
-					ru: 'Список устройств с силой сигнала',
-					pt: 'Lista de dispositivos com força de sinal',
-					nl: 'List van apparaten met signaalkracht',
-					fr: 'Liste des dispositifs avec force de signal',
-					it: 'Elenco dei dispositivi con forza del segnale',
-					es: 'Lista de dispositivos con fuerza de señal',
-					pl: 'Lista urządzeń z siłą sygnałową',
-					'zh-cn': '具有信号实力的装置清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.countAll`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of all devices',
-					de: 'Anzahl aller Geräte',
-					ru: 'Количество всех устройств',
-					pt: 'Número de todos os dispositivos',
-					nl: 'Nummer van alle apparaten',
-					fr: 'Nombre de tous les appareils',
-					it: 'Numero di tutti i dispositivi',
-					es: 'Número de todos los dispositivos',
-					pl: 'Ilość wszystkich urządzeń',
-					'zh-cn': '所有装置的数目',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.batteryList`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'List of devices with battery state',
-					de: 'Liste der Geräte mit Batteriezustand',
-					ru: 'Список устройств с состоянием батареи',
-					pt: 'Lista de dispositivos com estado da bateria',
-					nl: 'List van apparaten met batterij staat',
-					fr: 'Liste des appareils avec état de batterie',
-					it: 'Elenco dei dispositivi con stato della batteria',
-					es: 'Lista de dispositivos con estado de batería',
-					pl: 'Lista urządzeń z baterią stanową',
-					'zh-cn': '电池国装置清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.lowBatteryList`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'List of devices with low battery state',
-					de: 'Liste der Geräte mit niedrigem Batteriezustand',
-					ru: 'Список устройств с низким состоянием батареи',
-					pt: 'Lista de dispositivos com baixo estado da bateria',
-					nl: 'List van apparaten met lage batterij staat',
-					fr: 'Liste des appareils à faible état de batterie',
-					it: 'Elenco di dispositivi con stato di batteria basso',
-					es: 'Lista de dispositivos con estado de batería bajo',
-					pl: 'Lista urządzeń o niskim stanie baterii',
-					'zh-cn': '低电池国家装置清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.lowBatteryCount`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of devices with low battery',
-					de: 'Anzahl der Geräte mit niedriger Batterie',
-					ru: 'Количество устройств c низкой батареей',
-					pt: 'Número de dispositivos com bateria baixa',
-					nl: 'Nummer van apparaten met lage batterij',
-					fr: 'Nombre de dispositifs avec batterie basse',
-					it: 'Numero di dispositivi con batteria bassa',
-					es: 'Número de dispositivos con batería baja',
-					pl: 'Liczba urządzeń z niską baterią',
-					'zh-cn': '低电池的装置数量',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceLowBat`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Is one device with low battery',
-					de: 'Ist ein Gerät mit niedrigem Akku',
-					ru: 'Один прибор с низкой батареей',
-					pt: 'É um dispositivo com bateria baixa',
-					nl: 'Is een apparaat met lage batterijen',
-					fr: 'Est un appareil avec batterie basse',
-					it: 'È un dispositivo con batteria bassa',
-					es: 'Es un dispositivo con batería baja',
-					pl: 'Jest to jeden urządzenie z niską baterią',
-					// @ts-ignore
-					uk: 'Є одним пристроєм з низьких акумуляторів',
-					'zh-cn': '低电池的装置',
-				},
-				type: 'boolean',
-				role: 'state',
-				read: true,
-				write: false,
-				def: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.batteryCount`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of devices with battery',
-					de: 'Anzahl der Geräte mit Batterie',
-					ru: 'Количество устройств c батареей',
-					pt: 'Número de dispositivos com bateria',
-					nl: 'Nummer van apparaten met batterij',
-					fr: 'Nombre de dispositifs avec batterie',
-					it: 'Numero di dispositivi con batteria',
-					es: 'Número de dispositivos con batería',
-					pl: 'Liczba urządzeń z baterią',
-					'zh-cn': '电池的装置数量',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.upgradableCount`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Number of devices with available updates ',
-					de: 'Anzahl der Geräte mit verfügbaren Updates',
-					ru: 'Количество устройств с доступными обновлениями',
-					pt: 'Número de dispositivos com atualizações disponíveis',
-					nl: 'Nummer van apparatuur met beschikbare updates',
-					fr: 'Nombre de dispositifs avec mises à jour disponibles',
-					it: 'Numero di dispositivi con aggiornamenti disponibili',
-					es: 'Número de dispositivos con actualizaciones disponibles',
-					pl: 'Liczba urządzeń z dostępną aktualizacją',
-					// @ts-ignore
-					uk: 'Кількість пристроїв з доступними оновленнями',
-					'zh-cn': '现有更新的装置数目',
-				},
-				type: 'number',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.upgradableList`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'JSON List of devices with available updates ',
-					de: 'JSON Liste der Geräte mit verfügbaren Updates',
-					ru: 'ДЖСОН Список устройств с доступными обновлениями',
-					pt: 'J. Lista de dispositivos com atualizações disponíveis',
-					nl: 'JSON List van apparatuur met beschikbare updates',
-					fr: 'JSON Liste des appareils avec mises à jour disponibles',
-					it: 'JSON Elenco dei dispositivi con aggiornamenti disponibili',
-					es: 'JSON Lista de dispositivos con actualizaciones disponibles',
-					pl: 'JSON Lista urządzeń korzystających z aktualizacji',
-					// @ts-ignore
-					uk: 'Сонце Перелік пристроїв з доступними оновленнями',
-					'zh-cn': '附 件 现有最新设备清单',
-				},
-				type: 'array',
-				role: 'json',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${adptName}.oneDeviceUpdatable`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Is one device updatable',
-					de: 'Ist ein Gerät aufnehmbar',
-					ru: 'Одно устройство обновляется',
-					pt: 'É um dispositivo updatable',
-					nl: 'Is een apparaat updat',
-					fr: "Est-ce qu'un appareil est indéfectible",
-					it: 'È un dispositivo updatable',
-					es: 'Es un dispositivo actualizado',
-					pl: 'Jest to jedno urządzenie updatable',
-					// @ts-ignore
-					uk: 'Є одним пристроєм',
-					'zh-cn': '一台装置',
-				},
-				type: 'boolean',
-				role: 'state',
-				read: true,
-				write: false,
-				def: false,
-			},
-			native: {},
-		});
-	}
-
-	/**
-	 * delete datapoints for each adapter
-	 * @param {object} adptName - Adaptername of devices
-	 */
-	async deleteDPsForEachAdapter(adptName) {
-		await this.delObjectAsync(`devices.${adptName}`);
-		await this.delObjectAsync(`devices.${adptName}.offlineCount`);
-		await this.delObjectAsync(`devices.${adptName}.offlineList`);
-		await this.delObjectAsync(`devices.${adptName}.oneDeviceOffline`);
-		await this.delObjectAsync(`devices.${adptName}.listAllRawJSON`);
-		await this.delObjectAsync(`devices.${adptName}.listAll`);
-		await this.delObjectAsync(`devices.${adptName}.linkQualityList`);
-		await this.delObjectAsync(`devices.${adptName}.countAll`);
-		await this.delObjectAsync(`devices.${adptName}.batteryList`);
-		await this.delObjectAsync(`devices.${adptName}.lowBatteryList`);
-		await this.delObjectAsync(`devices.${adptName}.lowBatteryCount`);
-		await this.delObjectAsync(`devices.${adptName}.oneDeviceLowBat`);
-		await this.delObjectAsync(`devices.${adptName}.batteryCount`);
-		await this.delObjectAsync(`devices.${adptName}.upgradableCount`);
-		await this.delObjectAsync(`devices.${adptName}.upgradableList`);
-		await this.delObjectAsync(`devices.${adptName}.oneDeviceUpdatable`);
-	}
-
-	/**
-	 * create HTML list datapoints
-	 * @param {object} [adptName] - Adaptername of devices
-	 **/
-	async createHtmlListDatapoints(adptName) {
-		let dpSubFolder;
-		//write the datapoints in subfolders with the adaptername otherwise write the dP's in the root folder
-		if (adptName) {
-			dpSubFolder = `${adptName}.`;
-		} else {
-			dpSubFolder = '';
-		}
-
-		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}offlineListHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of offline devices',
-					de: 'HTML Liste der Offline-Geräte',
-					ru: 'HTML Список оффлайн устройств',
-					pt: 'HTML Lista de dispositivos off-line',
-					nl: 'HTML List van offline apparatuur',
-					fr: 'HTML Liste des dispositifs hors ligne',
-					it: 'HTML Elenco dei dispositivi offline',
-					es: 'HTML Lista de dispositivos sin conexión',
-					pl: 'HTML Lista urządzeń offline',
-					'zh-cn': 'HTML 线装置清单',
-				},
-				type: 'string',
-				role: 'html',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}linkQualityListHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of devices with signal strength',
-					de: 'HTML Liste der Geräte mit Signalstärke',
-					ru: 'HTML Список устройств с силой сигнала',
-					pt: 'HTML Lista de dispositivos com força de sinal',
-					nl: 'HTML List van apparaten met signaalkracht',
-					fr: 'HTML Liste des dispositifs avec force de signal',
-					it: 'HTML Elenco dei dispositivi con forza del segnale',
-					es: 'HTML Lista de dispositivos con fuerza de señal',
-					pl: 'HTML Lista urządzeń z siłą sygnałową',
-					'zh-cn': 'HTML 具有信号实力的装置清单',
-				},
-				type: 'string',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}batteryListHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of devices with battery state',
-					de: 'HTML Liste der Geräte mit Batteriezustand',
-					ru: 'HTML Список устройств с состоянием батареи',
-					pt: 'HTML Lista de dispositivos com estado da bateria',
-					nl: 'HTML List van apparaten met batterij staat',
-					fr: 'HTML Liste des appareils avec état de batterie',
-					it: 'HTML Elenco dei dispositivi con stato della batteria',
-					es: 'HTML Lista de dispositivos con estado de batería',
-					pl: 'HTML Lista urządzeń z baterią stanową',
-					'zh-cn': 'HTML 电池国装置清单',
-				},
-				type: 'string',
-				role: 'html',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`devices.${dpSubFolder}lowBatteryListHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of devices with low battery state',
-					de: 'HTML Liste der Geräte mit niedrigem Batteriezustand',
-					ru: 'HTML Список устройств с низким состоянием батареи',
-					pt: 'HTML Lista de dispositivos com baixo estado da bateria',
-					nl: 'HTML List van apparaten met lage batterij staat',
-					fr: 'HTML Liste des appareils à faible état de batterie',
-					it: 'HTML Elenco di dispositivi con stato di batteria basso',
-					es: 'HTML Lista de dispositivos con estado de batería bajo',
-					pl: 'HTML Lista urządzeń o niskim stanie baterii',
-					'zh-cn': 'HTML 低电池国家装置清单',
-				},
-				type: 'string',
-				role: 'html',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-	}
-
-	/**
-	 * delete html datapoints
-	 * @param {object} [adptName] - Adaptername of devices
-	 **/
-	async deleteHtmlListDatapoints(adptName) {
-		// delete the datapoints in subfolders with the adaptername otherwise delete the dP's in the root folder
-		let dpSubFolder;
-		if (adptName) {
-			dpSubFolder = `${adptName}.`;
-		} else {
-			dpSubFolder = '';
-		}
-
-		await this.delObjectAsync(`devices.${dpSubFolder}offlineListHTML`);
-		await this.delObjectAsync(`devices.${dpSubFolder}linkQualityListHTML`);
-		await this.delObjectAsync(`devices.${dpSubFolder}batteryListHTML`);
-		await this.delObjectAsync(`devices.${dpSubFolder}lowBatteryListHTML`);
-	}
-
-	/**
-	 * create HTML list datapoints for instances
-	 **/
-	async createHtmlListDatapointsInstances() {
-		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists`, {
-			type: 'channel',
-			common: {
-				name: {
-					en: 'HTML lists for adapter and instances',
-					de: 'HTML-Listen für Adapter und Instanzen',
-					ru: 'HTML-списки для адаптеров и инстанций',
-					pt: 'Listas HTML para adaptador e instâncias',
-					nl: 'HTML lijsten voor adapter en instituut',
-					fr: "Listes HTML pour l'adaptateur et les instances",
-					it: 'Elenchi HTML per adattatore e istanze',
-					es: 'Listas HTML para adaptador y casos',
-					pl: 'Listy HTML dla adaptera i instancji',
-					// @ts-ignore
-					uk: 'Списки HTML для адаптерів та екземплярів',
-					'zh-cn': 'HTML名单',
-				},
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of all instances',
-					de: 'HTML Liste aller Instanzen',
-					ru: 'HTML Список всех инстанций',
-					pt: 'HTML Lista de todas as instâncias',
-					nl: 'HTM List van alle instanties',
-					fr: 'HTML Liste de tous les cas',
-					it: 'HTML Elenco di tutte le istanze',
-					es: 'HTML Lista de todos los casos',
-					pl: 'HTML Lista wszystkich instancji',
-					// @ts-ignore
-					uk: 'Українська Список всіх екземплярів',
-					'zh-cn': 'HTML 所有事例一览表',
-				},
-				type: 'string',
-				role: 'html',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of all active instances',
-					de: 'HTML Liste aller aktiven Instanzen',
-					ru: 'HTML Список всех активных инстанций',
-					pt: 'HTML Lista de todas as instâncias ativas',
-					nl: 'HTM List van alle actieve instanties',
-					fr: 'HTML Liste de tous les cas actifs',
-					it: 'HTML Elenco di tutte le istanze attive',
-					es: 'HTML Lista de todos los casos activos',
-					pl: 'HTML Lista wszystkich aktywnych instancji',
-					// @ts-ignore
-					uk: 'Українська Список всіх активних екземплярів',
-					'zh-cn': 'HTML 所有积极事件清单',
-				},
-				type: 'string',
-				role: 'value',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of all deactivated instances',
-					de: 'HTML Liste aller deaktivierten Instanzen',
-					ru: 'HTML Список всех деактивированных инстанций',
-					pt: 'HTML Lista de todas as instâncias desativadas',
-					nl: 'HTM List van alle gedeactiveerde instanties',
-					fr: 'HTML Liste de tous les cas désactivés',
-					it: 'HTML Elenco di tutte le istanze disattivate',
-					es: 'HTML Lista de todos los casos desactivados',
-					pl: 'HTML Lista wszystkich przypadków deaktywowanych',
-					// @ts-ignore
-					uk: 'Українська Список всіх деактивованих екземплярів',
-					'zh-cn': 'HTML 所有违犯事件清单',
-				},
-				type: 'string',
-				role: 'html',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-
-		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML List of instances with error',
-					de: 'HTML Liste der Fälle mit Fehler',
-					ru: 'HTML Список инстанций с ошибкой',
-					pt: 'HTML Lista de casos com erro',
-					nl: 'HTM List van instoringen met fouten',
-					fr: 'HTML Liste des instances avec erreur',
-					it: 'HTML Elenco delle istanze con errore',
-					es: 'HTML Lista de casos con error',
-					pl: 'HTML Lista przykładów z błądem',
-					// @ts-ignore
-					uk: 'Українська Список екземплярів з помилкою',
-					'zh-cn': 'HTML 出现错误的情况清单',
-				},
-				type: 'string',
-				role: 'html',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-		await this.setObjectNotExistsAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`, {
-			type: 'state',
-			common: {
-				name: {
-					en: 'HTML list of adapters with available updates',
-					de: 'HTML-Liste der Adapter mit verfügbaren Updates',
-					ru: 'HTML список адаптеров с доступными обновлениями',
-					pt: 'Lista HTML de adaptadores com atualizações disponíveis',
-					nl: 'HTML lijst met beschikbare updates',
-					fr: 'Liste HTML des adaptateurs avec mises à jour disponibles',
-					it: 'Elenco HTML degli adattatori con aggiornamenti disponibili',
-					es: 'Lista HTML de adaptadores con actualizaciones disponibles',
-					pl: 'Lista adapterów HTML z dostępnymi aktualizacjami',
-					// @ts-ignore
-					uk: 'HTML список адаптерів з доступними оновленнями',
-					'zh-cn': 'HTML 可供更新的适应者名单',
-				},
-				type: 'string',
-				role: 'html',
-				read: true,
-				write: false,
-			},
-			native: {},
-		});
-	}
-
-	/**
-	 * delete html datapoints for instances
-	 **/
-	async deleteHtmlListDatapointsInstances() {
-		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listAllInstancesHTML`);
-		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listAllActiveInstancesHTML`);
-		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listDeactivatedInstancesHTML`);
-		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listInstancesErrorHTML`);
-		await this.delObjectAsync(`adapterAndInstances.HTML_Lists.listAdapterUpdatesHTML`);
-		await this.delObjectAsync(`adapterAndInstances.HTML_Lists`);
-	}
-
-	/*=============================================
-	=            	help functions   	          =
-	=============================================*/
-
-	/**
-	 * @param {string} id - id which should be capitalize
-	 */
-	capitalize(id) {
-		//make the first letter uppercase
-		return id && id[0].toUpperCase() + id.slice(1);
-	}
-
-	/**
-	 * @param {number} dpValue - get Time of this datapoint
-	 */
-	getTimestamp(dpValue) {
-		const time = new Date();
-		return (dpValue = Math.round((time.getTime() - dpValue) / 1000 / 60));
-	}
-
-	/**
-	 * @param {string} dp - get Time of this datapoint
-	 * @param {number} ms - milliseconds
-	 */
-	async getTimestampConnectionDP(dp, ms) {
-		const time = new Date();
-		const dpValue = await this.getForeignStateAsync(dp);
-		if (dpValue) {
-			if (!dpValue.val) return false;
-
-			const dpLastStateChange = Math.round(time.getTime() - dpValue.lc); // calculate in ms
-			if (dpLastStateChange >= ms) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * @param {object} obj - State of datapoint
-	 */
-	async getInitValue(obj) {
-		//state can be null or undefinded
-		const foreignState = await this.getForeignStateAsync(obj);
-		if (foreignState) return foreignState.val;
-	}
-
-	/**
-	 * @param {object} obj - State of own datapoint
-	 */
-	async getOwnInitValue(obj) {
-		//state can be null or undefinded for own states
-		const stateVal = await this.getStateAsync(obj);
-		if (stateVal) return stateVal.val;
-	}
-
-	/**
-	 * @param {object} data - object
-	 */
-	parseData(data) {
-		if (!data) return {};
-		if (typeof data === 'object') return data;
-		if (typeof data === 'string') return JSON.parse(data);
-		return {};
-	}
-
-	/**
-	 * Get previous run of cron job schedule
-	 * Requires cron-parser!
-	 * Inspired by https://stackoverflow.com/questions/68134104/
-	 * @param {string} lastCronRun
-	 */
-	getPreviousCronRun(lastCronRun) {
-		try {
-			const interval = cronParser.parseExpression(lastCronRun);
-			const previous = interval.prev();
-			return Math.floor(Date.now() - previous.getTime()); // in ms
-		} catch (error) {
-			this.log.error(`[getPreviousCronRun] - ${error}`);
 		}
 	}
 
