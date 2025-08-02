@@ -137,8 +137,9 @@ It's also counting them in the same categories. You can use the lists and states
   <tr>    
     <td>Zigbee2MQTT</td> 
     <td>Zwave</td>
-    <td></td>
+    <td>........</td>
   </tr>
+ 
 </table>
 
 A list with more information about the supported adapters can be found here: [in German](docs/de/listSupportAdapter.md) or [in English](docs/en/listSupportAdapter.md).</br>
