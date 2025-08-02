@@ -167,6 +167,7 @@ class DeviceWatcher extends utils.Adapter {
 			viessmann: this.config.viessmannDevices,
 			wifilight: this.config.wifilightDevices,
 			wled: this.config.wledDevices,
+			xsense: this.config.xsenseDevices,
 			yeelight: this.config.yeelightDevices,
 			zigbee: this.config.zigbeeDevices,
 			zigbee2MQTT: this.config.zigbee2mqttDevices,
@@ -229,6 +230,7 @@ class DeviceWatcher extends utils.Adapter {
 			viessmann: this.config.viessmannMaxMinutes,
 			wifilight: this.config.wifilightMaxMinutes,
 			wled: this.config.wledMaxMinutes,
+			xsense: this.config.xsenseMaxMinutes,
 			yeelight: this.config.yeelightMaxMinutes,
 			zigbee: this.config.zigbeeMaxMinutes,
 			zigbee2MQTT: this.config.zigbee2mqttMaxMinutes,
@@ -1159,6 +1161,29 @@ class DeviceWatcher extends utils.Adapter {
 					batteryHealthRaw = deviceBatteryState;
 					batteryHealthUnitRaw = 'V';
 					isBatteryDevice = true;
+				}
+				break;
+			case 'xsense':
+				if (deviceBatteryState === undefined) {
+					// do nothin brdge has no battery
+					isBatteryDevice = false;
+				} else if (deviceBatteryState >= 0) {
+					batteryHealthRaw = deviceBatteryState;
+					batteryHealthUnitRaw = '';
+					isBatteryDevice = true;
+					switch (batteryHealthRaw) {
+						case 1:
+							batteryHealth = 'low';
+							break;
+						case 2:
+							batteryHealth = 'medium';
+							break;
+						case 3:
+							batteryHealth = 'ok';
+							break;
+						default:
+							batteryHealth = 'error';
+						}
 				}
 				break;
 			default:
