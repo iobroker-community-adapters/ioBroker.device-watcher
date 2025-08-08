@@ -1,6 +1,6 @@
 {
   "name": "iobroker.device-watcher",
-  "version": "2.12.6",
+  "version": "2.12.4",
   "description": "Watchdog for devices",
   "author": {
     "name": "Christian Behrends",
@@ -9,6 +9,7 @@
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.device-watcher",
   "license": "MIT",
   "keywords": [
+    "ioBroker",
     "device",
     "watcher",
     "device-watcher",
@@ -22,7 +23,7 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.device-watcher"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.2.3"
