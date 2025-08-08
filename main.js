@@ -2210,7 +2210,9 @@ class DeviceWatcher extends utils.Adapter {
 		const setMessage = async (message) => {
 			this.log.info(message);
 			await this.setStateAsync('lastNotification', message, true);
-			await this.sendNotification(message);
+			if (!message.includes('no updates')) {
+				await this.sendNotification(message);
+			}
 		};
 
 		const processDeviceList = (deviceList, property1, property2) => {

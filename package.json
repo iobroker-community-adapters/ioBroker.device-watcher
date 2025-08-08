@@ -1,6 +1,6 @@
 {
   "name": "iobroker.device-watcher",
-  "version": "2.12.5",
+  "version": "2.12.6",
   "description": "Watchdog for devices",
   "author": {
     "name": "Christian Behrends",

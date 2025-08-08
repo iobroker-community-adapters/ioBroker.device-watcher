@@ -193,6 +193,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.12.6 (2025-08-08)
+- (arteck) fix send message
+
 ### 2.12.5 (2025-08-04)
 - (arteck) fix translation
 - (arteck) fix htmllist output
