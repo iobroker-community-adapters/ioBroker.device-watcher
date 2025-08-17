@@ -1,8 +1,34 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.12.4",
+    "version": "2.12.6",
     "news": {
+      "2.12.6": {
+        "en": "fix send message",
+        "de": "die nachricht senden",
+        "ru": "отправить сообщение",
+        "pt": "corrigir mensagem de envio",
+        "nl": "verzendbericht repareren",
+        "fr": "corriger le message d'envoi",
+        "it": "correzione messaggio di invio",
+        "es": "recibir el mensaje",
+        "pl": "naprawić wiadomość wysyłającą",
+        "uk": "фіксувати надсилання повідомлення",
+        "zh-cn": "修复发送消息"
+      },
+      "2.12.5": {
+        "en": "fix translation\nfix htmllist output",
+        "de": "bersetzung\nhtmllist ausgeben",
+        "ru": "перевод\nфиксировать выход htmll",
+        "pt": "corrigir tradução\ncorrigir saída htmllist",
+        "nl": "fix vertaling\nhtmllist uitvoer repareren",
+        "fr": "corriger la traduction\ncorriger la sortie htmllist",
+        "it": "correzione della traduzione\nfix htmllist output",
+        "es": "traducción\nfijar la salida htmllist",
+        "pl": "tłumaczenie\nfix htmllist output",
+        "uk": "фіксувати переклад\nвиправлення htmllist виведення",
+        "zh-cn": "固定翻译\n修正 htmllist 输出"
+      },
       "2.12.4": {
         "en": "ignore zigbee2mqtt disabled devices\nfix proxmox\nadd proxmox new structure request",
         "de": "ignorieren zickbee2mqt behinderte geräte\nfixer proxmox\nneue strukturanforderung hinzufügen",
@@ -67,32 +93,6 @@
         "pl": "Adapter wymaga nodeJS > = 18 i sterownika js- > = 5 teraz\nAdresat został przeniesiony do organizacji adapterów dla społeczności iobrokerskiej\nZaktualizowano zależności",
         "uk": "Адаптер вимагає nodeJS >= 18 і js-controller >= 5 тепер\nAdpter був мігрований до організації iobroker-community-adapters\nЗалежність було оновлено",
         "zh-cn": "适配器需要节点JS QQ 18和js控制器 QQ 现在5号\n接受者已迁移到经济经纪人-社区适应者组织\n依赖关系已更新"
-      },
-      "2.11.0": {
-        "en": "Added [#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Support for Ring Cameras",
-        "de": "Hinzugefügt [#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Unterstützung für Ring Kameras",
-        "ru": "Добавлено [#323] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Поддержка кольцевых камер",
-        "pt": "Adicionado [#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Suporte para câmeras de anel",
-        "nl": "Toegevoegd [#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Ondersteuning voor Ring camera's",
-        "fr": "Ajouté [#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Prise en charge des caméras Ring",
-        "it": "Aggiunto [#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Supporto per telecamere anelli",
-        "es": "[#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): Soporte para cámaras de anillo",
-        "pl": "Dodano [# 323] (https: / / github.com / ciddi89 / ioBroker.device- watcher / issues / 323): Wsparcie dla kamer pierścieniowych",
-        "uk": "Додано [#323](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/323): Підтримка камери кільця",
-        "zh-cn": "添加 [# 323] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/323): 中文(简体) ). 环相机支持"
-      },
-      "2.10.5": {
-        "en": "Fixed [#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): Phantom Messages",
-        "de": "Behoben [#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): Phantom-Nachrichten",
-        "ru": "Fixed [#262] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): Фантомные сообщения",
-        "pt": "Corrigido [#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): Mensagens de Fantasma",
-        "nl": "Vast [#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): Phantom messages",
-        "fr": "Correction [#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) et [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292) : Messages fantômes",
-        "it": "[#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): Messaggi fantasma",
-        "es": "[#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): Mensajes Fantasma",
-        "pl": "Fixed [# 262] (https: / / github.com / ciddi89 / ioBroker.device- watcher / issues / 262) & [# 292] (https: / / github.com / ciddi89 / iBroker.device- watcher / issues / 292): Wiadomości Phantom",
-        "uk": "Виправлено [#262](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) & [#292](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/292): Повідомлення",
-        "zh-cn": "固定 [262] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/262) 和 [292] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/292): 幽灵消息"
       }
     },
     "titleLang": {
@@ -175,7 +175,7 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.4.10"
+        "admin": ">=6.17.14"
       }
     ],
     "messages": [
@@ -219,8 +219,7 @@
           "cancel"
         ]
       }
-    ],
-    "installedFrom": "iobroker-community-adapters/ioBroker.device-watcher#7a85ba1ebd84e14c25e99023fff9efe6f73913a6"
+    ]
   },
   "native": {
     "checkAdapterInstances": false,
