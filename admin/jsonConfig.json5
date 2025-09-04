@@ -1530,6 +1530,11 @@
 						fontSize: 16,
 						marginTop: 20,
 					},
+					xs: 12,
+					sm: 12,
+					md: 12,
+					lg: 12,
+					xl: 12,
 				},
 				msgService: {
 					newLine: true,
@@ -1548,6 +1553,11 @@
 						{ label: 'Whatsapp', value: 'whatsapp' },
 					],
 					default: 'none',
+					xs: 12,
+					sm: 12,
+					md: 4,
+					lg: 4,
+					xl: 4,
 				},
 				_headerEmail: {
 					newLine: true,
