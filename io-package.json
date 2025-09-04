@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.12.6",
+    "version": "2.13.0",
     "news": {
+      "2.13.0": {
+        "en": "Adapter requires admin >= 7.6.17, js-controller >= 6.0.11 and node.js>= 20 now.\nMissing dependency of 'node-schedule' has been fixed.\nDependencies have been updated",
+        "de": "Adapter benötigt admin >= 7.6.17, js-controller >= 6.0.11 und node.js>= 20 jetzt.\nDie fehlende Abhängigkeit von 'node-schedule' wurde behoben.\nAbhängigkeiten wurden aktualisiert",
+        "ru": "Адаптер требует администратора >= 7.6.17, js-контроллер >= 6.0.11 и node.js>= 20 сейчас.\nОтсутствующая зависимость от «списка узлов» была исправлена.\nЗависимости были обновлены",
+        "pt": "O adaptador requer admin >= 7.6.17, js-controlador >= 6.0.11 e nod.js>= 20 agora.\nA dependência de 'node-schedule' foi corrigida.\nAs dependências foram atualizadas",
+        "nl": "Voor adapter is admin < 7.6.17, js-controller > 6.0.11 en node.js> = 20 nodig.\nOntbrekende afhankelijkheid van 'node-schema' is vastgesteld.\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "Adaptateur nécessite admin >= 7.6.17, js-controller >= 6.0.11 et node.js>= 20 maintenant.\nLa dépendance manquante de 'node-schedule' a été corrigée.\nLes dépendances ont été actualisées",
+        "it": "Adattatore richiede admin >= 7.6.17, js-controller >= 6.0.11 e node.js>= 20 ora.\nLa carenza di \"node-schedule\" è stata fissata.\nLe dipendenze sono state aggiornate",
+        "es": "El adaptador requiere admin= 7.6.17, js-controller ≤ 6.0.11 y node.js confianza= 20 ahora.\nSe ha fijado la dependencia de \"node-schedule\".\nSe han actualizado las dependencias",
+        "pl": "Adapter wymaga admin > = 7.6.17, js- controller > = 6.0.11 i node.js > = 20 teraz.\nBrak zależności od 'node-schedule' został ustalony.\nZaktualizowano zależności",
+        "uk": "Адаптер вимагає адмін >= 7.6.17, js-controller >= 6.0.11 і node.js>= 20 тепер.\nВизначена залежність 'node-schedule'.\nЗалежність було оновлено",
+        "zh-cn": "适配器需要管理员QQ7.6.17,js控制器QQ6.0.11和节点JsX20现在.\n丢失的“ 节点时间表” 的依赖性已被确定 .\n依赖关系已更新"
+      },
       "2.12.6": {
         "en": "fix send message",
         "de": "die nachricht senden",
@@ -80,19 +93,6 @@
         "pl": "Dodano: [# 341] (https: / / github.com / iobroker- community- adapters / iBroker.device- watcher / issues / 341) Wsparcie dla Bateria Zigbee _ state datapoint",
         "uk": "Додано: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/341) Підтримка акумулятора Zigbee_state",
         "zh-cn": "添加:[#341](https://github.com/iobro-communist-community-adapters/ioBroker.device-watcher/issues/341) 互联网档案馆的存檔,存档日期2013-03-02. 支持 Zigbee 电池_状态数据点"
-      },
-      "2.12.0": {
-        "en": "Adapter requires nodeJS >= 18 and js-controller >= 5 now\nAdpter has been migrated to iobroker-community-adapters organisation\nDependencies have been updated",
-        "de": "Adapter benötigt KnotenJS >= 18 und js-controller >= 5 jetzt\nAdpter wurde zu iobroker-community-Adapter Organisation migriert\nAbhängigkeiten wurden aktualisiert",
-        "ru": "Адаптер требует nodeJS >= 18 и js-контроллер >= 5 сейчас\nAdpter был перенесен в организацию iobroker-community-adapters\nЗависимость обновлена",
-        "pt": "Adapter requer nodeJS >= 18 e js-controller >= 5 agora\nAdpter foi migrado para a organização iobroker-community-adapters\nAs dependências foram atualizadas",
-        "nl": "Adapter vereist nodeJS < 18 en js-controller <= Nu 5\nAdpter is gemigreerd naar iobroker-community-adapters organisatie\nAfhankelijkheden zijn bijgewerkt",
-        "fr": "Adaptateur nécessite noeudJS >= 18 et js-controller >= 5 maintenant\nAdpter a été transféré à l'organisation iobroker-community-adapters\nLes dépendances ont été actualisées",
-        "it": "Adattatore richiede nodeJS >= 18 e js-controller >= 5 ora\nAdpter è stato migrato per l'organizzazione di adattatori della comunità\nLe dipendenze sono state aggiornate",
-        "es": "Adaptador requiere nodeJS ю= 18 y js-controller 5 ahora\nAdpter ha sido migrado a la organización de ibroker-community-adapters\nSe han actualizado las dependencias",
-        "pl": "Adapter wymaga nodeJS > = 18 i sterownika js- > = 5 teraz\nAdresat został przeniesiony do organizacji adapterów dla społeczności iobrokerskiej\nZaktualizowano zależności",
-        "uk": "Адаптер вимагає nodeJS >= 18 і js-controller >= 5 тепер\nAdpter був мігрований до організації iobroker-community-adapters\nЗалежність було оновлено",
-        "zh-cn": "适配器需要节点JS QQ 18和js控制器 QQ 现在5号\n接受者已迁移到经济经纪人-社区适应者组织\n依赖关系已更新"
       }
     },
     "titleLang": {
