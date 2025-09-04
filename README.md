@@ -193,6 +193,11 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+-   (mcm1957) Adapter requires admin >= 7.6.17, js-controller >= 6.0.11 and node.js>= 20 now.
+-   (mcm1957) Missing dependency of 'node-schedule' has been fixed.
+-   (mcm1957) Dependencies have been updated
+
 ### 2.12.6 (2025-08-08)
 - (arteck) fix send message
 
