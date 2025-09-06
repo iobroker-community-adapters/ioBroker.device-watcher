@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.13.0",
+    "version": "2.13.1",
     "news": {
+      "2.13.1": {
+        "en": "Dependencies have been fixed",
+        "de": "Abhängigkeiten wurden behoben",
+        "ru": "Зависимости были установлены",
+        "pt": "Dependências foram fixadas",
+        "nl": "Afhankelijkheden zijn vastgesteld",
+        "fr": "Les dépendances ont été fixées",
+        "it": "Le dipendenze sono state risolte",
+        "es": "Las dependencias se han fijado",
+        "pl": "Zależności zostały ustalone",
+        "uk": "Залежності були закріплені",
+        "zh-cn": "依赖已固定"
+      },
       "2.13.0": {
         "en": "Adapter requires admin >= 7.6.17, js-controller >= 6.0.11 and node.js>= 20 now.\nMissing dependency of 'node-schedule' has been fixed.\nDependencies have been updated",
         "de": "Adapter benötigt admin >= 7.6.17, js-controller >= 6.0.11 und node.js>= 20 jetzt.\nDie fehlende Abhängigkeit von 'node-schedule' wurde behoben.\nAbhängigkeiten wurden aktualisiert",
@@ -80,19 +93,6 @@
         "pl": "[# 362] (https: / / github.com / iobroker- community- adapters / iBroker.device- watcher / issues / 362): Ecovacs Deebot używa połączenia Uptime dp jako timeselector\nZaktualizowano zależności",
         "uk": "Виправлено [#362](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/362): Ecovacs Deebot з'єднання Разовий dp як разселектор\nЗалежність було оновлено",
         "zh-cn": "固定 [362] (https://github.com/iobroctor-community-adapters/ioBroker.device-watcher/issues/362): (中文(简体) ). Ecovacs Deebot 使用连接 时间 dp 作为时间选择器\n依赖关系已更新"
-      },
-      "2.12.1": {
-        "en": "Added: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Support for Zigbee battery_state datapoint",
-        "de": "Hinzugefügt: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Unterstützung für Zigbee battery_state Datenpunkt",
-        "ru": "Добавлено: [#341] (https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Поддержка Zigbee Battery_state datapoint",
-        "pt": "Adicionado: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Suporte para Zigbee battery_state datapoint",
-        "nl": "Toegevoegd: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Ondersteuning voor Zigbee battery_state datapoint",
-        "fr": "Ajouté : [#341](https://github.com/iobroker-community-adaptateurs/ioBroker.device-watcher/issues/341) Prise en charge du point de données batterie_état de Zigbee",
-        "it": "Aggiunto: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Supporto per Zigbee Battery_state datapoint",
-        "es": "Añadido: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/issues/341) Soporte para batería de Zigbee_punto de datos del estado",
-        "pl": "Dodano: [# 341] (https: / / github.com / iobroker- community- adapters / iBroker.device- watcher / issues / 341) Wsparcie dla Bateria Zigbee _ state datapoint",
-        "uk": "Додано: [#341](https://github.com/iobroker-community-adapters/ioBroker.device-watcher/products/341) Підтримка акумулятора Zigbee_state",
-        "zh-cn": "添加:[#341](https://github.com/iobro-communist-community-adapters/ioBroker.device-watcher/issues/341) 互联网档案馆的存檔,存档日期2013-03-02. 支持 Zigbee 电池_状态数据点"
       }
     },
     "titleLang": {
