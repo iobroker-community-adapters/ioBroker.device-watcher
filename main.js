@@ -126,6 +126,7 @@ class DeviceWatcher extends utils.Adapter {
 			esphome: this.config.esphomeDevices,
 			eusec: this.config.eusecDevices,
 			fhemTFAsensors: this.config.fhemTFAsensorsDevices,
+			freeair: this.config.freeairDevices,
 			fritzdect: this.config.fritzdectDevices,
 			fullybrowser: this.config.fullybrowserDevices,
 			fullybrowserV3: this.config.fullybrowserV3Devices,
@@ -189,6 +190,7 @@ class DeviceWatcher extends utils.Adapter {
 			esphome: this.config.esphomeMaxMinutes,
 			eusec: this.config.eusecMaxMinutes,
 			fhemTFAsensors: this.config.fhemTFAsensorsMaxMinutes,
+			freeair: this.config.freeairMaxMinutes,
 			fritzdect: this.config.fritzdectMaxMinutes,
 			fullybrowser: this.config.fullybrowserMaxMinutes,
 			fullybrowserV3: this.config.fullybrowserV3MaxMinutes,
@@ -335,7 +337,7 @@ class DeviceWatcher extends utils.Adapter {
 			// send overview of instances with error
 			if (this.config.checkSendInstanceFailedDaily) await this.sendScheduleNotifications('errorInstance');
 
-        } catch (error) {
+		} catch (error) {
 			this.log.error(`[onReady] - ${error}`);
 			this.terminate ? this.terminate(15) : process.exit(15);
 		}
@@ -634,7 +636,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			switch (this.selAdapter[i].adapterID) {
 				case 'fullybrowser':
-					deviceName = (await tools.getInitValue(this,currDeviceString + this.selAdapter[i].id)) + ' ' + (await tools.getInitValue(this,currDeviceString + this.selAdapter[i].id2));
+					deviceName = (await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id)) + ' ' + (await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id2));
 					break;
 
 				// Get ID with short currDeviceString from objectjson
@@ -663,7 +665,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'mihomeVacuum':
 				case 'roomba':
 					folderName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
-					deviceID = await tools.getInitValue(this,shortCurrDeviceString + this.selAdapter[i].id);
+					deviceID = await tools.getInitValue(this, shortCurrDeviceString + this.selAdapter[i].id);
 					deviceName = `I${folderName} ${deviceID}`;
 					break;
 
@@ -671,7 +673,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'tado':
 				case 'wifilight':
 				case 'fullybrowserV3':
-        		case 'sonoff':
+				case 'sonoff':
 					deviceName = currDeviceString.slice(currDeviceString.lastIndexOf('.') + 1);
 					break;
 
@@ -695,7 +697,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				// Get ID with main selektor from objectjson
 				default:
-					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) deviceName = await tools.getInitValue(this,currDeviceString + this.selAdapter[i].id);
+					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) deviceName = await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id);
 					if (deviceName === null || deviceName === undefined) {
 						if (deviceObject && typeof deviceObject === 'object' && deviceObject.common) {
 							deviceName = deviceObject.common.name;
@@ -829,7 +831,7 @@ class DeviceWatcher extends utils.Adapter {
 							break;
 						default:
 							batteryHealth = 'error';
-						}
+					}
 				}
 				break;
 			default:
@@ -845,8 +847,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				} else {
 					if (typeof deviceBatteryState === 'string') {
-						if (deviceBatteryState === 'high' || deviceBatteryState === 'medium')
-						{
+						if (deviceBatteryState === 'high' || deviceBatteryState === 'medium') {
 							batteryHealth = 'ok';
 							isBatteryDevice = true;
 						}
@@ -896,7 +897,7 @@ class DeviceWatcher extends utils.Adapter {
 			}
 		} else if (typeof deviceBatteryState === 'number' && deviceBatteryState < this.config.minWarnBatterie) {
 			lowBatIndicator = true;
-		} else if  (typeof deviceBatteryState === 'string' && deviceBatteryState === 'low') {
+		} else if (typeof deviceBatteryState === 'string' && deviceBatteryState === 'low') {
 			lowBatIndicator = true;
 		}
 
@@ -1286,7 +1287,7 @@ class DeviceWatcher extends utils.Adapter {
 						deviceData.BatteryRaw = batteryData[2];
 						deviceData.BatteryUnitRaw = batteryData[3];
 						if (deviceData.LowBatDP !== 'none') {
-							isLowBatValue = await tools.getInitValue(this,deviceData.LowBatDP);
+							isLowBatValue = await tools.getInitValue(this, deviceData.LowBatDP);
 						} else {
 							isLowBatValue = undefined;
 						}
@@ -1401,13 +1402,13 @@ class DeviceWatcher extends utils.Adapter {
 
 				// get instance connected to host data
 				const instanceConnectedHostDP = `system.adapter.${instanceID}.connected`;
-				const instanceConnectedHostVal = await tools.getInitValue(this,instanceConnectedHostDP);
+				const instanceConnectedHostVal = await tools.getInitValue(this, instanceConnectedHostDP);
 
 				// get instance connected to device data
 				const instanceConnectedDeviceDP = `${instanceID}.info.connection`;
 				let instanceConnectedDeviceVal;
 				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
-					instanceConnectedDeviceVal = await tools.getInitValue(this,instanceConnectedDeviceDP);
+					instanceConnectedDeviceVal = await tools.getInitValue(this, instanceConnectedDeviceDP);
 				} else {
 					instanceConnectedDeviceVal = 'N/A';
 				}
@@ -1506,9 +1507,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} instanceID
 	 */
 	async checkDaemonIsHealthy(instanceID) {
-		const connectedHostState = await tools.getInitValue(this,`system.adapter.${instanceID}.connected`);
-		const isAlive = await tools.getInitValue(this,`system.adapter.${instanceID}.alive`);
-		let connectedDeviceState = await tools.getInitValue(this,`${instanceID}.info.connection`);
+		const connectedHostState = await tools.getInitValue(this, `system.adapter.${instanceID}.connected`);
+		const isAlive = await tools.getInitValue(this, `system.adapter.${instanceID}.alive`);
+		let connectedDeviceState = await tools.getInitValue(this, `${instanceID}.info.connection`);
 		if (connectedDeviceState === undefined) {
 			connectedDeviceState = true;
 		}
@@ -1536,7 +1537,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {number} instanceDeactivationTime
 	 */
 	async checkDaemonIsAlive(instanceID, instanceDeactivationTime) {
-		let isAlive = await tools.getInitValue(this,`system.adapter.${instanceID}.alive`);
+		let isAlive = await tools.getInitValue(this, `system.adapter.${instanceID}.alive`);
 		let daemonIsAlive;
 		let isHealthy = false;
 		let instanceStatusString = isAlive ? translations.instance_activated[this.config.userSelectedLanguage] : translations.instance_deactivated[this.config.userSelectedLanguage];
@@ -1944,7 +1945,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instancePushover) {
 			try {
 				//first check if instance is living
-				const pushoverAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instancePushover + '.alive');
+				const pushoverAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instancePushover + '.alive');
 
 				if (!pushoverAliveState) {
 					this.log.warn('Pushover instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -1966,7 +1967,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceTelegram) {
 			try {
 				//first check if instance is living
-				const telegramAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceTelegram + '.alive');
+				const telegramAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceTelegram + '.alive');
 
 				if (!telegramAliveState) {
 					this.log.warn('Telegram instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -1986,7 +1987,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceWhatsapp) {
 			try {
 				//first check if instance is living
-				const whatsappAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceWhatsapp + '.alive');
+				const whatsappAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceWhatsapp + '.alive');
 
 				if (!whatsappAliveState) {
 					this.log.warn('Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2005,7 +2006,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceMatrix) {
 			try {
 				//first check if instance is living
-				const matrixAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceMatrix + '.alive');
+				const matrixAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceMatrix + '.alive');
 
 				if (!matrixAliveState) {
 					this.log.warn('Matrix instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2024,7 +2025,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceSignal) {
 			try {
 				//first check if instance is living
-				const signalAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceSignal + '.alive');
+				const signalAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceSignal + '.alive');
 
 				if (!signalAliveState) {
 					this.log.warn('Signal instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2043,7 +2044,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceEmail) {
 			try {
 				//first check if instance is living
-				const eMailAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceEmail + '.alive');
+				const eMailAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceEmail + '.alive');
 
 				if (!eMailAliveState) {
 					this.log.warn('eMail instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2063,7 +2064,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceJarvis) {
 			try {
 				//first check if instance is living
-				const jarvisAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceJarvis + '.alive');
+				const jarvisAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceJarvis + '.alive');
 
 				if (!jarvisAliveState) {
 					this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2083,7 +2084,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceLovelace) {
 			try {
 				//first check if instance is living
-				const lovelaceAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceLovelace + '.alive');
+				const lovelaceAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceLovelace + '.alive');
 
 				if (!lovelaceAliveState) {
 					this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2103,7 +2104,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceSynochat) {
 			try {
 				//first check if instance is living
-				const synochatAliveState = await tools.getInitValue(this,'system.adapter.' + this.config.instanceSynochat + '.alive');
+				const synochatAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceSynochat + '.alive');
 
 				if (!synochatAliveState) {
 					this.log.warn('Synochat instance is not running. Message could not be sent. Please check your instance configuration.');
