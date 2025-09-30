@@ -328,6 +328,8 @@
     "tuyaMaxMinutes": 0,
     "unifiDevices": false,
     "unifiMaxMinutes": 0,
+    "unifiNetworkDevices": false,
+    "unifiNetworkMaxMinutes": 0,
     "viessmannDevices": false,
     "viessmannMaxMinutes": 0,
     "wifilightDevices": false,
