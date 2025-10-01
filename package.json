@@ -37,7 +37,7 @@
     "@alcalzone/release-script-plugin-manual-review": "^3.7.0",
     "@iobroker/adapter-dev": "^1.4.0",
     "@iobroker/testing": "^5.1.1",
-    "@types/node": "^22.15.29",
+    "@types/node": "^24.6.1",
     "@types/node-schedule": "^2.1.8",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
