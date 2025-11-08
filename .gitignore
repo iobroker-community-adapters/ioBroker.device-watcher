@@ -18,3 +18,5 @@ admin/i18n/*/flat.txt
 
 #excluse .DS_Store files
 .DS_Store
+#ignore .commitinfo created by ioBroker release script
+.commitinfo
