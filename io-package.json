@@ -243,6 +243,8 @@
     "eusecMaxMinutes": 300,
     "fhemTFAsensorsDevices": false,
     "fhemTFAsensorsMaxMinutes": 300,
+    "freeairDevices": false,
+    "freeairMaxMinutes": 0,
     "fritzdectDevices": false,
     "fritzdectMaxMinutes": 0,
     "fullybrowserDevices": false,
