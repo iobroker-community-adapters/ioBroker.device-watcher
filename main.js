@@ -965,8 +965,7 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
 			const deviceUnreachSelector = await this.getForeignStateAsync(unreachDP);
-			const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorHMRPC); // for hmrpc devices
-			const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorHMRPC);
+
 			const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? tools.getTimestamp(deviceUnreachSelector.lc) : tools.getTimestamp(timeSelector.ts);
 
 			// ignore disabled device from zigbee2MQTT
@@ -990,6 +989,8 @@ class DeviceWatcher extends utils.Adapter {
 				default:
 					//State changed
 					if (adapterID === 'hmrpc') {
+						const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorHMRPC); // for hmrpc devices
+						const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorHMRPC);
 						if (linkQuality !== ' - ' && deviceTimeSelector) {
 							if (deviceUnreachState === 1) {
 								lastContactString = await this.getLastContact(deviceTimeSelector.lc);
@@ -1229,7 +1230,7 @@ class DeviceWatcher extends utils.Adapter {
 				Device: device.Device,
 				Adapter: device.Adapter,
 				Instance: device.instance,
-				'Instance connected': device.instancedeviceConnected,
+				'Instance connected': device.instanceDeviceConnected,
 				isBatteryDevice: device.isBatteryDevice,
 				Battery: device.Battery,
 				BatteryRaw: device.BatteryRaw,
@@ -1319,8 +1320,8 @@ class DeviceWatcher extends utils.Adapter {
 			switch (id) {
 				// device connection
 				case deviceData.instanceDeviceConnectionDP:
-					if (state.val !== deviceData.instancedeviceConnected) {
-						deviceData.instancedeviceConnected = state.val;
+					if (state.val !== deviceData.instanceDeviceConnected) {
+						deviceData.instanceDeviceConnected = state.val;
 					}
 					break;
 
@@ -1409,7 +1410,7 @@ class DeviceWatcher extends utils.Adapter {
 
 				// device unreach
 				case deviceData.UnreachDP:
-					if (deviceData.instancedeviceConnected !== undefined) {
+					if (deviceData.instanceDeviceConnected !== undefined) {
 						if (deviceData.UnreachState !== state.val) {
 							oldStatus = deviceData.Status;
 							deviceData.UnreachState = state.val;
