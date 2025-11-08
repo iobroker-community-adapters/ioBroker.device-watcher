@@ -90,9 +90,6 @@ class DeviceWatcher extends utils.Adapter {
 		this.on('objectChange', this.onObjectChange.bind(this));
 		this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
-
-
-
 	}
 
 	/**
@@ -170,7 +167,7 @@ class DeviceWatcher extends utils.Adapter {
 			tradfri: this.config.tradfriDevices,
 			tuya: this.config.tuyaDevices,
 			unifi: this.config.unifiDevices,
-			"unifi-network": this.config.unifiNetworkDevices,
+			'unifi-network': this.config.unifiNetworkDevices,
 			viessmann: this.config.viessmannDevices,
 			wifilight: this.config.wifilightDevices,
 			wled: this.config.wledDevices,
@@ -235,7 +232,7 @@ class DeviceWatcher extends utils.Adapter {
 			tradfri: this.config.tradfriMaxMinutes,
 			tuya: this.config.tuyaMaxMinutes,
 			unifi: this.config.unifiMaxMinutes,
-			"unifi-network": this.config.unifiNetworkMaxMinutes,
+			'unifi-network': this.config.unifiNetworkMaxMinutes,
 			viessmann: this.config.viessmannMaxMinutes,
 			wifilight: this.config.wifilightMaxMinutes,
 			wled: this.config.wledMaxMinutes,
@@ -300,10 +297,13 @@ class DeviceWatcher extends utils.Adapter {
 				await crud.deleteHtmlListDatapointsInstances(this);
 			} else {
 				await crud.createHtmlListDatapoints(this);
-				if (this.config.checkAdapterInstances) await crud.createHtmlListDatapointsInstances(this);
+				if (this.config.checkAdapterInstances) {
+					await crud.createHtmlListDatapointsInstances(this);
+				}
 			}
-			if (!this.config.checkAdapterInstances) await crud.deleteHtmlListDatapointsInstances(this);
-
+			if (!this.config.checkAdapterInstances) {
+				await crud.deleteHtmlListDatapointsInstances(this);
+			}
 
 			// instances and adapters
 			if (this.configCreateInstanceList) {
@@ -322,23 +322,34 @@ class DeviceWatcher extends utils.Adapter {
 			await this.refreshData();
 
 			// send overview for low battery devices
-			if (this.config.checkSendBatteryMsgDaily) await this.sendScheduleNotifications('lowBatteryDevices');
+			if (this.config.checkSendBatteryMsgDaily) {
+				await this.sendScheduleNotifications('lowBatteryDevices');
+			}
 
 			// send overview of offline devices
-			if (this.config.checkSendOfflineMsgDaily) await this.sendScheduleNotifications('offlineDevices');
+			if (this.config.checkSendOfflineMsgDaily) {
+				await this.sendScheduleNotifications('offlineDevices');
+			}
 
 			// send overview of upgradeable devices
-			if (this.config.checkSendUpgradeMsgDaily) await this.sendScheduleNotifications('updateDevices');
+			if (this.config.checkSendUpgradeMsgDaily) {
+				await this.sendScheduleNotifications('updateDevices');
+			}
 
 			// send overview of updatable adapters
-			if (this.config.checkSendAdapterUpdateMsgDaily) await this.sendScheduleNotifications('updateAdapter');
+			if (this.config.checkSendAdapterUpdateMsgDaily) {
+				await this.sendScheduleNotifications('updateAdapter');
+			}
 
 			// send overview of deactivated instances
-			if (this.config.checkSendInstanceDeactivatedDaily) await this.sendScheduleNotifications('deactivatedInstance');
+			if (this.config.checkSendInstanceDeactivatedDaily) {
+				await this.sendScheduleNotifications('deactivatedInstance');
+			}
 
 			// send overview of instances with error
-			if (this.config.checkSendInstanceFailedDaily) await this.sendScheduleNotifications('errorInstance');
-
+			if (this.config.checkSendInstanceFailedDaily) {
+				await this.sendScheduleNotifications('errorInstance');
+			}
 		} catch (error) {
 			this.log.error(`[onReady] - ${error}`);
 			this.terminate ? this.terminate(15) : process.exit(15);
@@ -353,7 +364,9 @@ class DeviceWatcher extends utils.Adapter {
 		this.mainRunning = true;
 
 		// cancel run if no adapter is selected
-		if (this.adapterSelected.length === 0) return;
+		if (this.adapterSelected.length === 0) {
+			return;
+		}
 
 		// fill counts and lists of all selected adapter
 		try {
@@ -374,7 +387,9 @@ class DeviceWatcher extends utils.Adapter {
 					if (this.configSetAdapter && this.configSetAdapter[id]) {
 						for (const deviceData of this.listAllDevicesRaw.values()) {
 							// list device only if selected adapter matched with device
-							if (!deviceData.adapterID.includes(id)) continue;
+							if (!deviceData.adapterID.includes(id)) {
+								continue;
+							}
 							await crud.createLists(this, id);
 						}
 						await crud.writeDatapoints(this, id); // fill the datapoints
@@ -394,6 +409,7 @@ class DeviceWatcher extends utils.Adapter {
 	//
 	/**
 	 * Is called if a subscribed object changes
+	 *
 	 * @param {string} id
 	 * @param {ioBroker.Object | null | undefined} obj
 	 */
@@ -446,6 +462,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Is called if a subscribed state changes
+	 *
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
@@ -575,7 +592,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * is neccessary to refresh lastContact data, especially of devices without state changes
 	 */
 	async refreshData() {
-		if (isUnloaded) return; // cancel run if unloaded was called.
+		if (isUnloaded) {
+			return;
+		} // cancel run if unloaded was called.
 		const nextTimeout = this.config.updateinterval * 1000;
 
 		// devices data
@@ -638,7 +657,7 @@ class DeviceWatcher extends utils.Adapter {
 
 			switch (this.selAdapter[i].adapterID) {
 				case 'fullybrowser':
-					deviceName = (await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id)) + ' ' + (await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id2));
+					deviceName = `${await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id)} ${await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id2)}`;
 					break;
 
 				// Get ID with short currDeviceString from objectjson
@@ -683,7 +702,6 @@ class DeviceWatcher extends utils.Adapter {
 				case 'sureflap':
 					if (deviceObject && typeof deviceObject === 'object' && deviceObject.common) {
 						deviceName = deviceObject.common.name
-							// @ts-ignore FIXME: fix syntax error
 							.replace(/'/g, '')
 							.replace(/\(\d+\)/g, '')
 							.trim()
@@ -699,7 +717,9 @@ class DeviceWatcher extends utils.Adapter {
 
 				// Get ID with main selektor from objectjson
 				default:
-					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) deviceName = await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id);
+					if (this.selAdapter[i].id !== 'none' || this.selAdapter[i].id !== undefined) {
+						deviceName = await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id);
+					}
 					if (deviceName === null || deviceName === undefined) {
 						if (deviceObject && typeof deviceObject === 'object' && deviceObject.common) {
 							deviceName = deviceObject.common.name;
@@ -715,6 +735,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * calculate Signalstrength
+	 *
 	 * @param {object} deviceQualityState - State value
 	 * @param {object} adapterID - adapter name
 	 */
@@ -782,6 +803,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * get battery data
+	 *
 	 * @param {object} deviceBatteryState - State value
 	 * @param {object} deviceLowBatState - State value
 	 * @param {object} faultReportingState - State value
@@ -852,8 +874,7 @@ class DeviceWatcher extends utils.Adapter {
 						if (deviceBatteryState === 'high' || deviceBatteryState === 'medium') {
 							batteryHealth = 'ok';
 							isBatteryDevice = true;
-						}
-						else if (deviceBatteryState === 'low') {
+						} else if (deviceBatteryState === 'low') {
 							batteryHealth = 'low';
 							isBatteryDevice = true;
 						}
@@ -872,6 +893,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * set low bat indicator
+	 *
 	 * @param {object} deviceBatteryState
 	 * @param {object} deviceLowBatState
 	 * @param {object} faultReportState
@@ -908,6 +930,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * get Last Contact
+	 *
 	 * @param {object} selector - Selector
 	 */
 	async getLastContact(selector) {
@@ -926,6 +949,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * get online state and time
+	 *
 	 * @param {object} timeSelector - device Timeselector
 	 * @param {string} adapterID - ID of Adapter
 	 * @param {string} unreachDP - Datapoint of Unreach
@@ -958,7 +982,9 @@ class DeviceWatcher extends utils.Adapter {
 			// calculate to days after 48 hours
 			switch (unreachDP) {
 				case 'none':
-					if (deviceTimeSelector) lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+					if (deviceTimeSelector) {
+						lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+					}
 					break;
 
 				default:
@@ -983,7 +1009,9 @@ class DeviceWatcher extends utils.Adapter {
 						if ((!deviceUnreachState || deviceUnreachState === 0) && deviceTimeSelector) {
 							lastContactString = await this.getLastContact(deviceTimeSelector.lc);
 						} else {
-							if (deviceTimeSelector) lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+							if (deviceTimeSelector) {
+								lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+							}
 						}
 						break;
 					}
@@ -993,7 +1021,9 @@ class DeviceWatcher extends utils.Adapter {
 					=            Set Online Status             =
 					=============================================*/
 			let lastContact;
-			if (deviceTimeSelector) lastContact = tools.getTimestamp(deviceTimeSelector.ts);
+			if (deviceTimeSelector) {
+				lastContact = tools.getTimestamp(deviceTimeSelector.ts);
+			}
 
 			if (this.configMaxMinutes !== undefined) {
 				switch (adapterID) {
@@ -1001,22 +1031,30 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState === 1) {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState === 1) {
 							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') {
+								linkQuality = '0%';
+							} // set linkQuality to nothing
 						}
 						break;
 					case 'proxmox':
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') {
+								linkQuality = '0%';
+							} // set linkQuality to nothing
 						}
 						break;
 					case 'hmiP':
@@ -1024,11 +1062,15 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState) {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') {
+								linkQuality = '0%';
+							} // set linkQuality to nothing
 						}
 						break;
 					case 'apcups':
@@ -1045,22 +1087,30 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (!deviceUnreachState) {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') {
+								linkQuality = '0%';
+							} // set linkQuality to nothing
 						}
 						break;
 					case 'mqttClientZigbee2Mqtt':
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState !== 'online') {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') {
+								linkQuality = '0%';
+							} // set linkQuality to nothing
 						}
 						break;
 					case 'mihome':
@@ -1068,21 +1118,29 @@ class DeviceWatcher extends utils.Adapter {
 							if (this.configMaxMinutes[adapterID] <= 0) {
 								if (!deviceUnreachState) {
 									deviceState = 'Offline'; //set online state to offline
-									if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+									if (linkQuality !== ' - ') {
+										linkQuality = '0%';
+									} // set linkQuality to nothing
 								}
 							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else {
 							if (this.config.mihomeMaxMinutes <= 0) {
 								if (this.configMaxMinutes[adapterID] <= 0) {
 									deviceState = 'Offline'; //set online state to offline
-									if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+									if (linkQuality !== ' - ') {
+										linkQuality = '0%';
+									} // set linkQuality to nothing
 								}
 							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						}
 						break;
@@ -1090,22 +1148,30 @@ class DeviceWatcher extends utils.Adapter {
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (deviceUnreachState === 'OFFLINE') {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') {
+								linkQuality = '0%';
+							} // set linkQuality to nothing
 						}
 						break;
 					default:
 						if (this.configMaxMinutes[adapterID] <= 0) {
 							if (!deviceUnreachState) {
 								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+								if (linkQuality !== ' - ') {
+									linkQuality = '0%';
+								} // set linkQuality to nothing
 							}
 						} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
 							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') linkQuality = '0%'; // set linkQuality to nothing
+							if (linkQuality !== ' - ') {
+								linkQuality = '0%';
+							} // set linkQuality to nothing
 						}
 						break;
 				}
@@ -1153,12 +1219,12 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * fill the lists for user
+	 *
 	 * @param {object} device
 	 */
 	async theLists(device) {
 		// Raw List with all devices for user
 		if (device.Status !== 'disabled') {
-
 			this.listAllDevicesUserRaw.push({
 				Device: device.Device,
 				Adapter: device.Adapter,
@@ -1233,7 +1299,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-
 	/**
 	 * @param {string | string[]} id
 	 * @param {ioBroker.State} state
@@ -1282,7 +1347,9 @@ class DeviceWatcher extends utils.Adapter {
 				case deviceData.batteryDP:
 					if (deviceData.isBatteryDevice) {
 						oldLowBatState = deviceData.LowBat;
-						if (state.val === 0 && deviceData.BatteryRaw >= 5) return;
+						if (state.val === 0 && deviceData.BatteryRaw >= 5) {
+							return;
+						}
 						batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.faultReport, deviceData.adapterID);
 
 						deviceData.Battery = batteryData[0];
@@ -1387,6 +1454,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * get instance data
+	 *
 	 *@param {string} instanceObject
 	 */
 	async getInstanceData(instanceObject) {
@@ -1395,9 +1463,10 @@ class DeviceWatcher extends utils.Adapter {
 
 			this.adapterUpdatesJsonRaw = await this.getAdapterUpdateData(adapterUpdateListDP);
 
-
 			for (const [id] of Object.entries(instanceAliveDP)) {
-				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) continue;
+				if (!(typeof id === 'string' && id.startsWith(`system.adapter.`))) {
+					continue;
+				}
 
 				// get instance name
 				const instanceID = await this.getInstanceName(id);
@@ -1424,7 +1493,6 @@ class DeviceWatcher extends utils.Adapter {
 				let scheduleTime = 'N/A';
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
 				if (instanceObjectData) {
-					// @ts-ignore
 					adapterName = tools.capitalize(instanceObjectData.common.name);
 					adapterVersion = instanceObjectData.common.version;
 					instanceMode = instanceObjectData.common.mode;
@@ -1434,10 +1502,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 				}
 
-
-				const updateEntry = this.adapterUpdatesJsonRaw.find(
-					entry => entry.adapter.toLowerCase() === adapterName.toLowerCase()
-				);
+				const updateEntry = this.adapterUpdatesJsonRaw.find((entry) => entry.adapter.toLowerCase() === adapterName.toLowerCase());
 
 				if (updateEntry) {
 					adapterAvailableUpdate = updateEntry.newVersion;
@@ -1495,6 +1560,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * get Instances
+	 *
 	 * @param {string} id - Path of alive datapoint
 	 */
 	async getInstanceName(id) {
@@ -1506,6 +1572,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Check if instance is alive and ok
+	 *
 	 * @param {string} instanceID
 	 */
 	async checkDaemonIsHealthy(instanceID) {
@@ -1535,6 +1602,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Check if instance is alive and ok
+	 *
 	 * @param {string} instanceID
 	 * @param {number} instanceDeactivationTime
 	 */
@@ -1594,6 +1662,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * set status for instance
+	 *
 	 * @param {string} instanceMode
 	 * @param {string} scheduleTime
 	 * @param {any} instanceID
@@ -1658,6 +1727,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * create adapter update raw lists
+	 *
 	 * @param {string} adapterUpdateListDP
 	 */
 	async getAdapterUpdateData(adapterUpdateListDP) {
@@ -1678,13 +1748,11 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Populate the adapter updates data
 		for (const [id, adapterData] of Object.entries(adapterJsonList)) {
-			adapterUpdatesJsonRaw.push(
-				{
-					adapter: tools.capitalize(id),
-					newVersion: adapterData.availableVersion,
-					oldVersion: adapterData.installedVersion,
-				}
-			);
+			adapterUpdatesJsonRaw.push({
+				adapter: tools.capitalize(id),
+				newVersion: adapterData.availableVersion,
+				oldVersion: adapterData.installedVersion,
+			});
 		}
 
 		return adapterUpdatesJsonRaw;
@@ -1749,7 +1817,9 @@ class DeviceWatcher extends utils.Adapter {
 				});
 			}
 
-			if (this.blacklistInstancesLists.includes(instance)) continue;
+			if (this.blacklistInstancesLists.includes(instance)) {
+				continue;
+			}
 			// all instances
 			this.listAllInstances.push({
 				[translations.Adapter[this.config.userSelectedLanguage]]: instanceData.Adapter,
@@ -1865,9 +1935,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		// Update instances with available adapter updates
 		for (const instance of this.listInstanceRaw.values()) {
-			const adapterUpdate = this.adapterUpdatesJsonRaw.find(
-				entry => entry.adapter.toLowerCase() === instance.Adapter.toLowerCase()
-			);
+			const adapterUpdate = this.adapterUpdatesJsonRaw.find((entry) => entry.adapter.toLowerCase() === instance.Adapter.toLowerCase());
 
 			if (adapterUpdate) {
 				instance.updateAvailable = adapterUpdate.newVersion;
@@ -1878,6 +1946,7 @@ class DeviceWatcher extends utils.Adapter {
 	}
 	/**
 	 * call function on state change, renew data and send messages
+	 *
 	 * @param {string} id
 	 * @param {ioBroker.State} state
 	 */
@@ -1903,7 +1972,9 @@ class DeviceWatcher extends utils.Adapter {
 						await checkInstance(instanceID, instanceData);
 						// send message when instance was deactivated
 						if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
-							if (this.blacklistInstancesNotify.includes(instanceID)) return;
+							if (this.blacklistInstancesNotify.includes(instanceID)) {
+								return;
+							}
 							await this.sendStateNotifications('Instances', 'deactivatedInstance', instanceID);
 						}
 					}
@@ -1914,7 +1985,9 @@ class DeviceWatcher extends utils.Adapter {
 						await checkInstance(instanceID, instanceData);
 						// send message when instance has an error
 						if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
-							if (this.blacklistInstancesNotify.includes(instanceID)) return;
+							if (this.blacklistInstancesNotify.includes(instanceID)) {
+								return;
+							}
 							await this.sendStateNotifications('Instances', 'errorInstance', instanceID);
 						}
 					}
@@ -1925,7 +1998,9 @@ class DeviceWatcher extends utils.Adapter {
 						await checkInstance(instanceID, instanceData);
 						// send message when instance has an error
 						if (this.config.checkSendInstanceFailedMsg && !instanceData.isHealthy && instanceData.isAlive) {
-							if (this.blacklistInstancesNotify.includes(instanceID)) return;
+							if (this.blacklistInstancesNotify.includes(instanceID)) {
+								return;
+							}
 							await this.sendStateNotifications('Instances', 'errorInstance', instanceID);
 						}
 					}
@@ -1940,6 +2015,7 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Notification service
+	 *
 	 * @param {string} text - Text which should be send
 	 */
 	async sendNotification(text) {
@@ -1947,7 +2023,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instancePushover) {
 			try {
 				//first check if instance is living
-				const pushoverAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instancePushover + '.alive');
+				const pushoverAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instancePushover}.alive`);
 
 				if (!pushoverAliveState) {
 					this.log.warn('Pushover instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -1969,7 +2045,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceTelegram) {
 			try {
 				//first check if instance is living
-				const telegramAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceTelegram + '.alive');
+				const telegramAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceTelegram}.alive`);
 
 				if (!telegramAliveState) {
 					this.log.warn('Telegram instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -1989,7 +2065,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceWhatsapp) {
 			try {
 				//first check if instance is living
-				const whatsappAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceWhatsapp + '.alive');
+				const whatsappAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceWhatsapp}.alive`);
 
 				if (!whatsappAliveState) {
 					this.log.warn('Whatsapp instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2008,7 +2084,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceMatrix) {
 			try {
 				//first check if instance is living
-				const matrixAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceMatrix + '.alive');
+				const matrixAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceMatrix}.alive`);
 
 				if (!matrixAliveState) {
 					this.log.warn('Matrix instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2027,7 +2103,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceSignal) {
 			try {
 				//first check if instance is living
-				const signalAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceSignal + '.alive');
+				const signalAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceSignal}.alive`);
 
 				if (!signalAliveState) {
 					this.log.warn('Signal instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2046,7 +2122,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceEmail) {
 			try {
 				//first check if instance is living
-				const eMailAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceEmail + '.alive');
+				const eMailAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceEmail}.alive`);
 
 				if (!eMailAliveState) {
 					this.log.warn('eMail instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2066,7 +2142,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceJarvis) {
 			try {
 				//first check if instance is living
-				const jarvisAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceJarvis + '.alive');
+				const jarvisAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceJarvis}.alive`);
 
 				if (!jarvisAliveState) {
 					this.log.warn('Jarvis instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2074,7 +2150,7 @@ class DeviceWatcher extends utils.Adapter {
 					const jsonText = JSON.stringify(text);
 					await this.setForeignStateAsync(
 						`${this.config.instanceJarvis}.addNotification`,
-						'{"title":"' + this.config.titleJarvis + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')","message": ' + jsonText + ',"display": "drawer"}',
+						`{"title":"${this.config.titleJarvis} (${this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss')})","message": ${jsonText},"display": "drawer"}`,
 					);
 				}
 			} catch (error) {
@@ -2086,7 +2162,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceLovelace) {
 			try {
 				//first check if instance is living
-				const lovelaceAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceLovelace + '.alive');
+				const lovelaceAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceLovelace}.alive`);
 
 				if (!lovelaceAliveState) {
 					this.log.warn('Lovelace instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2094,7 +2170,7 @@ class DeviceWatcher extends utils.Adapter {
 					const jsonText = JSON.stringify(text);
 					await this.setForeignStateAsync(
 						`${this.config.instanceLovelace}.notifications.add`,
-						'{"message":' + jsonText + ', "title":"' + this.config.titleLovelace + ' (' + this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss') + ')"}',
+						`{"message":${jsonText}, "title":"${this.config.titleLovelace} (${this.formatDate(new Date(), 'DD.MM.YYYY - hh:mm:ss')})"}`,
 					);
 				}
 			} catch (error) {
@@ -2106,7 +2182,7 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.config.instanceSynochat) {
 			try {
 				//first check if instance is living
-				const synochatAliveState = await tools.getInitValue(this, 'system.adapter.' + this.config.instanceSynochat + '.alive');
+				const synochatAliveState = await tools.getInitValue(this, `system.adapter.${this.config.instanceSynochat}.alive`);
 
 				if (!synochatAliveState) {
 					this.log.warn('Synochat instance is not running. Message could not be sent. Please check your instance configuration.');
@@ -2126,12 +2202,15 @@ class DeviceWatcher extends utils.Adapter {
 	/*---------- Notifications ----------*/
 	/**
 	 * Notifications on state changes
+	 *
 	 * @param {string} mainType
 	 * @param {string} type
 	 * @param {object} id
 	 */
 	async sendStateNotifications(mainType, type, id) {
-		if (isUnloaded) return;
+		if (isUnloaded) {
+			return;
+		}
 		let objectData;
 		let adapterName;
 		let list = '';
@@ -2177,7 +2256,9 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'updateAdapter':
-				if (this.countAdapterUpdates === 0) return;
+				if (this.countAdapterUpdates === 0) {
+					return;
+				}
 
 				objectData = this.listAdapterUpdates;
 				list = '';
@@ -2200,10 +2281,13 @@ class DeviceWatcher extends utils.Adapter {
 
 	/**
 	 * Notifications per user defined schedule
+	 *
 	 * @param {string} type
 	 */
 	async sendScheduleNotifications(type) {
-		if (isUnloaded) return;
+		if (isUnloaded) {
+			return;
+		}
 
 		const checkDays = [];
 		const dayConfigKeys = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -2221,21 +2305,27 @@ class DeviceWatcher extends utils.Adapter {
 		const processDeviceList = (deviceList, property1, property2) => {
 			list = '';
 			for (const id of deviceList) {
-				if (this.blacklistNotify.includes(id.Path)) continue;
-				list += `\n${!this.config.showAdapterNameinMsg ? '' : id.Adapter + ': '}${id[property1]}${property2 ? ` (${id[property2]})` : ''}`;
+				if (this.blacklistNotify.includes(id.Path)) {
+					continue;
+				}
+				list += `\n${!this.config.showAdapterNameinMsg ? '' : `${id.Adapter}: `}${id[property1]}${property2 ? ` (${id[property2]})` : ''}`;
 			}
 		};
 
 		const processInstanceList = (instanceList, property) => {
 			list = '';
 			for (const id of instanceList) {
-				if (this.blacklistInstancesNotify.includes(id[translations['Instance'][this.config.userSelectedLanguage]])) continue;
+				if (this.blacklistInstancesNotify.includes(id[translations['Instance'][this.config.userSelectedLanguage]])) {
+					continue;
+				}
 				list += `\n${id[translations['Instance'][this.config.userSelectedLanguage]]}${property ? `: ${id[property]}` : ''}`;
 			}
 		};
 
 		const processNotification = async (list, messageType) => {
-			if (list.length === 0) return;
+			if (list.length === 0) {
+				return;
+			}
 
 			switch (checkDays.length) {
 				case 1:
@@ -2254,7 +2344,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		switch (type) {
 			case 'lowBatteryDevices':
-				checkDays.push(...dayConfigKeys.map((day, index) => (this.config['check' + day] ? index : null)).filter((day) => day !== null));
+				checkDays.push(...dayConfigKeys.map((day, index) => (this.config[`check${day}`] ? index : null)).filter((day) => day !== null));
 
 				if (checkDays.length === 0) {
 					this.log.warn(`No days selected for daily low battery devices message. Please check the instance configuration!`);
@@ -2270,7 +2360,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'offlineDevices':
-				checkDays.push(...dayConfigKeys.map((day, index) => (this.config['checkOffline' + day] ? index : null)).filter((day) => day !== null));
+				checkDays.push(...dayConfigKeys.map((day, index) => (this.config[`checkOffline${day}`] ? index : null)).filter((day) => day !== null));
 
 				if (checkDays.length === 0) {
 					this.log.warn(`No days selected for daily offline devices message. Please check the instance configuration!`);
@@ -2286,7 +2376,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'updateDevices':
-				checkDays.push(...dayConfigKeys.map((day, index) => (this.config['checkUpgrade' + day] ? index : null)).filter((day) => day !== null));
+				checkDays.push(...dayConfigKeys.map((day, index) => (this.config[`checkUpgrade${day}`] ? index : null)).filter((day) => day !== null));
 
 				if (checkDays.length === 0) {
 					this.log.warn(`No days selected for daily updatable devices message. Please check the instance configuration!`);
@@ -2302,7 +2392,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'updateAdapter':
-				checkDays.push(...dayConfigKeys.map((day, index) => (this.config['checkAdapterUpdate' + day] ? index : null)).filter((day) => day !== null));
+				checkDays.push(...dayConfigKeys.map((day, index) => (this.config[`checkAdapterUpdate${day}`] ? index : null)).filter((day) => day !== null));
 
 				if (checkDays.length === 0) {
 					this.log.warn(`No days selected for daily adapter update message. Please check the instance configuration!`);
@@ -2320,7 +2410,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'errorInstance':
-				checkDays.push(...dayConfigKeys.map((day, index) => (this.config['checkFailedInstances' + day] ? index : null)).filter((day) => day !== null));
+				checkDays.push(...dayConfigKeys.map((day, index) => (this.config[`checkFailedInstances${day}`] ? index : null)).filter((day) => day !== null));
 
 				if (checkDays.length === 0) {
 					this.log.warn(`No days selected for daily instance error message. Please check the instance configuration!`);
@@ -2336,7 +2426,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 
 			case 'deactivatedInstance':
-				checkDays.push(...dayConfigKeys.map((day, index) => (this.config['checkInstanceDeactivated' + day] ? index : null)).filter((day) => day !== null));
+				checkDays.push(...dayConfigKeys.map((day, index) => (this.config[`checkInstanceDeactivated${day}`] ? index : null)).filter((day) => day !== null));
 
 				if (checkDays.length === 0) {
 					this.log.warn(`No days selected for daily instance deactivated message. Please check the instance configuration!`);
@@ -2376,11 +2466,10 @@ class DeviceWatcher extends utils.Adapter {
 	}
 }
 
-// @ts-ignore parent is a valid property on module
 if (require.main !== module) {
 	// Export the constructor in compact mode
 	/**
-	 * @param {Partial<utils.AdapterOptions>} [options={}]
+	 * @param {Partial<utils.AdapterOptions>} [options]
 	 */
 	module.exports = (options) => new DeviceWatcher(options);
 } else {
