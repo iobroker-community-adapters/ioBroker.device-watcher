@@ -198,6 +198,8 @@ This adapter would not have been possible without the great work of Christian Be
 * (arteck) Dependencies have been fixed
 * (arteck) ping adapter have been fixed
 * (arteck) optimisations for adapter without info.connection state 
+* (arteck) clean code
+* (arteck) silent notification for telegram
 
 ### 2.13.1 (2025-09-06)
 * (arteck) Dependencies have been fixed
