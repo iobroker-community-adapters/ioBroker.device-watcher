@@ -913,6 +913,8 @@ class DeviceWatcher extends utils.Adapter {
 			const device 			= Object.values(this.config.tableDevices).find(adapter => adapter.adapterKey === gefundenerAdapter.adapterKey);
 			const configMaxMinutes 	= device.maxMinutesOffline;
 
+			this.log.debug(`getOnline ${device} configMaxMinutes ${configMaxMinutes}`);
+
 			switch (adapterID) {
 				case 'hmrpc':
 					if (configMaxMinutes <= 0) {
@@ -1325,7 +1327,6 @@ class DeviceWatcher extends utils.Adapter {
 							}
 						}
 					}
-					break;
 			}
 		}
 	}
