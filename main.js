@@ -288,12 +288,7 @@ class DeviceWatcher extends utils.Adapter {
 	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
 	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
 	//
-	/**
-	 * Is called if a subscribed object changes
-	 *
-	 * @param {string} id
-	 * @param {ioBroker.Object | null | undefined} obj
-	 */
+
 	async onObjectChange(id, obj) {
 		if (obj) {
 			try {
@@ -341,12 +336,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-	/**
-	 * Is called if a subscribed state changes
-	 *
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
 	async onStateChange(id, state) {
 		if (state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
@@ -380,9 +369,7 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-	/**
-	 * @param {ioBroker.Message} obj
-	 */
+
 	onMessage(obj) {
 		const devices = [];
 		const instances = [];
@@ -909,22 +896,22 @@ class DeviceWatcher extends utils.Adapter {
 				lastContact = tools.getTimestamp(deviceTimeSelector.ts);
 			}
 
-			const gefundenerAdapter	= Object.values(arrApart).find(adapter => adapter.adapterID === adapterID);
-			const device 			= Object.values(this.config.tableDevices).find(adapter => adapter.adapterKey === gefundenerAdapter.adapterKey);
-			const configMaxMinutes 	= device.maxMinutesOffline;
+			const gefundenerAdapter		= Object.values(arrApart).find(adapter => adapter.adapterID === adapterID);
+			const device 					= Object.values(this.config.tableDevices).find(adapter => adapter.adapterKey === gefundenerAdapter.adapterKey);
+			const maxSecondAdapterOffline 	= device.maxSecondAdapterOffline;
 
-			this.log.debug(`getOnline ${device} configMaxMinutes ${configMaxMinutes}`);
+			this.log.debug(`getOnline ${device} maxSecondAdapterOffline ${maxSecondAdapterOffline}`);
 
 			switch (adapterID) {
 				case 'hmrpc':
-					if (configMaxMinutes <= 0) {
+					if (maxSecondAdapterOffline <= 0) {
 						if (deviceUnreachState === 1) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (lastDeviceUnreachStateChange > configMaxMinutes && deviceUnreachState === 1) {
+					} else if (lastDeviceUnreachStateChange > maxSecondAdapterOffline && deviceUnreachState === 1) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -932,14 +919,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				case 'proxmox':
-					if (configMaxMinutes <= 0) {
+					if (maxSecondAdapterOffline <= 0) {
 						if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (lastDeviceUnreachStateChange > configMaxMinutes && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
+					} else if (lastDeviceUnreachStateChange > maxSecondAdapterOffline && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -948,14 +935,14 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 				case 'hmiP':
 				case 'maxcube':
-					if (configMaxMinutes <= 0) {
+					if (maxSecondAdapterOffline <= 0) {
 						if (deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (lastDeviceUnreachStateChange > configMaxMinutes && deviceUnreachState) {
+					} else if (lastDeviceUnreachStateChange > maxSecondAdapterOffline && deviceUnreachState) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -973,14 +960,14 @@ class DeviceWatcher extends utils.Adapter {
 				case 'unifi':
 				case 'zigbee':
 				case 'zigbee2MQTT':
-					if (configMaxMinutes <= 0) {
+					if (maxSecondAdapterOffline <= 0) {
 						if (!deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (!deviceUnreachState && lastDeviceUnreachStateChange > configMaxMinutes) {
+					} else if (!deviceUnreachState && lastDeviceUnreachStateChange > maxSecondAdapterOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -988,14 +975,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				case 'mqttClientZigbee2Mqtt':
-					if (configMaxMinutes <= 0) {
+					if (maxSecondAdapterOffline <= 0) {
 						if (deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > configMaxMinutes) {
+					} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > maxSecondAdapterOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -1003,45 +990,23 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				case 'mihome':
-					if (deviceUnreachState !== undefined) {
-						if (configMaxMinutes <= 0) {
-							if (!deviceUnreachState) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (lastContact && lastContact > configMaxMinutes) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
-							} // set linkQuality to nothing
-						}
-					} else {
-						if (this.config.mihomeMaxMinutes <= 0) {
-							if (configMaxMinutes <= 0) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (lastContact && lastContact > configMaxMinutes) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
-							} // set linkQuality to nothing
-						}
+					const offlineByTime = maxSecondAdapterOffline <= 0 || (lastContact && lastContact > maxSecondAdapterOffline);
+					const offlineByState = deviceUnreachState !== undefined ? (!deviceUnreachState && offlineByTime) : offlineByTime;
+
+					if (offlineByState) {
+						deviceState = 'Offline';
+						if (linkQuality !== ' - ') linkQuality = '0%';
 					}
 					break;
 				case 'smartgarden':
-					if (configMaxMinutes <= 0) {
+					if (maxSecondAdapterOffline <= 0) {
 						if (deviceUnreachState === 'OFFLINE') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > configMaxMinutes) {
+					} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > maxSecondAdapterOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -1049,18 +1014,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				default:
-					if (configMaxMinutes <= 0) {
-						if (!deviceUnreachState) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
-							} // set linkQuality to nothing
-						}
-					} else if (lastContact && lastContact > configMaxMinutes) {
-						deviceState = 'Offline'; //set online state to offline
-						if (linkQuality !== ' - ') {
-							linkQuality = '0%';
-						} // set linkQuality to nothing
+					// Gerät gilt als offline, wenn es unerreichbar ist und keine Wartezeit definiert ist, oder wenn der letzte Kontakt zu lange her ist
+					const shouldBeOffline =
+						(!deviceUnreachState && maxSecondAdapterOffline <= 0) ||
+						(lastContact && lastContact > maxSecondAdapterOffline);
+
+					if (shouldBeOffline) {
+						deviceState = 'Offline'; // Gerät auf offline setzen
+						if (linkQuality !== ' - ') linkQuality = '0%'; // Linkqualität auf 0% setzen
 					}
 					break;
 			}
@@ -1076,35 +1037,27 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string | number | boolean | null} deviceUpdateSelector
 	 */
 	async checkDeviceUpdate(adapterID, deviceUpdateSelector) {
-		let isUpgradable;
+	let isUpgradable = false;
 
-		switch (adapterID) {
-			case 'hmiP':
-				if (deviceUpdateSelector === 'UPDATE_AVAILABLE') {
-					isUpgradable = true;
-				} else {
-					isUpgradable = false;
-				}
-				break;
-			case 'ring':
-				if (deviceUpdateSelector !== 'Up to Date') {
-					isUpgradable = true;
-				} else {
-					isUpgradable = false;
-				}
-				break;
-			default:
-				if (deviceUpdateSelector !== null && typeof deviceUpdateSelector === 'boolean') {
-					if (deviceUpdateSelector) {
-						isUpgradable = true;
-					} else if (!deviceUpdateSelector) {
-						isUpgradable = false;
-					}
-				}
-		}
+	switch (adapterID) {
+		case 'hmiP':
+			isUpgradable = deviceUpdateSelector === 'UPDATE_AVAILABLE';
+			break;
 
-		return isUpgradable;
+		case 'ring':
+			isUpgradable = deviceUpdateSelector !== 'Up to Date';
+			break;
+
+		default:
+			if (typeof deviceUpdateSelector === 'boolean') {
+				isUpgradable = deviceUpdateSelector;
+			}
+			break;
 	}
+
+	return isUpgradable;
+}
+
 
 	/**
 	 * fill the lists for user

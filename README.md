@@ -200,6 +200,7 @@ This adapter would not have been possible without the great work of Christian Be
 * (arteck) optimisations for adapter without info.connection state 
 * (arteck) clean code
 * (arteck) silent notification for telegram
+* (arteck) add matter devices
 
 ### 2.13.1 (2025-09-06)
 * (arteck) Dependencies have been fixed
