@@ -898,20 +898,20 @@ class DeviceWatcher extends utils.Adapter {
 
 			const gefundenerAdapter		= Object.values(arrApart).find(adapter => adapter.adapterID === adapterID);
 			const device 					= Object.values(this.config.tableDevices).find(adapter => adapter.adapterKey === gefundenerAdapter.adapterKey);
-			const maxSecondAdapterOffline 	= device.maxSecondAdapterOffline;
+			const maxSecondDevicesOffline 	= device.maxSecondDevicesOffline;
 
-			this.log.debug(`getOnline ${device} maxSecondAdapterOffline ${maxSecondAdapterOffline}`);
+			this.log.debug(`getOnline ${device} maxSecondDevicesOffline ${maxSecondDevicesOffline}`);
 
 			switch (adapterID) {
 				case 'hmrpc':
-					if (maxSecondAdapterOffline <= 0) {
+					if (maxSecondDevicesOffline <= 0) {
 						if (deviceUnreachState === 1) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (lastDeviceUnreachStateChange > maxSecondAdapterOffline && deviceUnreachState === 1) {
+					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState === 1) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -919,14 +919,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				case 'proxmox':
-					if (maxSecondAdapterOffline <= 0) {
+					if (maxSecondDevicesOffline <= 0) {
 						if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (lastDeviceUnreachStateChange > maxSecondAdapterOffline && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
+					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -935,14 +935,14 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 				case 'hmiP':
 				case 'maxcube':
-					if (maxSecondAdapterOffline <= 0) {
+					if (maxSecondDevicesOffline <= 0) {
 						if (deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (lastDeviceUnreachStateChange > maxSecondAdapterOffline && deviceUnreachState) {
+					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -960,14 +960,14 @@ class DeviceWatcher extends utils.Adapter {
 				case 'unifi':
 				case 'zigbee':
 				case 'zigbee2MQTT':
-					if (maxSecondAdapterOffline <= 0) {
+					if (maxSecondDevicesOffline <= 0) {
 						if (!deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (!deviceUnreachState && lastDeviceUnreachStateChange > maxSecondAdapterOffline) {
+					} else if (!deviceUnreachState && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -975,14 +975,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				case 'mqttClientZigbee2Mqtt':
-					if (maxSecondAdapterOffline <= 0) {
+					if (maxSecondDevicesOffline <= 0) {
 						if (deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > maxSecondAdapterOffline) {
+					} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -990,7 +990,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				case 'mihome':
-					const offlineByTime = maxSecondAdapterOffline <= 0 || (lastContact && lastContact > maxSecondAdapterOffline);
+					const offlineByTime = maxSecondDevicesOffline <= 0 || (lastContact && lastContact > maxSecondDevicesOffline);
 					const offlineByState = deviceUnreachState !== undefined ? (!deviceUnreachState && offlineByTime) : offlineByTime;
 
 					if (offlineByState) {
@@ -999,14 +999,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				case 'smartgarden':
-					if (maxSecondAdapterOffline <= 0) {
+					if (maxSecondDevicesOffline <= 0) {
 						if (deviceUnreachState === 'OFFLINE') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
 								linkQuality = '0%';
 							} // set linkQuality to nothing
 						}
-					} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > maxSecondAdapterOffline) {
+					} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
 							linkQuality = '0%';
@@ -1016,8 +1016,8 @@ class DeviceWatcher extends utils.Adapter {
 				default:
 					// Gerät gilt als offline, wenn es unerreichbar ist und keine Wartezeit definiert ist, oder wenn der letzte Kontakt zu lange her ist
 					const shouldBeOffline =
-						(!deviceUnreachState && maxSecondAdapterOffline <= 0) ||
-						(lastContact && lastContact > maxSecondAdapterOffline);
+						(!deviceUnreachState && maxSecondDevicesOffline <= 0) ||
+						(lastContact && lastContact > maxSecondDevicesOffline);
 
 					if (shouldBeOffline) {
 						deviceState = 'Offline'; // Gerät auf offline setzen
