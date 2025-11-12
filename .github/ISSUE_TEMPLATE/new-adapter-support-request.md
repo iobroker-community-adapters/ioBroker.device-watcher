@@ -20,3 +20,6 @@ Please tell me the adapter name and if possible the GitHub link.
 
 **Additional context**
 Add any other context or screenshots about the adapter request here.
+
+**Structure JSON export**
+we need a structure JSON from Object tree as .json fromat
