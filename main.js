@@ -1155,8 +1155,7 @@ class DeviceWatcher extends utils.Adapter {
 		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
 		const deviceData = this.listAllDevicesRaw.get(deviceID);
 
-		this.log.debug(`[renewDeviceData arrApart] - JSON.stringify(${arrApart})`);
-		this.log.debug(`[renewDeviceData deviceData] - JSON.stringify(${deviceData})`);
+		this.log.debug(`[renewDeviceData] - ${id}`);
 		
 		const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === deviceData.adapterID);
 		const silentEnabled = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
