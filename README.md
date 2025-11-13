@@ -193,8 +193,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.14.0 (2025-11-13)
 * (arteck) Dependencies have been fixed
 * (arteck) ping adapter have been fixed
 * (arteck) optimisations for adapter without info.connection state 
