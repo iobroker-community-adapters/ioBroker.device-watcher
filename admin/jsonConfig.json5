@@ -62,14 +62,16 @@
 							"max": 100000,
 							"default": 0,
 							"unit": "sec",
+              "disabled": "!data.enabled",
 						},
 						{
-                            "type": "checkbox",
-                            "title": "Telegram Silent Mode",
-                            "attr": "telegramSilent",
-                            "width": "20%",
-                            "default": false
-                        },
+              "type": "checkbox",
+              "title": "Telegram Silent Mode",
+              "attr": "telegramSilent",
+              "width": "20%",
+              "default": false,
+              "disabled": "!data.enabled",
+            },
 						{
 							"type": "text",
 							"title": "",
