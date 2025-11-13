@@ -113,144 +113,18 @@ class DeviceWatcher extends utils.Adapter {
 		this.configCreateOwnFolder = this.config.createOwnFolder;
 		this.configCreateHtmlList = this.config.createHtmlList;
 
-		this.configSetAdapter = {
-			alexa2: this.config.alexa2Devices,
-			apcups: this.config.apcupsDevices,
-			ble: this.config.bleDevices,
-			deconz: this.config.deconzDevices,
-			ecovacsdeebot: this.config.ecovacsdeebotDevices,
-			enocean: this.config.enoceanDevices,
-			esphome: this.config.esphomeDevices,
-			eusec: this.config.eusecDevices,
-			fhemTFAsensors: this.config.fhemTFAsensorsDevices,
-			freeair: this.config.freeairDevices,
-			fritzdect: this.config.fritzdectDevices,
-			fullybrowser: this.config.fullybrowserDevices,
-			fullybrowserV3: this.config.fullybrowserV3Devices,
-			fullyMQTT: this.config.fullyMQTTDevices,
-			ham: this.config.hamDevices,
-			harmony: this.config.harmonyDevices,
-			hmiP: this.config.hmiPDevices,
-			hmrpc: this.config.hmrpcDevices,
-			homeconnect: this.config.homeconnectDevices,
-			homekitController: this.config.homekitControllerDevices,
-			hs100: this.config.hs100Devices,
-			hue: this.config.hueDevices,
-			hueExt: this.config.hueExtDevices,
-			innogy: this.config.innogyDevices,
-			jeelink: this.config.jeelinkDevices,
-			loqedSmartLock: this.config.loqedSmartLockDevices,
-			lupusec: this.config.lupusecDevices,
-			maxcube: this.config.maxcubeDevices,
-			meross: this.config.merossDevices,
-			mihome: this.config.mihomeDevices,
-			mihomeGW: this.config.mihomeDevices,
-			mihomeVacuum: this.config.mihomeVacuumDevices,
-			mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttDevices,
-			mqttNuki: this.config.mqttNukiDevices,
-			musiccast: this.config.musiccastDevices,
-			netatmo: this.config.netatmoDevices,
-			nukiExt: this.config.nukiExtDevices,
-			nut: this.config.nutDevices,
-			ping: this.config.pingDevices,
-			proxmox: this.config.proxmoxDevices,
-			ring: this.config.ringDevices,
-			roomba: this.config.roombaDevices,
-			shelly: this.config.shellyDevices,
-			smartgarden: this.config.smartgardenDevices,
-			sonoff: this.config.sonoffDevices,
-			sonos: this.config.sonosDevices,
-			sureflap: this.config.sureflapDevices,
-			switchbotBle: this.config.switchbotBleDevices,
-			tado: this.config.tadoDevices,
-			tapo: this.config.tapoDevices,
-			tradfri: this.config.tradfriDevices,
-			tuya: this.config.tuyaDevices,
-			unifi: this.config.unifiDevices,
-			'unifi-network': this.config.unifiNetworkDevices,
-			viessmann: this.config.viessmannDevices,
-			wifilight: this.config.wifilightDevices,
-			wled: this.config.wledDevices,
-			xsense: this.config.xsenseDevices,
-			yeelight: this.config.yeelightDevices,
-			zigbee: this.config.zigbeeDevices,
-			zigbee2MQTT: this.config.zigbee2mqttDevices,
-			zwave2: this.config.zwaveDevices,
-		};
-
-		this.configMaxMinutes = {
-			alexa2: this.config.alexa2MaxMinutes,
-			apcups: this.config.apcupsMaxMinutes,
-			ble: this.config.bleMaxMinutes,
-			deconz: this.config.deconzMaxMinutes,
-			ecovacsdeebot: this.config.ecovacsdeebotMaxMinutes,
-			enocean: this.config.enoceanMaxMinutes,
-			esphome: this.config.esphomeMaxMinutes,
-			eusec: this.config.eusecMaxMinutes,
-			fhemTFAsensors: this.config.fhemTFAsensorsMaxMinutes,
-			freeair: this.config.freeairMaxMinutes,
-			fritzdect: this.config.fritzdectMaxMinutes,
-			fullybrowser: this.config.fullybrowserMaxMinutes,
-			fullybrowserV3: this.config.fullybrowserV3MaxMinutes,
-			fullyMQTT: this.config.fullyMQTTMaxMinutes,
-			ham: this.config.hamMaxMinutes,
-			harmony: this.config.harmonyMaxMinutes,
-			hmiP: this.config.hmiPMaxMinutes,
-			hmrpc: this.config.hmrpcMaxMinutes,
-			homeconnect: this.config.homeconnectMaxMinutes,
-			homekitController: this.config.homekitControllerMaxMinutes,
-			hs100: this.config.hs100MaxMinutes,
-			hue: this.config.hueMaxMinutes,
-			hueExt: this.config.hueextMaxMinutes,
-			innogy: this.config.innogyMaxMinutes,
-			jeelink: this.config.jeelinkMaxMinutes,
-			loqedSmartLock: this.config.loqedSmartLockMaxMinutes,
-			lupusec: this.config.lupusecMaxMinutes,
-			maxcube: this.config.maxcubeMaxMinutes,
-			meross: this.config.merossMaxMinutes,
-			mihome: this.config.mihomeMaxMinutes,
-			mihomeGW: this.config.mihomeMaxMinutes,
-			mihomeVacuum: this.config.mihomeVacuumMaxMinutes,
-			mqttClientZigbee2Mqtt: this.config.mqttClientZigbee2MqttMaxMinutes,
-			mqttNuki: this.config.mqttNukiMaxMinutes,
-			musiccast: this.config.musiccastMaxMinutes,
-			netatmo: this.config.netatmoMaxMinutes,
-			nukiExt: this.config.nukiextendMaxMinutes,
-			nut: this.config.nutMaxMinutes,
-			ping: this.config.pingMaxMinutes,
-			proxmox: this.config.proxmoxMaxMinutes,
-			ring: this.config.ringMaxMinutes,
-			roomba: this.config.roombaMaxMinutes,
-			shelly: this.config.shellyMaxMinutes,
-			smartgarden: this.config.smartgardenMaxMinutes,
-			sonoff: this.config.sonoffMaxMinutes,
-			sonos: this.config.sonosMaxMinutes,
-			sureflap: this.config.sureflapMaxMinutes,
-			switchbotBle: this.config.switchbotMaxMinutes,
-			tado: this.config.tadoMaxMinutes,
-			tapo: this.config.tapoMaxMinutes,
-			tradfri: this.config.tradfriMaxMinutes,
-			tuya: this.config.tuyaMaxMinutes,
-			unifi: this.config.unifiMaxMinutes,
-			'unifi-network': this.config.unifiNetworkMaxMinutes,
-			viessmann: this.config.viessmannMaxMinutes,
-			wifilight: this.config.wifilightMaxMinutes,
-			wled: this.config.wledMaxMinutes,
-			xsense: this.config.xsenseMaxMinutes,
-			yeelight: this.config.yeelightMaxMinutes,
-			zigbee: this.config.zigbeeMaxMinutes,
-			zigbee2MQTT: this.config.zigbee2mqttMaxMinutes,
-			zwave2: this.config.zwaveMaxMinutes,
-		};
-
 		try {
-			// create list with selected adapters for monitor devices
-			for (const [id] of Object.entries(arrApart)) {
-				if (this.configSetAdapter[id]) {
-					this.selAdapter.push(arrApart[id]);
-					this.adapterSelected.push(tools.capitalize(id));
-				}
-			}
+			// create list with enabled adapters for monitor devices
+			Object.values(this.config.tableDevices)
+				.filter((device) => device.enabled)
+				.forEach((device) => {
+					const entry = Object.entries(arrApart).find(([adapterName, adapter]) => adapter.adapterKey === device.adapterKey);
+					if (entry) {
+						const [adapterName, adapter] = entry;
+						this.selAdapter.push(adapter);
+						this.adapterSelected.push(tools.capitalize(adapterName));
+					}
+				});
 
 			// Check if an adapter to monitor devices is selected.
 			if (this.adapterSelected.length >= 1) {
@@ -275,7 +149,9 @@ class DeviceWatcher extends utils.Adapter {
 						await crud.deleteDPsForEachAdapter(this, id);
 						await crud.deleteHtmlListDatapoints(this, id);
 					} else {
-						if (this.configSetAdapter && this.configSetAdapter[id]) {
+						const adapter = arrApart[id];
+
+						if (this.adapterSelected.includes(adapter.adapter)) {
 							await crud.createDPsForEachAdapter(this, id);
 							// create HTML list datapoints
 							if (!this.configCreateHtmlList) {
@@ -384,7 +260,9 @@ class DeviceWatcher extends utils.Adapter {
 		if (this.configCreateOwnFolder) {
 			try {
 				for (const [id] of Object.entries(arrApart)) {
-					if (this.configSetAdapter && this.configSetAdapter[id]) {
+					const adapter = arrApart[id];
+
+					if (this.adapterSelected.includes(adapter.adapter)) {
 						for (const deviceData of this.listAllDevicesRaw.values()) {
 							// list device only if selected adapter matched with device
 							if (!deviceData.adapterID.includes(id)) {
@@ -407,12 +285,7 @@ class DeviceWatcher extends utils.Adapter {
 	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
 	// You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
 	//
-	/**
-	 * Is called if a subscribed object changes
-	 *
-	 * @param {string} id
-	 * @param {ioBroker.Object | null | undefined} obj
-	 */
+
 	async onObjectChange(id, obj) {
 		if (obj) {
 			try {
@@ -460,12 +333,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-	/**
-	 * Is called if a subscribed state changes
-	 *
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
 	async onStateChange(id, state) {
 		if (state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
@@ -499,9 +366,6 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
-	/**
-	 * @param {ioBroker.Message} obj
-	 */
 	onMessage(obj) {
 		const devices = [];
 		const instances = [];
@@ -605,7 +469,9 @@ class DeviceWatcher extends utils.Adapter {
 		// devices data in own adapter folder
 		if (this.configCreateOwnFolder) {
 			for (const [id] of Object.entries(arrApart)) {
-				if (this.configSetAdapter && this.configSetAdapter[id]) {
+				const adapter = arrApart[id];
+
+				if (this.adapterSelected.includes(adapter.adapter)) {
 					await crud.createLists(this, id);
 					await crud.writeDatapoints(this, id);
 					this.log.debug(`Created and filled data for ${tools.capitalize(id)}`);
@@ -816,6 +682,19 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryHealthUnitRaw;
 
 		switch (adapterID) {
+			case 'lupusec':
+				if (deviceBatteryState === undefined) {
+					if (deviceBatteryState === undefined) {
+						if (deviceLowBatState === 1) {
+							batteryHealth = 'ok';
+							isBatteryDevice = true;
+						} else {
+							batteryHealth = 'low';
+							isBatteryDevice = true;
+						}
+					}
+				}
+				break;
 			case 'hmrpc':
 				if (deviceBatteryState === undefined) {
 					if (faultReportingState !== undefined && faultReportingState !== 6) {
@@ -860,7 +739,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 			default:
 				if (deviceBatteryState === undefined) {
-					if (deviceLowBatState !== undefined) {
+					if (deviceBatteryState === undefined) {
 						if (deviceLowBatState !== true && deviceLowBatState !== 'NORMAL' && deviceLowBatState !== 1) {
 							batteryHealth = 'ok';
 							isBatteryDevice = true;
@@ -961,6 +840,7 @@ class DeviceWatcher extends utils.Adapter {
 	async getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorHMRPC, rssiPeerSelectorHMRPC) {
 		let lastContactString;
 		let deviceState = 'Online';
+		let linkQualitySet = linkQuality;
 
 		try {
 			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
@@ -973,7 +853,7 @@ class DeviceWatcher extends utils.Adapter {
 				const is_device_disabled = await tools.isDisabledDevice(this, unreachDP.substring(0, unreachDP.lastIndexOf('.')));
 
 				if (is_device_disabled) {
-					return [null, 'disabled', '0%'];
+					return [null, 'disabled', ' - '];
 				}
 			}
 
@@ -1019,165 +899,146 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			/*=============================================
-					=            Set Online Status             =
-					=============================================*/
+			=            Set Online Status             =
+			=============================================*/
 			let lastContact;
 			if (deviceTimeSelector) {
 				lastContact = tools.getTimestamp(deviceTimeSelector.ts);
 			}
 
-			if (this.configMaxMinutes !== undefined) {
-				switch (adapterID) {
-					case 'hmrpc':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState === 1) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState === 1) {
+			const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === adapterID);
+			const device = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
+			const maxSecondDevicesOffline = device.maxSecondDevicesOffline;
+
+			this.log.debug(`getOnline ${device} maxSecondDevicesOffline ${maxSecondDevicesOffline}`);
+
+			switch (adapterID) {
+				case 'hmrpc':
+					if (maxSecondDevicesOffline <= 0) {
+						if (deviceUnreachState === 1) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
-						break;
-					case 'proxmox':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
+					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState === 1) {
+						deviceState = 'Offline'; //set online state to offline
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						} // set linkQuality to nothing
+					}
+					break;
+				case 'proxmox':
+					if (maxSecondDevicesOffline <= 0) {
+						if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
-						break;
-					case 'hmiP':
-					case 'maxcube':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID] && deviceUnreachState) {
+					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
+						deviceState = 'Offline'; //set online state to offline
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						} // set linkQuality to nothing
+					}
+					break;
+				case 'hmiP':
+				case 'maxcube':
+					if (maxSecondDevicesOffline <= 0) {
+						if (deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
-						break;
-					case 'apcups':
-					case 'hue':
-					case 'hueExt':
-					case 'ping':
-					case 'deconz':
-					case 'shelly':
-					case 'sonoff':
-					case 'tradfri':
-					case 'unifi':
-					case 'zigbee':
-					case 'zigbee2MQTT':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (!deviceUnreachState) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (!deviceUnreachState && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
+					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState) {
+						deviceState = 'Offline'; //set online state to offline
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						} // set linkQuality to nothing
+					}
+					break;
+				case 'apcups':
+				case 'hue':
+				case 'hueExt':
+				case 'ping':
+				case 'deconz':
+				case 'shelly':
+				case 'sonoff':
+				case 'tradfri':
+				case 'unifi':
+				case 'zigbee':
+				case 'zigbee2MQTT':
+					if (maxSecondDevicesOffline <= 0) {
+						if (!deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
-						break;
-					case 'mqttClientZigbee2Mqtt':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState !== 'online') {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
+					} else if (!deviceUnreachState && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
+						deviceState = 'Offline'; //set online state to offline
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						} // set linkQuality to nothing
+					}
+					break;
+				case 'mqttClientZigbee2Mqtt':
+					if (maxSecondDevicesOffline <= 0) {
+						if (deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
-						break;
-					case 'mihome':
-						if (deviceUnreachState !== undefined) {
-							if (this.configMaxMinutes[adapterID] <= 0) {
-								if (!deviceUnreachState) {
-									deviceState = 'Offline'; //set online state to offline
-									if (linkQuality !== ' - ') {
-										linkQuality = '0%';
-									} // set linkQuality to nothing
-								}
-							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else {
-							if (this.config.mihomeMaxMinutes <= 0) {
-								if (this.configMaxMinutes[adapterID] <= 0) {
-									deviceState = 'Offline'; //set online state to offline
-									if (linkQuality !== ' - ') {
-										linkQuality = '0%';
-									} // set linkQuality to nothing
-								}
-							} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
+					} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
+						deviceState = 'Offline'; //set online state to offline
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
 						}
-						break;
-					case 'smartgarden':
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (deviceUnreachState === 'OFFLINE') {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > this.configMaxMinutes[adapterID]) {
+					}
+					break;
+				case 'mihome':
+					const offlineByTime = maxSecondDevicesOffline <= 0 || (lastContact && lastContact > maxSecondDevicesOffline);
+					const offlineByState = deviceUnreachState !== undefined ? !deviceUnreachState && offlineByTime : offlineByTime;
+
+					if (offlineByState) {
+						deviceState = 'Offline';
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						}
+					}
+					break;
+				case 'smartgarden':
+					if (maxSecondDevicesOffline <= 0) {
+						if (deviceUnreachState === 'OFFLINE') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
-						break;
-					default:
-						if (this.configMaxMinutes[adapterID] <= 0) {
-							if (!deviceUnreachState) {
-								deviceState = 'Offline'; //set online state to offline
-								if (linkQuality !== ' - ') {
-									linkQuality = '0%';
-								} // set linkQuality to nothing
-							}
-						} else if (lastContact && lastContact > this.configMaxMinutes[adapterID]) {
-							deviceState = 'Offline'; //set online state to offline
-							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
-							} // set linkQuality to nothing
-						}
-						break;
-				}
+					} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
+						deviceState = 'Offline'; //set online state to offline
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						} // set linkQuality to nothing
+					}
+					break;
+				default:
+					// Gerät gilt als offline, wenn es unerreichbar ist und keine Wartezeit definiert ist, oder wenn der letzte Kontakt zu lange her ist
+					const shouldBeOffline = (!deviceUnreachState && maxSecondDevicesOffline <= 0) || (lastContact && lastContact > maxSecondDevicesOffline);
+
+					if (shouldBeOffline) {
+						deviceState = 'Offline'; // Gerät auf offline setzen
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						} // Linkqualität auf 0% setzen
+					}
+					break;
 			}
-			return [lastContactString, deviceState, linkQuality];
+
+			return [lastContactString, deviceState, linkQualitySet];
 		} catch (error) {
 			this.log.error(`[getLastContact] - ${error}`);
 		}
@@ -1188,31 +1049,22 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string | number | boolean | null} deviceUpdateSelector
 	 */
 	async checkDeviceUpdate(adapterID, deviceUpdateSelector) {
-		let isUpgradable;
+		let isUpgradable = false;
 
 		switch (adapterID) {
 			case 'hmiP':
-				if (deviceUpdateSelector === 'UPDATE_AVAILABLE') {
-					isUpgradable = true;
-				} else {
-					isUpgradable = false;
-				}
+				isUpgradable = deviceUpdateSelector === 'UPDATE_AVAILABLE';
 				break;
+
 			case 'ring':
-				if (deviceUpdateSelector !== 'Up to Date') {
-					isUpgradable = true;
-				} else {
-					isUpgradable = false;
+				isUpgradable = deviceUpdateSelector !== 'Up to Date';
+				break;
+
+			default:
+				if (typeof deviceUpdateSelector === 'boolean') {
+					isUpgradable = deviceUpdateSelector;
 				}
 				break;
-			default:
-				if (deviceUpdateSelector !== null && typeof deviceUpdateSelector === 'boolean') {
-					if (deviceUpdateSelector) {
-						isUpgradable = true;
-					} else if (!deviceUpdateSelector) {
-						isUpgradable = false;
-					}
-				}
 		}
 
 		return isUpgradable;
@@ -1315,6 +1167,9 @@ class DeviceWatcher extends utils.Adapter {
 		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
 		const deviceData = this.listAllDevicesRaw.get(deviceID);
 
+		const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === deviceData.adapterID);
+		const silentEnabled = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
+
 		if (deviceData) {
 			// On statechange update available datapoint
 			switch (id) {
@@ -1331,7 +1186,7 @@ class DeviceWatcher extends utils.Adapter {
 						deviceData.Upgradable = await this.checkDeviceUpdate(deviceData.adapterID, state.val);
 						if (deviceData.Upgradable === true) {
 							if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('Devices', 'updateDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'updateDevice', deviceID, silentEnabled.telegramSilent);
 							}
 						}
 					}
@@ -1365,7 +1220,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
 							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID, silentEnabled.telegramSilent);
 							}
 						}
 					}
@@ -1383,7 +1238,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
 							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID, silentEnabled.telegramSilent);
 							}
 						}
 					}
@@ -1402,7 +1257,7 @@ class DeviceWatcher extends utils.Adapter {
 
 						if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
 							if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
-								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID);
+								await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID, silentEnabled.telegramSilent);
 							}
 						}
 					}
@@ -1431,12 +1286,11 @@ class DeviceWatcher extends utils.Adapter {
 							if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
 								// check if the generally deviceData connected state is for a while true
 								if (await tools.getTimestampConnectionDP(this, deviceData.instanceDeviceConnectionDP, 50000)) {
-									await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID);
+									await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID, silentEnabled.telegramSilent);
 								}
 							}
 						}
 					}
-					break;
 			}
 		}
 	}
@@ -2018,8 +1872,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * Notification service
 	 *
 	 * @param {string} text - Text which should be send
+	 * @param silent
 	 */
-	async sendNotification(text) {
+	async sendNotification(text, silent = false) {
 		// Pushover
 		if (this.config.instancePushover) {
 			try {
@@ -2055,6 +1910,7 @@ class DeviceWatcher extends utils.Adapter {
 						text: text,
 						user: this.config.deviceTelegram,
 						chatId: this.config.chatIdTelegram,
+						disable_notification: silent,
 					});
 				}
 			} catch (error) {
@@ -2207,8 +2063,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} mainType
 	 * @param {string} type
 	 * @param {object} id
+	 * @param silent
 	 */
-	async sendStateNotifications(mainType, type, id) {
+	async sendStateNotifications(mainType, type, id, silent = false) {
 		if (isUnloaded) {
 			return;
 		}
@@ -2229,7 +2086,7 @@ class DeviceWatcher extends utils.Adapter {
 		const setMessage = async (message) => {
 			this.log.info(message);
 			await this.setStateAsync('lastNotification', message, true);
-			await this.sendNotification(message);
+			await this.sendNotification(message, silent);
 		};
 
 		switch (type) {
@@ -2284,8 +2141,9 @@ class DeviceWatcher extends utils.Adapter {
 	 * Notifications per user defined schedule
 	 *
 	 * @param {string} type
+	 * @param silent
 	 */
-	async sendScheduleNotifications(type) {
+	async sendScheduleNotifications(type, silent = false) {
 		if (isUnloaded) {
 			return;
 		}
@@ -2299,7 +2157,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.info(message);
 			await this.setStateAsync('lastNotification', message, true);
 			if (!message.includes('no updates')) {
-				await this.sendNotification(message);
+				await this.sendNotification(message, silent);
 			}
 		};
 

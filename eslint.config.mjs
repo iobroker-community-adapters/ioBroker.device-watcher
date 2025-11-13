@@ -27,6 +27,7 @@ export default [
         rules: {
              'jsdoc/no-blank-blocks': 'off',
              'no-prototype-builtins': 'off',
+             'no-case-declarations': 'warn',
              '@typescript-eslint/no-unused-vars': 'warn',
             // 'jsdoc/require-returns-description': 'off',
             // 'jsdoc/require-returns-check': 'off',
