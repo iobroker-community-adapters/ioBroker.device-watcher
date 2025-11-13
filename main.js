@@ -3,6 +3,7 @@
 const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 const schedule = require('node-schedule');
+const cronParserLib = require('cron-parser');
 const arrApart = require('./lib/arrApart.js'); // list of supported adapters
 const translations = require('./lib/translations.js');
 const tools = require('./lib/tools.js');
@@ -1499,7 +1500,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (isAliveSchedule) {
 			lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
-			previousCronRun = tools.getPreviousCronRun(this, scheduleTime); // When was the last cron run
+			previousCronRun = this.getPreviousCronRun(scheduleTime); // When was the last cron run
 			if (previousCronRun) {
 				lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
 				diff = lastCronRun - lastUpdate;
@@ -2299,6 +2300,19 @@ class DeviceWatcher extends utils.Adapter {
 					await processNotification(list, 'deactivated_instances_msg');
 				});
 				break;
+		}
+	}
+	async getPreviousCronRun(lastCronRun) {
+		try {
+			const cronParser = cronParserLib.parseExpression
+				? cronParserLib // klassischer Import
+				: cronParserLib.default; // ESM-Fallback
+
+			const interval = cronParser.parseExpression(lastCronRun);
+			const previous = interval.prev();
+			return Math.floor(Date.now() - previous.getTime()); // in ms
+		} catch (error) {
+			this.log.error(`[getPreviousCronRun] - ${error}`);
 		}
 	}
 

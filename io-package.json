@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.0",
+    "version": "2.14.1",
     "news": {
+      "2.14.1": {
+        "en": "corr cronparser",
+        "de": "korr cronparser",
+        "ru": "кронпарсер",
+        "pt": "corr cronparser",
+        "nl": "corr cronparser",
+        "fr": "corr cronparser",
+        "it": "corr cronparser",
+        "es": "corr cronparser",
+        "pl": "corr cronparser",
+        "uk": "cron-пара",
+        "zh-cn": "圆锥螺旋桨"
+      },
       "2.14.0": {
         "en": "Dependencies have been fixed\nping adapter have been fixed\noptimisations for adapter without info.connection state \nclean code\nsilent notification for telegram\nadd matter devices\ncorr lupusec battery state",
         "de": "Abhängigkeiten wurden behoben\nping adapter wurden fixiert\noptimierungen für adapter ohne info. verbindungszustand\nreiner code\nstille benachrichtigung für telegramm\nhinzufügen von geräten\nkorr lupusec batteriezustand",
@@ -80,19 +93,6 @@
         "pl": "ignoruj wyłączone urządzenia zigbee2mqtt\nfix proxmox\ndodaj proxmox nowe żądanie struktury",
         "uk": "ігнорувати zigbee2mqtt вимкнені пристрої\nфіксатор проксмокс\nдодати проксмокс новий порядок структури",
         "zh-cn": "忽略已禁用的 zigbee2mqtt 设备\n修补proxmox\n添加正则结构请求"
-      },
-      "2.12.3": {
-        "en": "add XSense\nfix Sonoff Name\nDependencies have been updated",
-        "de": "xSense hinzufügen\nsonoff Name entfernen\nAbhängigkeiten wurden aktualisiert",
-        "ru": "добавить XSense\nоригинальное название Sonoff\nЗависимости были обновлены",
-        "pt": "adicionar XSense\ncorrigir o Nome do Sonoff\nAs dependências foram atualizadas",
-        "nl": "xSense toevoegen\nfix Sonoff Naam\nAfhankelijkheden zijn bijgewerkt",
-        "fr": "ajouter XSense\ncorrection du nom de sonoff\nLes dépendances ont été actualisées",
-        "it": "aggiungere XSense\ncorrezione Nome Sonoff\nLe dipendenze sono state aggiornate",
-        "es": "añadir XSense\nnombre de Sonoff\nSe han actualizado las dependencias",
-        "pl": "dodaj XSense\nfix Sonoff Name\nZaktualizowano zależności",
-        "uk": "додати XSense\nфіксувати ім'я Sonoff\nЗалежність було оновлено",
-        "zh-cn": "添加 X 语句\n修复 Sonoff 名称\n依赖关系已更新"
       }
     },
     "titleLang": {
