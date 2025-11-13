@@ -815,16 +815,24 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} selector - Selector
 	 */
 	async getLastContact(selector) {
-		const lastContact = tools.getTimestamp(selector);
+		const lastContact = tools.getTimestamp(selector); // z. B. Differenz in Sekunden?
 		let lastContactString;
 
+		// Wenn du den Timestamp direkt formatiert ausgeben willst:
 		lastContactString = `${this.formatDate(new Date(selector), 'hh:mm:ss')}`;
-		if (Math.round(lastContact) > 100) {
-			lastContactString = `${Math.round(lastContact / 60)} ${translations.hours[this.config.userSelectedLanguage]}`;
+
+		// Falls du die vergangene Zeit in Sekunden anzeigen willst:
+		if (Math.round(lastContact) >= 0) {
+			lastContactString = `${Math.round(lastContact)} ${translations.secs[this.config.userSelectedLanguage]}`;
 		}
-		if (Math.round(lastContact / 60) > 48) {
-			lastContactString = `${Math.round(lastContact / 60 / 24)} ${translations.days[this.config.userSelectedLanguage]}`;
+
+		// Optional: Wenn du ab einem bestimmten Wert lieber Minuten oder Stunden willst
+		if (lastContact >= 3600) {
+			lastContactString = `${(lastContact / 3600).toFixed(1)} ${translations.hours[this.config.userSelectedLanguage]}`;
+		} else {
+			lastContactString = `${Math.round(lastContact / 60)} ${translations.minits[this.config.userSelectedLanguage]}`;
 		}
+
 		return lastContactString;
 	}
 
@@ -863,8 +871,9 @@ class DeviceWatcher extends utils.Adapter {
 			// calculate to days after 48 hours
 			switch (unreachDP) {
 				case 'none':
-					if (deviceTimeSelector)
+					if (deviceTimeSelector) {
 						lastContactString = await this.getLastContact(deviceTimeSelector.ts);
+					}
 					break;
 
 				default:
@@ -886,7 +895,6 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 			}
-
 
 			/*=============================================
 			=            Set Online Status             =
@@ -1015,7 +1023,17 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 				default:
 					// Gerät gilt als offline, wenn es unerreichbar ist und keine Wartezeit definiert ist, oder wenn der letzte Kontakt zu lange her ist als Wartezeit
-					const shouldBeOffline = (!deviceUnreachState && maxSecondDevicesOffline <= 0) || (lastContact && lastContact > maxSecondDevicesOffline);
+					let shouldBeOffline = false;
+
+					if (!deviceUnreachState && maxSecondDevicesOffline <= 0) {
+						shouldBeOffline = true;
+					}
+
+					if (maxSecondDevicesOffline > 0) {
+						if (lastContact && lastContact > maxSecondDevicesOffline) {
+							shouldBeOffline = true;
+						}
+					}
 
 					if (shouldBeOffline) {
 						deviceState = 'Offline'; // Gerät auf offline setzen
@@ -1145,6 +1163,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {ioBroker.State} state
 	 */
 	async renewDeviceData(id, state) {
+		const regex = /^([^.]+\.\d+\.[^.]+)/;
 		let batteryData;
 		let signalData;
 		let oldLowBatState;
@@ -1152,15 +1171,14 @@ class DeviceWatcher extends utils.Adapter {
 		let oldStatus;
 		let isLowBatValue;
 
-		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
+		const deviceID = id.match(regex)[1];
 		const deviceData = this.listAllDevicesRaw.get(deviceID);
 
 		this.log.debug(`[renewDeviceData] - ${id}`);
-		
-		const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === deviceData.adapterID);
-		const silentEnabled = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
-
 		if (deviceData) {
+			const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === deviceData.adapterID);
+			const silentEnabled = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
+
 			// On statechange update available datapoint
 			switch (id) {
 				// device connection
@@ -2304,7 +2322,6 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.error(`[getPreviousCronRun] - ${error}`);
 		}
 	}
-
 
 	/**
 	 * @param {() => void} callback

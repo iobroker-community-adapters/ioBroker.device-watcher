@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.2",
+    "version": "2.14.3",
     "news": {
+      "2.14.3": {
+        "en": "corr offline devices",
+        "de": "corr offline-geräte",
+        "ru": "offline устройства",
+        "pt": "dispositivos off- line",
+        "nl": "corr offline apparaten",
+        "fr": "corr périphériques hors ligne",
+        "it": "dispositivi offline corr",
+        "es": "dispositivos sin conexión",
+        "pl": "korr urządzenia offline",
+        "uk": "пристрої транзисторні",
+        "zh-cn": "离线设备"
+      },
       "2.14.2": {
         "en": "corr finder",
         "de": "korrfinder",
@@ -80,19 +93,6 @@
         "pl": "naprawić wiadomość wysyłającą",
         "uk": "фіксувати надсилання повідомлення",
         "zh-cn": "修复发送消息"
-      },
-      "2.12.5": {
-        "en": "fix translation\nfix htmllist output",
-        "de": "bersetzung\nhtmllist ausgeben",
-        "ru": "перевод\nфиксировать выход htmll",
-        "pt": "corrigir tradução\ncorrigir saída htmllist",
-        "nl": "fix vertaling\nhtmllist uitvoer repareren",
-        "fr": "corriger la traduction\ncorriger la sortie htmllist",
-        "it": "correzione della traduzione\nfix htmllist output",
-        "es": "traducción\nfijar la salida htmllist",
-        "pl": "tłumaczenie\nfix htmllist output",
-        "uk": "фіксувати переклад\nвиправлення htmllist виведення",
-        "zh-cn": "固定翻译\n修正 htmllist 输出"
       }
     },
     "titleLang": {
@@ -219,7 +219,8 @@
           "cancel"
         ]
       }
-    ]
+    ],
+    "installedFrom": "iobroker-community-adapters/ioBroker.device-watcher#2cc0beea46e573bb5af6c052bbfacea07dc7b5d8"
   },
   "native": {
     "checkAdapterInstances": false,
@@ -449,6 +450,13 @@
         "enabled": false,
         "adapterName": "Home Connect",
         "adapterKey": "homeconnectDevices",
+        "telegramSilent": false,
+        "maxSecondDevicesOffline": 0
+      },
+      {
+        "enabled": false,
+        "adapterName": "Homee",
+        "adapterKey": "homeeDevices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
       },

@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.14.3 (2025-11-13)
+* (arteck) corr offline devices
+
 ### 2.14.2 (2025-11-13)
 * (arteck) corr finder
 
