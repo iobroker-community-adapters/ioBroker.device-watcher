@@ -58,7 +58,7 @@
 							title: 'Offline Time for devices/services',
 							attr: 'maxSecondDevicesOffline',
 							width: '20%',
-							min: 0,
+							min: -1,
 							max: 100000,
 							default: 0,
 							unit: 'sec',
