@@ -201,6 +201,7 @@ This adapter would not have been possible without the great work of Christian Be
 * (arteck) clean code
 * (arteck) silent notification for telegram
 * (arteck) add matter devices
+* (arteck) corr lupusec battery state
 
 ### 2.13.1 (2025-09-06)
 * (arteck) Dependencies have been fixed

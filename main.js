@@ -686,6 +686,19 @@ class DeviceWatcher extends utils.Adapter {
 		let batteryHealthUnitRaw;
 
 		switch (adapterID) {
+			case 'lupusec':
+				if (deviceBatteryState === undefined) {
+					if (deviceBatteryState === undefined) {
+						if (deviceLowBatState === 1) {
+							batteryHealth = 'ok';
+							isBatteryDevice = true;
+						} else {
+							batteryHealth = 'low';
+							isBatteryDevice = true;
+						}
+					}
+				}
+				break;
 			case 'hmrpc':
 				if (deviceBatteryState === undefined) {
 					if (faultReportingState !== undefined && faultReportingState !== 6) {
@@ -730,7 +743,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 			default:
 				if (deviceBatteryState === undefined) {
-					if (deviceLowBatState !== undefined) {
+					if (deviceBatteryState === undefined) {
 						if (deviceLowBatState !== true && deviceLowBatState !== 'NORMAL' && deviceLowBatState !== 1) {
 							batteryHealth = 'ok';
 							isBatteryDevice = true;
