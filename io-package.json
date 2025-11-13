@@ -741,8 +741,8 @@
       },
       {
         "enabled": false,
-        "adapterName": "Zwave",
-        "adapterKey": "zwaveDevices",
+        "adapterName": "Zwave2",
+        "adapterKey": "zwave2Devices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
       }
