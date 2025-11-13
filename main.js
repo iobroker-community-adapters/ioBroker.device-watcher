@@ -116,18 +116,15 @@ class DeviceWatcher extends utils.Adapter {
 		try {
 			// create list with enabled adapters for monitor devices
 			Object.values(this.config.tableDevices)
-			  .filter(device => device.enabled)
-			  .forEach(device => {
-				const entry = Object.entries(arrApart).find(([adapterName, adapter]) =>
-				  adapter.adapterKey === device.adapterKey
-				);
-				if (entry) {
-				  const [adapterName, adapter] = entry;
-				  this.selAdapter.push(adapter);
-				  this.adapterSelected.push(tools.capitalize(adapterName));
-				}
-			  });
-
+				.filter((device) => device.enabled)
+				.forEach((device) => {
+					const entry = Object.entries(arrApart).find(([adapterName, adapter]) => adapter.adapterKey === device.adapterKey);
+					if (entry) {
+						const [adapterName, adapter] = entry;
+						this.selAdapter.push(adapter);
+						this.adapterSelected.push(tools.capitalize(adapterName));
+					}
+				});
 
 			// Check if an adapter to monitor devices is selected.
 			if (this.adapterSelected.length >= 1) {
@@ -368,7 +365,6 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.debug(`state ${id} deleted`);
 		}
 	}
-
 
 	onMessage(obj) {
 		const devices = [];
@@ -844,6 +840,7 @@ class DeviceWatcher extends utils.Adapter {
 	async getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorHMRPC, rssiPeerSelectorHMRPC) {
 		let lastContactString;
 		let deviceState = 'Online';
+		let linkQualitySet = linkQuality;
 
 		try {
 			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
@@ -856,7 +853,7 @@ class DeviceWatcher extends utils.Adapter {
 				const is_device_disabled = await tools.isDisabledDevice(this, unreachDP.substring(0, unreachDP.lastIndexOf('.')));
 
 				if (is_device_disabled) {
-					return [null, 'disabled', '0%'];
+					return [null, 'disabled', ' - '];
 				}
 			}
 
@@ -909,9 +906,9 @@ class DeviceWatcher extends utils.Adapter {
 				lastContact = tools.getTimestamp(deviceTimeSelector.ts);
 			}
 
-			const gefundenerAdapter		= Object.values(arrApart).find(adapter => adapter.adapterID === adapterID);
-			const device 					= Object.values(this.config.tableDevices).find(adapter => adapter.adapterKey === gefundenerAdapter.adapterKey);
-			const maxSecondDevicesOffline 	= device.maxSecondDevicesOffline;
+			const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === adapterID);
+			const device = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
+			const maxSecondDevicesOffline = device.maxSecondDevicesOffline;
 
 			this.log.debug(`getOnline ${device} maxSecondDevicesOffline ${maxSecondDevicesOffline}`);
 
@@ -921,13 +918,13 @@ class DeviceWatcher extends utils.Adapter {
 						if (deviceUnreachState === 1) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
 					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState === 1) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
-							linkQuality = '0%';
+							linkQualitySet = '0%';
 						} // set linkQuality to nothing
 					}
 					break;
@@ -936,13 +933,13 @@ class DeviceWatcher extends utils.Adapter {
 						if (deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
 					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState !== 'running' && deviceUnreachState !== 'online') {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
-							linkQuality = '0%';
+							linkQualitySet = '0%';
 						} // set linkQuality to nothing
 					}
 					break;
@@ -952,13 +949,13 @@ class DeviceWatcher extends utils.Adapter {
 						if (deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
 					} else if (lastDeviceUnreachStateChange > maxSecondDevicesOffline && deviceUnreachState) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
-							linkQuality = '0%';
+							linkQualitySet = '0%';
 						} // set linkQuality to nothing
 					}
 					break;
@@ -977,13 +974,13 @@ class DeviceWatcher extends utils.Adapter {
 						if (!deviceUnreachState) {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
 					} else if (!deviceUnreachState && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
-							linkQuality = '0%';
+							linkQualitySet = '0%';
 						} // set linkQuality to nothing
 					}
 					break;
@@ -992,23 +989,25 @@ class DeviceWatcher extends utils.Adapter {
 						if (deviceUnreachState !== 'online') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
 					} else if (deviceUnreachState !== 'online' && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
-							linkQuality = '0%';
-						} // set linkQuality to nothing
+							linkQualitySet = '0%';
+						}
 					}
 					break;
 				case 'mihome':
 					const offlineByTime = maxSecondDevicesOffline <= 0 || (lastContact && lastContact > maxSecondDevicesOffline);
-					const offlineByState = deviceUnreachState !== undefined ? (!deviceUnreachState && offlineByTime) : offlineByTime;
+					const offlineByState = deviceUnreachState !== undefined ? !deviceUnreachState && offlineByTime : offlineByTime;
 
 					if (offlineByState) {
 						deviceState = 'Offline';
-						if (linkQuality !== ' - ') linkQuality = '0%';
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						}
 					}
 					break;
 				case 'smartgarden':
@@ -1016,30 +1015,30 @@ class DeviceWatcher extends utils.Adapter {
 						if (deviceUnreachState === 'OFFLINE') {
 							deviceState = 'Offline'; //set online state to offline
 							if (linkQuality !== ' - ') {
-								linkQuality = '0%';
+								linkQualitySet = '0%';
 							} // set linkQuality to nothing
 						}
 					} else if (deviceUnreachState === 'OFFLINE' && lastDeviceUnreachStateChange > maxSecondDevicesOffline) {
 						deviceState = 'Offline'; //set online state to offline
 						if (linkQuality !== ' - ') {
-							linkQuality = '0%';
+							linkQualitySet = '0%';
 						} // set linkQuality to nothing
 					}
 					break;
 				default:
 					// Gerät gilt als offline, wenn es unerreichbar ist und keine Wartezeit definiert ist, oder wenn der letzte Kontakt zu lange her ist
-					const shouldBeOffline =
-						(!deviceUnreachState && maxSecondDevicesOffline <= 0) ||
-						(lastContact && lastContact > maxSecondDevicesOffline);
+					const shouldBeOffline = (!deviceUnreachState && maxSecondDevicesOffline <= 0) || (lastContact && lastContact > maxSecondDevicesOffline);
 
 					if (shouldBeOffline) {
 						deviceState = 'Offline'; // Gerät auf offline setzen
-						if (linkQuality !== ' - ') linkQuality = '0%'; // Linkqualität auf 0% setzen
+						if (linkQuality !== ' - ') {
+							linkQualitySet = '0%';
+						} // Linkqualität auf 0% setzen
 					}
 					break;
 			}
 
-			return [lastContactString, deviceState, linkQuality];
+			return [lastContactString, deviceState, linkQualitySet];
 		} catch (error) {
 			this.log.error(`[getLastContact] - ${error}`);
 		}
@@ -1050,27 +1049,26 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string | number | boolean | null} deviceUpdateSelector
 	 */
 	async checkDeviceUpdate(adapterID, deviceUpdateSelector) {
-	let isUpgradable = false;
+		let isUpgradable = false;
 
-	switch (adapterID) {
-		case 'hmiP':
-			isUpgradable = deviceUpdateSelector === 'UPDATE_AVAILABLE';
-			break;
+		switch (adapterID) {
+			case 'hmiP':
+				isUpgradable = deviceUpdateSelector === 'UPDATE_AVAILABLE';
+				break;
 
-		case 'ring':
-			isUpgradable = deviceUpdateSelector !== 'Up to Date';
-			break;
+			case 'ring':
+				isUpgradable = deviceUpdateSelector !== 'Up to Date';
+				break;
 
-		default:
-			if (typeof deviceUpdateSelector === 'boolean') {
-				isUpgradable = deviceUpdateSelector;
-			}
-			break;
+			default:
+				if (typeof deviceUpdateSelector === 'boolean') {
+					isUpgradable = deviceUpdateSelector;
+				}
+				break;
+		}
+
+		return isUpgradable;
 	}
-
-	return isUpgradable;
-}
-
 
 	/**
 	 * fill the lists for user
@@ -1169,8 +1167,8 @@ class DeviceWatcher extends utils.Adapter {
 		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
 		const deviceData = this.listAllDevicesRaw.get(deviceID);
 
-		const gefundenerAdapter = Object.values(arrApart).find(adapter => adapter.adapterID === deviceData.adapterID);
-		const silentEnabled = Object.values(this.config.tableDevices).find(adapter => adapter.adapterKey === gefundenerAdapter.adapterKey);
+		const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === deviceData.adapterID);
+		const silentEnabled = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
 
 		if (deviceData) {
 			// On statechange update available datapoint
@@ -1874,6 +1872,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * Notification service
 	 *
 	 * @param {string} text - Text which should be send
+	 * @param silent
 	 */
 	async sendNotification(text, silent = false) {
 		// Pushover
@@ -2064,6 +2063,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {string} mainType
 	 * @param {string} type
 	 * @param {object} id
+	 * @param silent
 	 */
 	async sendStateNotifications(mainType, type, id, silent = false) {
 		if (isUnloaded) {
@@ -2141,6 +2141,7 @@ class DeviceWatcher extends utils.Adapter {
 	 * Notifications per user defined schedule
 	 *
 	 * @param {string} type
+	 * @param silent
 	 */
 	async sendScheduleNotifications(type, silent = false) {
 		if (isUnloaded) {
