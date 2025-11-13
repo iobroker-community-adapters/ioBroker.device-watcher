@@ -4,7 +4,7 @@ const utils = require('@iobroker/adapter-core');
 const adapterName = require('./package.json').name.split('.').pop();
 const schedule = require('node-schedule');
 const cronParserLib = require('cron-parser');
-const arrApart = require('./lib/arrApart.js'); // list of supported adapters
+const adapterArray = require('./lib/adapterArray.js'); // list of supported adapters
 const translations = require('./lib/translations.js');
 const tools = require('./lib/tools.js');
 const crud = require('./lib/crud.js');
@@ -118,7 +118,7 @@ class DeviceWatcher extends utils.Adapter {
 			// create list with enabled adapters for monitor devices
 			for (const device of Object.values(this.config.tableDevices)) {
 				if (device.enabled) {
-					for (const [adapterName, adapter] of Object.entries(arrApart)) {
+					for (const [adapterName, adapter] of Object.entries(adapterArray)) {
 						if (String(adapter.adapterKey).toLowerCase() === String(device.adapterKey).toLowerCase()) {
 							this.selAdapter.push(adapter);
 							this.adapterSelected.push(adapter.adapterKey);
@@ -145,13 +145,13 @@ class DeviceWatcher extends utils.Adapter {
 			await crud.createTimeListInstances(this);
 
 			//create datapoints for each adapter if selected
-			for (const [id] of Object.entries(arrApart)) {
+			for (const [id] of Object.entries(adapterArray)) {
 				try {
 					if (!this.configCreateOwnFolder) {
 						await crud.deleteDPsForEachAdapter(this, id);
 						await crud.deleteHtmlListDatapoints(this, id);
 					} else {
-						const adapter = arrApart[id];
+						const adapter = adapterArray[id];
 
 						if (this.adapterSelected.includes(adapter.adapterKey)) {
 							await crud.createDPsForEachAdapter(this, id);
@@ -261,8 +261,8 @@ class DeviceWatcher extends utils.Adapter {
 		// fill datapoints for each adapter if selected
 		if (this.configCreateOwnFolder) {
 			try {
-				for (const [id] of Object.entries(arrApart)) {
-					const adapter = arrApart[id];
+				for (const [id] of Object.entries(adapterArray)) {
+					const adapter = adapterArray[id];
 
 					if (this.adapterSelected.includes(adapter.adapterKey)) {
 						for (const deviceData of this.listAllDevicesRaw.values()) {
@@ -470,8 +470,8 @@ class DeviceWatcher extends utils.Adapter {
 
 		// devices data in own adapter folder
 		if (this.configCreateOwnFolder) {
-			for (const [id] of Object.entries(arrApart)) {
-				const adapter = arrApart[id];
+			for (const [id] of Object.entries(adapterArray)) {
+				const adapter = adapterArray[id];
 
 				if (this.adapterSelected.includes(adapter.adapterKey)) {
 					await crud.createLists(this, id);
@@ -836,6 +836,7 @@ class DeviceWatcher extends utils.Adapter {
 		return lastContactString;
 	}
 
+
 	/**
 	 * get online state and time
 	 *
@@ -871,9 +872,8 @@ class DeviceWatcher extends utils.Adapter {
 			// calculate to days after 48 hours
 			switch (unreachDP) {
 				case 'none':
-					if (deviceTimeSelector) {
+					if (deviceTimeSelector)
 						lastContactString = await this.getLastContact(deviceTimeSelector.ts);
-					}
 					break;
 
 				default:
@@ -896,6 +896,7 @@ class DeviceWatcher extends utils.Adapter {
 					break;
 			}
 
+
 			/*=============================================
 			=            Set Online Status             =
 			=============================================*/
@@ -904,7 +905,7 @@ class DeviceWatcher extends utils.Adapter {
 				lastContact = tools.getTimestamp(deviceTimeSelector.ts);
 			}
 
-			const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === adapterID);
+			const gefundenerAdapter = Object.values(adapterArray).find((adapter) => adapter.adapterID === adapterID);
 			const device = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
 			const maxSecondDevicesOffline = device.maxSecondDevicesOffline;
 
@@ -1176,8 +1177,10 @@ class DeviceWatcher extends utils.Adapter {
 
 		this.log.debug(`[renewDeviceData] - ${id}`);
 		if (deviceData) {
-			const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === deviceData.adapterID);
+
+			const gefundenerAdapter = Object.values(adapterArray).find((adapter) => adapter.adapterID === deviceData.adapterID);
 			const silentEnabled = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
+
 
 			// On statechange update available datapoint
 			switch (id) {
@@ -2322,6 +2325,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.error(`[getPreviousCronRun] - ${error}`);
 		}
 	}
+
 
 	/**
 	 * @param {() => void} callback
