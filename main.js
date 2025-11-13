@@ -116,16 +116,17 @@ class DeviceWatcher extends utils.Adapter {
 
 		try {
 			// create list with enabled adapters for monitor devices
-			Object.values(this.config.tableDevices)
-				.filter((device) => device.enabled)
-				.forEach((device) => {
-					const entry = Object.entries(arrApart).find(([adapterName, adapter]) => adapter.adapterKey === device.adapterKey);
-					if (entry) {
-						const [adapterName, adapter] = entry;
-						this.selAdapter.push(adapter);
-						this.adapterSelected.push(tools.capitalize(adapterName));
+			for (const device of Object.values(this.config.tableDevices)) {
+				if (device.enabled) {
+					for (const [adapterName, adapter] of Object.entries(arrApart)) {
+						if (String(adapter.adapterKey).toLowerCase() === String(device.adapterKey).toLowerCase()) {
+							this.selAdapter.push(adapter);
+							this.adapterSelected.push(tools.capitalize(adapterName));
+							break; // Match gefunden → keine weiteren Einträge prüfen
+						}
 					}
-				});
+				}
+			}
 
 			// Check if an adapter to monitor devices is selected.
 			if (this.adapterSelected.length >= 1) {
@@ -472,7 +473,7 @@ class DeviceWatcher extends utils.Adapter {
 			for (const [id] of Object.entries(arrApart)) {
 				const adapter = arrApart[id];
 
-				if (this.adapterSelected.includes(adapter.adapter)) {
+				if (this.adapterSelected.includes(adapter.adapterKey)) {
 					await crud.createLists(this, id);
 					await crud.writeDatapoints(this, id);
 					this.log.debug(`Created and filled data for ${tools.capitalize(id)}`);

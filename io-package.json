@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.1",
+    "version": "2.14.2",
     "news": {
+      "2.14.2": {
+        "en": "corr finder",
+        "de": "korrfinder",
+        "ru": "поисковик",
+        "pt": "localizador de corr",
+        "nl": "corrfinder",
+        "fr": "corr trouver",
+        "it": "ricercatore del corpo",
+        "es": "corr finder",
+        "pl": "wykrywacz korrów",
+        "uk": "кора finder",
+        "zh-cn": "corr 查找器"
+      },
       "2.14.1": {
         "en": "corr cronparser",
         "de": "korr cronparser",
@@ -80,19 +93,6 @@
         "pl": "tłumaczenie\nfix htmllist output",
         "uk": "фіксувати переклад\nвиправлення htmllist виведення",
         "zh-cn": "固定翻译\n修正 htmllist 输出"
-      },
-      "2.12.4": {
-        "en": "ignore zigbee2mqtt disabled devices\nfix proxmox\nadd proxmox new structure request",
-        "de": "ignorieren zickbee2mqt behinderte geräte\nfixer proxmox\nneue strukturanforderung hinzufügen",
-        "ru": "игнорировать zigbee2mqtt отключенные устройства\nисправить проксмокс\nдобавить proxmox новый запрос структуры",
-        "pt": "ignorar os dispositivos desactivados do zigbee2mqtt\ncorrigir proxmox\nadicionar proxmox nova solicitação de estrutura",
-        "nl": "zigbee2mqtt uitgeschakelde apparaten negeren\nproxmox repareren\nproxmox nieuw structuurverzoek toevoegen",
-        "fr": "ignorer les périphériques désactivés zigbee2mqtt\nréparer proxmox\najouter proxmox nouvelle demande de structure",
-        "it": "ignorare i dispositivi disabilitati zigbee2mqtt\ncorrezione di proxmox\naggiungere proxmox nuova struttura richiesta",
-        "es": "ignorar los dispositivos discapacitados zigbee2mqtt\narreglar proxmox\nañadir proxmox nueva solicitud de estructura",
-        "pl": "ignoruj wyłączone urządzenia zigbee2mqtt\nfix proxmox\ndodaj proxmox nowe żądanie struktury",
-        "uk": "ігнорувати zigbee2mqtt вимкнені пристрої\nфіксатор проксмокс\nдодати проксмокс новий порядок структури",
-        "zh-cn": "忽略已禁用的 zigbee2mqtt 设备\n修补proxmox\n添加正则结构请求"
       }
     },
     "titleLang": {
