@@ -201,17 +201,17 @@
           "uk": "Важливе повідомлення!"
         },
         "text": {
-          "en": "The new version 2.6.x has a new structure of adapter settings. The adapter must be reselected.",
-          "de": "Die neue Version 2.6.x hat neue Adaptereinstellungen. Der Adapter muss neu gewählt werden.",
-          "ru": "В новой версии 2.6.x появилась новая структура настроек адаптера. Адаптер необходимо выбрать повторно.",
-          "pt": "A nova versão 2.6.x tem uma nova estrutura de adaptadores. Reescolha o adaptador.",
-          "nl": "De nieuwe versie 2.6.x heeft een nieuwe structuur van adapterinstellingen. De adapter moet opnieuw worden geselecteerd.",
-          "fr": "La nouvelle version 2.6.x a modifié les paramètres des adaptateurs. L'adaptateur doit être resélectionné.",
-          "it": "La nuova versione 2.6.x ha un nuovo sistema di adattatori. L'adattatore va riselezionato.",
-          "es": "La nueva versión 2.6.x tiene una nueva estructura de adaptadores. Debe reseleccionarse el adaptador.",
-          "pl": "Nowa wersja 2.6.x ma nową strukturę ustawień adaptera. Adapter musi zostać ponownie wybrany.",
-          "uk": "Нова версія 2.6.x має нову структуру налаштувань адаптера. Перехідник необхідно вибрати повторно.",
-          "zh-cn": "新版本 2.6.x 具有新的适配器设置结构。必须重新选择适配器。"
+          "en": "The new version 2.14.x has a new structure of adapter settings. The adapter must be reselected.",
+          "de": "Die neue Version 2.14.x hat neue Adaptereinstellungen. Der Adapter muss neu gewählt werden.",
+          "ru": "В новой версии 2.14.x появилась новая структура настроек адаптера. Адаптер необходимо выбрать повторно.",
+          "pt": "A nova versão 2.14.x tem uma nova estrutura de adaptadores. Reescolha o adaptador.",
+          "nl": "De nieuwe versie 2.14.x heeft een nieuwe structuur van adapterinstellingen. De adapter moet opnieuw worden geselecteerd.",
+          "fr": "La nouvelle version 2.14.x a modifié les paramètres des adaptateurs. L'adaptateur doit être resélectionné.",
+          "it": "La nuova versione 2.14.x ha un nuovo sistema di adattatori. L'adattatore va riselezionato.",
+          "es": "La nueva versión 2.14.x tiene una nueva estructura de adaptadores. Debe reseleccionarse el adaptador.",
+          "pl": "Nowa wersja 2.14.x ma nową strukturę ustawień adaptera. Adapter musi zostać ponownie wybrany.",
+          "uk": "Нова версія 2.14.x має нову структуру налаштувань адаптера. Перехідник необхідно вибрати повторно.",
+          "zh-cn": "新版本 2.14.x 具有新的适配器设置结构。必须重新选择适配器。"
         },
         "level": "warn",
         "buttons": [
