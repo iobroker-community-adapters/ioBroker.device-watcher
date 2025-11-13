@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.3",
+    "version": "2.14.4",
     "news": {
+      "2.14.4": {
+        "en": "fix silent telegram notification\nfix offline list",
+        "de": "stille telegramm-benachrichtigung\noffline-liste aktivieren",
+        "ru": "установить бесшумную телеграмму\nисправить список оффлайн",
+        "pt": "fixar notificação por telegrama silencioso\ncorrigir lista offline",
+        "nl": "fix stil telegram notificatie\noffline lijst repareren",
+        "fr": "correction de la notification de télégramme silencieuse\ncorrection de la liste hors ligne",
+        "it": "correzione di notifica del telegramma silenzioso\ncorrezione elenco offline",
+        "es": "fijar notificación de telegrama silencioso\nfijar lista offline",
+        "pl": "naprawić zgłoszenie ciche telegram\npoprawianie listy offline",
+        "uk": "закріпити безшумне повідомлення\nфіксувати список офлайн",
+        "zh-cn": "固定无声电报通知\n校正离线列表"
+      },
       "2.14.3": {
         "en": "corr offline devices",
         "de": "corr offline-geräte",
@@ -80,19 +93,6 @@
         "pl": "Adapter wymaga admin > = 7.6.17, js- controller > = 6.0.11 i node.js > = 20 teraz.\nBrak zależności od 'node-schedule' został ustalony.\nZaktualizowano zależności",
         "uk": "Адаптер вимагає адмін >= 7.6.17, js-controller >= 6.0.11 і node.js>= 20 тепер.\nВизначена залежність 'node-schedule'.\nЗалежність було оновлено",
         "zh-cn": "适配器需要管理员QQ7.6.17,js控制器QQ6.0.11和节点JsX20现在.\n丢失的“ 节点时间表” 的依赖性已被确定 .\n依赖关系已更新"
-      },
-      "2.12.6": {
-        "en": "fix send message",
-        "de": "die nachricht senden",
-        "ru": "отправить сообщение",
-        "pt": "corrigir mensagem de envio",
-        "nl": "verzendbericht repareren",
-        "fr": "corriger le message d'envoi",
-        "it": "correzione messaggio di invio",
-        "es": "recibir el mensaje",
-        "pl": "naprawić wiadomość wysyłającą",
-        "uk": "фіксувати надсилання повідомлення",
-        "zh-cn": "修复发送消息"
       }
     },
     "titleLang": {
