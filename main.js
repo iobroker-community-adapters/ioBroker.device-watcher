@@ -121,7 +121,7 @@ class DeviceWatcher extends utils.Adapter {
 					for (const [adapterName, adapter] of Object.entries(arrApart)) {
 						if (String(adapter.adapterKey).toLowerCase() === String(device.adapterKey).toLowerCase()) {
 							this.selAdapter.push(adapter);
-							this.adapterSelected.push(tools.capitalize(adapterName));
+							this.adapterSelected.push(adapter.adapterKey);
 							break; // Match gefunden → keine weiteren Einträge prüfen
 						}
 					}
@@ -153,7 +153,7 @@ class DeviceWatcher extends utils.Adapter {
 					} else {
 						const adapter = arrApart[id];
 
-						if (this.adapterSelected.includes(adapter.adapter)) {
+						if (this.adapterSelected.includes(adapter.adapterKey)) {
 							await crud.createDPsForEachAdapter(this, id);
 							// create HTML list datapoints
 							if (!this.configCreateHtmlList) {
@@ -264,7 +264,7 @@ class DeviceWatcher extends utils.Adapter {
 				for (const [id] of Object.entries(arrApart)) {
 					const adapter = arrApart[id];
 
-					if (this.adapterSelected.includes(adapter.adapter)) {
+					if (this.adapterSelected.includes(adapter.adapterKey)) {
 						for (const deviceData of this.listAllDevicesRaw.values()) {
 							// list device only if selected adapter matched with device
 							if (!deviceData.adapterID.includes(id)) {
@@ -818,7 +818,7 @@ class DeviceWatcher extends utils.Adapter {
 		const lastContact = tools.getTimestamp(selector);
 		let lastContactString;
 
-		lastContactString = `${this.formatDate(new Date(selector), 'hh:mm')}`;
+		lastContactString = `${this.formatDate(new Date(selector), 'hh:mm:ss')}`;
 		if (Math.round(lastContact) > 100) {
 			lastContactString = `${Math.round(lastContact / 60)} ${translations.hours[this.config.userSelectedLanguage]}`;
 		}
@@ -842,7 +842,7 @@ class DeviceWatcher extends utils.Adapter {
 	async getOnlineState(timeSelector, adapterID, unreachDP, linkQuality, deviceUnreachState, deviceStateSelectorHMRPC, rssiPeerSelectorHMRPC) {
 		let lastContactString;
 		let deviceState = 'Online';
-		let linkQualitySet = linkQuality;
+		let linkQualitySet = linkQuality ?? '0%';
 
 		try {
 			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
@@ -863,42 +863,30 @@ class DeviceWatcher extends utils.Adapter {
 			// calculate to days after 48 hours
 			switch (unreachDP) {
 				case 'none':
-					if (deviceTimeSelector) {
+					if (deviceTimeSelector)
 						lastContactString = await this.getLastContact(deviceTimeSelector.ts);
-					}
 					break;
 
 				default:
-					//State changed
 					if (adapterID === 'hmrpc') {
-						const deviceStateSelector = await this.getForeignStateAsync(deviceStateSelectorHMRPC); // for hmrpc devices
-						const rssiPeerSelector = await this.getForeignStateAsync(rssiPeerSelectorHMRPC);
+						const deviceState = await this.getForeignStateAsync(deviceStateSelectorHMRPC);
+						const rssiPeer = await this.getForeignStateAsync(rssiPeerSelectorHMRPC);
+
 						if (linkQuality !== ' - ' && deviceTimeSelector) {
-							if (deviceUnreachState === 1) {
-								lastContactString = await this.getLastContact(deviceTimeSelector.lc);
-							} else {
-								lastContactString = await this.getLastContact(deviceTimeSelector.ts);
-							}
-						} else {
-							if (deviceStateSelector) {
-								// because old hm devices don't send rssi states
-								lastContactString = await this.getLastContact(deviceStateSelector.ts);
-							} else if (rssiPeerSelector) {
-								// because old hm sensors don't send rssi/state values
-								lastContactString = await this.getLastContact(rssiPeerSelector.ts);
-							}
+							const ts = deviceUnreachState === 1 ? deviceTimeSelector.lc : deviceTimeSelector.ts;
+							lastContactString = await this.getLastContact(ts);
+						} else if (deviceState) {
+							lastContactString = await this.getLastContact(deviceState.ts);
+						} else if (rssiPeer) {
+							lastContactString = await this.getLastContact(rssiPeer.ts);
 						}
-					} else {
-						if ((!deviceUnreachState || deviceUnreachState === 0) && deviceTimeSelector) {
-							lastContactString = await this.getLastContact(deviceTimeSelector.lc);
-						} else {
-							if (deviceTimeSelector) {
-								lastContactString = await this.getLastContact(deviceTimeSelector.ts);
-							}
-						}
-						break;
+					} else if (deviceTimeSelector) {
+						const ts = !deviceUnreachState ? deviceTimeSelector.lc : deviceTimeSelector.ts;
+						lastContactString = await this.getLastContact(ts);
 					}
+					break;
 			}
+
 
 			/*=============================================
 			=            Set Online Status             =
@@ -911,8 +899,6 @@ class DeviceWatcher extends utils.Adapter {
 			const gefundenerAdapter = Object.values(arrApart).find((adapter) => adapter.adapterID === adapterID);
 			const device = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
 			const maxSecondDevicesOffline = device.maxSecondDevicesOffline;
-
-			this.log.debug(`getOnline ${device} maxSecondDevicesOffline ${maxSecondDevicesOffline}`);
 
 			switch (adapterID) {
 				case 'hmrpc':
@@ -1028,7 +1014,7 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				default:
-					// Gerät gilt als offline, wenn es unerreichbar ist und keine Wartezeit definiert ist, oder wenn der letzte Kontakt zu lange her ist
+					// Gerät gilt als offline, wenn es unerreichbar ist und keine Wartezeit definiert ist, oder wenn der letzte Kontakt zu lange her ist als Wartezeit
 					const shouldBeOffline = (!deviceUnreachState && maxSecondDevicesOffline <= 0) || (lastContact && lastContact > maxSecondDevicesOffline);
 
 					if (shouldBeOffline) {
@@ -2316,6 +2302,7 @@ class DeviceWatcher extends utils.Adapter {
 			this.log.error(`[getPreviousCronRun] - ${error}`);
 		}
 	}
+
 
 	/**
 	 * @param {() => void} callback
