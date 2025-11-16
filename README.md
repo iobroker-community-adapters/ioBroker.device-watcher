@@ -640,7 +640,10 @@ This adapter would not have been possible without the great work of Christian Be
 
 MIT License
 
+
 Copyright (c) 2025 iobroker-community-adapters <iobroker-community-adapters@gmx.de>
+
+
 Copyright (c) 2025 Christian Behrends <mail@christian-behrends.de>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
