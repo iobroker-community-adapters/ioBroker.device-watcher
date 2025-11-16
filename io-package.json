@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.4",
+    "version": "2.14.5",
     "news": {
+      "2.14.5": {
+        "en": "add homee battery devices (only)\nfix battery list",
+        "de": "homee akku-geräte hinzufügen (nur)\nakku-liste",
+        "ru": "добавить домашние аккумуляторные устройства (только)\nисправить список батарей",
+        "pt": "adicionar dispositivos de bateria homee (apenas)\ncorrigir a lista de baterias",
+        "nl": "toe te voegen homee batterij apparaten (alleen)\nfix batterijlijst",
+        "fr": "ajouter des appareils de batterie homee (seulement)\ncorrection de la liste des piles",
+        "it": "aggiungere dispositivi a batteria homee (solo)\ncorretto elenco batteria",
+        "es": "añadir dispositivos de batería de homee (sólo)\nlista de baterías",
+        "pl": "dodawać akumulatory domowe (tylko)\npoprawianie listy baterii",
+        "uk": "додати побутові акумуляторні пристрої (тільки)\nфіксувати список акумуляторів",
+        "zh-cn": "添加居家电池设备( 只)\n固定电池列表"
+      },
       "2.14.4": {
         "en": "fix silent telegram notification\nfix offline list",
         "de": "stille telegramm-benachrichtigung\noffline-liste aktivieren",
@@ -80,19 +93,6 @@
         "pl": "Zależności zostały ustalone",
         "uk": "Залежності були закріплені",
         "zh-cn": "依赖已固定"
-      },
-      "2.13.0": {
-        "en": "Adapter requires admin >= 7.6.17, js-controller >= 6.0.11 and node.js>= 20 now.\nMissing dependency of 'node-schedule' has been fixed.\nDependencies have been updated",
-        "de": "Adapter benötigt admin >= 7.6.17, js-controller >= 6.0.11 und node.js>= 20 jetzt.\nDie fehlende Abhängigkeit von 'node-schedule' wurde behoben.\nAbhängigkeiten wurden aktualisiert",
-        "ru": "Адаптер требует администратора >= 7.6.17, js-контроллер >= 6.0.11 и node.js>= 20 сейчас.\nОтсутствующая зависимость от «списка узлов» была исправлена.\nЗависимости были обновлены",
-        "pt": "O adaptador requer admin >= 7.6.17, js-controlador >= 6.0.11 e nod.js>= 20 agora.\nA dependência de 'node-schedule' foi corrigida.\nAs dependências foram atualizadas",
-        "nl": "Voor adapter is admin < 7.6.17, js-controller > 6.0.11 en node.js> = 20 nodig.\nOntbrekende afhankelijkheid van 'node-schema' is vastgesteld.\nAfhankelijkheden zijn bijgewerkt",
-        "fr": "Adaptateur nécessite admin >= 7.6.17, js-controller >= 6.0.11 et node.js>= 20 maintenant.\nLa dépendance manquante de 'node-schedule' a été corrigée.\nLes dépendances ont été actualisées",
-        "it": "Adattatore richiede admin >= 7.6.17, js-controller >= 6.0.11 e node.js>= 20 ora.\nLa carenza di \"node-schedule\" è stata fissata.\nLe dipendenze sono state aggiornate",
-        "es": "El adaptador requiere admin= 7.6.17, js-controller ≤ 6.0.11 y node.js confianza= 20 ahora.\nSe ha fijado la dependencia de \"node-schedule\".\nSe han actualizado las dependencias",
-        "pl": "Adapter wymaga admin > = 7.6.17, js- controller > = 6.0.11 i node.js > = 20 teraz.\nBrak zależności od 'node-schedule' został ustalony.\nZaktualizowano zależności",
-        "uk": "Адаптер вимагає адмін >= 7.6.17, js-controller >= 6.0.11 і node.js>= 20 тепер.\nВизначена залежність 'node-schedule'.\nЗалежність було оновлено",
-        "zh-cn": "适配器需要管理员QQ7.6.17,js控制器QQ6.0.11和节点JsX20现在.\n丢失的“ 节点时间表” 的依赖性已被确定 .\n依赖关系已更新"
       }
     },
     "titleLang": {
@@ -455,7 +455,7 @@
       },
       {
         "enabled": false,
-        "adapterName": "Homee",
+        "adapterName": "Homee - only Battery Devices",
         "adapterKey": "homeeDevices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
