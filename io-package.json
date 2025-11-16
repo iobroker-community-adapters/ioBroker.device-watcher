@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.5",
+    "version": "2.14.6",
     "news": {
+      "2.14.6": {
+        "en": "fix all count devices",
+        "de": "alle zählgeräte",
+        "ru": "починить все счетные устройства",
+        "pt": "corrigir todos os dispositivos de contagem",
+        "nl": "alle telapparaten herstellen",
+        "fr": "réparer tous les appareils de comptage",
+        "it": "fissare tutti i dispositivi di conteggio",
+        "es": "arreglar todos los dispositivos de cuenta",
+        "pl": "naprawić wszystkie urządzenia liczące",
+        "uk": "фіксувати всі пристрої підрахунку",
+        "zh-cn": "修复所有计数设备"
+      },
       "2.14.5": {
         "en": "add homee battery devices (only)\nfix battery list",
         "de": "homee akku-geräte hinzufügen (nur)\nakku-liste",
@@ -80,19 +93,6 @@
         "pl": "Zależności zostały ustalone\nadapter ping został naprawiony\noptymalizacja adaptera bez informacji. stan połączenia\nkod czysty\nciche zgłoszenie telegramu\ndodawanie urządzeń materii\nstan akumulatora corr lupusec",
         "uk": "Залежності були закріплені\nping адаптер було виправлено\nоптимізація адаптера без інформації. стан підключення\nчистий код\nбезшумне повідомлення для телеграми\nдодавання пристроїв\ncorr lupusec стан батареї",
         "zh-cn": "依赖已固定\nping 适配器已经修好\n无信息适配器优化. 连接状态\n清洁代码\n匿名电报通知\n添加物质设备\ncorr lupusec 电池状态"
-      },
-      "2.13.1": {
-        "en": "Dependencies have been fixed",
-        "de": "Abhängigkeiten wurden behoben",
-        "ru": "Зависимости были установлены",
-        "pt": "Dependências foram fixadas",
-        "nl": "Afhankelijkheden zijn vastgesteld",
-        "fr": "Les dépendances ont été fixées",
-        "it": "Le dipendenze sono state risolte",
-        "es": "Las dependencias se han fijado",
-        "pl": "Zależności zostały ustalone",
-        "uk": "Залежності були закріплені",
-        "zh-cn": "依赖已固定"
       }
     },
     "titleLang": {

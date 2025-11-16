@@ -737,7 +737,7 @@ class DeviceWatcher extends utils.Adapter {
 				break;
 			default:
 				if (deviceBatteryState === undefined) {
-					if (deviceBatteryState === undefined) {
+					if (deviceLowBatState !== undefined) {
 						if (deviceLowBatState !== true && deviceLowBatState !== 'NORMAL' && deviceLowBatState !== 1) {
 							batteryHealth = 'ok';
 							isBatteryDevice = true;
