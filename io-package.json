@@ -219,8 +219,7 @@
           "cancel"
         ]
       }
-    ],
-    "installedFrom": "iobroker-community-adapters/ioBroker.device-watcher#2cc0beea46e573bb5af6c052bbfacea07dc7b5d8"
+    ]
   },
   "native": {
     "checkAdapterInstances": false,
