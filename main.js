@@ -358,7 +358,7 @@ class DeviceWatcher extends utils.Adapter {
 					await this.renewDeviceData(id, state);
 				}
 			} catch (error) {
-				this.log.error(`Issue at state change: ${error}`);
+				this.log.error(`Issue at state change: ${id}`);
 			}
 		} else {
 			// The state was deleted
