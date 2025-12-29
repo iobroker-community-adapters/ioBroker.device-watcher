@@ -122,7 +122,8 @@
       "uk": "Сторожовий пес для пристроїв"
     },
     "authors": [
-      "Christian Behrends <mail@christian-behrends.de>"
+      "Christian Behrends <mail@christian-behrends.de>",
+      "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
     ],
     "keywords": [
       "device",
