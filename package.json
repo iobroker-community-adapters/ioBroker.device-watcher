@@ -2,10 +2,10 @@
   "name": "iobroker.device-watcher",
   "version": "2.14.6",
   "description": "Watchdog for devices",
-  "author": {
-    "name": "Christian Behrends",
-    "email": "mail@christian-behrends.de"
-  },
+  "author": "Christian Behrends <mail@christian-behrends.de>",
+  "contributors": [
+    "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
+  ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.device-watcher",
   "license": "MIT",
   "keywords": [
