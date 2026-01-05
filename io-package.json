@@ -220,7 +220,8 @@
           "cancel"
         ]
       }
-    ]
+    ],
+    "installedFrom": "iobroker-community-adapters/ioBroker.device-watcher#f3189ae34dfe7edc01b690928d55912b5001b705"
   },
   "native": {
     "checkAdapterInstances": false,
@@ -756,7 +757,7 @@
       },
       {
         "enabled": false,
-        "adapterName": "Zigbee2MQTT",
+        "adapterName": "Zwave2MQTT",
         "adapterKey": "zwave2mqttDevices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
