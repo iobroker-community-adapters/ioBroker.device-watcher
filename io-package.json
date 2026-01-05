@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.7",
+    "version": "2.14.8",
     "news": {
+      "2.14.8": {
+        "en": "Dependencies have been updated\n",
+        "de": "Abhängigkeiten wurden aktualisiert\n",
+        "ru": "Зависимости были обновлены\n",
+        "pt": "As dependências foram atualizadas\n",
+        "nl": "Afhankelijkheden zijn bijgewerkt\n",
+        "fr": "Les dépendances ont été actualisées\n",
+        "it": "Le dipendenze sono state aggiornate\n",
+        "es": "Se han actualizado las dependencias\n",
+        "pl": "Zaktualizowano zależności\n",
+        "uk": "Залежність було оновлено\n",
+        "zh-cn": "依赖关系已更新\n"
+      },
       "2.14.7": {
         "en": "add zwave2mqtt Adapter",
         "de": "zwave2mqt Adapter hinzufügen",
@@ -80,19 +93,6 @@
         "pl": "wykrywacz korrów",
         "uk": "кора finder",
         "zh-cn": "corr 查找器"
-      },
-      "2.14.1": {
-        "en": "corr cronparser",
-        "de": "korr cronparser",
-        "ru": "кронпарсер",
-        "pt": "corr cronparser",
-        "nl": "corr cronparser",
-        "fr": "corr cronparser",
-        "it": "corr cronparser",
-        "es": "corr cronparser",
-        "pl": "corr cronparser",
-        "uk": "cron-пара",
-        "zh-cn": "圆锥螺旋桨"
       }
     },
     "titleLang": {
@@ -221,7 +221,7 @@
         ]
       }
     ],
-    "installedFrom": "iobroker-community-adapters/ioBroker.device-watcher#f3189ae34dfe7edc01b690928d55912b5001b705"
+    "installedFrom": "iobroker-community-adapters/ioBroker.device-watcher#2d186f5d55fd221426110b8762218095c818ad91"
   },
   "native": {
     "checkAdapterInstances": false,

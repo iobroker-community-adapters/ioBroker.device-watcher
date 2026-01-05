@@ -426,6 +426,12 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.14.3 (2025-11-13)
+* (arteck) corr offline devices
+.
+.
+.
+
 ## 0.0.1 (2022-05-01)
 
 -   initial release
