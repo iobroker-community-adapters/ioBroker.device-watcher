@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.6",
+    "version": "2.14.7",
     "news": {
+      "2.14.7": {
+        "en": "add zwave2mqtt Adapter",
+        "de": "zwave2mqt Adapter hinzufügen",
+        "ru": "добавить адаптер zwave2mqtt",
+        "pt": "adicionar o adaptador zwave2mqtt",
+        "nl": "zwave2mqtt-adapter toevoegen",
+        "fr": "ajouter l'adaptateur zwave2mqtt",
+        "it": "aggiungere adattatore zwave2mqtt",
+        "es": "añadir zwave2mqtt Adaptador",
+        "pl": "dodaj zwave2mqtt Adapter",
+        "uk": "add zwave2mqtt адаптер",
+        "zh-cn": "添加 zwave2mqtt 适配器"
+      },
       "2.14.6": {
         "en": "fix all count devices",
         "de": "alle zählgeräte",
@@ -80,19 +93,6 @@
         "pl": "corr cronparser",
         "uk": "cron-пара",
         "zh-cn": "圆锥螺旋桨"
-      },
-      "2.14.0": {
-        "en": "Dependencies have been fixed\nping adapter have been fixed\noptimisations for adapter without info.connection state \nclean code\nsilent notification for telegram\nadd matter devices\ncorr lupusec battery state",
-        "de": "Abhängigkeiten wurden behoben\nping adapter wurden fixiert\noptimierungen für adapter ohne info. verbindungszustand\nreiner code\nstille benachrichtigung für telegramm\nhinzufügen von geräten\nkorr lupusec batteriezustand",
-        "ru": "Зависимости были установлены\nадаптер пинг был исправлен\nоптимизация адаптера без информации. состояние соединения\nчистый код\nмолчаливое уведомление для телеграммы\nдобавить устройства\nсостояние батареи corr lupusec",
-        "pt": "Dependências foram fixadas\nadaptador de ping foram fixados\noptimizações para adaptador sem informação. estado da ligação\ncódigo limpo\nnotificação silenciosa para telegrama\nadicionar dispositivos de matéria\nestado da bateria de lúpus",
-        "nl": "Afhankelijkheden zijn vastgesteld\nping adapter zijn bevestigd\noptimalisaties voor adapter zonder info. verbindingsstatus\nschone code\nstille kennisgeving voor telegram\ntoe te voegen materie apparaten\ncorr lupusec batterijstatus",
-        "fr": "Les dépendances ont été fixées\nadaptateur ping ont été fixés\noptimisations pour adaptateur sans info. état de connexion\ncode propre\nnotification silencieuse pour télégramme\najouter des dispositifs\nétat de la batterie corr lupusec",
-        "it": "Le dipendenze sono state risolte\nping adattatore sono stati fissati\nottimizzazioni per adattatore senza informazioni. stato di connessione\ncodice pulito\nnotifica silenziosa per telegramma\naggiungere dispositivi di materia\nstato della batteria del corpo lupusec",
-        "es": "Las dependencias se han fijado\nadaptador de ping han sido fijos\noptimizaciones para adaptador sin información. estado de conexión\ncódigo limpio\nnotificación silenciosa para telegrama\nagregar dispositivos de materia\nestado de la batería de corr lupusec",
-        "pl": "Zależności zostały ustalone\nadapter ping został naprawiony\noptymalizacja adaptera bez informacji. stan połączenia\nkod czysty\nciche zgłoszenie telegramu\ndodawanie urządzeń materii\nstan akumulatora corr lupusec",
-        "uk": "Залежності були закріплені\nping адаптер було виправлено\nоптимізація адаптера без інформації. стан підключення\nчистий код\nбезшумне повідомлення для телеграми\nдодавання пристроїв\ncorr lupusec стан батареї",
-        "zh-cn": "依赖已固定\nping 适配器已经修好\n无信息适配器优化. 连接状态\n清洁代码\n匿名电报通知\n添加物质设备\ncorr lupusec 电池状态"
       }
     },
     "titleLang": {
@@ -751,6 +751,13 @@
         "enabled": false,
         "adapterName": "Zwave2",
         "adapterKey": "zwave2Devices",
+        "telegramSilent": false,
+        "maxSecondDevicesOffline": 0
+      },
+      {
+        "enabled": false,
+        "adapterName": "Zigbee2MQTT",
+        "adapterKey": "zwave2mqttDevices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
       }
