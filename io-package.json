@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.8",
+    "version": "2.14.9",
     "news": {
+      "2.14.9": {
+        "en": "delete zwave2mqtt Adapter\nadd zwavews Adapter",
+        "de": "löschen Sie zwave2mqt Adapter\nzwavews Adapter hinzufügen",
+        "ru": "скачать zwave2mqtt Адаптер\nдобавить адаптер zwavews",
+        "pt": "apagar zwave2mqtt Adaptador\nadicionar o adaptador zwavews",
+        "nl": "zwave2mqtt verwijderen Adapter\nzwavews-adapter toevoegen",
+        "fr": "supprimer zwave2mqtt Adaptateur\najouter l'adaptateur zwavews",
+        "it": "eliminare zwave2mqt Adattatore\naggiungere adattatore zwavews",
+        "es": "eliminar zwave2mqtt Adaptador\nañadir zwavews Adapter",
+        "pl": "usuń zwave2mqtt Adapter\ndodaj zwavews Adapter",
+        "uk": "видалити zwave2mqtt Адаптери\nдодати адаптер zwavews",
+        "zh-cn": "删除 zwave2mqtt 适配器\n添加 zwaws 适应器"
+      },
       "2.14.8": {
         "en": "Dependencies have been updated\n",
         "de": "Abhängigkeiten wurden aktualisiert\n",
@@ -80,19 +93,6 @@
         "pl": "korr urządzenia offline",
         "uk": "пристрої транзисторні",
         "zh-cn": "离线设备"
-      },
-      "2.14.2": {
-        "en": "corr finder",
-        "de": "korrfinder",
-        "ru": "поисковик",
-        "pt": "localizador de corr",
-        "nl": "corrfinder",
-        "fr": "corr trouver",
-        "it": "ricercatore del corpo",
-        "es": "corr finder",
-        "pl": "wykrywacz korrów",
-        "uk": "кора finder",
-        "zh-cn": "corr 查找器"
       }
     },
     "titleLang": {
@@ -756,8 +756,8 @@
       },
       {
         "enabled": false,
-        "adapterName": "Zwave2MQTT",
-        "adapterKey": "zwave2mqttDevices",
+        "adapterName": "Zwavews",
+        "adapterKey": "zwavewsDevices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
       }

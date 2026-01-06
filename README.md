@@ -191,9 +191,12 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.14.9 (2026-01-06)
+* (arteck) delete zwave2mqtt Adapter
+* (arteck) add zwavews Adapter
+
 ### 2.14.8 (2026-01-05)
 * (arteck) Dependencies have been updated
-*
 
 ### 2.14.7 (2026-01-05)
 * (arteck) add zwave2mqtt Adapter
@@ -204,10 +207,6 @@ This adapter would not have been possible without the great work of Christian Be
 ### 2.14.5 (2025-11-16)
 * (arteck) add homee battery devices (only)
 * (arteck) fix battery list
-
-### 2.14.4 (2025-11-13)
-* (arteck) fix silent telegram notification
-* (arteck) fix offline list
 
 ## License
 
