@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.14.10 (2026-01-06)
+* (arteck) fix device array
+
 ### 2.14.9 (2026-01-06)
 * (arteck) delete zwave2mqtt Adapter
 * (arteck) add zwavews Adapter
@@ -203,10 +206,6 @@ This adapter would not have been possible without the great work of Christian Be
 
 ### 2.14.6 (2025-11-16)
 * (arteck) fix all count devices
-
-### 2.14.5 (2025-11-16)
-* (arteck) add homee battery devices (only)
-* (arteck) fix battery list
 
 ## License
 

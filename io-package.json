@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.9",
+    "version": "2.14.10",
     "news": {
+      "2.14.10": {
+        "en": "fix device array",
+        "de": "fix device array",
+        "ru": "фиксировать массив устройств",
+        "pt": "corrigir o array do dispositivo",
+        "nl": "fix apparaat array",
+        "fr": "fixer le tableau du périphérique",
+        "it": "dispositivo di correzione",
+        "es": "array dispositivo",
+        "pl": "tablica urządzenia",
+        "uk": "фіксувати масив пристроїв",
+        "zh-cn": "固定设备阵列"
+      },
       "2.14.9": {
         "en": "delete zwave2mqtt Adapter\nadd zwavews Adapter",
         "de": "löschen Sie zwave2mqt Adapter\nzwavews Adapter hinzufügen",
@@ -80,19 +93,6 @@
         "pl": "naprawić zgłoszenie ciche telegram\npoprawianie listy offline",
         "uk": "закріпити безшумне повідомлення\nфіксувати список офлайн",
         "zh-cn": "固定无声电报通知\n校正离线列表"
-      },
-      "2.14.3": {
-        "en": "corr offline devices",
-        "de": "corr offline-geräte",
-        "ru": "offline устройства",
-        "pt": "dispositivos off- line",
-        "nl": "corr offline apparaten",
-        "fr": "corr périphériques hors ligne",
-        "it": "dispositivi offline corr",
-        "es": "dispositivos sin conexión",
-        "pl": "korr urządzenia offline",
-        "uk": "пристрої транзисторні",
-        "zh-cn": "离线设备"
       }
     },
     "titleLang": {
