@@ -191,14 +191,14 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### 2.15.0-alpha.1 (2026-01-07)
-* (arteck) fix device array
-* (arteck) delete zwave2mqtt Adapter
-* (arteck) add zwavews Adapter
+### **WORK IN PROGRESS**
+* (arteck) fixed device array
+* (arteck) deleted zwave2mqtt Adapter
+* (arteck) added zwavews Adapter
 * (arteck) Dependencies have been updated
-* (arteck) add zwave2mqtt Adapter
-* (arteck) fix all count devices
-* (arteck) corr finder
+* (arteck) added zwave2mqtt Adapter
+* (arteck) fixed all count devices
+* (arteck) corrected finder
 
 ### 2.14.1 (2025-11-13)
 * (arteck) corr cronparser
