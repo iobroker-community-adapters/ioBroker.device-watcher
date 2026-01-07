@@ -191,7 +191,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### 2.15.0-alpha.0 (2026-01-07)
+### **WORK IN PROGRESS**
 * (arteck) fix device array
 * (arteck) delete zwave2mqtt Adapter
 * (arteck) add zwavews Adapter
