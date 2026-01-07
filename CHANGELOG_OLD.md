@@ -1,20 +1,5 @@
 # Older changes
 
-### 2.14.2 (2025-11-13)
-* (arteck) corr finder
-
-### 2.14.1 (2025-11-13)
-* (arteck) corr cronparser
-
-### 2.14.0 (2025-11-13)
-* (arteck) Dependencies have been fixed
-* (arteck) ping adapter have been fixed
-* (arteck) optimisations for adapter without info.connection state 
-* (arteck) clean code
-* (arteck) silent notification for telegram
-* (arteck) add matter devices
-* (arteck) corr lupusec battery state
-
 ### 2.13.1 (2025-09-06)
 * (arteck) Dependencies have been fixed
 
