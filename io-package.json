@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.14.10",
+    "version": "2.15.0-alpha.0",
     "news": {
+      "2.15.0-alpha.0": {
+        "en": "fix device array\ndelete zwave2mqtt Adapter\nadd zwavews Adapter\nDependencies have been updated\nadd zwave2mqtt Adapter\nfix all count devices\ncorr finder",
+        "de": "fix device array\nlöschen Sie zwave2mqt Adapter\nzwavews Adapter hinzufügen\nAbhängigkeiten wurden aktualisiert\nzwave2mqt Adapter hinzufügen\nalle zählgeräte\nkorrfinder",
+        "ru": "фиксировать массив устройств\nскачать zwave2mqtt Адаптер\nдобавить адаптер zwavews\nЗависимости были обновлены\nдобавить адаптер zwave2mqtt\nпочинить все счетные устройства\nпоисковик",
+        "pt": "corrigir o array do dispositivo\napagar zwave2mqtt Adaptador\nadicionar o adaptador zwavews\nAs dependências foram atualizadas\nadicionar o adaptador zwave2mqtt\ncorrigir todos os dispositivos de contagem\nlocalizador de corr",
+        "nl": "fix apparaat array\nzwave2mqtt verwijderen Adapter\nzwavews-adapter toevoegen\nAfhankelijkheden zijn bijgewerkt\nzwave2mqtt-adapter toevoegen\nalle telapparaten herstellen\ncorrfinder",
+        "fr": "fixer le tableau du périphérique\nsupprimer zwave2mqtt Adaptateur\najouter l'adaptateur zwavews\nLes dépendances ont été actualisées\najouter l'adaptateur zwave2mqtt\nréparer tous les appareils de comptage\ncorr trouver",
+        "it": "dispositivo di correzione\neliminare zwave2mqt Adattatore\naggiungere adattatore zwavews\nLe dipendenze sono state aggiornate\naggiungere adattatore zwave2mqtt\nfissare tutti i dispositivi di conteggio\nricercatore del corpo",
+        "es": "array dispositivo\neliminar zwave2mqtt Adaptador\nañadir zwavews Adapter\nSe han actualizado las dependencias\nañadir zwave2mqtt Adaptador\narreglar todos los dispositivos de cuenta\ncorr finder",
+        "pl": "tablica urządzenia\nusuń zwave2mqtt Adapter\ndodaj zwavews Adapter\nZaktualizowano zależności\ndodaj zwave2mqtt Adapter\nnaprawić wszystkie urządzenia liczące\nwykrywacz korrów",
+        "uk": "фіксувати масив пристроїв\nвидалити zwave2mqtt Адаптери\nдодати адаптер zwavews\nЗалежність було оновлено\nadd zwave2mqtt адаптер\nфіксувати всі пристрої підрахунку\nкора finder",
+        "zh-cn": "固定设备阵列\n删除 zwave2mqtt 适配器\n添加 zwaws 适应器\n依赖关系已更新\n添加 zwave2mqtt 适配器\n修复所有计数设备\ncorr 查找器"
+      },
       "2.14.10": {
         "en": "fix device array",
         "de": "fix device array",
@@ -80,19 +93,6 @@
         "pl": "dodawać akumulatory domowe (tylko)\npoprawianie listy baterii",
         "uk": "додати побутові акумуляторні пристрої (тільки)\nфіксувати список акумуляторів",
         "zh-cn": "添加居家电池设备( 只)\n固定电池列表"
-      },
-      "2.14.4": {
-        "en": "fix silent telegram notification\nfix offline list",
-        "de": "stille telegramm-benachrichtigung\noffline-liste aktivieren",
-        "ru": "установить бесшумную телеграмму\nисправить список оффлайн",
-        "pt": "fixar notificação por telegrama silencioso\ncorrigir lista offline",
-        "nl": "fix stil telegram notificatie\noffline lijst repareren",
-        "fr": "correction de la notification de télégramme silencieuse\ncorrection de la liste hors ligne",
-        "it": "correzione di notifica del telegramma silenzioso\ncorrezione elenco offline",
-        "es": "fijar notificación de telegrama silencioso\nfijar lista offline",
-        "pl": "naprawić zgłoszenie ciche telegram\npoprawianie listy offline",
-        "uk": "закріпити безшумне повідомлення\nфіксувати список офлайн",
-        "zh-cn": "固定无声电报通知\n校正离线列表"
       }
     },
     "titleLang": {

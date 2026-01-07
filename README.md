@@ -191,7 +191,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.15.0-alpha.0 (2026-01-07)
 * (arteck) fix device array
 * (arteck) delete zwave2mqtt Adapter
 * (arteck) add zwavews Adapter
@@ -211,6 +211,14 @@ This adapter would not have been possible without the great work of Christian Be
 * (arteck) silent notification for telegram
 * (arteck) add matter devices
 * (arteck) corr lupusec battery state
+
+### 2.14.5 (2025-11-16)
+* (arteck) add homee battery devices (only)
+* (arteck) fix battery list
+
+### 2.14.4 (2025-11-13)
+* (arteck) fix silent telegram notification
+* (arteck) fix offline list
 
 ## License
 
