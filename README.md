@@ -191,21 +191,26 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### 2.14.10 (2026-01-06)
+### **WORK IN PROGRESS**
 * (arteck) fix device array
-
-### 2.14.9 (2026-01-06)
 * (arteck) delete zwave2mqtt Adapter
 * (arteck) add zwavews Adapter
-
-### 2.14.8 (2026-01-05)
 * (arteck) Dependencies have been updated
-
-### 2.14.7 (2026-01-05)
 * (arteck) add zwave2mqtt Adapter
-
-### 2.14.6 (2025-11-16)
 * (arteck) fix all count devices
+* (arteck) corr finder
+
+### 2.14.1 (2025-11-13)
+* (arteck) corr cronparser
+
+### 2.14.0 (2025-11-13)
+* (arteck) Dependencies have been fixed
+* (arteck) ping adapter have been fixed
+* (arteck) optimisations for adapter without info.connection state 
+* (arteck) clean code
+* (arteck) silent notification for telegram
+* (arteck) add matter devices
+* (arteck) corr lupusec battery state
 
 ## License
 
