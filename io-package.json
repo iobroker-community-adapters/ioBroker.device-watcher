@@ -1,98 +1,20 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.0-alpha.1",
+    "version": "2.15.0",
     "news": {
-      "2.15.0-alpha.1": {
-        "en": "fix device array\ndelete zwave2mqtt Adapter\nadd zwavews Adapter\nDependencies have been updated\nadd zwave2mqtt Adapter\nfix all count devices\ncorr finder",
-        "de": "fix device array\nlöschen Sie zwave2mqt Adapter\nzwavews Adapter hinzufügen\nAbhängigkeiten wurden aktualisiert\nzwave2mqt Adapter hinzufügen\nalle zählgeräte\nkorrfinder",
-        "ru": "фиксировать массив устройств\nскачать zwave2mqtt Адаптер\nдобавить адаптер zwavews\nЗависимости были обновлены\nдобавить адаптер zwave2mqtt\nпочинить все счетные устройства\nпоисковик",
-        "pt": "corrigir o array do dispositivo\napagar zwave2mqtt Adaptador\nadicionar o adaptador zwavews\nAs dependências foram atualizadas\nadicionar o adaptador zwave2mqtt\ncorrigir todos os dispositivos de contagem\nlocalizador de corr",
-        "nl": "fix apparaat array\nzwave2mqtt verwijderen Adapter\nzwavews-adapter toevoegen\nAfhankelijkheden zijn bijgewerkt\nzwave2mqtt-adapter toevoegen\nalle telapparaten herstellen\ncorrfinder",
-        "fr": "fixer le tableau du périphérique\nsupprimer zwave2mqtt Adaptateur\najouter l'adaptateur zwavews\nLes dépendances ont été actualisées\najouter l'adaptateur zwave2mqtt\nréparer tous les appareils de comptage\ncorr trouver",
-        "it": "dispositivo di correzione\neliminare zwave2mqt Adattatore\naggiungere adattatore zwavews\nLe dipendenze sono state aggiornate\naggiungere adattatore zwave2mqtt\nfissare tutti i dispositivi di conteggio\nricercatore del corpo",
-        "es": "array dispositivo\neliminar zwave2mqtt Adaptador\nañadir zwavews Adapter\nSe han actualizado las dependencias\nañadir zwave2mqtt Adaptador\narreglar todos los dispositivos de cuenta\ncorr finder",
-        "pl": "tablica urządzenia\nusuń zwave2mqtt Adapter\ndodaj zwavews Adapter\nZaktualizowano zależności\ndodaj zwave2mqtt Adapter\nnaprawić wszystkie urządzenia liczące\nwykrywacz korrów",
-        "uk": "фіксувати масив пристроїв\nвидалити zwave2mqtt Адаптери\nдодати адаптер zwavews\nЗалежність було оновлено\nadd zwave2mqtt адаптер\nфіксувати всі пристрої підрахунку\nкора finder",
-        "zh-cn": "固定设备阵列\n删除 zwave2mqtt 适配器\n添加 zwaws 适应器\n依赖关系已更新\n添加 zwave2mqtt 适配器\n修复所有计数设备\ncorr 查找器"
-      },
-      "2.15.0-alpha.0": {
-        "en": "fix device array\ndelete zwave2mqtt Adapter\nadd zwavews Adapter\nDependencies have been updated\nadd zwave2mqtt Adapter\nfix all count devices\ncorr finder",
-        "de": "fix device array\nlöschen Sie zwave2mqt Adapter\nzwavews Adapter hinzufügen\nAbhängigkeiten wurden aktualisiert\nzwave2mqt Adapter hinzufügen\nalle zählgeräte\nkorrfinder",
-        "ru": "фиксировать массив устройств\nскачать zwave2mqtt Адаптер\nдобавить адаптер zwavews\nЗависимости были обновлены\nдобавить адаптер zwave2mqtt\nпочинить все счетные устройства\nпоисковик",
-        "pt": "corrigir o array do dispositivo\napagar zwave2mqtt Adaptador\nadicionar o adaptador zwavews\nAs dependências foram atualizadas\nadicionar o adaptador zwave2mqtt\ncorrigir todos os dispositivos de contagem\nlocalizador de corr",
-        "nl": "fix apparaat array\nzwave2mqtt verwijderen Adapter\nzwavews-adapter toevoegen\nAfhankelijkheden zijn bijgewerkt\nzwave2mqtt-adapter toevoegen\nalle telapparaten herstellen\ncorrfinder",
-        "fr": "fixer le tableau du périphérique\nsupprimer zwave2mqtt Adaptateur\najouter l'adaptateur zwavews\nLes dépendances ont été actualisées\najouter l'adaptateur zwave2mqtt\nréparer tous les appareils de comptage\ncorr trouver",
-        "it": "dispositivo di correzione\neliminare zwave2mqt Adattatore\naggiungere adattatore zwavews\nLe dipendenze sono state aggiornate\naggiungere adattatore zwave2mqtt\nfissare tutti i dispositivi di conteggio\nricercatore del corpo",
-        "es": "array dispositivo\neliminar zwave2mqtt Adaptador\nañadir zwavews Adapter\nSe han actualizado las dependencias\nañadir zwave2mqtt Adaptador\narreglar todos los dispositivos de cuenta\ncorr finder",
-        "pl": "tablica urządzenia\nusuń zwave2mqtt Adapter\ndodaj zwavews Adapter\nZaktualizowano zależności\ndodaj zwave2mqtt Adapter\nnaprawić wszystkie urządzenia liczące\nwykrywacz korrów",
-        "uk": "фіксувати масив пристроїв\nвидалити zwave2mqtt Адаптери\nдодати адаптер zwavews\nЗалежність було оновлено\nadd zwave2mqtt адаптер\nфіксувати всі пристрої підрахунку\nкора finder",
-        "zh-cn": "固定设备阵列\n删除 zwave2mqtt 适配器\n添加 zwaws 适应器\n依赖关系已更新\n添加 zwave2mqtt 适配器\n修复所有计数设备\ncorr 查找器"
-      },
-      "2.14.10": {
-        "en": "fix device array",
-        "de": "fix device array",
-        "ru": "фиксировать массив устройств",
-        "pt": "corrigir o array do dispositivo",
-        "nl": "fix apparaat array",
-        "fr": "fixer le tableau du périphérique",
-        "it": "dispositivo di correzione",
-        "es": "array dispositivo",
-        "pl": "tablica urządzenia",
-        "uk": "фіксувати масив пристроїв",
-        "zh-cn": "固定设备阵列"
-      },
-      "2.14.9": {
-        "en": "delete zwave2mqtt Adapter\nadd zwavews Adapter",
-        "de": "löschen Sie zwave2mqt Adapter\nzwavews Adapter hinzufügen",
-        "ru": "скачать zwave2mqtt Адаптер\nдобавить адаптер zwavews",
-        "pt": "apagar zwave2mqtt Adaptador\nadicionar o adaptador zwavews",
-        "nl": "zwave2mqtt verwijderen Adapter\nzwavews-adapter toevoegen",
-        "fr": "supprimer zwave2mqtt Adaptateur\najouter l'adaptateur zwavews",
-        "it": "eliminare zwave2mqt Adattatore\naggiungere adattatore zwavews",
-        "es": "eliminar zwave2mqtt Adaptador\nañadir zwavews Adapter",
-        "pl": "usuń zwave2mqtt Adapter\ndodaj zwavews Adapter",
-        "uk": "видалити zwave2mqtt Адаптери\nдодати адаптер zwavews",
-        "zh-cn": "删除 zwave2mqtt 适配器\n添加 zwaws 适应器"
-      },
-      "2.14.8": {
-        "en": "Dependencies have been updated\n",
-        "de": "Abhängigkeiten wurden aktualisiert\n",
-        "ru": "Зависимости были обновлены\n",
-        "pt": "As dependências foram atualizadas\n",
-        "nl": "Afhankelijkheden zijn bijgewerkt\n",
-        "fr": "Les dépendances ont été actualisées\n",
-        "it": "Le dipendenze sono state aggiornate\n",
-        "es": "Se han actualizado las dependencias\n",
-        "pl": "Zaktualizowano zależności\n",
-        "uk": "Залежність було оновлено\n",
-        "zh-cn": "依赖关系已更新\n"
-      },
-      "2.14.7": {
-        "en": "add zwave2mqtt Adapter",
-        "de": "zwave2mqt Adapter hinzufügen",
-        "ru": "добавить адаптер zwave2mqtt",
-        "pt": "adicionar o adaptador zwave2mqtt",
-        "nl": "zwave2mqtt-adapter toevoegen",
-        "fr": "ajouter l'adaptateur zwave2mqtt",
-        "it": "aggiungere adattatore zwave2mqtt",
-        "es": "añadir zwave2mqtt Adaptador",
-        "pl": "dodaj zwave2mqtt Adapter",
-        "uk": "add zwave2mqtt адаптер",
-        "zh-cn": "添加 zwave2mqtt 适配器"
-      },
-      "2.14.6": {
-        "en": "fix all count devices",
-        "de": "alle zählgeräte",
-        "ru": "починить все счетные устройства",
-        "pt": "corrigir todos os dispositivos de contagem",
-        "nl": "alle telapparaten herstellen",
-        "fr": "réparer tous les appareils de comptage",
-        "it": "fissare tutti i dispositivi di conteggio",
-        "es": "arreglar todos los dispositivos de cuenta",
-        "pl": "naprawić wszystkie urządzenia liczące",
-        "uk": "фіксувати всі пристрої підрахунку",
-        "zh-cn": "修复所有计数设备"
+      "2.15.0": {
+        "en": "fixed device array\ndeleted zwave2mqtt Adapter\nadded zwavews Adapter\nDependencies have been updated\nadded zwave2mqtt Adapter\nfixed all count devices\ncorrected finder",
+        "de": "Geräteanordnung bereinigt\nzwave2mqt Adapter gelöscht\nzwavews Adapter hinzugefügt\nAbhängigkeiten wurden aktualisiert\nzwave2mqtt Adapter hinzugefügt\nalle Zählgeräte überarbeitet\nfinder korrigiert",
+        "ru": "фиксированный массив устройств\nудаленный zwave2mqtt Адаптер\nдобавить zwavews Адаптер\nЗависимости были обновлены\nдобавить zwave2mqtt Адаптер\nфиксированные все счетные устройства\nисправленный искатель",
+        "pt": "arranjo fixo do dispositivo\napagado zwave2mqtt Adaptador\nzwavews adicionados Adaptador\nAs dependências foram atualizadas\nadicionado zwave2mqtt Adaptador\nfixou todos os dispositivos de contagem\nlocalizador corrigido",
+        "nl": "vaste apparaatarray\nverwijderde zwave2mqtt Adapter\nzwavews toegevoegd Adapter\nAfhankelijkheden zijn bijgewerkt\nzwave2mqtt toegevoegd Adapter\nvaste alle telapparaten\ngecorrigeerde zoeker",
+        "fr": "tableau de périphériques fixes\nsupprimé zwave2mqtt Adaptateur\nzwavews ajoutés Adaptateur\nLes dépendances ont été actualisées\najouté zwave2mqtt Adaptateur\nfixe tous les appareils de comptage\ncorrecteur",
+        "it": "array di dispositivi fissi\ncancellato zwave2mqt Adattatore\naggiunto zwavews Adattatore\nLe dipendenze sono state aggiornate\naggiunto zwave2mqt Adattatore\nfissi tutti i dispositivi di conteggio\ncercatore corretto",
+        "es": "array de dispositivo fijo\nborrado zwave2mqt Adaptador\nañadido zwavews Adaptador\nSe han actualizado las dependencias\nzwave2mqt Adaptador\nfijo todos los dispositivos de cuenta\nbuscador corregido",
+        "pl": "stała tablica urządzeń\nusunięty zwave2mqtt Adapter\ndodane zwavews Adapter\nZaktualizowano zależności\ndodane zwave2mqtt Adapter\nwszystkie urządzenia liczące\npoprawiony wykrywacz",
+        "uk": "фіксований масив пристрою\nвидалено zwave2mqtt Адаптери\nдодано zwavews Адаптери\nЗалежність було оновлено\nдодано zwave2mqtt Адаптери\nфіксовані всі пристрої підрахунку\nвиправлений пошук",
+        "zh-cn": "固定设备阵列\n删除 zwave2mqtt 适配器\n添加z波长 适配器\n依赖关系已更新\n添加 zwave2mqtt 适配器\n固定所有计数设备\n更正的查找者"
       }
     },
     "titleLang": {
