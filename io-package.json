@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.2",
+    "version": "2.15.3",
     "news": {
+      "2.15.3": {
+        "en": "fix ping adapter, fritzdec",
+        "de": "fixierpistole, fritzdec",
+        "ru": "адаптер для фиксации пингов, fritzdec",
+        "pt": "corrigir adaptador de ping, fritzdec",
+        "nl": "fix ping adapter, fritzdec",
+        "fr": "adaptateur de fixation de ping, fritzdec",
+        "it": "correzione adattatore ping, fritzdec",
+        "es": "adaptador de fijación, fritzdec",
+        "pl": "fix adapter ping, fritzdec",
+        "uk": "фіксатор ping, fritzdec",
+        "zh-cn": "修补 ping 适配器, fritzdec"
+      },
       "2.15.2": {
         "en": "fix cronjob response",
         "de": "fix cronjob antwort",

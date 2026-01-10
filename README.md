@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.15.3 (2026-01-10)
+* (arteck) fix ping adapter, fritzdec
+
 ### 2.15.2 (2026-01-10)
 * (arteck) fix cronjob response
 
@@ -209,15 +212,6 @@ This adapter would not have been possible without the great work of Christian Be
 
 ### 2.14.1 (2025-11-13)
 * (arteck) corr cronparser
-
-### 2.14.0 (2025-11-13)
-* (arteck) Dependencies have been fixed
-* (arteck) ping adapter have been fixed
-* (arteck) optimisations for adapter without info.connection state 
-* (arteck) clean code
-* (arteck) silent notification for telegram
-* (arteck) add matter devices
-* (arteck) corr lupusec battery state
 
 ## License
 

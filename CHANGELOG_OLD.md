@@ -411,6 +411,15 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.14.0 (2025-11-13)
+* (arteck) Dependencies have been fixed
+* (arteck) ping adapter have been fixed
+* (arteck) optimisations for adapter without info.connection state 
+* (arteck) clean code
+* (arteck) silent notification for telegram
+* (arteck) add matter devices
+* (arteck) corr lupusec battery state
+
 ## 2.14.5 (2025-11-16)
 * (arteck) add homee battery devices (only)
 * (arteck) fix battery list

@@ -1146,7 +1146,7 @@ class DeviceWatcher extends utils.Adapter {
 		let oldStatus;
 		let isLowBatValue;
 
-		const deviceID = id.match(regex)[1];
+		const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
 		const deviceData = this.listAllDevicesRaw.get(deviceID);
 
 		this.log.debug(`[renewDeviceData] - ${id}`);
