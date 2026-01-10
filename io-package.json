@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.0",
+    "version": "2.15.1",
     "news": {
+      "2.15.1": {
+        "en": "fix instance check\nfix admin json",
+        "de": "fehlerbehebung\nadmin json",
+        "ru": "установить проверку\nисполнитель: admin json",
+        "pt": "corrigir verificação de instância\ncorrigir o administrador json",
+        "nl": "fix instantiecontrole\nfix admin json",
+        "fr": "correction de la vérification de l'instance\nréparer admin json",
+        "it": "verifica dell'istanza di correzione\ncorrezione admin json",
+        "es": "control de instancia de fijación\nadmin json",
+        "pl": "fix instance check\nfix admin json",
+        "uk": "перевірка екземпляра\nвиправлено admin json",
+        "zh-cn": "修补实例检查\n固定管理员json"
+      },
       "2.15.0": {
         "en": "fixed device array\ndeleted zwave2mqtt Adapter\nadded zwavews Adapter\nDependencies have been updated\nadded zwave2mqtt Adapter\nfixed all count devices\ncorrected finder",
         "de": "Geräteanordnung bereinigt\nzwave2mqt Adapter gelöscht\nzwavews Adapter hinzugefügt\nAbhängigkeiten wurden aktualisiert\nzwave2mqtt Adapter hinzugefügt\nalle Zählgeräte überarbeitet\nfinder korrigiert",

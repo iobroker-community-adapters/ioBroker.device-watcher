@@ -294,7 +294,9 @@ class DeviceWatcher extends utils.Adapter {
 
 				if (this.config.checkAdapterInstances && id.startsWith('system.adapter.')) {
 					//read new instance data and add it to the lists
-					await this.getInstanceData(id);
+					if (typeof id === 'string' && /\d$/.test(id)) {
+						await this.getInstanceData(id);
+					}
 				} else {
 					if (Array.from(this.listAllDevicesRaw.values()).some((obj) => obj.mainSelector === id)) {
 						if (!this.mainRunning) {
@@ -1299,7 +1301,8 @@ class DeviceWatcher extends utils.Adapter {
 	 */
 	async getInstanceData(instanceObject) {
 		try {
-			const instanceAliveDP = await this.getForeignStatesAsync(`${instanceObject}.alive`);
+			const idDP = `${instanceObject}.alive`;
+			const instanceAliveDP = await this.getForeignStatesAsync(idDP);
 
 			this.adapterUpdatesJsonRaw = await this.getAdapterUpdateData(adapterUpdateListDP);
 
@@ -1317,8 +1320,10 @@ class DeviceWatcher extends utils.Adapter {
 
 				// get instance connected to device data
 				const instanceConnectedDeviceDP = `${instanceID}.info.connection`;
+				const devicesState = await this.getForeignStateAsync(instanceConnectedDeviceDP);
+
 				let instanceConnectedDeviceVal;
-				if (instanceConnectedDeviceDP !== undefined && typeof instanceConnectedDeviceDP === 'boolean') {
+				if (instanceConnectedDeviceDP !== undefined && devicesState !== null && typeof devicesState.val === 'boolean') {
 					instanceConnectedDeviceVal = await tools.getInitValue(this, instanceConnectedDeviceDP);
 				} else {
 					instanceConnectedDeviceVal = 'N/A';
@@ -1331,7 +1336,9 @@ class DeviceWatcher extends utils.Adapter {
 				let adapterAvailableUpdate = '';
 				let instanceMode;
 				let scheduleTime = 'N/A';
+
 				const instanceObjectData = await this.getForeignObjectAsync(instanceObjectPath);
+
 				if (instanceObjectData) {
 					adapterName = tools.capitalize(instanceObjectData.common.name);
 					adapterVersion = instanceObjectData.common.version;
@@ -2284,18 +2291,20 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 	async getPreviousCronRun(lastCronRun) {
-		try {
-			const cronParser = cronParserLib.parseExpression
-				? cronParserLib // klassischer Import
-				: cronParserLib.default; // ESM-Fallback
+	  try {
+		const cronParser = cronParserLib.parseExpression ? cronParserLib : cronParserLib.default;
 
-			const interval = cronParser.parseExpression(lastCronRun);
-			const previous = interval.prev();
-			return Math.floor(Date.now() - previous.getTime()); // in ms
-		} catch (error) {
-			this.log.error(`[getPreviousCronRun] - ${error}`);
-		}
+		const interval = cronParser.parseExpression(lastCronRun);
+		const previous = interval.prev();
+
+		// Differenz in ms seit dem vorherigen Cron-Zeitpunkt
+		return Date.now() - previous.getTime();
+	  } catch (error) {
+		this.log.error(`[getPreviousCronRun] - ${error}`);
+		return null;
+	  }
 	}
+
 
 	/**
 	 * @param {() => void} callback

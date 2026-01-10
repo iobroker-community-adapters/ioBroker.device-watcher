@@ -1,6 +1,6 @@
 {
   "name": "iobroker.device-watcher",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "description": "Watchdog for devices",
   "author": "Christian Behrends <mail@christian-behrends.de>",
   "contributors": [
@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.3.2",
-    "node-schedule": "^2.1.1"
+    "node-schedule": "^2.1.1",
+    "cron-parser": "^4.9.0"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^5.0.0",
