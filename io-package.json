@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.1",
+    "version": "2.15.2",
     "news": {
+      "2.15.2": {
+        "en": "fix cronjob response",
+        "de": "fix cronjob antwort",
+        "ru": "реакция cronjob",
+        "pt": "corrigir a resposta do cronjob",
+        "nl": "cronjob respons repareren",
+        "fr": "corriger la réponse cronjob",
+        "it": "correzione di cronjob risposta",
+        "es": "solución respuesta cronjob",
+        "pl": "naprawić odpowiedź cronjob",
+        "uk": "виправити cronjob відповідь",
+        "zh-cn": "固定 curonjob 响应"
+      },
       "2.15.1": {
         "en": "fix instance check\nfix admin json",
         "de": "fehlerbehebung\nadmin json",

@@ -411,6 +411,10 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.14.5 (2025-11-16)
+* (arteck) add homee battery devices (only)
+* (arteck) fix battery list
+
 ## 2.14.4 (2025-11-13)
 * (arteck) fix silent telegram notification
 * (arteck) fix offline list

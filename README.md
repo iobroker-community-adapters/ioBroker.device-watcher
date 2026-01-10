@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.15.2 (2026-01-10)
+* (arteck) fix cronjob response
+
 ### 2.15.1 (2026-01-10)
 * (arteck) fix instance check
 * (arteck) fix admin json
@@ -215,10 +218,6 @@ This adapter would not have been possible without the great work of Christian Be
 * (arteck) silent notification for telegram
 * (arteck) add matter devices
 * (arteck) corr lupusec battery state
-
-### 2.14.5 (2025-11-16)
-* (arteck) add homee battery devices (only)
-* (arteck) fix battery list
 
 ## License
 

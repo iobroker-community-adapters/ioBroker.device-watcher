@@ -1491,7 +1491,7 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (isAliveSchedule) {
 			lastUpdate = Math.round((Date.now() - isAliveSchedule.lc) / 1000); // Last state change in seconds
-			previousCronRun = this.getPreviousCronRun(scheduleTime); // When was the last cron run
+			previousCronRun = await this.getPreviousCronRun(scheduleTime); // When was the last cron run
 			if (previousCronRun) {
 				lastCronRun = Math.round(previousCronRun / 1000); // change distance to last run in seconds
 				diff = lastCronRun - lastUpdate;
