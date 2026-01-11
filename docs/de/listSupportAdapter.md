@@ -440,5 +440,14 @@ Hier ist eine Liste der unterstützten Adapter mit der Information, was pro Adap
             <td class="column5 style0 s">✅</td>
             <td class="column6 style0 s">❌</td>
           </tr>
+         <tr>
+            <td class="column0 style0 s">...</td>
+            <td class="column1 style0 s">...</td>
+            <td class="column2 style0 s">...</td>
+            <td class="column3 style0 s">...</td>
+            <td class="column4 style0 s">...</td>
+            <td class="column5 style0 s">...</td>
+            <td class="column6 style0 s">...</td>
+          </tr>
         </tbody>
     </table>
