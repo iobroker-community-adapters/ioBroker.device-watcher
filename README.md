@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.15.4 (2026-01-11)
+* (arteck) define subscribe rules new
+
 ### 2.15.3 (2026-01-10)
 * (arteck) fix ping adapter, fritzdec
 
@@ -209,9 +212,6 @@ This adapter would not have been possible without the great work of Christian Be
 * (arteck) added zwave2mqtt Adapter
 * (arteck) fixed all count devices
 * (arteck) corrected finder
-
-### 2.14.1 (2025-11-13)
-* (arteck) corr cronparser
 
 ## License
 

@@ -411,6 +411,9 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.14.1 (2025-11-13)
+* (arteck) corr cronparser
+
 ## 2.14.0 (2025-11-13)
 * (arteck) Dependencies have been fixed
 * (arteck) ping adapter have been fixed

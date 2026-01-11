@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.3",
+    "version": "2.15.4",
     "news": {
+      "2.15.4": {
+        "en": "define subscribe rules new",
+        "de": "anmelderegeln neu definieren",
+        "ru": "новые правила подписки",
+        "pt": "definir regras de subscrição novas",
+        "nl": "nieuwe ondertekenregels definiëren",
+        "fr": "définir des règles de souscription nouvelles",
+        "it": "definire le regole di abbonamento",
+        "es": "definir reglas de suscripción nuevas",
+        "pl": "nowe zasady subskrypcji",
+        "uk": "визначити правила підписки",
+        "zh-cn": "定义订阅规则新"
+      },
       "2.15.3": {
         "en": "fix ping adapter, fritzdec",
         "de": "fixierpistole, fritzdec",
