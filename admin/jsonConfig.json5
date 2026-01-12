@@ -78,7 +78,7 @@
 							attr: 'adapterKey',
 							width: '1%',
 							disabled: 'true',
-							hidden: true,
+							hidden: 'true',
 						},
 					],
 				},
