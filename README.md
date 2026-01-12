@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.15.5 (2026-01-12)
+* (arteck) fix admin
+
 ### 2.15.4 (2026-01-11)
 * (arteck) define subscribe rules new
 
@@ -203,15 +206,6 @@ This adapter would not have been possible without the great work of Christian Be
 ### 2.15.1 (2026-01-10)
 * (arteck) fix instance check
 * (arteck) fix admin json
-
-### 2.15.0 (2026-01-07)
-* (arteck) fixed device array
-* (arteck) deleted zwave2mqtt Adapter
-* (arteck) added zwavews Adapter
-* (arteck) Dependencies have been updated
-* (arteck) added zwave2mqtt Adapter
-* (arteck) fixed all count devices
-* (arteck) corrected finder
 
 ## License
 

@@ -411,6 +411,15 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.0 (2026-01-07)
+* (arteck) fixed device array
+* (arteck) deleted zwave2mqtt Adapter
+* (arteck) added zwavews Adapter
+* (arteck) Dependencies have been updated
+* (arteck) added zwave2mqtt Adapter
+* (arteck) fixed all count devices
+* (arteck) corrected finder
+
 ## 2.14.1 (2025-11-13)
 * (arteck) corr cronparser
 

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.4",
+    "version": "2.15.5",
     "news": {
+      "2.15.5": {
+        "en": "fix admin",
+        "de": "admin",
+        "ru": "исправить admin",
+        "pt": "corrigir administrador",
+        "nl": "fix admin",
+        "fr": "réparer l'administration",
+        "it": "fix admin",
+        "es": "admin",
+        "pl": "fix admin",
+        "uk": "адмін",
+        "zh-cn": "固定管理员"
+      },
       "2.15.4": {
         "en": "define subscribe rules new",
         "de": "anmelderegeln neu definieren",
