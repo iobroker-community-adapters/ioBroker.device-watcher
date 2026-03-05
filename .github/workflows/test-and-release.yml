@@ -77,7 +77,7 @@ jobs:
       steps:
         - uses: ioBroker/testing-action-deploy@v1
           with:
-            node-version: '22.x'         
+            node-version: '22.x'
             github-token: ${{ secrets.AUTO_MERGE_TOKEN }}
 
 
