@@ -54,7 +54,6 @@ jobs:
 
     # Deploys the final package to NPM
     deploy:
-    # Define which jobst must succeed before the release
       needs: [ check-and-lint, adapter-tests]
       
       # Trigger this step only when a commit on master is tagged with a version number
