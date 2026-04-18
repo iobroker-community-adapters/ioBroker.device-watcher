@@ -534,6 +534,7 @@ class DeviceWatcher extends utils.Adapter {
 				// Get ID with short currDeviceString from objectjson
 				case 'hueExt':
 				case 'hmrpc':
+				case 'matter':
 				case 'nukiExt':
 				case 'wled':
 				case 'mqttNuki':
@@ -930,6 +931,7 @@ class DeviceWatcher extends utils.Adapter {
 				case 'apcups':
 				case 'hue':
 				case 'hueExt':
+				case 'matter':
 				case 'ping':
 				case 'deconz':
 				case 'shelly':

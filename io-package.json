@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.6",
+    "version": "2.15.7",
     "news": {
+      "2.15.7": {
+        "en": "fix matter \n",
+        "de": "fixkosten\n",
+        "ru": "исправлять\n",
+        "pt": "corrigir a matéria\n",
+        "nl": "fix materie\n",
+        "fr": "fixer la matière\n",
+        "it": "risolvere la questione\n",
+        "es": "arregla la materia\n",
+        "pl": "materia stabilna\n",
+        "uk": "фіксувати матерію\n",
+        "zh-cn": "固定事项\n"
+      },
       "2.15.6": {
         "en": "Adapter requires admin >= 7.7.22 now\nfix instanz restart\nfix cronParserLib.parseExpression message\nfix group in zigbee2mqtt",
         "de": "Adapter benötigt admin >= 7.7.22 jetzt\ninstanz restart\ncronParserLib.parseExpressionsnachricht\nfix group in zigbee2mqtt",
