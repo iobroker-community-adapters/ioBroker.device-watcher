@@ -191,9 +191,12 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.15.8 (2026-04-18)
+* (arteck) fix cronParserLib.parseExpression message
+
 ### 2.15.7 (2026-04-18)
 * (arteck) fix matter 
-*
+* (arteck) fix cronParserLib.parseExpression message
 
 ### 2.15.6 (2026-04-18)
 - (copilot) Adapter requires admin >= 7.7.22 now
@@ -206,9 +209,6 @@ This adapter would not have been possible without the great work of Christian Be
 
 ### 2.15.4 (2026-01-11)
 * (arteck) define subscribe rules new
-
-### 2.15.3 (2026-01-10)
-* (arteck) fix ping adapter, fritzdec
 
 ## License
 

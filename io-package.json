@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.7",
+    "version": "2.15.8",
     "news": {
+      "2.15.8": {
+        "en": "fix cronParserLib.parseExpression message",
+        "de": "cronParserLib.parseExpressionsnachricht",
+        "ru": "исправить сообщение cronParserLib.parse",
+        "pt": "corrigir cronParserLib.parseExpression message",
+        "nl": "fix cronParserLib.parseExpressiebericht",
+        "fr": "correction du message cronParserLib.parseExpression",
+        "it": "correzione cronParserLib.parseExpression messaggio",
+        "es": "fijar cronParserLib.parse",
+        "pl": "naprawić wiadomość cronParserLib.parseExpression",
+        "uk": "виправлено cronParserLib.parseExpression повідомлення",
+        "zh-cn": "修补 cronParserLib.parsepression 信件"
+      },
       "2.15.7": {
         "en": "fix matter \n",
         "de": "fixkosten\n",
@@ -80,19 +93,6 @@
         "pl": "fix instance check\nfix admin json",
         "uk": "перевірка екземпляра\nвиправлено admin json",
         "zh-cn": "修补实例检查\n固定管理员json"
-      },
-      "2.15.0": {
-        "en": "fixed device array\ndeleted zwave2mqtt Adapter\nadded zwavews Adapter\nDependencies have been updated\nadded zwave2mqtt Adapter\nfixed all count devices\ncorrected finder",
-        "de": "Geräteanordnung bereinigt\nzwave2mqt Adapter gelöscht\nzwavews Adapter hinzugefügt\nAbhängigkeiten wurden aktualisiert\nzwave2mqtt Adapter hinzugefügt\nalle Zählgeräte überarbeitet\nfinder korrigiert",
-        "ru": "фиксированный массив устройств\nудаленный zwave2mqtt Адаптер\nдобавить zwavews Адаптер\nЗависимости были обновлены\nдобавить zwave2mqtt Адаптер\nфиксированные все счетные устройства\nисправленный искатель",
-        "pt": "arranjo fixo do dispositivo\napagado zwave2mqtt Adaptador\nzwavews adicionados Adaptador\nAs dependências foram atualizadas\nadicionado zwave2mqtt Adaptador\nfixou todos os dispositivos de contagem\nlocalizador corrigido",
-        "nl": "vaste apparaatarray\nverwijderde zwave2mqtt Adapter\nzwavews toegevoegd Adapter\nAfhankelijkheden zijn bijgewerkt\nzwave2mqtt toegevoegd Adapter\nvaste alle telapparaten\ngecorrigeerde zoeker",
-        "fr": "tableau de périphériques fixes\nsupprimé zwave2mqtt Adaptateur\nzwavews ajoutés Adaptateur\nLes dépendances ont été actualisées\najouté zwave2mqtt Adaptateur\nfixe tous les appareils de comptage\ncorrecteur",
-        "it": "array di dispositivi fissi\ncancellato zwave2mqt Adattatore\naggiunto zwavews Adattatore\nLe dipendenze sono state aggiornate\naggiunto zwave2mqt Adattatore\nfissi tutti i dispositivi di conteggio\ncercatore corretto",
-        "es": "array de dispositivo fijo\nborrado zwave2mqt Adaptador\nañadido zwavews Adaptador\nSe han actualizado las dependencias\nzwave2mqt Adaptador\nfijo todos los dispositivos de cuenta\nbuscador corregido",
-        "pl": "stała tablica urządzeń\nusunięty zwave2mqtt Adapter\ndodane zwavews Adapter\nZaktualizowano zależności\ndodane zwave2mqtt Adapter\nwszystkie urządzenia liczące\npoprawiony wykrywacz",
-        "uk": "фіксований масив пристрою\nвидалено zwave2mqtt Адаптери\nдодано zwavews Адаптери\nЗалежність було оновлено\nдодано zwave2mqtt Адаптери\nфіксовані всі пристрої підрахунку\nвиправлений пошук",
-        "zh-cn": "固定设备阵列\n删除 zwave2mqtt 适配器\n添加z波长 适配器\n依赖关系已更新\n添加 zwave2mqtt 适配器\n固定所有计数设备\n更正的查找者"
       }
     },
     "titleLang": {

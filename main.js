@@ -2317,7 +2317,15 @@ class DeviceWatcher extends utils.Adapter {
 	}
 	async getPreviousCronRun(lastCronRun) {
 		try {
-			const interval = cronParserLib.parseExpression(lastCronRun);
+			let interval;
+			// cron-parser v4: parseExpression() – v5: CronExpressionParser.parse()
+			if (typeof cronParserLib.parseExpression === 'function') {
+				interval = cronParserLib.parseExpression(lastCronRun);
+			} else if (cronParserLib.CronExpressionParser && typeof cronParserLib.CronExpressionParser.parse === 'function') {
+				interval = cronParserLib.CronExpressionParser.parse(lastCronRun);
+			} else {
+				throw new Error('cron-parser: no compatible API found (parseExpression / CronExpressionParser.parse)');
+			}
 			const previous = interval.prev();
 
 			// Differenz in ms seit dem vorherigen Cron-Zeitpunkt
