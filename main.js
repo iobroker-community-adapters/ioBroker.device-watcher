@@ -2314,18 +2314,16 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 	async getPreviousCronRun(lastCronRun) {
-	  try {
-		const cronParser = cronParserLib.parseExpression ? cronParserLib : cronParserLib.default;
+		try {
+			const interval = cronParserLib.parseExpression(lastCronRun);
+			const previous = interval.prev();
 
-		const interval = cronParser.parseExpression(lastCronRun);
-		const previous = interval.prev();
-
-		// Differenz in ms seit dem vorherigen Cron-Zeitpunkt
-		return Date.now() - previous.getTime();
-	  } catch (error) {
-		this.log.error(`[getPreviousCronRun] - ${error}`);
-		return null;
-	  }
+			// Differenz in ms seit dem vorherigen Cron-Zeitpunkt
+			return Date.now() - previous.getTime();
+		} catch (error) {
+			this.log.error(`[getPreviousCronRun] - ${error}`);
+			return null;
+		}
 	}
 
 

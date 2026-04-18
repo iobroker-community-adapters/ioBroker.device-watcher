@@ -195,6 +195,7 @@ This adapter would not have been possible without the great work of Christian Be
 ### **WORK IN PROGRESS**
 - (copilot) Adapter requires admin >= 7.7.22 now
 * (arteck) fix instanz restart
+* (arteck) fix cronParserLib.parseExpression message
 
 ### 2.15.5 (2026-01-12)
 * (arteck) fix admin
