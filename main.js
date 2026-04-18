@@ -118,7 +118,7 @@ class DeviceWatcher extends utils.Adapter {
 			// create list with enabled adapters for monitor devices
 			for (const device of Object.values(this.config.tableDevices)) {
 				if (device.enabled) {
-					for (const [adapterName, adapter] of Object.entries(adapterArray)) {
+					for (const [_adapterName, adapter] of Object.entries(adapterArray)) {
 						if (String(adapter.adapterKey).toLowerCase() === String(device.adapterKey).toLowerCase()) {
 							this.selAdapter.push(adapter);
 							this.adapterSelected.push(adapter.adapterKey);
@@ -449,6 +449,9 @@ class DeviceWatcher extends utils.Adapter {
 						this.log.error(`[onMessage - instanceList] - ${error}`);
 					}
 				}
+				break;
+			default:
+				this.log.warn(`[onMessage] Unknown command: ${obj.command}`);
 				break;
 		}
 	}
@@ -813,20 +816,16 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {object} selector - Selector
 	 */
 	async getLastContact(selector) {
-		const lastContact = tools.getTimestamp(selector); // z. B. Differenz in Sekunden?
+		const lastContact = tools.getTimestamp(selector);
 
-		let lastContactString = `${this.formatDate(new Date(selector), 'hh:mm:ss')}`;
+		let lastContactString;
 
-		// Falls du die vergangene Zeit in Sekunden anzeigen willst:
-		if (Math.round(lastContact) >= 0) {
-			lastContactString = `${Math.round(lastContact)} ${translations.secs[this.config.userSelectedLanguage]}`;
-		}
-
-		// Optional: Wenn du ab einem bestimmten Wert lieber Minuten oder Stunden willst
 		if (lastContact >= 3600) {
 			lastContactString = `${(lastContact / 3600).toFixed(1)} ${translations.hours[this.config.userSelectedLanguage]}`;
-		} else {
+		} else if (lastContact >= 60) {
 			lastContactString = `${Math.round(lastContact / 60)} ${translations.minits[this.config.userSelectedLanguage]}`;
+		} else {
+			lastContactString = `${Math.round(lastContact)} ${translations.secs[this.config.userSelectedLanguage]}`;
 		}
 
 		return lastContactString;
@@ -842,7 +841,7 @@ class DeviceWatcher extends utils.Adapter {
 			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
 			const deviceUnreachSelector = await this.getForeignStateAsync(treeDP);
 
-			const lastDeviceUnreachStateChange = deviceUnreachSelector != undefined ? tools.getTimestamp(deviceUnreachSelector.lc) : tools.getTimestamp(timeSelector.ts);
+			const lastDeviceUnreachStateChange = deviceUnreachSelector !== undefined ? tools.getTimestamp(deviceUnreachSelector.lc) : tools.getTimestamp(timeSelector.ts);
 
 			// ignore disabled device from zigbee2MQTT
 			if (adapterID === 'zigbee2MQTT') {
@@ -1087,7 +1086,7 @@ class DeviceWatcher extends utils.Adapter {
 			});
 
 			// LinkQuality lists
-			if (device.SignalStrength != ' - ') {
+			if (device.SignalStrength !== ' - ') {
 				this.linkQualityDevices.push({
 					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
 					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
@@ -1138,7 +1137,6 @@ class DeviceWatcher extends utils.Adapter {
 	 * @param {ioBroker.State} state
 	 */
 	async renewDeviceData(id, state) {
-		const regex = /^([^.]+\.\d+\.[^.]+)/;
 		let batteryData;
 		let signalData;
 		let oldLowBatState;
@@ -1264,7 +1262,7 @@ class DeviceWatcher extends utils.Adapter {
 								deviceData.rssiPeerSelectorHMRPC,
 							);
 
-							if (contactData !== undefined || contactData !== null) {
+							if (contactData !== undefined && contactData !== null) {
 								deviceData.LastContact = contactData[0];
 								deviceData.Status = contactData[1];
 								deviceData.SignalStrength = contactData[2];
@@ -1323,7 +1321,7 @@ class DeviceWatcher extends utils.Adapter {
 				const devicesState = await this.getForeignStateAsync(instanceConnectedDeviceDP);
 
 				let instanceConnectedDeviceVal;
-				if (instanceConnectedDeviceDP !== undefined && devicesState !== null && typeof devicesState.val === 'boolean') {
+				if (devicesState !== null && typeof devicesState.val === 'boolean') {
 					instanceConnectedDeviceVal = await tools.getInitValue(this, instanceConnectedDeviceDP);
 				} else {
 					instanceConnectedDeviceVal = 'N/A';
@@ -1549,13 +1547,19 @@ class DeviceWatcher extends utils.Adapter {
 						await this.delay(instanceErrorTime);
 						const daemonIsAliveAfterSecondDelay = await this.checkDaemonIsHealthy(instanceID);
 
-						if (daemonIsAliveAfterSecondDelay[0] && !daemonIsAliveAfterSecondDelay[1]) {
-							isAlive = Boolean(daemonIsAliveAfterSecondDelay[0]);
-							isHealthy = Boolean(daemonIsAliveAfterSecondDelay[1]);
-							instanceStatusString = String(daemonIsAliveAfterSecondDelay[2]);
-							connectedToHost = Boolean(daemonIsAliveAfterSecondDelay[3]);
-							connectedToDevice = Boolean(daemonIsAliveAfterSecondDelay[4]);
-						}
+						// nach allen Retries: Status übernehmen (egal ob erholt oder weiterhin fehlerhaft)
+						isAlive = Boolean(daemonIsAliveAfterSecondDelay[0]);
+						isHealthy = Boolean(daemonIsAliveAfterSecondDelay[1]);
+						instanceStatusString = String(daemonIsAliveAfterSecondDelay[2]);
+						connectedToHost = Boolean(daemonIsAliveAfterSecondDelay[3]);
+						connectedToDevice = Boolean(daemonIsAliveAfterSecondDelay[4]);
+					} else {
+						// nach erstem Retry wieder gesund
+						isAlive = Boolean(daemonIsAliveAfterDelay[0]);
+						isHealthy = Boolean(daemonIsAliveAfterDelay[1]);
+						instanceStatusString = String(daemonIsAliveAfterDelay[2]);
+						connectedToHost = Boolean(daemonIsAliveAfterDelay[3]);
+						connectedToDevice = Boolean(daemonIsAliveAfterDelay[4]);
 					}
 				} else {
 					daemonIsNotAlive = await this.checkDaemonIsAlive(instanceID, instanceDeactivationTime);
@@ -1580,14 +1584,17 @@ class DeviceWatcher extends utils.Adapter {
 	async getAdapterUpdateData(adapterUpdateListDP) {
 		// Clear the existing adapter updates data
 		let adapterUpdatesJsonRaw = [];
-		let adapterJsonList;
+		let adapterJsonList = {};
 
 		// Fetch the adapter updates list
 		const adapterUpdatesListVal = await this.getForeignStatesAsync(adapterUpdateListDP);
 
-		// Extract adapter data from the list
-		for (const [id, value] of Object.entries(adapterUpdatesListVal)) {
-			adapterJsonList = tools.parseData(value.val);
+		// Extract adapter data from the list - merge all admin instances
+		for (const [_id, value] of Object.entries(adapterUpdatesListVal)) {
+			const parsed = tools.parseData(value.val);
+			if (parsed && typeof parsed === 'object') {
+				Object.assign(adapterJsonList, parsed);
+			}
 		}
 
 		// Populate the adapter updates data
@@ -1817,8 +1824,24 @@ class DeviceWatcher extends utils.Adapter {
 						// send message when instance was deactivated
 						if (this.config.checkSendInstanceDeactivatedMsg && !instanceData.isAlive) {
 							if (this.blacklistInstancesNotify.includes(instanceID)) {
-								return;
+								break;
 							}
+							// Restart-Erkennung: Toleranzzeit abwarten und prüfen ob Instanz schon wieder läuft
+							const restartTolerance = this.userTimeInstancesList.has(instanceID)
+								? this.userTimeInstancesList.get(instanceID).deactivationTime * 1000
+								: this.config.offlineTimeInstances * 1000;
+
+							this.log.debug(`[renewInstanceData] Instance ${instanceID} went offline - waiting ${restartTolerance}ms to check for restart...`);
+							await this.delay(restartTolerance);
+
+							const aliveAfterWait = await tools.getInitValue(this, `system.adapter.${instanceID}.alive`);
+							if (aliveAfterWait) {
+								// Instanz ist bereits wieder online → war nur ein Neustart
+								this.log.debug(`[renewInstanceData] Instance ${instanceID} is back online after restart. No deactivation notification sent.`);
+								await checkInstance(instanceID, instanceData);
+								break;
+							}
+
 							await this.sendStateNotifications('Instances', 'deactivatedInstance', instanceID);
 						}
 					}
