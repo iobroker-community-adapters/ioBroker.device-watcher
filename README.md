@@ -196,6 +196,7 @@ This adapter would not have been possible without the great work of Christian Be
 - (copilot) Adapter requires admin >= 7.7.22 now
 * (arteck) fix instanz restart
 * (arteck) fix cronParserLib.parseExpression message
+* (arteck) fix group in zigbee2mqtt
 
 ### 2.15.5 (2026-01-12)
 * (arteck) fix admin
