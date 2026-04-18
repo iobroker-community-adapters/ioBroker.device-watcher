@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.5",
+    "version": "2.15.6",
     "news": {
+      "2.15.6": {
+        "en": "Adapter requires admin >= 7.7.22 now\nfix instanz restart\nfix cronParserLib.parseExpression message\nfix group in zigbee2mqtt",
+        "de": "Adapter benötigt admin >= 7.7.22 jetzt\ninstanz restart\ncronParserLib.parseExpressionsnachricht\nfix group in zigbee2mqtt",
+        "ru": "Адаптер требует администратора >= 7.7.22\nвосстановление instanz\nисправить сообщение cronParserLib.parse\nфиксированная группа в zigbee2mqtt",
+        "pt": "Adaptador requer admin >= 7.7.22 agora\ncorrigir instanz reiniciar\ncorrigir cronParserLib.parseExpression message\ngrupo de correção em zigbee2mqtt",
+        "nl": "Adapter vereist admin < 7.7.22 nu\nfix instanz herstart\nfix cronParserLib.parseExpressiebericht\nfix groep in zigbee2mqtt",
+        "fr": "Adaptateur nécessite admin >= 7.7.22 maintenant\ncorrection du redémarrage de l'instanz\ncorrection du message cronParserLib.parseExpression\nfixer le groupe dans zigbee2mqtt",
+        "it": "Adattatore richiede admin >= 7.7.22 ora\nfix instanz riavvio\ncorrezione cronParserLib.parseExpression messaggio\ngruppo di correzione in zigbee2mqt",
+        "es": "El adaptador requiere administrador= 7.7.22 ahora\nfijación instanz restart\nfijar cronParserLib.parse\ngrupo de fijación en zigbee2mqt",
+        "pl": "Adapter wymaga admin > = 7.7.22\nfix instanz restart\nnaprawić wiadomość cronParserLib.parseExpression\nfix group in zigbee2mqtt",
+        "uk": "Адаптер вимагає адмін >= 7.7.22 тепер\nвиправити instanz перезавантаження\nвиправлено cronParserLib.parseExpression повідомлення\nфіксувати групу в zigbee2mqtt",
+        "zh-cn": "适任者需要管理员 \\ 7.7.22 现在\n修复即时状态重新启动\n修补 cronParserLib.parsepression 信件\n以zigbee2mqtt为单位的固定组"
+      },
       "2.15.5": {
         "en": "fix admin",
         "de": "admin",

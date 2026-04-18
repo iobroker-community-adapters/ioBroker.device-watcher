@@ -191,8 +191,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.15.6 (2026-04-18)
 - (copilot) Adapter requires admin >= 7.7.22 now
 * (arteck) fix instanz restart
 * (arteck) fix cronParserLib.parseExpression message
@@ -209,10 +208,6 @@ This adapter would not have been possible without the great work of Christian Be
 
 ### 2.15.2 (2026-01-10)
 * (arteck) fix cronjob response
-
-### 2.15.1 (2026-01-10)
-* (arteck) fix instance check
-* (arteck) fix admin json
 
 ## License
 

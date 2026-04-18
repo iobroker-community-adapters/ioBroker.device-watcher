@@ -411,6 +411,10 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.1 (2026-01-10)
+* (arteck) fix instance check
+* (arteck) fix admin json
+
 ## 2.15.0 (2026-01-07)
 * (arteck) fixed device array
 * (arteck) deleted zwave2mqtt Adapter
