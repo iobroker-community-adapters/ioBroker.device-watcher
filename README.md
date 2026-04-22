@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.15.9 (2026-04-22)
+* (arteck) new xsense (v. 0.4.0) structure, plz update before
+
 ### 2.15.8 (2026-04-18)
 * (arteck) fix cronParserLib.parseExpression message
 
@@ -206,9 +209,6 @@ This adapter would not have been possible without the great work of Christian Be
 
 ### 2.15.5 (2026-01-12)
 * (arteck) fix admin
-
-### 2.15.4 (2026-01-11)
-* (arteck) define subscribe rules new
 
 ## License
 

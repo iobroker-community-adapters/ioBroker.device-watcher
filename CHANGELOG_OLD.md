@@ -411,6 +411,9 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.4 (2026-01-11)
+* (arteck) define subscribe rules new
+
 ## 2.15.3 (2026-01-10)
 * (arteck) fix ping adapter, fritzdec
 

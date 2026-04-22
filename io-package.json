@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.8",
+    "version": "2.15.9",
     "news": {
+      "2.15.9": {
+        "en": "new xsense (v. 0.4.0) structure, plz update before",
+        "de": "neue xsense (v. 0.4.0) struktur, plz update vor",
+        "ru": "новая структура xsense (v. 0.4.0), обновление plz до",
+        "pt": "nova estrutura xsense (v. 0.4.0), atualização plz antes",
+        "nl": "nieuwe xsense (v. 0.4.0) structuur, plz update voor",
+        "fr": "nouvelle structure xsense (v. 0.4.0), mise à jour plz",
+        "it": "nuova struttura xsense (v. 0.4.0), aggiornamento plz prima",
+        "es": "nueva estructura xsense (v. 0.4.0)",
+        "pl": "nowa struktura xsense (v. 0.4.0), aktualizacja plz przed",
+        "uk": "новий xsense (v. 0.4.0) структура, оновлення plz перед",
+        "zh-cn": "新的 xsense (v. 04. 0) 结构, plz 更新前"
+      },
       "2.15.8": {
         "en": "fix cronParserLib.parseExpression message",
         "de": "cronParserLib.parseExpressionsnachricht",
@@ -80,19 +93,6 @@
         "pl": "naprawić odpowiedź cronjob",
         "uk": "виправити cronjob відповідь",
         "zh-cn": "固定 curonjob 响应"
-      },
-      "2.15.1": {
-        "en": "fix instance check\nfix admin json",
-        "de": "fehlerbehebung\nadmin json",
-        "ru": "установить проверку\nисполнитель: admin json",
-        "pt": "corrigir verificação de instância\ncorrigir o administrador json",
-        "nl": "fix instantiecontrole\nfix admin json",
-        "fr": "correction de la vérification de l'instance\nréparer admin json",
-        "it": "verifica dell'istanza di correzione\ncorrezione admin json",
-        "es": "control de instancia de fijación\nadmin json",
-        "pl": "fix instance check\nfix admin json",
-        "uk": "перевірка екземпляра\nвиправлено admin json",
-        "zh-cn": "修补实例检查\n固定管理员json"
       }
     },
     "titleLang": {
