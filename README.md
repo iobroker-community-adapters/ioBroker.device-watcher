@@ -213,6 +213,8 @@ This adapter would not have been possible without the great work of Christian Be
 ### 2.15.5 (2026-01-12)
 * (arteck) fix admin
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
 MIT License
