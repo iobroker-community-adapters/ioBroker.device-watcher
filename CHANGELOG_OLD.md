@@ -411,6 +411,10 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.7 (2026-04-18)
+* (arteck) fix matter 
+* (arteck) fix cronParserLib.parseExpression message
+
 ## 2.15.6 (2026-04-18)
 - (copilot) Adapter requires admin >= 7.7.22 now
 * (arteck) fix instanz restart

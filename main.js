@@ -1085,76 +1085,113 @@ class DeviceWatcher extends utils.Adapter {
 	async theLists(device) {
 		// Raw List with all devices for user
 		if (device.Status !== 'disabled') {
-			this.listAllDevicesUserRaw.push({
-				Device: device.Device,
-				Adapter: device.Adapter,
-				Instance: device.instance,
-				'Instance connected': device.instanceDeviceConnected,
-				isBatteryDevice: device.isBatteryDevice,
-				Battery: device.Battery,
-				BatteryRaw: device.BatteryRaw,
-				BatteryUnitRaw: device.BatteryUnitRaw,
-				isLowBat: device.LowBat,
-				'Signal strength': device.SignalStrength,
-				'Signal strength Raw': device.SignalStrengthRaw,
-				'Last contact': device.LastContact,
-				'Update Available': device.Upgradable,
-				Status: device.Status,
-			});
+			// Deduplication: some adapters (e.g. hmrpc with multiple channels, hue-extended with
+			// devices appearing under both lights and sensors) create multiple Map entries for the
+			// same physical device. Use Path as unique key to prevent duplicate list entries.
+			const lang = this.config.userSelectedLanguage;
+			const alreadyInUserRaw = this.listAllDevicesUserRaw.some((d) => d.Device === device.Device && d.Adapter === device.Adapter);
+			if (!alreadyInUserRaw) {
+				this.listAllDevicesUserRaw.push({
+					Device: device.Device,
+					Adapter: device.Adapter,
+					Instance: device.instance,
+					'Instance connected': device.instanceDeviceConnected,
+					isBatteryDevice: device.isBatteryDevice,
+					Battery: device.Battery,
+					BatteryRaw: device.BatteryRaw,
+					BatteryUnitRaw: device.BatteryUnitRaw,
+					isLowBat: device.LowBat,
+					'Signal strength': device.SignalStrength,
+					'Signal strength Raw': device.SignalStrengthRaw,
+					'Last contact': device.LastContact,
+					'Update Available': device.Upgradable,
+					Status: device.Status,
+				});
+			}
 
 			// List with all devices
-			this.listAllDevices.push({
-				[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-				[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-				[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
-				[translations.Signal_strength[this.config.userSelectedLanguage]]: device.SignalStrength,
-				[translations.Last_Contact[this.config.userSelectedLanguage]]: device.LastContact,
-				[translations.Status[this.config.userSelectedLanguage]]: device.Status,
-			});
+			const alreadyInAll = this.listAllDevices.some(
+				(d) => d[translations.Device[lang]] === device.Device && d[translations.Adapter[lang]] === device.Adapter,
+			);
+			if (!alreadyInAll) {
+				this.listAllDevices.push({
+					[translations.Device[lang]]: device.Device,
+					[translations.Adapter[lang]]: device.Adapter,
+					[translations.Battery[lang]]: device.Battery,
+					[translations.Signal_strength[lang]]: device.SignalStrength,
+					[translations.Last_Contact[lang]]: device.LastContact,
+					[translations.Status[lang]]: device.Status,
+				});
+			}
 
 			// LinkQuality lists
 			if (device.SignalStrength !== ' - ') {
-				this.linkQualityDevices.push({
-					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-					[translations.Signal_strength[this.config.userSelectedLanguage]]: device.SignalStrength,
-				});
+				const alreadyInLQ = this.linkQualityDevices.some(
+					(d) => d[translations.Device[lang]] === device.Device && d[translations.Adapter[lang]] === device.Adapter,
+				);
+				if (!alreadyInLQ) {
+					this.linkQualityDevices.push({
+						[translations.Device[lang]]: device.Device,
+						[translations.Adapter[lang]]: device.Adapter,
+						[translations.Signal_strength[lang]]: device.SignalStrength,
+					});
+				}
 			}
 
 			// Battery lists
 			if (device.isBatteryDevice) {
-				this.batteryPowered.push({
-					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-					[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
-					[translations.Status[this.config.userSelectedLanguage]]: device.Status,
-				});
+				const alreadyInBat = this.batteryPowered.some(
+					(d) => d[translations.Device[lang]] === device.Device && d[translations.Adapter[lang]] === device.Adapter,
+				);
+				if (!alreadyInBat) {
+					this.batteryPowered.push({
+						[translations.Device[lang]]: device.Device,
+						[translations.Adapter[lang]]: device.Adapter,
+						[translations.Battery[lang]]: device.Battery,
+						[translations.Status[lang]]: device.Status,
+					});
+				}
 			}
 
 			// Low Bat lists
 			if (device.LowBat && device.Status !== 'Offline') {
-				this.batteryLowPowered.push({
-					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-					[translations.Battery[this.config.userSelectedLanguage]]: device.Battery,
-				});
+				const alreadyInLowBat = this.batteryLowPowered.some(
+					(d) => d[translations.Device[lang]] === device.Device && d[translations.Adapter[lang]] === device.Adapter,
+				);
+				if (!alreadyInLowBat) {
+					this.batteryLowPowered.push({
+						[translations.Device[lang]]: device.Device,
+						[translations.Adapter[lang]]: device.Adapter,
+						[translations.Battery[lang]]: device.Battery,
+					});
+				}
 			}
 
 			// Offline List
 			if (device.Status === 'Offline') {
-				this.offlineDevices.push({
-					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-					[translations.Last_Contact[this.config.userSelectedLanguage]]: device.LastContact,
-				});
+				const alreadyOffline = this.offlineDevices.some(
+					(d) => d[translations.Device[lang]] === device.Device && d[translations.Adapter[lang]] === device.Adapter,
+				);
+				if (!alreadyOffline) {
+					this.offlineDevices.push({
+						[translations.Device[lang]]: device.Device,
+						[translations.Adapter[lang]]: device.Adapter,
+						[translations.Last_Contact[lang]]: device.LastContact,
+					});
+				}
 			}
 
 			// Device update List
 			if (device.Upgradable === true || device.Upgradable === 1) {
-				this.upgradableList.push({
-					[translations.Device[this.config.userSelectedLanguage]]: device.Device,
-					[translations.Adapter[this.config.userSelectedLanguage]]: device.Adapter,
-				});
+				const alreadyUpgradable = this.upgradableList.some(
+					(d) => d[translations.Device[lang]] === device.Device && d[translations.Adapter[lang]] === device.Adapter,
+				);
+				if (!alreadyUpgradable) {
+					this.upgradableList.push({
+						[translations.Device[lang]]: device.Device,
+						[translations.Adapter[lang]]: device.Adapter,
+					});
+				}
 			}
 		}
 	}

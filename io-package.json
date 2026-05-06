@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.11",
+    "version": "2.15.12",
     "news": {
+      "2.15.12": {
+        "en": "fix hueExtended battery check",
+        "de": "hueExtended Akku Check",
+        "ru": "проверка батареи Extended battery check",
+        "pt": "corrigir matizExtended verificação da bateria",
+        "nl": "fix hueExtended batterijcontrole",
+        "fr": "fix hueVérification étendue de la batterie",
+        "it": "correggere il controllo della batteria estesa",
+        "es": "hue de fijaciónComprobar la batería",
+        "pl": "fix hueExtended kontrola baterii",
+        "uk": "fix hueExtended перевірка батареї",
+        "zh-cn": "修复 hue 扩展电池检查"
+      },
       "2.15.11": {
         "en": "",
         "de": "",
@@ -28,7 +41,7 @@
         "pl": "Adapter wymaga node.js > = 22\nnaprawić awarię adaptera po usunięciu urządzenia",
         "uk": "Адаптер вимагає node.js >= 22 тепер\nвиправлено аварійний перехід після видалення пристрою",
         "zh-cn": "适配器需要节点.js 现在22\n删除设备后修复适配器崩溃"
-      },     
+      },
       "2.15.5": {
         "en": "fix admin",
         "de": "admin",
