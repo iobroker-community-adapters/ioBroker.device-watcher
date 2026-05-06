@@ -411,6 +411,17 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.6 (2026-04-18)
+- (copilot) Adapter requires admin >= 7.7.22 now
+* (arteck) fix instanz restart
+* (arteck) fix cronParserLib.parseExpression message
+* (arteck) fix group in zigbee2mqtt
+
+## 2.15.5 (2026-01-12)
+* (arteck) fix admin
+
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## 2.15.4 (2026-01-11)
 * (arteck) define subscribe rules new
 

@@ -1,8 +1,34 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.9",
+    "version": "2.15.11",
     "news": {
+      "2.15.11": {
+        "en": "",
+        "de": "",
+        "ru": "",
+        "pt": "",
+        "nl": "",
+        "fr": "",
+        "it": "",
+        "es": "",
+        "pl": "",
+        "uk": "",
+        "zh-cn": ""
+      },
+      "2.15.10": {
+        "en": "Adapter requires node.js >= 22 now\nfix adapter crash after delete a device",
+        "de": "Adapter benötigt node.js >= 22 jetzt\nfix adapter crash nach dem löschen eines geräts",
+        "ru": "Адаптер требует node.js >= 22 сейчас\nисправить сбой адаптера после удаления устройства",
+        "pt": "Adaptador requer nod.js >= 22 agora\ncorrigir falha do adaptador após apagar um dispositivo",
+        "nl": "Voor de adapter zijn node.js < 22 nu nodig\nfix adapter crash na het verwijderen van een apparaat",
+        "fr": "Adaptateur nécessite node.js >= 22 maintenant\ncorrection du crash de l'adaptateur après suppression d'un périphérique",
+        "it": "Adattatore richiede node.js >= 22 ora\nfissare l'arresto dell'adattatore dopo eliminare un dispositivo",
+        "es": "Adaptador requiere node.js ю= 22 ahora\najuste de bloqueo del adaptador después de eliminar un dispositivo",
+        "pl": "Adapter wymaga node.js > = 22\nnaprawić awarię adaptera po usunięciu urządzenia",
+        "uk": "Адаптер вимагає node.js >= 22 тепер\nвиправлено аварійний перехід після видалення пристрою",
+        "zh-cn": "适配器需要节点.js 现在22\n删除设备后修复适配器崩溃"
+      },
       "2.15.9": {
         "en": "new xsense (v. 0.4.0) structure, plz update before",
         "de": "neue xsense (v. 0.4.0) struktur, plz update vor",
@@ -67,32 +93,6 @@
         "pl": "fix admin",
         "uk": "адмін",
         "zh-cn": "固定管理员"
-      },
-      "2.15.3": {
-        "en": "fix ping adapter, fritzdec",
-        "de": "fixierpistole, fritzdec",
-        "ru": "адаптер для фиксации пингов, fritzdec",
-        "pt": "corrigir adaptador de ping, fritzdec",
-        "nl": "fix ping adapter, fritzdec",
-        "fr": "adaptateur de fixation de ping, fritzdec",
-        "it": "correzione adattatore ping, fritzdec",
-        "es": "adaptador de fijación, fritzdec",
-        "pl": "fix adapter ping, fritzdec",
-        "uk": "фіксатор ping, fritzdec",
-        "zh-cn": "修补 ping 适配器, fritzdec"
-      },
-      "2.15.2": {
-        "en": "fix cronjob response",
-        "de": "fix cronjob antwort",
-        "ru": "реакция cronjob",
-        "pt": "corrigir a resposta do cronjob",
-        "nl": "cronjob respons repareren",
-        "fr": "corriger la réponse cronjob",
-        "it": "correzione di cronjob risposta",
-        "es": "solución respuesta cronjob",
-        "pl": "naprawić odpowiedź cronjob",
-        "uk": "виправити cronjob відповідь",
-        "zh-cn": "固定 curonjob 响应"
       }
     },
     "titleLang": {

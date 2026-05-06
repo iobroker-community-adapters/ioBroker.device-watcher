@@ -325,6 +325,14 @@ class DeviceWatcher extends utils.Adapter {
 				if (this.listAllDevicesRaw.has(id)) {
 					this.listAllDevicesRaw.delete(id);
 				}
+				// also remove all child devices if a parent/adapter object was deleted
+				const idPrefix = `${id  }.`;
+				for (const key of this.listAllDevicesRaw.keys()) {
+					if (key.startsWith(idPrefix)) {
+						this.log.debug(`[onObjectChange] removing child device from map: ${key}`);
+						this.listAllDevicesRaw.delete(key);
+					}
+				}
 
 				//unsubscribe of Objects and states
 				this.unsubscribeForeignObjects(id);
@@ -744,10 +752,16 @@ class DeviceWatcher extends utils.Adapter {
 			default:
 				if (deviceBatteryState === undefined) {
 					if (deviceLowBatState !== undefined) {
-						if (deviceLowBatState !== true && deviceLowBatState !== 'NORMAL' && deviceLowBatState !== 1) {
+						// Explicit OK states: false, 'NORMAL', 0 (some adapters use 0=ok)
+						if (
+							deviceLowBatState === false ||
+							deviceLowBatState === 'NORMAL' ||
+							deviceLowBatState === 0
+						) {
 							batteryHealth = 'ok';
 							isBatteryDevice = true;
-						} else if (deviceLowBatState !== true) {
+						} else {
+							// true, 1, any other string != 'NORMAL' → low
 							batteryHealth = 'low';
 							isBatteryDevice = true;
 						}
@@ -794,11 +808,14 @@ class DeviceWatcher extends utils.Adapter {
 					}
 					break;
 				default:
-					if (typeof deviceLowBatState === 'number' && deviceLowBatState === 0) {
+					if (typeof deviceLowBatState === 'boolean' && deviceLowBatState === true) {
+						// true = low bat
 						lowBatIndicator = true;
 					} else if (typeof deviceLowBatState === 'string' && deviceLowBatState !== 'NORMAL') {
+						// any string other than 'NORMAL' = low bat
 						lowBatIndicator = true;
-					} else if (typeof deviceLowBatState === 'boolean' && deviceLowBatState) {
+					} else if (typeof deviceLowBatState === 'number' && deviceLowBatState === 1) {
+						// 1 = low bat (0 = ok), consistent with getBatteryData
 						lowBatIndicator = true;
 					}
 			}
@@ -842,7 +859,7 @@ class DeviceWatcher extends utils.Adapter {
 			const deviceTimeSelector = await this.getForeignStateAsync(timeSelector);
 			const deviceUnreachSelector = await this.getForeignStateAsync(treeDP);
 
-			const lastDeviceUnreachStateChange = deviceUnreachSelector !== undefined ? tools.getTimestamp(deviceUnreachSelector.lc) : tools.getTimestamp(timeSelector.ts);
+			const lastDeviceUnreachStateChange = deviceUnreachSelector?.lc != null ? tools.getTimestamp(deviceUnreachSelector.lc) : tools.getTimestamp(deviceTimeSelector?.ts ?? Date.now());
 
 			// ignore disabled device from zigbee2MQTT
 			if (adapterID === 'zigbee2MQTT') {
@@ -875,7 +892,15 @@ class DeviceWatcher extends utils.Adapter {
 			}
 
 			const gefundenerAdapter = Object.values(adapterArray).find((adapter) => adapter.adapterID === adapterID);
+			if (!gefundenerAdapter) {
+				this.log.warn(`[getOnlineState] - adapter not found in adapterArray for adapterID: ${adapterID}`);
+				return [lastContactString ?? ' - ', deviceState, linkQualitySet];
+			}
 			const device = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
+			if (!device) {
+				this.log.warn(`[getOnlineState] - device config not found for adapterKey: ${gefundenerAdapter.adapterKey}`);
+				return [lastContactString ?? ' - ', deviceState, linkQualitySet];
+			}
 			const maxSecondDevicesOffline = device.maxSecondDevicesOffline;
 
 			switch (adapterID) {
@@ -1153,7 +1178,15 @@ class DeviceWatcher extends utils.Adapter {
 
 		if (deviceData) {
 			const gefundenerAdapter = Object.values(adapterArray).find((adapter) => adapter.adapterID === deviceData.adapterID);
+			if (!gefundenerAdapter) {
+				this.log.warn(`[renewDeviceData] - adapter not found for adapterID: ${deviceData.adapterID}`);
+				return;
+			}
 			const silentEnabled = Object.values(this.config.tableDevices).find((adapter) => adapter.adapterKey === gefundenerAdapter.adapterKey);
+			if (!silentEnabled) {
+				this.log.warn(`[renewDeviceData] - device config not found for adapterKey: ${gefundenerAdapter.adapterKey}`);
+				return;
+			}
 
 			// On statechange update available datapoint
 			switch (id) {
@@ -1188,7 +1221,8 @@ class DeviceWatcher extends utils.Adapter {
 					if (deviceData.isBatteryDevice) {
 						oldLowBatState = deviceData.LowBat;
 						if (state.val === 0 && deviceData.BatteryRaw >= 5) {
-							return;
+							// Glitch-Filter: ignore single 0-value if battery was above 5 before
+							break;
 						}
 						batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.faultReport, deviceData.adapterID);
 
