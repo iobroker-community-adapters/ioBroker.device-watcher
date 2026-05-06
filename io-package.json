@@ -17,31 +17,18 @@
         "zh-cn": "修复 hue 扩展电池检查"
       },
       "2.15.11": {
-        "en": "",
-        "de": "",
-        "ru": "",
-        "pt": "",
-        "nl": "",
-        "fr": "",
-        "it": "",
-        "es": "",
-        "pl": "",
-        "uk": "",
-        "zh-cn": ""
-      },
-      "2.15.10": {
-        "en": "Adapter requires node.js >= 22 now\nfix adapter crash after delete a device",
-        "de": "Adapter benötigt node.js >= 22 jetzt\nfix adapter crash nach dem löschen eines geräts",
-        "ru": "Адаптер требует node.js >= 22 сейчас\nисправить сбой адаптера после удаления устройства",
-        "pt": "Adaptador requer nod.js >= 22 agora\ncorrigir falha do adaptador após apagar um dispositivo",
-        "nl": "Voor de adapter zijn node.js < 22 nu nodig\nfix adapter crash na het verwijderen van een apparaat",
-        "fr": "Adaptateur nécessite node.js >= 22 maintenant\ncorrection du crash de l'adaptateur après suppression d'un périphérique",
-        "it": "Adattatore richiede node.js >= 22 ora\nfissare l'arresto dell'adattatore dopo eliminare un dispositivo",
-        "es": "Adaptador requiere node.js ю= 22 ahora\najuste de bloqueo del adaptador después de eliminar un dispositivo",
-        "pl": "Adapter wymaga node.js > = 22\nnaprawić awarię adaptera po usunięciu urządzenia",
-        "uk": "Адаптер вимагає node.js >= 22 тепер\nвиправлено аварійний перехід після видалення пристрою",
-        "zh-cn": "适配器需要节点.js 现在22\n删除设备后修复适配器崩溃"
-      },
+        "en": "fix",
+        "de": "fix",
+        "ru": "fix",
+        "pt": "fix",
+        "nl": "fix",
+        "fr": "fix",
+        "it": "fix",
+        "es": "fix",
+        "pl": "fix",
+        "uk": "fix",
+        "zh-cn": "fix"
+      },     
       "2.15.5": {
         "en": "fix admin",
         "de": "admin",
