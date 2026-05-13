@@ -83,6 +83,10 @@ class DeviceWatcher extends utils.Adapter {
 		// Interval timer
 		this.refreshDataTimeout = null;
 
+		// Debounce timer for list/datapoint updates triggered by stateChange
+		this.listUpdateDebounceTimer = null;
+		this.LIST_UPDATE_DEBOUNCE_MS = 5000; // 5 Sekunden Ruhezeit
+
 		// Check if main function is running
 		this.mainRunning = false;
 
@@ -366,6 +370,36 @@ class DeviceWatcher extends utils.Adapter {
 		}
 	}
 
+	/**
+	 * Debounced update of all lists and datapoints.
+	 * Prevents excessive system load on rapid state changes.
+	 * Waits LIST_UPDATE_DEBOUNCE_MS ms after the last call before executing.
+	 */
+	scheduleListUpdate() {
+		if (this.listUpdateDebounceTimer) {
+			this.clearTimeout(this.listUpdateDebounceTimer);
+		}
+		this.listUpdateDebounceTimer = this.setTimeout(async () => {
+			this.listUpdateDebounceTimer = null;
+			try {
+				await crud.createLists(this);
+				await crud.writeDatapoints(this);
+
+				if (this.configCreateOwnFolder) {
+					for (const [adId] of Object.entries(adapterArray)) {
+						const adapter = adapterArray[adId];
+						if (this.adapterSelected.includes(adapter.adapterKey)) {
+							await crud.createLists(this, adId);
+							await crud.writeDatapoints(this, adId);
+						}
+					}
+				}
+			} catch (error) {
+				this.log.error(`[scheduleListUpdate] - ${error}`);
+			}
+		}, this.LIST_UPDATE_DEBOUNCE_MS);
+	}
+
 	async onStateChange(id, state) {
 		if (state) {
 			// this.log.debug(`State changed: ${id} changed ${state.val}`);
@@ -390,20 +424,8 @@ class DeviceWatcher extends utils.Adapter {
 				if (Array.from(this.listAllDevicesRaw.values()).some((obj) => Object.values(obj).includes(id))) {
 					await this.renewDeviceData(id, state);
 
-					// Update lists and datapoints immediately after device data change
-					await crud.createLists(this);
-					await crud.writeDatapoints(this);
-
-					// Also update per-adapter folder if configured
-					if (this.configCreateOwnFolder) {
-						for (const [adId] of Object.entries(adapterArray)) {
-							const adapter = adapterArray[adId];
-							if (this.adapterSelected.includes(adapter.adapterKey)) {
-								await crud.createLists(this, adId);
-								await crud.writeDatapoints(this, adId);
-							}
-						}
-					}
+					// Debounced update – verhindert Systemlast bei schnellen State-Änderungen
+					this.scheduleListUpdate();
 				}
 			} catch (error) {
 				this.log.error(`Issue at state change: ${id}`);
@@ -2458,6 +2480,11 @@ class DeviceWatcher extends utils.Adapter {
 			if (this.refreshDataTimeout) {
 				this.clearTimeout(this.refreshDataTimeout);
 				this.refreshDataTimeout = null;
+			}
+
+			if (this.listUpdateDebounceTimer) {
+				this.clearTimeout(this.listUpdateDebounceTimer);
+				this.listUpdateDebounceTimer = null;
 			}
 
 			this.log.info('cleaned everything up...');
