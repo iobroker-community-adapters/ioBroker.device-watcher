@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.14",
+    "version": "2.15.15",
     "news": {
+      "2.15.15": {
+        "en": "fix adapter device mix",
+        "de": "befestigungsadapter-mix",
+        "ru": "смесь адаптерного устройства",
+        "pt": "corrigir mix de dispositivo adaptador",
+        "nl": "fix adapter apparaat mix",
+        "fr": "fixer le mélange de périphérique d'adaptateur",
+        "it": "fix adattatore dispositivo mix",
+        "es": "mezcla de dispositivo de fijación",
+        "pl": "mix urządzenia adaptera",
+        "uk": "фіксувати пристрій адаптера",
+        "zh-cn": "固定适配器设备组合"
+      },
       "2.15.14": {
         "en": "fix high i/o",
         "de": "hoch i/o",

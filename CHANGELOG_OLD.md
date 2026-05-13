@@ -411,6 +411,10 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.10 (2026-05-06)
+- (copilot) Adapter requires node.js >= 22 now
+* (arteck) fix adapter crash after delete a device
+
 ## 2.15.9 (2026-04-22)
 * (arteck) new xsense (v. 0.4.0) structure, plz update before
 
