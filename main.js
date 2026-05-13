@@ -265,10 +265,14 @@ class DeviceWatcher extends utils.Adapter {
 
             // fill counts and lists of all selected adapter
             try {
+                // Erst alle Adapter-Daten sammeln, DANN einmal createLists aufrufen.
+                // createLists resettet batteryLowPowered/offlineDevices/etc. am Anfang –
+                // wird es innerhalb der Schleife aufgerufen, enthält listAllDevicesRaw beim
+                // 1. Durchlauf nur Adapter 0, beim 2. nur Adapter 0+1 usw. → instabile Listen.
                 for (let i = 0; i < this.selAdapter.length; i++) {
                     await crud.createData(this, i);
-                    await crud.createLists(this);
                 }
+                await crud.createLists(this); // einmal, nachdem alle Daten gesammelt sind
                 await crud.writeDatapoints(this); // fill the datapoints
                 this.log.debug(`Created and filled data for all adapters`);
             } catch (error) {
