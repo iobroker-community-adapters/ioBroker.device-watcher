@@ -83,11 +83,17 @@ class DeviceWatcher extends utils.Adapter {
         // Interval timer
         this.refreshDataTimeout = null;
 
-        // Check if main function is running
+        // Shared processing lock – verhindert Race Condition zwischen main() und refreshData()
+        this.processingLock = false;
+
+        // Check if main function is running (wird noch intern genutzt für pendingRescan-Guard)
         this.mainRunning = false;
 
         // Pending rescan flag (set if a new device was detected while main() was running)
         this.pendingRescan = false;
+
+        // Pending refresh flag (set if refreshData() wurde während main() geblockt)
+        this.pendingRefresh = false;
 
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
@@ -239,13 +245,14 @@ class DeviceWatcher extends utils.Adapter {
      * main function
      */
     async main() {
-        // Guard: wenn main() bereits läuft, rescan vormerken und sofort zurückkehren
-        if (this.mainRunning) {
+        // Guard: wenn bereits ein Prozess läuft (main oder refreshData), rescan vormerken und zurückkehren
+        if (this.processingLock) {
             this.pendingRescan = true;
             return;
         }
 
         this.log.debug(`Function started main`);
+        this.processingLock = true;
         this.mainRunning = true;
 
         do {
@@ -292,8 +299,16 @@ class DeviceWatcher extends utils.Adapter {
 
         } while (this.pendingRescan);
 
+        this.processingLock = false;
         this.mainRunning = false;
         this.log.debug(`Function finished: ${this.main.name}`);
+
+        // Falls refreshData() während main() gewartet hat, jetzt nachholen
+        if (this.pendingRefresh) {
+            this.pendingRefresh = false;
+            this.log.debug(`[main] pendingRefresh – starte refreshData nach main()`);
+            await this.refreshData();
+        }
     } //<--End of main function
 
     // If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
@@ -521,30 +536,52 @@ class DeviceWatcher extends utils.Adapter {
             this.refreshDataTimeout = null;
         }
 
-        const nextTimeout = this.config.updateinterval * 1000;
-
-        // devices data
-        await tools.checkLastContact(this);
-        await crud.createLists(this);
-        await crud.writeDatapoints(this);
-
-        // devices data in own adapter folder
-        if (this.configCreateOwnFolder) {
-            for (const [id] of Object.entries(adapterArray)) {
-                const adapter = adapterArray[id];
-
-                if (this.adapterSelected.includes(adapter.adapterKey)) {
-                    await crud.createLists(this, id);
-                    await crud.writeDatapoints(this, id);
-                    this.log.debug(`Created and filled data for ${tools.capitalize(id)}`);
-                }
-            }
+        // Race Condition Guard: wenn main() gerade läuft, refresh verschieben
+        if (this.processingLock) {
+            this.log.debug(`[refreshData] processingLock aktiv – refreshData wird nach main() nachgeholt`);
+            this.pendingRefresh = true;
+            // Timer neu ansetzen damit der refresh nicht komplett verloren geht
+            this.refreshDataTimeout = this.setTimeout(async () => {
+                this.log.debug('Updating Data (delayed after lock)');
+                await this.refreshData();
+            }, this.config.updateinterval * 1000);
+            return;
         }
 
-        // instance and adapter data
-        if (this.configCreateInstanceList) {
-            await this.createInstanceList();
-            await this.writeInstanceDPs();
+        this.processingLock = true;
+        const nextTimeout = this.config.updateinterval * 1000;
+
+        try {
+            const statusChanged = await tools.checkLastContact(this);
+
+            if (statusChanged) {
+                this.log.debug(`[refreshData] Statusänderung erkannt – Listen werden neu gebaut`);
+                await crud.createLists(this);
+                await crud.writeDatapoints(this);
+
+                if (this.configCreateOwnFolder) {
+                    for (const [id] of Object.entries(adapterArray)) {
+                        const adapter = adapterArray[id];
+
+                        if (this.adapterSelected.includes(adapter.adapterKey)) {
+                            await crud.createLists(this, id);
+                            await crud.writeDatapoints(this, id);
+                            this.log.debug(`Created and filled data for ${tools.capitalize(id)}`);
+                        }
+                    }
+                }
+            } else {
+                this.log.debug(`[refreshData] Kein Statuswechsel – kein Neuschreiben der Listen`);
+                const lastCheck = `${this.formatDate(new Date(), 'DD.MM.YYYY')} - ${this.formatDate(new Date(), 'hh:mm:ss')}`;
+                await this.setStateChangedAsync('lastCheck', lastCheck, true);
+            }
+
+            if (this.configCreateInstanceList) {
+                await this.createInstanceList();
+                await this.writeInstanceDPs();
+            }
+        } finally {
+            this.processingLock = false;
         }
 
         if (isUnloaded) {
