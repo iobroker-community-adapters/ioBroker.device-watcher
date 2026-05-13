@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (arteck) fix adapter device mix
+
 ### 2.15.14 (2026-05-13)
 * (arteck) fix high i/o
 

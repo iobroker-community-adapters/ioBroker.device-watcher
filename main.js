@@ -275,13 +275,8 @@ class DeviceWatcher extends utils.Adapter {
                         const adapter = adapterArray[id];
 
                         if (this.adapterSelected.includes(adapter.adapterKey)) {
-                            for (const deviceData of this.listAllDevicesRaw.values()) {
-                                // list device only if selected adapter matched with device
-                                if (!deviceData.adapterID.includes(id)) {
-                                    continue;
-                                }
-                                await crud.createLists(this, id);
-                            }
+                            // createLists nur EINMAL pro Adapter aufrufen, nicht pro Gerät (Systemlast + Mixing-Fix)
+                            await crud.createLists(this, id);
                             await crud.writeDatapoints(this, id); // fill the datapoints
                             this.log.debug(`Created and filled data for ${tools.capitalize(id)}`);
                         }
