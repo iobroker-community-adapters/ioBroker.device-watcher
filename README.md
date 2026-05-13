@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 2.15.14 (2026-05-13)
+* (arteck) fix high i/o
+
 ### 2.15.13 (2026-05-13)
 * (arteck) fix new devices
 
@@ -203,9 +206,6 @@ This adapter would not have been possible without the great work of Christian Be
 ### 2.15.10 (2026-05-06)
 - (copilot) Adapter requires node.js >= 22 now
 * (arteck) fix adapter crash after delete a device
-
-### 2.15.9 (2026-04-22)
-* (arteck) new xsense (v. 0.4.0) structure, plz update before
 
 ## License
 

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.13",
+    "version": "2.15.14",
     "news": {
+      "2.15.14": {
+        "en": "fix high i/o",
+        "de": "hoch i/o",
+        "ru": "фиксировать высокий i/o",
+        "pt": "fixar i/o elevado",
+        "nl": "fix high i/o",
+        "fr": "fixer haut i/o",
+        "it": "correzione alta i/o",
+        "es": "fijar alto i/o",
+        "pl": "fix high i / o",
+        "uk": "фіксувати високий i/o",
+        "zh-cn": "固定高 i/o"
+      },
       "2.15.13": {
         "en": "fix new devices",
         "de": "neue geräte installieren",

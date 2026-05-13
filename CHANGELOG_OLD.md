@@ -411,6 +411,9 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.9 (2026-04-22)
+* (arteck) new xsense (v. 0.4.0) structure, plz update before
+
 ## 2.15.8 (2026-04-18)
 * (arteck) fix cronParserLib.parseExpression message
 
