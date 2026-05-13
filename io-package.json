@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.12",
+    "version": "2.15.13",
     "news": {
+      "2.15.13": {
+        "en": "fix new devices",
+        "de": "neue geräte installieren",
+        "ru": "ремонт новых устройств",
+        "pt": "corrigir novos dispositivos",
+        "nl": "nieuwe apparaten herstellen",
+        "fr": "correction de nouveaux dispositifs",
+        "it": "fissare nuovi dispositivi",
+        "es": "nuevos dispositivos",
+        "pl": "naprawić nowe urządzenia",
+        "uk": "фіксувати нові пристрої",
+        "zh-cn": "修复新设备"
+      },
       "2.15.12": {
         "en": "fix hueExtended battery check",
         "de": "hueExtended Akku Check",
@@ -28,7 +41,7 @@
         "pl": "fix",
         "uk": "fix",
         "zh-cn": "fix"
-      },     
+      },
       "2.15.5": {
         "en": "fix admin",
         "de": "admin",

@@ -86,6 +86,9 @@ class DeviceWatcher extends utils.Adapter {
 		// Check if main function is running
 		this.mainRunning = false;
 
+		// Pending rescan flag (set if a new device was detected while main() was running)
+		this.pendingRescan = false;
+
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
 		this.on('objectChange', this.onObjectChange.bind(this));
@@ -280,6 +283,13 @@ class DeviceWatcher extends utils.Adapter {
 		}
 		this.mainRunning = false;
 		this.log.debug(`Function finished: ${this.main.name}`);
+
+		// If a new device was detected while main() was running, trigger a rescan now
+		if (this.pendingRescan) {
+			this.pendingRescan = false;
+			this.log.info(`[main] Pending rescan detected – restarting main() for new device`);
+			await this.main();
+		}
 	} //<--End of main function
 
 	// If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
@@ -302,10 +312,23 @@ class DeviceWatcher extends utils.Adapter {
 						if (!this.mainRunning) {
 							await this.main();
 						} else {
-							return;
+							this.pendingRescan = true;
 						}
 					} else {
-						return;
+						// Check if the changed object belongs to a monitored adapter (new device)
+						const belongsToMonitoredAdapter = this.adapterSelected.some((adapterKey) =>
+							id.toLowerCase().startsWith(`${adapterKey.toLowerCase()  }.`)
+						);
+
+						if (belongsToMonitoredAdapter) {
+							if (!this.mainRunning) {
+								this.log.info(`[onObjectChange] New device detected: ${id} – triggering rescan`);
+								await this.main();
+							} else {
+								this.log.debug(`[onObjectChange] main() is running – rescan for ${id} queued`);
+								this.pendingRescan = true;
+							}
+						}
 					}
 				}
 			} catch (error) {
@@ -366,6 +389,21 @@ class DeviceWatcher extends utils.Adapter {
 				=============================================*/
 				if (Array.from(this.listAllDevicesRaw.values()).some((obj) => Object.values(obj).includes(id))) {
 					await this.renewDeviceData(id, state);
+
+					// Update lists and datapoints immediately after device data change
+					await crud.createLists(this);
+					await crud.writeDatapoints(this);
+
+					// Also update per-adapter folder if configured
+					if (this.configCreateOwnFolder) {
+						for (const [adId] of Object.entries(adapterArray)) {
+							const adapter = adapterArray[adId];
+							if (this.adapterSelected.includes(adapter.adapterKey)) {
+								await crud.createLists(this, adId);
+								await crud.writeDatapoints(this, adId);
+							}
+						}
+					}
 				}
 			} catch (error) {
 				this.log.error(`Issue at state change: ${id}`);
