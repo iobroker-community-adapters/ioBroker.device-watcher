@@ -411,19 +411,19 @@ class DeviceWatcher extends utils.Adapter {
                 =          		  Devices     			      =
                 =============================================*/
                 if (Array.from(this.listAllDevicesRaw.values()).some((obj) => Object.values(obj).includes(id))) {
-                    await this.renewDeviceData(id, state);
+                    const listDirty = await this.renewDeviceData(id, state);
 
-                    // Update lists and datapoints immediately after device data change
-                    await crud.createLists(this);
-                    await crud.writeDatapoints(this);
+                    if (listDirty) {
+                        await crud.createLists(this);
+                        await crud.writeDatapoints(this);
 
-                    // Also update per-adapter folder if configured
-                    if (this.configCreateOwnFolder) {
-                        for (const [adId] of Object.entries(adapterArray)) {
-                            const adapter = adapterArray[adId];
-                            if (this.adapterSelected.includes(adapter.adapterKey)) {
-                                await crud.createLists(this, adId);
-                                await crud.writeDatapoints(this, adId);
+                        if (this.configCreateOwnFolder) {
+                            for (const [adId] of Object.entries(adapterArray)) {
+                                const adapter = adapterArray[adId];
+                                if (this.adapterSelected.includes(adapter.adapterKey)) {
+                                    await crud.createLists(this, adId);
+                                    await crud.writeDatapoints(this, adId);
+                                }
                             }
                         }
                     }
@@ -1295,6 +1295,7 @@ class DeviceWatcher extends utils.Adapter {
         let contactData;
         let oldStatus;
         let isLowBatValue;
+        let listDirty = false;
 
         const deviceID = id.slice(0, id.lastIndexOf('.') + 1 - 1);
         const deviceData = this.listAllDevicesRaw.get(deviceID);
@@ -1326,6 +1327,7 @@ class DeviceWatcher extends utils.Adapter {
                 case deviceData.UpdateDP:
                     if (state.val !== deviceData.Upgradable) {
                         deviceData.Upgradable = await this.checkDeviceUpdate(deviceData.adapterID, state.val);
+                        listDirty = true;
                         if (deviceData.Upgradable === true) {
                             if (this.config.checkSendDeviceUpgrade && !this.blacklistNotify.includes(deviceData.Path)) {
                                 await this.sendStateNotifications('Devices', 'updateDevice', deviceID, silentEnabled.telegramSilent);
@@ -1334,11 +1336,10 @@ class DeviceWatcher extends utils.Adapter {
                     }
                     break;
 
-                // device signal
+                // device signal – kein listDirty, SignalStrength ändert sich ständig
                 case deviceData.SignalStrengthDP:
                     signalData = await this.calculateSignalStrength(state, deviceData.adapterID);
                     deviceData.SignalStrength = signalData[0];
-
                     break;
 
                 // device battery
@@ -1346,11 +1347,9 @@ class DeviceWatcher extends utils.Adapter {
                     if (deviceData.isBatteryDevice) {
                         oldLowBatState = deviceData.LowBat;
                         if (state.val === 0 && deviceData.BatteryRaw >= 5) {
-                            // Glitch-Filter: ignore single 0-value if battery was above 5 before
                             break;
                         }
                         batteryData = await this.getBatteryData(state.val, oldLowBatState, deviceData.faultReport, deviceData.adapterID);
-
                         deviceData.Battery = batteryData[0];
                         deviceData.BatteryRaw = batteryData[2];
                         deviceData.BatteryUnitRaw = batteryData[3];
@@ -1360,7 +1359,7 @@ class DeviceWatcher extends utils.Adapter {
                             isLowBatValue = undefined;
                         }
                         deviceData.LowBat = await this.setLowbatIndicator(state.val, isLowBatValue, deviceData.faultReport, deviceData.adapterID);
-
+                        listDirty = true;
                         if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
                             if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
                                 await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID, silentEnabled.telegramSilent);
@@ -1378,7 +1377,7 @@ class DeviceWatcher extends utils.Adapter {
                         deviceData.BatteryRaw = batteryData[2];
                         deviceData.BatteryUnitRaw = batteryData[3];
                         deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, state.val, deviceData.faultReport, deviceData.adapterID);
-
+                        listDirty = true;
                         if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
                             if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
                                 await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID, silentEnabled.telegramSilent);
@@ -1392,12 +1391,11 @@ class DeviceWatcher extends utils.Adapter {
                     if (deviceData.isBatteryDevice) {
                         oldLowBatState = deviceData.LowBat;
                         batteryData = await this.getBatteryData(deviceData.BatteryRaw, oldLowBatState, state.val, deviceData.adapterID);
-
                         deviceData.Battery = batteryData[0];
                         deviceData.BatteryRaw = batteryData[2];
                         deviceData.BatteryUnitRaw = batteryData[3];
                         deviceData.LowBat = await this.setLowbatIndicator(deviceData.BatteryRaw, undefined, state.val, deviceData.adapterID);
-
+                        listDirty = true;
                         if (deviceData.LowBat && oldLowBatState !== deviceData.LowBat) {
                             if (this.config.checkSendBatteryMsg && !this.blacklistNotify.includes(deviceData.Path)) {
                                 await this.sendStateNotifications('Devices', 'lowBatDevice', deviceID, silentEnabled.telegramSilent);
@@ -1429,8 +1427,11 @@ class DeviceWatcher extends utils.Adapter {
                                 deviceData.SignalStrength = contactData[2];
                             }
 
+                            if (oldStatus !== deviceData.Status) {
+                                listDirty = true;
+                            }
+
                             if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-                                // check if the generally deviceData connected state is for a while true
                                 if (await tools.getTimestampConnectionDP(this, deviceData.instanceDeviceConnectionDP, 50000)) {
                                     await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID, silentEnabled.telegramSilent);
                                 }
@@ -1439,6 +1440,7 @@ class DeviceWatcher extends utils.Adapter {
                     }
             }
         }
+        return listDirty;
     }
 
     /**
