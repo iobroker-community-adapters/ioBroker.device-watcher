@@ -414,15 +414,34 @@ class DeviceWatcher extends utils.Adapter {
                     const listDirty = await this.renewDeviceData(id, state);
 
                     if (listDirty) {
-                        await crud.createLists(this);
-                        await crud.writeDatapoints(this);
+                        // Race Condition Guard: wenn main() oder refreshData() gerade läuft,
+                        // NICHT gleichzeitig createLists/writeDatapoints aufrufen – das korrumpiert
+                        // die globalen Counters (adaptr.deviceCounter etc.) und führt zu endlosen
+                        // Schreibvorgängen. Stattdessen Rescan vormerken.
+                        if (this.processingLock) {
+                            this.log.debug(`[onStateChange] processingLock aktiv – listDirty für ${id} wird als pendingRescan vorgemerkt`);
+                            this.pendingRescan = true;
+                        } else {
+                            this.processingLock = true;
+                            try {
+                                await crud.createLists(this);
+                                await crud.writeDatapoints(this);
 
-                        if (this.configCreateOwnFolder) {
-                            for (const [adId] of Object.entries(adapterArray)) {
-                                const adapter = adapterArray[adId];
-                                if (this.adapterSelected.includes(adapter.adapterKey)) {
-                                    await crud.createLists(this, adId);
-                                    await crud.writeDatapoints(this, adId);
+                                if (this.configCreateOwnFolder) {
+                                    for (const [adId] of Object.entries(adapterArray)) {
+                                        const adapter = adapterArray[adId];
+                                        if (this.adapterSelected.includes(adapter.adapterKey)) {
+                                            await crud.createLists(this, adId);
+                                            await crud.writeDatapoints(this, adId);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                this.processingLock = false;
+                                if (this.pendingRescan) {
+                                    this.pendingRescan = false;
+                                    this.log.debug(`[onStateChange] pendingRescan nach listDirty – starte main()`);
+                                    await this.main();
                                 }
                             }
                         }
