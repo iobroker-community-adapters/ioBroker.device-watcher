@@ -206,6 +206,8 @@ This adapter would not have been possible without the great work of Christian Be
 ### 2.15.12 (2026-05-06)
 * (arteck) fix hueExtended battery check
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
 MIT License
