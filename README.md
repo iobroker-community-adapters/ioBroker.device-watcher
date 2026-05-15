@@ -191,8 +191,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.15.16 (2026-05-15)
 * (arteck) minimize i/o
 
 ### 2.15.15 (2026-05-13)
@@ -206,9 +205,6 @@ This adapter would not have been possible without the great work of Christian Be
 
 ### 2.15.12 (2026-05-06)
 * (arteck) fix hueExtended battery check
-
-### 2.15.11 (2026-05-06)
-* (arteck)
 
 ## License
 

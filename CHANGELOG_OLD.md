@@ -411,6 +411,9 @@
 ### 0.0.2 (2022-06-05)
 
 -   Release for testing
+## 2.15.11 (2026-05-06)
+* (arteck)
+
 ## 2.15.10 (2026-05-06)
 - (copilot) Adapter requires node.js >= 22 now
 * (arteck) fix adapter crash after delete a device

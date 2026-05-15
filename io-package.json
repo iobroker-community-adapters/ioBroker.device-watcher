@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.15",
+    "version": "2.15.16",
     "news": {
+      "2.15.16": {
+        "en": "minimize i/o",
+        "de": "i/o minimieren",
+        "ru": "минимизировать i/o",
+        "pt": "minimizar i/o",
+        "nl": "i/o minimaliseren",
+        "fr": "réduire au minimum i/o",
+        "it": "minimizzare i",
+        "es": "minimizar i/o",
+        "pl": "zminimalizować i / o",
+        "uk": "мінімізація i/o",
+        "zh-cn": "尽量减少i/o"
+      },
       "2.15.15": {
         "en": "fix adapter device mix",
         "de": "befestigungsadapter-mix",
