@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.3.2",
-    "node-schedule": "^2.1.1",
-    "cron-parser": "^5.5.0"
+    "cron-parser": "^5.5.0",
+    "node-schedule": "^2.1.1"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^5.2.0",
@@ -38,6 +38,7 @@
     "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/eslint-config": "^2.3.4",
     "@iobroker/testing": "^5.2.2",
+    "@tsconfig/node22": "^22.0.5",
     "@types/node": "^22.19.19",
     "@types/node-schedule": "^2.1.8",
     "typescript": "~6.0.3"
