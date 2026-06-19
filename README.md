@@ -191,8 +191,10 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### 2.15.16 (2026-05-15)
-* (arteck) minimize i/o
+### **WORK IN PROGRESS**
+- (mcm1957) Release of 2.15.16 has failed and has been restarted
+- (arteck) i/o minimized
+- (mcm1957) Dependencies have been updated
 
 ### 2.15.15 (2026-05-13)
 * (arteck) fix adapter device mix
