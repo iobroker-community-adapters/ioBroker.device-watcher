@@ -191,7 +191,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.15.17 (2026-06-19)
 - (mcm1957) Release of 2.15.16 has failed and has been restarted
 - (arteck) i/o minimized
 - (mcm1957) Dependencies have been updated
@@ -207,6 +207,7 @@ This adapter would not have been possible without the great work of Christian Be
 
 ### 2.15.12 (2026-05-06)
 * (arteck) fix hueExtended battery check
+
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

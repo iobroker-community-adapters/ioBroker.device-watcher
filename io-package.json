@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "device-watcher",
-    "version": "2.15.16",
+    "version": "2.15.17",
     "news": {
+      "2.15.17": {
+        "en": "Release of 2.15.16 has failed and has been restarted\ni/o minimized\nDependencies have been updated",
+        "de": "Die Veröffentlichung von Version 2.15.16 ist fehlgeschlagen und wurde neu gestartet.\nE/A minimiert\nDie Abhängigkeiten wurden aktualisiert.",
+        "ru": "Выпуск версии 2.15.16 завершился неудачей и был перезапущен.\nминимизированный ввод/вывод\nЗависимости обновлены.",
+        "pt": "A publicação da versão 2.15.16 falhou e foi reiniciada.\nentrada/saída minimizada\nAs dependências foram atualizadas.",
+        "nl": "De release van 2.15.16 is mislukt en is opnieuw gestart.\nI/O geminimaliseerd\nAfhankelijkheden zijn bijgewerkt.",
+        "fr": "La publication de la version 2.15.16 a échoué et a été redémarrée.\nE/S minimisées\nLes dépendances ont été mises à jour",
+        "it": "Il rilascio della versione 2.15.16 non è riuscito ed è stato riavviato.\nI/O minimizzati\nLe dipendenze sono state aggiornate",
+        "es": "El lanzamiento de la versión 2.15.16 ha fallado y se ha reiniciado.\nE/S minimizada\nSe han actualizado las dependencias.",
+        "pl": "Wydanie wersji 2.15.16 nie powiodło się i zostało uruchomione ponownie\nzminimalizowane wejście/wyjście\nZaktualizowano zależności",
+        "uk": "Випуск версії 2.15.16 не вдався, його було перезапущено.\nвведення/виведення мінімізовано\nЗалежності оновлено",
+        "zh-cn": "2.15.16 版本发布失败，已重新启动。\n输入/输出最小化\n依赖项已更新"
+      },
       "2.15.16": {
         "en": "minimize i/o",
         "de": "i/o minimieren",
@@ -80,19 +93,6 @@
         "pl": "fix",
         "uk": "fix",
         "zh-cn": "fix"
-      },
-      "2.15.5": {
-        "en": "fix admin",
-        "de": "admin",
-        "ru": "исправить admin",
-        "pt": "corrigir administrador",
-        "nl": "fix admin",
-        "fr": "réparer l'administration",
-        "it": "fix admin",
-        "es": "admin",
-        "pl": "fix admin",
-        "uk": "адмін",
-        "zh-cn": "固定管理员"
       }
     },
     "titleLang": {
