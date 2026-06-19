@@ -237,7 +237,7 @@ class DeviceWatcher extends utils.Adapter {
             }
         } catch (error) {
             this.log.error(`[onReady] - ${error}`);
-            this.terminate ? this.terminate(15) : process.exit(15);
+            this.terminate(15);
         }
     } // <-- onReady end
 
