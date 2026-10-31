@@ -193,6 +193,7 @@ This adapter would not have been possible without the great work of Christian Be
 -->
 
 ### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22.19.0 now
 - (arteck) Dependencies have been updated
 - (arteck) fix message ([main] Pending rescan detected – Schleife wird wiederholt)
 
