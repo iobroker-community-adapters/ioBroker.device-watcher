@@ -763,7 +763,6 @@ class DeviceWatcher extends utils.Adapter {
                 case 'homekitController':
                 case 'ring':
                 case 'nukiLocal':
-                case 'snmp':
                     if (shortDeviceObject && typeof shortDeviceObject === 'object' && shortDeviceObject.common) {
                         deviceName = shortDeviceObject.common.name;
                     }
@@ -821,6 +820,7 @@ class DeviceWatcher extends utils.Adapter {
 
                 //Get ID of foldername
                 case 'yeelight':
+                case 'snmp':
                     deviceName = shortCurrDeviceString.slice(shortCurrDeviceString.lastIndexOf('.') + 1);
                     break;
 
