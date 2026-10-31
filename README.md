@@ -197,6 +197,7 @@ This adapter would not have been possible without the great work of Christian Be
 - (arteck) fix message ([main] Pending rescan detected – Schleife wird wiederholt)
 - (ipod86) added support for Modbus, Nuki Local, Reolink, SNMP and Sony Bravia
 - (ipod86) adapters added in a new version are now added to an existing device table automatically
+- (ipod86) Nut: UPS was always shown as offline and named "battery" - now uses info.connection and the UPS model
 
 ### 2.15.17 (2026-06-19)
 - (mcm1957) Release of 2.15.16 has failed and has been restarted

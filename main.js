@@ -769,6 +769,20 @@ class DeviceWatcher extends utils.Adapter {
                     break;
 
                 // One device per instance: name from a datapoint (or the adapter name) plus the instance
+                // UPS model from the instance level (nut.0.device.model), the selector sits in nut.0.battery
+                case 'nut':
+                    deviceName = await tools.getInitValue(this, shortCurrDeviceString + this.selAdapter[i].id);
+                    if (!deviceName) {
+                        deviceName = await tools.getInitValue(this, `${shortCurrDeviceString}.ups.model`);
+                    }
+                    if (!deviceName && deviceObject && typeof deviceObject === 'object' && deviceObject.common) {
+                        deviceName = deviceObject.common.name;
+                    }
+                    if (typeof deviceName === 'string') {
+                        deviceName = deviceName.trim();
+                    }
+                    break;
+
                 case 'reolink':
                 case 'sonyBravia':
                 case 'modbus': {
@@ -1246,6 +1260,7 @@ class DeviceWatcher extends utils.Adapter {
                 case 'zigbee2MQTT':
                 case 'modbus':
                 case 'nukiLocal':
+                case 'nut':
                 case 'reolink':
                 case 'snmp':
                 case 'sonyBravia': {
