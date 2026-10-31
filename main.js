@@ -131,6 +131,11 @@ class DeviceWatcher extends utils.Adapter {
         this.configCreateOwnFolder = this.config.createOwnFolder;
         this.configCreateHtmlList = this.config.createHtmlList;
 
+        // adapters added in a newer version are missing in an existing device table - add them (disabled)
+        if (await this.addMissingTableDevices()) {
+            return; // the instance restarts with the extended configuration
+        }
+
         try {
             // create list with enabled adapters for monitor devices
             for (const device of Object.values(this.config.tableDevices)) {
@@ -248,6 +253,44 @@ class DeviceWatcher extends utils.Adapter {
             this.terminate(15);
         }
     } // <-- onReady end
+
+    /**
+     * Add adapters from adapterArray that are missing in the configured device table.
+     * Returns true when the configuration was extended (the instance restarts then).
+     */
+    async addMissingTableDevices() {
+        try {
+            const table = Array.isArray(this.config.tableDevices) ? this.config.tableDevices : [];
+            const known = new Set(table.map((row) => String(row.adapterKey).toLowerCase()));
+            const added = [];
+
+            for (const adapter of Object.values(adapterArray)) {
+                const key = String(adapter.adapterKey);
+                if (!known.has(key.toLowerCase())) {
+                    known.add(key.toLowerCase());
+                    added.push({
+                        enabled: false,
+                        adapterName: adapter.adapter,
+                        adapterKey: key,
+                        telegramSilent: false,
+                        maxSecondDevicesOffline: 0,
+                    });
+                }
+            }
+
+            if (added.length === 0) {
+                return false;
+            }
+
+            const tableDevices = [...table, ...added].sort((a, b) => String(a.adapterName).localeCompare(String(b.adapterName)));
+            this.log.info(`Adding new adapters to the device table: ${added.map((row) => row.adapterName).join(', ')}`);
+            await this.extendForeignObjectAsync(`system.adapter.${this.namespace}`, { native: { tableDevices } });
+            return true;
+        } catch (error) {
+            this.log.error(`[addMissingTableDevices] - ${error}`);
+            return false;
+        }
+    }
 
     /**
      * main function
@@ -719,10 +762,27 @@ class DeviceWatcher extends utils.Adapter {
                 case 'viessmann':
                 case 'homekitController':
                 case 'ring':
+                case 'nukiLocal':
+                case 'snmp':
                     if (shortDeviceObject && typeof shortDeviceObject === 'object' && shortDeviceObject.common) {
                         deviceName = shortDeviceObject.common.name;
                     }
                     break;
+
+                // One device per instance: name from a datapoint (or the adapter name) plus the instance
+                case 'reolink':
+                case 'sonyBravia':
+                case 'modbus': {
+                    const instance = id.split('.').slice(0, 2).join('.');
+                    let baseName;
+                    if (this.selAdapter[i].adapterID === 'reolink') {
+                        baseName = await tools.getInitValue(this, shortCurrDeviceString + this.selAdapter[i].id);
+                    } else if (this.selAdapter[i].adapterID === 'sonyBravia') {
+                        baseName = await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id);
+                    }
+                    deviceName = `${baseName || this.selAdapter[i].adapter} (${instance})`;
+                    break;
+                }
 
                 // Get ID with short short currDeviceString from objectjson (HMiP Devices)
                 case 'hmiP':
@@ -1373,8 +1433,6 @@ class DeviceWatcher extends utils.Adapter {
         let batteryData;
         let signalData;
         let oldLowBatState;
-        let contactData;
-        let oldStatus;
         let isLowBatValue;
         let listDirty = false;
 
@@ -1487,38 +1545,65 @@ class DeviceWatcher extends utils.Adapter {
 
                 // device unreach
                 case deviceData.UnreachDP:
-                    if (deviceData.instanceDeviceConnected !== undefined) {
-                        if (deviceData.UnreachState !== state.val) {
-                            oldStatus = deviceData.Status;
-                            deviceData.UnreachState = state.val;
-
-                            contactData = await this.getOnlineState(
-                                deviceData.timeSelector,
-                                deviceData.adapterID,
-                                deviceData.UnreachDP,
-                                deviceData.SignalStrength,
-                                deviceData.UnreachState,
-                                deviceData.deviceStateSelectorHMRPC,
-                                deviceData.rssiPeerSelectorHMRPC,
-                            );
-
-                            if (contactData !== undefined && contactData !== null) {
-                                deviceData.LastContact = contactData[0];
-                                deviceData.Status = contactData[1];
-                                deviceData.SignalStrength = contactData[2];
-                            }
-
-                            if (oldStatus !== deviceData.Status) {
-                                listDirty = true;
-                            }
-
-                            if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
-                                if (await tools.getTimestampConnectionDP(this, deviceData.instanceDeviceConnectionDP, 50000)) {
-                                    await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID, silentEnabled.telegramSilent);
-                                }
-                            }
-                        }
+                    if (await this.handleUnreachChange(deviceID, deviceData, state, silentEnabled)) {
+                        listDirty = true;
                     }
+            }
+
+            // Adapters with one device per instance (modbus, sony-bravia) use info.connection as reach state.
+            // The switch above only ran the connection case for it, so evaluate the reach change here as well.
+            if (id === deviceData.UnreachDP && id === deviceData.instanceDeviceConnectionDP) {
+                if (await this.handleUnreachChange(deviceID, deviceData, state, silentEnabled)) {
+                    listDirty = true;
+                }
+            }
+        }
+        return listDirty;
+    }
+
+    /**
+     * update online state of a device after its reach datapoint changed
+     *
+     * @param {string} deviceID - key of the device in listAllDevicesRaw
+     * @param {object} deviceData - entry of the device in listAllDevicesRaw
+     * @param {ioBroker.State} state - new state of the reach datapoint
+     * @param {object} silentEnabled - device table entry of the adapter
+     */
+    async handleUnreachChange(deviceID, deviceData, state, silentEnabled) {
+        let listDirty = false;
+
+        if (deviceData.instanceDeviceConnected !== undefined) {
+            if (deviceData.UnreachState !== state.val) {
+                const oldStatus = deviceData.Status;
+                deviceData.UnreachState = state.val;
+
+                const contactData = await this.getOnlineState(
+                    deviceData.timeSelector,
+                    deviceData.adapterID,
+                    deviceData.UnreachDP,
+                    deviceData.SignalStrength,
+                    deviceData.UnreachState,
+                    deviceData.deviceStateSelectorHMRPC,
+                    deviceData.rssiPeerSelectorHMRPC,
+                );
+
+                if (contactData !== undefined && contactData !== null) {
+                    deviceData.LastContact = contactData[0];
+                    deviceData.Status = contactData[1];
+                    deviceData.SignalStrength = contactData[2];
+                }
+
+                if (oldStatus !== deviceData.Status) {
+                    listDirty = true;
+                }
+
+                if (this.config.checkSendOfflineMsg && oldStatus !== deviceData.Status && !this.blacklistNotify.includes(deviceData.Path)) {
+                    // the connection check would always fail when the connection itself is the reach state
+                    const reachIsConnection = deviceData.UnreachDP === deviceData.instanceDeviceConnectionDP;
+                    if (reachIsConnection || (await tools.getTimestampConnectionDP(this, deviceData.instanceDeviceConnectionDP, 50000))) {
+                        await this.sendStateNotifications('Devices', 'onlineStateDevice', deviceID, silentEnabled.telegramSilent);
+                    }
+                }
             }
         }
         return listDirty;
