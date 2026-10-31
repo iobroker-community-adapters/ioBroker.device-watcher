@@ -540,6 +540,13 @@
       },
       {
         "enabled": false,
+        "adapterName": "Modbus",
+        "adapterKey": "modbusDevices",
+        "telegramSilent": false,
+        "maxSecondDevicesOffline": 0
+      },
+      {
+        "enabled": false,
         "adapterName": "MQTT Client: Zigbee2MQTT",
         "adapterKey": "mqttClientZigbee2MqttDevices",
         "telegramSilent": false,
@@ -575,6 +582,13 @@
       },
       {
         "enabled": false,
+        "adapterName": "Nuki Local",
+        "adapterKey": "nukiLocalDevices",
+        "telegramSilent": false,
+        "maxSecondDevicesOffline": 0
+      },
+      {
+        "enabled": false,
         "adapterName": "Nut",
         "adapterKey": "nutDevices",
         "telegramSilent": false,
@@ -591,6 +605,13 @@
         "enabled": false,
         "adapterName": "Proxmox",
         "adapterKey": "proxmoxDevices",
+        "telegramSilent": false,
+        "maxSecondDevicesOffline": 0
+      },
+      {
+        "enabled": false,
+        "adapterName": "Reolink",
+        "adapterKey": "reolinkDevices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
       },
@@ -624,8 +645,22 @@
       },
       {
         "enabled": false,
+        "adapterName": "SNMP",
+        "adapterKey": "snmpDevices",
+        "telegramSilent": false,
+        "maxSecondDevicesOffline": 0
+      },
+      {
+        "enabled": false,
         "adapterName": "Sonoff",
         "adapterKey": "sonoffDevices",
+        "telegramSilent": false,
+        "maxSecondDevicesOffline": 0
+      },
+      {
+        "enabled": false,
+        "adapterName": "Sony Bravia",
+        "adapterKey": "sonyBraviaDevices",
         "telegramSilent": false,
         "maxSecondDevicesOffline": 0
       },
