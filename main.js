@@ -778,6 +778,12 @@ class DeviceWatcher extends utils.Adapter {
                         baseName = await tools.getInitValue(this, shortCurrDeviceString + this.selAdapter[i].id);
                     } else if (this.selAdapter[i].adapterID === 'sonyBravia') {
                         baseName = await tools.getInitValue(this, currDeviceString + this.selAdapter[i].id);
+                    } else {
+                        const modbusName = await this.getModbusName(instance);
+                        if (modbusName) {
+                            deviceName = modbusName;
+                            break;
+                        }
                     }
                     deviceName = `${baseName || this.selAdapter[i].adapter} (${instance})`;
                     break;
@@ -839,6 +845,50 @@ class DeviceWatcher extends utils.Adapter {
             return deviceName;
         } catch (error) {
             this.log.error(`[getDeviceName] - ${error}`);
+        }
+    }
+
+    /**
+     * Modbus has no device name: name it after its connection (IP or serial port) and,
+     * with several device IDs on one bus, list the IDs. Undefined in slave mode or without a target.
+     *
+     * @param {string} instance - modbus instance, e.g. modbus.0
+     */
+    async getModbusName(instance) {
+        try {
+            const instanceObj = await this.getForeignObjectAsync(`system.adapter.${instance}`);
+            const native = instanceObj?.native;
+            const params = native?.params;
+            if (!params || params.slave === '1' || params.slave === true) {
+                return undefined;
+            }
+
+            let target;
+            if (params.type === 'serial') {
+                target = params.comName ? String(params.comName).split('/').pop() : undefined;
+            } else {
+                target = params.host;
+            }
+            if (!target) {
+                return undefined;
+            }
+
+            let name = `Modbus ${target}`;
+            if (params.multiDeviceId === true || params.multiDeviceId === 'true') {
+                const ids = new Set();
+                for (const regType of ['disInputs', 'coils', 'inputRegs', 'holdingRegs']) {
+                    for (const reg of native[regType] || []) {
+                        ids.add(reg.deviceId !== undefined && reg.deviceId !== '' ? parseInt(reg.deviceId, 10) : parseInt(params.deviceId, 10) || 0);
+                    }
+                }
+                if (ids.size > 1) {
+                    name += ` (ID ${[...ids].sort((a, b) => a - b).join(', ')})`;
+                }
+            }
+            return name;
+        } catch (error) {
+            this.log.error(`[getModbusName] - ${error}`);
+            return undefined;
         }
     }
 
