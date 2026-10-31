@@ -1193,7 +1193,12 @@ class DeviceWatcher extends utils.Adapter {
                 case 'tradfri':
                 case 'unifi':
                 case 'zigbee':
-                case 'zigbee2MQTT': {
+                case 'zigbee2MQTT':
+                case 'modbus':
+                case 'nukiLocal':
+                case 'reolink':
+                case 'snmp':
+                case 'sonyBravia': {
                     if (maxSecondDevicesOffline <= 0) {
                         if (!deviceUnreachState) {
                             deviceState = 'Offline'; //set online state to offline
