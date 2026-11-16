@@ -197,9 +197,7 @@ This adapter would not have been possible without the great work of Christian Be
 - (copilot) Adapter requires node.js >= 22.19.0 now
 - (arteck) Dependencies have been updated
 - (arteck) fix message ([main] Pending rescan detected – Schleife wird wiederholt)
-- (ipod86) added support for Modbus, Nuki Local, Reolink, SNMP and Sony Bravia
-- (ipod86) adapters added in a new version are now added to an existing device table automatically
-- (ipod86) Nut: UPS was always shown as offline and named "battery" - now uses info.connection and the UPS model
+- (GermanBluefox) (fix) Matter: TypeError 'endsWith' when no PowerSource battery state exists; detect BATTERY/LOWBAT under any endpoint (#733)
 
 ### 2.15.17 (2026-06-19)
 - (mcm1957) Release of 2.15.16 has failed and has been restarted
