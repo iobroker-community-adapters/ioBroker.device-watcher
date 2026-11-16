@@ -1023,22 +1023,13 @@ class DeviceWatcher extends utils.Adapter {
                 if (deviceBatteryState === undefined) {
                     // do nothin brdge has no battery
                     isBatteryDevice = false;
-                } else if (deviceBatteryState >= 0) {
-                    batteryHealthRaw = deviceBatteryState;
-                    batteryHealthUnitRaw = '';
-                    isBatteryDevice = true;
-                    switch (batteryHealthRaw) {
-                        case 1:
-                            batteryHealth = 'low';
-                            break;
-                        case 2:
-                            batteryHealth = 'medium';
-                            break;
-                        case 3:
-                            batteryHealth = 'ok';
-                            break;
-                        default:
-                            batteryHealth = 'error';
+                } else {
+                    const xsensePercent = this.xsenseBatteryPercent(deviceBatteryState);
+                    if (xsensePercent !== undefined) {
+                        batteryHealth = `${xsensePercent}%`;
+                        batteryHealthRaw = xsensePercent;
+                        batteryHealthUnitRaw = '%';
+                        isBatteryDevice = true;
                     }
                 }
                 break;
@@ -1082,6 +1073,29 @@ class DeviceWatcher extends utils.Adapter {
     }
 
     /**
+     * normalize the xsense batInfo value to percent
+     * Newer xsense adapter versions deliver percent (0, 33, 67, 100),
+     * older versions delivered the raw level (0-3).
+     *
+     * @param {any} batInfo - value of the batInfo state
+     * @returns {number | undefined} percent 0-100 or undefined if not usable
+     */
+    xsenseBatteryPercent(batInfo) {
+        if (batInfo === null || batInfo === undefined || batInfo === '') {
+            return undefined;
+        }
+        const value = Number(batInfo);
+        if (!Number.isFinite(value) || value < 0) {
+            return undefined;
+        }
+        if (value <= 3) {
+            // raw level 0-3 (0 = empty, 3 = full)
+            return Math.round((value * 100) / 3);
+        }
+        return Math.min(Math.round(value), 100);
+    }
+
+    /**
      * set low bat indicator
      *
      * @param {object} deviceBatteryState
@@ -1100,6 +1114,14 @@ class DeviceWatcher extends utils.Adapter {
                         lowBatIndicator = true;
                     }
                     break;
+                case 'xsense': {
+                    // batInfo is used for battery and lowbat: 33% (critical) or less is always low
+                    const xsensePercent = this.xsenseBatteryPercent(deviceBatteryState ?? deviceLowBatState);
+                    if (xsensePercent !== undefined && (xsensePercent <= 33 || xsensePercent < this.config.minWarnBatterie)) {
+                        lowBatIndicator = true;
+                    }
+                    break;
+                }
                 default:
                     if (typeof deviceLowBatState === 'boolean' && deviceLowBatState === true) {
                         // true = low bat
