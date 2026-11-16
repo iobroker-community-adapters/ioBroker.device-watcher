@@ -191,7 +191,7 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### 2.15.18 (2026-11-16)
+### **WORK IN PROGRESS**
 - (softwarecrash) Fix false WLED offline detection by applying the configured timeout only while the connection state is false.
 - (copilot) Adapter requires node.js >= 22.19.0 now
 - (arteck) Dependencies have been updated
