@@ -1132,6 +1132,7 @@ class DeviceWatcher extends utils.Adapter {
                 case 'sonoff':
                 case 'tradfri':
                 case 'unifi':
+                case 'wled':
                 case 'zigbee':
                 case 'zigbee2MQTT': {
                     if (maxSecondDevicesOffline <= 0) {
