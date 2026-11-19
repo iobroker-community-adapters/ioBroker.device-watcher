@@ -8,6 +8,7 @@ const adapterArray = require('./lib/adapterArray.js'); // list of supported adap
 const translations = require('./lib/translations.js');
 const tools = require('./lib/tools.js');
 const crud = require('./lib/crud.js');
+const { COMMANDS, HELP } = require('./lib/help.js');
 
 // indicator if the adapter is running (for intervall/shedule)
 let isUnloaded = false;
@@ -569,6 +570,13 @@ class DeviceWatcher extends utils.Adapter {
         let countInstances = 0;
 
         switch (obj.command) {
+            case 'help':
+                // the description of all commands for AI agents and scripts
+                if (obj.callback) {
+                    this.sendTo(obj.from, obj.command, { help: HELP, commands: COMMANDS }, obj.callback);
+                }
+                break;
+
             case 'devicesList':
                 if (obj.message) {
                     try {

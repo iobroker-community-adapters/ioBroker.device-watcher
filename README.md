@@ -175,6 +175,10 @@ It's possible to select:
 -   Ignore in main list
 -   Ignore in adapter own list
 
+### Messages for scripts and AI agents
+
+`sendTo('device-watcher.0', 'help', {})` answers `{ help, commands }`: a description of the states with the lists (offline devices, low batteries, instances with errors, adapter updates, ...) and of all messages, written for AI agents (e.g. ioBroker.pi-agent) and script authors. `commands` lists every message with `write: true` if it changes something.
+
 ### Here are some images how the lists can be look like in Grafana:
 
 ![list1.png](admin/images/list1.png)
@@ -191,6 +195,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (GermanBluefox) Added the message "help": a description of all messages for AI agents (e.g. pi-agent), and common.supportedMessages.help
+
 ### 2.15.18 (2026-11-16)
 - (softwarecrash) Fix false WLED offline detection by applying the configured timeout only while the connection state is false.
 - (copilot) Adapter requires node.js >= 22.19.0 now
