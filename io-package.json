@@ -161,6 +161,10 @@
       "config": "json"
     },
     "messagebox": true,
+    "supportedMessages": {
+      "help": true,
+      "custom": true
+    },
     "docs": {
       "en": [
         "docs/en/README.md"
