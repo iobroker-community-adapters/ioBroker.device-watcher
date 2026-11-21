@@ -191,6 +191,9 @@ This adapter would not have been possible without the great work of Christian Be
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (Brainbug01) Fix adapter update list not being refreshed when `admin.*.info.updatesJson` changes after adapter start
+
 ### 2.15.18 (2026-11-16)
 - (softwarecrash) Fix false WLED offline detection by applying the configured timeout only while the connection state is false.
 - (copilot) Adapter requires node.js >= 22.19.0 now
