@@ -504,7 +504,7 @@ class DeviceWatcher extends utils.Adapter {
                 if (this.config.checkAdapterInstances) {
                     // Adapter Update data
                     if (id.endsWith('updatesJson')) {
-                        await this.renewAdapterUpdateData(id);
+                        await this.renewAdapterUpdateData();
                     }
                     // Instanz data
                     if (Array.from(this.listInstanceRaw.values()).some((obj) => Object.values(obj).includes(id))) {
@@ -2222,13 +2222,13 @@ class DeviceWatcher extends utils.Adapter {
     }
 
     /**
-     * @param {string} id
+     * renew adapter update data of all admin instances
      */
-    async renewAdapterUpdateData(id) {
+    async renewAdapterUpdateData() {
         const previousAdapterUpdatesCount = this.countAdapterUpdates;
 
-        // Fetch and process adapter update data
-        await this.getAdapterUpdateData(id);
+        // Fetch and process adapter update data (pattern: merge all admin instances)
+        this.adapterUpdatesJsonRaw = await this.getAdapterUpdateData(adapterUpdateListDP);
         await this.createAdapterUpdateList();
 
         // Check and send update notification if required
