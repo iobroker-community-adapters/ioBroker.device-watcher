@@ -36,8 +36,9 @@ function createAdapter() {
 // Simulates getForeignStatesAsync for a single id or a pattern like admin.*.info.updatesJson
 function foreignStates(states) {
     return async pattern => {
-        const regex = new RegExp(`^${pattern.replace(/\./g, '\\.').replace(/\*/g, '.*')}$`);
-        return Object.fromEntries(Object.entries(states).filter(([id]) => regex.test(id)).map(([id, val]) => [id, { val }]));
+        const [prefix, suffix = ''] = pattern.split('*');
+        const matches = id => pattern.includes('*') ? id.startsWith(prefix) && id.endsWith(suffix) : id === pattern;
+        return Object.fromEntries(Object.entries(states).filter(([id]) => matches(id)).map(([id, val]) => [id, { val }]));
     };
 }
 
